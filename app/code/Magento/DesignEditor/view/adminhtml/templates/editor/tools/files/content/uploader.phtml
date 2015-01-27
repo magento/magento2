@@ -5,10 +5,10 @@
  */
 ?>
 <?php
-/** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content\Uploader */
+/** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content\Uploader */
 ?>
 <div class="scroll-assets">
-    <div class="no-display" data-template="<?php echo $this->getHtmlId() ?>-template">
+    <div class="no-display" data-template="<?php echo $block->getHtmlId() ?>-template">
         <div class="progressbar-container">
            <div class="file-row" data-upload-id="${id}">
               <span class="file-info-name">${name}</span>
@@ -23,17 +23,17 @@
                       </button>
                   </span>
                   <span class="file-upload-success hidden">
-                      <img src="<?php echo $this->getViewFileUrl('Magento_DesignEditor::images/i_msg-success.gif') ?>">
+                      <img src="<?php echo $block->getViewFileUrl('Magento_DesignEditor::images/i_msg-success.gif') ?>">
                   </span>
                   <span class="file-upload-failure hidden">
-                      <img src="<?php echo $this->getViewFileUrl('Magento_DesignEditor::images/i_msg-error.gif') ?>">
+                      <img src="<?php echo $block->getViewFileUrl('Magento_DesignEditor::images/i_msg-error.gif') ?>">
                   </span>
               </span>
               <div class="progressbar upload-progress"></div>
            </div>
         </div>
     </div>
-    <div id="<?php echo $this->getHtmlId() ?>" class="uploader no-display">
+    <div id="<?php echo $block->getHtmlId() ?>" class="uploader no-display">
     </div>
     <div id="contents"></div>
 </div>
@@ -42,8 +42,8 @@
             <button class="action-default primary" data-action="browse" type="submit">
                 <?php echo __('Browse Files'); ?>
             </button>
-            <input data-action="fileinput" type="file" name="<?php echo $this->getConfig()->getFileField() ?>"
-                   data-url="<?php echo $this->getConfig()->getUrl() ?>" multiple>
+            <input data-action="fileinput" type="file" name="<?php echo $block->getConfig()->getFileField() ?>"
+                   data-url="<?php echo $block->getConfig()->getUrl() ?>" multiple>
     </span>
     <button class="no-display action-default primary" data-action="upload">
         <?php echo __('Upload Files'); ?>
@@ -128,7 +128,7 @@ require([
             },
             queuedFiles : [],
             sequentialUploads: true,
-            maxFileSize: <?php echo $this->getFileSizeService()->getMaxFileSize()?>,
+            maxFileSize: <?php echo $block->getFileSizeService()->getMaxFileSize()?>,
             uploadCount: 0,
             add: function(e, data) {
                 $(this).assetfileupload('switchToUploadQueueView');
@@ -139,12 +139,12 @@ require([
                     var fileSize = typeof(file.size) == "undefined"
                         ? $.mage.__('We could not detect a size.')
                         : byteConvert(file.size);
-                    var fileRowTmpl = $.tmpl($('[data-template="<?php echo $this->getHtmlId(); ?>-template"]'), {
+                    var fileRowTmpl = $.tmpl($('[data-template="<?php echo $block->getHtmlId(); ?>-template"]'), {
                         size: fileSize,
                         name : file.name,
                         id : data.fileId
                     });
-                    fileRowTmpl.appendTo('#<?php echo $this->getHtmlId() ?>');
+                    fileRowTmpl.appendTo('#<?php echo $block->getHtmlId() ?>');
                     fileRowTmpl.find('[data-upload-id]').data('upload-status', 'pending');
 
                     $('[data-delete-file="' + data.fileId + '"]').on('click', function() {

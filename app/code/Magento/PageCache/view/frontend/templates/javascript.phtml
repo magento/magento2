@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var \Magento\PageCache\Block\Javascript $this */ ?>
+<?php /** @var \Magento\PageCache\Block\Javascript $block */ ?>
 <script>
 require([
 	"jquery",
@@ -13,7 +13,7 @@ require([
 
     //<![CDATA[
     jQuery(function () {
-        jQuery('body').mage('pageCache', <?php echo $this->getScriptOptions(); ?>);
+        jQuery('body').mage('pageCache', <?php echo $block->getScriptOptions(); ?>);
     });
     //]]>
 

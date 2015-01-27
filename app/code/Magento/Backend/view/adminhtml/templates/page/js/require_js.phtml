@@ -5,11 +5,11 @@
  */
 ?>
 <script>
-    var BLANK_URL = '<?php echo $this->getViewFileUrl('blank.html') ?>';
-    var BLANK_IMG = '<?php echo $this->getViewFileUrl('spacer.gif') ?>';
-    var BASE_URL = '<?php echo $this->getUrl('*') ?>';
-    var FORM_KEY = '<?php echo $this->getFormKey() ?>';
+    var BLANK_URL = '<?php echo $block->getViewFileUrl('blank.html') ?>';
+    var BLANK_IMG = '<?php echo $block->getViewFileUrl('spacer.gif') ?>';
+    var BASE_URL = '<?php echo $block->getUrl('*') ?>';
+    var FORM_KEY = '<?php echo $block->getFormKey() ?>';
     var require = {
-        "baseUrl": "<?php echo $this->getViewFileUrl('/') ?>"
+        "baseUrl": "<?php echo $block->getViewFileUrl('/') ?>"
     };
 </script>

@@ -2036,4 +2036,5 @@ return [
     ['_getSendfriendModel', 'Magento\Sendfriend\Block\Send'],
     ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
     ['register', 'Magento\Sendfriend\Model\Sendfriend'],
+    ['_getImageHelper', 'Magento\Catalog\Model\Product'],
 ];

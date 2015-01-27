@@ -8,18 +8,18 @@
 
 ?>
 
-<?php $_divId = 'tree' . $this->getId() ?>
+<?php $_divId = 'tree' . $block->getId() ?>
 <div id="<?php echo $_divId ?>" class="tree"></div>
 
 <script>
 require(['prototype'], function(){
 //<![CDATA[
 
-var tree<?php echo $this->getId() ?>;
+var tree<?php echo $block->getId() ?>;
 
-var useMassaction = <?php echo $this->getUseMassaction() ? 1 : 0; ?>;
+var useMassaction = <?php echo $block->getUseMassaction() ? 1 : 0; ?>;
 
-var isAnchorOnly = <?php echo $this->getIsAnchorOnly() ? 1 : 0; ?>;
+var isAnchorOnly = <?php echo $block->getIsAnchorOnly() ? 1 : 0; ?>;
 
 Ext.tree.TreePanel.Enhanced = function(el, config)
 {
@@ -43,8 +43,8 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
         this.setRootNode(root);
 
         if (firstLoad) {
-            <?php if ($this->getNodeClickListener()): ?>
-                this.addListener('click', <?php echo $this->getNodeClickListener() ?>.createDelegate(this));
+            <?php if ($block->getNodeClickListener()): ?>
+                this.addListener('click', <?php echo $block->getNodeClickListener() ?>.createDelegate(this));
             <?php endif; ?>
         }
 
@@ -57,10 +57,10 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 
 Ext.onReady(function()
 {
-    var emptyNodeAdded = <?php echo($this->getWithEmptyNode() ? 'false' : 'true') ?>;
+    var emptyNodeAdded = <?php echo($block->getWithEmptyNode() ? 'false' : 'true') ?>;
 
     var categoryLoader = new Ext.tree.TreeLoader({
-       dataUrl: '<?php echo $this->getLoadTreeUrl() ?>'
+       dataUrl: '<?php echo $block->getLoadTreeUrl() ?>'
     });
 
     categoryLoader.buildCategoryTree = function(parent, config)
@@ -154,33 +154,33 @@ Ext.onReady(function()
         treeLoader.baseParams.id = node.attributes.id;
     });
 
-    tree<?php echo $this->getId() ?> = new Ext.tree.TreePanel.Enhanced('<?php echo $_divId ?>', {
+    tree<?php echo $block->getId() ?> = new Ext.tree.TreePanel.Enhanced('<?php echo $_divId ?>', {
         animate:          false,
         loader:           categoryLoader,
         enableDD:         false,
         containerScroll:  true,
-        rootVisible:      '<?php echo $this->getRoot()->getIsVisible() ?>',
+        rootVisible:      '<?php echo $block->getRoot()->getIsVisible() ?>',
         useAjax:          true,
-        currentNodeId:    <?php echo (int) $this->getCategoryId() ?>,
+        currentNodeId:    <?php echo (int) $block->getCategoryId() ?>,
         addNodeTo:        false
     });
 
     if (useMassaction) {
-        tree<?php echo $this->getId() ?>.on('check', function(node) {
+        tree<?php echo $block->getId() ?>.on('check', function(node) {
             $('<?php echo $_divId; ?>').fire('node:changed', {node:node});
-        }, tree<?php echo $this->getId() ?>);
+        }, tree<?php echo $block->getId() ?>);
     }
 
     // set the root node
     var parameters = {
         text:        'Psw',
         draggable:   false,
-        id:          <?php echo (int) $this->getRoot()->getId() ?>,
-        expanded:    <?php echo (int) $this->getIsWasExpanded() ?>,
-        category_id: <?php echo (int) $this->getCategoryId() ?>
+        id:          <?php echo (int) $block->getRoot()->getId() ?>,
+        expanded:    <?php echo (int) $block->getIsWasExpanded() ?>,
+        category_id: <?php echo (int) $block->getCategoryId() ?>
     };
 
-    tree<?php echo $this->getId() ?>.loadTree({parameters:parameters, data:<?php echo $this->getTreeJson() ?>},true);
+    tree<?php echo $block->getId() ?>.loadTree({parameters:parameters, data:<?php echo $block->getTreeJson() ?>},true);
 
 });
 //]]>

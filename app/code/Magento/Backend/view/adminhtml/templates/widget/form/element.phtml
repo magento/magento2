@@ -36,7 +36,7 @@
     case 'button':
     case 'password': ?>
     <span class="form_row">
-        <?php if ($element->getLabel()): ?><label for="<?php echo $element->getHtmlId() ?>" <?php echo $this->getUiId('label') ?>><?php echo $element->getLabel() ?>:</label><?php endif; ?>
+        <?php if ($element->getLabel()): ?><label for="<?php echo $element->getHtmlId() ?>" <?php echo $block->getUiId('label') ?>><?php echo $element->getLabel() ?>:</label><?php endif; ?>
         <input type="<?php echo $element->getType() ?>" name="<?php echo $element->getName() ?>" id="<?php echo $element->getHtmlId() ?>" value="<?php echo $element->getValue() ?>" class="input-text <?php echo $element->getClass() ?>" title="<?php echo $element->getTitle() ?>" <?php echo($element->getOnClick() ? 'onClick="' . $element->getOnClick() . '"' : '') ?>/>
     </span>
       <?php break;
@@ -60,8 +60,8 @@
     case 'wysiwyg': ?>
     <span class="form_row">
       <label for="<?php echo $element->getHtmlId() ?>"><?php echo $element->getLabel() ?>:</label>
-        <script type="text/javascript" src="<?php echo $this->getViewFileUrl('tiny_mce/tiny_mce.js') ?>"></script>
-        <script>
+        <script type="text/javascript" src="<?php echo $block->getViewFileUrl('tiny_mce/tiny_mce.js') ?>"></script>
+        <script type="text/javascript">
 
         //<![CDATA[
         tinyMCE.init({

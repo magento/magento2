@@ -5,14 +5,14 @@
  */
 ?>
 <div class="page-actions">
-    <?php echo $this->getBackButtonHtml() ?>
-    <?php echo $this->getResetButtonHtml() ?>
+    <?php echo $block->getBackButtonHtml() ?>
+    <?php echo $block->getResetButtonHtml() ?>
     <span class="hidden" id="formButtons">
-        <?php echo $this->getSaveButtonHtml() ?>
+        <?php echo $block->getSaveButtonHtml() ?>
     </span>
 </div>
 <div class="hidden" id="formContainer">
-    <?php echo $this->getFormHtml() ?>
+    <?php echo $block->getFormHtml() ?>
 </div>
 <script>
 require([
