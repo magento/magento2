@@ -316,7 +316,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     public function testModuleAction($command, $modules, $isForce, $expectedIsEnabled, $expectedModules)
     {
         $status = $this->getModuleActionMocks($command, $modules, $isForce, false);
-        $status->expects($this->once())->method('getUnchangedModules')->willReturn([]);
+        $status->expects($this->once())->method('getModulesToChange')->willReturn($expectedModules);
         if (!$isForce) {
             $status->expects($this->once())->method('checkConstraints')->willReturn([]);
         }
@@ -352,9 +352,9 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     {
         $status = $this->getModuleActionMocks($command, $modules, $isForce, true);
         $status->expects($this->once())
-            ->method('getUnchangedModules')
+            ->method('getModulesToChange')
             ->with($expectedIsEnabled, $expectedModules)
-            ->willReturn($expectedModules);
+            ->willReturn([]);
         $status->expects($this->never())->method('checkConstraints');
         $status->expects($this->never())->method('setIsEnabled');
         $this->consoleLogger->expects($this->once())->method('log');
@@ -367,7 +367,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
      * @param bool $isForce
      * @param bool $expectedIsEnabled
      * @param string[] $expectedModules
-     * @param string[] $unchangedModules
+     * @param string[] $modulesToChange
      * @dataProvider moduleActionPartialNoChangesDataProvider
      */
     public function testModuleActionPartialNoChanges(
@@ -376,16 +376,16 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $isForce,
         $expectedIsEnabled,
         $expectedModules,
-        $unchangedModules
+        $modulesToChange
     ) {
         $status = $this->getModuleActionMocks($command, $modules, $isForce, false);
-        $status->expects($this->once())->method('getUnchangedModules')->willReturn($unchangedModules);
+        $status->expects($this->once())->method('getModulesToChange')->willReturn($modulesToChange);
         if (!$isForce) {
             $status->expects($this->once())->method('checkConstraints')->willReturn([]);
         }
         $status->expects($this->once())
             ->method('setIsEnabled')
-            ->with($expectedIsEnabled, array_diff($expectedModules, $unchangedModules));
+            ->with($expectedIsEnabled, $modulesToChange);
         $this->consoleLogger->expects($this->once())->method('log');
         $this->controller->moduleAction();
     }
@@ -402,7 +402,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
                 false,
                 true,
                 ['Module_Foo', 'Module_Bar'],
-                ['Module_Foo'],
+                ['Module_Bar'],
             ],
             [
                 ConsoleController::CMD_MODULE_ENABLE,
@@ -410,7 +410,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
                 true,
                 true,
                 ['Module_Foo', 'Module_Bar'],
-                ['Module_Foo'],
+                ['Module_Bar'],
             ],
             [
                 ConsoleController::CMD_MODULE_DISABLE,
@@ -418,7 +418,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
                 false,
                 false,
                 ['Module_Foo', 'Module_Bar'],
-                ['Module_Foo'],
+                ['Module_Bar'],
             ],
             [
                 ConsoleController::CMD_MODULE_DISABLE,
@@ -426,7 +426,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
                 true,
                 false,
                 ['Module_Foo', 'Module_Bar'],
-                ['Module_Foo'],
+                ['Module_Bar'],
             ],
         ];
     }
@@ -466,7 +466,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $status->expects($this->once())->method('getUnchangedModules')->willReturn([]);
+        $status->expects($this->once())->method('getModulesToChange')->willReturn(['Module_Foo', 'Module_Bar']);
         $status->expects($this->once())
             ->method('checkConstraints')
             ->willReturn(['Circular dependency of Foo and Bar']);

@@ -487,27 +487,23 @@ class ConsoleController extends AbstractActionController
         /** @var \Magento\Framework\Module\Status $status */
         $status = $this->getObjectManager()->create('Magento\Framework\Module\Status');
 
-        $unchangedModules = $status->getUnchangedModules($isEnable, $modules);
-        $modules = array_diff($modules, $unchangedModules);
-        if (!empty($modules)) {
+        $modulesToChange = $status->getModulesToChange($isEnable, $modules);
+        if (!empty($modulesToChange)) {
             if (!$request->getParam('force')) {
-                $constraints = $status->checkConstraints($isEnable, $modules);
+                $constraints = $status->checkConstraints($isEnable, $modulesToChange);
                 if ($constraints) {
                     $message = "Unable to change status of modules because of the following constraints:\n"
                         . implode("\n", $constraints);
                     throw new \Magento\Setup\Exception($message);
                 }
             }
-            $status->setIsEnabled($isEnable, $modules);
+            $status->setIsEnabled($isEnable, $modulesToChange);
             if ($isEnable) {
                 $message = 'The following modules have been enabled:';
             } else {
                 $message = 'The following modules have been disabled:';
             }
-            $message .= ' ' . implode(', ', $modules);
-            if (!empty($unchangedModules)) {
-                $message .= "\nThe following modules have no changes: " . implode(', ', $unchangedModules);
-            }
+            $message .= ' ' . implode(', ', $modulesToChange);
         } else {
             $message = 'There have been no changes to any modules.';
         }
