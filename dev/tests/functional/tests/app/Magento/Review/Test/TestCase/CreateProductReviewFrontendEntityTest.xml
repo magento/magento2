@@ -9,6 +9,7 @@
     <testCase name="CreateProductReviewFrontendEntityTest">
         <variation name="CreateProductReviewFrontendEntityTestVariation1">
             <data name="description">Create product review with rating</data>
+            <data name="review/data/customer">-</data>
             <data name="review/data/nickname">name_%isolation%</data>
             <data name="review/data/title">title_%isolation%</data>
             <data name="review/data/detail">review_%isolation%</data>
@@ -23,6 +24,8 @@
             <data name="review/data/nickname">name_%isolation%</data>
             <data name="review/data/title">title_%isolation%</data>
             <data name="review/data/detail">review_%isolation%</data>
+            <data name="review/data/ratings/1/dataSet">-</data>
+            <data name="review/data/ratings/1/rating">-</data>
             <data name="review/data/entity_id/dataSet">catalogProductSimple::default</data>
             <data name="constraint">assertReviewCreationSuccessMessage, assertProductReviewIsAbsentOnProductPage, assertProductReviewForm, assertSetApprovedProductReview, assertReviewLinksIsPresentOnProductPage, assertProductReviewOnProductPage</data>
             <data name="tag">bamboo_plan:end_to_end,test_type:acceptance_test</data>

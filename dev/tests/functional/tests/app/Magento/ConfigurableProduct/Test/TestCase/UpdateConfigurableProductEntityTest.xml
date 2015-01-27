@@ -21,6 +21,7 @@
             <data name="updatedProduct/data/description">Configurable Product description %isolation%</data>
             <data name="updatedProduct/data/weight">3</data>
             <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+            <data name="updatedProduct/data/affected_attribute_set">-</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertProductInCategory, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart, assertChildProductIsNotDisplayedSeparately</data>
         </variation>
         <variation name="UpdateConfigurableProductEntityTestVariation2">
@@ -31,6 +32,7 @@
             <data name="updatedProduct/data/name">Configurable Product %isolation%</data>
             <data name="updatedProduct/data/sku">configurable_sku_%isolation%</data>
             <data name="updatedProduct/data/price/value">99</data>
+            <data name="updatedProduct/data/category_ids/presets">-</data>
             <data name="updatedProduct/data/short_description">Configurable short description</data>
             <data name="updatedProduct/data/description">Configurable Product description %isolation%</data>
             <data name="updatedProduct/data/weight">3</data>
@@ -52,6 +54,7 @@
             <data name="updatedProduct/data/description">Configurable Product description %isolation%</data>
             <data name="updatedProduct/data/weight">3</data>
             <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+            <data name="updatedProduct/data/affected_attribute_set">-</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid,  assertConfigurableProductForm, assertProductInCategory, assertProductInStock, assertConfigurableProductInCart, assertConfigurableAttributesAbsentOnProductPage</data>
         </variation>
         <variation name="UpdateConfigurableProductEntityTestVariation4">
@@ -62,10 +65,12 @@
             <data name="updatedProduct/data/name">Configurable Product %isolation%</data>
             <data name="updatedProduct/data/sku">configurable_sku_%isolation%</data>
             <data name="updatedProduct/data/price/value">99</data>
+            <data name="updatedProduct/data/category_ids/presets">-</data>
             <data name="updatedProduct/data/short_description">Configurable short description</data>
             <data name="updatedProduct/data/description">Configurable Product description %isolation%</data>
             <data name="updatedProduct/data/weight">3</data>
             <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+            <data name="updatedProduct/data/affected_attribute_set">-</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertConfigurableProductForm, assertConfigurableAttributesBlockIsAbsentOnProductPage, assertProductOutOfStock</data>
         </variation>
     </testCase>
