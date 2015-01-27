@@ -7,6 +7,9 @@ namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class Validator
 {
     /**

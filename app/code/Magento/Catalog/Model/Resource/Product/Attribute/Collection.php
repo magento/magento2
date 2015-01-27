@@ -89,6 +89,7 @@ class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
      *
      * @param  int $typeId
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setEntityTypeFilter($typeId)
     {

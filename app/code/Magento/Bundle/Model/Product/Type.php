@@ -588,6 +588,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param mixed $qty
      * @param \Magento\Catalog\Model\Product $product
      * @return int
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareQuoteItemQty($qty, $product)
     {
@@ -1028,6 +1029,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return boolean true
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getForceChildItemQtyChanges($product)
     {
@@ -1133,6 +1135,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param  \Magento\Catalog\Model\Product $product
      * @param  \Magento\Framework\Object $buyRequest
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processBuyRequest($product, $buyRequest)
     {
@@ -1165,6 +1168,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {

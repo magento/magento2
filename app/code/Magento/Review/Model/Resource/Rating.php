@@ -35,7 +35,6 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\App\Resource $resource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Review\Helper\Data $ratingData
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\Resource\Review\Summary $reviewSummary
      */
@@ -43,7 +42,6 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Framework\App\Resource $resource,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Review\Helper\Data $ratingData,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Review\Model\Resource\Review\Summary $reviewSummary
     ) {

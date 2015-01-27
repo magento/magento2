@@ -7,6 +7,7 @@ namespace Magento\DesignEditor\Model;
 
 /**
  * Design editor state model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class State
 {

@@ -213,6 +213,7 @@ abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\C
      *
      * @param  int $type
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setEntityTypeFilter($type)
     {
