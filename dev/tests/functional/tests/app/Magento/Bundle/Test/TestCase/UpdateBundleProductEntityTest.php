@@ -83,5 +83,17 @@ class UpdateBundleProductEntityTest extends Injectable
         $this->catalogProductIndex->getProductGrid()->searchAndOpen($filter);
         $this->catalogProductEdit->getProductForm()->fill($product);
         $this->catalogProductEdit->getFormPageActions()->save();
+
+        $productWithCategory = null;
+        if ($product->hasData('category_ids')) {
+            $productWithCategory = $product;
+        } elseif ($originalProduct->hasData('category_ids')) {
+            $productWithCategory = $originalProduct;
+        }
+        if ($productWithCategory) {
+            $categories = $productWithCategory->getDataFieldConfig('category_ids')['source']->getCategories();
+            return ['category' => reset($categories)];
+        }
+        return [];
     }
 }

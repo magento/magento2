@@ -10,7 +10,7 @@ use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -41,13 +41,6 @@ class UpdateSimpleProductEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Simple product fixture
-     *
-     * @var CatalogProductSimple
-     */
-    protected $initialProduct;
-
-    /**
      * Product page with a grid
      *
      * @var CatalogProductIndex
@@ -62,47 +55,16 @@ class UpdateSimpleProductEntityTest extends Injectable
     protected $editProductPage;
 
     /**
-     * Prepare data
-     *
-     * @param Category $category
-     * @return array
-     */
-    public function __prepare(Category $category)
-    {
-        $category->persist();
-        return [
-            'category' => $category
-        ];
-    }
-
-    /**
      * Injection data
      *
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductEdit $editProductPage
-     * @param Category $category
-     * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         CatalogProductIndex $productGrid,
-        CatalogProductEdit $editProductPage,
-        Category $category,
-        FixtureFactory $fixtureFactory
+        CatalogProductEdit $editProductPage
     ) {
-        $this->initialProduct = $fixtureFactory->createByCode(
-            'catalogProductSimple',
-            [
-                'dataSet' => 'default',
-                'data' => [
-                    'category_ids' => [
-                        'category' => $category,
-                    ],
-                ]
-            ]
-        );
-        $this->initialProduct->persist();
-
         $this->productGrid = $productGrid;
         $this->editProductPage = $editProductPage;
     }
@@ -110,16 +72,36 @@ class UpdateSimpleProductEntityTest extends Injectable
     /**
      * Run update product simple entity test
      *
+     * @param string $initialProduct
      * @param CatalogProductSimple $product
+     * @throws \Exception
      * @return array
      */
-    public function test(CatalogProductSimple $product)
+    public function test($initialProduct, CatalogProductSimple $product)
     {
-        $filter = ['sku' => $this->initialProduct->getSku()];
+        $createProductsStep = ObjectManager::getInstance()->create(
+            'Magento\Catalog\Test\TestStep\CreateProductStep',
+            ['product' => $initialProduct]
+        );
+        /** @var CatalogProductSimple $initialProduct */
+        $initialProduct = $createProductsStep->run()['product'];
+        $filter = ['sku' => $initialProduct->getSku()];
+
         $this->productGrid->open()->getProductGrid()->searchAndOpen($filter);
         $this->editProductPage->getProductForm()->fill($product);
         $this->editProductPage->getFormPageActions()->save();
 
-        return ['initialProduct' => $this->initialProduct];
+        $sharedArguments = ['initialProduct' => $initialProduct];
+        $productWithCategory = null;
+        if ($product->hasData('category_ids')) {
+            $productWithCategory = $product;
+        } elseif ($initialProduct->hasData('category_ids')) {
+            $productWithCategory = $initialProduct;
+        }
+        if ($productWithCategory) {
+            $categories = $productWithCategory->getDataFieldConfig('category_ids')['source']->getCategories();
+            $sharedArguments['category'] = reset($categories);
+        }
+        return $sharedArguments;
     }
 }

@@ -131,5 +131,51 @@
                 <item name="preset" xsi:type="string">default_fixed</item>
             </field>
         </dataset>
+
+        <dataset name="MAGETWO-12841">
+            <field name="name" xsi:type="string">Bundle fixed product %isolation%</field>
+            <field name="url_key" xsi:type="string">bundle-fixed-product-%isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_fixed_product_%isolation%</field>
+            <field name="sku_type" xsi:type="string">Fixed</field>
+            <field name="price_type" xsi:type="string">Fixed</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">100</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="weight_type" xsi:type="string">Fixed</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="presets" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="preset" xsi:type="string">MAGETWO-12841</item>
+            </field>
+        </dataset>
+
+        <dataset name="MAGETWO-12842">
+            <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
+            <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
+            <field name="sku_type" xsi:type="string">Dynamic</field>
+            <field name="price_type" xsi:type="string">Dynamic</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">-</item>
+                <item name="preset" xsi:type="string">MAGETWO-12842</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="presets" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="preset" xsi:type="string">MAGETWO-12842</item>
+            </field>
+        </dataset>
     </storage>
 </repository>

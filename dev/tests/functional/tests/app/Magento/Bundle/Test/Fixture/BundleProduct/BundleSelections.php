@@ -152,6 +152,7 @@ class BundleSelections implements FixtureInterface
                     ],
                 ],
             ],
+
             'default_fixed' => [
                 'bundle_options' => [
                     [
@@ -189,6 +190,7 @@ class BundleSelections implements FixtureInterface
                     ],
                 ],
             ],
+
             'second' => [
                 'bundle_options' => [
                     [
@@ -226,6 +228,7 @@ class BundleSelections implements FixtureInterface
                     ],
                 ],
             ],
+
             'all_types_fixed' => [
                 'bundle_options' => [
                     [
@@ -356,6 +359,7 @@ class BundleSelections implements FixtureInterface
                     ],
                 ],
             ],
+
             'all_types_dynamic' => [
                 'bundle_options' => [
                     [
@@ -470,6 +474,7 @@ class BundleSelections implements FixtureInterface
                     ],
                 ],
             ],
+
             'with_not_required_options' => [
                 'bundle_options' => [
                     [
@@ -535,6 +540,77 @@ class BundleSelections implements FixtureInterface
                     [
                         'catalogProductSimple::default',
                         'catalogProductSimple::product_100_dollar'
+                    ],
+                ],
+            ],
+
+            'MAGETWO-12841' => [
+                'bundle_options' => [
+                    [
+                        'title' => 'BundleOption1',
+                        'type' => 'Drop-down',
+                        'required' => 'Yes',
+                        'assigned_products' => [
+                            [
+                                'search_data' => [
+                                    'name' => '%product_name%',
+                                ],
+                                'data' => [
+                                    'selection_price_value' => 10.00,
+                                    'selection_price_type' => 'Fixed',
+                                    'selection_qty' => 1,
+                                ],
+                            ],
+                            [
+                                'search_data' => [
+                                    'name' => '%product_name%',
+                                ],
+                                'data' => [
+                                    'selection_price_value' => 20.00,
+                                    'selection_price_type' => 'Percent',
+                                    'selection_qty' => 1,
+                                ]
+                            ],
+                        ],
+                    ],
+                ],
+                'products' => [
+                    [
+                        'catalogProductSimple::product_without_category',
+                        'catalogProductSimple::product_without_category',
+                    ],
+                ],
+            ],
+
+            'MAGETWO-12842' => [
+                'bundle_options' => [
+                    [
+                        'title' => 'Drop-down Option',
+                        'type' => 'Drop-down',
+                        'assigned_products' => [
+                            [
+                                'search_data' => [
+                                    'name' => '%product_name%',
+                                ],
+                                'data' => [
+                                    'selection_qty' => 1,
+                                ],
+                            ],
+                            [
+                                'search_data' => [
+                                    'name' => '%product_name%',
+                                ],
+                                'data' => [
+                                    'selection_qty' => 1,
+                                ]
+                            ],
+                        ],
+                    ],
+                ],
+                'products' => [
+                    [
+                        'catalogProductSimple::product_without_category',
+                        'catalogProductSimple::product_without_category',
                     ],
                 ],
             ],

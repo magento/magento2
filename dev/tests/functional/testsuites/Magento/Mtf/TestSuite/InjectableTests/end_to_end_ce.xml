@@ -14,7 +14,7 @@
             <!--Products-->
             <!--Simple-->
             <class value="Magento\Catalog\Test\TestCase\Product\CreateProductTest" />
-            <class value="Magento\Catalog\Test\TestCase\Product\EditSimpleProductTest" />
+            <class value="Magento\Catalog\Test\TestCase\Product\UpdateSimpleProductEntityTest" />
             <class value="Magento\Catalog\Test\TestCase\Product\CreateSimpleWithCategoryTest" />
             <class value="Magento\Catalog\Test\TestCase\Product\UnassignCategoryTest" />
             <!--Grouped-->
@@ -22,12 +22,12 @@
             <!--Virtual-->
             <class value="Magento\Catalog\Test\TestCase\Product\CreateVirtualTest" />
             <!--Configurable-->
-            <class value="Magento\ConfigurableProduct\Test\TestCase\EditConfigurableTest" />
+            <class value="Magento\ConfigurableProduct\Test\TestCase\UpdateConfigurableProductEntityTest" />
             <!--Downloadable-->
             <class value="Magento\Downloadable\Test\TestCase\Create\LinksPurchasedSeparatelyTest" />
             <!--Bundle-->
             <class value="Magento\Bundle\Test\TestCase\BundleDynamicTest" />
-            <class value="Magento\Bundle\Test\TestCase\EditBundleTest" />
+            <class value="Magento\Bundle\Test\TestCase\UpdateBundleProductEntityTest" />
             <!--Related Products-->
             <class value="Magento\Catalog\Test\TestCase\Product\UpsellTest" />
             <class value="Magento\Catalog\Test\TestCase\Product\CrosssellTest" />

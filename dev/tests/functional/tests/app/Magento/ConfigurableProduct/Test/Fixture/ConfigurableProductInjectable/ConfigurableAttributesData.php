@@ -176,6 +176,7 @@ class ConfigurableAttributesData implements FixtureInterface
                 ],
             ],
         ],
+
         'one_variation' => [
             'attributes_data' => [
                 'attribute_key_0' => [
@@ -202,6 +203,7 @@ class ConfigurableAttributesData implements FixtureInterface
                 ],
             ],
         ],
+
         'two_options' => [
             'attributes_data' => [
                 'attribute_key_0' => [
@@ -242,6 +244,7 @@ class ConfigurableAttributesData implements FixtureInterface
                 ],
             ],
         ],
+
         'two_new_options' => [
             'attributes_data' => [
                 'attribute_key_0' => [
@@ -284,6 +287,7 @@ class ConfigurableAttributesData implements FixtureInterface
                 ],
             ],
         ],
+
         'one_new_options' => [
             'attributes_data' => [
                 'attribute_key_0' => [
@@ -301,6 +305,7 @@ class ConfigurableAttributesData implements FixtureInterface
             'products' => [],
             'matrix' => [],
         ],
+
         'two_new_options_with_zero_products' => [
             'attributes_data' => [
                 'attribute_key_0' => [
@@ -322,6 +327,7 @@ class ConfigurableAttributesData implements FixtureInterface
             ],
             'matrix' => [],
         ],
+
         'two_options_with_assigned_product' => [
             'attributes_data' => [
                 'attribute_key_0' => [
@@ -365,6 +371,7 @@ class ConfigurableAttributesData implements FixtureInterface
                 ],
             ],
         ],
+
         'color_and_size' => [
             'attributes_data' => [
                 'attribute_key_0' => [
@@ -430,6 +437,7 @@ class ConfigurableAttributesData implements FixtureInterface
                 ],
             ],
         ],
+
         'size' => [
             'attributes_data' => [
                 'attribute_key_0' => [
@@ -468,6 +476,7 @@ class ConfigurableAttributesData implements FixtureInterface
                 ],
             ],
         ],
+
         'with_one_option' => [
             'attributes_data' => [
                 'attribute_key_0' => [
@@ -515,6 +524,7 @@ class ConfigurableAttributesData implements FixtureInterface
                 ],
             ],
         ],
+
         'with_out_of_stock_item' => [
             'attributes_data' => [
                 'attribute_key_0' => [
@@ -534,6 +544,50 @@ class ConfigurableAttributesData implements FixtureInterface
                 'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_one_option',
             ],
             'matrix' => [],
+        ],
+
+        'MAGETWO-12840' => [
+            'attributes_data' => [
+                'attribute_key_0' => [
+                    'options' => [
+                        'option_key_0' => [
+                            'label' => 'option_key_1_%isolation%',
+                            'pricing_value' => 11,
+                            'is_percent' => 'No',
+                            'include' => 'Yes',
+                        ],
+                        'option_key_1' => [
+                            'label' => 'option_2_%isolation%',
+                            'pricing_value' => 12,
+                            'is_percent' => 'No',
+                            'include' => 'Yes',
+                        ],
+                    ],
+                ],
+            ],
+            'attributes' => [
+                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
+            ],
+            'products' => [
+                'attribute_key_0:option_key_0' => 'catalogProductSimple::product_without_category',
+                'attribute_key_0:option_key_1' => 'catalogProductSimple::product_without_category',
+            ],
+            'matrix' => [
+                'attribute_key_0:option_key_0' => [
+                    'display' => 'Yes',
+                    'quantity_and_stock_status' => [
+                        'qty' => 100,
+                    ],
+                    'weight' => 1,
+                ],
+                'attribute_key_0:option_key_1' => [
+                    'display' => 'Yes',
+                    'quantity_and_stock_status' => [
+                        'qty' => 200,
+                    ],
+                    'weight' => 1,
+                ],
+            ],
         ],
     ];
 
@@ -645,9 +699,21 @@ class ConfigurableAttributesData implements FixtureInterface
             if (is_string($product)) {
                 list($fixture, $dataSet) = explode('::', $product);
                 $attributeData = ['attributes' => $this->getProductAttributeData($key)];
+                $stock = [];
+
+                if (isset($data['matrix'][$key]['quantity_and_stock_status']['qty'])) {
+                    $stock['quantity_and_stock_status'] = [
+                        'qty' => $data['matrix'][$key]['quantity_and_stock_status']['qty'],
+                        'is_in_stock' => 'In Stock',
+                    ];
+                }
+
                 $product = $this->fixtureFactory->createByCode(
                     $fixture,
-                    ['dataSet' => $dataSet, 'data' => array_merge($attributeSetData, $attributeData)]
+                    [
+                        'dataSet' => $dataSet,
+                        'data' => array_merge($attributeSetData, $attributeData, $stock)
+                    ]
                 );
             }
             if (!$product->hasData('id')) {
