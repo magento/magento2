@@ -9,26 +9,18 @@ namespace Magento\Cms\Controller\Noroute;
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory
-     */
-    protected $resultLayoutFactory;
-
-    /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
     protected $resultForwardFactory;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
-        $this->resultLayoutFactory = $resultLayoutFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
@@ -36,7 +28,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * Render CMS 404 Not found page
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {

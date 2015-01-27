@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Controller;
+namespace Magento\Cms\Controller\Noroute;
 
-class NorouteTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Cms\Controller\Noroute
+     * @var \Magento\Cms\Controller\Noroute\Index
      */
     protected $_controller;
 
@@ -22,12 +22,32 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
      */
     protected $_requestMock;
 
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $forwardFactoryMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $forwardMock;
+
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $responseMock->expects(
+        $this->forwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->forwardMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->forwardFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->forwardMock);
+        $this->forwardMock->expects(
             $this->at(0)
         )->method(
             'setHeader'
@@ -35,9 +55,9 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
             'HTTP/1.1',
             '404 Not Found'
         )->will(
-            $this->returnValue($responseMock)
+            $this->returnSelf()
         );
-        $responseMock->expects(
+        $this->forwardMock->expects(
             $this->at(1)
         )->method(
             'setHeader'
@@ -45,7 +65,7 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
             'Status',
             '404 File not found'
         )->will(
-            $this->returnValue($responseMock)
+            $this->returnSelf()
         );
 
         $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
@@ -71,7 +91,9 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
         );
         $this->_controller = $helper->getObject(
             'Magento\Cms\Controller\Noroute\Index',
-            ['response' => $responseMock, 'objectManager' => $objectManagerMock, 'request' => $this->_requestMock]
+            ['response' => $responseMock, 'objectManager' => $objectManagerMock, 'request' => $this->_requestMock,
+            'resultForwardFactory' => $this->forwardFactoryMock
+            ]
         );
     }
 
