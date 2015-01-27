@@ -18,6 +18,7 @@ use Magento\Payment\Model\MethodInterface;
 
 /**
  * Payment module base helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -265,6 +266,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $withGroups
      * @param Store|null $store
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getPaymentMethodList($sorted = true, $asLabelValue = false, $withGroups = false, $store = null)
     {

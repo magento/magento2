@@ -41,6 +41,7 @@ class Resolver extends \Magento\Framework\Locale\Resolver
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Locale\Validator $localeValidator
      * @param null $locale
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,

@@ -32,6 +32,7 @@ class Authorization
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetActive(
         \Magento\Quote\Model\QuoteRepository $subject,
@@ -50,6 +51,7 @@ class Authorization
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetActiveForCustomer(
         \Magento\Quote\Model\QuoteRepository $subject,

@@ -70,6 +70,7 @@ class Edit extends \Magento\Backend\App\Action
      * Edit CMS page
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

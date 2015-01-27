@@ -333,6 +333,7 @@ class Ftp
      * @param int $fileMode         FTP_BINARY | FTP_ASCII
      * @param int $resumeOffset
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function get($localFile, $remoteFile, $fileMode = FTP_BINARY, $resumeOffset = 0)
     {
@@ -427,6 +428,7 @@ class Ftp
      * @param string $dir
      * @param bool $recursive
      * @return array
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function ls($dir = "/", $recursive = false)
     {

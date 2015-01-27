@@ -7,6 +7,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Status\Edit;
 
 /**
  * Edit status form
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\Status\NewStatus\Form
 {

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
 * Helper class that simplifies files stream reading and writing
 */
@@ -86,6 +88,7 @@ class File
      * @param int $chmod
      * @return void
      * @throws MagentoException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function open($mode = 'w+', $chmod = 0666)
     {

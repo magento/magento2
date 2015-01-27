@@ -118,6 +118,7 @@ abstract class AbstractAction
      * @param array $tablesList
      * @param int|string $storeId
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _cleanOnFailure(array $tablesList, $storeId)
     {
@@ -183,6 +184,7 @@ abstract class AbstractAction
      * @param int $storeId
      * @param int|array $productIds Update child product(s) only
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _updateRelationProducts($storeId, $productIds = null)
     {

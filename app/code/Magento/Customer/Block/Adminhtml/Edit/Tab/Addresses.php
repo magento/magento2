@@ -19,6 +19,7 @@ use Magento\Customer\Model\Address\Mapper as AddressMapper;
  * Customer addresses forms
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Addresses extends GenericMetadata
 {

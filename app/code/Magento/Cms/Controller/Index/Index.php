@@ -30,6 +30,7 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @param string|null $coreRoute
      * @return \Magento\Framework\Controller\Result\Forward
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($coreRoute = null)
     {

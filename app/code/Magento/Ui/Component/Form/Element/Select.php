@@ -15,6 +15,7 @@ class Select extends AbstractFormElement
      *
      * @param string $optionValue
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsSelected($optionValue)
     {

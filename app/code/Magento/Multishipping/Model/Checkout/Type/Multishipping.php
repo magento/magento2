@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Multishipping\Model\Checkout\Type;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -11,6 +14,9 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
  * Multishipping checkout model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Multishipping extends \Magento\Framework\Object
 {
@@ -149,6 +155,7 @@ class Multishipping extends \Magento\Framework\Object
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -202,6 +209,7 @@ class Multishipping extends \Magento\Framework\Object
      * Split virtual/not virtual items between default billing/shipping addresses
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _init()
     {
@@ -361,6 +369,8 @@ class Multishipping extends \Magento\Framework\Object
      * @param array $info
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function setShippingItemsInformation($info)
     {
@@ -444,6 +454,8 @@ class Multishipping extends \Magento\Framework\Object
      * @param int $quoteItemId
      * @param array $data array('qty'=>$qty, 'address'=>$customerAddressId)
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addShippingItem($quoteItemId, $data)
     {
@@ -604,10 +616,10 @@ class Multishipping extends \Magento\Framework\Object
         if ($address->getAddressType() == 'billing') {
             $order->setIsVirtual(1);
         } else {
-            $order->setShippingAddress($this->quoteAddressToOrderAddress->addressToOrderAddress($address));
+            $order->setShippingAddress($this->quoteAddressToOrderAddress->convert($address));
         }
 
-        $order->setPayment($this->quotePaymentToOrderPayment->paymentToOrderPayment($quote->getPayment()));
+        $order->setPayment($this->quotePaymentToOrderPayment->convert($quote->getPayment()));
         if ($this->priceCurrency->round($address->getGrandTotal()) == 0) {
             $order->getPayment()->setMethod('free');
         }
@@ -622,7 +634,7 @@ class Multishipping extends \Magento\Framework\Object
             )->setProductOptions(
                 $_quoteItem->getProduct()->getTypeInstance()->getOrderOptions($_quoteItem->getProduct())
             );
-            $orderItem = $this->quoteItemToOrderItem->itemToOrderItem($item);
+            $orderItem = $this->quoteItemToOrderItem->convert($_quoteItem);
             if ($item->getParentItem()) {
                 $orderItem->setParentItem($order->getItemByQuoteItemId($item->getParentItem()->getId()));
             }

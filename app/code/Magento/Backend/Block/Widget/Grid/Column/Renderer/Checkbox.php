@@ -70,6 +70,8 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      *
      * @param   \Magento\Framework\Object $row
      * @return  string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function render(\Magento\Framework\Object $row)
     {

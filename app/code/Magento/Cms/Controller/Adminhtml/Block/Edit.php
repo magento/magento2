@@ -37,6 +37,7 @@ class Edit extends \Magento\Cms\Controller\Adminhtml\Block
      * Edit CMS block
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

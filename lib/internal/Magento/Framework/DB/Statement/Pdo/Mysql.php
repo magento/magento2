@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Mysql DB Statement
  *
@@ -22,6 +24,7 @@ class Mysql extends \Zend_Db_Statement_Pdo
      * @param array $params Array of values to bind to parameter placeholders.
      * @return bool
      * @throws \Zend_Db_Statement_Exception
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function _executeWithBinding(array $params)
     {

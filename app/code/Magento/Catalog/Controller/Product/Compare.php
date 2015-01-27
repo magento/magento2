@@ -14,6 +14,7 @@ use Magento\Framework\View\Result\PageFactory;
  * Catalog compare controller
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Compare extends \Magento\Framework\App\Action\Action
 {
@@ -106,6 +107,7 @@ class Compare extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param ProductRepositoryInterface $productRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

@@ -40,7 +40,7 @@ class ProcessorFactory
             $instance = $this->_objectManager->create($model);
             if (!$instance instanceof ProcessorInterface) {
                 throw new \InvalidArgumentException(
-                    $model . ' does not instance of \Magento\Framework\App\Config\Data\ProcessorInterface'
+                    $model . ' is not instance of \Magento\Framework\App\Config\Data\ProcessorInterface'
                 );
             }
             $this->_pool[$model] = $instance;

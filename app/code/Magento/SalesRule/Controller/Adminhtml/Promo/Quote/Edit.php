@@ -12,6 +12,7 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      * Promo quote edit action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
