@@ -49,7 +49,7 @@ class BlockPool
     {
         if (!class_exists($class)) {
             throw new \InvalidArgumentException(
-                (string)new \Magento\Framework\Phrase('Invalid Block class name: ') . $class
+                (string)new \Magento\Framework\Phrase('Invalid Block class name: %1', [$class])
             );
         }
 
