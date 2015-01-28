@@ -11,8 +11,7 @@ class SaveTest extends \Magento\Backend\Utility\Controller
     /**
      * Test save action
      *
-     * @magentoConfigFixture               currency/options/allow  EUR, USD
-     * @magentoDataFixture Magento/CurrencySymbol/_files/currency_symbol.php
+     * @magentoConfigFixture               currency/options/allow USD
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @dataProvider currencySymbolDataProvider
@@ -49,7 +48,7 @@ class SaveTest extends \Magento\Backend\Utility\Controller
     {
         return [
             ['USD', 'customSymbolUSD', 'customSymbolUSD'],
-            ['EUR', '<script>customSymbolEUR</script>', 'customSymbolEUR']
+            ['USD', '<script>customSymbolUSD</script>', 'customSymbolUSD']
         ];
     }
 }

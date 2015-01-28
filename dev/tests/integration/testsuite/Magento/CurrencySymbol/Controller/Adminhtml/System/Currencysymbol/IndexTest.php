@@ -10,8 +10,8 @@ class IndexTest extends \Magento\Backend\Utility\Controller
     /**
      * Test index action
      *
-     * @magentoConfigFixture               currency/options/allow  EUR, USD
-     * @magentoDataFixture Magento/CurrencySymbol/_files/currency_symbol.php
+     * @magentoConfigFixture               currency/options/allow USD
+     * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
     public function testIndexAction()
@@ -21,7 +21,6 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
         $this->assertContains('id="currency-symbols-form"', $body);
         $this->assertContains('<input id="custom_currency_symbolUSD"', $body);
-        $this->assertContains('<input id="custom_currency_symbolEUR"', $body);
         $this->assertContains('save primary save-currency-symbols', $body);
     }
 }
