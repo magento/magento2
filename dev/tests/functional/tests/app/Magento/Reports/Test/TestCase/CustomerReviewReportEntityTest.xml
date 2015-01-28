@@ -5,34 +5,37 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="CustomerReviewReportEntityTest">
-        <variation name="CustomerReviewReportEntityTestVariation1">
-            <data name="customerLogin">Yes</data>
-            <data name="product/dataSet">default</data>
-            <data name="review/data/nickname">name_upd_%isolation%</data>
-            <data name="review/data/title">title_upd_%isolation%</data>
-            <data name="review/data/detail">review_upd_%isolation%</data>
-            <data name="reviewsCount">1</data>
-            <data name="constraint">assertProductReviewsQtyByCustomer, assertProductReportByCustomerInGrid</data>
-        </variation>
-        <variation name="CustomerReviewReportEntityTestVariation2">
-            <data name="customerLogin">Yes</data>
-            <data name="product/dataSet">default</data>
-            <data name="review/data/nickname">name_upd_%isolation%</data>
-            <data name="review/data/title">title_upd_%isolation%</data>
-            <data name="review/data/detail">review_upd_%isolation%</data>
-            <data name="reviewsCount">2</data>
-            <data name="constraint">assertProductReviewsQtyByCustomer, assertProductReportByCustomerInGrid</data>
-        </variation>
-        <variation name="CustomerReviewReportEntityTestVariation3">
-            <data name="customerLogin">No</data>
-            <data name="product/dataSet">default</data>
-            <data name="review/data/nickname">name_upd_%isolation%</data>
-            <data name="review/data/title">title_upd_%isolation%</data>
-            <data name="review/data/detail">review_upd_%isolation%</data>
-            <data name="reviewsCount">2</data>
-            <data name="constraint">assertProductReviewsQtyByCustomer, assertProductReportByCustomerNotInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="CustomerReviewReportEntityTest">
+    <variation name="CustomerReviewReportEntityTestVariation1" firstConstraint="assertProductReviewsQtyByCustomer" method="test">
+      <data name="customerLogin">Yes</data>
+      <data name="product/dataSet">default</data>
+      <data name="review/data/nickname">name_upd_%isolation%</data>
+      <data name="review/data/title">title_upd_%isolation%</data>
+      <data name="review/data/detail">review_upd_%isolation%</data>
+      <data name="reviewsCount">1</data>
+      <constraint name="assertProductReviewsQtyByCustomer" next="assertProductReportByCustomerInGrid"/>
+      <constraint name="assertProductReportByCustomerInGrid" prev="assertProductReviewsQtyByCustomer"/>
+    </variation>
+    <variation name="CustomerReviewReportEntityTestVariation2" firstConstraint="assertProductReviewsQtyByCustomer" method="test">
+      <data name="customerLogin">Yes</data>
+      <data name="product/dataSet">default</data>
+      <data name="review/data/nickname">name_upd_%isolation%</data>
+      <data name="review/data/title">title_upd_%isolation%</data>
+      <data name="review/data/detail">review_upd_%isolation%</data>
+      <data name="reviewsCount">2</data>
+      <constraint name="assertProductReviewsQtyByCustomer" next="assertProductReportByCustomerInGrid"/>
+      <constraint name="assertProductReportByCustomerInGrid" prev="assertProductReviewsQtyByCustomer"/>
+    </variation>
+    <variation name="CustomerReviewReportEntityTestVariation3" firstConstraint="assertProductReviewsQtyByCustomer" method="test">
+      <data name="customerLogin">No</data>
+      <data name="product/dataSet">default</data>
+      <data name="review/data/nickname">name_upd_%isolation%</data>
+      <data name="review/data/title">title_upd_%isolation%</data>
+      <data name="review/data/detail">review_upd_%isolation%</data>
+      <data name="reviewsCount">2</data>
+      <constraint name="assertProductReviewsQtyByCustomer" next="assertProductReportByCustomerNotInGrid"/>
+      <constraint name="assertProductReportByCustomerNotInGrid" prev="assertProductReviewsQtyByCustomer"/>
+    </variation>
+  </testCase>
 </config>

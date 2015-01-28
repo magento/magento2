@@ -5,17 +5,19 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="DeleteTaxRuleEntityTest">
-        <variation name="DeleteTaxRuleEntityTestVariation1">
-            <data name="taxRule/dataSet">tax_rule_with_custom_tax_classes</data>
-            <data name="address/data/country_id">United States</data>
-            <data name="address/data/region_id">California</data>
-            <data name="address/data/postcode">90001</data>
-            <data name="shipping/carrier">Flat Rate</data>
-            <data name="shipping/method">Fixed</data>
-            <data name="shipping/price">5</data>
-            <data name="constraint">assertTaxRuleSuccessDeleteMessage, assertTaxRuleNotInGrid, assertTaxRuleIsNotApplied</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="DeleteTaxRuleEntityTest">
+    <variation name="DeleteTaxRuleEntityTestVariation1" firstConstraint="assertTaxRuleSuccessDeleteMessage" method="test">
+      <data name="taxRule/dataSet">tax_rule_with_custom_tax_classes</data>
+      <data name="address/data/country_id">United States</data>
+      <data name="address/data/region_id">California</data>
+      <data name="address/data/postcode">90001</data>
+      <data name="shipping/carrier">Flat Rate</data>
+      <data name="shipping/method">Fixed</data>
+      <data name="shipping/price">5</data>
+      <constraint name="assertTaxRuleSuccessDeleteMessage" next="assertTaxRuleNotInGrid"/>
+      <constraint name="assertTaxRuleNotInGrid" next="assertTaxRuleIsNotApplied" prev="assertTaxRuleSuccessDeleteMessage"/>
+      <constraint name="assertTaxRuleIsNotApplied" prev="assertTaxRuleNotInGrid"/>
+    </variation>
+  </testCase>
 </config>

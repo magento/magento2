@@ -5,10 +5,11 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="DeleteIntegrationEntityTest">
-        <variation name="DeleteIntegrationEntityTestVariation1">
-            <data name="constraint">assertIntegrationSuccessDeleteMessage, assertIntegrationNotInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="DeleteIntegrationEntityTest">
+    <variation name="DeleteIntegrationEntityTestVariation1" firstConstraint="assertIntegrationSuccessDeleteMessage" method="test">
+      <constraint name="assertIntegrationSuccessDeleteMessage" next="assertIntegrationNotInGrid"/>
+      <constraint name="assertIntegrationNotInGrid" prev="assertIntegrationSuccessDeleteMessage"/>
+    </variation>
+  </testCase>
 </config>

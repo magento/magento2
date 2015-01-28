@@ -5,366 +5,438 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
-    <testCase name="CreateSimpleProductEntityTest">
-        <variation name="CreateSimpleProductEntityTestVariation1">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10000</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">50</data>
-            <data name="product/data/quantity_and_stock_status/qty">657</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">drop_down_with_one_option_fixed_price</data>
-            <data name="product/data/checkout_data/preset">drop_down_with_one_option_fixed_price</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">drop_down_with_one_option_fixed_price</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation2">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10001</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">51</data>
-            <data name="product/data/quantity_and_stock_status/qty">658</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">drop_down_with_one_option_percent_price</data>
-            <data name="product/data/checkout_data/preset">drop_down_with_one_option_percent_price</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">drop_down_with_one_option_percent_price</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation3">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10002</data>
-            <data name="product/data/special_price">90</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">52</data>
-            <data name="product/data/quantity_and_stock_status/qty">659</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">drop_down_with_one_option_fixed_price</data>
-            <data name="product/data/checkout_data/preset">drop_down_with_one_option_fixed_price</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">MAGETWO-23029</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation4">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10003</data>
-            <data name="product/data/special_price">90</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">53</data>
-            <data name="product/data/quantity_and_stock_status/qty">660</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">drop_down_with_one_option_percent_price</data>
-            <data name="product/data/checkout_data/preset">drop_down_with_one_option_percent_price</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">MAGETWO-23030</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation5">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10004</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">54</data>
-            <data name="product/data/quantity_and_stock_status/qty">661</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">drop_down_with_one_option_percent_price</data>
-            <data name="product/data/checkout_data/preset">drop_down_with_one_option_percent_price</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">MAGETWO-23030</data>
-            <data name="product/data/group_price/preset">MAGETWO-23055</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation6">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10005</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">55</data>
-            <data name="product/data/quantity_and_stock_status/qty">662</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">drop_down_with_one_option_fixed_price</data>
-            <data name="product/data/checkout_data/preset">drop_down_with_one_option_fixed_price</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">MAGETWO-23029</data>
-            <data name="product/data/group_price/preset">MAGETWO-23055</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation7">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10006</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">56</data>
-            <data name="product/data/quantity_and_stock_status/qty">663</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">drop_down_with_one_option_percent_price</data>
-            <data name="product/data/checkout_data/preset">drop_down_with_one_option_percent_price</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">MAGETWO-23030</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">MAGETWO-23002</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation8">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10007</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">57</data>
-            <data name="product/data/quantity_and_stock_status/qty">664</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">drop_down_with_one_option_fixed_price</data>
-            <data name="product/data/checkout_data/preset">drop_down_with_one_option_fixed_price</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">MAGETWO-23029</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">MAGETWO-23002</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation9">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10008</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">58</data>
-            <data name="product/data/quantity_and_stock_status/qty">665</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">-</data>
-            <data name="product/data/checkout_data/preset">-</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">-</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductVisibleInCategory, assertProductPage</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation10">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10009</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">59</data>
-            <data name="product/data/quantity_and_stock_status/qty">75</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">-</data>
-            <data name="product/data/checkout_data/preset">-</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">-</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInStock</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation11">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10010</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">60</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">-</data>
-            <data name="product/data/checkout_data/preset">-</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">-</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductOutOfStock</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation12">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10011</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">61</data>
-            <data name="product/data/quantity_and_stock_status/qty">138</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">Search</data>
-            <data name="product/data/custom_options/preset">-</data>
-            <data name="product/data/checkout_data/preset">-</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">-</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductSearchableBySku</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation13">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10012</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">62</data>
-            <data name="product/data/quantity_and_stock_status/qty">139</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">-</data>
-            <data name="product/data/checkout_data/preset">-</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">-</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductInStock, assertProductSearchableBySku, assertProductPage</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation14">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10013</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">63</data>
-            <data name="product/data/quantity_and_stock_status/qty">140</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">-</data>
-            <data name="product/data/checkout_data/preset">-</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">-</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductInStock, assertProductVisibleInCategory, assertProductPage</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation15">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
-            <data name="product/data/price/value">10014</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">64</data>
-            <data name="product/data/quantity_and_stock_status/qty">141</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">-</data>
-            <data name="product/data/checkout_data/preset">-</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">-</data>
-            <data name="product/data/group_price/preset">default</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductInStock, assertProductVisibleInCategory, assertProductPage, assertProductGroupedPriceOnProductPage</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation16">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
-            <data name="product/data/price/value">10015</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">65</data>
-            <data name="product/data/quantity_and_stock_status/qty">142</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">-</data>
-            <data name="product/data/checkout_data/preset">-</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">-</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductInStock, assertProductVisibleInCategory, assertProductPage, assertProductSpecialPriceOnProductPage</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation17">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">None</data>
-            <data name="product/data/price/value">10016</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">66</data>
-            <data name="product/data/quantity_and_stock_status/qty">143</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">-</data>
-            <data name="product/data/checkout_data/preset">-</data>
-            <data name="product/data/custom_options/import_products">-</data>
-            <data name="product/data/price/preset">-</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">default</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductInStock, assertProductVisibleInCategory, assertProductPage, assertProductTierPriceOnProductPage</data>
-        </variation>
-        <variation name="CreateSimpleProductEntityTestVariation18">
-            <data name="product/data/name">Simple Product %isolation%</data>
-            <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">-</data>
-            <data name="product/data/price/value">10017</data>
-            <data name="product/data/special_price">-</data>
-            <data name="product/data/short_description">Simple Product short_description %isolation%</data>
-            <data name="product/data/description">Simple Product description %isolation%</data>
-            <data name="product/data/weight">67</data>
-            <data name="product/data/quantity_and_stock_status/qty">144</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/visibility">-</data>
-            <data name="product/data/custom_options/preset">options-suite</data>
-            <data name="product/data/checkout_data/preset">options-suite</data>
-            <data name="product/data/custom_options/import_products">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
-            <data name="product/data/price/preset">-</data>
-            <data name="product/data/group_price/preset">-</data>
-            <data name="product/data/tier_price/preset">-</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductInStock, assertProductVisibleInCategory, assertProductPage, assertProductCustomOptionsOnProductPage</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="CreateSimpleProductEntityTest">
+    <variation name="CreateSimpleProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10000</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">50</data>
+      <data name="product/data/quantity_and_stock_status/qty">657</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">drop_down_with_one_option_fixed_price</data>
+      <data name="product/data/checkout_data/preset">drop_down_with_one_option_fixed_price</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">drop_down_with_one_option_fixed_price</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
+      <constraint name="assertProductInCart" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10001</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">51</data>
+      <data name="product/data/quantity_and_stock_status/qty">658</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">drop_down_with_one_option_percent_price</data>
+      <data name="product/data/checkout_data/preset">drop_down_with_one_option_percent_price</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">drop_down_with_one_option_percent_price</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
+      <constraint name="assertProductInCart" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10002</data>
+      <data name="product/data/special_price">90</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">52</data>
+      <data name="product/data/quantity_and_stock_status/qty">659</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">drop_down_with_one_option_fixed_price</data>
+      <data name="product/data/checkout_data/preset">drop_down_with_one_option_fixed_price</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">MAGETWO-23029</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
+      <constraint name="assertProductInCart" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10003</data>
+      <data name="product/data/special_price">90</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">53</data>
+      <data name="product/data/quantity_and_stock_status/qty">660</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">drop_down_with_one_option_percent_price</data>
+      <data name="product/data/checkout_data/preset">drop_down_with_one_option_percent_price</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">MAGETWO-23030</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
+      <constraint name="assertProductInCart" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10004</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">54</data>
+      <data name="product/data/quantity_and_stock_status/qty">661</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">drop_down_with_one_option_percent_price</data>
+      <data name="product/data/checkout_data/preset">drop_down_with_one_option_percent_price</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">MAGETWO-23030</data>
+      <data name="product/data/group_price/preset">MAGETWO-23055</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
+      <constraint name="assertProductInCart" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10005</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">55</data>
+      <data name="product/data/quantity_and_stock_status/qty">662</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">drop_down_with_one_option_fixed_price</data>
+      <data name="product/data/checkout_data/preset">drop_down_with_one_option_fixed_price</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">MAGETWO-23029</data>
+      <data name="product/data/group_price/preset">MAGETWO-23055</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
+      <constraint name="assertProductInCart" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10006</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">56</data>
+      <data name="product/data/quantity_and_stock_status/qty">663</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">drop_down_with_one_option_percent_price</data>
+      <data name="product/data/checkout_data/preset">drop_down_with_one_option_percent_price</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">MAGETWO-23030</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">MAGETWO-23002</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
+      <constraint name="assertProductInCart" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10007</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">57</data>
+      <data name="product/data/quantity_and_stock_status/qty">664</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">drop_down_with_one_option_fixed_price</data>
+      <data name="product/data/checkout_data/preset">drop_down_with_one_option_fixed_price</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">MAGETWO-23029</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">MAGETWO-23002</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
+      <constraint name="assertProductInCart" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10008</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">58</data>
+      <data name="product/data/quantity_and_stock_status/qty">665</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">-</data>
+      <data name="product/data/checkout_data/preset">-</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">-</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductVisibleInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" prev="assertProductVisibleInCategory"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation10" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10009</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">59</data>
+      <data name="product/data/quantity_and_stock_status/qty">75</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">-</data>
+      <data name="product/data/checkout_data/preset">-</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">-</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInStock"/>
+      <constraint name="assertProductInStock" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation11" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10010</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">60</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">-</data>
+      <data name="product/data/checkout_data/preset">-</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">-</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductOutOfStock"/>
+      <constraint name="assertProductOutOfStock" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation12" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10011</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">61</data>
+      <data name="product/data/quantity_and_stock_status/qty">138</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">Search</data>
+      <data name="product/data/custom_options/preset">-</data>
+      <data name="product/data/checkout_data/preset">-</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">-</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductSearchableBySku"/>
+      <constraint name="assertProductSearchableBySku" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation13" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10012</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">62</data>
+      <data name="product/data/quantity_and_stock_status/qty">139</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">-</data>
+      <data name="product/data/checkout_data/preset">-</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">-</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
+      <constraint name="assertProductInStock" next="assertProductSearchableBySku" prev="assertProductForm"/>
+      <constraint name="assertProductSearchableBySku" next="assertProductPage" prev="assertProductInStock"/>
+      <constraint name="assertProductPage" prev="assertProductSearchableBySku"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation14" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10013</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">63</data>
+      <data name="product/data/quantity_and_stock_status/qty">140</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">-</data>
+      <data name="product/data/checkout_data/preset">-</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">-</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
+      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
+      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
+      <constraint name="assertProductPage" prev="assertProductVisibleInCategory"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation15" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+      <data name="product/data/price/value">10014</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">64</data>
+      <data name="product/data/quantity_and_stock_status/qty">141</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">-</data>
+      <data name="product/data/checkout_data/preset">-</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">-</data>
+      <data name="product/data/group_price/preset">default</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
+      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
+      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
+      <constraint name="assertProductPage" next="assertProductGroupedPriceOnProductPage" prev="assertProductVisibleInCategory"/>
+      <constraint name="assertProductGroupedPriceOnProductPage" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation16" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+      <data name="product/data/price/value">10015</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">65</data>
+      <data name="product/data/quantity_and_stock_status/qty">142</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">-</data>
+      <data name="product/data/checkout_data/preset">-</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">-</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
+      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
+      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
+      <constraint name="assertProductPage" next="assertProductSpecialPriceOnProductPage" prev="assertProductVisibleInCategory"/>
+      <constraint name="assertProductSpecialPriceOnProductPage" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation17" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">None</data>
+      <data name="product/data/price/value">10016</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">66</data>
+      <data name="product/data/quantity_and_stock_status/qty">143</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">-</data>
+      <data name="product/data/checkout_data/preset">-</data>
+      <data name="product/data/custom_options/import_products">-</data>
+      <data name="product/data/price/preset">-</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
+      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
+      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
+      <constraint name="assertProductPage" next="assertProductTierPriceOnProductPage" prev="assertProductVisibleInCategory"/>
+      <constraint name="assertProductTierPriceOnProductPage" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation18" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name">Simple Product %isolation%</data>
+      <data name="product/data/sku">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet">-</data>
+      <data name="product/data/price/value">10017</data>
+      <data name="product/data/special_price">-</data>
+      <data name="product/data/short_description">Simple Product short_description %isolation%</data>
+      <data name="product/data/description">Simple Product description %isolation%</data>
+      <data name="product/data/weight">67</data>
+      <data name="product/data/quantity_and_stock_status/qty">144</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+      <data name="product/data/visibility">-</data>
+      <data name="product/data/custom_options/preset">options-suite</data>
+      <data name="product/data/checkout_data/preset">options-suite</data>
+      <data name="product/data/custom_options/import_products">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
+      <data name="product/data/price/preset">-</data>
+      <data name="product/data/group_price/preset">-</data>
+      <data name="product/data/tier_price/preset">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
+      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
+      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
+      <constraint name="assertProductPage" next="assertProductCustomOptionsOnProductPage" prev="assertProductVisibleInCategory"/>
+      <constraint name="assertProductCustomOptionsOnProductPage" prev="assertProductPage"/>
+    </variation>
+  </testCase>
 </config>

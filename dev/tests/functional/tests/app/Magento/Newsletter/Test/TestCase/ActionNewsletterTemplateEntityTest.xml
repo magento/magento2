@@ -5,17 +5,17 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="ActionNewsletterTemplateEntityTest">
-        <variation name="ActionNewsletterTemplateEntityTestVariation1">
-            <data name="newsletter/dataSet">default</data>
-            <data name="action">Preview</data>
-            <data name="constraint">assertNewsletterPreview</data>
-        </variation>
-        <variation name="ActionNewsletterTemplateEntityTestVariation2">
-            <data name="newsletter/dataSet">default</data>
-            <data name="action">Queue Newsletter</data>
-            <data name="constraint">assertNewsletterQueue</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="ActionNewsletterTemplateEntityTest">
+    <variation name="ActionNewsletterTemplateEntityTestVariation1" firstConstraint="assertNewsletterPreview" method="test">
+      <data name="newsletter/dataSet">default</data>
+      <data name="action">Preview</data>
+      <constraint name="assertNewsletterPreview"/>
+    </variation>
+    <variation name="ActionNewsletterTemplateEntityTestVariation2" firstConstraint="assertNewsletterQueue" method="test">
+      <data name="newsletter/dataSet">default</data>
+      <data name="action">Queue Newsletter</data>
+      <constraint name="assertNewsletterQueue"/>
+    </variation>
+  </testCase>
 </config>

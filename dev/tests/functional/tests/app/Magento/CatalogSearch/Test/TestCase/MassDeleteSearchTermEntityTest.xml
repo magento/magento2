@@ -5,11 +5,14 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="MassDeleteSearchTermEntityTest">
-        <variation name="MassDeleteSearchTermEntityTestVariation1">
-            <data name="searchTerms">catalogSearchQuery::default,catalogSearchQuery::default,catalogSearchQuery::default</data>
-            <data name="constraint">assertSearchTermSuccessMassDeleteMessage, assertSearchTermMassActionsNotInGrid, assertSearchTermMassActionNotOnFrontend, assertSearchSynonymMassActionNotOnFrontend</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="MassDeleteSearchTermEntityTest">
+    <variation name="MassDeleteSearchTermEntityTestVariation1" firstConstraint="assertSearchTermSuccessMassDeleteMessage" method="test">
+      <data name="searchTerms">catalogSearchQuery::default,catalogSearchQuery::default,catalogSearchQuery::default</data>
+      <constraint name="assertSearchTermSuccessMassDeleteMessage" next="assertSearchTermMassActionsNotInGrid"/>
+      <constraint name="assertSearchTermMassActionsNotInGrid" next="assertSearchTermMassActionNotOnFrontend" prev="assertSearchTermSuccessMassDeleteMessage"/>
+      <constraint name="assertSearchTermMassActionNotOnFrontend" next="assertSearchSynonymMassActionNotOnFrontend" prev="assertSearchTermMassActionsNotInGrid"/>
+      <constraint name="assertSearchSynonymMassActionNotOnFrontend" prev="assertSearchTermMassActionNotOnFrontend"/>
+    </variation>
+  </testCase>
 </config>
