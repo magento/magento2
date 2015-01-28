@@ -16,14 +16,17 @@ class RepositoryGenerator implements OperationInterface
      * @var Scanner\DirectoryScanner
      */
     private $directoryScanner;
+
     /**
      * @var Scanner\RepositoryScanner
      */
     private $repositoryScanner;
+
     /**
      * @var array
      */
     private $data;
+
     /**
      * @var ClassesScanner
      */

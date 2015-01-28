@@ -59,6 +59,7 @@ class RepositoryScanner implements ScannerInterface
      * Sets autoload flag
      *
      * @param boolean $useAutoload
+     * @return void
      */
     public function setUseAutoload($useAutoload)
     {

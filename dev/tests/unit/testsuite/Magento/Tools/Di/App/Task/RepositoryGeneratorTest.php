@@ -16,6 +16,7 @@ class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
      * @var Scanner\DirectoryScanner | \PHPUnit_Framework_MockObject_MockObject
      */
     private $directoryScannerMock;
+    
     /**
      * @var Scanner\RepositoryScanner | \PHPUnit_Framework_MockObject_MockObject
      */
@@ -58,7 +59,7 @@ class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @returns array
+     * @return array
      */
     public function wrongDataDataProvider()
     {
