@@ -7,6 +7,7 @@
 namespace Magento\Framework\View\Asset\Minified;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
 
 class AbstractAssetTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -58,8 +59,8 @@ class AbstractAssetTestCase extends \PHPUnit_Framework_TestCase
         $this->_filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->will($this->returnValueMap([
-                [DirectoryList::STATIC_VIEW, $this->_staticViewDir],
-                [DirectoryList::ROOT, $this->_rootDir],
+                [DirectoryList::STATIC_VIEW, DriverPool::FILE, $this->_staticViewDir],
+                [DirectoryList::ROOT, DriverPool::FILE, $this->_rootDir],
             ]));
         $this->_filesystem->expects($this->any())
             ->method('getDirectoryWrite')
