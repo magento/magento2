@@ -1,79 +1,46 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<constraint>
-    <assertUrlRewriteInGrid module="Magento_UrlRewrite">
-        <severity>low</severity>
-        <require>
-            <urlRewriteIndex class="Magento\UrlRewrite\Test\Fixture\UrlRewriteCategory"/>
-            <urlRewriteCategory class="Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex"/>
-        </require>
-    </assertUrlRewriteInGrid>
-    <assertUrlRewriteSaveMessage module="Magento_UrlRewrite">
-        <severity>low</severity>
-    </assertUrlRewriteSaveMessage>
-    <assertUrlRewriteCategoryRedirect module="Magento_UrlRewrite">
-        <severity>low</severity>
-    </assertUrlRewriteCategoryRedirect>
-    <assertUrlRewriteProductRedirect module="Magento_UrlRewrite">
-        <severity>low</severity>
-        <require>
-            <urlRewrite class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
-            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView"/>
-            <product class="Magento\Mtf\Fixture\FixtureInterface"/>
-            <browser class="Magento\Mtf\Client\Browser"/>
-        </require>
-    </assertUrlRewriteProductRedirect>
-    <assertUrlRewriteDeletedMessage module="Magento_UrlRewrite">
-        <severity>low</severity>
-        <require>
-            <index class="Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex"/>
-        </require>
-    </assertUrlRewriteDeletedMessage>
-    <assertUrlRewriteNotInGrid module="Magento_UrlRewrite">
-        <severity>low</severity>
-        <require>
-            <urlRewriteIndex class="Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex"/>
-            <productRedirect class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
-        </require>
-    </assertUrlRewriteNotInGrid>
-    <assertPageByUrlRewriteIsNotFound module="Magento_UrlRewrite">
-        <severity>low</severity>
-        <require>
-            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView"/>
-            <productRedirect class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
-            <browser class="Magento\Mtf\Client\Browser"/>
-        </require>
-    </assertPageByUrlRewriteIsNotFound>
-    <assertUrlRewriteCustomRedirect module="Magento_UrlRewrite">
-        <severity>low</severity>
-    </assertUrlRewriteCustomRedirect>
-    <assertUrlRewriteSuccessOutsideRedirect module="Magento_UrlRewrite">
-        <severity>low</severity>
-        <require>
-            <urlRewrite class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
-            <browser class="Magento\Mtf\Client\Browser"/>
-        </require>
-    </assertUrlRewriteSuccessOutsideRedirect>
-    <assertUrlRewriteCustomSearchRedirect module="Magento_UrlRewrite">
-        <severity>low</severity>
-        <require>
-            <urlRewrite class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
-            <browser class="Magento\Mtf\Client\Browser"/>
-            <categoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView"/>
-        </require>
-    </assertUrlRewriteCustomSearchRedirect>
-    <assertUrlRewriteCategoryInGrid module="Magento_UrlRewrite">
-        <severity>low</severity>
-    </assertUrlRewriteCategoryInGrid>
-    <assertUrlRewriteUpdatedProductInGrid module="Magento_UrlRewrite">
-        <severity>low</severity>
-    </assertUrlRewriteUpdatedProductInGrid>
-    <assertUrlRewriteCategoryNotInGrid module="Magento_UrlRewrite">
-        <severity>low</severity>
-    </assertUrlRewriteCategoryNotInGrid>
-</constraint>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/constraints.xsd">
+    <constraint name="assertUrlRewriteInGrid" module="Magento_UrlRewrite" severity="low">
+        <argument name="urlRewriteIndex">Magento\UrlRewrite\Test\Fixture\UrlRewriteCategory</argument>
+        <argument name="urlRewriteCategory">Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex</argument>
+    </constraint>
+    <constraint name="assertUrlRewriteSaveMessage" module="Magento_UrlRewrite" severity="low"/>
+    <constraint name="assertUrlRewriteCategoryRedirect" module="Magento_UrlRewrite" severity="low"/>
+    <constraint name="assertUrlRewriteProductRedirect" module="Magento_UrlRewrite" severity="low">
+        <argument name="urlRewrite">Magento\UrlRewrite\Test\Fixture\UrlRewrite</argument>
+        <argument name="catalogProductView">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+        <argument name="product">Magento\Mtf\Fixture\FixtureInterface</argument>
+        <argument name="browser">Magento\Mtf\Client\Browser</argument>
+    </constraint>
+    <constraint name="assertUrlRewriteDeletedMessage" module="Magento_UrlRewrite" severity="low">
+        <argument name="index">Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex</argument>
+    </constraint>
+    <constraint name="assertUrlRewriteNotInGrid" module="Magento_UrlRewrite" severity="low">
+        <argument name="urlRewriteIndex">Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex</argument>
+        <argument name="productRedirect">Magento\UrlRewrite\Test\Fixture\UrlRewrite</argument>
+    </constraint>
+    <constraint name="assertPageByUrlRewriteIsNotFound" module="Magento_UrlRewrite" severity="low">
+        <argument name="catalogProductView">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+        <argument name="productRedirect">Magento\UrlRewrite\Test\Fixture\UrlRewrite</argument>
+        <argument name="browser">Magento\Mtf\Client\Browser</argument>
+    </constraint>
+    <constraint name="assertUrlRewriteCustomRedirect" module="Magento_UrlRewrite" severity="low"/>
+    <constraint name="assertUrlRewriteSuccessOutsideRedirect" module="Magento_UrlRewrite" severity="low">
+        <argument name="urlRewrite">Magento\UrlRewrite\Test\Fixture\UrlRewrite</argument>
+        <argument name="browser">Magento\Mtf\Client\Browser</argument>
+    </constraint>
+    <constraint name="assertUrlRewriteCustomSearchRedirect" module="Magento_UrlRewrite" severity="low">
+        <argument name="urlRewrite">Magento\UrlRewrite\Test\Fixture\UrlRewrite</argument>
+        <argument name="browser">Magento\Mtf\Client\Browser</argument>
+        <argument name="categoryView">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+    </constraint>
+    <constraint name="assertUrlRewriteCategoryInGrid" module="Magento_UrlRewrite" severity="low"/>
+    <constraint name="assertUrlRewriteUpdatedProductInGrid" module="Magento_UrlRewrite" severity="low"/>
+    <constraint name="assertUrlRewriteCategoryNotInGrid" module="Magento_UrlRewrite" severity="low"/>
+</config>
