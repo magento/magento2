@@ -19,15 +19,13 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * @param Context $context
-     * @param Registry $coreRegistry
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
-        Registry $coreRegistry,
         PageFactory $resultPageFactory
     ) {
-        parent::__construct($context, $coreRegistry);
+        parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
     }
     /**
