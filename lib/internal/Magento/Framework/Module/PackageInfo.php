@@ -6,7 +6,8 @@
 namespace Magento\Framework\Module;
 
 /**
- * Provide information of dependencies and conflicts in composer.json files and mapping of package name to module name
+ * Provide information of dependencies and conflicts in composer.json files, mapping of package name to module name,
+ * and mapping of module name to package version
  */
 class PackageInfo
 {
@@ -18,21 +19,21 @@ class PackageInfo
     private $packageModuleMap;
 
     /**
-     * Map of modules to package current version, contains depending module's name
+     * Map of module name to package version
      *
      * @var string[]
      */
     private $modulePackageVersionMap;
 
     /**
-     * "require" field of each module
+     * "require" field of each module, contains depending modules' name
      *
      * @var array[]
      */
     private $requireMap;
 
     /**
-     * "conflict" field of each module, contains conflicting module's name and version
+     * "conflict" field of each module, contains conflicting modules' name and version
      *
      * @var array[]
      */
