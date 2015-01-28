@@ -28,7 +28,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * Render CMS 404 Not found page
      *
-     * @return \Magento\Backend\Model\View\Result\Forward
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -46,10 +46,12 @@ class Index extends \Magento\Framework\App\Action\Action
         );
         /** @var \Magento\Cms\Helper\Page $pageHelper */
         $pageHelper = $this->_objectManager->get('Magento\Cms\Helper\Page');
-        if (!$pageHelper->renderPage($this, $pageId)) {
+        $resultPage = $pageHelper->prepareResultPage($this, $pageId);
+        if (!$resultPage) {
             $resultForward->setController('index');
             $resultForward->forward('defaultNoRoute');
             return $resultForward;
         }
+        return $resultPage;
     }
 }

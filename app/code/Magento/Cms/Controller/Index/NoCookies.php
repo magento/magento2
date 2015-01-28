@@ -39,7 +39,7 @@ class NoCookies extends \Magento\Framework\App\Action\Action
             \Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        $resultPage = $this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId);
+        $resultPage = $this->_objectManager->get('Magento\Cms\Helper\Page')->prepareResultPage($this, $pageId);
         if (!$resultPage) {
             $resultForward = $this->resultForwardFactory->create();
             return $resultForward->forward('defaultNoCookies');
