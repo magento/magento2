@@ -5,484 +5,510 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Catalog\Test\Fixture\CatalogProductSimple">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
+          class="Magento\Catalog\Test\Fixture\CatalogProductSimple">
     <module>Magento_Catalog</module>
     <type>eav</type>
     <entity_type>catalog_product</entity_type>
     <product_type>simple</product_type>
     <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
     <identifier>sku</identifier>
+    <repository_class>Magento\Catalog\Test\Repository\CatalogProductSimple</repository_class>
+    <handler_interface>Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface</handler_interface>
+    <dataset name="default">
+        <field name="name" xsi:type="string">Test simple product %isolation%</field>
+        <field name="sku" xsi:type="string">test_simple_sku_%isolation%</field>
+        <field name="attribute_set_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default</item>
+        </field>
+        <field name="price" xsi:type="array">
+            <item name="value" xsi:type="string">100.00</item>
+        </field>
+        <field name="weight" xsi:type="string">12.00</field>
+        <field name="quantity_and_stock_status" xsi:type="array">
+            <item name="qty" xsi:type="string">10.00</item>
+            <item name="is_in_stock" xsi:type="string">In Stock</item>
+        </field>
+        <field name="website_ids" xsi:type="array">
+            <item name="0" xsi:type="string">Main Website</item>
+        </field>
+    </dataset>
+    <data_config>
+        <item name="type_id" xsi:type="string">simple</item>
+        <item name="create_url_params" xsi:type="array">
+            <item name="type" xsi:type="string">simple</item>
+            <item name="set" xsi:type="string">4</item>
+        </item>
+        <item name="input_prefix" xsi:type="string">product</item>
+    </data_config>
     <fields>
-        <category_ids>
+        <field name="category_ids">
             <attribute_code>category_ids</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>product-details</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds</source>
-        </category_ids>
-        <color>
+        </field>
+        <field name="color">
             <attribute_code>color</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
-        </color>
-        <country_of_manufacture>
+        </field>
+        <field name="country_of_manufacture">
             <attribute_code>country_of_manufacture</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
-        </country_of_manufacture>
-        <created_at>
+        </field>
+        <field name="created_at">
             <attribute_code>created_at</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </created_at>
-        <custom_design>
+        </field>
+        <field name="custom_design">
             <attribute_code>custom_design</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
-        </custom_design>
-        <custom_design_from>
+        </field>
+        <field name="custom_design_from">
             <attribute_code>custom_design_from</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
-        </custom_design_from>
-        <custom_design_to>
+        </field>
+        <field name="custom_design_to">
             <attribute_code>custom_design_to</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
-        </custom_design_to>
-        <custom_layout_update>
+        </field>
+        <field name="custom_layout_update">
             <attribute_code>custom_layout_update</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>textarea</input>
-        </custom_layout_update>
-        <description>
+        </field>
+        <field name="description">
             <attribute_code>description</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>textarea</input>
             <group>product-details</group>
-        </description>
-        <gallery>
+        </field>
+        <field name="gallery">
             <attribute_code>gallery</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>gallery</input>
-        </gallery>
-        <gift_message_available>
+        </field>
+        <field name="gift_message_available">
             <attribute_code>gift_message_available</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
-        </gift_message_available>
-        <group_price>
+        </field>
+        <field name="group_price">
             <attribute_code>group_price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>advanced-pricing</group>
-            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions</fixture>
-        </group_price>
-        <has_options>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions</source>
+        </field>
+        <field name="has_options">
             <attribute_code>has_options</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </has_options>
-        <image>
+        </field>
+        <field name="image">
             <attribute_code>image</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>media_image</input>
-        </image>
-        <image_label>
+        </field>
+        <field name="image_label">
             <attribute_code>image_label</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </image_label>
-        <manufacturer>
+        </field>
+        <field name="manufacturer">
             <attribute_code>manufacturer</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
-        </manufacturer>
-        <media_gallery>
+        </field>
+        <field name="media_gallery">
             <attribute_code>media_gallery</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>gallery</input>
-        </media_gallery>
-        <meta_description>
+        </field>
+        <field name="meta_description">
             <attribute_code>meta_description</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <group>search-engine-optimization</group>
             <input>textarea</input>
-        </meta_description>
-        <meta_keyword>
+        </field>
+        <field name="meta_keyword">
             <attribute_code>meta_keyword</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <group>search-engine-optimization</group>
             <input>textarea</input>
-        </meta_keyword>
-        <meta_title>
+        </field>
+        <field name="meta_title">
             <attribute_code>meta_title</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <group>search-engine-optimization</group>
             <input>text</input>
-        </meta_title>
-        <minimal_price>
+        </field>
+        <field name="minimal_price">
             <attribute_code>minimal_price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>price</input>
-        </minimal_price>
-        <msrp>
+        </field>
+        <field name="msrp">
             <attribute_code>msrp</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>price</input>
-        </msrp>
-        <msrp_display_actual_price_type>
+        </field>
+        <field name="msrp_display_actual_price_type">
             <attribute_code>msrp_display_actual_price_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>Use config</default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
-        </msrp_display_actual_price_type>
-        <name>
+        </field>
+        <field name="name">
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="string">Test simple product %isolation%</default_value>
             <input>text</input>
             <group>product-details</group>
-        </name>
-        <news_from_date>
-            <attribute_code>news_from_date</attribute_code>
-            <backend_type>datetime</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>date</input>
-        </news_from_date>
-        <news_to_date>
-            <attribute_code>news_to_date</attribute_code>
-            <backend_type>datetime</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>date</input>
-        </news_to_date>
-        <old_id>
+        </field>
+        <field name="old_id">
             <attribute_code>old_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </old_id>
-        <options_container>
+        </field>
+        <field name="options_container">
             <attribute_code>options_container</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>Block after Info Column</default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
-        </options_container>
-        <page_layout>
+        </field>
+        <field name="page_layout">
             <attribute_code>page_layout</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
-        </page_layout>
-        <price>
+        </field>
+        <field name="price">
             <attribute_code>price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="array">
+                <item name="value" xsi:type="number">100</item>
+            </default_value>
             <input>price</input>
             <group>product-details</group>
-            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\Price</fixture>
-        </price>
-        <quantity_and_stock_status>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\Price</source>
+        </field>
+        <field name="quantity_and_stock_status">
             <attribute_code>quantity_and_stock_status</attribute_code>
-            <backend_type>int</backend_type>
+            <backend_type>array</backend_type>
             <is_required>0</is_required>
-            <default_value>In Stock</default_value>
-            <input>select</input>
+            <default_value xsi:type="array">
+                <item name="qty" xsi:type="number">10</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </default_value>
+            <input />
             <group>product-details</group>
-        </quantity_and_stock_status>
-        <required_options>
+        </field>
+        <field name="required_options">
             <attribute_code>required_options</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </required_options>
-        <sku>
+        </field>
+        <field name="sku">
             <attribute_code>sku</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="string">test_simple_sku_%isolation%</default_value>
             <input>text</input>
             <group>product-details</group>
-        </sku>
-        <small_image>
+        </field>
+        <field name="small_image">
             <attribute_code>small_image</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>media_image</input>
-        </small_image>
-        <small_image_label>
+        </field>
+        <field name="small_image_label">
             <attribute_code>small_image_label</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </small_image_label>
-        <special_from_date>
+        </field>
+        <field name="special_from_date">
             <attribute_code>special_from_date</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
-        </special_from_date>
-        <short_description>
+        </field>
+        <field name="short_description">
             <attribute_code>short_description</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>textarea</input>
             <group>autosettings</group>
-        </short_description>
-        <special_price>
+        </field>
+        <field name="special_price">
             <attribute_code>special_price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>price</input>
             <group>advanced-pricing</group>
-        </special_price>
-        <special_to_date>
+        </field>
+        <field name="special_to_date">
             <attribute_code>special_to_date</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
-        </special_to_date>
-        <status>
+        </field>
+        <field name="status">
             <attribute_code>status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>Product online</default_value>
+            <default_value xsi:type="string">Product online</default_value>
             <input>checkbox</input>
             <group>product-details</group>
-        </status>
-        <tax_class_id>
+        </field>
+        <field name="tax_class_id">
             <attribute_code>tax_class_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>Taxable Goods</default_value>
+            <default_value xsi:type="string">Taxable Goods</default_value>
             <input>select</input>
-            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
             <group>product-details</group>
-        </tax_class_id>
-        <thumbnail>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
+        </field>
+        <field name="thumbnail">
             <attribute_code>thumbnail</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>media_image</input>
-        </thumbnail>
-        <thumbnail_label>
+        </field>
+        <field name="thumbnail_label">
             <attribute_code>thumbnail_label</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </thumbnail_label>
-        <tier_price>
+        </field>
+        <field name="tier_price">
             <attribute_code>tier_price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>advanced-pricing</group>
-            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions</fixture>
-        </tier_price>
-        <updated_at>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions</source>
+        </field>
+        <field name="updated_at">
             <attribute_code>updated_at</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </updated_at>
-        <url_key>
+        </field>
+        <field name="url_key">
             <attribute_code>url_key</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>search-engine-optimization</group>
-        </url_key>
-        <url_path>
+        </field>
+        <field name="url_path">
             <attribute_code>url_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </url_path>
-        <visibility>
+        </field>
+        <field name="visibility">
             <attribute_code>visibility</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>Catalog, Search</default_value>
+            <default_value xsi:type="string">Catalog, Search</default_value>
             <input>select</input>
             <group>autosettings</group>
-        </visibility>
-        <weight>
+        </field>
+        <field name="weight">
             <attribute_code>weight</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="number">12</default_value>
             <input>weight</input>
             <group>product-details</group>
-        </weight>
-        <id>
+        </field>
+        <field name="id">
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
-        </id>
-        <type_id>
+            <group>null</group>
+        </field>
+        <field name="type_id">
             <attribute_code>type_id</attribute_code>
             <backend_type>virtual</backend_type>
-            <group />
-        </type_id>
-        <attribute_set_id>
+        </field>
+        <field name="attribute_set_id">
             <attribute_code>attribute_set_id</attribute_code>
             <backend_type>virtual</backend_type>
-            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId</source>
             <group>product-details</group>
-        </attribute_set_id>
-        <custom_attribute>
-            <attribute_code>attributes</attribute_code>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId</source>
+            <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </default_value>
+        </field>
+        <field name="custom_attribute">
+            <attribute_code>custom_attribute</attribute_code>
             <backend_type>virtual</backend_type>
             <group>product-details</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomAttribute</source>
-        </custom_attribute>
-        <custom_options>
+        </field>
+        <field name="custom_options">
             <attribute_code>custom_options</attribute_code>
             <backend_type>virtual</backend_type>
             <is_required>0</is_required>
             <group>customer-options</group>
-            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</fixture>
-        </custom_options>
-        <website_ids>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</source>
+        </field>
+        <field name="website_ids">
             <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
-            <default_value>Main Website</default_value>
+            <default_value xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </default_value>
             <group>websites</group>
-        </website_ids>
-        <is_returnable>
+        </field>
+        <field name="is_returnable">
             <attribute_code>is_returnable</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>2</default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
             <group>autosettings</group>
-        </is_returnable>
-        <stock_data>
+        </field>
+        <field name="news_from_date">
+            <attribute_code>news_from_date</attribute_code>
+            <backend_type>datetime</backend_type>
+            <is_required>0</is_required>
+            <default_value xsi:type="null" />
+            <input>date</input>
+            <source>Magento\Backend\Test\Fixture\Source\Date</source>
+        </field>
+        <field name="news_to_date">
+            <attribute_code>news_to_date</attribute_code>
+            <backend_type>datetime</backend_type>
+            <is_required>0</is_required>
+            <default_value xsi:type="null" />
+            <input>date</input>
+            <source>Magento\Backend\Test\Fixture\Source\Date</source>
+        </field>
+        <field name="stock_data">
             <attribute_code>stock_data</attribute_code>
             <backend_type>virtual</backend_type>
             <group>advanced-inventory</group>
-        </stock_data>
-        <checkout_data>
+        </field>
+        <field name="checkout_data">
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
-            <group />
+            <group>null</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CheckoutData</source>
-        </checkout_data>
-        <cross_sell_products>
+        </field>
+        <field name="cross_sell_products">
             <attribute_code>cross_sell_products</attribute_code>
             <backend_type>virtual</backend_type>
             <group>crosssells</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CrossSellProducts</source>
-        </cross_sell_products>
-        <up_sell_products>
+        </field>
+        <field name="up_sell_products">
             <attribute_code>up_sell_products</attribute_code>
             <backend_type>virtual</backend_type>
             <group>upsells</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\UpSellProducts</source>
-        </up_sell_products>
-        <related_products>
+        </field>
+        <field name="related_products">
             <attribute_code>related_products</attribute_code>
             <backend_type>virtual</backend_type>
             <group>related-products</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\RelatedProducts</source>
-        </related_products>
-        <is_virtual>
+        </field>
+        <field name="is_virtual">
             <attribute_code>is_virtual</attribute_code>
             <backend_type>virtual</backend_type>
             <group>product-details</group>
-        </is_virtual>
-        <attributes>
+        </field>
+        <field name="attributes">
             <attribute_code>attributes</attribute_code>
             <backend_type>virtual</backend_type>
-        </attributes>
-        <fpt>
+        </field>
+        <field name="fpt">
             <attribute_code>fpt</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>product-details</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\Fpt</source>
-        </fpt>
+        </field>
     </fields>
-    <data_set>
-        <sku></sku>
-        <name></name>
-        <short_description></short_description>
-        <description></description>
-        <tax_class_id></tax_class_id>
-    </data_set>
-    <data_config>
-        <create_url_params>
-            <type>simple</type>
-            <set>4</set>
-        </create_url_params>
-        <input_prefix>product</input_prefix>
-    </data_config>
-    <repository_class>Magento\Catalog\Test\Repository\CatalogProductSimple</repository_class>
-    <handler_interface>Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface</handler_interface>
 </fixture>

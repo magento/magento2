@@ -131,11 +131,10 @@ class AssertProductPage extends AbstractAssertForm
      */
     protected function verifySpecialPrice()
     {
-        $fixtureProductSpecialPrice = $this->product->getSpecialPrice();
-        if (!$fixtureProductSpecialPrice) {
+        if (!$this->product->hasData('special_price')) {
             return null;
         }
-
+        $fixtureProductSpecialPrice = $this->product->getSpecialPrice();
         $fixtureProductSpecialPrice = number_format($fixtureProductSpecialPrice, 2);
         $formProductSpecialPrice = $this->productView->getPriceBlock()->getSpecialPrice();
         if ($fixtureProductSpecialPrice == $formProductSpecialPrice) {
