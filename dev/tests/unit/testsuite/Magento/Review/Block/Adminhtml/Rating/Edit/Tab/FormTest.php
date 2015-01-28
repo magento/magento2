@@ -7,6 +7,10 @@ namespace Magento\Review\Block\Adminhtml\Rating\Edit\Tab;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FormTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -129,8 +133,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->ratingOptionCollection->expects($this->any())->method('load')->will($this->returnSelf());
         $this->ratingOptionCollection->expects($this->any())->method('getItems')
             ->will($this->returnValue([$this->optionRating]));
-        $this->optionRating->expects($this->any())->method('getResourceCollection'
-        )->will($this->returnValue($this->ratingOptionCollection));
+        $this->optionRating->expects($this->any())->method('getResourceCollection')
+            ->will($this->returnValue($this->ratingOptionCollection));
         $this->store->expects($this->any())->method('getId')->will($this->returnValue('0'));
         $this->store->expects($this->any())->method('getName')->will($this->returnValue('store_name'));
         $this->element->expects($this->any())->method('setValue')->will($this->returnSelf());
@@ -203,5 +207,4 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->directoryReadInterface));
         $this->block->toHtml();
     }
-
 }

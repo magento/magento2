@@ -25,4 +25,3 @@ $category->setId(
 )->setPosition(
     '5'
 )->save();
-

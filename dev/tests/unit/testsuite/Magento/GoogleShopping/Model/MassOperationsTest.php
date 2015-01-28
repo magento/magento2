@@ -52,7 +52,10 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         $this->itemFactory = $this->getMock('Magento\GoogleShopping\Model\ItemFactory', ['create'], [], '', false);
         $this->productRepository = $this->getMock(
             '\Magento\Catalog\Api\ProductRepositoryInterface',
-            ['save', 'get', 'delete', 'getById', 'deleteById', 'getList'], [], '', false
+            ['save', 'get', 'delete', 'getById', 'deleteById', 'getList'],
+            [],
+            '',
+            false
         );
         $this->notificationInterface = $this->getMock('Magento\Framework\Notification\NotifierInterface');
         $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');

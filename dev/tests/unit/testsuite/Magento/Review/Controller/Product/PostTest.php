@@ -171,6 +171,9 @@ class PostTest extends \PHPUnit_Framework_TestCase
             );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testExecute()
     {
         $ratingsData = ['ratings' => [1 => 1]];

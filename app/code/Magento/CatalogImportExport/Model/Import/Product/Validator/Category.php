@@ -35,6 +35,8 @@ class Category extends AbstractValidator implements RowValidatorInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function isValid($value)
     {

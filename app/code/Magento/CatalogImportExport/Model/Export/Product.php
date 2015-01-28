@@ -809,6 +809,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Collect export data for all products
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function collectRawData()
     {
@@ -864,6 +866,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function collectMultirawData()
     {
@@ -1008,7 +1012,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
 
             if (!empty($this->collectedMultiselectsData[$storeId][$productId])) {
-                foreach ($this->collectedMultiselectsData[$storeId][$productId] as $attrKey => $attrVal) {
+                foreach (array_keys($this->collectedMultiselectsData[$storeId][$productId]) as $attrKey) {
                     if (!empty($this->collectedMultiselectsData[$storeId][$productId][$attrKey])) {
                         $dataRow[$attrKey] = array_shift(
                             $this->collectedMultiselectsData[$storeId][$productId][$attrKey]
@@ -1039,13 +1043,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * @param int[] $productIds
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getCustomOptionsData($productIds)
     {
         $customOptionsData = [];
         $customOptionsDataPre = [];
 
-        foreach ($this->_storeIdToCode as $storeId => $storeCode) {
+        foreach (array_keys($this->_storeIdToCode) as $storeId) {
             $options = $this->_optionColFactory->create()->reset()->addTitleToResult(
                 $storeId
             )->addPriceToResult(
@@ -1069,9 +1075,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     $row['_custom_option_sku'] = $option['sku'];
                     $row['_custom_option_max_characters'] = $option['max_characters'];
                     $row['_custom_option_sort_order'] = $option['sort_order'];
-
-                    // remember default title for later comparisons
-                    $defaultTitles[$option['option_id']] = $option['title'];
                 } else {
                     $row['_custom_option_title'] = $option['title'];
                 }
@@ -1085,8 +1088,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         $row['_custom_option_row_price'] = $firstValue['price'] . $priceType;
                         $row['_custom_option_row_sku'] = $firstValue['sku'];
                         $row['_custom_option_row_sort'] = $firstValue['sort_order'];
-
-                        $defaultValueTitles[$firstValue['option_type_id']] = $firstValue['title'];
                     } else {
                         $row['_custom_option_row_title'] = $firstValue['title'];
                     }
