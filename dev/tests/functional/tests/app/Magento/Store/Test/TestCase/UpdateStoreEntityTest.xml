@@ -5,15 +5,19 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="UpdateStoreEntityTest">
-        <variation name="UpdateStoreEntityTestVariation1">
-            <data name="storeInitial/dataSet">custom</data>
-            <data name="store/data/group_id/dataSet">default</data>
-            <data name="store/data/name">storename_updated%isolation%</data>
-            <data name="store/data/code">storecode_updated%isolation%</data>
-            <data name="store/data/is_active">Enabled</data>
-            <data name="constraint">assertStoreSuccessSaveMessage, assertStoreInGrid, assertStoreForm, assertStoreBackend, assertStoreFrontend</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="UpdateStoreEntityTest">
+    <variation name="UpdateStoreEntityTestVariation1" firstConstraint="assertStoreSuccessSaveMessage" method="test">
+      <data name="storeInitial/dataSet">custom</data>
+      <data name="store/data/group_id/dataSet">default</data>
+      <data name="store/data/name">storename_updated%isolation%</data>
+      <data name="store/data/code">storecode_updated%isolation%</data>
+      <data name="store/data/is_active">Enabled</data>
+      <constraint name="assertStoreSuccessSaveMessage" next="assertStoreInGrid"/>
+      <constraint name="assertStoreInGrid" next="assertStoreForm" prev="assertStoreSuccessSaveMessage"/>
+      <constraint name="assertStoreForm" next="assertStoreBackend" prev="assertStoreInGrid"/>
+      <constraint name="assertStoreBackend" next="assertStoreFrontend" prev="assertStoreForm"/>
+      <constraint name="assertStoreFrontend" prev="assertStoreBackend"/>
+    </variation>
+  </testCase>
 </config>

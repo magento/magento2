@@ -5,39 +5,45 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="UpdateCatalogPriceRuleEntityTest">
-        <variation name="UpdateCatalogPriceRuleEntityTestVariation1">
-            <data name="catalogPriceRuleOriginal/dataSet">active_catalog_price_rule_with_conditions</data>
-            <data name="catalogPriceRule/data/name">New Catalog Price Rule Name %isolation%</data>
-            <data name="catalogPriceRule/data/description">-</data>
-            <data name="catalogPriceRule/data/is_active">Inactive</data>
-            <data name="catalogPriceRule/data/conditions">-</data>
-            <data name="catalogPriceRule/data/simple_action">-</data>
-            <data name="catalogPriceRule/data/discount_amount">-</data>
-            <data name="saveAction">save</data>
-            <data name="price/sub_total">-</data>
-            <data name="price/grand_total">-</data>
-            <data name="price/discount_amount">-</data>
-            <data name="price/special">-</data>
-            <data name="price/regular">-</data>
-            <data name="constraint">assertCatalogPriceRuleSuccessSaveMessage, assertCatalogPriceRuleNoticeMessage, assertCatalogPriceRuleForm, assertCatalogPriceRuleInGrid</data>
-        </variation>
-        <variation name="UpdateCatalogPriceRuleEntityTestVariation2">
-            <data name="catalogPriceRuleOriginal/dataSet">active_catalog_price_rule_with_conditions</data>
-            <data name="catalogPriceRule/data/name">New Catalog Price Rule Name %isolation%</data>
-            <data name="catalogPriceRule/data/description">New Catalog Price Rule Description %isolation%</data>
-            <data name="catalogPriceRule/data/is_active">Active</data>
-            <data name="catalogPriceRule/data/conditions">[Category|is|%category_1%]</data>
-            <data name="catalogPriceRule/data/simple_action">By Fixed Amount</data>
-            <data name="catalogPriceRule/data/discount_amount">35</data>
-            <data name="saveAction">saveAndApply</data>
-            <data name="price/sub_total">100</data>
-            <data name="price/grand_total">65</data>
-            <data name="price/discount_amount">35</data>
-            <data name="price/special">65</data>
-            <data name="price/regular">100</data>
-            <data name="constraint">assertCatalogPriceRuleSuccessSaveMessage, assertCatalogPriceRuleAppliedProductPage, assertCatalogPriceRuleForm, assertCatalogPriceRuleInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="UpdateCatalogPriceRuleEntityTest">
+    <variation name="UpdateCatalogPriceRuleEntityTestVariation1" firstConstraint="assertCatalogPriceRuleSuccessSaveMessage" method="test">
+      <data name="catalogPriceRuleOriginal/dataSet">active_catalog_price_rule_with_conditions</data>
+      <data name="catalogPriceRule/data/name">New Catalog Price Rule Name %isolation%</data>
+      <data name="catalogPriceRule/data/description">-</data>
+      <data name="catalogPriceRule/data/is_active">Inactive</data>
+      <data name="catalogPriceRule/data/conditions">-</data>
+      <data name="catalogPriceRule/data/simple_action">-</data>
+      <data name="catalogPriceRule/data/discount_amount">-</data>
+      <data name="saveAction">save</data>
+      <data name="price/sub_total">-</data>
+      <data name="price/grand_total">-</data>
+      <data name="price/discount_amount">-</data>
+      <data name="price/special">-</data>
+      <data name="price/regular">-</data>
+      <constraint name="assertCatalogPriceRuleSuccessSaveMessage" next="assertCatalogPriceRuleNoticeMessage"/>
+      <constraint name="assertCatalogPriceRuleNoticeMessage" next="assertCatalogPriceRuleForm" prev="assertCatalogPriceRuleSuccessSaveMessage"/>
+      <constraint name="assertCatalogPriceRuleForm" next="assertCatalogPriceRuleInGrid" prev="assertCatalogPriceRuleNoticeMessage"/>
+      <constraint name="assertCatalogPriceRuleInGrid" prev="assertCatalogPriceRuleForm"/>
+    </variation>
+    <variation name="UpdateCatalogPriceRuleEntityTestVariation2" firstConstraint="assertCatalogPriceRuleSuccessSaveMessage" method="test">
+      <data name="catalogPriceRuleOriginal/dataSet">active_catalog_price_rule_with_conditions</data>
+      <data name="catalogPriceRule/data/name">New Catalog Price Rule Name %isolation%</data>
+      <data name="catalogPriceRule/data/description">New Catalog Price Rule Description %isolation%</data>
+      <data name="catalogPriceRule/data/is_active">Active</data>
+      <data name="catalogPriceRule/data/conditions">[Category|is|%category_1%]</data>
+      <data name="catalogPriceRule/data/simple_action">By Fixed Amount</data>
+      <data name="catalogPriceRule/data/discount_amount">35</data>
+      <data name="saveAction">saveAndApply</data>
+      <data name="price/sub_total">100</data>
+      <data name="price/grand_total">65</data>
+      <data name="price/discount_amount">35</data>
+      <data name="price/special">65</data>
+      <data name="price/regular">100</data>
+      <constraint name="assertCatalogPriceRuleSuccessSaveMessage" next="assertCatalogPriceRuleAppliedProductPage"/>
+      <constraint name="assertCatalogPriceRuleAppliedProductPage" next="assertCatalogPriceRuleForm" prev="assertCatalogPriceRuleSuccessSaveMessage"/>
+      <constraint name="assertCatalogPriceRuleForm" next="assertCatalogPriceRuleInGrid" prev="assertCatalogPriceRuleAppliedProductPage"/>
+      <constraint name="assertCatalogPriceRuleInGrid" prev="assertCatalogPriceRuleForm"/>
+    </variation>
+  </testCase>
 </config>

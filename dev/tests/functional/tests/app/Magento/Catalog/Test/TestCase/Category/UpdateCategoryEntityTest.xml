@@ -5,49 +5,57 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
-    <testCase name="UpdateCategoryEntityTest">
-        <variation name="UpdateCategoryEntityTestVariation1">
-            <data name="category/data/name">Name%isolation%</data>
-            <data name="category/data/is_active">Yes</data>
-            <data name="category/data/url_key">UrlKey%isolation%</data>
-            <data name="category/data/description">-</data>
-            <data name="category/data/meta_title">-</data>
-            <data name="category/data/include_in_menu">Yes</data>
-            <data name="category/data/available_product_listing_config">Yes</data>
-            <data name="category/data/available_sort_by/sort_2">-</data>
-            <data name="category/data/available_sort_by/sort_1">-</data>
-            <data name="category/data/default_product_listing_config">No</data>
-            <data name="category/data/default_sort_by">Name</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForm, assertUrlRewriteCategoryInGrid, assertCategoryRedirect, assertCategoryPage</data>
-        </variation>
-        <variation name="UpdateCategoryEntityTestVariation2">
-            <data name="category/data/name">Name%isolation%</data>
-            <data name="category/data/is_active">Yes</data>
-            <data name="category/data/url_key">UrlKey%isolation%</data>
-            <data name="category/data/description">Category Description</data>
-            <data name="category/data/meta_title">Category Title</data>
-            <data name="category/data/include_in_menu">Yes</data>
-            <data name="category/data/available_product_listing_config">No</data>
-            <data name="category/data/available_sort_by/sort_2">Position</data>
-            <data name="category/data/available_sort_by/sort_1">Price</data>
-            <data name="category/data/default_product_listing_config">Yes</data>
-            <data name="category/data/default_sort_by">-</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForm, assertUrlRewriteCategoryInGrid, assertCategoryPage</data>
-        </variation>
-        <variation name="UpdateCategoryEntityTestVariation3">
-            <data name="category/data/name">Name%isolation%</data>
-            <data name="category/data/is_active">No</data>
-            <data name="category/data/url_key">-</data>
-            <data name="category/data/description">-</data>
-            <data name="category/data/meta_title">-</data>
-            <data name="category/data/include_in_menu">-</data>
-            <data name="category/data/available_product_listing_config">-</data>
-            <data name="category/data/available_sort_by/sort_2">-</data>
-            <data name="category/data/available_sort_by/sort_1">-</data>
-            <data name="category/data/default_product_listing_config">-</data>
-            <data name="category/data/default_sort_by">-</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForm</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="UpdateCategoryEntityTest">
+    <variation name="UpdateCategoryEntityTestVariation1" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="category/data/name">Name%isolation%</data>
+      <data name="category/data/is_active">Yes</data>
+      <data name="category/data/url_key">UrlKey%isolation%</data>
+      <data name="category/data/description">-</data>
+      <data name="category/data/meta_title">-</data>
+      <data name="category/data/include_in_menu">Yes</data>
+      <data name="category/data/available_product_listing_config">Yes</data>
+      <data name="category/data/available_sort_by/sort_2">-</data>
+      <data name="category/data/available_sort_by/sort_1">-</data>
+      <data name="category/data/default_product_listing_config">No</data>
+      <data name="category/data/default_sort_by">Name</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
+      <constraint name="assertCategoryForm" next="assertUrlRewriteCategoryInGrid" prev="assertCategorySaveMessage"/>
+      <constraint name="assertUrlRewriteCategoryInGrid" next="assertCategoryRedirect" prev="assertCategoryForm"/>
+      <constraint name="assertCategoryRedirect" next="assertCategoryPage" prev="assertUrlRewriteCategoryInGrid"/>
+      <constraint name="assertCategoryPage" prev="assertCategoryRedirect"/>
+    </variation>
+    <variation name="UpdateCategoryEntityTestVariation2" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="category/data/name">Name%isolation%</data>
+      <data name="category/data/is_active">Yes</data>
+      <data name="category/data/url_key">UrlKey%isolation%</data>
+      <data name="category/data/description">Category Description</data>
+      <data name="category/data/meta_title">Category Title</data>
+      <data name="category/data/include_in_menu">Yes</data>
+      <data name="category/data/available_product_listing_config">No</data>
+      <data name="category/data/available_sort_by/sort_2">Position</data>
+      <data name="category/data/available_sort_by/sort_1">Price</data>
+      <data name="category/data/default_product_listing_config">Yes</data>
+      <data name="category/data/default_sort_by">-</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
+      <constraint name="assertCategoryForm" next="assertUrlRewriteCategoryInGrid" prev="assertCategorySaveMessage"/>
+      <constraint name="assertUrlRewriteCategoryInGrid" next="assertCategoryPage" prev="assertCategoryForm"/>
+      <constraint name="assertCategoryPage" prev="assertUrlRewriteCategoryInGrid"/>
+    </variation>
+    <variation name="UpdateCategoryEntityTestVariation3" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="category/data/name">Name%isolation%</data>
+      <data name="category/data/is_active">No</data>
+      <data name="category/data/url_key">-</data>
+      <data name="category/data/description">-</data>
+      <data name="category/data/meta_title">-</data>
+      <data name="category/data/include_in_menu">-</data>
+      <data name="category/data/available_product_listing_config">-</data>
+      <data name="category/data/available_sort_by/sort_2">-</data>
+      <data name="category/data/available_sort_by/sort_1">-</data>
+      <data name="category/data/default_product_listing_config">-</data>
+      <data name="category/data/default_sort_by">-</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
+      <constraint name="assertCategoryForm" prev="assertCategorySaveMessage"/>
+    </variation>
+  </testCase>
 </config>

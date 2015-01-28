@@ -5,21 +5,27 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="UpdateStoreGroupEntityTest">
-        <variation name="UpdateStoreGroupEntityTestVariation1">
-            <data name="storeGroupOrigin/dataSet">custom</data>
-            <data name="storeGroup/data/website_id/dataSet">main_website</data>
-            <data name="storeGroup/data/name">store_name_updated_%isolation%</data>
-            <data name="storeGroup/data/root_category_id/dataSet">default_category</data>
-            <data name="constraint">assertStoreGroupSuccessSaveMessage, assertStoreGroupInGrid, assertStoreGroupForm, assertStoreGroupOnStoreViewForm</data>
-        </variation>
-        <variation name="UpdateStoreGroupEntityTestVariation2">
-            <data name="storeGroupOrigin/dataSet">custom</data>
-            <data name="storeGroup/data/website_id/dataSet">custom_website</data>
-            <data name="storeGroup/data/name">store_name_updated_%isolation%</data>
-            <data name="storeGroup/data/root_category_id/dataSet">root_category</data>
-            <data name="constraint">assertStoreGroupSuccessSaveMessage, assertStoreGroupInGrid, assertStoreGroupForm, assertStoreGroupOnStoreViewForm</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="UpdateStoreGroupEntityTest">
+    <variation name="UpdateStoreGroupEntityTestVariation1" firstConstraint="assertStoreGroupSuccessSaveMessage" method="test">
+      <data name="storeGroupOrigin/dataSet">custom</data>
+      <data name="storeGroup/data/website_id/dataSet">main_website</data>
+      <data name="storeGroup/data/name">store_name_updated_%isolation%</data>
+      <data name="storeGroup/data/root_category_id/dataSet">default_category</data>
+      <constraint name="assertStoreGroupSuccessSaveMessage" next="assertStoreGroupInGrid"/>
+      <constraint name="assertStoreGroupInGrid" next="assertStoreGroupForm" prev="assertStoreGroupSuccessSaveMessage"/>
+      <constraint name="assertStoreGroupForm" next="assertStoreGroupOnStoreViewForm" prev="assertStoreGroupInGrid"/>
+      <constraint name="assertStoreGroupOnStoreViewForm" prev="assertStoreGroupForm"/>
+    </variation>
+    <variation name="UpdateStoreGroupEntityTestVariation2" firstConstraint="assertStoreGroupSuccessSaveMessage" method="test">
+      <data name="storeGroupOrigin/dataSet">custom</data>
+      <data name="storeGroup/data/website_id/dataSet">custom_website</data>
+      <data name="storeGroup/data/name">store_name_updated_%isolation%</data>
+      <data name="storeGroup/data/root_category_id/dataSet">root_category</data>
+      <constraint name="assertStoreGroupSuccessSaveMessage" next="assertStoreGroupInGrid"/>
+      <constraint name="assertStoreGroupInGrid" next="assertStoreGroupForm" prev="assertStoreGroupSuccessSaveMessage"/>
+      <constraint name="assertStoreGroupForm" next="assertStoreGroupOnStoreViewForm" prev="assertStoreGroupInGrid"/>
+      <constraint name="assertStoreGroupOnStoreViewForm" prev="assertStoreGroupForm"/>
+    </variation>
+  </testCase>
 </config>

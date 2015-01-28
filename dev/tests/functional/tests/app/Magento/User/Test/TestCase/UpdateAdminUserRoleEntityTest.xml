@@ -5,23 +5,30 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="UpdateAdminUserRoleEntityTest">
-        <variation name="UpdateAdminUserRoleEntityTestVariation1">
-            <data name="user/dataSet">custom_admin_with_default_role</data>
-            <data name="role/data/rolename">NewAdminRole%isolation%</data>
-            <data name="role/data/resource_access">-</data>
-            <data name="role/data/roles_resources">-</data>
-            <data name="role/data/in_role_users/dataSet">-</data>
-            <data name="constraint">assertRoleSuccessSaveMessage, assertRoleInGrid, assertUserSuccessLogOut, assertUserSuccessLogin</data>
-        </variation>
-        <variation name="UpdateAdminUserRoleEntityTestVariation2">
-            <data name="user/dataSet">default</data>
-            <data name="role/data/rolename">-</data>
-            <data name="role/data/resource_access">Custom</data>
-            <data name="role/data/roles_resources">Sales</data>
-            <data name="role/data/in_role_users/dataSet">custom_admin</data>
-            <data name="constraint">assertRoleSuccessSaveMessage, assertRoleInGrid, assertUserSuccessLogOut, assertUserSuccessLogin, assertUserRoleSalesRestrictedAccess</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="UpdateAdminUserRoleEntityTest">
+    <variation name="UpdateAdminUserRoleEntityTestVariation1" firstConstraint="assertRoleSuccessSaveMessage" method="test">
+      <data name="user/dataSet">custom_admin_with_default_role</data>
+      <data name="role/data/rolename">NewAdminRole%isolation%</data>
+      <data name="role/data/resource_access">-</data>
+      <data name="role/data/roles_resources">-</data>
+      <data name="role/data/in_role_users/dataSet">-</data>
+      <constraint name="assertRoleSuccessSaveMessage" next="assertRoleInGrid"/>
+      <constraint name="assertRoleInGrid" next="assertUserSuccessLogOut" prev="assertRoleSuccessSaveMessage"/>
+      <constraint name="assertUserSuccessLogOut" next="assertUserSuccessLogin" prev="assertRoleInGrid"/>
+      <constraint name="assertUserSuccessLogin" prev="assertUserSuccessLogOut"/>
+    </variation>
+    <variation name="UpdateAdminUserRoleEntityTestVariation2" firstConstraint="assertRoleSuccessSaveMessage" method="test">
+      <data name="user/dataSet">default</data>
+      <data name="role/data/rolename">-</data>
+      <data name="role/data/resource_access">Custom</data>
+      <data name="role/data/roles_resources">Sales</data>
+      <data name="role/data/in_role_users/dataSet">custom_admin</data>
+      <constraint name="assertRoleSuccessSaveMessage" next="assertRoleInGrid"/>
+      <constraint name="assertRoleInGrid" next="assertUserSuccessLogOut" prev="assertRoleSuccessSaveMessage"/>
+      <constraint name="assertUserSuccessLogOut" next="assertUserSuccessLogin" prev="assertRoleInGrid"/>
+      <constraint name="assertUserSuccessLogin" next="assertUserRoleSalesRestrictedAccess" prev="assertUserSuccessLogOut"/>
+      <constraint name="assertUserRoleSalesRestrictedAccess" prev="assertUserSuccessLogin"/>
+    </variation>
+  </testCase>
 </config>

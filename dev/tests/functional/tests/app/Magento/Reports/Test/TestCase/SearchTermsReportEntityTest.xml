@@ -5,19 +5,21 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="SearchTermsReportEntityTest">
-        <variation name="SearchTermsReportEntityTestVariation1">
-            <data name="product">product_with_url_key</data>
-            <data name="countProducts">1</data>
-            <data name="countSearch">2</data>
-            <data name="constraint">assertSearchTermsInGrid, assertSearchTermReportForm</data>
-        </variation>
-        <variation name="SearchTermsReportEntityTestVariation2">
-            <data name="product">product_with_url_key</data>
-            <data name="countProducts">3</data>
-            <data name="countSearch">1</data>
-            <data name="constraint">assertSearchTermsInGrid, assertSearchTermReportForm</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="SearchTermsReportEntityTest">
+    <variation name="SearchTermsReportEntityTestVariation1" firstConstraint="assertSearchTermsInGrid" method="test">
+      <data name="product">product_with_url_key</data>
+      <data name="countProducts">1</data>
+      <data name="countSearch">2</data>
+      <constraint name="assertSearchTermsInGrid" next="assertSearchTermReportForm"/>
+      <constraint name="assertSearchTermReportForm" prev="assertSearchTermsInGrid"/>
+    </variation>
+    <variation name="SearchTermsReportEntityTestVariation2" firstConstraint="assertSearchTermsInGrid" method="test">
+      <data name="product">product_with_url_key</data>
+      <data name="countProducts">3</data>
+      <data name="countSearch">1</data>
+      <constraint name="assertSearchTermsInGrid" next="assertSearchTermReportForm"/>
+      <constraint name="assertSearchTermReportForm" prev="assertSearchTermsInGrid"/>
+    </variation>
+  </testCase>
 </config>

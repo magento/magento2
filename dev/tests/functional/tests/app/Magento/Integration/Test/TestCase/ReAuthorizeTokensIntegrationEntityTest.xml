@@ -5,11 +5,13 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="ReAuthorizeTokensIntegrationEntityTest">
-        <variation name="ReAuthorizeTokensIntegrationEntityTestVariation1">
-            <data name="description">Re-authorize integration</data>
-            <data name="constraint">assertIntegrationSuccessReauthorizeMessage, assertIntegrationForm, assertIntegrationTokensAfterReauthorize</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="ReAuthorizeTokensIntegrationEntityTest">
+    <variation name="ReAuthorizeTokensIntegrationEntityTestVariation1" firstConstraint="assertIntegrationSuccessReauthorizeMessage" method="test">
+      <data name="description">Re-authorize integration</data>
+      <constraint name="assertIntegrationSuccessReauthorizeMessage" next="assertIntegrationForm"/>
+      <constraint name="assertIntegrationForm" next="assertIntegrationTokensAfterReauthorize" prev="assertIntegrationSuccessReauthorizeMessage"/>
+      <constraint name="assertIntegrationTokensAfterReauthorize" prev="assertIntegrationForm"/>
+    </variation>
+  </testCase>
 </config>

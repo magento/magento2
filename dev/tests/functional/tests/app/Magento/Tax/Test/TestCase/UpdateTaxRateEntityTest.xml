@@ -5,77 +5,85 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="UpdateTaxRateEntityTest">
-        <variation name="UpdateTaxRateEntityTestVariation1">
-            <data name="initialTaxRate/dataSet">default</data>
-            <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
-            <data name="taxRate/data/zip_is_range">No</data>
-            <data name="taxRate/data/zip_from">-</data>
-            <data name="taxRate/data/zip_to">-</data>
-            <data name="taxRate/data/tax_postcode">90001</data>
-            <data name="taxRate/data/tax_country_id">United States</data>
-            <data name="taxRate/data/tax_region_id">California</data>
-            <data name="taxRate/data/rate">100</data>
-            <data name="constraint">assertTaxRateSuccessSaveMessage, assertTaxRateInGrid, assertTaxRateForm</data>
-        </variation>
-        <variation name="UpdateTaxRateEntityTestVariation2">
-            <data name="initialTaxRate/dataSet">default</data>
-            <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
-            <data name="taxRate/data/zip_is_range">Yes</data>
-            <data name="taxRate/data/zip_from">90001</data>
-            <data name="taxRate/data/zip_to">96162</data>
-            <data name="taxRate/data/tax_postcode">-</data>
-            <data name="taxRate/data/tax_country_id">United States</data>
-            <data name="taxRate/data/tax_region_id">California</data>
-            <data name="taxRate/data/rate">15.05</data>
-            <data name="constraint">assertTaxRateSuccessSaveMessage, assertTaxRateInGrid, assertTaxRateForm</data>
-        </variation>
-        <variation name="UpdateTaxRateEntityTestVariation3">
-            <data name="initialTaxRate/dataSet">default</data>
-            <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
-            <data name="taxRate/data/zip_is_range">No</data>
-            <data name="taxRate/data/zip_from">-</data>
-            <data name="taxRate/data/zip_to">-</data>
-            <data name="taxRate/data/tax_postcode">*</data>
-            <data name="taxRate/data/tax_country_id">United Kingdom</data>
-            <data name="taxRate/data/tax_region_id">*</data>
-            <data name="taxRate/data/rate">777</data>
-            <data name="constraint">assertTaxRateIsInCorrectRange</data>
-        </variation>
-        <variation name="UpdateTaxRateEntityTestVariation4">
-            <data name="initialTaxRate/dataSet">withZipRange</data>
-            <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
-            <data name="taxRate/data/zip_is_range">No</data>
-            <data name="taxRate/data/zip_from">-</data>
-            <data name="taxRate/data/zip_to">-</data>
-            <data name="taxRate/data/tax_postcode">180</data>
-            <data name="taxRate/data/tax_country_id">Canada</data>
-            <data name="taxRate/data/tax_region_id">*</data>
-            <data name="taxRate/data/rate">25</data>
-            <data name="constraint">assertTaxRateSuccessSaveMessage, assertTaxRateInGrid, assertTaxRateForm</data>
-        </variation>
-        <variation name="UpdateTaxRateEntityTestVariation5">
-            <data name="initialTaxRate/dataSet">withZipRange</data>
-            <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
-            <data name="taxRate/data/zip_is_range">Yes</data>
-            <data name="taxRate/data/zip_to">7800935</data>
-            <data name="taxRate/data/tax_postcode">-</data>
-            <data name="taxRate/data/tax_country_id">United Kingdom</data>
-            <data name="taxRate/data/tax_region_id">*</data>
-            <data name="constraint">assertTaxRateIsInCorrectRange</data>
-        </variation>
-        <variation name="UpdateTaxRateEntityTestVariation6">
-            <data name="initialTaxRate/dataSet">withZipRange</data>
-            <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
-            <data name="taxRate/data/zip_is_range">No</data>
-            <data name="taxRate/data/zip_from">-</data>
-            <data name="taxRate/data/zip_to">-</data>
-            <data name="taxRate/data/tax_postcode">*</data>
-            <data name="taxRate/data/tax_country_id">France</data>
-            <data name="taxRate/data/tax_region_id">Val-d'Oise</data>
-            <data name="taxRate/data/rate">0.1</data>
-            <data name="constraint">assertTaxRateSuccessSaveMessage, assertTaxRateInGrid, assertTaxRateForm</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="UpdateTaxRateEntityTest">
+    <variation name="UpdateTaxRateEntityTestVariation1" firstConstraint="assertTaxRateSuccessSaveMessage" method="test">
+      <data name="initialTaxRate/dataSet">default</data>
+      <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
+      <data name="taxRate/data/zip_is_range">No</data>
+      <data name="taxRate/data/zip_from">-</data>
+      <data name="taxRate/data/zip_to">-</data>
+      <data name="taxRate/data/tax_postcode">90001</data>
+      <data name="taxRate/data/tax_country_id">United States</data>
+      <data name="taxRate/data/tax_region_id">California</data>
+      <data name="taxRate/data/rate">100</data>
+      <constraint name="assertTaxRateSuccessSaveMessage" next="assertTaxRateInGrid"/>
+      <constraint name="assertTaxRateInGrid" next="assertTaxRateForm" prev="assertTaxRateSuccessSaveMessage"/>
+      <constraint name="assertTaxRateForm" prev="assertTaxRateInGrid"/>
+    </variation>
+    <variation name="UpdateTaxRateEntityTestVariation2" firstConstraint="assertTaxRateSuccessSaveMessage" method="test">
+      <data name="initialTaxRate/dataSet">default</data>
+      <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
+      <data name="taxRate/data/zip_is_range">Yes</data>
+      <data name="taxRate/data/zip_from">90001</data>
+      <data name="taxRate/data/zip_to">96162</data>
+      <data name="taxRate/data/tax_postcode">-</data>
+      <data name="taxRate/data/tax_country_id">United States</data>
+      <data name="taxRate/data/tax_region_id">California</data>
+      <data name="taxRate/data/rate">15.05</data>
+      <constraint name="assertTaxRateSuccessSaveMessage" next="assertTaxRateInGrid"/>
+      <constraint name="assertTaxRateInGrid" next="assertTaxRateForm" prev="assertTaxRateSuccessSaveMessage"/>
+      <constraint name="assertTaxRateForm" prev="assertTaxRateInGrid"/>
+    </variation>
+    <variation name="UpdateTaxRateEntityTestVariation3" firstConstraint="assertTaxRateIsInCorrectRange" method="test">
+      <data name="initialTaxRate/dataSet">default</data>
+      <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
+      <data name="taxRate/data/zip_is_range">No</data>
+      <data name="taxRate/data/zip_from">-</data>
+      <data name="taxRate/data/zip_to">-</data>
+      <data name="taxRate/data/tax_postcode">*</data>
+      <data name="taxRate/data/tax_country_id">United Kingdom</data>
+      <data name="taxRate/data/tax_region_id">*</data>
+      <data name="taxRate/data/rate">777</data>
+      <constraint name="assertTaxRateIsInCorrectRange"/>
+    </variation>
+    <variation name="UpdateTaxRateEntityTestVariation4" firstConstraint="assertTaxRateSuccessSaveMessage" method="test">
+      <data name="initialTaxRate/dataSet">withZipRange</data>
+      <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
+      <data name="taxRate/data/zip_is_range">No</data>
+      <data name="taxRate/data/zip_from">-</data>
+      <data name="taxRate/data/zip_to">-</data>
+      <data name="taxRate/data/tax_postcode">180</data>
+      <data name="taxRate/data/tax_country_id">Canada</data>
+      <data name="taxRate/data/tax_region_id">*</data>
+      <data name="taxRate/data/rate">25</data>
+      <constraint name="assertTaxRateSuccessSaveMessage" next="assertTaxRateInGrid"/>
+      <constraint name="assertTaxRateInGrid" next="assertTaxRateForm" prev="assertTaxRateSuccessSaveMessage"/>
+      <constraint name="assertTaxRateForm" prev="assertTaxRateInGrid"/>
+    </variation>
+    <variation name="UpdateTaxRateEntityTestVariation5" firstConstraint="assertTaxRateIsInCorrectRange" method="test">
+      <data name="initialTaxRate/dataSet">withZipRange</data>
+      <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
+      <data name="taxRate/data/zip_is_range">Yes</data>
+      <data name="taxRate/data/zip_to">7800935</data>
+      <data name="taxRate/data/tax_postcode">-</data>
+      <data name="taxRate/data/tax_country_id">United Kingdom</data>
+      <data name="taxRate/data/tax_region_id">*</data>
+      <constraint name="assertTaxRateIsInCorrectRange"/>
+    </variation>
+    <variation name="UpdateTaxRateEntityTestVariation6" firstConstraint="assertTaxRateSuccessSaveMessage" method="test">
+      <data name="initialTaxRate/dataSet">withZipRange</data>
+      <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
+      <data name="taxRate/data/zip_is_range">No</data>
+      <data name="taxRate/data/zip_from">-</data>
+      <data name="taxRate/data/zip_to">-</data>
+      <data name="taxRate/data/tax_postcode">*</data>
+      <data name="taxRate/data/tax_country_id">France</data>
+      <data name="taxRate/data/tax_region_id">Val-d'Oise</data>
+      <data name="taxRate/data/rate">0.1</data>
+      <constraint name="assertTaxRateSuccessSaveMessage" next="assertTaxRateInGrid"/>
+      <constraint name="assertTaxRateInGrid" next="assertTaxRateForm" prev="assertTaxRateSuccessSaveMessage"/>
+      <constraint name="assertTaxRateForm" prev="assertTaxRateInGrid"/>
+    </variation>
+  </testCase>
 </config>

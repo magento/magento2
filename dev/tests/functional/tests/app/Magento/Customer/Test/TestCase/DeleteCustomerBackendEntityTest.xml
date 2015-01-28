@@ -5,11 +5,12 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="DeleteCustomerBackendEntityTest">
-        <variation name="DeleteCustomerBackendEntityTestVariation1">
-            <data name="customer/dataSet">default</data>
-            <data name="constraint">assertCustomerSuccessDeleteMessage, assertCustomerNotInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="DeleteCustomerBackendEntityTest">
+    <variation name="DeleteCustomerBackendEntityTestVariation1" firstConstraint="assertCustomerSuccessDeleteMessage" method="test">
+      <data name="customer/dataSet">default</data>
+      <constraint name="assertCustomerSuccessDeleteMessage" next="assertCustomerNotInGrid"/>
+      <constraint name="assertCustomerNotInGrid" prev="assertCustomerSuccessDeleteMessage"/>
+    </variation>
+  </testCase>
 </config>

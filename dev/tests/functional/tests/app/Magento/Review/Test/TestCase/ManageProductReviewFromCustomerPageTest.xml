@@ -5,21 +5,25 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="ManageProductReviewFromCustomerPageTest">
-        <variation name="ManageProductReviewFromCustomerPageTestVariation1">
-            <data name="review/data/status_id">Approved</data>
-            <data name="review/data/nickname">name_upd_%isolation%</data>
-            <data name="review/data/title">title_upd_%isolation%</data>
-            <data name="review/data/detail">review_upd_%isolation%</data>
-            <data name="constraint">assertReviewSuccessSaveMessage, assertProductReviewInGridOnCustomerPage, assertProductReviewOnProductPage</data>
-        </variation>
-        <variation name="ManageProductReviewFromCustomerPageTestVariation2">
-            <data name="review/data/status_id">Not Approved</data>
-            <data name="review/data/nickname">name_upd_%isolation%</data>
-            <data name="review/data/title">title_upd_%isolation%</data>
-            <data name="review/data/detail">review_upd_%isolation%</data>
-            <data name="constraint">assertReviewSuccessSaveMessage, assertProductReviewInGridOnCustomerPage, assertProductRatingNotInProductPage</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="ManageProductReviewFromCustomerPageTest">
+    <variation name="ManageProductReviewFromCustomerPageTestVariation1" firstConstraint="assertReviewSuccessSaveMessage" method="test">
+      <data name="review/data/status_id">Approved</data>
+      <data name="review/data/nickname">name_upd_%isolation%</data>
+      <data name="review/data/title">title_upd_%isolation%</data>
+      <data name="review/data/detail">review_upd_%isolation%</data>
+      <constraint name="assertReviewSuccessSaveMessage" next="assertProductReviewInGridOnCustomerPage"/>
+      <constraint name="assertProductReviewInGridOnCustomerPage" next="assertProductReviewOnProductPage" prev="assertReviewSuccessSaveMessage"/>
+      <constraint name="assertProductReviewOnProductPage" prev="assertProductReviewInGridOnCustomerPage"/>
+    </variation>
+    <variation name="ManageProductReviewFromCustomerPageTestVariation2" firstConstraint="assertReviewSuccessSaveMessage" method="test">
+      <data name="review/data/status_id">Not Approved</data>
+      <data name="review/data/nickname">name_upd_%isolation%</data>
+      <data name="review/data/title">title_upd_%isolation%</data>
+      <data name="review/data/detail">review_upd_%isolation%</data>
+      <constraint name="assertReviewSuccessSaveMessage" next="assertProductReviewInGridOnCustomerPage"/>
+      <constraint name="assertProductReviewInGridOnCustomerPage" next="assertProductRatingNotInProductPage" prev="assertReviewSuccessSaveMessage"/>
+      <constraint name="assertProductRatingNotInProductPage" prev="assertProductReviewInGridOnCustomerPage"/>
+    </variation>
+  </testCase>
 </config>

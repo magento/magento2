@@ -5,251 +5,295 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
-    <testCase name="CreateProductAttributeEntityTest">
-        <variation name="CreateProductAttributeEntityTestVariation1">
-            <data name="productTemplate/dataSet">custom_attribute_set</data>
-            <data name="productAttribute/data/frontend_label">Text_Field_Admin_%isolation%</data>
-            <data name="productAttribute/data/frontend_input">Text Field</data>
-            <data name="productAttribute/data/options/preset">-</data>
-            <data name="productAttribute/data/is_required">No</data>
-            <data name="productAttribute/data/attribute_code">attr_textfield_%isolation%</data>
-            <data name="productAttribute/data/is_global">-</data>
-            <data name="productAttribute/data/default_value_text">default_value_text%isolation%</data>
-            <data name="productAttribute/data/default_value_textarea">-</data>
-            <data name="productAttribute/data/default_value_date/pattern">-</data>
-            <data name="productAttribute/data/default_value_yesno">-</data>
-            <data name="productAttribute/data/is_unique">-</data>
-            <data name="productAttribute/data/is_configurable">-</data>
-            <data name="productAttribute/data/manage_frontend_label">-</data>
-            <data name="productAttribute/data/is_searchable">-</data>
-            <data name="productAttribute/data/is_visible_in_advanced_search">-</data>
-            <data name="productAttribute/data/is_comparable">-</data>
-            <data name="productAttribute/data/is_filterable">-</data>
-            <data name="productAttribute/data/is_filterable_in_search">-</data>
-            <data name="productAttribute/data/is_used_for_promo_rules">-</data>
-            <data name="productAttribute/data/is_html_allowed_on_front">-</data>
-            <data name="productAttribute/data/is_visible_on_front">-</data>
-            <data name="productAttribute/data/used_in_product_listing">-</data>
-            <data name="productAttribute/data/used_for_sort_by">-</data>
-            <data name="constraint">assertProductAttributeInGrid, assertAttributeForm, assertAddedProductAttributeOnProductForm</data>
-        </variation>
-        <variation name="CreateProductAttributeEntityTestVariation2">
-            <data name="productTemplate/dataSet">custom_attribute_set</data>
-            <data name="productAttribute/data/frontend_label">Text_Field_Admin_%isolation%</data>
-            <data name="productAttribute/data/frontend_input">Text Area</data>
-            <data name="productAttribute/data/options/preset">-</data>
-            <data name="productAttribute/data/is_required">Yes</data>
-            <data name="productAttribute/data/attribute_code">attr_textarea_%isolation%</data>
-            <data name="productAttribute/data/is_global">Store View</data>
-            <data name="productAttribute/data/default_value_text">-</data>
-            <data name="productAttribute/data/default_value_textarea">default_value_textarea%isolation%</data>
-            <data name="productAttribute/data/default_value_date/pattern">-</data>
-            <data name="productAttribute/data/default_value_yesno">-</data>
-            <data name="productAttribute/data/is_unique">No</data>
-            <data name="productAttribute/data/is_configurable">-</data>
-            <data name="productAttribute/data/manage_frontend_label">Area_Field%isolation%</data>
-            <data name="productAttribute/data/is_searchable">Yes</data>
-            <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
-            <data name="productAttribute/data/is_comparable">Yes</data>
-            <data name="productAttribute/data/is_filterable">-</data>
-            <data name="productAttribute/data/is_filterable_in_search">-</data>
-            <data name="productAttribute/data/is_used_for_promo_rules">-</data>
-            <data name="productAttribute/data/is_html_allowed_on_front">-</data>
-            <data name="productAttribute/data/is_visible_on_front">-</data>
-            <data name="productAttribute/data/used_in_product_listing">-</data>
-            <data name="productAttribute/data/used_for_sort_by">-</data>
-            <data name="constraint">assertProductAttributeInGrid, assertAttributeForm, assertAddedProductAttributeOnProductForm, assertProductAttributeIsRequired, assertAttributeSearchableByLabel, assertProductAttributeDisplayingOnSearchForm, assertProductAttributeIsComparable</data>
-        </variation>
-        <variation name="CreateProductAttributeEntityTestVariation3">
-            <data name="productTemplate/dataSet">custom_attribute_set</data>
-            <data name="productAttribute/data/frontend_label">Date_Admin_%isolation%</data>
-            <data name="productAttribute/data/frontend_input">Date</data>
-            <data name="productAttribute/data/options/preset">-</data>
-            <data name="productAttribute/data/is_required">No</data>
-            <data name="productAttribute/data/attribute_code">attr_date_%isolation%</data>
-            <data name="productAttribute/data/is_global">-</data>
-            <data name="productAttribute/data/default_value_text">-</data>
-            <data name="productAttribute/data/default_value_textarea">-</data>
-            <data name="productAttribute/data/default_value_date/pattern">n/j/y</data>
-            <data name="productAttribute/data/default_value_yesno">-</data>
-            <data name="productAttribute/data/is_unique">No</data>
-            <data name="productAttribute/data/is_configurable">-</data>
-            <data name="productAttribute/data/manage_frontend_label">Date_Store_View</data>
-            <data name="productAttribute/data/is_searchable">Yes</data>
-            <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
-            <data name="productAttribute/data/is_comparable">No</data>
-            <data name="productAttribute/data/is_filterable">-</data>
-            <data name="productAttribute/data/is_filterable_in_search">-</data>
-            <data name="productAttribute/data/is_used_for_promo_rules">-</data>
-            <data name="productAttribute/data/is_html_allowed_on_front">-</data>
-            <data name="productAttribute/data/is_visible_on_front">Yes</data>
-            <data name="productAttribute/data/used_in_product_listing">Yes</data>
-            <data name="productAttribute/data/used_for_sort_by">Yes</data>
-            <data name="constraint">assertProductAttributeInGrid, assertAttributeForm, assertAddedProductAttributeOnProductForm, assertProductAttributeIsUsedInSortOnFrontend, assertProductAttributeIsUsedPromoRules</data>
-        </variation>
-        <variation name="CreateProductAttributeEntityTestVariation4">
-            <data name="productTemplate/dataSet">custom_attribute_set</data>
-            <data name="productAttribute/data/frontend_label">Yes/No_Admin_%isolation%</data>
-            <data name="productAttribute/data/frontend_input">Yes/No</data>
-            <data name="productAttribute/data/options/preset">-</data>
-            <data name="productAttribute/data/is_required">Yes</data>
-            <data name="productAttribute/data/attribute_code">attr_yesno_%isolation%</data>
-            <data name="productAttribute/data/is_global">Global</data>
-            <data name="productAttribute/data/default_value_text">-</data>
-            <data name="productAttribute/data/default_value_textarea">-</data>
-            <data name="productAttribute/data/default_value_date/pattern">-</data>
-            <data name="productAttribute/data/default_value_yesno">No</data>
-            <data name="productAttribute/data/is_unique">-</data>
-            <data name="productAttribute/data/is_configurable">-</data>
-            <data name="productAttribute/data/manage_frontend_label">Yes/No_Global</data>
-            <data name="productAttribute/data/is_searchable">-</data>
-            <data name="productAttribute/data/is_visible_in_advanced_search">-</data>
-            <data name="productAttribute/data/is_comparable">-</data>
-            <data name="productAttribute/data/is_filterable">-</data>
-            <data name="productAttribute/data/is_filterable_in_search">-</data>
-            <data name="productAttribute/data/is_used_for_promo_rules">-</data>
-            <data name="productAttribute/data/is_html_allowed_on_front">-</data>
-            <data name="productAttribute/data/is_visible_on_front">-</data>
-            <data name="productAttribute/data/used_in_product_listing">-</data>
-            <data name="productAttribute/data/used_for_sort_by">-</data>
-            <data name="constraint">assertProductAttributeInGrid, assertAttributeForm, assertAddedProductAttributeOnProductForm</data>
-        </variation>
-        <variation name="CreateProductAttributeEntityTestVariation5">
-            <data name="productTemplate/dataSet">custom_attribute_set</data>
-            <data name="productAttribute/data/frontend_label">Multiple_Select_Admin_%isolation%</data>
-            <data name="productAttribute/data/frontend_input">Multiple Select</data>
-            <data name="productAttribute/data/options/preset">default</data>
-            <data name="productAttribute/data/is_required">No</data>
-            <data name="productAttribute/data/attribute_code">attr_multiselect_%isolation%</data>
-            <data name="productAttribute/data/is_global">Website</data>
-            <data name="productAttribute/data/default_value_text">-</data>
-            <data name="productAttribute/data/default_value_textarea">-</data>
-            <data name="productAttribute/data/default_value_date/pattern">-</data>
-            <data name="productAttribute/data/default_value_yesno">-</data>
-            <data name="productAttribute/data/is_unique">Yes</data>
-            <data name="productAttribute/data/is_configurable">-</data>
-            <data name="productAttribute/data/manage_frontend_label">-</data>
-            <data name="productAttribute/data/is_searchable">Yes</data>
-            <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
-            <data name="productAttribute/data/is_comparable">Yes</data>
-            <data name="productAttribute/data/is_filterable">Filterable (with results)</data>
-            <data name="productAttribute/data/is_filterable_in_search">Yes</data>
-            <data name="productAttribute/data/is_used_for_promo_rules">-</data>
-            <data name="productAttribute/data/is_html_allowed_on_front">Yes</data>
-            <data name="productAttribute/data/is_visible_on_front">Yes</data>
-            <data name="productAttribute/data/used_in_product_listing">Yes</data>
-            <data name="productAttribute/data/used_for_sort_by">-</data>
-            <data name="constraint">assertProductAttributeInGrid, assertAttributeForm, assertAddedProductAttributeOnProductForm, assertProductAttributeDisplayingOnFrontend, assertProductAttributeDisplayingOnSearchForm, assertProductAttributeIsComparable, assertProductAttributeIsFilterable, assertProductAttributeIsFilterableInSearch, assertAttributeSearchableByLabel, assertAttributeOptionsOnProductForm</data>
-        </variation>
-        <variation name="CreateProductAttributeEntityTestVariation6">
-            <data name="productTemplate/dataSet">custom_attribute_set</data>
-            <data name="productAttribute/data/frontend_label">Dropdown_Admin_%isolation%</data>
-            <data name="productAttribute/data/frontend_input">Dropdown</data>
-            <data name="productAttribute/data/options/preset">default</data>
-            <data name="productAttribute/data/is_required">Yes</data>
-            <data name="productAttribute/data/attribute_code">attr_dropdown_%isolation%</data>
-            <data name="productAttribute/data/is_global">Global</data>
-            <data name="productAttribute/data/default_value_text">-</data>
-            <data name="productAttribute/data/default_value_textarea">-</data>
-            <data name="productAttribute/data/default_value_date/pattern">-</data>
-            <data name="productAttribute/data/default_value_yesno">-</data>
-            <data name="productAttribute/data/is_unique">No</data>
-            <data name="productAttribute/data/is_configurable">Yes</data>
-            <data name="productAttribute/data/manage_frontend_label">-</data>
-            <data name="productAttribute/data/is_searchable">Yes</data>
-            <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
-            <data name="productAttribute/data/is_comparable">Yes</data>
-            <data name="productAttribute/data/is_filterable">Filterable (with results)</data>
-            <data name="productAttribute/data/is_filterable_in_search">Yes</data>
-            <data name="productAttribute/data/is_used_for_promo_rules">-</data>
-            <data name="productAttribute/data/is_html_allowed_on_front">Yes</data>
-            <data name="productAttribute/data/is_visible_on_front">Yes</data>
-            <data name="productAttribute/data/used_in_product_listing">Yes</data>
-            <data name="productAttribute/data/used_for_sort_by">Yes</data>
-            <data name="constraint">assertProductAttributeInGrid, assertAttributeForm, assertAddedProductAttributeOnProductForm, assertProductAttributeIsRequired, assertProductAttributeIsGlobal, assertProductAttributeDisplayingOnFrontend, assertProductAttributeDisplayingOnSearchForm, assertAttributeSearchableByLabel, assertProductAttributeIsComparable, assertProductAttributeIsUsedInSortOnFrontend, assertProductAttributeIsFilterable, assertProductAttributeIsConfigurable, assertProductAttributeIsFilterableInSearch, assertAttributeOptionsOnProductForm</data>
-        </variation>
-        <variation name="CreateProductAttributeEntityTestVariation7">
-            <data name="productTemplate/dataSet">custom_attribute_set</data>
-            <data name="productAttribute/data/frontend_label">Price_Admin_%isolation%</data>
-            <data name="productAttribute/data/frontend_input">Price</data>
-            <data name="productAttribute/data/options/preset">-</data>
-            <data name="productAttribute/data/is_required">No</data>
-            <data name="productAttribute/data/attribute_code">attr_price_%isolation%</data>
-            <data name="productAttribute/data/is_global">-</data>
-            <data name="productAttribute/data/default_value_text">1000</data>
-            <data name="productAttribute/data/default_value_textarea">-</data>
-            <data name="productAttribute/data/default_value_date/pattern">-</data>
-            <data name="productAttribute/data/default_value_yesno">-</data>
-            <data name="productAttribute/data/is_unique">No</data>
-            <data name="productAttribute/data/is_configurable">-</data>
-            <data name="productAttribute/data/manage_frontend_label">Price_StoreView</data>
-            <data name="productAttribute/data/is_searchable">Yes</data>
-            <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
-            <data name="productAttribute/data/is_comparable">No</data>
-            <data name="productAttribute/data/is_filterable">Filterable (with results)</data>
-            <data name="productAttribute/data/is_filterable_in_search">Yes</data>
-            <data name="productAttribute/data/is_used_for_promo_rules">-</data>
-            <data name="productAttribute/data/is_html_allowed_on_front">-</data>
-            <data name="productAttribute/data/is_visible_on_front">-</data>
-            <data name="productAttribute/data/used_in_product_listing">-</data>
-            <data name="productAttribute/data/used_for_sort_by">-</data>
-            <data name="constraint">assertProductAttributeInGrid, assertAttributeForm, assertAddedProductAttributeOnProductForm, assertAttributeSearchableByLabel, assertProductAttributeDisplayingOnSearchForm, assertProductAttributeIsFilterable, assertProductAttributeIsFilterableInSearch</data>
-            <data name="issue">Bug:MAGETWO-31560</data>
-        </variation>
-        <variation name="CreateProductAttributeEntityTestVariation8">
-            <data name="productTemplate/dataSet">custom_attribute_set</data>
-            <data name="productAttribute/data/frontend_label">Fixed_Product_Tax_Admin_%isolation%</data>
-            <data name="productAttribute/data/frontend_input">Fixed Product Tax</data>
-            <data name="productAttribute/data/options/preset">-</data>
-            <data name="productAttribute/data/is_required">-</data>
-            <data name="productAttribute/data/attribute_code">attr_fpt_code_%isolation%</data>
-            <data name="productAttribute/data/is_global">-</data>
-            <data name="productAttribute/data/default_value_text">-</data>
-            <data name="productAttribute/data/default_value_textarea">-</data>
-            <data name="productAttribute/data/default_value_date/pattern">-</data>
-            <data name="productAttribute/data/default_value_yesno">-</data>
-            <data name="productAttribute/data/is_unique">-</data>
-            <data name="productAttribute/data/is_configurable">-</data>
-            <data name="productAttribute/data/manage_frontend_label">Fixed_Product_Tax_Storeview</data>
-            <data name="productAttribute/data/is_searchable">-</data>
-            <data name="productAttribute/data/is_visible_in_advanced_search">-</data>
-            <data name="productAttribute/data/is_comparable">-</data>
-            <data name="productAttribute/data/is_filterable">-</data>
-            <data name="productAttribute/data/is_filterable_in_search">-</data>
-            <data name="productAttribute/data/is_used_for_promo_rules">-</data>
-            <data name="productAttribute/data/is_html_allowed_on_front">-</data>
-            <data name="productAttribute/data/is_visible_on_front">-</data>
-            <data name="productAttribute/data/used_in_product_listing">-</data>
-            <data name="productAttribute/data/used_for_sort_by">-</data>
-            <data name="constraint">assertProductAttributeInGrid, assertAttributeForm, assertAddedProductAttributeOnProductForm</data>
-        </variation>
-        <variation name="CreateProductAttributeEntityTestVariation9">
-            <data name="productTemplate/dataSet">custom_attribute_set</data>
-            <data name="productAttribute/data/frontend_label">Text_Field_Admin_%isolation%</data>
-            <data name="productAttribute/data/frontend_input">Text Field</data>
-            <data name="productAttribute/data/options/preset">-</data>
-            <data name="productAttribute/data/is_required">Yes</data>
-            <data name="productAttribute/data/attribute_code">attr_textfield_%isolation%</data>
-            <data name="productAttribute/data/is_global">Store View</data>
-            <data name="productAttribute/data/default_value_text">default_value_text%isolation%</data>
-            <data name="productAttribute/data/default_value_textarea">-</data>
-            <data name="productAttribute/data/default_value_date/pattern">-</data>
-            <data name="productAttribute/data/default_value_yesno">-</data>
-            <data name="productAttribute/data/is_unique">Yes</data>
-            <data name="productAttribute/data/is_configurable">-</data>
-            <data name="productAttribute/data/manage_frontend_label">Area_Field%isolation%</data>
-            <data name="productAttribute/data/is_searchable">Yes</data>
-            <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
-            <data name="productAttribute/data/is_comparable">Yes</data>
-            <data name="productAttribute/data/is_filterable">-</data>
-            <data name="productAttribute/data/is_filterable_in_search">-</data>
-            <data name="productAttribute/data/is_used_for_promo_rules">-</data>
-            <data name="productAttribute/data/is_html_allowed_on_front">-</data>
-            <data name="productAttribute/data/is_visible_on_front">-</data>
-            <data name="productAttribute/data/used_in_product_listing">-</data>
-            <data name="productAttribute/data/used_for_sort_by">-</data>
-            <data name="constraint">assertProductAttributeIsUnique</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="CreateProductAttributeEntityTest">
+    <variation name="CreateProductAttributeEntityTestVariation1" firstConstraint="assertProductAttributeInGrid" method="test">
+      <data name="productTemplate/dataSet">custom_attribute_set</data>
+      <data name="productAttribute/data/frontend_label">Text_Field_Admin_%isolation%</data>
+      <data name="productAttribute/data/frontend_input">Text Field</data>
+      <data name="productAttribute/data/options/preset">-</data>
+      <data name="productAttribute/data/is_required">No</data>
+      <data name="productAttribute/data/attribute_code">attr_textfield_%isolation%</data>
+      <data name="productAttribute/data/is_global">-</data>
+      <data name="productAttribute/data/default_value_text">default_value_text%isolation%</data>
+      <data name="productAttribute/data/default_value_textarea">-</data>
+      <data name="productAttribute/data/default_value_date/pattern">-</data>
+      <data name="productAttribute/data/default_value_yesno">-</data>
+      <data name="productAttribute/data/is_unique">-</data>
+      <data name="productAttribute/data/is_configurable">-</data>
+      <data name="productAttribute/data/manage_frontend_label">-</data>
+      <data name="productAttribute/data/is_searchable">-</data>
+      <data name="productAttribute/data/is_visible_in_advanced_search">-</data>
+      <data name="productAttribute/data/is_comparable">-</data>
+      <data name="productAttribute/data/is_filterable">-</data>
+      <data name="productAttribute/data/is_filterable_in_search">-</data>
+      <data name="productAttribute/data/is_used_for_promo_rules">-</data>
+      <data name="productAttribute/data/is_html_allowed_on_front">-</data>
+      <data name="productAttribute/data/is_visible_on_front">-</data>
+      <data name="productAttribute/data/used_in_product_listing">-</data>
+      <data name="productAttribute/data/used_for_sort_by">-</data>
+      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
+      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
+      <constraint name="assertAddedProductAttributeOnProductForm" prev="assertAttributeForm"/>
+    </variation>
+    <variation name="CreateProductAttributeEntityTestVariation2" firstConstraint="assertProductAttributeInGrid" method="test">
+      <data name="productTemplate/dataSet">custom_attribute_set</data>
+      <data name="productAttribute/data/frontend_label">Text_Field_Admin_%isolation%</data>
+      <data name="productAttribute/data/frontend_input">Text Area</data>
+      <data name="productAttribute/data/options/preset">-</data>
+      <data name="productAttribute/data/is_required">Yes</data>
+      <data name="productAttribute/data/attribute_code">attr_textarea_%isolation%</data>
+      <data name="productAttribute/data/is_global">Store View</data>
+      <data name="productAttribute/data/default_value_text">-</data>
+      <data name="productAttribute/data/default_value_textarea">default_value_textarea%isolation%</data>
+      <data name="productAttribute/data/default_value_date/pattern">-</data>
+      <data name="productAttribute/data/default_value_yesno">-</data>
+      <data name="productAttribute/data/is_unique">No</data>
+      <data name="productAttribute/data/is_configurable">-</data>
+      <data name="productAttribute/data/manage_frontend_label">Area_Field%isolation%</data>
+      <data name="productAttribute/data/is_searchable">Yes</data>
+      <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
+      <data name="productAttribute/data/is_comparable">Yes</data>
+      <data name="productAttribute/data/is_filterable">-</data>
+      <data name="productAttribute/data/is_filterable_in_search">-</data>
+      <data name="productAttribute/data/is_used_for_promo_rules">-</data>
+      <data name="productAttribute/data/is_html_allowed_on_front">-</data>
+      <data name="productAttribute/data/is_visible_on_front">-</data>
+      <data name="productAttribute/data/used_in_product_listing">-</data>
+      <data name="productAttribute/data/used_for_sort_by">-</data>
+      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
+      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
+      <constraint name="assertAddedProductAttributeOnProductForm" next="assertProductAttributeIsRequired" prev="assertAttributeForm"/>
+      <constraint name="assertProductAttributeIsRequired" next="assertAttributeSearchableByLabel" prev="assertAddedProductAttributeOnProductForm"/>
+      <constraint name="assertAttributeSearchableByLabel" next="assertProductAttributeDisplayingOnSearchForm" prev="assertProductAttributeIsRequired"/>
+      <constraint name="assertProductAttributeDisplayingOnSearchForm" next="assertProductAttributeIsComparable" prev="assertAttributeSearchableByLabel"/>
+      <constraint name="assertProductAttributeIsComparable" prev="assertProductAttributeDisplayingOnSearchForm"/>
+    </variation>
+    <variation name="CreateProductAttributeEntityTestVariation3" firstConstraint="assertProductAttributeInGrid" method="test">
+      <data name="productTemplate/dataSet">custom_attribute_set</data>
+      <data name="productAttribute/data/frontend_label">Date_Admin_%isolation%</data>
+      <data name="productAttribute/data/frontend_input">Date</data>
+      <data name="productAttribute/data/options/preset">-</data>
+      <data name="productAttribute/data/is_required">No</data>
+      <data name="productAttribute/data/attribute_code">attr_date_%isolation%</data>
+      <data name="productAttribute/data/is_global">-</data>
+      <data name="productAttribute/data/default_value_text">-</data>
+      <data name="productAttribute/data/default_value_textarea">-</data>
+      <data name="productAttribute/data/default_value_date/pattern">n/j/y</data>
+      <data name="productAttribute/data/default_value_yesno">-</data>
+      <data name="productAttribute/data/is_unique">No</data>
+      <data name="productAttribute/data/is_configurable">-</data>
+      <data name="productAttribute/data/manage_frontend_label">Date_Store_View</data>
+      <data name="productAttribute/data/is_searchable">Yes</data>
+      <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
+      <data name="productAttribute/data/is_comparable">No</data>
+      <data name="productAttribute/data/is_filterable">-</data>
+      <data name="productAttribute/data/is_filterable_in_search">-</data>
+      <data name="productAttribute/data/is_used_for_promo_rules">-</data>
+      <data name="productAttribute/data/is_html_allowed_on_front">-</data>
+      <data name="productAttribute/data/is_visible_on_front">Yes</data>
+      <data name="productAttribute/data/used_in_product_listing">Yes</data>
+      <data name="productAttribute/data/used_for_sort_by">Yes</data>
+      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
+      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
+      <constraint name="assertAddedProductAttributeOnProductForm" next="assertProductAttributeIsUsedInSortOnFrontend" prev="assertAttributeForm"/>
+      <constraint name="assertProductAttributeIsUsedInSortOnFrontend" next="assertProductAttributeIsUsedPromoRules" prev="assertAddedProductAttributeOnProductForm"/>
+      <constraint name="assertProductAttributeIsUsedPromoRules" prev="assertProductAttributeIsUsedInSortOnFrontend"/>
+    </variation>
+    <variation name="CreateProductAttributeEntityTestVariation4" firstConstraint="assertProductAttributeInGrid" method="test">
+      <data name="productTemplate/dataSet">custom_attribute_set</data>
+      <data name="productAttribute/data/frontend_label">Yes/No_Admin_%isolation%</data>
+      <data name="productAttribute/data/frontend_input">Yes/No</data>
+      <data name="productAttribute/data/options/preset">-</data>
+      <data name="productAttribute/data/is_required">Yes</data>
+      <data name="productAttribute/data/attribute_code">attr_yesno_%isolation%</data>
+      <data name="productAttribute/data/is_global">Global</data>
+      <data name="productAttribute/data/default_value_text">-</data>
+      <data name="productAttribute/data/default_value_textarea">-</data>
+      <data name="productAttribute/data/default_value_date/pattern">-</data>
+      <data name="productAttribute/data/default_value_yesno">No</data>
+      <data name="productAttribute/data/is_unique">-</data>
+      <data name="productAttribute/data/is_configurable">-</data>
+      <data name="productAttribute/data/manage_frontend_label">Yes/No_Global</data>
+      <data name="productAttribute/data/is_searchable">-</data>
+      <data name="productAttribute/data/is_visible_in_advanced_search">-</data>
+      <data name="productAttribute/data/is_comparable">-</data>
+      <data name="productAttribute/data/is_filterable">-</data>
+      <data name="productAttribute/data/is_filterable_in_search">-</data>
+      <data name="productAttribute/data/is_used_for_promo_rules">-</data>
+      <data name="productAttribute/data/is_html_allowed_on_front">-</data>
+      <data name="productAttribute/data/is_visible_on_front">-</data>
+      <data name="productAttribute/data/used_in_product_listing">-</data>
+      <data name="productAttribute/data/used_for_sort_by">-</data>
+      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
+      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
+      <constraint name="assertAddedProductAttributeOnProductForm" prev="assertAttributeForm"/>
+    </variation>
+    <variation name="CreateProductAttributeEntityTestVariation5" firstConstraint="assertProductAttributeInGrid" method="test">
+      <data name="productTemplate/dataSet">custom_attribute_set</data>
+      <data name="productAttribute/data/frontend_label">Multiple_Select_Admin_%isolation%</data>
+      <data name="productAttribute/data/frontend_input">Multiple Select</data>
+      <data name="productAttribute/data/options/preset">default</data>
+      <data name="productAttribute/data/is_required">No</data>
+      <data name="productAttribute/data/attribute_code">attr_multiselect_%isolation%</data>
+      <data name="productAttribute/data/is_global">Website</data>
+      <data name="productAttribute/data/default_value_text">-</data>
+      <data name="productAttribute/data/default_value_textarea">-</data>
+      <data name="productAttribute/data/default_value_date/pattern">-</data>
+      <data name="productAttribute/data/default_value_yesno">-</data>
+      <data name="productAttribute/data/is_unique">Yes</data>
+      <data name="productAttribute/data/is_configurable">-</data>
+      <data name="productAttribute/data/manage_frontend_label">-</data>
+      <data name="productAttribute/data/is_searchable">Yes</data>
+      <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
+      <data name="productAttribute/data/is_comparable">Yes</data>
+      <data name="productAttribute/data/is_filterable">Filterable (with results)</data>
+      <data name="productAttribute/data/is_filterable_in_search">Yes</data>
+      <data name="productAttribute/data/is_used_for_promo_rules">-</data>
+      <data name="productAttribute/data/is_html_allowed_on_front">Yes</data>
+      <data name="productAttribute/data/is_visible_on_front">Yes</data>
+      <data name="productAttribute/data/used_in_product_listing">Yes</data>
+      <data name="productAttribute/data/used_for_sort_by">-</data>
+      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
+      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
+      <constraint name="assertAddedProductAttributeOnProductForm" next="assertProductAttributeDisplayingOnFrontend" prev="assertAttributeForm"/>
+      <constraint name="assertProductAttributeDisplayingOnFrontend" next="assertProductAttributeDisplayingOnSearchForm" prev="assertAddedProductAttributeOnProductForm"/>
+      <constraint name="assertProductAttributeDisplayingOnSearchForm" next="assertProductAttributeIsComparable" prev="assertProductAttributeDisplayingOnFrontend"/>
+      <constraint name="assertProductAttributeIsComparable" next="assertProductAttributeIsFilterable" prev="assertProductAttributeDisplayingOnSearchForm"/>
+      <constraint name="assertProductAttributeIsFilterable" next="assertProductAttributeIsFilterableInSearch" prev="assertProductAttributeIsComparable"/>
+      <constraint name="assertProductAttributeIsFilterableInSearch" next="assertAttributeSearchableByLabel" prev="assertProductAttributeIsFilterable"/>
+      <constraint name="assertAttributeSearchableByLabel" next="assertAttributeOptionsOnProductForm" prev="assertProductAttributeIsFilterableInSearch"/>
+      <constraint name="assertAttributeOptionsOnProductForm" prev="assertAttributeSearchableByLabel"/>
+    </variation>
+    <variation name="CreateProductAttributeEntityTestVariation6" firstConstraint="assertProductAttributeInGrid" method="test">
+      <data name="productTemplate/dataSet">custom_attribute_set</data>
+      <data name="productAttribute/data/frontend_label">Dropdown_Admin_%isolation%</data>
+      <data name="productAttribute/data/frontend_input">Dropdown</data>
+      <data name="productAttribute/data/options/preset">default</data>
+      <data name="productAttribute/data/is_required">Yes</data>
+      <data name="productAttribute/data/attribute_code">attr_dropdown_%isolation%</data>
+      <data name="productAttribute/data/is_global">Global</data>
+      <data name="productAttribute/data/default_value_text">-</data>
+      <data name="productAttribute/data/default_value_textarea">-</data>
+      <data name="productAttribute/data/default_value_date/pattern">-</data>
+      <data name="productAttribute/data/default_value_yesno">-</data>
+      <data name="productAttribute/data/is_unique">No</data>
+      <data name="productAttribute/data/is_configurable">Yes</data>
+      <data name="productAttribute/data/manage_frontend_label">-</data>
+      <data name="productAttribute/data/is_searchable">Yes</data>
+      <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
+      <data name="productAttribute/data/is_comparable">Yes</data>
+      <data name="productAttribute/data/is_filterable">Filterable (with results)</data>
+      <data name="productAttribute/data/is_filterable_in_search">Yes</data>
+      <data name="productAttribute/data/is_used_for_promo_rules">-</data>
+      <data name="productAttribute/data/is_html_allowed_on_front">Yes</data>
+      <data name="productAttribute/data/is_visible_on_front">Yes</data>
+      <data name="productAttribute/data/used_in_product_listing">Yes</data>
+      <data name="productAttribute/data/used_for_sort_by">Yes</data>
+      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
+      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
+      <constraint name="assertAddedProductAttributeOnProductForm" next="assertProductAttributeIsRequired" prev="assertAttributeForm"/>
+      <constraint name="assertProductAttributeIsRequired" next="assertProductAttributeIsGlobal" prev="assertAddedProductAttributeOnProductForm"/>
+      <constraint name="assertProductAttributeIsGlobal" next="assertProductAttributeDisplayingOnFrontend" prev="assertProductAttributeIsRequired"/>
+      <constraint name="assertProductAttributeDisplayingOnFrontend" next="assertProductAttributeDisplayingOnSearchForm" prev="assertProductAttributeIsGlobal"/>
+      <constraint name="assertProductAttributeDisplayingOnSearchForm" next="assertAttributeSearchableByLabel" prev="assertProductAttributeDisplayingOnFrontend"/>
+      <constraint name="assertAttributeSearchableByLabel" next="assertProductAttributeIsComparable" prev="assertProductAttributeDisplayingOnSearchForm"/>
+      <constraint name="assertProductAttributeIsComparable" next="assertProductAttributeIsUsedInSortOnFrontend" prev="assertAttributeSearchableByLabel"/>
+      <constraint name="assertProductAttributeIsUsedInSortOnFrontend" next="assertProductAttributeIsFilterable" prev="assertProductAttributeIsComparable"/>
+      <constraint name="assertProductAttributeIsFilterable" next="assertProductAttributeIsConfigurable" prev="assertProductAttributeIsUsedInSortOnFrontend"/>
+      <constraint name="assertProductAttributeIsConfigurable" next="assertProductAttributeIsFilterableInSearch" prev="assertProductAttributeIsFilterable"/>
+      <constraint name="assertProductAttributeIsFilterableInSearch" next="assertAttributeOptionsOnProductForm" prev="assertProductAttributeIsConfigurable"/>
+      <constraint name="assertAttributeOptionsOnProductForm" prev="assertProductAttributeIsFilterableInSearch"/>
+    </variation>
+    <variation name="CreateProductAttributeEntityTestVariation7" firstConstraint="assertProductAttributeInGrid" method="test">
+      <data name="productTemplate/dataSet">custom_attribute_set</data>
+      <data name="productAttribute/data/frontend_label">Price_Admin_%isolation%</data>
+      <data name="productAttribute/data/frontend_input">Price</data>
+      <data name="productAttribute/data/options/preset">-</data>
+      <data name="productAttribute/data/is_required">No</data>
+      <data name="productAttribute/data/attribute_code">attr_price_%isolation%</data>
+      <data name="productAttribute/data/is_global">-</data>
+      <data name="productAttribute/data/default_value_text">1000</data>
+      <data name="productAttribute/data/default_value_textarea">-</data>
+      <data name="productAttribute/data/default_value_date/pattern">-</data>
+      <data name="productAttribute/data/default_value_yesno">-</data>
+      <data name="productAttribute/data/is_unique">No</data>
+      <data name="productAttribute/data/is_configurable">-</data>
+      <data name="productAttribute/data/manage_frontend_label">Price_StoreView</data>
+      <data name="productAttribute/data/is_searchable">Yes</data>
+      <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
+      <data name="productAttribute/data/is_comparable">No</data>
+      <data name="productAttribute/data/is_filterable">Filterable (with results)</data>
+      <data name="productAttribute/data/is_filterable_in_search">Yes</data>
+      <data name="productAttribute/data/is_used_for_promo_rules">-</data>
+      <data name="productAttribute/data/is_html_allowed_on_front">-</data>
+      <data name="productAttribute/data/is_visible_on_front">-</data>
+      <data name="productAttribute/data/used_in_product_listing">-</data>
+      <data name="productAttribute/data/used_for_sort_by">-</data>
+      <data name="issue">Bug:MAGETWO-31560</data>
+      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
+      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
+      <constraint name="assertAddedProductAttributeOnProductForm" next="assertAttributeSearchableByLabel" prev="assertAttributeForm"/>
+      <constraint name="assertAttributeSearchableByLabel" next="assertProductAttributeDisplayingOnSearchForm" prev="assertAddedProductAttributeOnProductForm"/>
+      <constraint name="assertProductAttributeDisplayingOnSearchForm" next="assertProductAttributeIsFilterable" prev="assertAttributeSearchableByLabel"/>
+      <constraint name="assertProductAttributeIsFilterable" next="assertProductAttributeIsFilterableInSearch" prev="assertProductAttributeDisplayingOnSearchForm"/>
+      <constraint name="assertProductAttributeIsFilterableInSearch" prev="assertProductAttributeIsFilterable"/>
+    </variation>
+    <variation name="CreateProductAttributeEntityTestVariation8" firstConstraint="assertProductAttributeInGrid" method="test">
+      <data name="productTemplate/dataSet">custom_attribute_set</data>
+      <data name="productAttribute/data/frontend_label">Fixed_Product_Tax_Admin_%isolation%</data>
+      <data name="productAttribute/data/frontend_input">Fixed Product Tax</data>
+      <data name="productAttribute/data/options/preset">-</data>
+      <data name="productAttribute/data/is_required">-</data>
+      <data name="productAttribute/data/attribute_code">attr_fpt_code_%isolation%</data>
+      <data name="productAttribute/data/is_global">-</data>
+      <data name="productAttribute/data/default_value_text">-</data>
+      <data name="productAttribute/data/default_value_textarea">-</data>
+      <data name="productAttribute/data/default_value_date/pattern">-</data>
+      <data name="productAttribute/data/default_value_yesno">-</data>
+      <data name="productAttribute/data/is_unique">-</data>
+      <data name="productAttribute/data/is_configurable">-</data>
+      <data name="productAttribute/data/manage_frontend_label">Fixed_Product_Tax_Storeview</data>
+      <data name="productAttribute/data/is_searchable">-</data>
+      <data name="productAttribute/data/is_visible_in_advanced_search">-</data>
+      <data name="productAttribute/data/is_comparable">-</data>
+      <data name="productAttribute/data/is_filterable">-</data>
+      <data name="productAttribute/data/is_filterable_in_search">-</data>
+      <data name="productAttribute/data/is_used_for_promo_rules">-</data>
+      <data name="productAttribute/data/is_html_allowed_on_front">-</data>
+      <data name="productAttribute/data/is_visible_on_front">-</data>
+      <data name="productAttribute/data/used_in_product_listing">-</data>
+      <data name="productAttribute/data/used_for_sort_by">-</data>
+      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
+      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
+      <constraint name="assertAddedProductAttributeOnProductForm" prev="assertAttributeForm"/>
+    </variation>
+    <variation name="CreateProductAttributeEntityTestVariation9" firstConstraint="assertProductAttributeIsUnique" method="test">
+      <data name="productTemplate/dataSet">custom_attribute_set</data>
+      <data name="productAttribute/data/frontend_label">Text_Field_Admin_%isolation%</data>
+      <data name="productAttribute/data/frontend_input">Text Field</data>
+      <data name="productAttribute/data/options/preset">-</data>
+      <data name="productAttribute/data/is_required">Yes</data>
+      <data name="productAttribute/data/attribute_code">attr_textfield_%isolation%</data>
+      <data name="productAttribute/data/is_global">Store View</data>
+      <data name="productAttribute/data/default_value_text">default_value_text%isolation%</data>
+      <data name="productAttribute/data/default_value_textarea">-</data>
+      <data name="productAttribute/data/default_value_date/pattern">-</data>
+      <data name="productAttribute/data/default_value_yesno">-</data>
+      <data name="productAttribute/data/is_unique">Yes</data>
+      <data name="productAttribute/data/is_configurable">-</data>
+      <data name="productAttribute/data/manage_frontend_label">Area_Field%isolation%</data>
+      <data name="productAttribute/data/is_searchable">Yes</data>
+      <data name="productAttribute/data/is_visible_in_advanced_search">Yes</data>
+      <data name="productAttribute/data/is_comparable">Yes</data>
+      <data name="productAttribute/data/is_filterable">-</data>
+      <data name="productAttribute/data/is_filterable_in_search">-</data>
+      <data name="productAttribute/data/is_used_for_promo_rules">-</data>
+      <data name="productAttribute/data/is_html_allowed_on_front">-</data>
+      <data name="productAttribute/data/is_visible_on_front">-</data>
+      <data name="productAttribute/data/used_in_product_listing">-</data>
+      <data name="productAttribute/data/used_for_sort_by">-</data>
+      <constraint name="assertProductAttributeIsUnique"/>
+    </variation>
+  </testCase>
 </config>

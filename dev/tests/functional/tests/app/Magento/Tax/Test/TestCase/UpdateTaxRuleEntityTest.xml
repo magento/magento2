@@ -5,75 +5,85 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="UpdateTaxRuleEntityTest">
-        <variation name="UpdateTaxRuleEntityTestVariation1">
-            <data name="initialTaxRule/dataSet">tax_rule_default</data>
-            <data name="address/data/country_id">-</data>
-            <data name="address/data/region_id">-</data>
-            <data name="address/data/postcode">-</data>
-            <data name="shipping/carrier">-</data>
-            <data name="shipping/method">-</data>
-            <data name="shipping/price">-</data>
-            <data name="taxRule/data/code">New Tax Rule name%isolation%</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_0">default</data>
-            <data name="taxRule/data/tax_customer_class/dataSet/class_0">customer_tax_class</data>
-            <data name="taxRule/data/tax_product_class/dataSet/class_0">product_tax_class</data>
-            <data name="taxRule/data/tax_product_class/dataSet/class_1">product_tax_class</data>
-            <data name="taxRule/data/priority">2</data>
-            <data name="taxRule/data/position">2</data>
-            <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm</data>
-        </variation>
-        <variation name="UpdateTaxRuleEntityTestVariation2">
-            <data name="initialTaxRule/dataSet">tax_rule_with_custom_tax_classes</data>
-            <data name="address/data/country_id">-</data>
-            <data name="address/data/region_id">-</data>
-            <data name="address/data/postcode">-</data>
-            <data name="shipping/carrier">-</data>
-            <data name="shipping/method">-</data>
-            <data name="shipping/price">-</data>
-            <data name="taxRule/data/code">-</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_0">withZipRange</data>
-            <data name="taxRule/data/tax_customer_class/dataSet/class_0">Retail Customer</data>
-            <data name="taxRule/data/tax_product_class/dataSet/class_0">product_tax_class</data>
-            <data name="taxRule/data/tax_product_class/dataSet/class_1">Taxable Goods</data>
-            <data name="taxRule/data/priority">-</data>
-            <data name="taxRule/data/position">-</data>
-            <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm</data>
-        </variation>
-        <variation name="UpdateTaxRuleEntityTestVariation3">
-            <data name="initialTaxRule/dataSet">tax_rule_with_custom_tax_classes</data>
-            <data name="address/data/country_id">United States</data>
-            <data name="address/data/region_id">Utah</data>
-            <data name="address/data/postcode">84001</data>
-            <data name="shipping/carrier">Flat Rate</data>
-            <data name="shipping/method">Fixed</data>
-            <data name="shipping/price">5</data>
-            <data name="taxRule/data/code">-</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_0">us_ut_fixed_zip_rate_20</data>
-            <data name="taxRule/data/tax_customer_class/dataSet/class_0">-</data>
-            <data name="taxRule/data/tax_product_class/dataSet/class_0">product_tax_class</data>
-            <data name="taxRule/data/tax_product_class/dataSet/class_1">-</data>
-            <data name="taxRule/data/priority">-</data>
-            <data name="taxRule/data/position">-</data>
-            <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm, assertTaxRuleIsApplied</data>
-        </variation>
-        <variation name="UpdateTaxRuleEntityTestVariation4">
-            <data name="initialTaxRule/dataSet">tax_rule_with_custom_tax_classes</data>
-            <data name="address/data/country_id">United States</data>
-            <data name="address/data/region_id">Idaho</data>
-            <data name="address/data/postcode">83201</data>
-            <data name="shipping/carrier">Flat Rate</data>
-            <data name="shipping/method">Fixed</data>
-            <data name="shipping/price">5</data>
-            <data name="taxRule/data/code">-</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_0">withFixedZip</data>
-            <data name="taxRule/data/tax_customer_class/dataSet/class_0">-</data>
-            <data name="taxRule/data/tax_product_class/dataSet/class_0">product_tax_class</data>
-            <data name="taxRule/data/tax_product_class/dataSet/class_1">-</data>
-            <data name="taxRule/data/priority">-</data>
-            <data name="taxRule/data/position">-</data>
-            <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm, assertTaxRuleIsNotApplied</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="UpdateTaxRuleEntityTest">
+    <variation name="UpdateTaxRuleEntityTestVariation1" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
+      <data name="initialTaxRule/dataSet">tax_rule_default</data>
+      <data name="address/data/country_id">-</data>
+      <data name="address/data/region_id">-</data>
+      <data name="address/data/postcode">-</data>
+      <data name="shipping/carrier">-</data>
+      <data name="shipping/method">-</data>
+      <data name="shipping/price">-</data>
+      <data name="taxRule/data/code">New Tax Rule name%isolation%</data>
+      <data name="taxRule/data/tax_rate/dataSet/rate_0">default</data>
+      <data name="taxRule/data/tax_customer_class/dataSet/class_0">customer_tax_class</data>
+      <data name="taxRule/data/tax_product_class/dataSet/class_0">product_tax_class</data>
+      <data name="taxRule/data/tax_product_class/dataSet/class_1">product_tax_class</data>
+      <data name="taxRule/data/priority">2</data>
+      <data name="taxRule/data/position">2</data>
+      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
+      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
+      <constraint name="assertTaxRuleForm" prev="assertTaxRuleInGrid"/>
+    </variation>
+    <variation name="UpdateTaxRuleEntityTestVariation2" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
+      <data name="initialTaxRule/dataSet">tax_rule_with_custom_tax_classes</data>
+      <data name="address/data/country_id">-</data>
+      <data name="address/data/region_id">-</data>
+      <data name="address/data/postcode">-</data>
+      <data name="shipping/carrier">-</data>
+      <data name="shipping/method">-</data>
+      <data name="shipping/price">-</data>
+      <data name="taxRule/data/code">-</data>
+      <data name="taxRule/data/tax_rate/dataSet/rate_0">withZipRange</data>
+      <data name="taxRule/data/tax_customer_class/dataSet/class_0">Retail Customer</data>
+      <data name="taxRule/data/tax_product_class/dataSet/class_0">product_tax_class</data>
+      <data name="taxRule/data/tax_product_class/dataSet/class_1">Taxable Goods</data>
+      <data name="taxRule/data/priority">-</data>
+      <data name="taxRule/data/position">-</data>
+      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
+      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
+      <constraint name="assertTaxRuleForm" prev="assertTaxRuleInGrid"/>
+    </variation>
+    <variation name="UpdateTaxRuleEntityTestVariation3" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
+      <data name="initialTaxRule/dataSet">tax_rule_with_custom_tax_classes</data>
+      <data name="address/data/country_id">United States</data>
+      <data name="address/data/region_id">Utah</data>
+      <data name="address/data/postcode">84001</data>
+      <data name="shipping/carrier">Flat Rate</data>
+      <data name="shipping/method">Fixed</data>
+      <data name="shipping/price">5</data>
+      <data name="taxRule/data/code">-</data>
+      <data name="taxRule/data/tax_rate/dataSet/rate_0">us_ut_fixed_zip_rate_20</data>
+      <data name="taxRule/data/tax_customer_class/dataSet/class_0">-</data>
+      <data name="taxRule/data/tax_product_class/dataSet/class_0">product_tax_class</data>
+      <data name="taxRule/data/tax_product_class/dataSet/class_1">-</data>
+      <data name="taxRule/data/priority">-</data>
+      <data name="taxRule/data/position">-</data>
+      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
+      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
+      <constraint name="assertTaxRuleForm" next="assertTaxRuleIsApplied" prev="assertTaxRuleInGrid"/>
+      <constraint name="assertTaxRuleIsApplied" prev="assertTaxRuleForm"/>
+    </variation>
+    <variation name="UpdateTaxRuleEntityTestVariation4" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
+      <data name="initialTaxRule/dataSet">tax_rule_with_custom_tax_classes</data>
+      <data name="address/data/country_id">United States</data>
+      <data name="address/data/region_id">Idaho</data>
+      <data name="address/data/postcode">83201</data>
+      <data name="shipping/carrier">Flat Rate</data>
+      <data name="shipping/method">Fixed</data>
+      <data name="shipping/price">5</data>
+      <data name="taxRule/data/code">-</data>
+      <data name="taxRule/data/tax_rate/dataSet/rate_0">withFixedZip</data>
+      <data name="taxRule/data/tax_customer_class/dataSet/class_0">-</data>
+      <data name="taxRule/data/tax_product_class/dataSet/class_0">product_tax_class</data>
+      <data name="taxRule/data/tax_product_class/dataSet/class_1">-</data>
+      <data name="taxRule/data/priority">-</data>
+      <data name="taxRule/data/position">-</data>
+      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
+      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
+      <constraint name="assertTaxRuleForm" next="assertTaxRuleIsNotApplied" prev="assertTaxRuleInGrid"/>
+      <constraint name="assertTaxRuleIsNotApplied" prev="assertTaxRuleForm"/>
+    </variation>
+  </testCase>
 </config>
