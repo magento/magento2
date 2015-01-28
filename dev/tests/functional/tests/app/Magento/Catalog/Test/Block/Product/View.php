@@ -204,8 +204,7 @@ class View extends AbstractConfigureBlock
      */
     public function setQty($qty)
     {
-        $this->browser->selectWindow();
-        $this->_rootElement->find($this->qty)->keys([$qty]);
+        $this->_rootElement->find($this->qty)->setValue($qty);
         $this->_rootElement->click();
     }
 
