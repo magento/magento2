@@ -99,7 +99,7 @@ class Logo extends \Magento\Framework\View\Element\Template
         } elseif ($this->getLogoFile()) {
             $url = $this->getViewFileUrl($this->getLogoFile());
         } else {
-            $url = $this->getViewFileUrl('images/logo.gif');
+            $url = $this->getViewFileUrl('images/logo.svg');
         }
         return $url;
     }

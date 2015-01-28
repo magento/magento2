@@ -147,7 +147,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'name' => 'from',
                 'date_format' => $dateFormat,
-                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'label' => __('From'),
                 'title' => __('From'),
                 'required' => true
@@ -160,7 +160,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'name' => 'to',
                 'date_format' => $dateFormat,
-                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'label' => __('To'),
                 'title' => __('To'),
                 'required' => true
