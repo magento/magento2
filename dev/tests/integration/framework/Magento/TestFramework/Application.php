@@ -281,7 +281,13 @@ class Application
                 'handlers' => [
                     'system' => $objectManager->create(
                         'Magento\Framework\Logger\Handler\System',
-                        ['filePath' => $this->installDir]
+                        [
+                            'exceptionHandler' => $objectManager->create(
+                                'Magento\Framework\Logger\Handler\Exception',
+                                ['filePath' => $this->installDir]
+                            ),
+                            'filePath' => $this->installDir
+                        ]
                     ),
                     'debug'  => $objectManager->create(
                         'Magento\Framework\Logger\Handler\Debug',
