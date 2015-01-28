@@ -54,6 +54,11 @@ class ActionTest extends \PHPUnit_Framework_TestCase
     protected $pageConfigMock;
 
     /**
+     * @var \Magento\Framework\View\DesignLoader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $designLoader;
+
+    /**
      * Full action name
      */
     const FULL_ACTION_NAME = 'module/controller/someaction';
@@ -110,9 +115,11 @@ class ActionTest extends \PHPUnit_Framework_TestCase
 
         $this->pageConfigMock = $this->getMock('Magento\Framework\View\Page\Config', ['getConfig'], [], '', false);
         $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
+        $this->designLoader = $this->getMockBuilder('Magento\Framework\View\DesignLoader')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->viewMock->expects($this->any())->method('getPage')->will($this->returnValue($this->pageConfigMock));
         $this->pageConfigMock->expects($this->any())->method('getConfig')->will($this->returnValue(1));
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->action = $this->objectManagerHelper->getObject(
             'Magento\Framework\App\Action\ActionFake',
@@ -123,6 +130,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
                 'redirect' => $this->_redirectMock,
                 'actionFlag' => $this->_actionFlagMock,
                 'view' => $this->viewMock,
+                'designLoader' => $this->designLoader,
             ]
         );
         \Magento\Framework\Profiler::disable();
@@ -130,6 +138,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchPostDispatch()
     {
+        $this->designLoader->expects($this->once())->method('load')->with();
         $this->_requestMock->expects($this->exactly(3))->method('getFullActionName')->will(
             $this->returnValue(self::FULL_ACTION_NAME)
         );
@@ -188,6 +197,11 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($this->_responseMock, $this->action->dispatch($this->_requestMock));
+    }
+
+    public function testGetActionFlag()
+    {
+        $this->assertSame($this->_actionFlagMock, $this->action->getActionFlag());
     }
 }
 

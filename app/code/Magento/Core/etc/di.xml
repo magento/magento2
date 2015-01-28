@@ -502,7 +502,6 @@
     </type>
     <type name="Magento\Framework\App\Action\Action">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
-        <plugin name="designLoader" type="Magento\Core\App\Action\Plugin\Design" sortOrder="30"/>
     </type>
     <virtualType name="Magento\Core\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
