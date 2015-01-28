@@ -57,6 +57,7 @@ $id = $block->escapeHtml($attribute['attribute_id']);
                     <div class="control">
                         <input type="text" value="<?php echo $block->escapeHtml($attribute['label']); ?>"
                                name="product[configurable_attributes_data][<?php echo $id ?>][label]"
+                               data-mage-init='{"useDefault": {}}'
                                data-store-label="<?php echo $block->escapeHtml($attribute['label']); ?>"
                                class="store-label required-entry"/>
                     </div>

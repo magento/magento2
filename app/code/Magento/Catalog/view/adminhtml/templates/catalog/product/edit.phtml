@@ -64,7 +64,7 @@ require([
     "mage/mage",
     "Magento_Catalog/catalog/type-switcher",
     "mage/backend/tabs",
-    "domReady"
+    "domReady!"
 ], function($){
     var $form = $('[data-form=edit-product]');
     $form.data('typeSwitcher', new TypeSwitcher(<?php echo $block->getTypeSwitcherData();?>).bindAll());

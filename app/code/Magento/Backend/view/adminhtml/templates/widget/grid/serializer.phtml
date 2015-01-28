@@ -16,17 +16,22 @@
 <?php $formId = $block->getFormId()?>
 <?php if (!empty($formId)) :?>
 <script>
-    Event.observe(window, "load", function(){
-        var serializeInput  = document.createElement('input');
-        serializeInput.type = 'hidden';
-        serializeInput.name = '<?php echo $block->getInputElementName()?>';
-        serializeInput.id   = '<?php echo $_id?>';
-        try {
-            document.getElementById('<?php echo $formId?>').appendChild(serializeInput);
-            new serializerController('<?php echo $_id?>', <?php echo $block->getDataAsJSON() ?>, <?php echo $block->getColumnInputNames(true) ?>, <?php echo $block->getGridBlock()->getJsObjectName() ?>, '<?php echo $block->getReloadParamName()?>');
-        } catch(e) {
-            //Error add serializer
-        }
+    require([
+        'prototype',
+        'mage/adminhtml/grid'
+    ], function(){
+        Event.observe(window, "load", function(){
+            var serializeInput  = document.createElement('input');
+            serializeInput.type = 'hidden';
+            serializeInput.name = '<?php echo $block->getInputElementName()?>';
+            serializeInput.id   = '<?php echo $_id?>';
+            try {
+                document.getElementById('<?php echo $formId?>').appendChild(serializeInput);
+                new serializerController('<?php echo $_id?>', <?php echo $block->getDataAsJSON() ?>, <?php echo $block->getColumnInputNames(true) ?>, <?php echo $block->getGridBlock()->getJsObjectName() ?>, '<?php echo $block->getReloadParamName()?>');
+            } catch(e) {
+                //Error add serializer
+            }
+        });
     });
 </script>
 <?php else :?>

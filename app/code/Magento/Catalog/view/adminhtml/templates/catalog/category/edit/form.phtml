@@ -13,8 +13,8 @@ $categoryId = $block->getCategoryId();
 <div class="category-edit-title">
     <h3 class="title"><?php echo $block->escapeHtml($block->getHeader()) . ($block->getCategoryId() ? ' (' . __('ID: %1', $block->getCategoryId()) . ')' : '') ?></h3>
 </div>
-<div class="page-actions">
-    <?php echo $block->getResetButtonHtml() ?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions">
+    <?php echo $blcok->getResetButtonHtml() ?>
     <?php if ($block->getCategoryId()): ?>
         <?php echo $block->getDeleteButtonHtml() ?>
     <?php endif; ?>

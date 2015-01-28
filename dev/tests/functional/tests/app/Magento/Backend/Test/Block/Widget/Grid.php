@@ -455,6 +455,8 @@ abstract class Grid extends Block
      */
     protected function openFilterBlock()
     {
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+
         $button = $this->_rootElement->find($this->filterButton);
         if ($button->isVisible() && !$this->_rootElement->find($this->filterButton . $this->active)->isVisible()) {
             $button->click();

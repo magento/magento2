@@ -27,24 +27,34 @@ $_paymentBlock = $block->getLayout()->getBlock('checkout.onepage.payment');
     </ol>
     <script>
 require([
-    "jquery",
-    "mage/mage"
-], function($){
+    "underscore",
+    "accordion",
+    "opcOrderReview",
+], function(_, accordion, opcOrderReview){
     'use strict';
 
-    $(document).ready(function() {
-        $('#checkoutSteps').mage('accordion',{
-            'collapsibleElement' : ' > li',
-            'openedState' : 'active'
-        }).mage('opcOrderReview', $.extend({
-            'checkoutAgreements': '#checkout-agreements',
-            'checkoutProgressContainer': '#checkout-progress-wrapper',
-            'methodDescription': '.items'
-            },
-            <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>
-        ));
-    });
+    /**
+     * @todo refactor opcCheckoutMethod
+     *
+     * Initializiation of this components can't be moved to a data-mage-init attribute
+     * due to dependencies between instances of opcCheckoutMethod and mage.accordion.
+     * Thus initializiation has to be synchronyous.
+     */
+    var elem = document.getElementById('checkoutSteps'),
+        opcConfig;
 
+    opcConfig = _.extend({
+        'checkoutAgreements': '#checkout-agreements',
+        'checkoutProgressContainer': '#checkout-progress-wrapper',
+        'methodDescription': '.items'
+    },<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>);
+
+    accordion({
+        'collapsibleElement': ' > li',
+        'openedState': 'active'
+    }, elem);
+
+    opcOrderReview(opcConfig, elem);
 });
 </script>
 </div>

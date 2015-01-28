@@ -13,12 +13,16 @@
         <?php echo $block->getLocaleSelect(); ?>
     </div>
     <script>
-        function setInterfaceLanguage(event) {
-            var elem = Event.element(event);
-            if (elem) {
-                setLocation('<?php echo $block->getChangeLocaleUrl() ?>locale/'+elem.value+'/<?php echo $block->getUrlForReferer() ?>');
+        (function () {
+            'use strict';
+
+            var elem = document.getElementById('footer_interface_locale');
+
+            function onChange() {
+                window.location.href = '<?php echo $block->getChangeLocaleUrl() ?>locale/' + elem.value + '/<?php echo $block->getUrlForReferer() ?>';
             }
-        }
-        Event.observe('footer_interface_locale', 'change', setInterfaceLanguage)
+
+            elem.addEventListener('change', onChange);
+        })();
     </script>
 </div>

@@ -14,7 +14,7 @@ $item = $block->getItem();
     <span class="price-including-tax" data-label="<?php echo $block->escapeHtml(__('Incl. Tax')); ?>">
         <?php if ($block->displayPriceWithWeeeDetails()): ?>
             <span class="cart-tax-total"
-                data-tax-toggle='{"itemTaxId" : "#unit-item-tax-details<?php echo $item->getId(); ?>"}'>
+                data-mage-init='{"taxtToggle": {"itemTaxId" : "#unit-item-tax-details<?php echo $item->getId(); ?>"}}'>
         <?php else: ?>
             <span class="cart-price">
         <?php endif; ?>
@@ -32,7 +32,7 @@ $item = $block->getItem();
 
             <?php if ($block->displayFinalPrice()): ?>
                 <span class="cart-tax-total"
-                    data-tax-toggle='{"itemTaxId" : "#unit-item-tax-details<?php echo $item->getId(); ?>"}'>
+                    data-mage-init='{"taxtToggle": {"itemTaxId" : "#unit-item-tax-details<?php echo $item->getId(); ?>"}}'>
                     <span class="weee" data-label="<?php echo $block->escapeHtml(__('Total incl. tax')); ?>">
                         <?php echo $block->formatPrice($block->getFinalUnitDisplayPriceInclTax()); ?>
                     </span>
@@ -46,7 +46,7 @@ $item = $block->getItem();
     <span class="price-excluding-tax" data-label="<?php echo $block->escapeHtml(__('Excl. Tax')); ?>">
         <?php if ($block->displayPriceWithWeeeDetails()): ?>
             <span class="cart-tax-total"
-                data-tax-toggle='{"itemTaxId" : "#eunit-item-tax-details<?php echo $item->getId(); ?>"}'>
+                data-mage-init='{"taxtToggle": {"itemTaxId" : "#eunit-item-tax-details<?php echo $item->getId(); ?>"}}'>
         <?php else: ?>
             <span class="cart-price">
         <?php endif; ?>
@@ -66,8 +66,8 @@ $item = $block->getItem();
             <?php if ($block->displayFinalPrice()): ?>
                 <span class="cart-tax-total"
                     data-tax-toggle='{"itemTaxId" : "#eunit-item-tax-details<?php echo $item->getId(); ?>"}'>
-                    <span class="weee" data-label="<?php echo $block->escapeHtml(__('Total')); ?>">
-                        <?php echo $block->formatPrice($block->getFinalUnitDisplayPriceExclTax()); ?>
+                    <span class="weee" data-label="<?php echo $this->escapeHtml(__('Total')); ?>">
+                        <?php echo $this->formatPrice($this->getFinalUnitDisplayPriceExclTax()); ?>
                     </span>
                 </span>
             <?php endif; ?>

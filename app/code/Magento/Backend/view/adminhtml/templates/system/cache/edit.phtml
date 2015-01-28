@@ -16,13 +16,14 @@
  *  getForm() - html
  */
 ?>
-<div class="page-actions"><?php echo $block->getSaveButtonHtml() ?></div>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?php echo $block->getSaveButtonHtml() ?></div>
 <form action="<?php echo $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
     <?php echo $block->getBlockHtml('formkey')?>
 
     <script>
-    function setCacheAction(id, button) {
-        $(id).value = button.id;
+    window.setCacheAction = function(id, button) {
+        document.getElementById(id).value = button.id;
+
         configForm.submit();
     }
     </script>

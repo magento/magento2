@@ -8,7 +8,9 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-styledocco": "^0.1.4",
     "load-grunt-tasks": "^1.0.0",
-    "time-grunt": "^1.0.0"
+    "time-grunt": "^1.0.0",
+    "underscore": "^1.7.0",
+    "node-minify": "^1.0.1"
   },
   "engines": {
     "node": ">=0.10.0"

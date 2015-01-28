@@ -8,7 +8,7 @@
 
 /* @var $block \Magento\Newsletter\Block\Adminhtml\Queue\Edit */
 ?>
-<div class="page-actions">
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <?php echo $block->getBackButtonHtml() ?>
     <?php echo $block->getPreviewButtonHtml(); ?>
     <?php if (!$block->getIsPreview()): ?>
@@ -34,7 +34,12 @@
     </div>
 </form>
 <script>
-require(['jquery', 'mage/mage', 'prototype'], function(jQuery){
+require([
+    'jquery',
+    'tinymce',
+    'mage/mage',
+    'prototype'
+], function(jQuery, tinyMCE){
 
 //<![CDATA[
 jQuery('#queue_edit_form').mage('form').mage('validation');

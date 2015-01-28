@@ -17,7 +17,7 @@
                 <div id="messages" data-container-for="messages">
                     <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
                 </div>
-                <form method="post" action="" id="login-form" autocomplete="off">
+                <form method="post" action="" id="login-form" data-mage-init='{"form": {}, "validation": {}}' autocomplete="off">
                     <fieldset class="fieldset">
                         <legend class="legend"><span><?php echo __('Welcome') ?></span></legend><br/>
                         <input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>" />
@@ -41,29 +41,6 @@
                         </div>
                     </fieldset>
                 </form>
-                <script>
-                    function initForm($){
-                        $('#login-form').form().validation();
-                    }
-
-                    function focusInput(){
-                        var username            = document.getElementById('username'),
-                            autofocusSupport    = typeof username.autofocus !== 'undefined';
-
-                        if(!autofocusSupport){
-                            username.focus();
-                        }
-                    }
-
-                    require([
-                        "jquery",
-                        "mage/backend/form",
-                        "mage/backend/validation"
-                    ], initForm);
-
-                    focusInput();
-
-                </script>
             </div>
         </div>
     </div>

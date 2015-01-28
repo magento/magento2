@@ -43,7 +43,11 @@
                 </div>
             <?php else: ?>
                 <script>
-                    jQuery('#layered-filter-block').addClass('filter-no-options');
+                    require([
+                        'jquery'
+                    ], function ($) {
+                        $('#layered-filter-block').addClass('filter-no-options');
+                    });
                 </script>
             <?php endif; ?>
         </div>

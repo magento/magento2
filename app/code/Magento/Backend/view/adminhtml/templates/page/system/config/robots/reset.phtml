@@ -14,12 +14,15 @@ $coreHelper = $this->helper('Magento\Core\Helper\Data');
 ?>
 
 <script>
-    function resetRobotsToDefault()
-    {
-        $('design_search_engine_robots_custom_instructions').value = <?php
-            echo $coreHelper->jsonEncode($block->getRobotsDefaultCustomInstructions())
-        ?>;
-    }
+    require([
+        'prototype'
+    ], function () {
+        window.resetRobotsToDefault = function(){
+            $('design_search_engine_robots_custom_instructions').value = <?php
+                echo $coreHelper->jsonEncode($block->getRobotsDefaultCustomInstructions())
+            ?>;
+        }
+    });
 </script>
 
 <?php echo $block->getButtonHtml() ?>

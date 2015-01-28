@@ -17,7 +17,7 @@
     <input name="form_key" type="hidden" value="<?php echo $block->escapeHtml($block->getFormKey()) ?>" />
     <?php echo $block->getChildHtml('form') ?>
 </form>
-<div class="page-actions" <?php echo $block->getUiId('content-header') ?>>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions" <?php echo $block->getUiId('content-header') ?>>
     <?php echo $block->getButtonsHtml('header') ?>
 </div>
 <script>
