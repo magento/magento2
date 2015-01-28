@@ -19,9 +19,10 @@
 <script>
 require([
     "jquery",
-    "js/theme",
+    "tinymce",
+    "loadingPopup",
     "mage/backend/floating-header"
-], function(jQuery){
+], function(jQuery, tinyMCE){
 
 //<![CDATA[
     function categoryReset(url,useAjax){
@@ -91,6 +92,7 @@ require([
                         $('.page-actions').floatingHeader({
                             'title': '.category-edit-title'
                         });
+                        $('body').trigger('contentUpdated');
                         try {
                             if (refreshTree) {
                                 window.refreshTreeArea();

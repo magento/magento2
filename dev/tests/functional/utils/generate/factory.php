@@ -3,19 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+require_once dirname(__DIR__) . '/' . 'bootstrap.php';
 
-$mtfRoot = dirname(dirname(dirname(__FILE__)));
-$mtfRoot = str_replace('\\', '/', $mtfRoot);
-define('MTF_BP', $mtfRoot);
-define('MTF_TESTS_PATH', MTF_BP . '/tests/app/');
-
-require __DIR__ . '/../../../../../app/bootstrap.php';
-require MTF_BP . '/vendor/autoload.php';
-
-$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
-
-$om = $bootstrap->getObjectManager();
-/** @var \Magento\Mtf\Util\Generate\Factory $generator */
-$generator = $om->create('Magento\Mtf\Util\Generate\Factory');
-$generator->launch();
+$objectManager->create('Magento\Mtf\Util\Generate\Factory')->launch();
 \Magento\Mtf\Util\Generate\GenerateResult::displayResults();

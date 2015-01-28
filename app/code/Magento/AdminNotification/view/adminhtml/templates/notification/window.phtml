@@ -12,7 +12,7 @@
  * @see \Magento\AdminNotification\Block\Window
  */
 ?>
-<div class="fade critical-notification">
+<div data-mage-init='{"modalPopup": {}}' class="fade critical-notification">
     <div class="popup popup-<?php echo preg_replace('#[^a-z0-9]+#', '-', strtolower($this->getSeverityText())) ?>">
         <div class="popup-inner">
             <header class="popup-header">
