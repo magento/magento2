@@ -65,7 +65,7 @@ class BackendDecorator implements CurlInterface
      */
     protected function authorize()
     {
-        $url = $this->configuration->getParameter('application/appBackendUrl') .
+        $url = $_ENV['app_backend_url'] .
             $this->configuration->getParameter('application/backendLoginUrl');
         $data = [
             'login[username]' => $this->configuration->getParameter('application/backendLogin'),
