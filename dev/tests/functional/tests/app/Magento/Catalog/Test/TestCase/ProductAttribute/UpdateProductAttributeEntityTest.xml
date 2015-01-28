@@ -34,7 +34,7 @@
             <data name="attribute/data/is_required">Yes</data>
             <data name="attribute/data/is_global">Global</data>
             <data name="attribute/data/is_unique">Yes</data>
-            <data name="attribute/data/is_configurable&quot;">Yes</data>
+            <data name="attribute/data/is_configurable'">Yes</data>
             <data name="attribute/data/is_searchable">Yes</data>
             <data name="attribute/data/is_visible_in_advanced_search">Yes</data>
             <data name="attribute/data/is_comparable">Yes</data>

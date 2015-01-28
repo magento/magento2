@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="page" maxOccurs="unbounded" minOccurs="1" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="page">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="block" maxOccurs="unbounded" minOccurs="1" />
+            </xs:sequence>
+            <xs:attribute type="notEmptyType" name="name" use="required"/>
+            <xs:attribute type="notEmptyType" name="mca" use="required"/>
+            <xs:attribute type="notEmptyType" name="module"/>
+            <xs:attribute type="notEmptyType" name="area"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="block">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="render" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute type="notEmptyType" name="name" use="required"/>
+            <xs:attribute type="notEmptyType" name="class"/>
+            <xs:attribute type="notEmptyType" name="locator"/>
+            <xs:attribute type="strategyType" name="strategy"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="render">
+        <xs:complexType>
+            <xs:attribute type="notEmptyType" name="name" use="required"/>
+            <xs:attribute type="notEmptyType" name="class" use="required"/>
+            <xs:attribute type="notEmptyType" name="locator"/>
+            <xs:attribute type="notEmptyType" name="strategy"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="strategyType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="css selector|xpath|id|name|class name|tag name|link text"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="areaType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="adminhtml|frontend"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="notEmptyType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
