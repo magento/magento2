@@ -13,6 +13,7 @@ class BackendCustomerCreateTest extends Functional
 {
     /* tags */
     const TEST_TYPE = 'acceptance_test';
+    const STABLE = 'no';
     /* end tags */
 
     /**

@@ -16,11 +16,12 @@
     <handler_interface>Magento\Catalog\Test\Handler\Category\CategoryInterface</handler_interface>
     <dataset name="default">
         <field name="name" xsi:type="string">Category%isolation%</field>
-        <field name="path" xsi:type="string">Default Category</field>
         <field name="url_key" xsi:type="string">category%isolation%</field>
         <field name="is_active" xsi:type="string">Yes</field>
         <field name="include_in_menu" xsi:type="string">Yes</field>
-        <field name="parent_id" xsi:type="string">2</field>
+        <field name="parent_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default_category</item>
+        </field>
     </dataset>
     <fields>
         <field name="entity_id">
@@ -50,6 +51,7 @@
             <is_required>0</is_required>
             <default_value xsi:type="null" />
             <input>textarea</input>
+            <group>general_information</group>
         </field>
         <field name="parent_id">
             <attribute_code>parent_id</attribute_code>
