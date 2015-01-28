@@ -12,7 +12,7 @@
         <collection>Magento\Store\Model\Resource\Website\Collection</collection>
         <identifier>code</identifier>
         <fields />
-        <data_set />
+        <dataset />
         <data_config />
     </website>
     <storeGroup module="Magento_Store">
@@ -21,7 +21,7 @@
         <collection>Magento\Store\Model\Resource\Group\Collection</collection>
         <identifier />
         <fields />
-        <data_set />
+        <dataset />
         <data_config />
     </storeGroup>
     <store module="Magento_Store">
@@ -30,7 +30,7 @@
         <collection>Magento\Store\Model\Resource\Store\Collection</collection>
         <identifier>code</identifier>
         <fields />
-        <data_set />
+        <dataset />
         <data_config />
     </store>
 </fixture>
