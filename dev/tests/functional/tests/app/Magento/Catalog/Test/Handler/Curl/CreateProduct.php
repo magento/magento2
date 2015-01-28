@@ -113,7 +113,7 @@ class CreateProduct extends Curl
         $curl->close();
 
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
-            throw new \Exception("Product creation by curl handler was not successful! Response: $response");
+            throw new \Exception("Product creation by curl handler was not successful! Response: $response  URL: $url");
         }
         preg_match("~Location: [^\s]*\/id\/(\d+)~", $response, $matches);
         return isset($matches[1]) ? $matches[1] : null;
