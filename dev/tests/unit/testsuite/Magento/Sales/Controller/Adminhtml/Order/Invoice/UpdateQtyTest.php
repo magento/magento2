@@ -55,6 +55,21 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
      */
     protected $controller;
 
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultPageFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRawFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultJsonFactoryMock;
+
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -69,8 +84,8 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
         $this->responseMock = $this->getMockBuilder('Magento\Framework\App\Response\Http')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
-            ->setMethods(['getConfig'])
+        $this->resultPageMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Page')
+            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
@@ -110,10 +125,28 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('getObjectManager')
             ->will($this->returnValue($this->objectManagerMock));
 
+        $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->resultRawFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $this->controller = $objectManager->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\UpdateQty',
             [
-                'context' => $contextMock
+                'context' => $contextMock,
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'resultRawFactory' => $this->resultRawFactoryMock,
+                'resultJsonFactory' => $this->resultJsonFactoryMock
             ]
         );
     }
@@ -173,10 +206,6 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Sales\Model\Service\Order')
             ->willReturn($orderService);
 
-        $this->responseMock->expects($this->once())
-            ->method('setBody')
-            ->with($response);
-
         $blockItemMock = $this->getMockBuilder('Magento\Sales\Block\Order\Items')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -193,16 +222,29 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('getBlock')
             ->with('order_items')
             ->will($this->returnValue($blockItemMock));
-        $this->viewMock->expects($this->once())->method('getPage')->will($this->returnValue($this->resultPageMock));
-        $this->viewMock->expects($this->once())
+
+        $this->resultPageMock->expects($this->once())
             ->method('getLayout')
             ->will($this->returnValue($layoutMock));
-        $this->resultPageMock->expects($this->once())->method('getConfig')->will(
-            $this->returnValue($this->pageConfigMock)
-        );
+        $this->resultPageMock->expects($this->once())
+            ->method('getConfig')
+            ->will($this->returnValue($this->pageConfigMock));
+
         $this->pageConfigMock->expects($this->once())->method('getTitle')->will($this->returnValue($this->titleMock));
 
-        $this->assertNull($this->controller->execute());
+        $this->resultPageFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->resultPageMock));
+
+        $resultRaw = $this->getMockBuilder('Magento\Framework\Controller\Result\Raw')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $resultRaw->expects($this->once())->method('setContents')->with($response);
+
+        $this->resultRawFactoryMock->expects($this->once())->method('create')->will($this->returnValue($resultRaw));
+
+        $this->assertSame($resultRaw, $this->controller->execute());
     }
 
     public function testExecuteModelException()
@@ -229,25 +271,18 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('prepend')
             ->with('Invoices');
 
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
-            ->with(json_encode($response));
-
-        $helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')
+        /** @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject */
+        $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $helperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with($response)
-            ->will($this->returnValue(json_encode($response)));
+        $resultJsonMock->expects($this->once())->method('setData')->with($response);
 
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($helperMock));
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($resultJsonMock));
 
-        $this->assertNull($this->controller->execute());
+        $this->assertSame($resultJsonMock, $this->controller->execute());
     }
 
     public function testExecuteException()
@@ -269,28 +304,22 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Sales\Model\Order')
             ->willReturn($orderMock);
+
         $this->titleMock->expects($this->never())
             ->method('prepend')
             ->with('Invoices');
 
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
-            ->with(json_encode($response));
-
-        $helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')
+        /** @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject */
+        $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $helperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with($response)
-            ->will($this->returnValue(json_encode($response)));
+        $resultJsonMock->expects($this->once())->method('setData')->with($response);
 
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($helperMock));
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($resultJsonMock));
 
-        $this->assertNull($this->controller->execute());
+        $this->assertSame($resultJsonMock, $this->controller->execute());
     }
 }
