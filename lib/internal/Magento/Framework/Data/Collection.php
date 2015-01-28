@@ -497,7 +497,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param string $callback
      * @param array $args
-     * @internal param string $method
      * @return array
      */
     public function walk($callback, array $args = [])
