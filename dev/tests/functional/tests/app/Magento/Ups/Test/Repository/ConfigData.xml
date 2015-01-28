@@ -16,14 +16,14 @@
             <field path="carriers/ups/active_rma" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/ups/type" scope="carriers" scope_id="1" label="United Parcel Service XML" xsi:type="string">UPS_XML</field>
             <field path="carriers/ups/is_account_live" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
-            <field path="carriers/ups/password" scope="carriers" scope_id="1" label="" xsi:type="string">magento200</field>
-            <field path="carriers/ups/username" scope="carriers" scope_id="1" label="" xsi:type="string">magento</field>
+            <field path="carriers/ups/password" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_UPS_PASSWORD</field>
+            <field path="carriers/ups/username" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_UPS_USERNAME</field>
             <field path="carriers/ups/mode_xml" scope="carriers" scope_id="1" label="Development" xsi:type="string">0</field>
             <field path="carriers/ups/gateway_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://wwwcie.ups.com/ups.app/xml/Rate</field>
             <field path="carriers/ups/origin_shipment" scope="carriers" scope_id="1" label="" xsi:type="string">Shipments Originating in United States</field>
-            <field path="carriers/ups/access_license_number" scope="carriers" scope_id="1" label="" xsi:type="string">ECAB751ABF189ECA</field>
+            <field path="carriers/ups/access_license_number" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_UPS_ACCESS_LICENSE_NUMBER</field>
             <field path="carriers/ups/negotiated_active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
-            <field path="carriers/ups/shipper_number" scope="carriers" scope_id="1" label="" xsi:type="string">207W88</field>
+            <field path="carriers/ups/shipper_number" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_UPS_SHIPPER_NUMBER</field>
             <field path="carriers/ups/container" scope="carriers" scope_id="1" label="Customer Packaging" xsi:type="string">CP</field>
             <field path="carriers/ups/dest_type" scope="carriers" scope_id="1" label="Residential" xsi:type="string">RES</field>
             <field path="carriers/ups/tracking_xml_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://wwwcie.ups.com/ups.app/xml/Track</field>

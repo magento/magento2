@@ -14,9 +14,9 @@
         <dataset name="dhl_eu">
             <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/dhl/gateway_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://xmlpitest-ea.dhl.com/XMLShippingServlet</field>
-            <field path="carriers/dhl/id" scope="carriers" scope_id="1" label="" xsi:type="string">EvgeniyDE</field>
-            <field path="carriers/dhl/password" scope="carriers" scope_id="1" label="" xsi:type="string">aplNb6Rop</field>
-            <field path="carriers/dhl/account" scope="carriers" scope_id="1" label="" xsi:type="string">152691811</field>
+            <field path="carriers/dhl/id" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_DHL_ID</field>
+            <field path="carriers/dhl/password" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_DHL_PASSWORD</field>
+            <field path="carriers/dhl/account" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_DHL_ACCOUNT</field>
             <field path="carriers/dhl/showmethod" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/dhl/debug" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>
