@@ -42,7 +42,7 @@ class DataBuilderTest extends \PHPUnit_Framework_TestCase
     public function getBuildersToTest()
     {
         return [
-            ['Magento\Checkout\Service\V1\Data\Cart\TotalsBuilder'],
+            ['Magento\Catalog\Api\Data\ProductDataBuilder'],
         ];
     }
 

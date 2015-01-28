@@ -33,7 +33,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             'title' => 'Drop-down Option',
                             'type' => 'Drop-down',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ],
                         ],
                     ],
@@ -46,7 +46,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             'title' => 'Drop-down Option',
                             'type' => 'Drop-down',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ],
                         ],
                     ],
@@ -65,7 +65,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             'title' => 'Drop-down Option',
                             'type' => 'Drop-down',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ],
                         ],
                     ],
@@ -103,14 +103,14 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             'title' => 'Drop-down Option',
                             'type' => 'Drop-down',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ],
                         ],
                         [
                             'title' => 'Radio Button Option',
                             'type' => 'Radio Buttons',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ]
                         ],
                     ],
@@ -123,7 +123,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             'title' => 'Drop-down Option',
                             'type' => 'Drop-down',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ],
                         ],
                     ],
@@ -166,11 +166,11 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                         ],
                         [
                             'title' => 'attribute_key_10',
-                            'value' => '12/12/2014',
+                            'value' => '12/12/2015',
                         ],
                         [
                             'title' => 'attribute_key_11',
-                            'value' => '12/12/2014/12/30/AM',
+                            'value' => '12/12/2015/12/30/AM',
                         ],
                         [
                             'title' => 'attribute_key_12',
@@ -186,7 +186,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             'title' => 'Drop-down Option',
                             'type' => 'Drop-down',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ],
                         ],
                     ],
@@ -205,28 +205,28 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             'title' => 'Drop-down Option',
                             'type' => 'Drop-down',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ],
                         ],
                         [
                             'title' => 'Radio Button Option',
                             'type' => 'Radio Buttons',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ]
                         ],
                         [
                             'title' => 'Checkbox Option',
                             'type' => 'Checkbox',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ]
                         ],
                         [
                             'title' => 'Multiple Select Option',
                             'type' => 'Multiple',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ]
                         ],
                     ],
@@ -257,11 +257,11 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                         ],
                         [
                             'title' => 'attribute_key_7',
-                            'value' => '12/12/2014',
+                            'value' => '12/12/2015',
                         ],
                         [
                             'title' => 'attribute_key_8',
-                            'value' => '12/12/2014/12/30/AM',
+                            'value' => '12/12/2015/12/30/AM',
                         ],
                         [
                             'title' => 'attribute_key_9',
@@ -277,28 +277,28 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             'title' => 'Drop-down Option',
                             'type' => 'Drop-down',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ],
                         ],
                         [
                             'title' => 'Radio Button Option',
                             'type' => 'Radio Buttons',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ]
                         ],
                         [
                             'title' => 'Checkbox Option',
                             'type' => 'Checkbox',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ]
                         ],
                         [
                             'title' => 'Multiple Select Option',
                             'type' => 'Multiple',
                             'value' => [
-                                'name' => '100_dollar_product',
+                                'name' => 'product_100_dollar',
                             ]
                         ],
                     ],

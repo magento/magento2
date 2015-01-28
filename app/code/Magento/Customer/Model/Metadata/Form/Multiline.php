@@ -25,6 +25,7 @@ class Multiline extends Text
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateValue($value)
     {

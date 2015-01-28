@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Block\System\Design\Edit\Tab;
 
 class General extends \Magento\Backend\Block\Widget\Form\Generic
@@ -97,7 +100,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Date From'),
                 'title' => __('Date From'),
                 'name' => 'date_from',
-                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'date_format' => $dateFormat
                 //'required' => true
             ]
@@ -109,7 +112,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Date To'),
                 'title' => __('Date To'),
                 'name' => 'date_to',
-                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'date_format' => $dateFormat
                 //'required' => true
             ]

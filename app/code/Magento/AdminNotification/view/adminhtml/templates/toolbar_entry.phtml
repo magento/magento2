@@ -3,10 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php /** @var $this \Magento\AdminNotification\Block\ToolbarEntry */ ?>
 <?php $notificationCount = $this->getUnreadNotificationCount(); ?>
-<div class="notifications-summary" data-notification-count="<?php echo $this->escapeHtml($notificationCount); ?>">
+<div data-mage-init='{"toolbarEntry": {}}' class="notifications-summary" data-notification-count="<?php echo $this->escapeHtml($notificationCount); ?>">
     <?php if ($notificationCount > 0) : ?>
         <a href="<?php echo $this->getUrl('adminhtml/notification/index'); ?>" class="action notifications-action" data-mage-init='{"dropdown":{}}' title="<?php echo __('Notifications'); ?>" data-toggle="dropdown">
             <span class="text"><?php echo __('Notifications'); ?></span>

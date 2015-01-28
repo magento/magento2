@@ -26,6 +26,8 @@ class Mastercard extends \Magento\Centinel\Model\AbstractState
      * Result depends from flag self::getIsModeStrict()
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function isAuthenticateSuccessful()
     {
@@ -133,6 +135,7 @@ class Mastercard extends \Magento\Centinel\Model\AbstractState
      * Analyse lookup`s results. If lookup is soft successful return true
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _isLookupSoftSuccessful()
     {

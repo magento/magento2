@@ -23,6 +23,7 @@ class LowStockItemsTest extends WebapiAbstract
      * @param array $result
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @dataProvider getLowStockItemsDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testGetLowStockItems($qty, $currentPage, $pageSize, $result)
     {

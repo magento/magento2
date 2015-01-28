@@ -48,6 +48,7 @@ class RulesApplier
      * @param bool $skipValidation
      * @param mixed $couponCode
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function applyRules($item, $rules, $skipValidation, $couponCode)
     {

@@ -5,55 +5,66 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\UrlRewrite\Test\Fixture\UrlRewrite">
-    <module>Magento_Backend</module>
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
+         class="Magento\UrlRewrite\Test\Fixture\UrlRewrite">
+    <module>Magento_UrlRewrite</module>
     <type>virtual</type>
     <entity_type>url_rewrite</entity_type>
     <collection>Magento\UrlRewrite\Model\Resource\UrlRewriteCollection</collection>
     <identifier>request_path</identifier>
+    <repository_class>Magento\UrlRewrite\Test\Repository\UrlRewrite</repository_class>
+    <handler_interface>Magento\UrlRewrite\Test\Handler\UrlRewrite\UrlRewriteInterface</handler_interface>
+    <dataset name="default">
+        <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
+        <field name="request_path" xsi:type="string">test_request%isolation%</field>
+    </dataset>
     <fields>
-        <id>
+        <field name="id">
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
-        </id>
-        <store_id>
+        </field>
+        <field name="store_id">
             <attribute_code>store_id</attribute_code>
-            <backend_type>virtual</backend_type>
-        </store_id>
-        <redirect_type>
+            <backend_type>varchar</backend_type>
+            <is_required>1</is_required>
+            <default_value xsi:type="string">Main Website/Main Website Store/Default Store View</default_value>
+            <source>Magento\UrlRewrite\Test\Fixture\UrlRewrite\StoreId</source>
+            <input>select</input>
+        </field>
+        <field name="redirect_type">
             <attribute_code>redirect_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
             <input>select</input>
-        </redirect_type>
-        <request_path>
+        </field>
+        <field name="request_path">
             <attribute_code>request_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>request_path%isolation%</default_value>
+            <default_value xsi:type="string">test_request%isolation%</default_value>
             <input>text</input>
-        </request_path>
-        <entity_type>
+        </field>
+        <field name="entity_type">
             <attribute_code>entity_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </entity_type>
-        <target_path>
+        </field>
+        <field name="target_path">
             <attribute_code>target_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>target_path%isolation%</default_value>
-            <source>Magento\UrlRewrite\Test\Fixture\UrlRewrite\TargetPath</source>
+            <default_value xsi:type="string">target_path%isolation%</default_value>
             <input>text</input>
-        </target_path>
-        <description>
+            <source>Magento\UrlRewrite\Test\Fixture\UrlRewrite\TargetPath</source>
+        </field>
+        <field name="description">
             <attribute_code>description</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
             <input>text</input>
-        </description>
+        </field>
     </fields>
-    <repository_class>Magento\UrlRewrite\Test\Repository\UrlRewrite</repository_class>
-    <handler_interface>Magento\UrlRewrite\Test\Handler\UrlRewrite</handler_interface>
 </fixture>

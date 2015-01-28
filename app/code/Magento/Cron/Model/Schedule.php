@@ -128,6 +128,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * @param int $num
      * @return bool
      * @throws Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function matchCronExpression($expr, $num)
     {

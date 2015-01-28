@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="attribute-set">
     <div class="edit-attribute-set attribute-set-col">
@@ -36,7 +39,7 @@ require([
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
             <script>
-require(['jquery'], function(jQuery){
+require(["jquery", "extjs/ext-tree-checkbox"], function(jQuery){
 
             //<![CDATA[
             var allowDragAndDrop = <?php echo($this->getIsReadOnly() ? 'false' : 'true'); ?>;

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;

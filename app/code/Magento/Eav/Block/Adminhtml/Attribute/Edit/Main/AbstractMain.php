@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Product attribute add/edit form main tab
  *
@@ -100,6 +102,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * Preparing default form elements for editing attribute
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
@@ -207,7 +210,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'default_value_date',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
-                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'value' => $attributeObject->getDefaultValue(),
                 'date_format' => $dateFormat
             ]

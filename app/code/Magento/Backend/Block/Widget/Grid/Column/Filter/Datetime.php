@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
@@ -136,7 +139,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                         dateFormat: "' . $format . '",
                         timeFormat: "' . $timeFormat . '",
                         showsTime: ' . ($this->getColumn()->getFilterTime() ? 'true' : 'false') . ',
-                        buttonImage: "' . $this->getViewFileUrl('images/grid-cal.gif') . '",
+                        buttonImage: "' . $this->getViewFileUrl('images/grid-cal.png') . '",
                         buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
                         from: {
                             id: "' . $htmlId . '_from"

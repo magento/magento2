@@ -9,6 +9,9 @@
  */
 namespace Magento\Backend\App;
 
+/**
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ */
 class Action extends \Magento\Backend\App\AbstractAction
 {
 }

@@ -13,6 +13,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute;
 
 use Magento\Eav\Block\Adminhtml\Attribute\Grid\AbstractGrid;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Grid extends AbstractGrid
 {
     /**

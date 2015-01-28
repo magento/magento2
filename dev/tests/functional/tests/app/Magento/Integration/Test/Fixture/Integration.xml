@@ -5,203 +5,211 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Integration\Test\Fixture\Integration">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
+         class="Magento\Integration\Test\Fixture\Integration">
     <module>Magento_Integration</module>
     <type>composite</type>
     <entities>
-        <integration>integration</integration>
-        <oauth_token>oauth_token</oauth_token>
-        <oauth_consumer>oauth_consumer</oauth_consumer>
+        <entity name="integration" />
+        <entity name="oauth_token" />
+        <entity name="oauth_consumer" />
     </entities>
     <entity_type>integration</entity_type>
     <collection>Magento\Integration\Model\Resource\Integration\Collection</collection>
+    <repository_class>Magento\Integration\Test\Repository\Integration</repository_class>
+    <handler_interface>Magento\Integration\Test\Handler\Integration\IntegrationInterface</handler_interface>
+    <dataset name="default">
+        <field name="name" xsi:type="string">default_integration_%isolation%</field>
+        <field name="email" xsi:type="string">test_%isolation%@example.com</field>
+        <field name="resource_access" xsi:type="string">All</field>
+    </dataset>
     <fields>
-        <integration_id>
+        <field name="integration_id">
             <attribute_code>integration_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </integration_id>
-        <name>
+        </field>
+        <field name="name">
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="string">default_integration_%isolation%</default_value>
             <input />
             <group>integration_info</group>
-        </name>
-        <email>
-            <attribute_code>email</attribute_code>
+        </field>
+        <field name="email">
+           <attribute_code>email</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="string">test_%isolation%@example.com</default_value>
             <input />
             <group>integration_info</group>
-        </email>
-        <endpoint>
+        </field>
+        <field name="endpoint">
             <attribute_code>endpoint</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
             <group>integration_info</group>
-        </endpoint>
-        <status>
+        </field>
+        <field name="status">
             <attribute_code>status</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </status>
-        <consumer_id>
+        </field>
+        <field name="consumer_id">
             <attribute_code>consumer_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </consumer_id>
-        <created_at>
+        </field>
+        <field name="created_at">
             <attribute_code>created_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required />
-            <default_value>CURRENT_TIMESTAMP</default_value>
+            <default_value xsi:type="string">CURRENT_TIMESTAMP</default_value>
             <input />
-        </created_at>
-        <updated_at>
+        </field>
+        <field name="updated_at">
             <attribute_code>updated_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required />
-            <default_value>0000-00-00 00:00:00</default_value>
+            <default_value xsi:type="null" />
             <input />
-        </updated_at>
-        <setup_type>
+        </field>
+        <field name="setup_type">
             <attribute_code>setup_type</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
-        </setup_type>
-        <identity_link_url>
+        </field>
+        <field name="identity_link_url">
             <attribute_code>identity_link_url</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
             <group>integration_info</group>
-        </identity_link_url>
-        <entity_id>
+        </field>
+        <field name="entity_id">
             <attribute_code>entity_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </entity_id>
-        <admin_id>
+        </field>
+        <field name="admin_id">
             <attribute_code>admin_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </admin_id>
-        <customer_id>
+        </field>
+        <field name="customer_id">
             <attribute_code>customer_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </customer_id>
-        <type>
+        </field>
+        <field name="type">
             <attribute_code>type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </type>
-        <token>
+        </field>
+        <field name="token">
             <attribute_code>token</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </token>
-        <secret>
+        </field>
+        <field name="secret">
             <attribute_code>secret</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </secret>
-        <verifier>
+        </field>
+        <field name="verifier">
             <attribute_code>verifier</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </verifier>
-        <callback_url>
+        </field>
+        <field name="callback_url">
             <attribute_code>callback_url</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </callback_url>
-        <revoked>
+        </field>
+        <field name="revoked">
             <attribute_code>revoked</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
-        </revoked>
-        <authorized>
+        </field>
+        <field name="authorized">
             <attribute_code>authorized</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
-        </authorized>
-        <user_type>
+        </field>
+        <field name="user_type">
             <attribute_code>user_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </user_type>
-        <key>
+        </field>
+        <field name="key">
             <attribute_code>key</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </key>
-        <rejected_callback_url>
+        </field>
+        <field name="rejected_callback_url">
             <attribute_code>rejected_callback_url</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </rejected_callback_url>
-        <resource_access>
+        </field>
+        <field name="resource_access">
             <attribute_code>resource_access</attribute_code>
             <backend_type>virtual</backend_type>
             <group>api</group>
-        </resource_access>
-        <resources>
+            <default_value xsi:type="string">All</default_value>
+        </field>
+        <field name="resources">
             <attribute_code>resources</attribute_code>
             <backend_type>virtual</backend_type>
             <group>api</group>
-        </resources>
-        <token_secret>
+        </field>
+        <field name="token_secret">
             <attribute_code>token_secret</attribute_code>
             <backend_type>virtual</backend_type>
-            <group>api</group>
-        </token_secret>
-        <consumer_secret>
+            <group>integration_info</group>
+        </field>
+        <field name="consumer_secret">
             <attribute_code>consumer_secret</attribute_code>
             <backend_type>virtual</backend_type>
-            <group>api</group>
-        </consumer_secret>
+            <group>integration_info</group>
+        </field>
     </fields>
-    <repository_class>Magento\Integration\Test\Repository\Integration</repository_class>
-    <handler_interface>Magento\Integration\Test\Handler\Integration\IntegrationInterface</handler_interface>
 </fixture>

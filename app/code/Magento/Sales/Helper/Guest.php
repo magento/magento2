@@ -10,6 +10,7 @@ use Magento\Framework\App as App;
 
 /**
  * Sales module base helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Guest extends \Magento\Core\Helper\Data
 {
@@ -46,6 +47,11 @@ class Guest extends \Magento\Core\Helper\Data
     protected $orderFactory;
 
     /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * Cookie key for guest view
      */
     const COOKIE_NAME = 'guest-view';
@@ -72,7 +78,7 @@ class Guest extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Framework\App\ViewInterface $view
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param bool $dbCompatibleMode
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -89,7 +95,7 @@ class Guest extends \Magento\Core\Helper\Data
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Framework\App\ViewInterface $view,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         $dbCompatibleMode = true
     ) {
         $this->coreRegistry = $coreRegistry;
@@ -98,7 +104,7 @@ class Guest extends \Magento\Core\Helper\Data
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->messageManager = $messageManager;
         $this->orderFactory = $orderFactory;
-        $this->_view = $view;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct(
             $context,
             $scopeConfig,
@@ -113,17 +119,15 @@ class Guest extends \Magento\Core\Helper\Data
      * Try to load valid order by $_POST or $_COOKIE
      *
      * @param App\RequestInterface $request
-     * @param App\ResponseInterface $response
-     * @return bool
+     * @return \Magento\Framework\Controller\Result\Redirect|bool
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function loadValidOrder(App\RequestInterface $request, App\ResponseInterface $response)
+    public function loadValidOrder(App\RequestInterface $request)
     {
         if ($this->customerSession->isLoggedIn()) {
-            $response->setRedirect($this->_urlBuilder->getUrl('sales/order/history'));
-            return false;
+            return $this->resultRedirectFactory->create()->setPath('sales/order/history');
         }
 
         $post = $request->getPost();
@@ -134,8 +138,7 @@ class Guest extends \Magento\Core\Helper\Data
 
         $fromCookie = $this->cookieManager->getCookie(self::COOKIE_NAME);
         if (empty($post) && !$fromCookie) {
-            $response->setRedirect($this->_urlBuilder->getUrl('sales/guest/form'));
-            return false;
+            return $this->resultRedirectFactory->create()->setPath('sales/guest/form');
         } elseif (!empty($post) && isset($post['oar_order_id']) && isset($post['oar_type'])) {
             $type = $post['oar_type'];
             $incrementId = $post['oar_order_id'];
@@ -192,18 +195,18 @@ class Guest extends \Magento\Core\Helper\Data
         }
 
         $this->messageManager->addError(__('You entered incorrect data. Please try again.'));
-        $response->setRedirect($this->_urlBuilder->getUrl('sales/guest/form'));
-        return false;
+        return $this->resultRedirectFactory->create()->setPath('sales/guest/form');
     }
 
     /**
      * Get Breadcrumbs for current controller action
      *
+     * @param \Magento\Framework\View\Result\Page $resultPage
      * @return void
      */
-    public function getBreadcrumbs()
+    public function getBreadcrumbs(\Magento\Framework\View\Result\Page $resultPage)
     {
-        $breadcrumbs = $this->_view->getLayout()->getBlock('breadcrumbs');
+        $breadcrumbs = $resultPage->getLayout()->getBlock('breadcrumbs');
         $breadcrumbs->addCrumb(
             'home',
             [

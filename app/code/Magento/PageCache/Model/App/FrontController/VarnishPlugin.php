@@ -45,6 +45,7 @@ class VarnishPlugin
      * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      * @return false|\Magento\Framework\App\Response\Http|\Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
         \Magento\Framework\App\FrontControllerInterface $subject,

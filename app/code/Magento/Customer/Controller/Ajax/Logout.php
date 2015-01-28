@@ -21,32 +21,31 @@ class Logout extends \Magento\Framework\App\Action\Action
     protected $session;
 
     /**
-     * @var \Magento\Core\Helper\Data $helper
+     * @var \Magento\Framework\Controller\Result\JSONFactory
      */
-    protected $helper;
+    protected $resultJsonFactory;
 
     /**
      * Initialize Logout controller
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Helper\Data $helper
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Helper\Data $helper
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
     ) {
         parent::__construct($context);
         $this->customerSession = $customerSession;
-        $this->helper = $helper;
-
+        $this->resultJsonFactory = $resultJsonFactory;
     }
 
     /**
      * Customer logout action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {
@@ -55,6 +54,8 @@ class Logout extends \Magento\Framework\App\Action\Action
             ->setBeforeAuthUrl($this->_redirect->getRefererUrl())
             ->setLastCustomerId($lastCustomerId);
 
-        $this->getResponse()->representJson($this->helper->jsonEncode(['message' => 'Logout Successful']));
+        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData(['message' => 'Logout Successful']);
     }
 }
