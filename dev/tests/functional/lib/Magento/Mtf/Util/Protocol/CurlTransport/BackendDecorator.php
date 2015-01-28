@@ -75,7 +75,7 @@ class BackendDecorator implements CurlInterface
         $response = $this->read();
         if (strpos($response, 'page-login')) {
             throw new \Exception(
-                'Admin user cannot be logged in by curl handler! URL: ' . $url . 'DATA: ' . implode(' ', $data)
+                'Admin user cannot be logged in by curl handler!'
             );
         }
     }
