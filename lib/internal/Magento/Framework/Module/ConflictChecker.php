@@ -60,18 +60,20 @@ class ConflictChecker
     }
 
     /**
-     * Check if module is conflicted
+     * Check if two modules are conflicted
      *
-     * @param string $enabledModule
-     * @param string $moduleName
+     * @param string $moduleA
+     * @param string $moduleB
      * @return bool
      */
-    private function checkIfConflict($enabledModule, $moduleName)
+    private function checkIfConflict($moduleA, $moduleB)
     {
-        if (array_search($enabledModule, $this->packageInfo->getConflict($moduleName)) !== false) {
+        if (isset($this->packageInfo->getConflict($moduleB)[$moduleA]) &&
+            $this->packageInfo->getConflict($moduleB)[$moduleA] === $this->packageInfo->getVersion($moduleA)) {
             return true;
         }
-        if (array_search($moduleName, $this->packageInfo->getConflict($enabledModule)) !== false) {
+        if (isset($this->packageInfo->getConflict($moduleA)[$moduleB]) &&
+            $this->packageInfo->getConflict($moduleA)[$moduleB] === $this->packageInfo->getVersion($moduleB)) {
             return true;
         }
 

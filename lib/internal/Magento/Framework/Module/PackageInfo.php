@@ -6,7 +6,8 @@
 namespace Magento\Framework\Module;
 
 /**
- * Provide information of dependencies and conflicts in composer.json files and mapping of package name to module name
+ * Provide information of dependencies and conflicts in composer.json files, mapping of package name to module name,
+ * and mapping of module name to package version
  */
 class PackageInfo
 {
@@ -18,14 +19,21 @@ class PackageInfo
     private $packageModuleMap;
 
     /**
-     * "require" field of each module
+     * Map of module name to package version
+     *
+     * @var string[]
+     */
+    private $modulePackageVersionMap;
+
+    /**
+     * "require" field of each module, contains depending modules' name
      *
      * @var array[]
      */
     private $requireMap;
 
     /**
-     * "conflict" field of each module
+     * "conflict" field of each module, contains conflicting modules' name and version
      *
      * @var array[]
      */
@@ -76,11 +84,12 @@ class PackageInfo
             foreach ($rawData as $moduleName => $jsonData) {
                 $jsonData = \Zend_Json::decode($jsonData);
                 $this->packageModuleMap[$jsonData['name']] = $moduleName;
+                $this->modulePackageVersionMap[$moduleName] = $jsonData['version'];
                 if (!empty($jsonData['require'])) {
                     $this->requireMap[$moduleName] = array_keys($jsonData['require']);
                 }
                 if (!empty($jsonData['conflict'])) {
-                    $this->conflictMap[$moduleName] = array_keys($jsonData['conflict']);
+                    $this->conflictMap[$moduleName] = $jsonData['conflict'];
                 }
             }
         }
@@ -147,11 +156,26 @@ class PackageInfo
         $conflict = [];
         if (isset($this->conflictMap[$moduleName])) {
             if ($returnModuleName) {
-                $conflict = $this->convertToModuleNames($this->conflictMap[$moduleName]);
+                $conflict = array_combine(
+                    $this->convertToModuleNames(array_keys($this->conflictMap[$moduleName])),
+                    $this->conflictMap[$moduleName]
+                );
             } else {
                 $conflict = $this->conflictMap[$moduleName];
             }
         }
         return $conflict;
+    }
+
+    /**
+     * Get package version of a module
+     *
+     * @param string $moduleName
+     * @return string
+     */
+    public function getVersion($moduleName)
+    {
+        $this->load();
+        return $this->modulePackageVersionMap[$moduleName];
     }
 }
