@@ -92,36 +92,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testFormatCurrency()
-    {
-        $amount = '120';
-        $includeContainer = false;
-        $result = '10grn.';
-
-        $this->priceCurrencyMock->expects($this->once())
-            ->method('convertAndFormat')
-            ->with($amount, $includeContainer)
-            ->will($this->returnValue($result));
-
-        $helper = $this->getHelper(['priceCurrency' => $this->priceCurrencyMock]);
-        $this->assertEquals($result, $helper->formatCurrency($amount, $includeContainer));
-    }
-
-    public function testFormatPrice()
-    {
-        $amount = '120';
-        $includeContainer = false;
-        $result = '10grn.';
-
-        $this->priceCurrencyMock->expects($this->once())
-            ->method('format')
-            ->with($amount, $includeContainer)
-            ->will($this->returnValue($result));
-
-        $helper = $this->getHelper(['priceCurrency' => $this->priceCurrencyMock]);
-        $this->assertEquals($result, $helper->formatPrice($amount, $includeContainer));
-    }
-
     /**
      * @param array $allowedIps
      * @param bool $expected
@@ -279,30 +249,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->assertEquals($country, $helper->getDefaultCountry($storeId));
-    }
-
-    /**
-     * @param bool $expected
-     * @param bool $dbCompatibleMode
-     * @dataProvider useDbCompatibleModelDataProvider
-     */
-    public function testUseDbCompatibleModel($expected, $dbCompatibleMode = null)
-    {
-        $arguments = [];
-        if (null !== $dbCompatibleMode) {
-            $arguments['dbCompatibleMode'] = $dbCompatibleMode;
-        }
-        $helper = $this->getHelper($arguments);
-        $this->assertEquals($expected, $helper->useDbCompatibleMode());
-    }
-
-    public function useDbCompatibleModelDataProvider()
-    {
-        return [
-            'default' => [true],
-            'false' => [false, false],
-            'true' => [true, true],
-        ];
     }
 
     /**

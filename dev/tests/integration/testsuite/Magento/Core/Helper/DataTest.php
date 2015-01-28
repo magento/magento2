@@ -36,13 +36,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($priceHtml, $this->_helper->formatCurrency($price));
     }
 
-    public function testFormatPrice()
-    {
-        $price = 10.00;
-        $priceHtml = '<span class="price">$10.00</span>';
-        $this->assertEquals($priceHtml, $this->_helper->formatPrice($price));
-    }
-
     /**
      * @magentoAppIsolation enabled
      */

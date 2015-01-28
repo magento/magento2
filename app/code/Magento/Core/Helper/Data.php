@@ -65,11 +65,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_appState;
 
     /**
-     * @var boolean
-     */
-    protected $_dbCompatibleMode;
-
-    /**
      * @var PriceCurrencyInterface
      */
     protected $_priceCurrency;
@@ -80,21 +75,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param PriceCurrencyInterface $priceCurrency
-     * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
-        PriceCurrencyInterface $priceCurrency,
-        $dbCompatibleMode = true
+        PriceCurrencyInterface $priceCurrency
     ) {
         parent::__construct($context);
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_appState = $appState;
-        $this->_dbCompatibleMode = $dbCompatibleMode;
         $this->_priceCurrency =  $priceCurrency;
     }
 
@@ -136,30 +128,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $value;
-    }
-
-    /**
-     * Format and convert currency using current store option
-     *
-     * @param   float $value
-     * @param   bool $includeContainer
-     * @return  string
-     */
-    public function formatCurrency($value, $includeContainer = true)
-    {
-        return $this->_priceCurrency->convertAndFormat($value, $includeContainer);
-    }
-
-    /**
-     * Formats price
-     *
-     * @param float $price
-     * @param bool $includeContainer
-     * @return string
-     */
-    public function formatPrice($price, $includeContainer = true)
-    {
-        return $this->_priceCurrency->format($price, $includeContainer);
     }
 
     /**
@@ -245,15 +213,5 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
-    }
-
-    /**
-     * Check whether database compatible mode is used (configs enable it for MySQL by default).
-     *
-     * @return bool
-     */
-    public function useDbCompatibleMode()
-    {
-        return $this->_dbCompatibleMode;
     }
 }
