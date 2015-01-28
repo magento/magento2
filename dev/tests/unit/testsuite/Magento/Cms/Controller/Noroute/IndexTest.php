@@ -103,7 +103,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     public function testIndexAction($renderPage)
     {
-        $this->_cmsHelperMock->expects($this->once())->method('renderPage')->will($this->returnValue($renderPage));
+        $this->_cmsHelperMock->expects($this->once())->method('prepareResultPage')->will($this->returnValue($renderPage));
         $this->_requestMock->expects($this->any())->method('setActionName')->with('defaultNoRoute');
         $this->_controller->execute();
     }
