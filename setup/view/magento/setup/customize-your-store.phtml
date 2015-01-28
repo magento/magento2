@@ -13,6 +13,11 @@
     <h1>{{$state.current.header}}</h1>
 </div>
 
+<?php foreach ($this->modules as $label => $value):?>
+    {{add(<?php echo '"' . $label . '", "' .$value['selected'] .'"';?>);}}
+<?php endforeach; ?>
+{{checkIfAllAreSelected();}}
+
 <form class="form-horizontal" role="form">
     <div class="form-group">
         <label class="col-md-3 control-label">Sample Data</label>
@@ -77,8 +82,27 @@
             </select>
         </div>
     </div>
-</form>
 
+    <div class="collapsed-options">
+        <a href="#" class="collapsed-options" ng-click="updateOnExpand(store.advanced)">Advanced Modules Configurations</a>
+        <span class="caret"></span>
+    </div>
+    <div ng-show="store.advanced.expanded">
+        <div class="form-group">
+            <input type="checkbox"
+               ng-model="store.selectAll"
+               ng-click="toggleAllModules()">&nbsp;Select All
+        </div>
+        <div class="form-group multiSelect">
+            <label class="col-md-7 uncheckedClass" ng-repeat="module in store.allModules"  ng-class="{'checkedClass': store.selectedModules.indexOf(module) > -1}">
+                <input class="moduleCheckbox" type="checkbox" ng-click="toggleModule(module)" ng-checked="store.selectedModules.indexOf(module) > -1" name="{{module}}"> {{module}}<br/>
+            </label>
+        </div>
+        <div class="form-group">
+            {{store.selectedModules.length}} out of {{store.allModules.length}} selected.
+        </div>
+    </div>
+</form>
 <div class="step-controls">
     <a href="" class="btn btn-primary" ng-click="previousState()">Previous</a>
     <a href="" class="btn btn-primary" ng-click="nextState()">Next</a>

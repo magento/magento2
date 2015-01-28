@@ -11,12 +11,12 @@ namespace Magento\Setup\Model;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\App\DeploymentConfig\Reader as ConfigReader;
 
-class ModuleStatus {
-
+class ModuleStatus
+{
     /**
      * List of Modules
      *
-     * @var ModuleLoader
+     * @var array
      */
     protected $allModules;
 
@@ -47,39 +47,24 @@ class ModuleStatus {
     public function getAllModules()
     {
         $allModules = $this->allModules;
-        foreach ($allModules as $module => $value) {
-            $allModules[$module]['select'] = true;
-            $allModules[$module]['mvp'] = false;
-        }
+        if (isset($allModules)) {
+            foreach ($allModules as $module => $value) {
+                $allModules[$module]['selected'] = true;
+            }
 
-        $existingModules = $this->configReader->load();
-        if (isset($existingModules['modules'])){
-            $existingModules = $existingModules['modules'];
-            foreach ($existingModules as $module => $value) {
-                if(!$value){
-                    $allModules[$module]['select'] = false;
+            $existingModules = $this->configReader->load();
+            if (isset($existingModules['modules'])) {
+                $existingModules = $existingModules['modules'];
+                foreach ($existingModules as $module => $value) {
+                    if(!$value) {
+                        $allModules[$module]['selected'] = false;
+                    }
                 }
             }
-        }
 
-        $mvpModules = $this->getMVPModules();
-        if (isset($mvpModules)){
-            foreach ($mvpModules as $module) {
-                $allModules[$module]['mvp'] = true;
-            }
+            ksort($allModules);
+            return $allModules;
         }
-        ksort($allModules);
-        return $allModules;
-    }
-
-    /**
-     * Returns list of MVP modules
-     *
-     * @return array
-     */
-    private function getMVPModules()
-    {
-        //for example will be implemented in MAGETWO-33222
-        return ['Magento_Core', 'Magento_Store', 'Magento_AdminNotification'];
+        return [];
     }
 }
