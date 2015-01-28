@@ -82,6 +82,10 @@
             </block>
         </referenceContainer>
         <referenceBlock name="page.main.title">
+            <arguments>
+                <argument name="id" xsi:type="string">page-title-heading</argument>
+                <argument name="add_base_attribute_aria" xsi:type="string">aria-labelledby="page-title-heading toolbar-amount"</argument>
+            </arguments>
             <block class="Magento\Catalog\Block\Category\Rss\Link" name="rss.link" template="Magento_Catalog::category/rss.phtml"/>
         </referenceBlock>
     </body>

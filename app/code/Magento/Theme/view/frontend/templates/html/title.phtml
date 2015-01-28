@@ -15,7 +15,12 @@ if (trim($this->getPageTitle())) {
 ?>
 <?php if ($title): ?>
 <div class="page-title<?php echo $cssClass; ?>">
-    <h1 class="title" tabindex="0"><?php echo $title ?></h1>
+    <h1 class="title"
+        <?php if ($this->getId()): ?>id="<?php echo $this->getId(); ?>"<?php endif; ?>
+        tabindex="0"
+        <?php echo $this->getAddBaseAttributeAria(); ?>>
+            <?php echo $title ?>
+    </h1>
     <?php echo $this->getChildHtml(); ?>
 </div>
 <?php endif; ?>
