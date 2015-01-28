@@ -9,7 +9,7 @@
 ?>
 <?php /** @var $this \Magento\AdminNotification\Block\ToolbarEntry */ ?>
 <?php $notificationCount = $block->getUnreadNotificationCount(); ?>
-<div data-mage-init='{"toolbarEntry": {}}' class="notifications-summary" data-notification-count="<?php echo $this->escapeHtml($notificationCount); ?>">
+<div data-mage-init='{"toolbarEntry": {}}' class="notifications-summary" data-notification-count="<?php echo $block->escapeHtml($notificationCount); ?>">
     <?php if ($notificationCount > 0) : ?>
         <a href="<?php echo $block->getUrl('adminhtml/notification/index'); ?>" class="action notifications-action" data-mage-init='{"dropdown":{}}' title="<?php echo __('Notifications'); ?>" data-toggle="dropdown">
             <span class="text"><?php echo __('Notifications'); ?></span>

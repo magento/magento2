@@ -57,7 +57,7 @@
                 var select = $('order_amounts_period');
             }
             var periodParam = select.value ? 'period/' + select.value + '/' : '';
-            setLocation('<?php echo $this->getSwitchUrl() ?>' + storeParam + periodParam);
+            setLocation('<?php echo $block->getSwitchUrl() ?>' + storeParam + periodParam);
         }
     });
 </script>

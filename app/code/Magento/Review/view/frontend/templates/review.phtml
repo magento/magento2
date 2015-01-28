@@ -34,7 +34,7 @@
             });
         }
 
-        processReviews('<?php echo $this->getProductReviewUrl();?>');
+        processReviews('<?php echo $block->getProductReviewUrl();?>');
 
         $(function () {
             $('.product-info-main .reviews-actions a').click(function (event) {
