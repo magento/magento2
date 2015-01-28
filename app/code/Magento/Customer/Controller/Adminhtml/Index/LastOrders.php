@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,13 +10,12 @@ class LastOrders extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customer last orders grid for ajax
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
         $this->_initCustomer();
-        $this->_view->loadLayout();
-        $this->prepareDefaultCustomerTitle();
-        $this->_view->renderLayout();
+        $resultLayout = $this->resultLayoutFactory->create();
+        return $resultLayout;
     }
 }
