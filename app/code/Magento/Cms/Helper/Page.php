@@ -167,7 +167,9 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
                 $this->_design->setDesignTheme($this->_page->getCustomTheme());
             }
         }
-        $resultPage = $this->_setLayoutType($inRange);
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $this->_setLayoutType($inRange, $resultPage);
         $resultPage->initLayout();
         $resultPage->addHandle('cms_page_view');
         $resultPage->addPageLayoutHandles(['id' => $this->_page->getIdentifier()]);
@@ -221,8 +223,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int $pageId
      * @param bool $renderLayout
      * @return bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _renderPage(Action $action, $pageId = null, $renderLayout = true)
     {
@@ -253,7 +253,9 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
                 $this->_design->setDesignTheme($this->_page->getCustomTheme());
             }
         }
-        $resultPage = $this->_setLayoutType($inRange);
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->_view->getPage();
+        $this->_setLayoutType($inRange, $resultPage);
         $resultPage->initLayout();
         $resultPage->addHandle('cms_page_view');
         $resultPage->addPageLayoutHandles(['id' => $this->_page->getIdentifier()]);
@@ -333,12 +335,11 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * Set layout type
      *
      * @param bool $inRange
+     * @param \Magento\Framework\View\Result\Page $resultPage
      * @return \Magento\Framework\View\Result\Page
      */
-    protected function _setLayoutType($inRange)
+    protected function _setLayoutType($inRange, $resultPage)
     {
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
-        $resultPage = $this->resultPageFactory->create();
         if ($this->_page->getPageLayout()) {
             if ($this->_page->getCustomPageLayout()
                 && $this->_page->getCustomPageLayout() != 'empty'
@@ -349,7 +350,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
                 $handle = $this->_page->getPageLayout();
             }
             $resultPage->getConfig()->setPageLayout($handle);
-            return $resultPage;
         }
         return $resultPage;
     }
