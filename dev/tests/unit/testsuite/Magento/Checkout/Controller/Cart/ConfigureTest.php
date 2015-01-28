@@ -8,7 +8,7 @@ namespace Magento\Checkout\Controller\Cart;
 /**
  * Shopping cart edit tests
  */
-class ConfigureTest extends \PHPUnit_Framework_TestCase
+class ConfigureTest extends \Magento\TestFramework\AbstractControllerTest
 {
 
     /**
@@ -58,18 +58,6 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $urlMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $actionFlagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
         $viewMock = $this->getMockBuilder('Magento\Framework\App\ViewInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -95,27 +83,17 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Action\Context')
-            ->setConstructorArgs(
-                [
-                    $this->requestMock,
-                    $this->responseMock,
-                    $this->objectManagerMock,
-                    $eventManagerMock,
-                    $urlMock,
-                    $this->redirectMock,
-                    $actionFlagMock,
-                    $viewMock,
-                    $this->messageManagerMock
-                ]
-            )
-            ->setMethods([])
-            ->getMock();
-        $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
-        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
-        $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
-        $this->contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);
-        $this->contextMock->expects($this->any())->method('getRedirect')->willReturn($this->redirectMock);
+        $contextData = [
+            'objectManager' => $this->objectManagerMock,
+            'request' => $this->requestMock,
+            'response' => $this->responseMock,
+            'messageManager' => $this->messageManagerMock,
+            'redirect' => $this->redirectMock,
+            'view' => $viewMock
+        ];
+
+        $this->setUpContext($contextData);
+
         $scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
