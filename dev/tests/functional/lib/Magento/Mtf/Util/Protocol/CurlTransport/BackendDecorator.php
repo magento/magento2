@@ -65,7 +65,7 @@ class BackendDecorator implements CurlInterface
      */
     protected function authorize()
     {
-        $url = $this->configuration->getParameter('application/appBackendUrl') .
+        $url = $_ENV['app_backend_url'] .
             $this->configuration->getParameter('application/backendLoginUrl');
         $data = [
             'login[username]' => $this->configuration->getParameter('application/backendLogin'),
@@ -75,7 +75,7 @@ class BackendDecorator implements CurlInterface
         $response = $this->read();
         if (strpos($response, 'page-login')) {
             throw new \Exception(
-                'Admin user cannot be logged in by curl handler! URL: ' . $url . 'DATA: ' . implode(' ', $data)
+                'Admin user cannot be logged in by curl handler!'
             );
         }
     }

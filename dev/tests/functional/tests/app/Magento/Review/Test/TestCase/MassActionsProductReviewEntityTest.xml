@@ -24,6 +24,7 @@
         </variation>
         <variation name="MassActionsProductReviewEntityTestVariation4">
             <data name="gridActions">Delete</data>
+            <data name="gridStatus">-</data>
             <data name="constraint">assertProductReviewMassActionSuccessDeleteMessage, assertProductRatingNotInProductPage</data>
         </variation>
     </testCase>

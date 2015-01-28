@@ -10,6 +10,8 @@
         <variation name="CreateTaxRateEntityTestVariation1">
             <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range">No</data>
+            <data name="taxRate/data/zip_from">-</data>
+            <data name="taxRate/data/zip_to">-</data>
             <data name="taxRate/data/tax_postcode">*</data>
             <data name="taxRate/data/tax_country_id">Australia</data>
             <data name="taxRate/data/tax_region_id">*</data>
@@ -21,6 +23,7 @@
             <data name="taxRate/data/zip_is_range">Yes</data>
             <data name="taxRate/data/zip_from">90001</data>
             <data name="taxRate/data/zip_to">96162</data>
+            <data name="taxRate/data/tax_postcode">-</data>
             <data name="taxRate/data/tax_country_id">United States</data>
             <data name="taxRate/data/tax_region_id">California</data>
             <data name="taxRate/data/rate">15.5</data>
@@ -29,6 +32,8 @@
         <variation name="CreateTaxRateEntityTestVariation3">
             <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range">No</data>
+            <data name="taxRate/data/zip_from">-</data>
+            <data name="taxRate/data/zip_to">-</data>
             <data name="taxRate/data/tax_postcode">180</data>
             <data name="taxRate/data/tax_country_id">Canada</data>
             <data name="taxRate/data/tax_region_id">*</data>
@@ -39,6 +44,7 @@
             <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range">Yes</data>
             <data name="taxRate/data/zip_to">7800935</data>
+            <data name="taxRate/data/tax_postcode">-</data>
             <data name="taxRate/data/tax_country_id">United Kingdom</data>
             <data name="taxRate/data/tax_region_id">*</data>
             <data name="constraint">assertTaxRateIsInCorrectRange</data>
@@ -46,6 +52,8 @@
         <variation name="CreateTaxRateEntityTestVariation5">
             <data name="taxRate/data/code">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range">No</data>
+            <data name="taxRate/data/zip_from">-</data>
+            <data name="taxRate/data/zip_to">-</data>
             <data name="taxRate/data/tax_postcode">*</data>
             <data name="taxRate/data/tax_country_id">France</data>
             <data name="taxRate/data/tax_region_id">Val-d'Oise</data>
