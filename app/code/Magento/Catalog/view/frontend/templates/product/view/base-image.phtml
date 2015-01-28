@@ -110,22 +110,22 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
             {{/each}}
         </ul>
     </script>
-    <script data-template="zoom-display" type="text/x-jQuery-tmpl">
+    <script data-template="zoom-display" type="text/x-magento-template">
         <div class="zoom lense" data-role="zoom-container">
             <div data-role="zoom-inner" class="zoom inner"></div>
         </div>
     </script>
-    <script data-template="zoom-enlarged-image" type="text/x-jQuery-tmpl">
-        <img data-role="enlarged-image" src="${img}" />
+    <script data-template="zoom-enlarged-image" type="text/x-magento-template">
+        <img data-role="enlarged-image" src="<%=img%>" />
     </script>
-    <script data-template="zoom-track" type="text/z-jQuery-tmpl">
+    <script data-template="zoom-track" type="text/x-magento-template">
         <div data-role="zoom-track"></div>
     </script>
-    <script data-template="zoom-lens" type="text/z-jQuery-tmpl">
+    <script data-template="zoom-lens" type="text/x-magento-template">
         <div data-role="zoom-lens"></div>
     </script>
-    <script data-template="notice" type="text/x-jQuery-tmpl">
-        <p class="notice" data-role="notice">${text}</p>
+    <script data-template="notice" type="text/x-magento-template">
+        <p class="notice" data-role="notice"><%=text%></p>
     </script>
     <script>
         require(["jquery", "mage/mage"], function($){
