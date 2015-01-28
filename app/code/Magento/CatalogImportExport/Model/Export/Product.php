@@ -866,8 +866,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     /**
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function collectMultirawData()
     {
@@ -963,6 +961,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param array $dataRow
      * @param array $multirawData
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function addMultirowData($dataRow, $multirawData)
     {
