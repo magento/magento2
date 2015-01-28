@@ -50,7 +50,6 @@ class Data extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
      * @param \Magento\Framework\Escaper $escaper
-     * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -59,8 +58,7 @@ class Data extends \Magento\Core\Helper\Data
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
-        \Magento\Framework\Escaper $escaper,
-        $dbCompatibleMode = true
+        \Magento\Framework\Escaper $escaper
     ) {
         $this->_modulesReader = $modulesReader;
         $this->_escaper = $escaper;
@@ -70,8 +68,7 @@ class Data extends \Magento\Core\Helper\Data
             $scopeConfig,
             $storeManager,
             $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $priceCurrency
         );
     }
 

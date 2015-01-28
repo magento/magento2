@@ -79,7 +79,6 @@ class Guest extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
-     * @param bool $dbCompatibleMode
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -95,8 +94,7 @@ class Guest extends \Magento\Core\Helper\Data
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
-        $dbCompatibleMode = true
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->customerSession = $customerSession;
@@ -110,8 +108,7 @@ class Guest extends \Magento\Core\Helper\Data
             $scopeConfig,
             $storeManager,
             $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $priceCurrency
         );
     }
 

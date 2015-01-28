@@ -74,7 +74,6 @@ class Message extends \Magento\Core\Helper\Data
      * @param \Magento\GiftMessage\Model\MessageFactory $giftMessageFactory
      * @param \Magento\Framework\Escaper $escaper
      * @param array $skipMessageCheck
-     * @param bool $dbCompatibleMode
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -87,8 +86,7 @@ class Message extends \Magento\Core\Helper\Data
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\GiftMessage\Model\MessageFactory $giftMessageFactory,
         \Magento\Framework\Escaper $escaper,
-        $skipMessageCheck = [],
-        $dbCompatibleMode = true
+        $skipMessageCheck = []
     ) {
         $this->_escaper = $escaper;
         $this->productRepository = $productRepository;
@@ -100,8 +98,7 @@ class Message extends \Magento\Core\Helper\Data
             $scopeConfig,
             $storeManager,
             $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $priceCurrency
         );
     }
 

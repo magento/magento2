@@ -22,7 +22,6 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Reports\Model\Resource\Order\Collection $orderCollection
-     * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -30,8 +29,7 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Reports\Model\Resource\Order\Collection $orderCollection,
-        $dbCompatibleMode = true
+        \Magento\Reports\Model\Resource\Order\Collection $orderCollection
     ) {
         $this->_orderCollection = $orderCollection;
         parent::__construct(
@@ -39,8 +37,7 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
             $scopeConfig,
             $storeManager,
             $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $priceCurrency
         );
     }
 

@@ -34,7 +34,6 @@ class Data extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param DeploymentConfig $deploymentConfig
-     * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -42,16 +41,14 @@ class Data extends \Magento\Core\Helper\Data
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        DeploymentConfig $deploymentConfig,
-        $dbCompatibleMode = true
+        DeploymentConfig $deploymentConfig
     ) {
         parent::__construct(
             $context,
             $scopeConfig,
             $storeManager,
             $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $priceCurrency
         );
         $this->_installDate = $deploymentConfig->get(self::INSTALL_DATE);
     }

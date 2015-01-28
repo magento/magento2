@@ -36,7 +36,6 @@ class Data extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\File\Size $fileSize
-     * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -44,8 +43,7 @@ class Data extends \Magento\Core\Helper\Data
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\File\Size $fileSize,
-        $dbCompatibleMode = true
+        \Magento\Framework\File\Size $fileSize
     ) {
         $this->_fileSize = $fileSize;
         parent::__construct(
@@ -53,8 +51,7 @@ class Data extends \Magento\Core\Helper\Data
             $scopeConfig,
             $storeManager,
             $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $priceCurrency
         );
     }
 

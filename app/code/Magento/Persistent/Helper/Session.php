@@ -54,7 +54,6 @@ class Session extends \Magento\Core\Helper\Data
      * @param Data $persistentData
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
-     * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -64,8 +63,7 @@ class Session extends \Magento\Core\Helper\Data
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Persistent\Model\SessionFactory $sessionFactory,
-        $dbCompatibleMode = true
+        \Magento\Persistent\Model\SessionFactory $sessionFactory
     ) {
         $this->_persistentData = $persistentData;
         $this->_checkoutSession = $checkoutSession;
@@ -76,8 +74,7 @@ class Session extends \Magento\Core\Helper\Data
             $scopeConfig,
             $storeManager,
             $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $priceCurrency
         );
     }
 
