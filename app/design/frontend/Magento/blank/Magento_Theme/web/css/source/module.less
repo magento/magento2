@@ -82,7 +82,20 @@ body {
 }
 
 .action.skip {
-    &:extend(.abs-visually-hidden all);
+    &:not(:focus) {
+        &:extend(.abs-visually-hidden all);
+    }
+    &:focus {
+        position: absolute;
+        z-index: 15;
+        box-sizing: border-box;
+        width: 100%;
+        left: 0;
+        top: 0;
+        text-align: center;
+        .css(background, @color-gray94);
+        .css(padding, @indent-s-base);
+    }
 }
 
 //
@@ -247,6 +260,11 @@ body {
                     &.welcome,
                     a {
                         line-height: 1.4;
+                    }
+                    &.welcome {
+                        a {
+                            .css(padding-left, @indent-xs-base);
+                        }
                     }
                 }
                 margin-left: auto;

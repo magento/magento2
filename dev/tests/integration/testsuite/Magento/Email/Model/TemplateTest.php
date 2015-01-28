@@ -174,7 +174,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Area::AREA_FRONTEND
         )->load();
         $this->assertStringEndsWith(
-            'static/frontend/Magento/blank/en_US/Magento_Email/logo_email.gif',
+            'static/frontend/Magento/blank/en_US/Magento_Email/logo_email.png',
             $this->_model->getDefaultEmailLogo()
         );
     }
