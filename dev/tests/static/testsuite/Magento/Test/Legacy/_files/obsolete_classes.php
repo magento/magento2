@@ -2261,6 +2261,7 @@ return [
     ['Magento\Core\Model\App\Area\CacheIdentifierPlugin', 'Magento\PageCache\App\CacheIdentifierPlugin'],
     ['Magento\Core\Model\App\Area', 'Magento\Framework\App\Area'],
     ['Magento\Core\Model\App\Area\DesignExceptions', 'Magento\Framework\View\DesignExceptions'],
+    ['Magento\Core\App\Action\FormKeyValidator', 'Magento\Framework\Data\Form\FormKey\FormKeyValidator'],
     ['Magento\Checkout\Block\Adminhtml\Agreement', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement'],
     ['Magento\Checkout\Block\Adminhtml\Agreement\Edit', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit'],
     [
@@ -2855,4 +2856,5 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
     ['Magento\Core\Model\Validator\Factory', 'Magento\Framework\Validator\Factory'],
+
 ];

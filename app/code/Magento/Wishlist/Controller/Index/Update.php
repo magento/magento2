@@ -19,7 +19,7 @@ class Update extends Action\Action implements IndexInterface
     protected $wishlistProvider;
 
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\FormKeyValidator
      */
     protected $_formKeyValidator;
 
@@ -30,13 +30,13 @@ class Update extends Action\Action implements IndexInterface
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
         \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
     ) {

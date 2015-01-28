@@ -44,7 +44,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
 
-    /** @var \Magento\Core\App\Action\FormKeyValidator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Form\FormKey\FormKeyValidator|\PHPUnit_Framework_MockObject_MockObject */
     protected $formKeyValidatorMock;
 
     /** @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -95,7 +95,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->listCompareMock = $this->getMock('Magento\Catalog\Model\Product\Compare\ListCompare', [], [], '', false);
         $this->catalogSession = $this->getMock('Magento\Catalog\Model\Session', ['setBeforeCompareUrl'], [], '', false);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->formKeyValidatorMock = $this->getMock('Magento\Core\App\Action\FormKeyValidator', [], [], '', false);
+        $this->formKeyValidatorMock = $this->getMock('Magento\Framework\Data\Form\FormKey\FormKeyValidator', [], [], '', false);
         $this->redirectFactoryMock = $this->getMock(
             'Magento\Framework\Controller\Result\RedirectFactory',
             ['create'],

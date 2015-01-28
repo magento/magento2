@@ -46,7 +46,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     private $customerSessionMock;
 
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\FormKey\FormKeyValidator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $formKeyValidatorMock;
 
@@ -75,7 +75,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
             ->will($this->returnValue(true));
-        $this->formKeyValidatorMock = $this->getMockBuilder('Magento\Core\App\Action\FormKeyValidator')
+        $this->formKeyValidatorMock = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\FormKeyValidator')
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerRepositoryMock =

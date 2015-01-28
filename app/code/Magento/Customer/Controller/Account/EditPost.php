@@ -6,7 +6,7 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Core\App\Action\FormKeyValidator;
+use Magento\Framework\Data\Form\FormKey\FormKeyValidator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerDataBuilder;
@@ -46,7 +46,7 @@ class EditPost extends \Magento\Customer\Controller\Account
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerDataBuilder $customerDataBuilder
-     * @param FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */

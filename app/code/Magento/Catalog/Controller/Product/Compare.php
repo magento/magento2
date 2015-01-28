@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Controller\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Core\App\Action\FormKeyValidator;
+use Magento\Framework\Data\Form\FormKey\FormKeyValidator;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\PageFactory;
 

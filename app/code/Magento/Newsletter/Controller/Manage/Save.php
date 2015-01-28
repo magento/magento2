@@ -12,7 +12,7 @@ use Magento\Customer\Api\Data\CustomerDataBuilder;
 class Save extends \Magento\Newsletter\Controller\Manage
 {
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\FormKeyValidator
      */
     protected $formKeyValidator;
 
@@ -41,7 +41,7 @@ class Save extends \Magento\Newsletter\Controller\Manage
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param CustomerRepository $customerRepository
      * @param CustomerDataBuilder $customerBuilder
@@ -50,7 +50,7 @@ class Save extends \Magento\Newsletter\Controller\Manage
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         CustomerRepository $customerRepository,
         CustomerDataBuilder $customerBuilder,

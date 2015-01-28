@@ -6,7 +6,7 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
-use Magento\Core\App\Action\FormKeyValidator;
+use Magento\Framework\Data\Form\FormKey\FormKeyValidator;
 use Magento\Framework\App\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Wishlist\Controller\IndexInterface;
@@ -26,7 +26,7 @@ class Allcart extends Action\Action implements IndexInterface
     protected $itemCarrier;
 
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\FormKeyValidator
      */
     protected $formKeyValidator;
 

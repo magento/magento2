@@ -69,7 +69,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\Model\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $backendUrl;
 
-    /** @var \Magento\Core\App\Action\FormKeyValidator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Form\FormKey\FormKeyValidator|\PHPUnit_Framework_MockObject_MockObject */
     protected $formKeyValidator;
 
     /** @var \Magento\Framework\App\Action\Title|\PHPUnit_Framework_MockObject_MockObject */
@@ -171,7 +171,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->auth = $this->getMock('Magento\Backend\Model\Auth', [], [], '', false);
         $this->helper = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
         $this->backendUrl = $this->getMock('Magento\Backend\Model\UrlInterface', [], [], '', false);
-        $this->formKeyValidator = $this->getMock('Magento\Core\App\Action\FormKeyValidator', [], [], '', false);
+        $this->formKeyValidator = $this->getMock('Magento\Framework\Data\Form\FormKey\FormKeyValidator', [], [], '', false);
         $this->title = $this->getMock('Magento\Framework\App\Action\Title', [], [], '', false);
         $this->localeResolver = $this->getMock('Magento\Framework\Locale\ResolverInterface', [], [], '', false);
 
