@@ -18,6 +18,13 @@ class SaveTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveAction($currencyCode, $inputCurrencySymbol, $outputCurrencySymbol)
     {
+        /** @var \Magento\CurrencySymbol\Model\System\Currencysymbol $currencySymbol */
+        $currencySymbol = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\CurrencySymbol\Model\System\Currencysymbol'
+        );
+
+        $currencySymbolOriginal = $currencySymbol->getCurrencySymbol($currencyCode);
+
         $request = $this->getRequest();
         $request->setParam(
             'custom_currency_symbol',
@@ -29,16 +36,14 @@ class SaveTest extends \Magento\Backend\Utility\Controller
 
         $this->assertRedirect();
 
-        /** @var \Magento\CurrencySymbol\Model\System\Currencysymbol $symbol */
-        $currencySymbol = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CurrencySymbol\Model\System\Currencysymbol'
-        );
-
         $this->assertEquals(
             $outputCurrencySymbol,
             $currencySymbol->getCurrencySymbol($currencyCode),
             'Currency symbol has not been saved'
         );
+
+        //restore current symbol
+        $currencySymbol->setCurrencySymbolsData([$currencyCode => $currencySymbolOriginal]);
     }
 
     /**
