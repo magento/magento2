@@ -8,7 +8,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Cookie\Model\Config\Backend\Cookie;
+namespace Magento\Cookie\Model\Config\Backend;
 
 use Magento\Framework\Session\Config\Validator\CookieLifetimeValidator;
 use Magento\TestFramework\Helper\ObjectManager;
