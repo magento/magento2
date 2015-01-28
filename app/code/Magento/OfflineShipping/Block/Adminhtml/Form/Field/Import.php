@@ -34,6 +34,7 @@ class Import extends \Magento\Framework\Data\Form\Element\AbstractElement
 
         $html .= <<<EndHTML
         <script>
+        require(['prototype'], function(){
         Event.observe($('carriers_tablerate_condition_name'), 'change', checkConditionName.bind(this));
         function checkConditionName(event)
         {
@@ -42,6 +43,7 @@ class Import extends \Magento\Framework\Data\Form\Element\AbstractElement
                 $('time_condition').value = '_' + conditionNameElement.value + '/' + Math.random();
             }
         }
+        });
         </script>
 EndHTML;
 

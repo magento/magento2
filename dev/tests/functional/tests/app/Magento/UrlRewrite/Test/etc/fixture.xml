@@ -17,7 +17,7 @@
                 <backend_type>virtual</backend_type>
             </id>
         </fields>
-        <data_set/>
+        <dataset/>
         <data_config/>
     </urlRewrite>
 </fixture>

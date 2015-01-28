@@ -40,11 +40,6 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
     protected $eventManager;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $actionFlag;
-
-    /**
      * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $messageManager;
@@ -53,6 +48,16 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $escaper;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultForward;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultForwardFactory;
 
     protected function setUp()
     {
@@ -92,9 +97,6 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getResponse')->willReturn($response);
         $context->expects($this->any())->method('getRequest')->willReturn($this->request);
 
-        $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
-        $context->expects($this->any())->method('getActionFlag')->willReturn($this->actionFlag);
-
         $this->messageManager = $this->getMock('Magento\Framework\Message\ManagerInterface', [], [], '', false);
         $context->expects($this->any())->method('getMessageManager')->willReturn($this->messageManager);
 
@@ -104,21 +106,28 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManager);
 
-        $this->session = $this->getMock(
-            'Magento\Backend\Model\Session\Quote',
-            ['setIsUrlNotice', 'getQuote'],
-            [],
-            '',
-            false
-        );
+        $this->session = $this->getMock('Magento\Backend\Model\Session\Quote', [], [], '', false);
         $context->expects($this->any())->method('getSession')->willReturn($this->session);
         $this->escaper = $this->getMock('Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
+
+        $this->resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultForwardFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->resultForwardFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultForward);
 
         $this->processData = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData',
             [
                 'context' => $context,
-                'escaper' => $this->escaper
+                'escaper' => $this->escaper,
+                'resultForwardFactory' => $this->resultForwardFactory,
             ]
         );
     }
@@ -217,12 +226,11 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManager->expects($this->once())->method('addError')->with($errorMessageManager)->willReturnSelf();
 
-        $this->actionFlag->expects($this->once())->method('get')->willReturn(false);
-        $this->session->expects($this->once())->method('setIsUrlNotice')->with(false)->willReturn(false);
-        $this->request->expects($this->once())->method('initForward')->willReturnSelf();
-        $this->request->expects($this->once())->method('setActionName')->willReturnSelf();
-        $this->request->expects($this->once())->method('setDispatched')->willReturnSelf();
-        $this->assertNull($this->processData->execute());
+        $this->resultForward->expects($this->once())
+            ->method('forward')
+            ->with('index')
+            ->willReturnSelf();
+        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->processData->execute());
     }
 
     public function isApplyDiscountDataProvider()
