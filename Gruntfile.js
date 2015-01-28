@@ -12,6 +12,8 @@ module.exports = function (grunt) {
     //  Required plugins
     //  _____________________________________________
 
+    require('./dev/tools/grunt/tasks/mage-minify')(grunt);
+
     //  Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
 
@@ -36,6 +38,9 @@ module.exports = function (grunt) {
         },
         less: {
             setup: 'setup/module/Magento/Setup/styles'
+        },
+        uglify: {
+            legacy: 'lib/web/legacy-build.min.js'
         },
         doc: 'lib/web/css/docs'
     };
@@ -413,6 +418,29 @@ module.exports = function (grunt) {
             }
         },
 
+        'mage-minify': {
+            legacy: {
+                options: {
+                    type: 'yui-js',
+                    tempPath: 'var/cache/',
+                    options: ['--nomunge=true']
+                },
+                files: {
+                    '<%= config.path.uglify.legacy %>': [
+                        'lib/web/prototype/prototype.js',
+                        'lib/web/prototype/window.js',
+                        'lib/web/scriptaculous/builder.js',
+                        'lib/web/scriptaculous/effects.js',
+                        'lib/web/lib/ccard.js',
+                        'lib/web/prototype/validation.js',
+                        'lib/web/varien/js.js',
+                        'lib/web/mage/adminhtml/varienLoader.js',
+                        'lib/web/mage/adminhtml/tools.js'
+                    ]
+                }
+            }
+        },
+
         //
 
         styledocco: {
@@ -442,16 +470,6 @@ module.exports = function (grunt) {
         grunt.log.subhead('I\'m default task and at the moment I\'m empty, sorry :/');
     });
 
-    //  Documentation
-    //  ---------------------------------------------
-
-    grunt.registerTask('documentation', [
-        'less:documentation',
-        'styledocco:documentation',
-        'clean:var',
-        'clean:pub'
-    ]);
-
     //  Refresh magento frontend & backend
     //  ---------------------------------------------
 
@@ -460,6 +478,24 @@ module.exports = function (grunt) {
         'less:blank',
         'less:luma',
         'less:backend'
+    ]);
+
+    //  Creates build of a legacy files.
+    //  Mostly prototype dependant libraries.
+    //  ---------------------------------------------
+
+    grunt.registerTask('legacy-build', [
+        'mage-minify:legacy'
+    ]);
+
+    //  Documentation
+    //  ---------------------------------------------
+
+    grunt.registerTask('documentation', [
+        'less:documentation',
+        'styledocco:documentation',
+        'clean:var',
+        'clean:pub'
     ]);
 
     //  Production
