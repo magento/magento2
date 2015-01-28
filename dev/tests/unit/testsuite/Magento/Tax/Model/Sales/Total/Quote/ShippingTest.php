@@ -38,12 +38,12 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $addressBuilderMock;
+    private $addressFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $regionBuilderMock;
+    private $regionFactoryMock;
 
     /**
      * @var Shipping
@@ -81,13 +81,13 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->addressBuilderMock = $this->getMock('Magento\Customer\Api\Data\AddressDataBuilder',
+        $this->addressFactoryMock = $this->getMock('Magento\Customer\Api\Data\AddressInterfaceFactory',
             [],
             [],
             '',
             false
         );
-        $this->regionBuilderMock = $this->getMock('Magento\Customer\Api\Data\RegionDataBuilder',
+        $this->regionFactoryMock = $this->getMock('Magento\Customer\Api\Data\RegionInterfaceFactory',
             [],
             [],
             '',
@@ -99,8 +99,8 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             $this->quoteDetailsBuilder,
             $this->itemDetailsBuilder,
             $this->taxClassKeyBuilder,
-            $this->addressBuilderMock,
-            $this->regionBuilderMock
+            $this->addressFactoryMock,
+            $this->regionFactoryMock
         );
     }
 

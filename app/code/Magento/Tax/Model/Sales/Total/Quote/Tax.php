@@ -5,8 +5,8 @@
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\Customer\Api\Data\AddressDataBuilder as CustomerAddressBuilder;
-use Magento\Customer\Api\Data\RegionDataBuilder as CustomerAddressRegionBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
+use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\Calculation;
@@ -53,8 +53,8 @@ class Tax extends CommonTaxCollector
      * @param \Magento\Tax\Api\Data\QuoteDetailsDataBuilder $quoteDetailsBuilder
      * @param \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder
      * @param \Magento\Tax\Api\Data\TaxClassKeyDataBuilder $taxClassKeyBuilder
-     * @param CustomerAddressBuilder $customerAddressBuilder
-     * @param CustomerAddressRegionBuilder $customerAddressRegionBuilder
+     * @param CustomerAddressFactory $customerAddressFactory
+     * @param CustomerAddressRegionFactory $customerAddressRegionFactory
      * @param \Magento\Tax\Helper\Data $taxData
      */
     public function __construct(
@@ -63,8 +63,8 @@ class Tax extends CommonTaxCollector
         \Magento\Tax\Api\Data\QuoteDetailsDataBuilder $quoteDetailsBuilder,
         \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder,
         \Magento\Tax\Api\Data\TaxClassKeyDataBuilder $taxClassKeyBuilder,
-        CustomerAddressBuilder $customerAddressBuilder,
-        CustomerAddressRegionBuilder $customerAddressRegionBuilder,
+        CustomerAddressFactory $customerAddressFactory,
+        CustomerAddressRegionFactory $customerAddressRegionFactory,
         \Magento\Tax\Helper\Data $taxData
     ) {
         $this->setCode('tax');
@@ -75,8 +75,8 @@ class Tax extends CommonTaxCollector
             $quoteDetailsBuilder,
             $quoteDetailsItemBuilder,
             $taxClassKeyBuilder,
-            $customerAddressBuilder,
-            $customerAddressRegionBuilder
+            $customerAddressFactory,
+            $customerAddressRegionFactory
         );
     }
 

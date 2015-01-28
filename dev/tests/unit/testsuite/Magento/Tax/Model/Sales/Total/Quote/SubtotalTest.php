@@ -81,21 +81,39 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $customerAddressBuilderMock = $this->getMock(
-            'Magento\Customer\Api\Data\AddressDataBuilder',
-            ['setCountryId', 'setRegion', 'setPostcode', 'setCity', 'setStreet', 'create'],
+
+        $customerAddressMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\AddressInterface',
             [],
             '',
             false
         );
-        $customerAddressRegionBuilderMock = $this->getMock(
-            'Magento\Customer\Api\Data\RegionDataBuilder',
-            ['setRegionId', 'create'],
+        $customerAddressFactoryMock = $this->getMock(
+            'Magento\Customer\Api\Data\AddressInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
-        $customerAddressRegionBuilderMock->expects($this->any())->method('setRegionId')->willReturnSelf();
+        $customerAddressFactoryMock->expects($this->any())->method('create')->willReturn($customerAddressMock);
+
+        $customerAddressRegionMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\RegionInterface',
+            [],
+            '',
+            false
+        );
+        $customerAddressRegionMock->expects($this->any())->method('setRegionId')->willReturnSelf();
+        $customerAddressRegionFactoryMock = $this->getMock(
+            'Magento\Customer\Api\Data\RegionInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $customerAddressRegionFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($customerAddressRegionMock);
 
         $this->model = $this->objectManager->getObject(
             'Magento\Tax\Model\Sales\Total\Quote\Subtotal',
@@ -104,8 +122,8 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
                 'taxCalculationService' => $this->taxCalculationMock,
                 'quoteDetailsBuilder' => $this->quoteDetailsBuilder,
                 'taxClassKeyBuilder' => $this->keyBuilderMock,
-                'customerAddressBuilder' => $customerAddressBuilderMock,
-                'customerAddressRegionBuilder' => $customerAddressRegionBuilderMock,
+                'customerAddressFactory' => $customerAddressFactoryMock,
+                'customerAddressRegionFactory' => $customerAddressRegionFactoryMock,
             ]
         );
 
