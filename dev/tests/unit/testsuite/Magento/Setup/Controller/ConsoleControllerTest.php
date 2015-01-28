@@ -346,6 +346,42 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
      * @param bool $isForce
      * @param bool $expectedIsEnabled
      * @param string[] $expectedModules
+     * @dataProvider moduleActionEnabledSuggestionMessageDataProvider
+     */
+    public function testModuleActionEnabledSuggestionMessage($command, $modules, $isForce, $expectedIsEnabled, $expectedModules)
+    {
+        $status = $this->getModuleActionMocks($command, $modules, $isForce, false);
+        $status->expects($this->once())->method('getModulesToChange')->willReturn($expectedModules);
+        if (!$isForce) {
+            $status->expects($this->once())->method('checkConstraints')->willReturn([]);
+        }
+        $status->expects($this->once())
+            ->method('setIsEnabled')
+            ->with($expectedIsEnabled, $expectedModules);
+        $this->consoleLogger->expects($this->once())
+            ->method('log')
+            ->with($this->stringContains("To make sure that the enabled modules are properly registered, run 'update' command."));
+        $this->controller->moduleAction();
+    }
+
+    /**
+     * @return array
+     */
+    public function moduleActionEnabledSuggestionMessageDataProvider()
+    {
+        return [
+            [ConsoleController::CMD_MODULE_ENABLE, 'Module_Foo,Module_Bar', false, true, ['Module_Foo', 'Module_Bar']],
+            [ConsoleController::CMD_MODULE_ENABLE, 'Module_Foo,Module_Bar', true, true, ['Module_Foo', 'Module_Bar']],
+            [ConsoleController::CMD_MODULE_ENABLE, 'Module_Foo,Module_Bar', false, true, ['Module_Foo']],
+        ];
+    }
+
+    /**
+     * @param string $command
+     * @param string $modules
+     * @param bool $isForce
+     * @param bool $expectedIsEnabled
+     * @param string[] $expectedModules
      * @dataProvider moduleActionDataProvider
      */
     public function testModuleActionNoChanges($command, $modules, $isForce, $expectedIsEnabled, $expectedModules)

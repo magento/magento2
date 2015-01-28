@@ -497,12 +497,14 @@ class ConsoleController extends AbstractActionController
                 }
             }
             $status->setIsEnabled($isEnable, $modulesToChange);
+            $updateAfterEnableMessage = '';
             if ($isEnable) {
                 $message = 'The following modules have been enabled:';
+                $updateAfterEnableMessage = "\nTo make sure that the enabled modules are properly registered, run 'update' command.";
             } else {
                 $message = 'The following modules have been disabled:';
             }
-            $message .= ' ' . implode(', ', $modulesToChange);
+            $message .= ' ' . implode(', ', $modulesToChange) . $updateAfterEnableMessage;
         } else {
             $message = 'There have been no changes to any modules.';
         }
