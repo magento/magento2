@@ -59,6 +59,26 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
      */
     protected $controller;
 
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultPageFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultJsonFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRawFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultJsonMock;
+
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -121,6 +141,26 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
 
+        $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $this->resultRawFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $this->commentSenderMock = $this->getMockBuilder('Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -129,7 +169,10 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\AddComment',
             [
                 'context' => $contextMock,
-                'invoiceCommentSender' => $this->commentSenderMock
+                'invoiceCommentSender' => $this->commentSenderMock,
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'resultRawFactory' => $this->resultRawFactoryMock,
+                'resultJsonFactory' => $this->resultJsonFactoryMock
             ]
         );
     }
@@ -190,7 +233,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->with('invoice_comments')
             ->will($this->returnValue($commentsBlockMock));
 
-        $this->viewMock->expects($this->any())
+        $this->resultPageFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->resultPageMock));
+
+        $this->resultPageMock->expects($this->any())
             ->method('getLayout')
             ->will($this->returnValue($layoutMock));
 
@@ -198,11 +245,14 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->method('send')
             ->with($invoiceMock, false, $data['comment']);
 
-        $this->responseMock->expects($this->once())
-            ->method('setBody')
-            ->with($response);
+        $resultRaw = $this->getMockBuilder('Magento\Framework\Controller\Result\Raw')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $resultRaw->expects($this->once())->method('setContents')->with($response);
 
-        $this->assertNull($this->controller->execute());
+        $this->resultRawFactoryMock->expects($this->once())->method('create')->will($this->returnValue($resultRaw));
+        $this->assertSame($resultRaw, $this->controller->execute());
     }
 
     public function testExecuteModelException()
@@ -215,24 +265,12 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->will($this->throwException($e));
 
-        $helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $helperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with($response)
-            ->will($this->returnValue(json_encode($response)));
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->resultJsonMock));
 
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
-            ->with(json_encode($response));
-
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($helperMock));
-        $this->assertNull($this->controller->execute());
+        $this->resultJsonMock->expects($this->once())->method('setData')->with($response);
+        $this->assertSame($this->resultJsonMock, $this->controller->execute());
     }
 
     public function testExecuteException()
@@ -244,24 +282,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->will($this->throwException($e));
 
-        $helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $helperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with($response)
-            ->will($this->returnValue(json_encode($response)));
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->resultJsonMock));
 
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($helperMock));
-
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
-            ->with(json_encode($response));
-
-        $this->assertNull($this->controller->execute());
+        $this->resultJsonMock->expects($this->once())->method('setData')->with($response);
+        $this->assertSame($this->resultJsonMock, $this->controller->execute());
     }
 }
