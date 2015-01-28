@@ -279,8 +279,14 @@ class Application
             [
                 'name' => 'integration-tests',
                 'handlers' => [
-                    'system' => $objectManager->get('Magento\Framework\Logger\Handler\System'),
-                    'debug'  => $objectManager->get('Magento\Framework\Logger\Handler\Debug'),
+                    'system' => $objectManager->create(
+                        'Magento\Framework\Logger\Handler\System',
+                        ['filePath' => $this->installDir]
+                    ),
+                    'debug'  => $objectManager->create(
+                        'Magento\Framework\Logger\Handler\Debug',
+                        ['filePath' => $this->installDir]
+                    ),
                 ]
             ]
         );

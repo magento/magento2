@@ -29,11 +29,17 @@ class Base extends StreamHandler
 
     /**
      * @param DriverInterface $filesystem
+     * @param string $filePath
      */
-    public function __construct(DriverInterface $filesystem)
-    {
+    public function __construct(
+        DriverInterface $filesystem,
+        $filePath = null
+    ) {
         $this->filesystem = $filesystem;
-        parent::__construct(BP . $this->fileName, $this->loggerType);
+        parent::__construct(
+            $filePath ? $filePath . $this->fileName : BP . $this->fileName,
+            $this->loggerType
+        );
     }
 
     /**

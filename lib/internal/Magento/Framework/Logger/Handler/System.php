@@ -29,13 +29,15 @@ class System extends Base
     /**
      * @param DriverInterface $filesystem
      * @param Exception $exceptionHandler
+     * @param string $filePath
      */
     public function __construct(
         DriverInterface $filesystem,
-        Exception $exceptionHandler
+        Exception $exceptionHandler,
+        $filePath = null
     ) {
         $this->exceptionHandler = $exceptionHandler;
-        parent::__construct($filesystem);
+        parent::__construct($filesystem, $filePath);
     }
 
     /**
