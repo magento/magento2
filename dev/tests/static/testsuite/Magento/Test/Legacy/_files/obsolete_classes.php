@@ -2906,4 +2906,5 @@ return [
         'Magento\Core\Model\TemplateEngine\Plugin\DebugHints',
         'Magento\Developer\Model\TemplateEngine\Plugin\DebugHints'
     ],
+    ['Magento\Core\Model\Asset\Config', 'Magento\Framework\View\Asset\Config'],
 ];

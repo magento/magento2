@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests Magento\Core\Model\Asset\Config
+ * Tests Magento\Framework\View\Asset\Config
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,7 +8,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Core\Model\Asset;
+namespace Magento\Framework\View\Asset;
 
 class ConfigTest extends \Magento\Test\BaseTestCase
 {
@@ -18,7 +18,7 @@ class ConfigTest extends \Magento\Test\BaseTestCase
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Core\Model\Asset\Config
+     * @var \Magento\Framework\View\Asset\Config
      */
     private $model;
 
@@ -26,7 +26,7 @@ class ConfigTest extends \Magento\Test\BaseTestCase
     {
         parent::setUp();
         $this->scopeConfigMock = $this->basicMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->model = $this->objectManager->getObject('Magento\Core\Model\Asset\Config',
+        $this->model = $this->objectManager->getObject('Magento\Framework\View\Asset\Config',
             ['scopeConfig' => $this->scopeConfigMock]
         );
     }

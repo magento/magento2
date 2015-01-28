@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Core\Model\Asset;
+namespace Magento\Framework\View\Asset;
 
 /**
  * View asset configuration interface
