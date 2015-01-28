@@ -4,14 +4,13 @@
  */
 /*jshint browser:true jquery:true sub:true*/
 /*global alert*/
-/*global Handlebars*/
 define([
     "jquery",
-    "handlebars",
+    "mage/template",
     "jquery/ui",
     "mage/validation/validation",
     "mage/dataPost"
-], function($){
+], function($, mageTemplate){
     "use strict";
 
     $.widget('mage.wishlist', {
@@ -190,7 +189,7 @@ define([
                         url: json['url']
                     },
                     source = $(_this.options.formTmplSelector).html(),
-                    template = Handlebars.compile(source),
+                    template = mageTemplate(source),
                     html = template(tmplJson);
                     $(html).appendTo('body');
                 $(_this.options.formTmplId).submit();
