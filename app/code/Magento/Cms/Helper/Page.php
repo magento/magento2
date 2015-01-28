@@ -6,6 +6,7 @@
 namespace Magento\Cms\Helper;
 
 use Magento\Framework\App\Action\Action;
+
 /**
  * CMS Page Helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
