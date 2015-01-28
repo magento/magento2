@@ -190,9 +190,9 @@ class Installer
     private $sampleData;
 
     /**
-     * @var ObjectManagerFactory
+     * @var ObjectManagerProvider
      */
-    private $objectManagerFactory;
+    private $objectManagerProvider;
 
     /**
      * Constructor
@@ -211,7 +211,7 @@ class Installer
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
      * @param SampleData $sampleData
-     * @param ObjectManagerFactory $objectManagerFactory
+     * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
         FilePermissions $filePermissions,
@@ -228,7 +228,7 @@ class Installer
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
         SampleData $sampleData,
-        ObjectManagerFactory $objectManagerFactory
+        ObjectManagerProvider $objectManagerProvider
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -246,7 +246,7 @@ class Installer
         $this->sampleData = $sampleData;
         $this->installInfo[self::INFO_MESSAGE] = array();
         $this->deploymentConfig = $deploymentConfig;
-        $this->objectManagerFactory = $objectManagerFactory;
+        $this->objectManagerProvider = $objectManagerProvider;
     }
 
     /**
@@ -579,7 +579,7 @@ class Installer
         $this->assertDbAccessible();
 
         /** @var \Magento\Framework\Module\Updater $updater */
-        $updater = $this->getObjectManager()->create('Magento\Framework\Module\Updater');
+        $updater = $this->objectManagerProvider->get()->create('Magento\Framework\Module\Updater');
         $updater->updateData();
     }
 
@@ -598,7 +598,7 @@ class Installer
         }
 
         /** @var \Magento\Backend\Model\Config\Factory $configFactory */
-        $configFactory = $this->getObjectManager()->create('Magento\Backend\Model\Config\Factory');
+        $configFactory = $this->objectManagerProvider->get()->create('Magento\Backend\Model\Config\Factory');
         foreach ($configData as $key => $val) {
             $configModel = $configFactory->create();
             $configModel->setDataByPath($key, $val);
@@ -688,7 +688,7 @@ class Installer
     private function enableCaches()
     {
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
-        $cacheManager = $this->getObjectManager()->create('Magento\Framework\App\Cache\Manager');
+        $cacheManager = $this->objectManagerProvider->get()->create('Magento\Framework\App\Cache\Manager');
         $types = $cacheManager->getAvailableTypes();
         $enabledTypes = $cacheManager->setEnabled($types, true);
         $cacheManager->clean($enabledTypes);
@@ -838,20 +838,6 @@ class Installer
     }
 
     /**
-     * Get object manager for Magento application
-     *
-     * @return \Magento\Framework\ObjectManagerInterface
-     */
-    private function getObjectManager()
-    {
-        if (null === $this->objectManager) {
-            $this->assertDeploymentConfigExists();
-            $this->objectManager = $this->objectManagerFactory->create();
-        }
-        return $this->objectManager;
-    }
-
-    /**
      * Validates that deployment configuration exists
      *
      * @throws \Magento\Setup\Exception
@@ -890,6 +876,6 @@ class Installer
     private function installSampleData($request)
     {
         $userName = isset($request[AdminAccount::KEY_USERNAME]) ? $request[AdminAccount::KEY_USERNAME] : '';
-        $this->sampleData->install($this->getObjectManager(), $this->log, $userName);
+        $this->sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
     }
 }

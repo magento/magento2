@@ -18,7 +18,8 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
-use Magento\Setup\Model\ObjectManagerFactory;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\Module\DbVersionInfo;
 
 /**
  * Controller that handles all setup commands via command line interface.
@@ -38,6 +39,7 @@ class ConsoleController extends AbstractActionController
     const CMD_INSTALL_USER_CONFIG = 'install-user-configuration';
     const CMD_INSTALL_ADMIN_USER = 'install-admin-user';
     const CMD_UPDATE = 'update';
+    const CMD_DB_STATUS = 'db-status';
     const CMD_UNINSTALL = 'uninstall';
     const CMD_MAINTENANCE = 'maintenance';
     const CMD_MODULE_ENABLE = 'module-enable';
@@ -63,6 +65,7 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_USER_CONFIG => 'installUserConfig',
         self::CMD_INSTALL_ADMIN_USER => 'installAdminUser',
         self::CMD_UPDATE => 'update',
+        self::CMD_DB_STATUS => 'dbStatus',
         self::CMD_UNINSTALL => 'uninstall',
         self::CMD_MAINTENANCE => 'maintenance',
         self::CMD_MODULE_ENABLE => 'module',
@@ -82,6 +85,7 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_USER_CONFIG,
         self::CMD_INSTALL_ADMIN_USER,
         self::CMD_UPDATE,
+        self::CMD_DB_STATUS,
         self::CMD_UNINSTALL,
         self::CMD_MAINTENANCE,
         self::CMD_MODULE_ENABLE,
@@ -114,11 +118,11 @@ class ConsoleController extends AbstractActionController
     private $installer;
 
     /**
-     * Object manager factory
+     * Object manager provider
      *
-     * @var ObjectManagerFactory
+     * @var ObjectManagerProvider
      */
-    private $objectManagerFactory;
+    private $objectManagerProvider;
 
     /**
      * Object manager
@@ -228,6 +232,12 @@ class ConsoleController extends AbstractActionController
                 'usage_short' => self::CMD_UPDATE,
                 'usage_desc' => 'Update database schema and data',
             ],
+            self::CMD_DB_STATUS => [
+                'route' => self::CMD_DB_STATUS,
+                'usage' => '',
+                'usage_short' => self::CMD_DB_STATUS,
+                'usage_desc' => 'Check if update of DB schema or data is required',
+            ],
             self::CMD_UNINSTALL => [
                 'route' => self::CMD_UNINSTALL,
                 'usage' => '',
@@ -298,20 +308,20 @@ class ConsoleController extends AbstractActionController
      * @param Lists $options
      * @param InstallerFactory $installerFactory
      * @param MaintenanceMode $maintenanceMode
-     * @param ObjectManagerFactory $objectManagerFactory
+     * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
         ConsoleLogger $consoleLogger,
         Lists $options,
         InstallerFactory $installerFactory,
         MaintenanceMode $maintenanceMode,
-        ObjectManagerFactory $objectManagerFactory
+        ObjectManagerProvider $objectManagerProvider
     ) {
         $this->log = $consoleLogger;
         $this->options = $options;
         $this->installer = $installerFactory->create($consoleLogger);
         $this->maintenanceMode = $maintenanceMode;
-        $this->objectManagerFactory = $objectManagerFactory;
+        $this->objectManagerProvider = $objectManagerProvider;
     }
 
     /**
@@ -404,6 +414,34 @@ class ConsoleController extends AbstractActionController
     }
 
     /**
+     * Checks if DB schema or data upgrade is required
+     *
+     * @return void
+     */
+    public function dbStatusAction()
+    {
+        /** @var DbVersionInfo $dbVersionInfo */
+        $dbVersionInfo = $this->objectManagerProvider->get()
+            ->get('Magento\Framework\Module\DbVersionInfo');
+        $outdated = $dbVersionInfo->getDbVersionErrors();
+        if (!empty($outdated)) {
+            $this->log->log('The following modules require update:');
+            foreach ($outdated as $row) {
+                $this->log->log(sprintf(
+                    "%20s %10s: %11s  ->  %-11s",
+                    $row[DbVersionInfo::KEY_MODULE],
+                    $row[DbVersionInfo::KEY_TYPE],
+                    $row[DbVersionInfo::KEY_CURRENT],
+                    $row[DbVersionInfo::KEY_REQUIRED]
+                ));
+            }
+            $this->log->log("Run 'update' command to update your DB schema and/or data");
+        } else {
+            $this->log->log('All modules are up to date');
+        }
+    }
+
+    /**
      * Installs user configuration
      *
      * @return void
@@ -484,7 +522,7 @@ class ConsoleController extends AbstractActionController
         $isEnable = $request->getParam(0) == self::CMD_MODULE_ENABLE;
         $modules = explode(',', $request->getParam('modules'));
         /** @var \Magento\Framework\Module\Status $status */
-        $status = $this->getObjectManager()->create('Magento\Framework\Module\Status');
+        $status = $this->objectManagerProvider->get()->create('Magento\Framework\Module\Status');
 
         $modulesToChange = $status->getModulesToChange($isEnable, $modules);
         if (!empty($modulesToChange)) {
@@ -513,19 +551,6 @@ class ConsoleController extends AbstractActionController
     }
 
     /**
-     * Getter for object manager
-     *
-     * @return \Magento\Framework\ObjectManagerInterface
-     */
-    private function getObjectManager()
-    {
-        if (!$this->objectManager) {
-            $this->objectManager = $this->objectManagerFactory->create();
-        }
-        return $this->objectManager;
-    }
-
-    /**
      * Shows necessary information for installing Magento
      *
      * @return string
@@ -540,7 +565,6 @@ class ConsoleController extends AbstractActionController
             );
             return $usageInfo;
         }
-        $usages = self::getCommandUsage();
         switch($type) {
             case UserConfig::KEY_LANGUAGE:
                 return $this->arrayToString($this->options->getLocaleList());
@@ -551,6 +575,7 @@ class ConsoleController extends AbstractActionController
             case self::HELP_LIST_OF_MODULES:
                 return $this->getModuleListMsg();
             default:
+                $usages = self::getCommandUsage();
                 if (isset($usages[$type])) {
                     if ($usages[$type]) {
                         $formatted = $this->formatCliUsage($usages[$type]);
@@ -637,7 +662,7 @@ class ConsoleController extends AbstractActionController
      */
     private function getModuleListMsg()
     {
-        $moduleList = $this->getObjectManager()->create('Magento\Framework\Module\ModuleList');
+        $moduleList = $this->objectManagerProvider->get()->create('Magento\Framework\Module\ModuleList');
         $result = "\nList of enabled modules:\n";
         $enabledModuleList = $moduleList->getNames();
         foreach ($enabledModuleList as $moduleName) {
@@ -647,7 +672,7 @@ class ConsoleController extends AbstractActionController
             $result .= "None\n";
         }
 
-        $fullModuleList = $this->getObjectManager()->create('Magento\Framework\Module\FullModuleList');
+        $fullModuleList = $this->objectManagerProvider->get()->create('Magento\Framework\Module\FullModuleList');
         $result .= "\nList of disabled modules:\n";
         $disabledModuleList = array_diff($fullModuleList->getNames(), $enabledModuleList);
         foreach ($disabledModuleList as $moduleName) {
