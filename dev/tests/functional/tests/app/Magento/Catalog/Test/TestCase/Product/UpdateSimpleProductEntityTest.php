@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
@@ -14,13 +13,11 @@ use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for UpdateProductSimpleEntity
- *
  * Test Flow:
  *
  * Precondition:
- * Category is created.
- * Product is created and assigned to created category.
+ * 1. Category is created.
+ * 2. Product is created and assigned to created category.
  *
  * Steps:
  * 1. Login to backend.
@@ -72,36 +69,37 @@ class UpdateSimpleProductEntityTest extends Injectable
     /**
      * Run update product simple entity test
      *
-     * @param string $initialProduct
+     * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
      * @throws \Exception
      * @return array
      */
-    public function test($initialProduct, CatalogProductSimple $product)
+
+
+    /**
+     * @param CatalogProductSimple $initialProduct
+     * @param CatalogProductSimple $product
+     * @return array
+     */
+    public function test(CatalogProductSimple $initialProduct, CatalogProductSimple $product)
     {
-        $createProductsStep = ObjectManager::getInstance()->create(
-            'Magento\Catalog\Test\TestStep\CreateProductStep',
-            ['product' => $initialProduct]
-        );
-        /** @var CatalogProductSimple $initialProduct */
-        $initialProduct = $createProductsStep->run()['product'];
+        // Preconditions
+        $initialProduct->persist();
+        $initialCategory = $initialProduct->hasData('category_ids')
+            ? $initialProduct->getDataFieldConfig('category_ids')['source']->getCategories()[0]
+            : null;
+        $category = $product->hasData('category_ids')
+            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
+            : $initialCategory;
+
+        // Steps
         $filter = ['sku' => $initialProduct->getSku()];
 
-        $this->productGrid->open()->getProductGrid()->searchAndOpen($filter);
+        $this->productGrid->open();
+        $this->productGrid->getProductGrid()->searchAndOpen($filter);
         $this->editProductPage->getProductForm()->fill($product);
         $this->editProductPage->getFormPageActions()->save();
 
-        $sharedArguments = ['initialProduct' => $initialProduct];
-        $productWithCategory = null;
-        if ($product->hasData('category_ids')) {
-            $productWithCategory = $product;
-        } elseif ($initialProduct->hasData('category_ids')) {
-            $productWithCategory = $initialProduct;
-        }
-        if ($productWithCategory) {
-            $categories = $productWithCategory->getDataFieldConfig('category_ids')['source']->getCategories();
-            $sharedArguments['category'] = reset($categories);
-        }
-        return $sharedArguments;
+        return ['category' => $category];
     }
 }

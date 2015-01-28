@@ -546,7 +546,7 @@ class ConfigurableAttributesData implements FixtureInterface
             'matrix' => [],
         ],
 
-        'MAGETWO-12840' => [
+        'two_options_with_fixed_price' => [
             'attributes_data' => [
                 'attribute_key_0' => [
                     'options' => [

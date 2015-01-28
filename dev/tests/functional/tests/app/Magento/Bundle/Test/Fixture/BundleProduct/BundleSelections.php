@@ -544,7 +544,7 @@ class BundleSelections implements FixtureInterface
                 ],
             ],
 
-            'MAGETWO-12841' => [
+            'two_options_with_fixed_and_percent_prices' => [
                 'bundle_options' => [
                     [
                         'title' => 'BundleOption1',
@@ -582,7 +582,7 @@ class BundleSelections implements FixtureInterface
                 ],
             ],
 
-            'MAGETWO-12842' => [
+            'two_options_assigned_products_without_category' => [
                 'bundle_options' => [
                     [
                         'title' => 'Drop-down Option',

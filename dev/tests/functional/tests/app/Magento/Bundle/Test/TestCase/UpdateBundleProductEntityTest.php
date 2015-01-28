@@ -77,23 +77,23 @@ class UpdateBundleProductEntityTest extends Injectable
      */
     public function test(BundleProduct $product, BundleProduct $originalProduct)
     {
+        // Preconditions
         $originalProduct->persist();
-        $this->catalogProductIndex->open();
+        $originalCategory = $originalProduct->hasData('category_ids')
+            ? $originalProduct->getDataFieldConfig('category_ids')['source']->getCategories()
+            : null;
+        $category = $product->hasData('category_ids')
+            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
+            : $originalCategory;
+
+        // Steps
         $filter = ['sku' => $originalProduct->getSku()];
+
+        $this->catalogProductIndex->open();
         $this->catalogProductIndex->getProductGrid()->searchAndOpen($filter);
         $this->catalogProductEdit->getProductForm()->fill($product);
         $this->catalogProductEdit->getFormPageActions()->save();
 
-        $productWithCategory = null;
-        if ($product->hasData('category_ids')) {
-            $productWithCategory = $product;
-        } elseif ($originalProduct->hasData('category_ids')) {
-            $productWithCategory = $originalProduct;
-        }
-        if ($productWithCategory) {
-            $categories = $productWithCategory->getDataFieldConfig('category_ids')['source']->getCategories();
-            return ['category' => reset($categories)];
-        }
-        return [];
+        return ['category' => $category];
     }
 }

@@ -132,7 +132,7 @@
             </field>
         </dataset>
 
-        <dataset name="MAGETWO-12841">
+        <dataset name="bundle_fixed_with_category">
             <field name="name" xsi:type="string">Bundle fixed product %isolation%</field>
             <field name="url_key" xsi:type="string">bundle-fixed-product-%isolation%</field>
             <field name="sku" xsi:type="string">sku_bundle_fixed_product_%isolation%</field>
@@ -153,11 +153,11 @@
                 <item name="presets" xsi:type="string">default_subcategory</item>
             </field>
             <field name="bundle_selections" xsi:type="array">
-                <item name="preset" xsi:type="string">MAGETWO-12841</item>
+                <item name="preset" xsi:type="string">two_options_with_fixed_and_percent_prices</item>
             </field>
         </dataset>
 
-        <dataset name="MAGETWO-12842">
+        <dataset name="bundle_dynamic_with_category">
             <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
             <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
             <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
@@ -165,7 +165,7 @@
             <field name="price_type" xsi:type="string">Dynamic</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">-</item>
-                <item name="preset" xsi:type="string">MAGETWO-12842</item>
+                <item name="preset" xsi:type="string">bundle_dynamic_with_category</item>
             </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
@@ -174,7 +174,7 @@
                 <item name="presets" xsi:type="string">default_subcategory</item>
             </field>
             <field name="bundle_selections" xsi:type="array">
-                <item name="preset" xsi:type="string">MAGETWO-12842</item>
+                <item name="preset" xsi:type="string">two_options_assigned_products_without_category</item>
             </field>
         </dataset>
     </storage>

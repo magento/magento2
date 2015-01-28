@@ -186,11 +186,11 @@ class Price implements FixtureInterface
                 'price_to' => '756.00',
                 'cart_price' => '756.00',
             ],
-            'MAGETWO-12841' => [
+            'bundle_fixed_with_category' => [
                 'price_from' => '130.00',
                 'price_to' => '144.00',
             ],
-            'MAGETWO-12842' => [
+            'bundle_dynamic_with_category' => [
                 'price_from' => '100.00',
                 'price_to' => '100.00',
             ]
