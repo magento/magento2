@@ -10,7 +10,7 @@ define([
     "jquery/ui",
     "jquery/jquery.parsequery",
     "Magento_Catalog/js/price-box"
-], function($, _, template){
+], function($, _, mageTemplate){
 
     function getPrices(elems){
         var prices = {};
@@ -68,7 +68,7 @@ define([
             if(priceBoxOptions.priceConfig && priceBoxOptions.priceConfig.optionTemplate) {
                 this.options.optionTemplate = priceBoxOptions.priceConfig.optionTemplate;
             }
-            this.options.optionTemplate = template(this.options.optionTemplate);
+            this.options.optionTemplate = mageTemplate(this.options.optionTemplate);
 
             this.options.settings = (this.options.spConfig.containerId) ?
                 $(this.options.spConfig.containerId).find(this.options.superSelector) :

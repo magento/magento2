@@ -9,7 +9,7 @@ define([
     "underscore",
     "mage/template",
     "jquery/ui"
-], function ($, utils, _, template) {
+], function ($, utils, _, mageTemplate) {
     "use strict";
 
     var globalOptions = {
@@ -145,7 +145,7 @@ define([
         var box = this.element;
         var prices = this.cache.displayPrices;
         var priceFormat = this.options.priceConfig && this.options.priceConfig.priceFormat || {};
-        var priceTemplate = template(this.options.priceTemplate);
+        var priceTemplate = mageTemplate(this.options.priceTemplate);
 
         _.each(prices, function (price, priceCode) {
             var html,
