@@ -130,30 +130,13 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Renders CMS page on front end
-     *
-     * Call from controller action
+     * Return result CMS page
      *
      * @param Action $action
-     * @param int $pageId
-     * @return bool|\Magento\Framework\View\Result\Page
+     * @param null $pageId
+     * @return \Magento\Framework\View\Result\Page|bool
      */
-    public function renderPage(Action $action, $pageId = null)
-    {
-        return $this->_renderPage($action, $pageId);
-    }
-
-    /**
-     * Renders CMS page
-     *
-     * @param Action $action
-     * @param int $pageId
-     * @param bool $returnPage
-     * @return bool|\Magento\Framework\View\Result\Page
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function _renderPage(Action $action, $pageId = null, $returnPage = true)
+    public function prepareResultPage(Action $action, $pageId = null)
     {
         if (!is_null($pageId) && $pageId !== $this->_page->getId()) {
             $delimiterPosition = strrpos($pageId, '|');
@@ -224,8 +207,105 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $messageBlock->addStorageType($this->messageManager->getDefaultGroup());
         $messageBlock->addMessages($this->messageManager->getMessages(true));
 
-        if ($returnPage) {
-            return $resultPage;
+        return $resultPage;
+    }
+
+    /**
+     * Renders CMS page on front end
+     *
+     * Call from controller action
+     *
+     * @param Action $action
+     * @param int $pageId
+     * @return bool
+     */
+    public function renderPage(Action $action, $pageId = null)
+    {
+        return $this->_renderPage($action, $pageId);
+    }
+
+    /**
+     * Renders CMS page
+     *
+     * @param Action $action
+     * @param int $pageId
+     * @param bool $renderLayout
+     * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function _renderPage(Action $action, $pageId = null, $renderLayout = true)
+    {
+        if (!is_null($pageId) && $pageId !== $this->_page->getId()) {
+            $delimiterPosition = strrpos($pageId, '|');
+            if ($delimiterPosition) {
+                $pageId = substr($pageId, 0, $delimiterPosition);
+            }
+
+            $this->_page->setStoreId($this->_storeManager->getStore()->getId());
+            if (!$this->_page->load($pageId)) {
+                return false;
+            }
+        }
+
+        if (!$this->_page->getId()) {
+            return false;
+        }
+
+        $inRange = $this->_localeDate->isScopeDateInInterval(
+            null,
+            $this->_page->getCustomThemeFrom(),
+            $this->_page->getCustomThemeTo()
+        );
+
+        if ($this->_page->getCustomTheme()) {
+            if ($inRange) {
+                $this->_design->setDesignTheme($this->_page->getCustomTheme());
+            }
+        }
+        $resultPage = $this->_view->getPage();
+        if ($this->_page->getPageLayout()) {
+            if ($this->_page->getCustomPageLayout()
+                && $this->_page->getCustomPageLayout() != 'empty'
+                && $inRange
+            ) {
+                $handle = $this->_page->getCustomPageLayout();
+            } else {
+                $handle = $this->_page->getPageLayout();
+            }
+            $resultPage->getConfig()->setPageLayout($handle);
+        }
+        $resultPage->initLayout();
+        $resultPage->addHandle('cms_page_view');
+        $resultPage->addPageLayoutHandles(['id' => $this->_page->getIdentifier()]);
+
+        $this->_eventManager->dispatch(
+            'cms_page_render',
+            ['page' => $this->_page, 'controller_action' => $action]
+        );
+
+        if ($this->_page->getCustomLayoutUpdateXml() && $inRange) {
+            $layoutUpdate = $this->_page->getCustomLayoutUpdateXml();
+        } else {
+            $layoutUpdate = $this->_page->getLayoutUpdateXml();
+        }
+        if (!empty($layoutUpdate)) {
+            $resultPage->getLayout()->getUpdate()->addUpdate($layoutUpdate);
+        }
+
+        $contentHeadingBlock = $resultPage->getLayout()->getBlock('page_content_heading');
+        if ($contentHeadingBlock) {
+            $contentHeading = $this->_escaper->escapeHtml($this->_page->getContentHeading());
+            $contentHeadingBlock->setContentHeading($contentHeading);
+        }
+
+        /* @TODO: Move catalog and checkout storage types to appropriate modules */
+        $messageBlock = $resultPage->getLayout()->getMessagesBlock();
+        $messageBlock->addStorageType($this->messageManager->getDefaultGroup());
+        $messageBlock->addMessages($this->messageManager->getMessages(true));
+
+        if ($renderLayout) {
+            $this->_view->renderLayout();
         }
 
         return true;
@@ -239,7 +319,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Action $action
      * @param int $pageId
      * @param bool $renderLayout
-     * @return bool|\Magento\Framework\View\Result\Page
+     * @return bool
      */
     public function renderPageExtended(Action $action, $pageId = null, $renderLayout = true)
     {
