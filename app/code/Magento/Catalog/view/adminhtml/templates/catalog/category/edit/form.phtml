@@ -14,7 +14,7 @@ $categoryId = $block->getCategoryId();
     <h3 class="title"><?php echo $block->escapeHtml($block->getHeader()) . ($block->getCategoryId() ? ' (' . __('ID: %1', $block->getCategoryId()) . ')' : '') ?></h3>
 </div>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
-    <?php echo $blcok->getResetButtonHtml() ?>
+    <?php echo $block->getResetButtonHtml() ?>
     <?php if ($block->getCategoryId()): ?>
         <?php echo $block->getDeleteButtonHtml() ?>
     <?php endif; ?>
