@@ -21,7 +21,7 @@
                     <fixture>Magento\CatalogRule\Test\Fixture\Product\Category</fixture>
                 </category>
             </id>
-        <data_set />
+        <dataset />
         <data_config />
     </catalogRule>
 </fixture>
