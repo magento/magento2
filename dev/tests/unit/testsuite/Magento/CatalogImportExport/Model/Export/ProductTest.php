@@ -8,7 +8,7 @@ namespace Magento\CatalogImportExport\Model\Export;
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Stub_UnitTest_\Magento\CatalogImportExport\Model\Export\Product
+     * @var StubProduct|\Magento\CatalogImportExport\Model\Export\Product
      */
     protected $_object;
 
