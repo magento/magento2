@@ -451,7 +451,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * Retrieve status name
      *
      * @param string $statusId
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public static function getStatusName($statusId)
     {

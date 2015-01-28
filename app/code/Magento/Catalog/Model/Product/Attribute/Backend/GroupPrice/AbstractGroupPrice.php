@@ -135,7 +135,7 @@ abstract class AbstractGroupPrice extends Price
      *
      * @param \Magento\Catalog\Model\Product $object
      * @throws \Magento\Framework\Model\Exception
-     * @return bool
+     * @return \Magento\Framework\Phrase|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

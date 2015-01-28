@@ -267,7 +267,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get html for option
      *
      * @param \Magento\Bundle\Model\Option $option
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getOptionHtml($option)
     {

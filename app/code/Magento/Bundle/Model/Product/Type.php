@@ -658,7 +658,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Object $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
-     * @return array|string
+     * @return \Magento\Framework\Phrase|array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -837,7 +837,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Retrieve message for specify option(s)
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getSpecifyOptionMessage()
     {

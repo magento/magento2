@@ -42,7 +42,7 @@ abstract class AbstractElement implements ElementInterface
      * Translate element attribute
      *
      * @param string $code
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     protected function _getTranslatedAttribute($code)
     {

@@ -49,7 +49,7 @@ class Render
      *
      * @param float|string $fromPrice
      * @param float|string $toPrice
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function renderRangeLabel($fromPrice, $toPrice)
     {

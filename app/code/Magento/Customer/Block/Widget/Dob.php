@@ -118,7 +118,7 @@ class Dob extends AbstractWidget
     /**
      * Return label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getLabel()
     {

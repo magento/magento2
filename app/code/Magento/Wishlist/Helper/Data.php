@@ -476,7 +476,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve default empty comment message
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function defaultCommentString()
     {
@@ -486,7 +486,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve default empty comment message
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getDefaultWishlistName()
     {

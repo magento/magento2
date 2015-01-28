@@ -136,7 +136,7 @@ class Decimal extends AbstractFilter
      *
      * @param float|string $fromPrice
      * @param float|string $toPrice
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function renderRangeLabel($fromPrice, $toPrice)
     {

@@ -49,7 +49,7 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getLabel()
     {

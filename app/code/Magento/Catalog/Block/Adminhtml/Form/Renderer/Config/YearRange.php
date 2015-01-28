@@ -18,7 +18,7 @@ class YearRange extends Field
 {
     /**
      * @param AbstractElement $element
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getElementHtml(AbstractElement $element)
     {

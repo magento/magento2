@@ -56,7 +56,7 @@ class ErrorMessage
     /**
      * Return the message localized to based on the locale of the current request.
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getMessage()
     {

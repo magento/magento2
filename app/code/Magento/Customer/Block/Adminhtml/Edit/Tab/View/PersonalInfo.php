@@ -161,7 +161,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getIsConfirmedStatus()
     {
@@ -188,7 +188,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return string|null
+     * @return \Magento\Framework\Phrase|string
      */
     public function getBillingAddressHtml()
     {

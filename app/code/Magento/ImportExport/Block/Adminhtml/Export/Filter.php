@@ -131,7 +131,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param Attribute $attribute
      * @param mixed $value
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     protected function _getMultiSelectHtmlWithValue(Attribute $attribute, $value)
     {
@@ -209,7 +209,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param Attribute $attribute
      * @param mixed $value
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _getSelectHtmlWithValue(Attribute $attribute, $value)

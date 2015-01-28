@@ -62,7 +62,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getLabel()
     {
@@ -99,7 +99,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      * Create button label based on wishlist item quantity
      *
      * @param int $count
-     * @return string|void
+     * @return \Magento\Framework\Phrase|void
      */
     protected function _createCounter($count)
     {

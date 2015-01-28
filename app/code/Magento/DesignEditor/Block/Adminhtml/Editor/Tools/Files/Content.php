@@ -15,7 +15,7 @@ class Content extends \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content
     /**
      * Get header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

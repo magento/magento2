@@ -331,7 +331,7 @@ class Config extends Widget implements TabInterface
     /**
      * Retrieve Tab label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -341,7 +341,7 @@ class Config extends Widget implements TabInterface
     /**
      * Retrieve Tab title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

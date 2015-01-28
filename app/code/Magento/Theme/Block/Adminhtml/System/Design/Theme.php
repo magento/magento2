@@ -30,7 +30,7 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Container
     /**
      * Prepare header for container
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
