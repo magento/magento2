@@ -31,11 +31,11 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['A' => [], 'B' => [], 'C' => [], 'D' => [], 'E' => []]));
 
         $composerData = [
-            'A' => '{"name":"a", "require":{"b":"0.1"}, "conflict":{"c":"0.1"}}',
-            'B' => '{"name":"b", "require":{"d":"0.1"}}',
-            'C' => '{"name":"c", "require":{"e":"0.1"}}',
-            'D' => '{"name":"d", "conflict":{"c":"0.1"}}',
-            'E' => '{"name":"e"}',
+            'A' => '{"name":"a", "require":{"b":"0.1"}, "conflict":{"c":"0.1"}, "version":"0.1"}',
+            'B' => '{"name":"b", "require":{"d":"0.1"}, "version":"0.1"}',
+            'C' => '{"name":"c", "require":{"e":"0.1"}, "version":"0.1"}',
+            'D' => '{"name":"d", "conflict":{"c":"0.1"}, "version":"0.1"}',
+            'E' => '{"name":"e", "version":"0.1"}',
         ];
         $fileIteratorMock = $this->getMock('Magento\Framework\Config\FileIterator', [], [], '', false);
         $fileIteratorMock->expects($this->once())
@@ -68,10 +68,10 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConflictReturnModuleName()
     {
-        $this->assertEquals(['C'], $this->packageInfo->getConflict('A'));
+        $this->assertEquals(['C' => '0.1'], $this->packageInfo->getConflict('A'));
         $this->assertEquals([], $this->packageInfo->getConflict('B'));
         $this->assertEquals([], $this->packageInfo->getConflict('C'));
-        $this->assertEquals(['C'], $this->packageInfo->getConflict('D'));
+        $this->assertEquals(['C' => '0.1'], $this->packageInfo->getConflict('D'));
         $this->assertEquals([], $this->packageInfo->getConflict('E'));
     }
 
@@ -86,10 +86,10 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConflictReturnPackageName()
     {
-        $this->assertEquals(['c'], $this->packageInfo->getConflict('A', false));
+        $this->assertEquals(['c' => '0.1'], $this->packageInfo->getConflict('A', false));
         $this->assertEquals([], $this->packageInfo->getConflict('B', false));
         $this->assertEquals([], $this->packageInfo->getConflict('C', false));
-        $this->assertEquals(['c'], $this->packageInfo->getConflict('D', false));
+        $this->assertEquals(['c' => '0.1'], $this->packageInfo->getConflict('D', false));
         $this->assertEquals([], $this->packageInfo->getConflict('E', false));
     }
 }
