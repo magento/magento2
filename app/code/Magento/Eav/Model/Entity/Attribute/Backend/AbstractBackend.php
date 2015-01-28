@@ -7,6 +7,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 /**
  * Entity/Attribute/Model - attribute backend abstract
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Backend\BackendInterface
 {
@@ -212,6 +213,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * @param \Magento\Framework\Object $object
      * @throws \Magento\Eav\Exception
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate($object)
     {
@@ -244,6 +246,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @param \Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterLoad($object)
     {
@@ -271,6 +274,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @param \Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave($object)
     {
@@ -282,6 +286,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @param \Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDelete($object)
     {
@@ -293,6 +298,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @param \Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDelete($object)
     {

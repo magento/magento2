@@ -6,7 +6,7 @@
 
 namespace Magento\GiftMessage\Test\Block\Adminhtml\Order\Create\Items;
 
-use Mtf\Client\Locator;
+use Magento\Mtf\Client\Locator;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 
 /**

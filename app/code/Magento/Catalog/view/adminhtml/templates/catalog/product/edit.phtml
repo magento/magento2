@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -61,7 +64,7 @@ require([
     "mage/mage",
     "Magento_Catalog/catalog/type-switcher",
     "mage/backend/tabs",
-    "domReady"
+    "domReady!"
 ], function($){
     var $form = $('[data-form=edit-product]');
     $form.data('typeSwitcher', new TypeSwitcher(<?php echo $this->getTypeSwitcherData();?>).bindAll());

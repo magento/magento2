@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\TestCase;
 
-use Mtf\Client\BrowserInterface;
-use Mtf\TestCase\Injectable;
-use Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 

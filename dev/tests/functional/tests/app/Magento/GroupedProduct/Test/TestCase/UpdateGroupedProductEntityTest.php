@@ -9,7 +9,7 @@ namespace Magento\GroupedProduct\Test\TestCase;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Update GroupedProductEntity

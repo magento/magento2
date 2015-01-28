@@ -32,6 +32,7 @@ namespace Magento\Newsletter\Model;
  * @method \Magento\Newsletter\Model\Template setModifiedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Template extends \Magento\Email\Model\AbstractTemplate
 {
@@ -93,7 +94,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Core\Model\App\Emulation $appEmulation
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Newsletter\Model\Template\Filter $filter
@@ -101,12 +102,13 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
-        \Magento\Core\Model\App\Emulation $appEmulation,
+        \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\Filter $filter,
@@ -217,6 +219,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Check Template Text Preprocessed
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getTemplateTextPreprocessed()
     {

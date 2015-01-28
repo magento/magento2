@@ -145,6 +145,8 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *  - 'cutReplacer': replacer for cut off value part when option value exceeds maxLength
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getFormattedOptionValue($optionValue, $params = null)
     {

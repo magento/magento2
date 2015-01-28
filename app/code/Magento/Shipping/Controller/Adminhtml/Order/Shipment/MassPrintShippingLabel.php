@@ -50,6 +50,7 @@ class MassPrintShippingLabel extends \Magento\Backend\App\Action
      * Push pdf document with shipping labels to user browser
      *
      * @return ResponseInterface|void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

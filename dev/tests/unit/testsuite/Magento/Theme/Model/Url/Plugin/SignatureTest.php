@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Theme\Model\Url\Plugin;
 
 class SignatureTest extends \PHPUnit_Framework_TestCase

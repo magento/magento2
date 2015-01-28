@@ -36,6 +36,7 @@ class Parameter extends \Magento\Framework\Filter\Template\Tokenizer\AbstractTok
      * Get string value in parameters through tokenize
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getValue()
     {

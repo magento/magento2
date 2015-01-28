@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -13,13 +16,14 @@
  *  getForm() - html
  */
 ?>
-<div class="page-actions"><?php echo $this->getSaveButtonHtml() ?></div>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?php echo $this->getSaveButtonHtml() ?></div>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
     <?php echo $this->getBlockHtml('formkey')?>
 
     <script>
-    function setCacheAction(id, button) {
-        $(id).value = button.id;
+    window.setCacheAction = function(id, button) {
+        document.getElementById(id).value = button.id;
+
         configForm.submit();
     }
     </script>

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -10,6 +13,9 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 
 /**
  * Import entity product model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
@@ -400,6 +406,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param Product\Validator $validator
      * @param array $data
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
@@ -640,6 +647,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Must be called after ALL products saving done.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _saveLinks()
     {
@@ -870,6 +880,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Gather and save information about product entities.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _saveProducts()
     {
@@ -1230,6 +1243,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $mediaGalleryData
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _saveMediaGallery(array $mediaGalleryData)
     {
@@ -1506,6 +1520,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      * @param int $rowNum
      * @return boolean
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function validateRow(array $rowData, $rowNum)
     {

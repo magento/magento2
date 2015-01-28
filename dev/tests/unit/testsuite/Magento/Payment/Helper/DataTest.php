@@ -42,7 +42,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $layoutFactoryMock->expects($this->once())->method('create')->willReturn($this->layoutMock);
 
         $this->methodFactory = $this->getMock('Magento\Payment\Model\Method\Factory', [], [], '', false);
-        $this->appEmulation = $this->getMock('Magento\Core\Model\App\Emulation', [], [], '', false);
+        $this->appEmulation = $this->getMock('Magento\Store\Model\App\Emulation', [], [], '', false);
         $paymentConfig = $this->getMock('Magento\Payment\Model\Config', [], [], '', false);
         $this->initialConfig = $this->getMock('Magento\Framework\App\Config\Initial', [], [], '', false);
 

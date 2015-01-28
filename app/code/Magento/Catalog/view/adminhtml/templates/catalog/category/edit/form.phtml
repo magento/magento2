@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var \Magento\Catalog\Block\Adminhtml\Category\Edit\Form $this */
 $parentId = $this->getParentCategoryId();
 $categoryId = $this->getCategoryId();
@@ -11,7 +13,7 @@ $categoryId = $this->getCategoryId();
 <div class="category-edit-title">
     <h3 class="title"><?php echo $this->escapeHtml($this->getHeader()) . ($this->getCategoryId() ? ' (' . __('ID: %1', $this->getCategoryId()) . ')' : '') ?></h3>
 </div>
-<div class="page-actions">
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <?php echo $this->getResetButtonHtml() ?>
     <?php if ($this->getCategoryId()): ?>
         <?php echo $this->getDeleteButtonHtml() ?>

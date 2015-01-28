@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /* @var $this \Magento\Newsletter\Block\Adminhtml\Template\Edit */
 ?>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="newsletter_template_edit_form">
@@ -23,7 +26,12 @@
     </div>
 </form>
 <script>
-require(['jquery', 'mage/mage', 'prototype'], function(jQuery){
+require([
+    'jquery',
+    'tinymce',
+    'mage/mage',
+    'prototype'
+], function(jQuery, tinyMCE){
 
 //<![CDATA[
     jQuery('#newsletter_template_edit_form').mage('form').mage('validation');

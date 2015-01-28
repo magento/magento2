@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Product;
 
 /**
@@ -117,6 +120,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $attributesData
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _hasIndexableAttributes($attributesData)
     {

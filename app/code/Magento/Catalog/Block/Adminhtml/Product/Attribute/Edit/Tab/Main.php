@@ -13,12 +13,16 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Main extends AbstractMain
 {
     /**
      * Adding product form elements for editing attribute
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _prepareForm()
     {

@@ -31,6 +31,8 @@ class Select extends DefaultValidator
      *
      * @param Option $option
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function validateOptionValue(Option $option)
     {

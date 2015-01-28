@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /* @var $this \Magento\Framework\View\Element\Template */
 
 $havePriceVariation = array_reduce(
@@ -54,6 +57,7 @@ $id = $this->escapeHtml($attribute['attribute_id']);
                     <div class="control">
                         <input type="text" value="<?php echo $this->escapeHtml($attribute['label']); ?>"
                                name="product[configurable_attributes_data][<?php echo $id ?>][label]"
+                               data-mage-init='{"useDefault": {}}'
                                data-store-label="<?php echo $this->escapeHtml($attribute['label']); ?>"
                                class="store-label required-entry"/>
                     </div>

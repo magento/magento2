@@ -11,6 +11,9 @@ namespace Magento\Wishlist\Model\Resource\Item\Collection;
 
 use Magento\Customer\Controller\RegistryConstants as RegistryConstants;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Grid extends \Magento\Wishlist\Model\Resource\Item\Collection
 {
     /**

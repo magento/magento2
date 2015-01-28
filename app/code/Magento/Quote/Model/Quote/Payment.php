@@ -18,9 +18,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method \Magento\Quote\Model\Quote\Payment setCreatedAt(string $value)
  * @method string getUpdatedAt()
  * @method \Magento\Quote\Model\Quote\Payment setUpdatedAt(string $value)
- * @method string getMethod()
  * @method \Magento\Quote\Model\Quote\Payment setMethod(string $value)
- * @method string getCcType()
  * @method \Magento\Quote\Model\Quote\Payment setCcType(string $value)
  * @method string getCcNumberEnc()
  * @method \Magento\Quote\Model\Quote\Payment setCcNumberEnc(string $value)
@@ -34,16 +32,15 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method \Magento\Quote\Model\Quote\Payment setCcSsStartMonth(int $value)
  * @method int getCcSsStartYear()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsStartYear(int $value)
- * @method string getPoNumber()
  * @method \Magento\Quote\Model\Quote\Payment setPoNumber(string $value)
- * @method string getAdditionalData()
  * @method \Magento\Quote\Model\Quote\Payment setAdditionalData(string $value)
  * @method string getCcSsIssue()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsIssue(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Payment extends \Magento\Payment\Model\Info
+class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\Data\PaymentInterface
 {
     /**
      * @var string
@@ -78,6 +75,7 @@ class Payment extends \Magento\Payment\Model\Info
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -235,4 +233,81 @@ class Payment extends \Magento\Payment\Model\Info
         $method = parent::getMethodInstance();
         return $method->setStore($this->getQuote()->getStore());
     }
+
+    /**
+     * @codeCoverageIgnoreStart
+     *
+     * {@inheritdoc}
+     */
+    public function getPoNumber()
+    {
+        return $this->getData('po_number');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMethod()
+    {
+        return $this->getData('method');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCcOwner()
+    {
+        return $this->getData('cc_owner');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCcNumber()
+    {
+        return $this->getData('cc_number');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCcType()
+    {
+        return $this->getData('cc_type');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCcExpYear()
+    {
+        $expirationYear = $this->getData('cc_exp_year') ?: null;
+        return $expirationYear;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCcExpMonth()
+    {
+        return $this->getData('cc_exp_month');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAdditionalData()
+    {
+        $additionalDataValue = $this->getData('additional_data');
+        if (is_string($additionalDataValue)) {
+            $additionalData = @unserialize($additionalDataValue);
+            if (is_array($additionalData)) {
+                return $additionalData;
+            }
+        } elseif (is_array($additionalDataValue)) {
+            return $additionalDataValue;
+        }
+        return null;
+    }
+    //@codeCoverageIgnoreEnd
 }

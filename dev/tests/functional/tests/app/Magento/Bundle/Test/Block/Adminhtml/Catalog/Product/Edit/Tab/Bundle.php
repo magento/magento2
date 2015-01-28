@@ -7,9 +7,9 @@
 namespace Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
-use Mtf\Client\Element;
+use Magento\Mtf\Client\Element;
 
 /**
  * Class Bundle

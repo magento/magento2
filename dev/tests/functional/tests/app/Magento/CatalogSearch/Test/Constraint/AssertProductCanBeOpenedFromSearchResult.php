@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogSearch\Test\Constraint;
 
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\CatalogSearch\Test\Page\AdvancedResult;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;

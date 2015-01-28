@@ -15,6 +15,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * Save action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

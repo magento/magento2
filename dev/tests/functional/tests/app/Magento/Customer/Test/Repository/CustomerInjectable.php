@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class CustomerInjectable
@@ -19,6 +19,7 @@ class CustomerInjectable extends AbstractRepository
      * @param array $defaultData
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
@@ -115,6 +116,16 @@ class CustomerInjectable extends AbstractRepository
             'password' => '123123q',
             'password_confirmation' => '123123q',
             'address' => ['presets' => 'US_address_TX'],
+        ];
+
+        $this->_data['johndoe_with_multiple_addresses'] = [
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'group_id' => ['dataSet' => 'General'],
+            'email' => 'JohnDoe_%isolation%@example.com',
+            'password' => '123123q',
+            'password_confirmation' => '123123q',
+            'address' => ['presets' => 'US_address_NY, US_address'],
         ];
     }
 }

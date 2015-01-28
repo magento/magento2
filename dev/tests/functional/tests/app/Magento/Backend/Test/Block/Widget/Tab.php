@@ -6,9 +6,9 @@
 
 namespace Magento\Backend\Test\Block\Widget;
 
-use Mtf\Block\Form as AbstractForm;
-use Mtf\Client\Element\SimpleElement;
-use Mtf\Client\Locator;
+use Magento\Mtf\Block\Form as AbstractForm;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Tab

@@ -6,7 +6,7 @@
 
 namespace Magento\Cms\Test\Handler\CmsBlock;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface CmsBlockInterface
