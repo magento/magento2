@@ -10,6 +10,8 @@ use Magento\Framework\App\Action\Action;
 /**
  * CMS Page Helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class Page extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -165,19 +167,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
                 $this->_design->setDesignTheme($this->_page->getCustomTheme());
             }
         }
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
-        $resultPage = $this->resultPageFactory->create();
-        if ($this->_page->getPageLayout()) {
-            if ($this->_page->getCustomPageLayout()
-                && $this->_page->getCustomPageLayout() != 'empty'
-                && $inRange
-            ) {
-                $handle = $this->_page->getCustomPageLayout();
-            } else {
-                $handle = $this->_page->getPageLayout();
-            }
-            $resultPage->getConfig()->setPageLayout($handle);
-        }
+        $resultPage = $this->_setLayoutType($inRange);
         $resultPage->initLayout();
         $resultPage->addHandle('cms_page_view');
         $resultPage->addPageLayoutHandles(['id' => $this->_page->getIdentifier()]);
@@ -263,18 +253,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
                 $this->_design->setDesignTheme($this->_page->getCustomTheme());
             }
         }
-        $resultPage = $this->_view->getPage();
-        if ($this->_page->getPageLayout()) {
-            if ($this->_page->getCustomPageLayout()
-                && $this->_page->getCustomPageLayout() != 'empty'
-                && $inRange
-            ) {
-                $handle = $this->_page->getCustomPageLayout();
-            } else {
-                $handle = $this->_page->getPageLayout();
-            }
-            $resultPage->getConfig()->setPageLayout($handle);
-        }
+        $resultPage = $this->_setLayoutType($inRange);
         $resultPage->initLayout();
         $resultPage->addHandle('cms_page_view');
         $resultPage->addPageLayoutHandles(['id' => $this->_page->getIdentifier()]);
@@ -348,5 +327,30 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $this->_urlBuilder->getUrl(null, ['_direct' => $page->getIdentifier()]);
+    }
+
+    /**
+     * Set layout type
+     *
+     * @param bool $inRange
+     * @return \Magento\Framework\View\Result\Page
+     */
+    protected function _setLayoutType($inRange)
+    {
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        if ($this->_page->getPageLayout()) {
+            if ($this->_page->getCustomPageLayout()
+                && $this->_page->getCustomPageLayout() != 'empty'
+                && $inRange
+            ) {
+                $handle = $this->_page->getCustomPageLayout();
+            } else {
+                $handle = $this->_page->getPageLayout();
+            }
+            $resultPage->getConfig()->setPageLayout($handle);
+            return $resultPage;
+        }
+        return $resultPage;
     }
 }
