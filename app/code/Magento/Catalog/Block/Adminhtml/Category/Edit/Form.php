@@ -237,7 +237,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * @return \Magento\Framework\Phrase
+     * @return \Magento\Framework\Phrase|string
      */
     public function getHeader()
     {

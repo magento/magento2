@@ -64,7 +64,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return text value for cmpi eci flag field
      *
      * @param string $value
-     * @return \Magento\Framework\Phrase
+     * @return \Magento\Framework\Phrase|string
      */
     private function _getCmpiEciValue($value)
     {

@@ -210,7 +210,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Get 'clear price' link text
      *
-     * @return \Magento\Framework\Phrase
+     * @return \Magento\Framework\Phrase|bool
      */
     public function getClearLinkText()
     {
