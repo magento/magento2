@@ -234,6 +234,9 @@ class Category extends AbstractResource
         }
 
         if ($object->isObjectNew()) {
+            if (is_null($object->getPosition())) {
+                $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
+            }
             $path = explode('/', $object->getPath());
             $level = count($path)  - ($object->getId() ? 1 : 0);
             $toUpdateChild = array_diff($path, [$object->getId()]);

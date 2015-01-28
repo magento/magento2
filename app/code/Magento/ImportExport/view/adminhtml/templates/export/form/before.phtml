@@ -54,6 +54,7 @@ require(['prototype'], function(){
                             $('export_filter_grid_container').update(responseText);
                             this.modifyFilterGrid();
                             $('export_filter_container').show();
+                            $('messages').update();
                         }.bind(this)
                     });
                 } else {
