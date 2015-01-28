@@ -130,11 +130,27 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
         $customAttributeCode = 'custom_attribute_code_1';
         $customAttributeValue = 'custom_attribute_value_1';
 
+        $attributeMetaDataMock = $this->getMockBuilder('\Magento\Customer\Api\Data\AttributeMetadataInterface')
+            ->getMock();
+        $attributeMetaDataMock->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($customAttributeCode);
+        $metadataServiceMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\AddressMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $metadataServiceMock->expects($this->once())
+            ->method('getCustomAttributesMetadata')
+            ->with('Magento\Customer\Model\Data\Address')
+            ->willReturn(
+                [$attributeMetaDataMock]
+            );
+
         /** @var \Magento\Customer\Model\Data\Address $addressDataObject */
         $addressDataObject = $this->objectManager->getObject(
             'Magento\Customer\Model\Data\Address',
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
+                'metadataService' => $metadataServiceMock,
                 'attributeValueFactory' => $this->attributeValueFactoryMock,
             ]
         );
@@ -143,6 +159,30 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
             'id' => $id,
             $customAttributeCode => $customAttributeValue,
         ];
+
+        $customAttribute = $this->objectManager->getObject('Magento\Framework\Api\AttributeValue');
+        $this->attributeValueFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($customAttribute);
+        $this->dataObjectHelper->populateWithArray($addressDataObject, $data);
+
+        $this->assertEquals($id, $addressDataObject->getId());
+        $this->assertEquals(
+            $customAttributeValue,
+            $addressDataObject->getCustomAttribute($customAttributeCode)->getValue()
+        );
+        $this->assertEquals(
+            $customAttributeCode,
+            $addressDataObject->getCustomAttribute($customAttributeCode)->getAttributeCode()
+        );
+    }
+
+    public function testPopulateWithArrayWithCustomAttributes()
+    {
+        $id = 5;
+
+        $customAttributeCode = 'custom_attribute_code_1';
+        $customAttributeValue = 'custom_attribute_value_1';
 
         $attributeMetaDataMock = $this->getMockBuilder('\Magento\Customer\Api\Data\AttributeMetadataInterface')
             ->getMock();
@@ -159,38 +199,12 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
                 [$attributeMetaDataMock]
             );
 
-        $this->objectFactoryMock->expects($this->once())
-            ->method('get')
-            ->with('\Magento\Customer\Api\AddressMetadataInterface')
-            ->willReturn($metadataServiceMock);
-
-        $customAttribute = $this->objectManager->getObject('Magento\Framework\Api\AttributeValue');
-        $this->attributeValueFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($customAttribute);
-        $this->dataObjectHelper->populateWithArray($addressDataObject, $data);
-
-        $this->assertEquals($id, $addressDataObject->getId());
-        $this->assertEquals(
-            $customAttributeValue,
-            $addressDataObject->getCustomAttribute($customAttributeCode)->getValue());
-        $this->assertEquals(
-            $customAttributeCode,
-            $addressDataObject->getCustomAttribute($customAttributeCode)->getAttributeCode());
-    }
-
-    public function testPopulateWithArrayWithCustomAttributes()
-    {
-        $id = 5;
-
-        $customAttributeCode = 'custom_attribute_code_1';
-        $customAttributeValue = 'custom_attribute_value_1';
-
         /** @var \Magento\Customer\Model\Data\Address $addressDataObject */
         $addressDataObject = $this->objectManager->getObject(
             'Magento\Customer\Model\Data\Address',
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
+                'metadataService' => $metadataServiceMock,
                 'attributeValueFactory' => $this->attributeValueFactoryMock,
             ]
         );
@@ -205,26 +219,6 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $attributeMetaDataMock = $this->getMockBuilder('\Magento\Customer\Api\Data\AttributeMetadataInterface')
-            ->getMock();
-        $attributeMetaDataMock->expects($this->once())
-            ->method('getAttributeCode')
-            ->willReturn($customAttributeCode);
-        $metadataServiceMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\AddressMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $metadataServiceMock->expects($this->once())
-            ->method('getCustomAttributesMetadata')
-            ->with('Magento\Customer\Model\Data\Address')
-            ->willReturn(
-                [$attributeMetaDataMock]
-            );
-
-        $this->objectFactoryMock->expects($this->once())
-            ->method('get')
-            ->with('\Magento\Customer\Api\AddressMetadataInterface')
-            ->willReturn($metadataServiceMock);
-
         $customAttribute = $this->objectManager->getObject('Magento\Framework\Api\AttributeValue');
         $this->attributeValueFactoryMock->expects($this->once())
             ->method('create')
@@ -234,9 +228,11 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($id, $addressDataObject->getId());
         $this->assertEquals(
             $customAttributeValue,
-            $addressDataObject->getCustomAttribute($customAttributeCode)->getValue());
+            $addressDataObject->getCustomAttribute($customAttributeCode)->getValue()
+        );
         $this->assertEquals(
             $customAttributeCode,
-            $addressDataObject->getCustomAttribute($customAttributeCode)->getAttributeCode());
+            $addressDataObject->getCustomAttribute($customAttributeCode)->getAttributeCode()
+        );
     }
 }

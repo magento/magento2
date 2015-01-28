@@ -7,10 +7,27 @@
 namespace Magento\Customer\Model\Data;
 
 use Magento\Customer\Api\Data\CustomerInterface;
+use \Magento\Framework\Api\DataObjectHelper;
+use \Magento\Framework\Api\AttributeValueFactory;
 
 class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\CustomerInterface
 {
+    /**
+     * @param DataObjectHelper $dataObjectHelper
+     * @param \Magento\Customer\Api\CustomerMetadataInterface $metadataService
+     * @param AttributeValueFactory $attributeValueFactory
+     * @param array $data
+     */
+    public function __construct(
+        DataObjectHelper $dataObjectHelper,
+        \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
+        AttributeValueFactory $attributeValueFactory,
+        $data = []
+    ) {
+        parent::__construct($dataObjectHelper, $metadataService, $attributeValueFactory, $data);
+    }
+
     /**
      * @return string|null
      */
@@ -406,15 +423,5 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     public function setAddresses(array $addresses)
     {
         return $this->setData(self::KEY_ADDRESSES, $addresses);
-    }
-
-    /**
-     * Return associated metadata service interface
-     *
-     * @return string|null
-     */
-    public function getMetadataServiceInterface()
-    {
-        return '\Magento\Customer\Api\CustomerMetadataInterface';
     }
 }

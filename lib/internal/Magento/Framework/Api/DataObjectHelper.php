@@ -60,19 +60,17 @@ class DataObjectHelper
      * Template method used to configure the attribute codes for the custom attributes
      *
      * @param ExtensibleDataInterface $dataObject
+     * @param MetadataServiceInterface metadataService
      * @return string[]
      */
-    public function getCustomAttributesCodes(ExtensibleDataInterface $dataObject)
-    {
-        $metadataServiceInterface = $dataObject->getMetadataServiceInterface();
-        if (is_null($metadataServiceInterface)) {
-            return [];
+    public function getCustomAttributesCodes(
+        ExtensibleDataInterface $dataObject,
+        MetadataServiceInterface $metadataService
+    ) {
+        $metadataServiceClass = get_class($metadataService);
+        if (isset($this->customAttributesCodes[$metadataServiceClass])) {
+            return $this->customAttributesCodes[$metadataServiceClass];
         }
-        if (isset($this->customAttributesCodes[$metadataServiceInterface])) {
-            return $this->customAttributesCodes[$metadataServiceInterface];
-        }
-        /** @var MetadataServiceInterface $metadataService */
-        $metadataService = $this->objectFactory->get($metadataServiceInterface);
         $attributeCodes = [];
         /** @var \Magento\Framework\Api\MetadataObjectInterface[] $customAttributesMetadata */
         $customAttributesMetadata = $metadataService
@@ -82,7 +80,7 @@ class DataObjectHelper
                 $attributeCodes[] = $attribute->getAttributeCode();
             }
         }
-        $this->customAttributesCodes[$metadataServiceInterface] = $attributeCodes;
+        $this->customAttributesCodes[$metadataServiceClass] = $attributeCodes;
         return $attributeCodes;
     }
 
@@ -121,7 +119,7 @@ class DataObjectHelper
                     $getterMethodName = 'get' . $camelCaseKey;
                     $this->setComplexValue($dataObject, $getterMethodName, $methodName, $value);
                 }
-            } elseif (in_array($key, $this->getCustomAttributesCodes($dataObject))) {
+            } else {
                 $dataObject->setCustomAttribute($key, $value);
             }
         }

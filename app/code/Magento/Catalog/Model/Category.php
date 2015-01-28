@@ -1195,14 +1195,4 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         }
         return ConvertArray::toFlatArray($dataArray);
     }
-
-    /**
-     * Return associated metadata service interface
-     *
-     * @return string|null
-     */
-    public function getMetadataServiceInterface()
-    {
-        return '\Magento\Catalog\Model\Category\AttributeRepository';
-    }
 }
