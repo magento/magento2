@@ -72,7 +72,6 @@ class ReAuthorizeTokensIntegrationEntityTest extends Injectable
      */
     public function test(Integration $integration)
     {
-        $this->markTestIncomplete('MAGETWO-26850');
         // Precondition
         $integration->persist();
         $filter = ['name' => $integration->getName()];
