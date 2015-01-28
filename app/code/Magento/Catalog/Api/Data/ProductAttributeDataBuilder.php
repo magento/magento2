@@ -119,16 +119,6 @@ class ProductAttributeDataBuilder extends \Magento\Framework\Api\Builder
     }
 
     /**
-     * @param string|null $isConfigurable
-     * @return $this
-     */
-    public function setIsConfigurable($isConfigurable)
-    {
-        $this->_set('is_configurable', $isConfigurable);
-        return $this;
-    }
-
-    /**
      * @param string|null $isSearchable
      * @return $this
      */
