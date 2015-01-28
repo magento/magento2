@@ -29,8 +29,8 @@ class Save extends \Magento\Backend\App\Action
     public function __construct(
         Action\Context $context,
         PostDataProcessor $dataProcessor,
-        RedirectFactory $resultRedirectFactory)
-    {
+        RedirectFactory $resultRedirectFactory
+    ) {
         $this->dataProcessor = $dataProcessor;
         $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);

@@ -8,6 +8,9 @@ namespace Magento\Cms\Helper;
 use Magento\Framework\App\Action\Action;
 
 /**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+/**
  * CMS Page Helper
  */
 class Page extends \Magento\Framework\App\Helper\AbstractHelper

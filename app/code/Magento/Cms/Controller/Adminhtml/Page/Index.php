@@ -51,7 +51,7 @@ class Index extends \Magento\Backend\App\Action
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Cms::cms_page');
         $resultPage->addBreadcrumb(__('CMS'), __('CMS'));
-        $resultPage->addBreadcrumb(__('Manage Pages'),__('Manage Pages'));
+        $resultPage->addBreadcrumb(__('Manage Pages'), __('Manage Pages'));
         $resultPage->getConfig()->getTitle()->prepend(__('Pages'));
 
         return $resultPage;

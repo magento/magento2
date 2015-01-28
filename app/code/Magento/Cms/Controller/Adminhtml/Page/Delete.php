@@ -21,8 +21,8 @@ class Delete extends \Magento\Backend\App\Action
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory)
-    {
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
         $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
