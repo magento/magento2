@@ -22,7 +22,7 @@ class Index extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
-     * @param CustomerCart $cart
+     * @param \Magento\Checkout\Model\Cart $cart
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */

@@ -17,6 +17,6 @@ class ShippingMethod extends \Magento\Checkout\Controller\Onepage
             return $this->_ajaxRedirectResponse();
         }
 
-        $this->resultLayoutFactory->create();
+        return $this->resultLayoutFactory->create();
     }
 }

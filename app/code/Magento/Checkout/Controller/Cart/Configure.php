@@ -6,45 +6,8 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
-class Configure extends \Magento\Checkout\Controller\Cart
+class Configure extends \Magento\Checkout\Controller\Cart\Index
 {
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
-     * @param \Magento\Checkout\Model\Cart $cart
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     */
-    public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
-        \Magento\Checkout\Model\Cart $cart,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
-    ) {
-        parent::__construct(
-            $context,
-            $scopeConfig,
-            $checkoutSession,
-            $storeManager,
-            $formKeyValidator,
-            $cart,
-            $resultRedirectFactory
-        );
-        $this->resultPageFactory = $resultPageFactory;
-    }
-
     /**
      * Action to reconfigure cart item
      *

@@ -1,12 +1,9 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Cart;
-
-use Magento\Checkout\Model\Cart as CustomerCart;
 
 class CouponPost extends \Magento\Checkout\Controller\Cart
 {
@@ -23,7 +20,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
-     * @param CustomerCart $cart
+     * @param \Magento\Checkout\Model\Cart $cart
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      */
@@ -33,7 +30,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
-        CustomerCart $cart,
+        \Magento\Checkout\Model\Cart $cart,
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {

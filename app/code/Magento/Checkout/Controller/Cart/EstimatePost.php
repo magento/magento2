@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,45 +7,8 @@ namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Checkout\Model\Cart as CustomerCart;
 
-class EstimatePost extends \Magento\Checkout\Controller\Cart
+class EstimatePost extends \Magento\Checkout\Controller\Cart\CouponPost
 {
-    /**
-     * @var \Magento\Quote\Model\QuoteRepository
-     */
-    protected $quoteRepository;
-
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
-     * @param CustomerCart $cart
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
-     */
-    public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
-        CustomerCart $cart,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository
-    ) {
-        $this->quoteRepository = $quoteRepository;
-        parent::__construct(
-            $context,
-            $scopeConfig,
-            $checkoutSession,
-            $storeManager,
-            $formKeyValidator,
-            $cart,
-            $resultRedirectFactory
-        );
-    }
-
     /**
      * Initialize shipping information
      *

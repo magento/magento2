@@ -80,14 +80,16 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->configureController = $objectManagerHelper->getObject('Magento\Checkout\Controller\Cart\Configure', [
-            'request' => $this->requestMock,
-            'response' => $this->responseMock,
-            'objectManager' => $this->objectManagerMock,
-            'messageManager' => $this->messageManagerMock,
-            'cart' => $this->cartMock,
-            'resultPageFactory' => $this->resultPageFactoryMock,
-            'resultRedirectFactory' => $resultRedirectFactoryMock
+        $this->configureController = $objectManagerHelper->getObject(
+            'Magento\Checkout\Controller\Cart\Configure',
+            [
+                'request' => $this->requestMock,
+                'response' => $this->responseMock,
+                'objectManager' => $this->objectManagerMock,
+                'messageManager' => $this->messageManagerMock,
+                'cart' => $this->cartMock,
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'resultRedirectFactory' => $resultRedirectFactoryMock
             ]
         );
     }
