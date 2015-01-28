@@ -3,9 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Model\Config\Backend\Cookie;
-
-use Magento\Framework\App\Config\Value;
+namespace Magento\Cookie\Model\Config\Backend;
 
 /**
  * Backend model for domain config value

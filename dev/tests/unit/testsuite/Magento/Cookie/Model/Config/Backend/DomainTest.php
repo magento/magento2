@@ -3,20 +3,20 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Model\Config\Backend\Cookie;
+namespace Magento\Cookie\Model\Config\Backend;
 
 use Magento\Framework\Model\Exception;
 use Magento\Framework\Session\Config\Validator\CookieDomainValidator;
 
 /**
- * Test \Magento\Backend\Model\Config\Backend\Cookie\Domain
+ * Test \Magento\Cookie\Model\Config\Backend\Domain
  */
 class DomainTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Model\Resource\AbstractResource | \PHPUnit_Framework_MockObject_MockObject */
     protected $resourceMock;
 
-    /** @var \Magento\Backend\Model\Config\Backend\Cookie\Domain */
+    /** @var \Magento\Cookie\Model\Config\Backend\Domain */
     protected $domain;
 
     /**
@@ -60,7 +60,7 @@ class DomainTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->domain = $helper->getObject(
-            'Magento\Backend\Model\Config\Backend\Cookie\Domain',
+            'Magento\Cookie\Model\Config\Backend\Domain',
             [
                 'context' => $contextMock,
                 'resource' => $this->resourceMock,
@@ -70,7 +70,7 @@ class DomainTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Model\Config\Backend\Cookie\Domain::beforeSave
+     * @covers \Magento\Cookie\Model\Config\Backend\Domain::beforeSave
      * @dataProvider beforeSaveDataProvider
      *
      * @param string $value

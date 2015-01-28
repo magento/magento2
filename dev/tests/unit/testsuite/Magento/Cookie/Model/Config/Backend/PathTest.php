@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit test for Magento\Backend\Model\Config\Backend\Cookie\Lifetime
+ * Unit test for Magento\Cookie\Model\Config\Backend\Path
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,34 +8,33 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Backend\Model\Config\Backend\Cookie;
+namespace Magento\Cookie\Model\Config\Backend;
 
-use Magento\Framework\Session\Config\Validator\CookieLifetimeValidator;
+use Magento\Framework\Session\Config\Validator\CookiePathValidator;
 use Magento\TestFramework\Helper\ObjectManager;
 
-class LifetimeTest extends \PHPUnit_Framework_TestCase
+class PathTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | CookieLifetimeValidator */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | CookiePathValidator */
     private $validatorMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\Resource */
     private $resourceMock;
 
-    /** @var \Magento\Backend\Model\Config\Backend\Cookie\Lifetime */
+    /** @var \Magento\Cookie\Model\Config\Backend\Path */
     private $model;
 
     public function setUp()
     {
-        $this->validatorMock = $this->getMockBuilder(
-            'Magento\Framework\Session\Config\Validator\CookieLifetimeValidator'
-        )->disableOriginalConstructor()
+        $this->validatorMock = $this->getMockBuilder('Magento\Framework\Session\Config\Validator\CookiePathValidator')
+            ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock = $this->getMockBuilder('Magento\Framework\Module\Resource')
-            ->disableOriginalConstructor('delete')
+            ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Backend\Model\Config\Backend\Cookie\Lifetime',
+        $this->model = $objectManager->getObject('Magento\Cookie\Model\Config\Backend\Path',
             [
                 'configValidator' => $this->validatorMock,
                 'resource' => $this->resourceMock
@@ -47,22 +46,18 @@ class LifetimeTest extends \PHPUnit_Framework_TestCase
      * Method is not publicly accessible, so it must be called through parent
      *
      * @expectedException \Magento\Framework\Model\Exception
-     * @expectedExceptionMessage Invalid cookie lifetime: must be numeric
+     * @expectedExceptionMessage Invalid cookie path
      */
     public function testBeforeSaveException()
     {
-        $invalidCookieLifetime = 'invalid lifetime';
-        $messages = ['must be numeric'];
-        $this->validatorMock->expects($this->once())
-            ->method('getMessages')
-            ->willReturn($messages);
+        $invalidCookiePath = 'invalid path';
         $this->validatorMock->expects($this->once())
             ->method('isValid')
-            ->with($invalidCookieLifetime)
+            ->with($invalidCookiePath)
             ->willReturn(false);
 
-        // Test
-        $this->model->setValue($invalidCookieLifetime)->beforeSave();
+        // Must throw exception
+        $this->model->setValue($invalidCookiePath)->beforeSave();
     }
 
     /**
@@ -73,29 +68,31 @@ class LifetimeTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSaveNoException()
     {
-        $validCookieLifetime = 1;
+        $validCookiePath = 1;
         $this->validatorMock->expects($this->once())
             ->method('isValid')
-            ->with($validCookieLifetime)
+            ->with($validCookiePath)
             ->willReturn(true);
+        $this->resourceMock->expects($this->any())->method('addCommitCallback')->willReturnSelf();
 
-        // Test
-        $this->model->setValue($validCookieLifetime)->beforeSave();
+        // Must not throw exception
+        $this->model->setValue($validCookiePath)->beforeSave();
     }
 
     /**
      * Method is not publicly accessible, so it must be called through parent
      *
-     * No assertions exist because the purpose of the test is to make sure that no
-     * exception gets thrown
+     * Empty string should not be sent to validator
      */
-    public function testBeforeEmptyString()
+    public function testBeforeSaveEmptyString()
     {
-        $validCookieLifetime = '';
+        $validCookiePath = '';
         $this->validatorMock->expects($this->never())
             ->method('isValid');
 
-        // Test
-        $this->model->setValue($validCookieLifetime)->beforeSave();
+        $this->resourceMock->expects($this->any())->method('addCommitCallback')->willReturnSelf();
+
+        // Must not throw exception
+        $this->model->setValue($validCookiePath)->beforeSave();
     }
 }

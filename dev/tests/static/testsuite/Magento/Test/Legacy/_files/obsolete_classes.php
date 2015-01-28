@@ -363,7 +363,7 @@ return [
     ['Mage_Adminhtml_Model_System_Config_Backend_Baseurl', 'Magento\Backend\Model\Config\Backend\Baseurl'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Cache', 'Magento\Backend\Model\Config\Backend\Cache'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Category', 'Magento\Catalog\Model\Config\Backend\Category'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Cookie', 'Magento\Backend\Model\Config\Backend\Cookie'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Cookie', 'Magento\Cookie\Model\Config\Backend\Cookie'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Datashare', 'Magento\Backend\Model\Config\Backend\Datashare'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Encrypted', 'Magento\Backend\Model\Config\Backend\Encrypted'],
     ['Mage_Adminhtml_Model_System_Config_Backend_File', 'Magento\Backend\Model\Config\Backend\File'],
@@ -2855,4 +2855,8 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
     ['Magento\Core\Model\Validator\Factory', 'Magento\Framework\Validator\Factory'],
+    ['Magento\Backend\Model\Config\Backend\Cookie', 'Magento\Cookie\Model\Config\Cookie'],
+    ['Magento\Backend\Model\Config\Backend\Domain', 'Magento\Cookie\Model\Config\Domain'],
+    ['Magento\Backend\Model\Config\Backend\Lifetime', 'Magento\Cookie\Model\Config\Lifetime'],
+    ['Magento\Backend\Model\Config\Backend\Path', 'Magento\Cookie\Model\Config\Path'],
 ];

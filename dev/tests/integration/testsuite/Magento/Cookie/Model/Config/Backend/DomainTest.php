@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Model\Config\Backend\Cookie;
+namespace Magento\Cookie\Model\Config\Backend\Cookie;
 
 use Magento\Framework\Model\Exception;
 
 /**
- * Test \Magento\Backend\Model\Config\Backend\Cookie\Domain
+ * Test \Magento\Cookie\Model\Config\Backend\Domain
  *
  * @magentoAppArea adminhtml
  */
@@ -22,9 +22,9 @@ class DomainTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave($value, $exceptionMessage = null)
     {
-        /** @var $domain \Magento\Backend\Model\Config\Backend\Cookie\Domain */
+        /** @var $domain \Magento\Cookie\Model\Config\Backend\Domain */
         $domain = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Backend\Model\Config\Backend\Cookie\Domain'
+            'Magento\Cookie\Model\Config\Backend\Domain'
         );
         $domain->setValue($value);
         try {

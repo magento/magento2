@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Cookie\Model\Config\Backend;
+
 /**
  * Config Cookie Restriction mode backend
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Model\Config\Backend;
-
 class Cookie extends \Magento\Framework\App\Config\Value
 {
     /**
