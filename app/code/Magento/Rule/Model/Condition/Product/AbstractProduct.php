@@ -426,7 +426,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         if (is_object($this->getAttributeObject())) {
             switch ($this->getAttributeObject()->getFrontendInput()) {
                 case 'date':
-                    $element->setImage($this->_assetRepo->getUrl('images/grid-cal.gif'));
+                    $element->setImage($this->_assetRepo->getUrl('images/grid-cal.png'));
                     break;
                 default:
                     break;
