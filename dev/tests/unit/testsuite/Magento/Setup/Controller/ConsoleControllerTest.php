@@ -360,7 +360,9 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
             ->with($expectedIsEnabled, $expectedModules);
         $this->consoleLogger->expects($this->once())
             ->method('log')
-            ->with($this->stringContains("To make sure that the enabled modules are properly registered, run 'update' command."));
+            ->with($this->stringContains(
+                "To make sure that the enabled modules are properly registered, run 'update' command."
+            ));
         $this->controller->moduleAction();
     }
 

@@ -500,7 +500,8 @@ class ConsoleController extends AbstractActionController
             $updateAfterEnableMessage = '';
             if ($isEnable) {
                 $message = 'The following modules have been enabled:';
-                $updateAfterEnableMessage = "\nTo make sure that the enabled modules are properly registered, run 'update' command.";
+                $updateAfterEnableMessage = "\nTo make sure that the enabled modules are properly registered,"
+                                            . " run 'update' command.";
             } else {
                 $message = 'The following modules have been disabled:';
             }
