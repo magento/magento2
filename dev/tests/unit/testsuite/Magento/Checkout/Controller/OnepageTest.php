@@ -9,7 +9,7 @@ namespace Magento\Checkout\Controller;
  * Class OnepageTest
  * @package Magento\Checkout\Controller
  */
-class OnepageTest extends \PHPUnit_Framework_TestCase
+class OnepageTest extends \Magento\TestFramework\AbstractControllerTest
 {
     /**
      * @var Onepage
@@ -41,11 +41,6 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
      */
     protected $quote;
 
-    /**
-     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $eventManager;
-
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -53,7 +48,6 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
         $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->checkoutSession = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
         $this->checkoutSession->expects($this->once())
@@ -70,24 +64,17 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Customer\Model\Session')
             ->willReturn($this->customerSession);
 
-        $context = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
-        $context->expects($this->once())
-            ->method('getObjectManager')
-            ->willReturn($objectManagerMock);
-        $context->expects($this->once())
-            ->method('getRequest')
-            ->willReturn($this->request);
-        $context->expects($this->once())
-            ->method('getResponse')
-            ->willReturn($this->response);
-        $context->expects($this->once())
-            ->method('getEventManager')
-            ->willReturn($this->eventManager);
-
+        $this->setUpContext(
+            [
+                'objectManager' => $objectManagerMock,
+                'response' => $this->response,
+                'request' => $this->request,
+            ]
+        );
         $this->controller = $objectManager->getObject(
             'Magento\Checkout\Controller\Onepage',
             [
-                'context' => $context
+                'context' => $this->contextMock,
             ]
         );
     }

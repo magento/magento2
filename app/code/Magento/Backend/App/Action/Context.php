@@ -68,6 +68,7 @@ class Context extends \Magento\Framework\App\Action\Context
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\View\DesignLoader $designLoader
      * @param bool $canUseBaseUrl
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -88,6 +89,7 @@ class Context extends \Magento\Framework\App\Action\Context
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\View\DesignLoader $designLoader,
         $canUseBaseUrl = false
     ) {
         parent::__construct(
@@ -99,7 +101,8 @@ class Context extends \Magento\Framework\App\Action\Context
             $redirect,
             $actionFlag,
             $view,
-            $messageManager
+            $messageManager,
+            $designLoader
         );
 
         $this->_session = $session;
