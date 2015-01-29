@@ -54,7 +54,7 @@ class Generator
      * @param \Magento\Webapi\Model\Soap\Config $apiConfig
      * @param Factory $wsdlFactory
      * @param \Magento\Webapi\Model\Cache\Type $cache
-     * @param \Framework\Magento\Reflection\TypeProcessor $typeProcessor
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -136,7 +136,7 @@ class Generator
                     $outputBinding = $bindingDataPrototype;
                     $outputMessageName = $this->_createOperationOutput($wsdl, $operationName, $methodData);
                 }
-                $faultBinding = array_merge($bindingDataPrototype, ['name' => Fault::NODE_DETAIL_WRAPPER]);
+                $faultBinding = ['name' => Fault::NODE_DETAIL_WRAPPER];
 
                 $wsdl->addPortOperation(
                     $portType,
