@@ -77,7 +77,7 @@ class Onepage extends Action
     protected $resultRawFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var \Magento\Framework\Controller\Result\JSONFactory
      */
     protected $resultJsonFactory;
 
@@ -96,7 +96,7 @@ class Onepage extends Action
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -115,7 +115,7 @@ class Onepage extends Action
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_translateInline = $translateInline;
