@@ -227,7 +227,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->with($price, true)
             ->will($this->returnValue($formattedPrice));
 
-        $itemMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item')
+        $itemMock = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getStore', '__wakeup'])
             ->getMock();
@@ -313,7 +313,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 'default';
 
-        $itemMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item')
+        $itemMock = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getStoreId', '__wakeup'])
             ->getMock();
@@ -330,8 +330,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         $price = 10;
 
-        /** @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $quoteItemMock */
-        $quoteItemMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item')
+        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $quoteItemMock */
+        $quoteItemMock = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getCalculationPrice', '__wakeup'])
             ->getMock();

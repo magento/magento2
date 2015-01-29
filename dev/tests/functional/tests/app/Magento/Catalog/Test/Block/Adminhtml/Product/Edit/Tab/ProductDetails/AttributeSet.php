@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails;
 
-use Mtf\Client\Driver\Selenium\Element\SuggestElement;
+use Magento\Mtf\Client\Element\SuggestElement;
 
 /**
  * Class AttributeSet

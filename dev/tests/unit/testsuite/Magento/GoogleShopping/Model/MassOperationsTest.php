@@ -23,7 +23,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
     protected $itemFactory;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $productFactory;
+    protected $productRepository;
 
     /** @var \Magento\Framework\Notification\NotifierInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $notificationInterface;
@@ -40,19 +40,29 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\GoogleShopping\Helper\Category|\PHPUnit_Framework_MockObject_MockObject */
     protected $googleShoppingCategoryHelper;
 
+    /** @var \Magento\GoogleShopping\Model\Flag|\PHPUnit_Framework_MockObject_MockObject */
+    protected $flag;
+
     protected function setUp()
     {
         $this->collectionFactory = $this->getMockBuilder(
             'Magento\GoogleShopping\Model\Resource\Item\CollectionFactory'
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
 
-        $this->itemFactory = $this->getMock('Magento\GoogleShopping\Model\ItemFactory', [], [], '', false);
-        $this->productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
+        $this->itemFactory = $this->getMock('Magento\GoogleShopping\Model\ItemFactory', ['create'], [], '', false);
+        $this->productRepository = $this->getMock(
+            '\Magento\Catalog\Api\ProductRepositoryInterface',
+            ['save', 'get', 'delete', 'getById', 'deleteById', 'getList'],
+            [],
+            '',
+            false
+        );
         $this->notificationInterface = $this->getMock('Magento\Framework\Notification\NotifierInterface');
         $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->googleShoppingHelper = $this->getMock('Magento\GoogleShopping\Helper\Data', [], [], '', false);
         $this->googleShoppingCategoryHelper = $this->getMock('Magento\GoogleShopping\Helper\Category');
+        $this->flag = $this->getMock('Magento\GoogleShopping\Model\Flag', [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->massOperations = $this->objectManagerHelper->getObject(
@@ -60,7 +70,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
             [
                 'collectionFactory' => $this->collectionFactory,
                 'itemFactory' => $this->itemFactory,
-                'productFactory' => $this->productFactory,
+                'productRepository' => $this->productRepository,
                 'notifier' => $this->notificationInterface,
                 'storeManager' => $this->storeManagerInterface,
                 'logger' => $this->logger,
@@ -68,6 +78,56 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
                 'gleShoppingCategory' => $this->googleShoppingCategoryHelper
             ]
         );
+    }
+
+    public function testAddProducts()
+    {
+        $products = ['1','2'];
+        $product = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productRepository->expects($this->exactly(2))->method('getById')->will($this->returnValue($product));
+        $googleShoppingItem = $this->getMock('\Magento\GoogleShopping\Model\Item', [], [], '', false);
+        $googleShoppingItem->expects($this->exactly(2))->method('insertItem')->will($this->returnSelf());
+        $this->itemFactory->expects($this->exactly(2))->method('create')->will($this->returnValue($googleShoppingItem));
+        $this->flag->expects($this->any())->method('isExpired')->will($this->returnValue(false));
+        $this->massOperations->setFlag($this->flag);
+        $this->assertEquals($this->massOperations->addProducts($products, 1), $this->massOperations);
+    }
+
+    public function testAddProductsExpiredFlag()
+    {
+        $products = ['1','2'];
+        $this->flag->expects($this->exactly(2))->method('isExpired')->will($this->returnValue(true));
+        $this->massOperations->setFlag($this->flag);
+        $this->massOperations->addProducts($products, 1);
+    }
+
+    /**
+     * @dataProvider dataAddProductsExceptions
+     * @param string $exception
+     */
+    public function testAddProductsExceptions($exception)
+    {
+        $products = ['1'];
+        $this->flag->expects($this->any())->method('isExpired')->will($this->returnValue(false));
+        $product = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productRepository->expects($this->once())->method('getById')->will($this->returnValue($product));
+        $this->itemFactory->expects($this->once())->method('create')->will($this->throwException(new $exception));
+        $this->massOperations->setFlag($this->flag);
+        $this->massOperations->addProducts($products, 1);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataAddProductsExceptions()
+    {
+        return [
+            ['\Magento\Framework\Exception\NoSuchEntityException'],
+            ['\Zend_Gdata_App_Exception'],
+            ['\Zend_Db_Statement_Exception'],
+            ['\Magento\Framework\Model\Exception'],
+            ['\Exception']
+        ];
     }
 
     public function testSynchronizeItems()

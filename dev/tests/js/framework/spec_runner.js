@@ -181,15 +181,12 @@ module.exports.build = function (type, dir, port) {
     'use strict';
 
     return {
-        src: '<%= config.path.spec %>/env.js',
+        src: '<%= path.spec %>/env.js',
         options: {
             host: 'http://localhost:' + port,
-            specs: '<%= config.path.spec %>/' + type + '/**/' + dir + '/**/*Spec.js',
+            specs: '<%= path.spec %>/' + type + '/**/' + dir + '/**/*Spec.js',
             templateOptions: {
-                requireConfigFile: [
-                    'lib/web/app-config.js',
-                    '<%= config.path.spec %>/' + type + '/config.js/'
-                ]
+                requireConfigFile: '<%= path.spec %>/' + type + '/config.js'
             }
         }
     };

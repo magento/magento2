@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $upsModel \Magento\Ups\Helper\Config */
 /** @var $this \Magento\Ups\Block\Backend\System\CarrierConfig */
 $upsCarrierConfig = $this->getCarrierConfig();
@@ -33,7 +35,7 @@ if (!$storeCode && $websiteCode) {
     $storedUpsType        = $this->getConfig('carriers/ups/type');
 }
 ?>
-<script type="text/javascript">
+<script>
 require(["prototype"], function(){
 
 //<![CDATA[

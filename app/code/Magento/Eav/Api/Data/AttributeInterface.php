@@ -74,6 +74,7 @@ interface AttributeInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Whether attribute is required.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsRequired();
 

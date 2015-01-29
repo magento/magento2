@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Resource\Eav;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
@@ -36,6 +39,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method int setIsUsedForPromoRules(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     \Magento\Catalog\Api\Data\ProductAttributeInterface
@@ -113,6 +117,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -175,6 +180,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      *
      * @return \Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave()
     {
@@ -412,6 +418,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * Check is an attribute used in EAV index
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isIndexable()
     {
@@ -442,6 +449,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * Is original attribute config indexable
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _isOriginalIndexable()
     {
@@ -534,14 +542,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     public function getPosition()
     {
         return $this->getData(self::POSITION);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIsConfigurable()
-    {
-        return $this->getData(self::IS_CONFIGURABLE);
     }
 
     /**

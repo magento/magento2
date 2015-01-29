@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\Client\Element\Locator;
-use Mtf\Factory\Factory;
-use Mtf\Fixture\DataFixture;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Fixture\DataFixture;
 
 /**
  * Class Attribute
@@ -122,12 +122,6 @@ class ProductAttribute extends DataFixture
                     'value' => 'Dropdown',
                     'input' => 'select',
                     'input_value' => 'select',
-                    'group' => self::GROUP_PRODUCT_ATTRIBUTE_MAIN,
-                ],
-                'is_configurable' => [
-                    'value' => 'Yes',
-                    'input' => 'select',
-                    'input_value' => 1,
                     'group' => self::GROUP_PRODUCT_ATTRIBUTE_MAIN,
                 ],
                 'is_searchable' => [

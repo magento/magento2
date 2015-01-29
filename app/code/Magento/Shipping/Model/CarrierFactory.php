@@ -5,7 +5,7 @@
  */
 namespace Magento\Shipping\Model;
 
-use Magento\Sales\Model\Quote\Address\CarrierFactoryInterface;
+use Magento\Quote\Model\Quote\Address\CarrierFactoryInterface;
 
 class CarrierFactory implements CarrierFactoryInterface
 {

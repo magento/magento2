@@ -7,8 +7,8 @@
 namespace Magento\Bundle\Test\TestCase;
 
 use Magento\Bundle\Test\Fixture\Bundle;
-use Mtf\Factory\Factory;
-use Mtf\TestCase\Functional;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\TestCase\Functional;
 
 /**
  * Class BundleFixedTest
@@ -16,6 +16,10 @@ use Mtf\TestCase\Functional;
  */
 class BundleFixedTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Login into backend area before test
      *

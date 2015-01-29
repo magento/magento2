@@ -6,9 +6,9 @@
 
 namespace Magento\Review\Test\Constraint;
 
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductReviewMassActionSuccessDeleteMessage
@@ -28,11 +28,11 @@ class AssertProductReviewMassActionSuccessDeleteMessage extends AbstractConstrai
     /**
      * Assert that success message is displayed after deletion via mass actions
      *
-     * @param ReviewInjectable|ReviewInjectable[] $review
+     * @param Review|Review[] $review
      * @param ReviewIndex $reviewIndex
      * @return void
      */
-    public function processAssert(ReviewInjectable $review, ReviewIndex $reviewIndex)
+    public function processAssert(Review $review, ReviewIndex $reviewIndex)
     {
         $reviews = is_array($review) ? $review : [$review];
         $deleteMessage = sprintf(self::SUCCESS_DELETE_MESSAGE, count($reviews));

@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing;
  * Adminhtml sales order create billing address block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 {
@@ -72,7 +73,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
     /**
      * Return billing address object
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return \Magento\Quote\Model\Quote\Address
      */
     public function getAddress()
     {

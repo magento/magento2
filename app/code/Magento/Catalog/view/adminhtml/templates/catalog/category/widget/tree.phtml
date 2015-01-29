@@ -3,14 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php $_divId = 'tree' . $this->getId() ?>
 <div id="<?php echo $_divId ?>" class="tree"></div>
 
-<script type="text/javascript">
-require(['prototype'], function(){
-//<![CDATA[
+<script>
+require(["prototype", "extjs/ext-tree-checkbox"], function(){
 
 var tree<?php echo $this->getId() ?>;
 
@@ -180,7 +182,6 @@ Ext.onReady(function()
     tree<?php echo $this->getId() ?>.loadTree({parameters:parameters, data:<?php echo $this->getTreeJson() ?>},true);
 
 });
-//]]>
 
 });
 </script>

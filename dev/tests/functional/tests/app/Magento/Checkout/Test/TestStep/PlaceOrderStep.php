@@ -9,7 +9,7 @@ namespace Magento\Checkout\Test\TestStep;
 use Magento\Checkout\Test\Constraint\AssertOrderTotalOnReviewPage;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class PlaceOrderStep

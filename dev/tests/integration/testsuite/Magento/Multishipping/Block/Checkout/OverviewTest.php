@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Multishipping\Block\Checkout;
 
 /**
@@ -47,14 +50,14 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRowItemHtml()
     {
-        /** @var $item \Magento\Sales\Model\Quote\Item */
-        $item = $this->_objectManager->create('Magento\Sales\Model\Quote\Item');
+        /** @var $item \Magento\Quote\Model\Quote\Item */
+        $item = $this->_objectManager->create('Magento\Quote\Model\Quote\Item');
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->_objectManager->create('Magento\Catalog\Model\Product');
         $product->load(1);
         $item->setProduct($product);
-        /** @var $quote \Magento\Sales\Model\Quote */
-        $quote = $this->_objectManager->create('Magento\Sales\Model\Quote');
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->_objectManager->create('Magento\Quote\Model\Quote');
         $item->setQuote($quote);
         // assure that default renderer was obtained
         $this->assertSelectCount('.product.name a', 1, $this->_block->getRowItemHtml($item));

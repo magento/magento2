@@ -7,6 +7,9 @@
  * @copyright   ...
  * @license     ...
  */
+
+// @codingStandardsIgnoreFile
+
 class Magento_Test_Php_Exemplar_CodeStyleTest_phpcs_input_coding_style_inline_doc_normal
 {
     /**

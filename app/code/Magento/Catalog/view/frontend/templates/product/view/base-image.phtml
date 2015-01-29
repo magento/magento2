@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Product media data template
  *
@@ -125,7 +127,7 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
     <script data-template="notice" type="text/x-jQuery-tmpl">
         <p class="notice" data-role="notice">${text}</p>
     </script>
-    <script type="text/javascript">
+    <script>
         require(["jquery", "mage/mage"], function($){
 
             $('[data-role=media-gallery]')

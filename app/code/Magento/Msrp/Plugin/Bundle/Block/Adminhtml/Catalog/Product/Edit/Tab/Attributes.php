@@ -21,8 +21,9 @@ class Attributes
         $mapEnabled = $subject->getForm()->getElement('msrp');
         if ($mapEnabled && $subject->getCanEditPrice() !== false) {
             $mapEnabled->setAfterElementHtml(
-                '<script type="text/javascript">' .
+                '<script>' .
                 "
+                require(['prototype'], function(){
                 function changePriceTypeMap() {
                     if ($('price_type').value == " . \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC . ") {
                         $('msrp_display_actual_price_type').setValue(" . Price::TYPE_USE_CONFIG . ");
@@ -34,9 +35,10 @@ class Attributes
                         $('msrp').enable();
                     }
                 }
-                document.observe('dom:loaded', function() {
-                    $('price_type').observe('change', changePriceTypeMap);
-                    changePriceTypeMap();
+                
+                $('price_type').observe('change', changePriceTypeMap);
+                changePriceTypeMap();
+
                 });
                 " .
                 '</script>'

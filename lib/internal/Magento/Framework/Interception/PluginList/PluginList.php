@@ -19,6 +19,9 @@ use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
 use Magento\Framework\ObjectManagerInterface;
 use Zend\Soap\Exception\InvalidArgumentException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PluginList extends Scoped implements InterceptionPluginList
 {
     /**
@@ -84,6 +87,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param ClassDefinitions $classDefinitions
      * @param array $scopePriorityScheme
      * @param string $cacheId
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ReaderInterface $reader,
@@ -113,6 +117,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @return array
      * @throws InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _inheritPlugins($type)
     {

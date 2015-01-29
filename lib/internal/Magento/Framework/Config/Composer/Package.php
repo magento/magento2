@@ -23,7 +23,7 @@ class Package
      *
      * @param \StdClass $json
      */
-    public function __construct(\StdClass $json)
+    public function __construct(\stdClass $json)
     {
         $this->json = $json;
     }
@@ -59,6 +59,7 @@ class Package
      * @param string $propertyPath
      * @param string $filter pattern to filter out the properties
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function get($propertyPath, $filter = null)
     {

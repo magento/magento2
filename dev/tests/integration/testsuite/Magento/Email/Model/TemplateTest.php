@@ -34,7 +34,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\Model\Context'),
                 $objectManager->get('Magento\Framework\View\DesignInterface'),
                 $objectManager->get('Magento\Framework\Registry'),
-                $objectManager->get('Magento\Core\Model\App\Emulation'),
+                $objectManager->get('Magento\Store\Model\App\Emulation'),
                 $objectManager->get('Magento\Store\Model\StoreManager'),
                 $objectManager->create('Magento\Framework\Filesystem'),
                 $objectManager->create('Magento\Framework\View\Asset\Repository'),
@@ -174,7 +174,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Area::AREA_FRONTEND
         )->load();
         $this->assertStringEndsWith(
-            'static/frontend/Magento/blank/en_US/Magento_Email/logo_email.gif',
+            'static/frontend/Magento/blank/en_US/Magento_Email/logo_email.png',
             $this->_model->getDefaultEmailLogo()
         );
     }

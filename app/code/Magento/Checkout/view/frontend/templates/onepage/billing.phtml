@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /** @var \Magento\Checkout\Block\Onepage\Billing $this */
 ?>
 <form class="form billing" id="co-billing-form" data-hasrequired="<?php echo __('* Required Fields') ?>">
@@ -191,7 +194,7 @@
     <div class="primary"><button data-role="opc-continue" type="button" class="button action continue primary"><span><?php echo __('Continue') ?></span></button></div>
 </div>
 </form>
-<script type="text/javascript">
+<script>
     require([
         "jquery",
         "mage/mage"

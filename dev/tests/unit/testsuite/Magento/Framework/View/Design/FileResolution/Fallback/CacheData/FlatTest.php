@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\View\Design\FileResolution\Fallback\CacheData;
 
 class FlatTest extends \PHPUnit_Framework_TestCase

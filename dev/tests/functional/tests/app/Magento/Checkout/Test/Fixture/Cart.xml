@@ -5,381 +5,383 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Checkout\Test\Fixture\Cart">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
+         class="Magento\Checkout\Test\Fixture\Cart">
     <module>Magento_Checkout</module>
     <type>flat</type>
-    <entity_type>sales_quote</entity_type>
+    <entity_type>quote</entity_type>
     <collection>Magento\Checkout\Model\Resource\Cart</collection>
+    <repository_class>Magento\Checkout\Test\Repository\Cart</repository_class>
+    <handler_interface>Magento\Checkout\Test\Handler\Cart\CartInterface</handler_interface>
     <fields>
-        <entity_id>
+        <field name="entity_id">
             <attribute_code>entity_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
-        </entity_id>
-        <store_id>
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="store_id">
             <attribute_code>store_id</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </store_id>
-        <created_at>
-            <attribute_code>created_at</attribute_code>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="created_at">
+           <attribute_code>created_at</attribute_code>
             <backend_type>timestamp</backend_type>
-            <is_required></is_required>
-            <default_value>CURRENT_TIMESTAMP</default_value>
-            <input></input>
-        </created_at>
-        <updated_at>
+            <is_required />
+            <default_value xsi:type="string">CURRENT_TIMESTAMP</default_value>
+            <input />
+        </field>
+        <field name="updated_at">
             <attribute_code>updated_at</attribute_code>
             <backend_type>timestamp</backend_type>
-            <is_required></is_required>
-            <default_value>0000-00-00 00:00:00</default_value>
-            <input></input>
-        </updated_at>
-        <converted_at>
+            <is_required />
+            <default_value xsi:type="string">0000-00-00 00:00:00</default_value>
+            <input />
+        </field>
+        <field name="converted_at">
             <attribute_code>converted_at</attribute_code>
             <backend_type>timestamp</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </converted_at>
-        <is_active>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="is_active">
             <attribute_code>is_active</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>1</default_value>
-            <input></input>
-        </is_active>
-        <is_virtual>
+            <is_required />
+            <default_value xsi:type="string">1</default_value>
+            <input />
+        </field>
+        <field name="is_virtual">
             <attribute_code>is_virtual</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </is_virtual>
-        <is_multi_shipping>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="is_multi_shipping">
             <attribute_code>is_multi_shipping</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </is_multi_shipping>
-        <items>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="items">
             <attribute_code>items</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Checkout\Test\Fixture\Cart\Items</source>
-        </items>
-        <items_count>
+        </field>
+        <field name="items_count">
             <attribute_code>items_count</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </items_count>
-        <items_qty>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="items_qty">
             <attribute_code>items_qty</attribute_code>
             <backend_type>decimal</backend_type>
-            <is_required></is_required>
-            <default_value>0.0000</default_value>
-            <input></input>
-        </items_qty>
-        <orig_order_id>
+            <is_required />
+            <default_value xsi:type="string">0.0000</default_value>
+            <input />
+        </field>
+        <field name="orig_order_id">
             <attribute_code>orig_order_id</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </orig_order_id>
-        <store_to_base_rate>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="store_to_base_rate">
             <attribute_code>store_to_base_rate</attribute_code>
             <backend_type>decimal</backend_type>
-            <is_required></is_required>
-            <default_value>0.0000</default_value>
-            <input></input>
-        </store_to_base_rate>
-        <store_to_quote_rate>
+            <is_required />
+            <default_value xsi:type="string">0.0000</default_value>
+            <input />
+        </field>
+        <field name="store_to_quote_rate">
             <attribute_code>store_to_quote_rate</attribute_code>
             <backend_type>decimal</backend_type>
-            <is_required></is_required>
-            <default_value>0.0000</default_value>
-            <input></input>
-        </store_to_quote_rate>
-        <base_currency_code>
+            <is_required />
+            <default_value xsi:type="string">0.0000</default_value>
+            <input />
+        </field>
+        <field name="base_currency_code">
             <attribute_code>base_currency_code</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </base_currency_code>
-        <store_currency_code>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="store_currency_code">
             <attribute_code>store_currency_code</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </store_currency_code>
-        <quote_currency_code>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="quote_currency_code">
             <attribute_code>quote_currency_code</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </quote_currency_code>
-        <grand_total>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="grand_total">
             <attribute_code>grand_total</attribute_code>
             <backend_type>decimal</backend_type>
-            <is_required></is_required>
-            <default_value>0.0000</default_value>
-            <input></input>
-        </grand_total>
-        <base_grand_total>
+            <is_required />
+            <default_value xsi:type="string">0.0000</default_value>
+            <input />
+        </field>
+        <field name="base_grand_total">
             <attribute_code>base_grand_total</attribute_code>
             <backend_type>decimal</backend_type>
-            <is_required></is_required>
-            <default_value>0.0000</default_value>
-            <input></input>
-        </base_grand_total>
-        <checkout_method>
+            <is_required />
+            <default_value xsi:type="string">0.0000</default_value>
+            <input />
+        </field>
+        <field name="checkout_method">
             <attribute_code>checkout_method</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </checkout_method>
-        <customer_id>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="customer_id">
             <attribute_code>customer_id</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </customer_id>
-        <customer_tax_class_id>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="customer_tax_class_id">
             <attribute_code>customer_tax_class_id</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </customer_tax_class_id>
-        <customer_group_id>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="customer_group_id">
             <attribute_code>customer_group_id</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </customer_group_id>
-        <customer_email>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="customer_email">
             <attribute_code>customer_email</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </customer_email>
-        <customer_prefix>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="customer_prefix">
             <attribute_code>customer_prefix</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </customer_prefix>
-        <customer_firstname>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="customer_firstname">
             <attribute_code>customer_firstname</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </customer_firstname>
-        <customer_middlename>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="customer_middlename">
             <attribute_code>customer_middlename</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </customer_middlename>
-        <customer_lastname>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="customer_lastname">
             <attribute_code>customer_lastname</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </customer_lastname>
-        <customer_suffix>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="customer_suffix">
             <attribute_code>customer_suffix</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </customer_suffix>
-        <customer_dob>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="customer_dob">
             <attribute_code>customer_dob</attribute_code>
             <backend_type>datetime</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </customer_dob>
-        <customer_note>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="customer_note">
             <attribute_code>customer_note</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </customer_note>
-        <customer_note_notify>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="customer_note_notify">
             <attribute_code>customer_note_notify</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>1</default_value>
-            <input></input>
-        </customer_note_notify>
-        <customer_is_guest>
+            <is_required />
+            <default_value xsi:type="string">1</default_value>
+            <input />
+        </field>
+        <field name="customer_is_guest">
             <attribute_code>customer_is_guest</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </customer_is_guest>
-        <remote_ip>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="remote_ip">
             <attribute_code>remote_ip</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </remote_ip>
-        <applied_rule_ids>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="applied_rule_ids">
             <attribute_code>applied_rule_ids</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </applied_rule_ids>
-        <reserved_order_id>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="reserved_order_id">
             <attribute_code>reserved_order_id</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </reserved_order_id>
-        <password_hash>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="password_hash">
             <attribute_code>password_hash</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </password_hash>
-        <coupon_code>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="coupon_code">
             <attribute_code>coupon_code</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </coupon_code>
-        <global_currency_code>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="global_currency_code">
             <attribute_code>global_currency_code</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </global_currency_code>
-        <base_to_global_rate>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="base_to_global_rate">
             <attribute_code>base_to_global_rate</attribute_code>
             <backend_type>decimal</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </base_to_global_rate>
-        <base_to_quote_rate>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="base_to_quote_rate">
             <attribute_code>base_to_quote_rate</attribute_code>
             <backend_type>decimal</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </base_to_quote_rate>
-        <customer_taxvat>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="customer_taxvat">
             <attribute_code>customer_taxvat</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </customer_taxvat>
-        <customer_gender>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="customer_gender">
             <attribute_code>customer_gender</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </customer_gender>
-        <subtotal>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="subtotal">
             <attribute_code>subtotal</attribute_code>
             <backend_type>decimal</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </subtotal>
-        <base_subtotal>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="base_subtotal">
             <attribute_code>base_subtotal</attribute_code>
             <backend_type>decimal</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </base_subtotal>
-        <subtotal_with_discount>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="subtotal_with_discount">
             <attribute_code>subtotal_with_discount</attribute_code>
             <backend_type>decimal</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </subtotal_with_discount>
-        <base_subtotal_with_discount>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="base_subtotal_with_discount">
             <attribute_code>base_subtotal_with_discount</attribute_code>
             <backend_type>decimal</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </base_subtotal_with_discount>
-        <is_changed>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="is_changed">
             <attribute_code>is_changed</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </is_changed>
-        <trigger_recollect>
-            <attribute_code>trigger_recollect</attribute_code>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="trigger_recollect">
+            <attribute_code>trigger_recollec</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </trigger_recollect>
-        <ext_shipping_info>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="ext_shipping_info">
             <attribute_code>ext_shipping_info</attribute_code>
             <backend_type>text</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </ext_shipping_info>
-        <is_persistent>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="is_persistent">
             <attribute_code>is_persistent</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </is_persistent>
-        <gift_message_id>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="gift_message_id">
             <attribute_code>gift_message_id</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </gift_message_id>
-        <checkout_data>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="checkout_data">
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
-            <group />
+            <group/>
             <source>Magento\Checkout\Test\Fixture\Cart\CheckoutData</source>
-        </checkout_data>
+        </field>
     </fields>
-    <repository_class>Magento\Checkout\Test\Repository\Cart</repository_class>
-    <handler_interface>Magento\Checkout\Test\Handler\Cart\CartInterface</handler_interface>
 </fixture>

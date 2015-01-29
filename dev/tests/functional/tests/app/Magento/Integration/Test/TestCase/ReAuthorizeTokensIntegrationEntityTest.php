@@ -8,8 +8,8 @@ namespace Magento\Integration\Test\TestCase;
 
 use Magento\Integration\Test\Fixture\Integration;
 use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Reauthorize tokens for the Integration Entity.
@@ -32,6 +32,11 @@ use Mtf\TestCase\Injectable;
  */
 class ReAuthorizeTokensIntegrationEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Integration grid page.
      *
@@ -67,7 +72,6 @@ class ReAuthorizeTokensIntegrationEntityTest extends Injectable
      */
     public function test(Integration $integration)
     {
-        $this->markTestIncomplete('MAGETWO-26850');
         // Precondition
         $integration->persist();
         $filter = ['name' => $integration->getName()];

@@ -12,19 +12,21 @@ class QuoteItem
     /**
      * Add bundle attributes to order data
      *
-     * @param \Magento\Sales\Model\Convert\Quote $subject
-     * @param Closure $proceed
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\ToOrderItem $subject
+     * @param callable $proceed
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param array $additional
      * @return \Magento\Sales\Model\Order\Item
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundItemToOrderItem(
-        \Magento\Sales\Model\Convert\Quote $subject,
+    public function aroundConvert(
+        \Magento\Quote\Model\Quote\Item\ToOrderItem $subject,
         Closure $proceed,
-        \Magento\Sales\Model\Quote\Item\AbstractItem $item
+        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
+        $additional = []
     ) {
         /** @var $orderItem \Magento\Sales\Model\Order\Item */
-        $orderItem = $proceed($item);
+        $orderItem = $proceed($item, $additional);
 
         if ($attributes = $item->getProduct()->getCustomOption('bundle_selection_attributes')) {
             $productOptions = $orderItem->getProductOptions();

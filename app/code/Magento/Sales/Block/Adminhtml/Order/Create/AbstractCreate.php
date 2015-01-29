@@ -11,6 +11,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Adminhtml sales order create abstract block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractCreate extends \Magento\Backend\Block\Widget
 {
@@ -76,7 +77,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     /**
      * Retrieve quote model object
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
 use Magento\Framework\App\Filesystem\DirectoryList;

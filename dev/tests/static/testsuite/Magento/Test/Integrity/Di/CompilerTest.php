@@ -103,6 +103,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->_validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
         $this->_validator->add(new \Magento\Framework\Code\Validator\TypeDuplication());
         $this->_validator->add(new \Magento\Framework\Code\Validator\ArgumentSequence());
+        $this->_validator->add(new \Magento\Framework\Code\Validator\ConstructorArgumentTypes());
         $this->pluginValidator = new \Magento\Framework\Interception\Code\InterfaceValidator();
     }
 
@@ -256,8 +257,15 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         }
         $class = new \ReflectionClass($className);
         $parent = $class->getParentClass();
+        $file = false;
+        if ($parent) {
+            $basePath = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
+            $file = str_replace('\\', DIRECTORY_SEPARATOR, $parent->getFileName());
+            $basePath = str_replace('\\', DIRECTORY_SEPARATOR, $basePath);
+            $file = str_replace($basePath . DIRECTORY_SEPARATOR, '', $file);
+        }
         /** Prevent analysis of non Magento classes  */
-        if ($parent && in_array($parent->getFileName(), $allowedFiles)) {
+        if ($parent && in_array($file, $allowedFiles)) {
             $output = array_merge(
                 $this->_buildInheritanceHierarchyTree($parent->getName(), $allowedFiles),
                 [$className],

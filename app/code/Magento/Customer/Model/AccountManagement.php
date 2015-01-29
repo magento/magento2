@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -683,7 +685,7 @@ class AccountManagement implements AccountManagementInterface
     public function validate(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
         $customerErrors = $this->validator->validateData(
-            $this->extensibleDataObjectConverter->toFlatArray($customer),
+            $this->extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface'),
             [],
             'customer'
         );

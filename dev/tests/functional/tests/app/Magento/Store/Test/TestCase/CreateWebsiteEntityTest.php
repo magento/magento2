@@ -9,7 +9,7 @@ namespace Magento\Store\Test\TestCase;
 use Magento\Backend\Test\Page\Adminhtml\NewWebsiteIndex;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Store\Test\Fixture\Website;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Create Website (Store Management)
@@ -27,6 +27,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateWebsiteEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Page StoreIndex
      *

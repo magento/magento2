@@ -4,5 +4,6 @@
  * See COPYING.txt for license details.
  */
 require_once dirname(__DIR__) . '/' . 'bootstrap.php';
-$objectManager->create('Mtf\Util\Generate\Page')->launch();
-\Mtf\Util\Generate\GenerateResult::displayResults();
+
+$objectManager->create('Magento\Mtf\Util\Generate\Page')->launch();
+\Magento\Mtf\Util\Generate\GenerateResult::displayResults();

@@ -13,6 +13,7 @@
         font-family: @family-name;
         src: url('@{font-path}.eot');
         src: url('@{font-path}.eot?#iefix') format('embedded-opentype'),
+        url('@{font-path}.woff2') format('woff2'),
         url('@{font-path}.woff') format('woff'),
         url('@{font-path}.ttf') format('truetype'),
         url('@{font-path}.svg#@{family-name}') format('svg');
@@ -22,11 +23,17 @@
 }
 
 //  Rem font size
-.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) {
-    @value: unit(@sizeValue);
-    @remValue: (@value / @font-rem-ratio);
-    @pxValue: @value;
-    font-size: ~"@{remValue}rem";
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, rem)) {
+    font-size: @sizeValue;
+}
+
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, em)) {
+    font-size: @sizeValue;
+}
+
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, px)) {
+    .to-rem(@sizeValue);
+    font-size: @valueRem;
 }
 
 .font-size(@sizeValue) when (ispercentage(@sizeValue)) and not (@sizeValue = false) {
@@ -35,10 +42,8 @@
 
 //  Rem line height
 .line-height(@heightValue) when not (@heightValue = false) and not (ispercentage(@heightValue)) {
-    @value: unit(@heightValue);
-    @remValue: (@value / @font-rem-ratio);
-    @pxValue: @value;
-    line-height: ~"@{remValue}rem";
+    .to-rem(@heightValue);
+    line-height: @valueRem;
 }
 
 .line-height(@heightValue) when (ispercentage(@heightValue)) and not (@heightValue = false) {
@@ -58,20 +63,20 @@
 }
 
 .text-hide() {
+    background-color: transparent;
+    border: 0;
     font: ~"0/0" a;
     color: transparent;
     text-shadow: none;
-    background-color: transparent;
-    border: 0;
 }
 
 //  Optional hyphenation
 .hyphens(@mode: auto) {
     word-wrap: break-word;
     -webkit-hyphens: @mode;
-    -moz-hyphens: @mode;
-    -ms-hyphens: @mode; // IE10+
-    hyphens: @mode;
+       -moz-hyphens: @mode;
+        -ms-hyphens: @mode; //  IE10+
+            hyphens: @mode;
 }
 
 .typography (
@@ -139,49 +144,64 @@
     @_font-style: "@{_heading_level}-font-style";
     @_margin-top: "@{_heading_level}-margin-top";
     @_margin-bottom: "@{_heading_level}-margin-bottom";
-        .typography(
-            @@_font-size,
-            @@_font-color,
-            @@_font-family,
-            @@_font-weight,
-            @@_line-height,
-            @@_font-style
-        );
-        .margin-vertical-rem(@@_margin-top, @@_margin-bottom);
+    .typography(
+        @@_font-size,
+        @@_font-color,
+        @@_font-family,
+        @@_font-weight,
+        @@_line-height,
+        @@_font-style
+    );
+    & {
+        .to-rem(@@_margin-top);
+        margin-top: @valueRem;
+    }
+    & {
+        .to-rem(@@_margin-bottom);
+        margin-bottom: @valueRem;
+    }
 }
 
 //
 //  Base typography
-//--------------------------------------
+//  ---------------------------------------------
+
 .typography-base() {
     html {
-        font-size: @font-size-root;
+        .css(font-size, @font-size-root);
         -webkit-text-size-adjust: 100%;
-        -ms-text-size-adjust: 100%;
-        font-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+                font-size-adjust: 100%;
     }
     body {
         .typography();
     }
 
     p {
-        .margin-vertical-rem(@p-margin-top, @p-margin-bottom);
+        & {
+            .to-rem(@p-margin-top);
+            margin-top: @valueRem;
+        }
+        & {
+            .to-rem(@p-margin-bottom);
+            margin-bottom: @valueRem;
+        }
     }
 
-    // Abbreviations and acronyms
+    //  Abbreviations and acronyms
     abbr[title] {
         cursor: help;
-        border-bottom: 1px dotted @abbr-border-color;
+        .css(border-bottom, 1px dotted @abbr-border-color);
     }
 
     b,
     strong {
-        font-weight: @font-weight-bold;
+        .css(font-weight, @font-weight-bold);
     }
 
     em,
     i {
-        font-style: @font-style-emphasis;
+        .css(font-style, @font-style-emphasis);
     }
 
     mark {
@@ -191,19 +211,19 @@
 
     small,
     .small {
-        font-size: @font-size-s;
+        .css(font-size, @font-size-s);
     }
 
     hr {
-        margin-top: @line-height-computed;
-        margin-bottom: @line-height-computed;
+        .css(margin-top, @line-height-computed);
+        .css(margin-bottom, @line-height-computed);
         border: 0;
-        border-top: @hr-border-width @hr-border-style @hr-border-color;
+        .css(border-top, @hr-border-width @hr-border-style @hr-border-color);
     }
 
     sub,
     sup {
-        font-size: (@font-size-xs/@font-size-base)*100%;
+        .css(font-size, (@font-size-xs/@font-size-base)*100%);
         line-height: 0;
         position: relative;
         vertical-align: baseline;
@@ -216,13 +236,14 @@
     }
 
     dfn {
-        font-style: @font-style-emphasis;
+        .css(font-style, @font-style-emphasis);
     }
 }
 
 //
 //  Headings
-//--------------------------------------
+//  ---------------------------------------------
+
 .typography-headings() {
     h1 {
         .heading(h1);
@@ -262,7 +283,8 @@
 
 //
 //  Links
-// --------------------------------------------------
+//  ---------------------------------------------
+
 .typography-links() {
     a,
     .alink {
@@ -272,14 +294,29 @@
 
 //
 //  Unordered and Ordered lists
-// --------------------------------------------------
+//  ---------------------------------------------
+
 .typography-lists() {
     ul,
     ol {
-        .margin-vertical-rem(@list-margin-top, @list-margin-bottom);
+        & {
+            .to-rem(@list-margin-top);
+            margin-top: @valueRem;
+        }
+        & {
+            .to-rem(@list-margin-bottom);
+            margin-bottom: @valueRem;
+        }
         //.typography(@list-font-size-base, @list-color-base);
         > li {
-            .margin-vertical-rem(@list-item-margin-top, @list-item-margin-bottom);
+            & {
+                .to-rem(@list-item-margin-top);
+                margin-top: @valueRem;
+            }
+            & {
+                .to-rem(@list-item-margin-bottom);
+                margin-bottom: @valueRem;
+            }
         }
         ul,
         ol {
@@ -288,33 +325,34 @@
     }
 
     dl {
-        margin-top: @dl-margin-top;
-        margin-bottom: @dl-margin-bottom;
+        .css(margin-top, @dl-margin-top);
+        .css(margin-bottom, @dl-margin-bottom);
     }
     dt {
         .css(font-weight, @dt-font-weight);
-        margin-top: @dt-margin-top;
-        margin-bottom: @dt-margin-bottom;
+        .css(margin-top, @dt-margin-top);
+        .css(margin-bottom, @dt-margin-bottom);
     }
     dd {
-        margin-top: @dd-margin-top;
-        margin-bottom: @dd-margin-bottom;
+        .css(margin-top, @dd-margin-top);
+        .css(margin-bottom, @dd-margin-bottom);
         margin-left: 0;
     }
 }
 
 //
 //  Code (inline and block)
-// --------------------------------------------------
+//  ---------------------------------------------
+
 .typography-code() {
     code,
     kbd,
     pre,
     samp {
-        font-family: @font-family-monospace;
+        .css(font-family, @font-family-monospace);
     }
 
-    // Inline code
+    //  Inline code
     code {
         .css(background, @code-bg);
         .css(color, @code-color);
@@ -323,23 +361,23 @@
         white-space: nowrap;
     }
 
-    // User input typically entered via keyboard
+    //  User input typically entered via keyboard
     kbd {
         .css(background, @kbd-bg);
         .css(color, @kbd-color);
-        .css(padding, @code-padding);
         .font-size(@code-font-size);
+        .css(padding, @code-padding);
     }
 
-    // Blocks of code
+    //  Blocks of code
     pre {
         .css(background, @pre-bg);
-        border: @pre-border-width solid @pre-border-color;
+        .css(border, @pre-border-width solid @pre-border-color);
         .css(color, @pre-color);
         display: block;
         .font-size (@code-font-size);
-        margin: 0 0 @indent-s-base;
-        line-height: @line-height-base;
+        .css(margin, 0 0 @indent-s-base);
+        .css(line-height, @line-height-base);
         .css(padding, @indent-s-base);
         word-break: break-all;
         word-wrap: break-word;
@@ -356,16 +394,17 @@
 
 //
 //  Blockquotes
-// --------------------------------------------------
+//  ---------------------------------------------
+
 .typography-blockquote() {
     blockquote {
+        .css(border-left, @blockquote-border-width solid @blockquote-border-color);
         .css(margin, @blockquote-margin);
         .css(padding, @blockquote-padding);
         .typography(
-              @_font-size: @blockquote-font-size,
-              @_font-style: @blockquote-font-style
+            @_font-size: @blockquote-font-size,
+            @_font-style: @blockquote-font-style
         );
-        border-left: @blockquote-border-width solid @blockquote-border-color;
 
         p,
         ul,
@@ -381,17 +420,18 @@
             .css(color, @blockquote-small-color);
             display: block;
             .font-size(@blockquote-small-font-size);
-            line-height: @line-height-base;
+            .css(line-height, @line-height-base);
             &:before {
-                content: @blockquote-before-content;
+                .css(content, @blockquote-before-content);
             }
         }
+
         cite {
             .css(font-style, @cite-font-style);
         }
     }
 
-    // Quotes
+    //  Quotes
     blockquote:before,
     blockquote:after {
         content: "";
@@ -406,7 +446,7 @@
         content: none;
     }
 
-    // Undo browser default styling
+    //  Undo browser default styling
     cite {
         .css(font-style, @cite-font-style);
     }

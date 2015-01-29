@@ -137,6 +137,7 @@ class Refunded extends AbstractReport
      * @param string|null $to
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _aggregateByRefundCreatedAt($from, $to)
     {

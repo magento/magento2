@@ -1,15 +1,14 @@
 <?php
 /**
- * @spi
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Page;
 
-use Mtf\Client\Element\Locator;
-use Mtf\Factory\Factory;
-use Mtf\Page\Page;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Page\Page;
 
 /**
  * Customer Address Edit page.

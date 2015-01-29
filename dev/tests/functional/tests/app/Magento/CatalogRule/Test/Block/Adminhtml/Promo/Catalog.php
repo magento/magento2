@@ -6,9 +6,9 @@
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo;
 
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Backend\Test\Block\Widget\Grid;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
 
 /**
  * Backend catalog price rule grid.
@@ -61,7 +61,7 @@ class Catalog extends Grid
      * Return row with given catalog price rule name.
      *
      * @param string $ruleName
-     * @return Element
+     * @return SimpleElement
      */
     public function getGridRow($ruleName)
     {

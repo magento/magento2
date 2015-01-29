@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -187,6 +189,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
                 'adminhtml_customer',
                 $this->extensibleDataObjectConverterMock->toFlatArray(
                     $customerObject,
+                    [],
                     '\Magento\Customer\Api\Data\CustomerInterface'
                 )
             )

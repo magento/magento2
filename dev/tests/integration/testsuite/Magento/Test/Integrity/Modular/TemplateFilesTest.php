@@ -8,7 +8,7 @@ namespace Magento\Test\Integrity\Modular;
 use Magento\Customer\Model\Context;
 
 /**
- * @magentoAppIsolation
+ * @magentoAppIsolation enabled
  */
 class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 {
@@ -43,6 +43,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function allTemplatesDataProvider()
     {

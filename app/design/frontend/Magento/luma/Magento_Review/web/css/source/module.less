@@ -7,10 +7,10 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .data.switch .counter {
-    color: @text-color-muted;
+    .css(color, @text-color-muted);
     &:before {
         content:"(";
     }
@@ -79,7 +79,7 @@
 .review {
     &-toolbar {
         padding: 0;
-        border-top: 1px solid #c9c9c9;
+        border-top: 1px solid @color-gray79;
         margin: 0 0 @indent-base;
         text-align: center;
         &:first-child {
@@ -88,7 +88,7 @@
         .pages {
             display: block;
             text-align: center;
-            border-bottom: 1px solid #c9c9c9;
+            border-bottom: 1px solid @color-gray79;
             padding: @indent-base 0;
         }
         .limiter {
@@ -155,7 +155,7 @@
     }
     &-item {
         padding: @indent-base 0;
-        border-bottom: 1px solid #c9c9c9;
+        border-bottom: 1px solid @color-gray79;
         margin: 0;
         .clearer();
         &:last-child {
@@ -201,7 +201,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .review {
         &-form {
             max-width: 500px;
@@ -243,7 +243,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .data.table.reviews {
     .rating-summary {
@@ -292,7 +292,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .product-reviews-summary {
         margin-bottom: @indent-s-base + @indent-xs-base;
         .products.wrapper.list & {
@@ -310,7 +310,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Account
@@ -357,7 +357,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .account {
         .table-reviews {
             .col.actions {
@@ -370,7 +370,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .block-reviews-dashboard {
         .product-name {
             &:extend(.abs-account-block-font-size all);
@@ -382,7 +382,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .customer-review {
     .product-details {
@@ -435,7 +435,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .customer-review {
         .product-name {
             .css(margin-bottom, @indent-xs-base);
@@ -452,7 +452,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .customer-review {
         .product-details {
             &:extend(.abs-margin-for-blocks-and-widgets-desktop all);

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Model\Resource\Group\Grid;
 
 use Magento\Core\Model\EntityFactory;
@@ -56,6 +59,7 @@ class ServiceCollection extends AbstractServiceCollection
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -67,7 +71,7 @@ class ServiceCollection extends AbstractServiceCollection
             $groups = $searchResults->getItems();
             foreach ($groups as $group) {
                 $groupItem = new \Magento\Framework\Object();
-                $groupItem->addData($this->simpleDataObjectConverter->toFlatArray($group));
+                $groupItem->addData($this->simpleDataObjectConverter->toFlatArray($group, '\Magento\Customer\Api\Data\GroupInterface'));
                 $this->_addItem($groupItem);
             }
             $this->_setIsLoaded();

@@ -10,6 +10,7 @@ class Save extends \Magento\Review\Controller\Adminhtml\Product
 {
     /**
      * @return mixed
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

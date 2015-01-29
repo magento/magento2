@@ -33,11 +33,11 @@ class Config extends \Magento\Framework\Data\Form\Element\Select
         $html .= '<input id="' . $htmlId . '" name="product[' . $htmlId . ']" ' . $disabled . ' value="1" ' . $checked;
         $html .= ' onclick="toggleValueElements(this, this.parentNode);" class="checkbox" type="checkbox" />';
         $html .= ' <label for="' . $htmlId . '">' . __('Use Config Settings') . '</label>';
-        $html .= '<script type="text/javascript">toggleValueElements($(\'' .
+        $html .= '<script>require(["prototype"], function(){toggleValueElements($(\'' .
             $htmlId .
             '\'), $(\'' .
             $htmlId .
-            '\').parentNode);</script>';
+            '\').parentNode);});</script>';
 
         return $html;
     }

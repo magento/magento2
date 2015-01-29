@@ -7,9 +7,9 @@
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractAssertForm;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertProductCustomOptionsOnProductPage
@@ -80,11 +80,14 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
      *
      * @param CatalogProductView $catalogProductView
      * @param FixtureInterface $product
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
-    public function processAssert(CatalogProductView $catalogProductView, FixtureInterface $product, Browser $browser)
-    {
+    public function processAssert(
+        CatalogProductView $catalogProductView,
+        FixtureInterface $product,
+        BrowserInterface $browser
+    ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         $actualPrice = null;

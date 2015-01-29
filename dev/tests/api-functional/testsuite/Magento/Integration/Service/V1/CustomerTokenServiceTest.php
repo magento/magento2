@@ -83,6 +83,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
 
     /**
      * @dataProvider validationDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testCreateCustomerAccessTokenEmptyOrNullCredentials($username, $password)
     {

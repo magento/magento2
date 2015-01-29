@@ -6,8 +6,8 @@
 
 namespace Magento\Reports\Test\Block\Adminhtml;
 
-use Mtf\Block\Form;
-use Mtf\ObjectManager;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Abstract Class Filter
@@ -40,7 +40,7 @@ abstract class AbstractFilter extends Form
         foreach ($viewsReport as $key => $reportFilter) {
             if (in_array($key, $this->dateFields)) {
                 $date = ObjectManager::getInstance()->create(
-                    '\Magento\Backend\Test\Fixture\Date',
+                    '\Magento\Backend\Test\Fixture\Source\Date',
                     ['params' => [], 'data' => ['pattern' => $reportFilter]]
                 );
                 $viewsReport[$key] = $date->getData();

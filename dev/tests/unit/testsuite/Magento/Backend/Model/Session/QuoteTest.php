@@ -7,6 +7,7 @@ namespace Magento\Backend\Model\Session;
 
 /**
  * Class QuoteTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,7 +72,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Sales\Model\QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteRepositoryMock;
 
@@ -89,6 +90,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * Set up
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
@@ -121,7 +123,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ['getValue']
         );
         $this->quoteRepositoryMock = $this->getMock(
-            'Magento\Sales\Model\QuoteRepository',
+            'Magento\Quote\Model\QuoteRepository',
             ['create', 'save', 'get'],
             [],
             '',
@@ -223,7 +225,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $customerId = 66;
 
         $quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             [
                 'setStoreId',
                 'setCustomerGroupId',
@@ -312,7 +314,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $customerId = 66;
 
         $quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             [
                 'setStoreId',
                 'setCustomerGroupId',

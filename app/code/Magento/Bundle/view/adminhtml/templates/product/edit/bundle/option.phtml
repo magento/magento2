@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $this \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option */
 ?>
 <script id="bundle-option-template" type="text/x-jquery-tmpl">
@@ -111,11 +113,11 @@
 
 <?php echo $this->getSelectionHtml() ?>
 
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "jquery/jquery.tabs",
-    "js/theme",
+    "collapsable",
     "Magento_Bundle/js/bundle-product",
     "prototype",
     "mage/adminhtml/form"

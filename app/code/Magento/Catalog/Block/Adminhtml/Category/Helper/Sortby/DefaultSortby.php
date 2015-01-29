@@ -51,11 +51,11 @@ class DefaultSortby extends \Magento\Framework\Data\Form\Element\Select
 
         $html .= ' onclick="toggleValueElements(this, this.parentNode);" class="checkbox" type="checkbox" />';
         $html .= ' <label for="' . $htmlId . '" class="normal">' . __('Use Config Settings') . '</label>';
-        $html .= '<script type="text/javascript">toggleValueElements($(\'' .
+        $html .= '<script>require(["prototype"], function(){toggleValueElements($(\'' .
             $htmlId .
             '\'), $(\'' .
             $htmlId .
-            '\').parentNode);</script>';
+            '\').parentNode);});</script>';
 
         return $html;
     }

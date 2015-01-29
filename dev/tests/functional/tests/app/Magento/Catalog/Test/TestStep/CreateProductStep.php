@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\TestStep;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Create product using handler.
@@ -55,7 +55,6 @@ class CreateProductStep implements TestStepInterface
         if ($product->hasData('id') === false) {
             $product->persist();
         }
-
-        return ['product' => $product];
+         return ['product' => $product];
     }
 }
