@@ -62,7 +62,7 @@ class PhraseCollector
         $this->_phrases = [];
         $this->_file = $file;
         $this->_tokenizer->parse($file);
-        while (!$this->_tokenizer->isLastToken()) {
+        while (!$this->_tokenizer->isEndOfLoop()) {
             $this->_extractPhrases();
         }
     }
@@ -74,12 +74,22 @@ class PhraseCollector
      */
     protected function _extractPhrases()
     {
-        $phraseStartToken = $this->_tokenizer->getNextToken();
-        if ($phraseStartToken->isEqualFunction('__') && $this->_tokenizer->getNextToken()->isOpenBrace()) {
-            $arguments = $this->_tokenizer->getFunctionArgumentsTokens();
-            $phrase = $this->_collectPhrase(array_shift($arguments));
-            if (null !== $phrase) {
-                $this->_addPhrase($phrase, count($arguments), $this->_file, $phraseStartToken->getLine());
+        if ($firstToken = $this->_tokenizer->getNextRealToken()) {
+            if ($firstToken->isEqualFunction('__')) {
+                $secondToken = $this->_tokenizer->getNextRealToken();
+                if ($secondToken && $secondToken->isOpenBrace()) {
+                    $arguments = $this->_tokenizer->getFunctionArgumentsTokens();
+                    $phrase = $this->_collectPhrase(array_shift($arguments));
+                    if (null !== $phrase) {
+                        $this->_addPhrase($phrase, count($arguments), $this->_file, $firstToken->getLine());
+                    }
+                }
+            } elseif ($firstToken->isNew() && $this->_tokenizer->isMatchingClass('Phrase')) {
+                $arguments = $this->_tokenizer->getFunctionArgumentsTokens();
+                $phrase = $this->_collectPhrase(array_shift($arguments));
+                if (null !== $phrase) {
+                    $this->_addPhrase($phrase, count($arguments), $this->_file, $firstToken->getLine());
+                }
             }
         }
     }
