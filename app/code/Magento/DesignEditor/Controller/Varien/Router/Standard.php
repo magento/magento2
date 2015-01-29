@@ -5,11 +5,12 @@
  *
  */
 namespace Magento\DesignEditor\Controller\Varien\Router;
+use Magento\Framework\App\Router\Base;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Standard extends \Magento\Core\App\Router\Base
+class Standard extends \Magento\Framework\App\Router\Base
 {
     /**
      * Routers that must not been matched

@@ -8,7 +8,7 @@
  */
 namespace Magento\Backend\App;
 
-class Router extends \Magento\Core\App\Router\Base
+class Router extends \Magento\Framework\App\Router\Base
 {
     /**
      * @var \Magento\Backend\App\ConfigInterface

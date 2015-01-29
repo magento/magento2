@@ -376,7 +376,7 @@
             <argument name="reader" xsi:type="object">Magento\Framework\App\Route\Config\Reader\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\App\Router\Base">
+    <type name="Magento\Framework\App\Router\Base">
         <arguments>
             <argument name="routerId" xsi:type="string">standard</argument>
         </arguments>
