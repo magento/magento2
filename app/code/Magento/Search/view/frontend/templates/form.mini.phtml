@@ -30,6 +30,9 @@ $helper = $this->helper('Magento\Search\Helper\Data');
                            placeholder="<?php echo __('Search entire store here...'); ?>"
                            class="input-text"
                            maxlength="<?php echo $helper->getMaxQueryLength();?>"
+                           role="combobox"
+                           aria-haspopup="false"
+                           aria-autocomplete="both"
                            autocomplete="off"/>
                     <div id="search_autocomplete" class="search-autocomplete"></div>
                     <?php echo $this->getChildHtml() ?>
