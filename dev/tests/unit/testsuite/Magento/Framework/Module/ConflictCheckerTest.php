@@ -93,6 +93,18 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => ['Vendor_C'], 'Vendor_C' => ['Vendor_B']]
             ],
+            [
+                [['Vendor_A', ['Vendor_B' => '>=0.1']], ['Vendor_B', []]],
+                ['Vendor_A'],
+                ['Vendor_B'],
+                ['Vendor_B' => ['Vendor_A']]
+            ],
+            [
+                [['Vendor_A', ['Vendor_B' => '~0.1']], ['Vendor_B', []]],
+                ['Vendor_A'],
+                ['Vendor_B'],
+                ['Vendor_B' => ['Vendor_A']]
+            ],
         ];
     }
 
@@ -108,7 +120,7 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap([
                 ['Vendor_A', []],
                 ['Vendor_B', []],
-                ['Vendor_C', ['Vendor_A' => '0.2', 'Vendor_B' => '0.3']]
+                ['Vendor_C', ['Vendor_A' => '>=0.2,<0.3', 'Vendor_B' => '<0.4']]
             ]));
         $packageInfoMock->expects($this->any())
             ->method('getVersion')
