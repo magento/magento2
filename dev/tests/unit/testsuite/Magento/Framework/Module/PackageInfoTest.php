@@ -75,24 +75,6 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->packageInfo->getConflict('E'));
     }
 
-    public function testGetRequireReturnPackageName()
-    {
-        $this->assertEquals(['b'], $this->packageInfo->getRequire('A', false));
-        $this->assertEquals(['d'], $this->packageInfo->getRequire('B', false));
-        $this->assertEquals(['e'], $this->packageInfo->getRequire('C', false));
-        $this->assertEquals([], $this->packageInfo->getRequire('D', false));
-        $this->assertEquals([], $this->packageInfo->getRequire('E', false));
-    }
-
-    public function testGetConflictReturnPackageName()
-    {
-        $this->assertEquals(['c' => '0.1'], $this->packageInfo->getConflict('A', false));
-        $this->assertEquals([], $this->packageInfo->getConflict('B', false));
-        $this->assertEquals([], $this->packageInfo->getConflict('C', false));
-        $this->assertEquals(['c' => '0.1'], $this->packageInfo->getConflict('D', false));
-        $this->assertEquals([], $this->packageInfo->getConflict('E', false));
-    }
-
     public function testGetVersion()
     {
         $this->assertEquals('0.1', $this->packageInfo->getVersion('A'));
@@ -100,5 +82,6 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('0.1', $this->packageInfo->getVersion('C'));
         $this->assertEquals('0.3', $this->packageInfo->getVersion('D'));
         $this->assertEquals('0.4', $this->packageInfo->getVersion('E'));
+        $this->assertEquals('', $this->packageInfo->getVersion('F'));
     }
 }

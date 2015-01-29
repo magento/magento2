@@ -46,49 +46,49 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                [['Vendor_A', true, ['Vendor_B' => '0.1']], ['Vendor_B', true, []]],
+                [['Vendor_A', ['Vendor_B' => '0.1']], ['Vendor_B', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => ['Vendor_A']]
             ],
             [
-                [['Vendor_A', true, ['Vendor_B' => '0.1']], ['Vendor_B', true, []]],
+                [['Vendor_A', ['Vendor_B' => '0.1']], ['Vendor_B', []]],
                 [],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['Vendor_B', true, ['Vendor_A' => '0.1']], ['Vendor_A', true, []]],
+                [['Vendor_B', ['Vendor_A' => '0.1']], ['Vendor_A', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => ['Vendor_A']]
             ],
             [
-                [['Vendor_B', true, ['Vendor_A' => '0.1']], ['Vendor_A', true, []]],
+                [['Vendor_B', ['Vendor_A' => '0.1']], ['Vendor_A', []]],
                 [],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['Vendor_A', true, []], ['Vendor_B', true, []]],
+                [['Vendor_A', []], ['Vendor_B', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['Vendor_A', true, []], ['Vendor_B', true, []], ['Vendor_C', true, []]],
+                [['Vendor_A', []], ['Vendor_B', []], ['Vendor_C', []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => [], 'Vendor_C' => []]
             ],
             [
-                [['Vendor_A', true, ['Vendor_C' => '0.1']], ['Vendor_B', true, []], ['Vendor_C', true, []]],
+                [['Vendor_A', ['Vendor_C' => '0.1']], ['Vendor_B', []], ['Vendor_C', []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => [], 'Vendor_C' => ['Vendor_A']]
             ],
             [
-                [['Vendor_A', true, []], ['Vendor_B', true, ['Vendor_C' => '0.1']], ['Vendor_C', true, []]],
+                [['Vendor_A', []], ['Vendor_B', ['Vendor_C' => '0.1']], ['Vendor_C', []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => ['Vendor_C'], 'Vendor_C' => ['Vendor_B']]
@@ -106,9 +106,9 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
         $packageInfoMock->expects($this->any())
             ->method('getConflict')
             ->will($this->returnValueMap([
-                ['Vendor_A', true, []],
-                ['Vendor_B', true, []],
-                ['Vendor_C', true, ['Vendor_A' => '0.2', 'Vendor_B' => '0.3']]
+                ['Vendor_A', []],
+                ['Vendor_B', []],
+                ['Vendor_C', ['Vendor_A' => '0.2', 'Vendor_B' => '0.3']]
             ]));
         $packageInfoMock->expects($this->any())
             ->method('getVersion')
