@@ -30,4 +30,11 @@
             <argument name="blockFilter" xsi:type="string">Magento\Widget\Model\Template\Filter</argument>
         </arguments>
     </type>
+    <type name="Magento\Widget\Model\Layout\Merge">
+        <arguments>
+            <argument name="fileSource" xsi:type="object">Magento\Framework\View\Layout\File\Collector\Aggregated\Proxy</argument>
+            <argument name="pageLayoutFileSource" xsi:type="object">pageLayoutFileCollectorAggregated</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
+        </arguments>
+    </type>
 </config>
