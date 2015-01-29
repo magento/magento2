@@ -84,7 +84,7 @@ require([
         cookieName: '<?php echo \Magento\Store\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
         cookieValue: '<?php echo $this->helper('Magento\Store\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
         cookieLifetime: <?php echo $this->helper('Magento\Store\Helper\Cookie')->getCookieRestrictionLifetime()?>,
-        noCookiesUrl: '<?php echo $this->getUrl('cms/index/noCookies') ?>'
+        noCookiesUrl: '<?php echo $this->getUrl('cookie/index/noCookies') ?>'
     });
 // ]]>
 

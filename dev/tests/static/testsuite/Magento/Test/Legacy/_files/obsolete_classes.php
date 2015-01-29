@@ -974,6 +974,7 @@ return [
     ['Mage_Sales_Model_Entity_Quote_Payment_Collection'],
     ['Mage_Sales_Model_Entity_Sale_Collection'],
     ['Mage_Sales_Model_Entity_Setup'],
+    ['Magento\Cms\Controller\Index\NoCookies'],
     ['Mage_Shipping_ShippingController'],
     ['Mage_Tag_Block_Adminhtml_Report_Customer_Detail_Grid'],
     ['Mage_Tag_Block_Adminhtml_Report_Customer_Grid'],
