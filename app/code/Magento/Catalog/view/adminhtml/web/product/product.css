@@ -201,7 +201,7 @@
     bottom: 5px;
     top: auto;
     margin: auto;
-    background: url(Magento_Backend::images/draggable-handle-bg.gif) no-repeat;
+    background: url(Magento_Backend::images/draggable-handle-bg.png) no-repeat;
     z-index: 2;
 }
 
