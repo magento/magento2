@@ -156,7 +156,7 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\Catalog\Model\Product|array $data
      * @return boolean
      */
-    public function  isDataForPriceIndexerWasChanged($data)
+    public function isDataForPriceIndexerWasChanged($data)
     {
         if ($data instanceof ModelProduct) {
             foreach ($this->_reindexPriceIndexerData['byDataResult'] as $param) {
@@ -187,11 +187,11 @@ class Product extends \Magento\Core\Helper\Url
      */
     public function isDataForProductCategoryIndexerWasChanged(\Magento\Catalog\Model\Product $data)
     {
-            foreach ($this->_reindexProductCategoryIndexerData['byDataChange'] as $param) {
-                if ($data->dataHasChangedFor($param)) {
-                    return true;
-                }
+        foreach ($this->_reindexProductCategoryIndexerData['byDataChange'] as $param) {
+            if ($data->dataHasChangedFor($param)) {
+                return true;
             }
+        }
         return false;
     }
 
