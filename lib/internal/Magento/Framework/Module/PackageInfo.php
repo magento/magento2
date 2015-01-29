@@ -33,7 +33,7 @@ class PackageInfo
     private $requireMap;
 
     /**
-     * "conflict" field of each module, contains conflicting modules' name and version
+     * "conflict" field of each module, contains conflicting modules' name and version constraint
      *
      * @var array[]
      */
