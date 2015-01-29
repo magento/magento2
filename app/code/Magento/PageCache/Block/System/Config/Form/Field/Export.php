@@ -15,16 +15,17 @@ class Export extends \Magento\Backend\Block\System\Config\Form\Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         /** @var \Magento\Backend\Block\Widget\Button $buttonBlock  */
         $buttonBlock = $this->getForm()->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
 
-        $params = array(
+        $params = [
             'website' => $buttonBlock->getRequest()->getParam('website'),
             'varnish' => $this->getVarnishVersion()
-        );
+        ];
 
         $url = $this->getUrl("*/PageCache/exportVarnishConfig", $params);
         $data = [
@@ -37,7 +38,7 @@ class Export extends \Magento\Backend\Block\System\Config\Form\Field
         return $html;
     }
 
-    /*
+    /**
      * Return Varnish version to this class
      *
      * @return int

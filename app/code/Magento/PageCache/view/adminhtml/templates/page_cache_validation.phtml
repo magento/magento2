@@ -24,7 +24,10 @@ require(['jquery'], function($){
             var invalidFields = fields.filter(function () {
                 return ($(this).val().length == 0 || ($(this).val() != $(this).data('previous-value')));
             });
-            $('[id^=system_full_page_cache_varnish_export_button_version]').prop('disabled', (invalidFields.length > 0));
+            $('[id^=system_full_page_cache_varnish_export_button_version]').prop(
+                'disabled',
+                (invalidFields.length > 0)
+            );
         });
     //]]>
 
