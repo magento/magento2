@@ -68,10 +68,11 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexAll
+     * @return void
      */
     public function testStatusChange()
     {
+        $this->testReindexAll();
         $categories = $this->getCategories(4);
         $products = $this->getProducts(3);
 
@@ -98,10 +99,11 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexAll
+     * @return void
      */
     public function testVisibilityChange()
     {
+        $this->testReindexAll();
         $categories = $this->getCategories(4);
         $products = $this->getProducts(3);
 
