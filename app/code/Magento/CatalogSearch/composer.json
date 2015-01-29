@@ -7,7 +7,6 @@
         "magento/module-catalog": "0.42.0-beta5",
         "magento/module-search": "0.42.0-beta5",
         "magento/module-customer": "0.42.0-beta5",
-        "magento/module-core": "0.42.0-beta5",
         "magento/module-directory": "0.42.0-beta5",
         "magento/module-indexer": "0.42.0-beta5",
         "magento/module-eav": "0.42.0-beta5",
