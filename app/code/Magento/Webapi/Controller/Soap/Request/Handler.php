@@ -107,7 +107,6 @@ class Handler
         }
 
         if (!$isAllowed) {
-            // TODO: Consider passing Integration ID instead of Consumer ID
             throw new AuthorizationException(
                 AuthorizationException::NOT_AUTHORIZED,
                 ['resources' => implode(', ', $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])]

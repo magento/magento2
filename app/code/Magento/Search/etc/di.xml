@@ -14,18 +14,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Search\Block\Recommendations">
-        <arguments>
-            <argument name="searchDataProvider" xsi:type="object">Magento\Search\Model\SearchDataProvider</argument>
-            <argument name="title" xsi:type="string">Related search terms</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Search\Block\Suggestions">
-        <arguments>
-            <argument name="searchDataProvider" xsi:type="object">Magento\Search\Model\SearchDataProvider</argument>
-            <argument name="title" xsi:type="string">Did you mean</argument>
-        </arguments>
-    </type>
     <type name="Magento\Search\Model\AdapterFactory">
         <arguments>
             <argument name="path" xsi:type="string">catalog/search/adapter</argument>

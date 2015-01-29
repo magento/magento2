@@ -3,6 +3,12 @@
  * See COPYING.txt for license details.
  */
 
+// Import vars
+@import "source/lib/lib.less"; // Import all lib files
+@import "source/theme.less"; // import theme styles
+
+@baseDir: "../"; //default
+
 // Magento/blank
 .page-print {
     .logo {
@@ -12,7 +18,8 @@
     }
 }
 @media print {
-    *{background: transparent !important;
+    * {
+        background: transparent !important;
         color: black !important;
         text-shadow: none !important;
         -webkit-filter: none !important; // Use in 41 Chrome
