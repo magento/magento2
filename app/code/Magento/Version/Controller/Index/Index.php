@@ -20,14 +20,15 @@ class Index extends Action
     /**
      * @var ProductMetadataInterface
      */
-    protected $_productMetadata;
+    protected $productMetadata;
 
     /**
      * @param Context $context
      * @param ProductMetadataInterface $productMetadata
      */
-    public function __construct(Context $context, ProductMetadataInterface $productMetadata) {
-        $this->_productMetadata = $productMetadata;
+    public function __construct(Context $context, ProductMetadataInterface $productMetadata)
+    {
+        $this->productMetadata = $productMetadata;
         parent::__construct($context);
     }
 
@@ -40,8 +41,8 @@ class Index extends Action
     {
         $this->getResponse()->setBody(
             self::PRODUCT_NAME . '/' .
-            $this->_productMetadata->getVersion() . ' (' .
-            $this->_productMetadata->getEdition() . ')'
+            $this->productMetadata->getVersion() . ' (' .
+            $this->productMetadata->getEdition() . ')'
         );
     }
 }
