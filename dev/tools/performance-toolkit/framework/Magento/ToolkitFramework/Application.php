@@ -65,13 +65,19 @@ class Application
     protected $_applicationBaseDir;
 
     /**
+     * @var array
+     */
+    protected $_initArguments;
+
+    /**
      * @param string $applicationBaseDir
      * @param \Magento\Framework\Shell $shell
      */
-    public function __construct($applicationBaseDir, \Magento\Framework\Shell $shell)
+    public function __construct($applicationBaseDir, \Magento\Framework\Shell $shell, array $initArguments)
     {
         $this->_applicationBaseDir = $applicationBaseDir;
         $this->_shell = $shell;
+        $this->_initArguments = $initArguments;
     }
 
     /**
@@ -217,8 +223,11 @@ class Application
     public function getObjectManager()
     {
         if (!$this->_objectManager) {
-            $objectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
-            $this->_objectManager = $objectManagerFactory->create($_SERVER);
+            $objectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(
+                BP,
+                $this->_initArguments
+            );
+            $this->_objectManager = $objectManagerFactory->create($this->_initArguments);
             $this->_objectManager->get('Magento\Framework\App\State')->setAreaCode(self::AREA_CODE);
         }
         return $this->_objectManager;
