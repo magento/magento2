@@ -82,7 +82,7 @@ class Form extends Template
      */
     public function getSearchableAttributes()
     {
-        $attributes = $this->getModel()->getAttributes();
+        $attributes = $this->_catalogSearchAdvanced->getAttributes();
         return $attributes;
     }
 
@@ -313,16 +313,6 @@ class Form extends Template
             $this->setData('_date_block', $block);
         }
         return $block;
-    }
-
-    /**
-     * Retrieve advanced search model object
-     *
-     * @return Advanced
-     */
-    public function getModel()
-    {
-        return $this->_catalogSearchAdvanced;
     }
 
     /**

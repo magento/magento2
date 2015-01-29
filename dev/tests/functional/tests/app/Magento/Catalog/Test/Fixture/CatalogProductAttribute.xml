@@ -278,14 +278,6 @@
             <default_value xsi:type="number">0</default_value>
             <input />
         </field>
-        <field name="is_configurable">
-            <attribute_code>is_configurable</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required />
-            <default_value xsi:type="null" />
-            <input />
-            <group>advanced-properties</group>
-        </field>
         <field name="search_weight">
             <attribute_code>search_weight</attribute_code>
             <backend_type>smallint</backend_type>
