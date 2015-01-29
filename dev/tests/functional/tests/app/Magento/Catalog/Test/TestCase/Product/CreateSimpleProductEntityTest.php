@@ -10,7 +10,6 @@ use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
@@ -35,6 +34,13 @@ class CreateSimpleProductEntityTest extends Injectable
     /* end tags */
 
     /**
+     * Object Manager.
+     *
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
+    /**
      * Configuration setting.
      *
      * @var string
@@ -42,88 +48,52 @@ class CreateSimpleProductEntityTest extends Injectable
     protected $configData;
 
     /**
-     * Category fixture.
-     *
-     * @var Category
-     */
-    protected $category;
-
-    /**
-     * Product page with a grid.
-     *
-     * @var CatalogProductIndex
-     */
-    protected $productGrid;
-
-    /**
-     * Page to create a product.
-     *
-     * @var CatalogProductNew
-     */
-    protected $newProductPage;
-
-    /**
      * Prepare data.
      *
+     * @param ObjectManager $objectManager
      * @param Category $category
      * @return array
      */
-    public function __prepare(Category $category)
+    public function __prepare(ObjectManager $objectManager, Category $category)
     {
-        $category->persist();
+        $this->objectManager = $objectManager;
 
+        $category->persist();
         return [
             'category' => $category
         ];
     }
 
     /**
-     * Injection data.
+     * Run create product simple entity test.
      *
+     * @param string $configData
+     * @param CatalogProductSimple $product
      * @param Category $category
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductNew $newProductPage
-     * @return void
+     * @return array
      */
-    public function __inject(
+    public function testCreate(
+        $configData,
+        CatalogProductSimple $product,
         Category $category,
         CatalogProductIndex $productGrid,
         CatalogProductNew $newProductPage
     ) {
-        $this->category = $category;
-        $this->productGrid = $productGrid;
-        $this->newProductPage = $newProductPage;
-    }
-
-    /**
-     * Run create product simple entity test.
-     *
-     * @param string $configData
-     * @param array $productData
-     * @param Category $category
-     * @param FixtureFactory $fixtureFactory
-     * @return array
-     */
-    public function testCreate($configData, array $productData, Category $category, FixtureFactory $fixtureFactory)
-    {
         $this->configData = $configData;
 
         // Preconditions
-        ObjectManager::getInstance()->create(
+        $this->objectManager->create(
             'Magento\Core\Test\TestStep\SetupConfigurationStep',
             ['configData' => $this->configData]
         )->run();
-        $product = $fixtureFactory->createByCode('catalogProductSimple',
-            [
-                'data' => array_merge($productData, ['category_ids' => ['category' => $category]])
-            ]
-        );
 
         // Steps
-        $this->productGrid->open();
-        $this->productGrid->getGridPageActionBlock()->addProduct('simple');
-        $this->newProductPage->getProductForm()->fill($product, null, $category);
-        $this->newProductPage->getFormPageActions()->save();
+        $productGrid->open();
+        $productGrid->getGridPageActionBlock()->addProduct('simple');
+        $newProductPage->getProductForm()->fill($product, null, $category);
+        $newProductPage->getFormPageActions()->save();
 
         return ['product' => $product];
     }
@@ -135,7 +105,7 @@ class CreateSimpleProductEntityTest extends Injectable
      */
     public function tearDown()
     {
-        ObjectManager::getInstance()->create(
+        $this->objectManager->create(
             'Magento\Core\Test\TestStep\SetupConfigurationStep',
             ['configData' => $this->configData, 'rollback' => true]
         )->run();

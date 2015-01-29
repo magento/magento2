@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
@@ -25,21 +25,23 @@ class AssertAddToCartButtonPresent extends AbstractConstraint
     /**
      * Assert that "Add to cart" button is present on page.
      *
+     * @param InjectableFixture $product
+     * @param Category $category
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
-     * @param CatalogProductSimple $product
      * @param CatalogProductView $catalogProductView
      *
      * @return void
      */
     public function processAssert(
+        InjectableFixture $product,
+        Category $category,
         CmsIndex $cmsIndex,
         CatalogCategoryView $catalogCategoryView,
-        CatalogProductSimple $product,
         CatalogProductView $catalogProductView
     ) {
         $cmsIndex->open();
-        $cmsIndex->getTopmenu()->selectCategoryByName($product->getCategoryIds()[0]);
+        $cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
 
         $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
         while (!$isProductVisible && $catalogCategoryView->getBottomToolbar()->nextPage()) {

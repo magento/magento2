@@ -6,11 +6,12 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Checks the button on the category/product pages.
@@ -24,21 +25,23 @@ class AssertAddToCartButtonAbsent extends AbstractConstraint
     /**
      * Assert that "Add to cart" button is not display on page.
      *
+     * @param InjectableFixture $product
+     * @param Category $category
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
-     * @param CatalogProductSimple $product
      * @param CatalogProductView $catalogProductView
      *
      * @return void
      */
     public function processAssert(
+        InjectableFixture $product,
+        Category $category,
         CmsIndex $cmsIndex,
         CatalogCategoryView $catalogCategoryView,
-        CatalogProductSimple $product,
         CatalogProductView $catalogProductView
     ) {
         $cmsIndex->open();
-        $cmsIndex->getTopmenu()->selectCategoryByName($product->getCategoryIds()[0]);
+        $cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
 
         $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
         while (!$isProductVisible && $catalogCategoryView->getBottomToolbar()->nextPage()) {
@@ -48,7 +51,7 @@ class AssertAddToCartButtonAbsent extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertFalse(
             $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisibleAddToCardButton(),
-            "Button 'Add to Card' is present on Category page"
+            "Button 'Add to Card' is present on Category page."
         );
 
         $catalogCategoryView->getListProductBlock()->openProductViewPage($product->getName());

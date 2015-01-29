@@ -10,7 +10,6 @@ use Magento\Catalog\Test\Block\Product\ProductList\ProductItem;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
