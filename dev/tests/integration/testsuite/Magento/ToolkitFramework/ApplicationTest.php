@@ -35,12 +35,24 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
 
     public function testTest()
     {
-        $fixturesArray = \Magento\ToolkitFramework\FixtureSet::getInstance()->getFixtures();
-        $config = \Magento\ToolkitFramework\Config::getInstance();
-        $config->loadConfig(self::$_generatorWorkingDir . '/profiles/small.xml');
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get('Magento\Framework\App\State')
+            ->setAreaCode(\Magento\ToolkitFramework\Application::AREA_CODE);
 
-        foreach ($fixturesArray as $fixture) {
-            $this->applyFixture(self::$_generatorWorkingDir . '/fixtures/' . $fixture['file']);
+        $config = \Magento\ToolkitFramework\Config::getInstance();
+        $config->loadConfig(self::$_generatorWorkingDir . '/profiles/ce/small.xml');
+        /** @var \Magento\TestFramework\Application $itfApplication */
+        $itfApplication = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication();
+        $installDir = $itfApplication->getTempDir();
+        $magentoBaseDir = realpath("{$installDir}/../../../../../");
+        $shell = $this->getMock('Magento\Framework\Shell', [], [], '', false);
+
+
+        $application = new \Magento\ToolkitFramework\Application($magentoBaseDir, $shell);
+        $application->bootstrap();
+        foreach ($application->loadFixtures()->getFixtures() as $fixture) {
+            echo $fixture->getActionTitle() . '... ' . PHP_EOL;
+            $fixture->execute();
         }
     }
 
