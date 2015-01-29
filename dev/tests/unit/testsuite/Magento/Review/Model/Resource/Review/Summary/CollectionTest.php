@@ -19,7 +19,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $fetchStrategyMock;
 
     /**
-     * @var \Magento\Core\Model\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityFactoryMock;
 
@@ -53,7 +53,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->entityFactoryMock = $this->getMock(
-            'Magento\Core\Model\EntityFactory',
+            'Magento\Framework\Data\Collection\EntityFactory',
             ['create'],
             [],
             '',

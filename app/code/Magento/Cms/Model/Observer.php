@@ -68,7 +68,7 @@ class Observer
 
         $pageId = $this->_scopeConfig->getValue(
             \Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         $pageUrl = $this->_cmsPage->getPageUrl($pageId);
 

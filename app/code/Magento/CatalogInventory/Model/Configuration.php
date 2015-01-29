@@ -9,7 +9,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Helper\Minsaleqty as MinsaleqtyHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Class Configuration
@@ -129,13 +129,13 @@ class Configuration implements StockConfigurationInterface
      * @param ConfigInterface $config
      * @param ScopeConfigInterface $scopeConfig
      * @param MinsaleqtyHelper $minsaleqtyHelper
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         ConfigInterface $config,
         ScopeConfigInterface $scopeConfig,
         MinsaleqtyHelper $minsaleqtyHelper,
-        StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->config = $config;
         $this->scopeConfig = $scopeConfig;
@@ -196,7 +196,7 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CAN_SUBTRACT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -209,7 +209,7 @@ class Configuration implements StockConfigurationInterface
     {
         return (float)$this->scopeConfig->getValue(
             self::XML_PATH_MIN_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -232,7 +232,7 @@ class Configuration implements StockConfigurationInterface
     {
         return (float)$this->scopeConfig->getValue(
             self::XML_PATH_MAX_SALE_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -245,7 +245,7 @@ class Configuration implements StockConfigurationInterface
     {
         return (float) $this->scopeConfig->getValue(
             self::XML_PATH_NOTIFY_STOCK_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -261,7 +261,7 @@ class Configuration implements StockConfigurationInterface
     {
         return (bool) $this->scopeConfig->getValue(
             self::XML_PATH_ENABLE_QTY_INCREMENTS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -274,7 +274,7 @@ class Configuration implements StockConfigurationInterface
     {
         return (float)$this->scopeConfig->getValue(
             self::XML_PATH_QTY_INCREMENTS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -289,7 +289,7 @@ class Configuration implements StockConfigurationInterface
     {
         return (int) $this->scopeConfig->getValue(
             self::XML_PATH_BACKORDERS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -304,7 +304,7 @@ class Configuration implements StockConfigurationInterface
     {
         return (int) $this->scopeConfig->isSetFlag(
             self::XML_PATH_MANAGE_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -320,7 +320,7 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CAN_BACK_IN_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -335,7 +335,7 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_SHOW_OUT_OF_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -350,7 +350,7 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ITEM_AUTO_RETURN,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -366,7 +366,7 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -380,7 +380,7 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_ITEM . $field,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

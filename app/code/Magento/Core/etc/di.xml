@@ -18,30 +18,30 @@
     <preference for="Magento\Framework\App\Config\ReinitableConfigInterface" type="Magento\Framework\App\ReinitableConfig" />
     <preference for="Magento\Framework\App\Config\MutableScopeConfigInterface" type="Magento\Framework\App\MutableScopeConfig" />
     <preference for="Magento\Framework\App\Config\Storage\WriterInterface" type="Magento\Framework\App\Config\Storage\Writer" />
-    <preference for="Magento\Framework\View\Design\Theme\FileInterface" type="Magento\Core\Model\Theme\File" />
+    <preference for="Magento\Framework\View\Design\Theme\FileInterface" type="Magento\Theme\Model\Theme\File" />
     <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\Config\Converter\Dom"/>
     <preference for="Magento\Framework\App\DefaultPathInterface" type="Magento\Framework\App\DefaultPath\DefaultPath" />
     <preference for="Magento\Framework\Encryption\EncryptorInterface" type="Magento\Framework\Encryption\Encryptor" />
     <preference for="Magento\Framework\Filter\Encrypt\AdapterInterface" type="Magento\Framework\Filter\Encrypt\Basic" />
     <preference for="Magento\Framework\Cache\ConfigInterface" type="Magento\Framework\Cache\Config" />
-    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Core\Model\Theme\ThemeProvider" />
-    <preference for="Magento\Framework\View\Design\Theme\FileProviderInterface" type="Magento\Core\Model\Theme\FileProvider" />
-    <preference for="Magento\Framework\View\Design\Theme\Customization\ConfigInterface" type="Magento\Core\Model\Theme\Customization\Config" />
+    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Theme\Model\Theme\ThemeProvider" />
+    <preference for="Magento\Framework\View\Design\Theme\FileProviderInterface" type="Magento\Theme\Model\Theme\FileProvider" />
+    <preference for="Magento\Framework\View\Design\Theme\Customization\ConfigInterface" type="Magento\Theme\Model\Theme\Customization\Config" />
     <preference for="Magento\Framework\View\Asset\ConfigInterface" type="Magento\Core\Model\Asset\Config" />
     <preference for="Magento\Framework\View\Asset\MergeStrategyInterface" type="Magento\Framework\View\Asset\MergeStrategy\Direct" />
     <preference for="Magento\Framework\App\ViewInterface" type="Magento\Framework\App\View" />
     <preference for="Magento\Framework\TranslateInterface" type="Magento\Framework\Translate" />
     <preference for="Magento\Framework\App\Response\RedirectInterface" type="Magento\Store\App\Response\Redirect" />
-    <preference for="Magento\Framework\Data\Collection\EntityFactoryInterface" type="Magento\Core\Model\EntityFactory" />
+    <preference for="Magento\Framework\Data\Collection\EntityFactoryInterface" type="Magento\Framework\Data\Collection\EntityFactory" />
     <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
     <preference for="Magento\Framework\Translate\Inline\ConfigInterface" type="Magento\Translation\Model\Inline\Config" />
     <preference for="Magento\Framework\Translate\Inline\ParserInterface" type="Magento\Translation\Model\Inline\Parser" />
     <preference for="Magento\Framework\Session\ValidatorInterface" type="Magento\Framework\Session\Validator" />
     <preference for="Magento\Framework\Session\StorageInterface" type="Magento\Framework\Session\Storage" />
-    <preference for="Magento\Framework\Url\RouteParamsResolverInterface" type="Magento\Core\Model\Url\RouteParamsResolver" />
+    <preference for="Magento\Framework\Url\RouteParamsResolverInterface" type="Magento\Framework\Url\RouteParamsResolver" />
     <preference for="Magento\Framework\Url\QueryParamsResolverInterface" type="Magento\Framework\Url\QueryParamsResolver" />
-    <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Core\Model\Url\ScopeResolver" />
-    <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Core\Model\Url\SecurityInfo\Proxy" />
+    <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Framework\Url\ScopeResolver" />
+    <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Framework\Url\SecurityInfo\Proxy" />
     <preference for="Magento\Framework\Mview\ConfigInterface" type="Magento\Framework\Mview\Config" />
     <preference for="Magento\Framework\Mview\ViewInterface" type="Magento\Framework\Mview\View" />
     <preference for="Magento\Framework\Mview\ProcessorInterface" type="Magento\Framework\Mview\Processor" />
@@ -59,13 +59,13 @@
     <preference for="Magento\Framework\Less\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Less\PreProcessor\ErrorHandler" />
     <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\Resource" />
     <preference for="Magento\Framework\App\Config\Resource\ConfigInterface" type="Magento\Core\Model\Resource\Config" />
-    <preference for="Magento\Framework\App\DesignInterface" type="Magento\Core\Model\Design" />
+    <preference for="Magento\Framework\App\DesignInterface" type="Magento\Theme\Model\Design" />
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria" />
     <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
-    <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Core\Model\Theme\Collection" />
+    <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Theme\Model\Theme\Collection" />
     <type name="Magento\Framework\App\DefaultPath\DefaultPath">
         <arguments>
             <argument name="parts" xsi:type="array">
@@ -105,7 +105,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\View\Asset\Collection" shared="false" />
-    <type name="Magento\Core\Model\Theme\Collection" shared="false" />
+    <type name="Magento\Theme\Model\Theme\Collection" shared="false" />
     <type name="Magento\Core\Model\Layout\Merge">
         <arguments>
             <argument name="fileSource" xsi:type="object">Magento\Framework\View\Layout\File\Collector\Aggregated\Proxy</argument>
@@ -398,7 +398,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\View\Design">
+    <type name="Magento\Theme\Model\View\Design">
         <arguments>
             <argument name="themes" xsi:type="array">
                 <item name="frontend" xsi:type="string">Magento/blank</item>
@@ -453,14 +453,6 @@
             <argument name="fileStorage" xsi:type="object">Magento\Core\Model\File\Storage\File\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\TemplateEngineFactory">
-        <plugin name="debug_hints" type="Magento\Core\Model\TemplateEngine\Plugin\DebugHints" sortOrder="10"/>
-        <arguments>
-            <argument name="engines" xsi:type="array">
-                <item name="phtml" xsi:type="string">Magento\Framework\View\TemplateEngine\Php</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Image">
         <arguments>
             <argument name="adapter" xsi:type="object">Magento\Framework\Image\Adapter\Gd2</argument>
@@ -488,7 +480,7 @@
     <type name="Magento\Framework\App\Area">
         <arguments>
             <argument name="translator" xsi:type="object">Magento\Framework\Translate</argument>
-            <argument name="design" xsi:type="object">Magento\Core\Model\Design\Proxy</argument>
+            <argument name="design" xsi:type="object">Magento\Theme\Model\Design\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\FrontController">
@@ -526,7 +518,7 @@
     <type name="Magento\Framework\View\Asset\MergeService">
         <plugin name="cleanMergedJsCss" type="Magento\Core\Model\Asset\Plugin\CleanMergedJsCss"/>
     </type>
-    <type name="Magento\Core\Model\Url\ScopeResolver">
+    <type name="Magento\Framework\Url\ScopeResolver">
         <arguments>
             <argument name="areaCode" xsi:type="string">frontend</argument>
         </arguments>
@@ -585,19 +577,19 @@
     <type name="Magento\Framework\Stdlib\DateTime\Timezone">
         <arguments>
             <argument name="defaultTimezonePath" xsi:type="const">Magento\Core\Helper\Data::XML_PATH_DEFAULT_TIMEZONE</argument>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Url">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Locale\Resolver">
         <plugin name="initLocale" type="Magento\Framework\Translate\Locale\Resolver\Plugin" sortOrder="10"/>
         <arguments>
             <argument name="defaultLocalePath" xsi:type="const">Magento\Core\Helper\Data::XML_PATH_DEFAULT_LOCALE</argument>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\ScopeResolverPool">
@@ -636,7 +628,7 @@
     <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
-                <item name="core_setup" xsi:type="string">Magento\Core\Model\Resource\Setup</item>
+                <item name="core_setup" xsi:type="string">Magento\Framework\Module\DataSetup</item>
             </argument>
         </arguments>
     </type>

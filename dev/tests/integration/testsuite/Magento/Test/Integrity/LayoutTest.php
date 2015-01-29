@@ -22,7 +22,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
-            ['preferences' => ['Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data']]
+            ['preferences' => ['Magento\Theme\Model\Theme' => 'Magento\Theme\Model\Theme\Data']]
         );
     }
 
@@ -162,9 +162,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\View\File\Collector\Override\ThemeModular',
                 ['subDir' => 'layout/override/theme']
             );
-        /** @var $themeCollection \Magento\Core\Model\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Theme\Collection'
+            'Magento\Theme\Model\Theme\Collection'
         );
         $themeCollection->addDefaultPattern('*');
         /** @var $themeLayouts \Magento\Framework\View\File[] */
@@ -319,9 +319,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     protected function _retrieveFilesForEveryTheme(\Magento\Framework\View\File\CollectorInterface $filesRetriever)
     {
         $result = [];
-        /** @var $themeCollection \Magento\Core\Model\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Theme\Collection'
+            'Magento\Theme\Model\Theme\Collection'
         );
         $themeCollection->addDefaultPattern('*');
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
