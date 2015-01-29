@@ -156,14 +156,40 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->object->setIsEnabled(true, ['Module_Baz']);
     }
 
-    public function testGetUnchangedModules()
+    /**
+     * @dataProvider getModulesToChangeDataProvider
+     * @param bool $firstEnabled
+     * @param bool $secondEnabled
+     * @param bool $thirdEnabled
+     * @param bool $isEnabled
+     * @param string[] $expected
+     */
+    public function testGetModulesToChange($firstEnabled, $secondEnabled, $thirdEnabled, $isEnabled, $expected)
     {
         $modules = ['Module_Foo' => '', 'Module_Bar' => '', 'Module_Baz' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
-        $this->moduleList->expects($this->at(0))->method('has')->with('Module_Foo')->willReturn(true);
-        $this->moduleList->expects($this->at(1))->method('has')->with('Module_Bar')->willReturn(true);
-        $this->moduleList->expects($this->at(2))->method('has')->with('Module_Baz')->willReturn(true);
-        $result = $this->object->getUnchangedModules(true, ['Module_Foo', 'Module_Bar', 'Module_Baz']);
-        $this->assertEquals(array_keys($modules), $result);
+        $this->moduleList->expects($this->at(0))->method('has')->with('Module_Foo')->willReturn($firstEnabled);
+        $this->moduleList->expects($this->at(1))->method('has')->with('Module_Bar')->willReturn($secondEnabled);
+        $this->moduleList->expects($this->at(2))->method('has')->with('Module_Baz')->willReturn($thirdEnabled);
+        $result = $this->object->getModulesToChange($isEnabled, ['Module_Foo', 'Module_Bar', 'Module_Baz']);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function getModulesToChangeDataProvider()
+    {
+        return [
+            [true, true, true, true, []],
+            [true, true, false, true, ['Module_Baz']],
+            [true, false, true, true, ['Module_Bar']],
+            [true, false, false, true, ['Module_Bar', 'Module_Baz']],
+            [false, false, false, true, ['Module_Foo', 'Module_Bar', 'Module_Baz']],
+            [true, false, false, false, ['Module_Foo']],
+            [false, true, false, false, ['Module_Bar']],
+            [false, true, true, false, ['Module_Bar', 'Module_Baz']],
+            [true, true, true, false, ['Module_Foo', 'Module_Bar', 'Module_Baz']],
+        ];
     }
 }

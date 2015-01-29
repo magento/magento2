@@ -148,24 +148,24 @@ class Status
     }
 
     /**
-     * Get a list of modules that will not be changed
+     * Get a list of modules that will be changed
      *
      * @param bool $isEnabled
      * @param string[] $modules
      * @return string[]
      */
-    public function getUnchangedModules($isEnabled, $modules)
+    public function getModulesToChange($isEnabled, $modules)
     {
-        $unchanged = [];
+        $changed = [];
         foreach ($this->getAllModules($modules) as $name) {
             $currentStatus = $this->list->has($name);
             if (in_array($name, $modules)) {
-                if ($isEnabled == $currentStatus) {
-                    $unchanged[] = $name;
+                if ($isEnabled != $currentStatus) {
+                    $changed[] = $name;
                 }
             }
         }
-        return $unchanged;
+        return $changed;
     }
 
     /**
