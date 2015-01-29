@@ -370,6 +370,8 @@ return [
         '\Magento\ImportExport\Model\Export\ConfigInterface::getEntityTypes()'
     ],
     ['forsedSave'],
+    ['formatCurrency', 'Magento\Core\Helper\Data'],
+    ['formatPrice', 'Magento\Core\Helper\Data'],
     ['generateBlocks', '', 'generateElements()'],
     ['getAbsolutePath', '', 'normalizePath'],
     ['getAccount', 'Magento\GoogleAnalytics\Block\Ga'],
@@ -2032,5 +2034,6 @@ return [
     ['isNominal', 'Magento\Sales\Model\Order\Item'],
     ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem'],
     ['checkQuoteAmount', 'Magento\Sales\Helper\Data'],
-    ['getEntityTypeId', 'Magento\Customer\Model\Customer']
+    ['getEntityTypeId', 'Magento\Customer\Model\Customer'],
+    ['useDbCompatibleMode', 'Magento\Core\Helper\Data']
 ];
