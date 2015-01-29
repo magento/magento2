@@ -2855,4 +2855,6 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
     ['Magento\Core\Model\Validator\Factory', 'Magento\Framework\Validator\Factory'],
+    ['Zend_Controller_Router_Route'],
+    ['Zend_Controller_Router_Route_Interface'],
 ];
