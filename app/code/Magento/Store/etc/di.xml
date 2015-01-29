@@ -155,4 +155,14 @@
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Router\NoRouteHandlerList">
+        <arguments>
+            <argument name="handlerClassesList" xsi:type="array">
+                <item name="default" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Framework\App\Router\NoRouteHandler</item>
+                    <item name="sortOrder" xsi:type="string">100</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

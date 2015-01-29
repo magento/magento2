@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\App\Router;
+namespace Magento\Framework\App\Router;
 
 class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInterface
 {
