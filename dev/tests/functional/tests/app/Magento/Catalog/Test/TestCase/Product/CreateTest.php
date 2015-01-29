@@ -12,7 +12,7 @@ use Magento\Mtf\TestCase\Functional;
 
 /**
  * Class CreateTest
- * Create simple product for BAT
+ * Create simple product
  */
 class CreateTest extends Functional
 {

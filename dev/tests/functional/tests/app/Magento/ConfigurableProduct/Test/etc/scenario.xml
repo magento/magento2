@@ -12,9 +12,6 @@
                 <steps>
                     <first>createProduct</first>
                     <step name="createProduct" module="Magento_Catalog">
-                        <arguments>
-                            <item name="product">configurableProductInjectable::default</item>
-                        </arguments>
                         <next>openProductOnBackend</next>
                     </step>
                     <step name="openProductOnBackend" module="Magento_Catalog">

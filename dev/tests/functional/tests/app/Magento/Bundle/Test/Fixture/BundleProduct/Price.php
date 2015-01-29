@@ -186,6 +186,14 @@ class Price implements FixtureInterface
                 'price_to' => '756.00',
                 'cart_price' => '756.00',
             ],
+            'bundle_fixed_with_category' => [
+                'price_from' => '130.00',
+                'price_to' => '144.00',
+            ],
+            'bundle_dynamic_with_category' => [
+                'price_from' => '100.00',
+                'price_to' => '100.00',
+            ]
         ];
         if (!isset($presets[$this->currentPreset])) {
             return null;
