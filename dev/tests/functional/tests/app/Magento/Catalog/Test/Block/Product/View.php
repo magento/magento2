@@ -351,7 +351,7 @@ class View extends AbstractConfigureBlock
      *
      * @return bool
      */
-    public function checkAddToCardButton()
+    public function isVisibleAddToCardButton()
     {
         return $this->_rootElement->find($this->addToCart, Locator::SELECTOR_CSS)->isVisible();
     }
