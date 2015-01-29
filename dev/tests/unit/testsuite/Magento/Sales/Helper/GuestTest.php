@@ -160,8 +160,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('setPublicCookie')
             ->with(Guest::COOKIE_NAME, $this->anything(), $metaDataMock);
-        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->assertTrue($this->guest->loadValidOrder($requestMock, $responseMock));
+        $this->assertTrue($this->guest->loadValidOrder($requestMock));
     }
 
     public function testLoadValidOrderStoredCookie()
@@ -213,7 +212,6 @@ class GuestTest extends \PHPUnit_Framework_TestCase
             ->with(Guest::COOKIE_NAME, $this->anything(), $metaDataMock);
 
         $requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->assertTrue($this->guest->loadValidOrder($requestMock, $responseMock));
+        $this->assertTrue($this->guest->loadValidOrder($requestMock));
     }
 }
