@@ -15,6 +15,19 @@ class ArgumentsResolver
     private $diContainerConfig;
 
     /**
+     * Argument pattern used for configuration
+     *
+     * @var array
+     */
+    private $argumentPattern = [
+        '_i_' => null,
+        '_s_' => false,
+        '_v_' => null,
+        '_a_' => null,
+        '_d_' => null
+    ];
+
+    /**
      * @param \Magento\Framework\ObjectManager\ConfigInterface $diContainerConfig
      */
     public function __construct(\Magento\Framework\ObjectManager\ConfigInterface $diContainerConfig)
@@ -39,9 +52,9 @@ class ArgumentsResolver
         $arguments = [];
         /** @var ConstructorArgument $constructorArgument */
         foreach ($constructor as $constructorArgument) {
-            $argument = self::getNonObjectArgument(null);
+            $argument = $this->getNonObjectArgument(null);
             if (!$constructorArgument->isRequired()) {
-                $argument = self::getNonObjectArgument($constructorArgument->getDefaultValue());
+                $argument = $this->getNonObjectArgument($constructorArgument->getDefaultValue());
             } elseif ($constructorArgument->getType()) {
                 $argument = $this->getInstanceArgument($constructorArgument->getType());
             }
@@ -67,12 +80,38 @@ class ArgumentsResolver
     private function getConfiguredArgument($configuredArgument, ConstructorArgument $constructorArgument)
     {
         if ($constructorArgument->getType()) {
-            return $this->getInstanceArgument($configuredArgument['instance']);
+            $argument = $this->getInstanceArgument($configuredArgument['instance']);
+            $argument['_s_'] = isset($configuredArgument['shared']) ? $configuredArgument['shared'] : $argument['_s_'];
+            return $argument;
         } elseif (isset($configuredArgument['argument'])) {
-            return self::getGlobalArgument($configuredArgument['argument'], $constructorArgument->getDefaultValue());
+            return $this->getGlobalArgument($configuredArgument['argument'], $constructorArgument->getDefaultValue());
         }
 
-        return self::getNonObjectArgument($configuredArgument);
+        return $this->getNonObjectArgument($configuredArgument);
+    }
+
+    private function getConfiguredArrayAttribute($array)
+    {
+        foreach ($array as $key => $value) {
+            if (!is_array($value)) {
+                continue;
+            }
+
+            if (isset($value['instance'])) {
+                $array[$key] = $this->getInstanceArgument($value['instance']);
+                $array[$key]['_s_'] = isset($value['shared']) ? $value['shared'] : $array[$key]['_s_'];
+                continue;
+            }
+
+            if (isset($value['argument'])) {
+                $array[$key] = $this->getGlobalArgument($value['argument'], null);
+                continue;
+            }
+
+            $array[$key] = $this->getConfiguredArrayAttribute($value);
+        }
+
+        return $array;
     }
 
     /**
@@ -104,23 +143,10 @@ class ArgumentsResolver
      */
     private function getInstanceArgument($instanceType)
     {
-        return $this->diContainerConfig->isShared($instanceType)
-            ? $instanceType
-            : self::getNonSharedInstance($instanceType);
-    }
-
-    /**
-     * Returns argument of non shared instance
-     *
-     * @param string $instanceType
-     * @return array
-     */
-    private static function getNonSharedInstance($instanceType)
-    {
-        return [
-            '__non_shared__' => true,
-            '__instance__' => $instanceType
-        ];
+        $argument = $this->argumentPattern;
+        $argument['_i_'] = $instanceType;
+        $argument['_s_'] = $this->diContainerConfig->isShared($instanceType);
+        return $argument;
     }
 
     /**
@@ -129,23 +155,28 @@ class ArgumentsResolver
      * @param mixed $value
      * @return array
      */
-    private static function getNonObjectArgument($value)
+    private function getNonObjectArgument($value)
     {
-        return ['__val__' => $value];
+        $argument = $this->argumentPattern;
+        if (is_array($value)) {
+            $value = $this->getConfiguredArrayAttribute($value);
+        }
+        $argument['_v_'] = $value;
+        return $argument;
     }
 
     /**
      * Returns global argument
      *
-     * @param string $argument
+     * @param string $value
      * @param string $default
      * @return array
      */
-    private static function getGlobalArgument($argument, $default)
+    private function getGlobalArgument($value, $default)
     {
-        return [
-            '__arg__' => $argument,
-            '__default__' => $default
-        ];
+        $argument = $this->argumentPattern;
+        $argument['_a_'] = $value;
+        $argument['_d_'] = $default;
+        return $argument;
     }
 }

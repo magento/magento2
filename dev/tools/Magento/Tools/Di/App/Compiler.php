@@ -68,11 +68,11 @@ class Compiler implements \Magento\Framework\AppInterface
             Task\OperationFactory::AREA => [
                 BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
             ],
-            Task\OperationFactory::INTERCEPTION =>
-                BP . '/var/generation',
-            Task\OperationFactory::INTERCEPTION_CACHE => [
-                BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
-            ]
+            //Task\OperationFactory::INTERCEPTION =>
+            //    BP . '/var/generation',
+            //Task\OperationFactory::INTERCEPTION_CACHE => [
+            //    BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
+            //]
         ];
 
         $responseCode = Response::SUCCESS;

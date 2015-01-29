@@ -8,6 +8,8 @@
 
 namespace Magento\Tools\Di\Compiler;
 
+use Magento\Tools\Di\Compiler\ConstructorArgument;
+
 class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -22,203 +24,230 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->diContainerConfig = $this->getMock('Magento\Framework\ObjectManager\ConfigInterface', [], [], '', false);
+        $this->diContainerConfig = $this->getMock(
+            'Magento\Framework\ObjectManager\ConfigInterface',
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new \Magento\Tools\Di\Compiler\ArgumentsResolver($this->diContainerConfig);
     }
 
-    /**
-     * @dataProvider getResolvedConstructorArgumentsNoTypeDataProvider
-     */
-    public function testGetResolvedConstructorArgumentsNoType($constructor, $isRequired, $getType, $isShared, $expected)
+    public function testGetResolvedArgumentsConstructorFormat()
     {
-        $instanceType = ['instance' => 'Magento\Framework\Api\Config\MetadataConfig', 'argument' => 'object'];
-        $this->diContainerConfig->expects($this->any())
-            ->method('getArguments')
-            ->willReturn(['virtualType' => $instanceType]);
-        $constructor->expects($this->any())
-            ->method('isRequired')
-            ->willReturn($isRequired);
-        $constructor->expects($this->any())
-            ->method('getDefaultValue')
-            ->willReturn('Magento\Customer\Api\Data\Eav\AttributeMetadataDataBuilder');
-        $constructor->expects($this->any())
-            ->method('getType')
-            ->willReturn($getType);
-        $constructor->expects($this->any())
-            ->method('getName')
-            ->willReturn('attributeMetadataBuilder');
+        $expectedResultDefault = $this->getResolvedSimpleConfigExpectation();
+
+        $constructor = [
+            new ConstructorArgument(['type_dependency', 'Type\Dependency', true, null]),
+            new ConstructorArgument(['type_dependency_shared', 'Type\Dependency\Shared', true, null]),
+            new ConstructorArgument(['value', null, false, 'value']),
+            new ConstructorArgument(['value_array', null, false, ['default_value1', 'default_value2']]),
+        ];
         $this->diContainerConfig->expects($this->any())
             ->method('isShared')
-            ->willReturn($isShared);
+            ->willReturnMap(
+                [
+                    ['Type\Dependency', false],
+                    ['Type\Dependency\Shared', true]
+                ]
+            );
 
-        $this->assertEquals(
-            $expected,
-            $this->model->getResolvedConstructorArguments($instanceType, [$constructor])
+        $type = 'Class';
+        $this->diContainerConfig->expects($this->any())
+            ->method('getArguments')
+            ->with($type)
+            ->willReturn([]);
+
+        $this->assertSame(
+            $expectedResultDefault,
+            $this->model->getResolvedConstructorArguments($type, $constructor)
+        );
+    }
+
+    public function testGetResolvedArgumentsConstructorConfiguredFormat()
+    {
+        $expectedResultConfigured = $this->getResolvedConfigurableConfigExpectation();
+
+        $constructor = [
+            new ConstructorArgument(['type_dependency_configured', 'Type\Dependency', true, null]),
+            new ConstructorArgument(['type_dependency_shared_configured', 'Type\Dependency\Shared', true, null]),
+            new ConstructorArgument(['global_argument', null, false, null]),
+            new ConstructorArgument(['global_argument_def', null, false, []]),
+            new ConstructorArgument(['value_configured', null, false, 'value']),
+            new ConstructorArgument(['value_array_configured', null, false, []]),
+        ];
+
+
+
+        $this->diContainerConfig->expects($this->any())
+            ->method('isShared')
+            ->willReturnMap(
+                [
+                    ['Type\Dependency', false],
+                    ['Type\Dependency\Shared', true],
+                    ['Type\Dependency\Configured', false],
+                    ['Type\Dependency\Shared\Configured', true]
+                ]
+            );
+
+        $type = 'Class';
+        $this->diContainerConfig->expects($this->any())
+            ->method('getArguments')
+            ->with($type)
+            ->willReturn(
+                $this->getConfiguredArguments()
+            );
+
+        $this->assertSame(
+            $expectedResultConfigured,
+            $this->model->getResolvedConstructorArguments($type, $constructor)
         );
     }
 
     /**
+     * Returns resolved simple config expectation
+     *
      * @return array
      */
-    public function getResolvedConstructorArgumentsNoTypeDataProvider()
+    private function getResolvedSimpleConfigExpectation()
     {
-        $constructor = $this->getMock('Magento\Tools\Di\Compiler\ConstructorArgument', [], [], '', false);
-        $expected = [
-            'attributeMetadataBuilder' => ['__val__' => 'Magento\Customer\Api\Data\Eav\AttributeMetadataDataBuilder']
-        ];
         return [
-            [$constructor, false, false, true, $expected]
+            'type_dependency' => [
+                '_i_' => 'Type\Dependency',
+                '_s_' => false,
+                '_v_' => null,
+                '_a_' => null,
+                '_d_' => null
+            ],
+            'type_dependency_shared' => [
+                '_i_' => 'Type\Dependency\Shared',
+                '_s_' => true,
+                '_v_' => null,
+                '_a_' => null,
+                '_d_' => null
+            ],
+            'value' => [
+                '_i_' => null,
+                '_s_' => false,
+                '_v_' => 'value',
+                '_a_' => null,
+                '_d_' => null
+            ],
+            'value_array' => [
+                '_i_' => null,
+                '_s_' => false,
+                '_v_' => ['default_value1', 'default_value2'],
+                '_a_' => null,
+                '_d_' => null
+            ],
         ];
     }
 
     /**
-     * @dataProvider getResolvedConstructorArgumentsWithTypeDataProvider
-     */
-    public function testGetResolvedConstructorArgumentsWithType(
-        $constructor, $isRequired, $getType, $isShared, $expected
-    ) {
-        $instanceType = ['instance' => 'Magento\Framework\Api\Config\MetadataConfig'];
-        if (!$constructor) {
-            $this->assertNull($this->model->getResolvedConstructorArguments('virtualType', $constructor));
-            return;
-        }
-
-        $this->diContainerConfig->expects($this->any())
-            ->method('getArguments')
-            ->willReturn(['virtualType' => $instanceType]);
-        $constructor->expects($this->any())
-            ->method('isRequired')
-            ->willReturn($isRequired);
-        $constructor->expects($this->any())
-            ->method('getDefaultValue')
-            ->willReturn('Magento\Customer\Api\Data\Eav\AttributeMetadataDataBuilder');
-        $constructor->expects($this->any())
-            ->method('getType')
-            ->willReturn($getType);
-        $constructor->expects($this->any())
-            ->method('getName')
-            ->willReturn('virtualType');
-        $this->diContainerConfig->expects($this->any())
-            ->method('isShared')
-            ->willReturn($isShared);
-
-        $this->assertEquals(
-            $expected,
-            $this->model->getResolvedConstructorArguments($instanceType, [$constructor])
-        );
-    }
-
-    /**
+     * Returns configured arguments expectation
+     *
      * @return array
      */
-    public function getResolvedConstructorArgumentsWithTypeDataProvider()
+    private function getConfiguredArguments()
     {
-        $constructor = $this->getMock('Magento\Tools\Di\Compiler\ConstructorArgument', [], [], '', false);
         return [
-            [$constructor, true, 'virtualType', true, ['virtualType' => 'Magento\Framework\Api\Config\MetadataConfig']],
-        ];
-    }
-
-    public function testGetResolvedConstructorArgumentsConstructorNull()
-    {
-        $this->assertNull($this->model->getResolvedConstructorArguments('virtualType', []));
-    }
-
-    /**
-     * @dataProvider getResolvedConstructorArgumentsWithArgumentDataProvider
-     */
-    public function testGetResolvedConstructorArgumentsWithArgument(
-        $constructor, $isRequired, $getType, $isShared, $expected
-    ) {
-        $instanceType = ['instance' => 'Magento\Framework\Api\Config\MetadataConfig', 'argument' => 'object'];
-        $this->diContainerConfig->expects($this->any())
-            ->method('getArguments')
-            ->willReturn(['virtualType' => $instanceType]);
-        $constructor->expects($this->any())
-            ->method('isRequired')
-            ->willReturn($isRequired);
-        $constructor->expects($this->any())
-            ->method('getDefaultValue')
-            ->willReturn('Magento\Customer\Api\Data\Eav\AttributeMetadataDataBuilder');
-        $constructor->expects($this->any())
-            ->method('getType')
-            ->willReturn($getType);
-        $constructor->expects($this->any())
-            ->method('getName')
-            ->willReturn('virtualType');
-        $this->diContainerConfig->expects($this->any())
-            ->method('isShared')
-            ->willReturn($isShared);
-
-        $this->assertEquals(
-            $expected,
-            $this->model->getResolvedConstructorArguments($instanceType, [$constructor])
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function getResolvedConstructorArgumentsWithArgumentDataProvider()
-    {
-        $constructor = $this->getMock('Magento\Tools\Di\Compiler\ConstructorArgument', [], [], '', false);
-        $expected = [
-            'virtualType' => [
-                '__arg__' => 'object',
-                '__default__' => 'Magento\Customer\Api\Data\Eav\AttributeMetadataDataBuilder'
+            'type_dependency_configured' => ['instance' => 'Type\Dependency\Configured'],
+            'type_dependency_shared_configured' => ['instance' => 'Type\Dependency\Shared\Configured'],
+            'global_argument' => ['argument' => 'global_argument_configured'],
+            'global_argument_def' => ['argument' => 'global_argument_configured'],
+            'value_configured' => 'value_configured',
+            'value_array_configured' => [
+                'array_value' => 'value',
+                'array_configured_instance' => ['instance' => 'Type\Dependency\Shared\Configured'],
+                'array_configured_array' => [
+                    'array_array_value' => 'value',
+                    'array_array_configured_instance' => [
+                        'instance' => 'Type\Dependency\Shared\Configured',
+                        'shared' => false
+                    ]
+                ],
+                'array_global_argument' => ['argument' => 'global_argument_configured']
             ]
         ];
-        return [
-            [$constructor, false, false, true, $expected]
-        ];
     }
 
     /**
-     * @dataProvider getResolvedConstructorArgumentsNoSharedDataProvider
-     */
-    public function testGetResolvedConstructorArgumentsNoShared(
-        $constructor, $isRequired, $getType, $isShared, $expected
-    ) {
-        $instanceType = ['instance' => 'Magento\Framework\Api\Config\MetadataConfig', 'argument' => 'object'];
-        $this->diContainerConfig->expects($this->any())
-            ->method('getArguments')
-            ->willReturn(['virtualType' => $instanceType]);
-        $constructor->expects($this->any())
-            ->method('isRequired')
-            ->willReturn($isRequired);
-        $constructor->expects($this->any())
-            ->method('getDefaultValue')
-            ->willReturn('Magento\Customer\Api\Data\Eav\AttributeMetadataDataBuilder');
-        $constructor->expects($this->any())
-            ->method('getType')
-            ->willReturn($getType);
-        $constructor->expects($this->any())
-            ->method('getName')
-            ->willReturn('virtualType');
-        $this->diContainerConfig->expects($this->any())
-            ->method('isShared')
-            ->willReturn($isShared);
-
-        $this->assertEquals(
-            $expected,
-            $this->model->getResolvedConstructorArguments($instanceType, [$constructor])
-        );
-    }
-
-    /**
+     * Returns resolved configurable config expectation
+     *
      * @return array
      */
-    public function getResolvedConstructorArgumentsNoSharedDataProvider()
+    private function getResolvedConfigurableConfigExpectation()
     {
-        $constructor = $this->getMock('Magento\Tools\Di\Compiler\ConstructorArgument', [], [], '', false);
-        $expected = [
-            'virtualType' => [
-                '__non_shared__' => true,
-                '__instance__' => 'Magento\Framework\Api\Config\MetadataConfig'
-            ]
-        ];
         return [
-            [$constructor, false, true, false, $expected]
+            'type_dependency_configured' => [
+                '_i_' => 'Type\Dependency\Configured',
+                '_s_' => false,
+                '_v_' => null,
+                '_a_' => null,
+                '_d_' => null
+            ],
+            'type_dependency_shared_configured' => [
+                '_i_' => 'Type\Dependency\Shared\Configured',
+                '_s_' => true,
+                '_v_' => null,
+                '_a_' => null,
+                '_d_' => null
+            ],
+            'global_argument' => [
+                '_i_' => null,
+                '_s_' => false,
+                '_v_' => null,
+                '_a_' => 'global_argument_configured',
+                '_d_' => null
+            ],
+            'global_argument_def' => [
+                '_i_' => null,
+                '_s_' => false,
+                '_v_' => null,
+                '_a_' => 'global_argument_configured',
+                '_d_' => []
+            ],
+            'value_configured' => [
+                '_i_' => null,
+                '_s_' => false,
+                '_v_' => 'value_configured',
+                '_a_' => null,
+                '_d_' => null
+            ],
+            'value_array_configured' => [
+                '_i_' => null,
+                '_s_' => false,
+                '_v_' => [
+                    'array_value' => 'value',
+                    'array_configured_instance' => [
+                        '_i_' => 'Type\Dependency\Shared\Configured',
+                        '_s_' => true,
+                        '_v_' => null,
+                        '_a_' => null,
+                        '_d_' => null
+                    ],
+                    'array_configured_array' => [
+                        'array_array_value' => 'value',
+                        'array_array_configured_instance' => [
+                            '_i_' => 'Type\Dependency\Shared\Configured',
+                            '_s_' => false,
+                            '_v_' => null,
+                            '_a_' => null,
+                            '_d_' => null
+                        ],
+                    ],
+                    'array_global_argument' => [
+                        '_i_' => null,
+                        '_s_' => false,
+                        '_v_' => null,
+                        '_a_' => 'global_argument_configured',
+                        '_d_' => null
+                    ]
+                ],
+                '_a_' => null,
+                '_d_' => null
+            ]
         ];
     }
 }
