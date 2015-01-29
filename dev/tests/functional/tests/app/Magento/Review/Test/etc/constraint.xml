@@ -1,81 +1,35 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<constraint>
-    <assertProductRatingSuccessSaveMessage module="Magento_Review">
-        <severity>high</severity>
-    </assertProductRatingSuccessSaveMessage>
-    <assertProductRatingSuccessDeleteMessage module="Magento_Review">
-        <severity>high</severity>
-    </assertProductRatingSuccessDeleteMessage>
-    <assertProductRatingInGrid module="Magento_Review">
-        <severity>middle</severity>
-    </assertProductRatingInGrid>
-    <assertProductRatingNotInGrid module="Magento_Review">
-        <severity>middle</severity>
-    </assertProductRatingNotInGrid>
-    <assertProductRatingInProductPage module="Magento_Review">
-        <severity>middle</severity>
-    </assertProductRatingInProductPage>
-    <assertProductRatingNotInProductPage module="Magento_Review">
-        <severity>middle</severity>
-    </assertProductRatingNotInProductPage>
-    <assertReviewSuccessSaveMessage module="Magento_Review">
-        <severity>high</severity>
-    </assertReviewSuccessSaveMessage>
-    <assertReviewCreationSuccessMessage module="Magento_Review">
-        <severity>high</severity>
-    </assertReviewCreationSuccessMessage>
-    <assertProductReviewInGrid module="Magento_Review">
-        <severity>low</severity>
-    </assertProductReviewInGrid>
-    <assertProductRatingOnReviewPage module="Magento_Review">
-        <severity>middle</severity>
-    </assertProductRatingOnReviewPage>
-    <assertProductRatingInProductPage module="Magento_Review">
-        <severity>middle</severity>
-    </assertProductRatingInProductPage>
-    <assertProductReviewMassActionSuccessMessage module="Magento_Review">
-        <severity>high</severity>
-        <require>
-            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
-        </require>
-    </assertProductReviewMassActionSuccessMessage>
-    <assertProductReviewMassActionSuccessDeleteMessage module="Magento_Review">
-        <severity>high</severity>
-        <require>
-            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
-        </require>
-    </assertProductReviewMassActionSuccessDeleteMessage>
-    <assertProductReviewBackendSuccessSaveMessage module="Magento_Review">
-        <severity>middle</severity>
-    </assertProductReviewBackendSuccessSaveMessage>
-    <assertProductReviewNotOnProductPage module="Magento_Review">
-        <severity>middle</severity>
-    </assertProductReviewNotOnProductPage>
-    <assertProductReviewOnProductPage module="Magento_Review">
-        <severity>middle</severity>
-    </assertProductReviewOnProductPage>
-    <assertProductReviewNotInGrid module="Magento_Review">
-        <severity>low</severity>
-    </assertProductReviewNotInGrid>
-    <assertProductReviewInGridOnCustomerPage module="Magento_Review">
-        <severity>low</severity>
-    </assertProductReviewInGridOnCustomerPage>
-    <assertProductReviewIsAbsentOnProductPage module="Magento_Review">
-        <severeness>middle</severeness>
-    </assertProductReviewIsAbsentOnProductPage>
-    <assertProductReviewForm module="Magento_Review">
-        <severeness>middle</severeness>
-    </assertProductReviewForm>
-    <assertSetApprovedProductReview module="Magento_Review">
-        <severeness>low</severeness>
-    </assertSetApprovedProductReview>
-    <assertReviewLinksIsPresentOnProductPage module="Magento_Review">
-        <severeness>low</severeness>
-    </assertReviewLinksIsPresentOnProductPage>
-</constraint>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/constraints.xsd">
+    <constraint name="assertProductRatingSuccessSaveMessage" module="Magento_Review" severity="high"/>
+    <constraint name="assertProductRatingSuccessDeleteMessage" module="Magento_Review" severity="high"/>
+    <constraint name="assertProductRatingInGrid" module="Magento_Review" severity="middle"/>
+    <constraint name="assertProductRatingNotInGrid" module="Magento_Review" severity="middle"/>
+    <constraint name="assertProductRatingInProductPage" module="Magento_Review" severity="middle"/>
+    <constraint name="assertProductRatingNotInProductPage" module="Magento_Review" severity="middle"/>
+    <constraint name="assertReviewSuccessSaveMessage" module="Magento_Review" severity="high"/>
+    <constraint name="assertReviewCreationSuccessMessage" module="Magento_Review" severity="high"/>
+    <constraint name="assertProductReviewInGrid" module="Magento_Review" severity="low"/>
+    <constraint name="assertProductRatingOnReviewPage" module="Magento_Review" severity="middle"/>
+    <constraint name="assertProductRatingInProductPage" module="Magento_Review" severity="middle"/>
+    <constraint name="assertProductReviewMassActionSuccessMessage" module="Magento_Review" severity="high">
+        <argument name="reviewIndex">Magento\Review\Test\Page\Adminhtml\ReviewIndex</argument>
+    </constraint>
+    <constraint name="assertProductReviewMassActionSuccessDeleteMessage" module="Magento_Review" severity="high">
+        <argument name="reviewIndex">Magento\Review\Test\Page\Adminhtml\ReviewIndex</argument>
+    </constraint>
+    <constraint name="assertProductReviewBackendSuccessSaveMessage" module="Magento_Review" severity="middle"/>
+    <constraint name="assertProductReviewNotOnProductPage" module="Magento_Review" severity="middle"/>
+    <constraint name="assertProductReviewOnProductPage" module="Magento_Review" severity="middle"/>
+    <constraint name="assertProductReviewNotInGrid" module="Magento_Review" severity="low"/>
+    <constraint name="assertProductReviewInGridOnCustomerPage" module="Magento_Review" severity="low"/>
+    <constraint name="assertProductReviewIsAbsentOnProductPage" module="Magento_Review"/>
+    <constraint name="assertProductReviewForm" module="Magento_Review"/>
+    <constraint name="assertSetApprovedProductReview" module="Magento_Review"/>
+    <constraint name="assertReviewLinksIsPresentOnProductPage" module="Magento_Review"/>
+</config>
