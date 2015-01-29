@@ -19,6 +19,11 @@
             <argument name="cacheId" xsi:type="string">widget_config</argument>
         </arguments>
     </type>
+    <type name="Magento\Widget\Model\Resource\Layout\Update">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
+        </arguments>
+    </type>
     <type name="Magento\Cms\Model\Template\FilterProvider">
         <arguments>
             <argument name="pageFilter" xsi:type="string">Magento\Widget\Model\Template\Filter</argument>

@@ -263,7 +263,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $map = [
             ['Magento\Framework\App\Config\ScopeConfigInterface', $this->_configMock],
-            ['Magento\Core\Model\Layout\Filter\Acl', $this->_layoutFilterMock],
+            ['Magento\Backend\Model\Layout\Filter\Acl', $this->_layoutFilterMock],
             ['Magento\Backend\Model\Session', $this->_backendSessionMock],
             ['Magento\Framework\TranslateInterface', $this->_translateModelMock],
             ['Magento\Framework\Config\ScopeInterface', $this->_configScopeMock],

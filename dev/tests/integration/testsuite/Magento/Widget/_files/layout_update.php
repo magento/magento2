@@ -21,8 +21,8 @@ $theme->setThemePath(
     \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
 )->save();
 
-/** @var $updateNotTemporary \Magento\Core\Model\Layout\Update */
-$updateNotTemporary = $objectManager->create('Magento\Core\Model\Layout\Update');
+/** @var $updateNotTemporary \Magento\Widget\Model\Layout\Update */
+$updateNotTemporary = $objectManager->create('Magento\Widget\Model\Layout\Update');
 $updateNotTemporary->setHandle(
     'test_handle'
 )->setXml(
@@ -33,8 +33,8 @@ $updateNotTemporary->setHandle(
     $theme->getId()
 )->save();
 
-/** @var $updateTemporary \Magento\Core\Model\Layout\Update */
-$updateTemporary = $objectManager->create('Magento\Core\Model\Layout\Update');
+/** @var $updateTemporary \Magento\Widget\Model\Layout\Update */
+$updateTemporary = $objectManager->create('Magento\Widget\Model\Layout\Update');
 $updateTemporary->setHandle(
     'test_handle'
 )->setIsTemporary(

@@ -96,7 +96,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private $pageLayoutFileSource;
 
     /**
-     * @var \Magento\Core\Model\Resource\Layout\Update
+     * @var \Magento\Widget\Model\Resource\Layout\Update
      */
     private $_resource;
 
@@ -163,7 +163,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\File\CollectorInterface $fileSource
      * @param \Magento\Framework\View\File\CollectorInterface $pageLayoutFileSource
-     * @param \Magento\Core\Model\Resource\Layout\Update $resource
+     * @param \Magento\Widget\Model\Resource\Layout\Update $resource
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\View\Model\Layout\Update\Validator $validator
@@ -178,7 +178,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\View\File\CollectorInterface $fileSource,
         \Magento\Framework\View\File\CollectorInterface $pageLayoutFileSource,
-        \Magento\Core\Model\Resource\Layout\Update $resource,
+        \Magento\Widget\Model\Resource\Layout\Update $resource,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Framework\View\Model\Layout\Update\Validator $validator,

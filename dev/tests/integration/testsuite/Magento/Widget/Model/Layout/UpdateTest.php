@@ -3,28 +3,28 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Layout;
+namespace Magento\Widget\Model\Layout;
 
 class UpdateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Layout\Update
+     * @var \Magento\Widget\Model\Layout\Update
      */
     protected $_model;
 
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Layout\Update'
+            'Magento\Widget\Model\Layout\Update'
         );
     }
 
     public function testConstructor()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Layout\Update'
+            'Magento\Widget\Model\Layout\Update'
         );
-        $this->assertInstanceOf('Magento\Core\Model\Resource\Layout\Update', $this->_model->getResource());
+        $this->assertInstanceOf('Magento\Widget\Model\Resource\Layout\Update', $this->_model->getResource());
     }
 
     /**

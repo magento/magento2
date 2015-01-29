@@ -114,11 +114,6 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Resource\Layout\Update">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
-        </arguments>
-    </type>
 
     <virtualType name="layoutFileSourceBase" type="Magento\Framework\View\File\Collector\Base">
         <arguments>

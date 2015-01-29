@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Layout;
+namespace Magento\Widget\Model\Resource\Layout;
 
 abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +18,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     const TEST_DAYS_BEFORE = 3;
 
     /**
-     * @var \Magento\Core\Model\Resource\Layout\Update\Collection
+     * @var \Magento\Widget\Model\Resource\Layout\Update\Collection
      */
     protected $_collection;
 

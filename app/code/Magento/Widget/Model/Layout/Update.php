@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Layout;
+namespace Magento\Widget\Model\Layout;
 
 /**
  * Layout Update model class
@@ -12,13 +12,13 @@ namespace Magento\Core\Model\Layout;
  * @method int getLayoutLinkId() getLayoutLinkId()
  * @method string getUpdatedAt() getUpdatedAt()
  * @method string getXml() getXml()
- * @method \Magento\Core\Model\Layout\Update setIsTemporary() setIsTemporary(int $isTemporary)
- * @method \Magento\Core\Model\Layout\Update setHandle() setHandle(string $handle)
- * @method \Magento\Core\Model\Layout\Update setXml() setXml(string $xml)
- * @method \Magento\Core\Model\Layout\Update setStoreId() setStoreId(int $storeId)
- * @method \Magento\Core\Model\Layout\Update setThemeId() setThemeId(int $themeId)
- * @method \Magento\Core\Model\Layout\Update setUpdatedAt() setUpdatedAt(string $updateDateTime)
- * @method \Magento\Core\Model\Resource\Layout\Update\Collection getCollection()
+ * @method \Magento\Widget\Model\Layout\Update setIsTemporary() setIsTemporary(int $isTemporary)
+ * @method \Magento\Widget\Model\Layout\Update setHandle() setHandle(string $handle)
+ * @method \Magento\Widget\Model\Layout\Update setXml() setXml(string $xml)
+ * @method \Magento\Widget\Model\Layout\Update setStoreId() setStoreId(int $storeId)
+ * @method \Magento\Widget\Model\Layout\Update setThemeId() setThemeId(int $themeId)
+ * @method \Magento\Widget\Model\Layout\Update setUpdatedAt() setUpdatedAt(string $updateDateTime)
+ * @method \Magento\Widget\Model\Resource\Layout\Update\Collection getCollection()
  */
 class Update extends \Magento\Framework\Model\AbstractModel
 {
@@ -54,7 +54,7 @@ class Update extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Core\Model\Resource\Layout\Update');
+        $this->_init('Magento\Widget\Model\Resource\Layout\Update');
     }
 
     /**

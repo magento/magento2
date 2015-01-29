@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Layout;
+namespace Magento\Widget\Model\Layout;
 
 class UpdateTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +15,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSave()
     {
         $resourceModel = $this->getMock(
-            'Magento\Core\Model\Resource\Layout\Update',
+            'Magento\Widget\Model\Resource\Layout\Update',
             [
                 '__wakeup',
                 'formatDate',
@@ -41,9 +41,9 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         );
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var $model \Magento\Core\Model\Layout\Update */
+        /** @var $model \Magento\Widget\Model\Layout\Update */
         $model = $helper->getObject(
-            'Magento\Core\Model\Layout\Update',
+            'Magento\Widget\Model\Layout\Update',
             ['resource' => $resourceModel, 'dateTime' => $dateTime]
         );
         $model->setId(0);

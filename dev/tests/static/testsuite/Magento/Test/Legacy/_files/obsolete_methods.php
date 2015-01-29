@@ -346,7 +346,7 @@ return [
     ['exportOrderedExcelAction'],
     ['fetchItemsCount', 'Magento\Wishlist\Model\Resource\Wishlist'],
     ['fetchRuleRatesForCustomerTaxClass'],
-    ['fetchUpdatesByHandle', 'Magento\Core\Model\Resource\Layout', 'Magento\Core\Model\Resource\Layout\Update'],
+    ['fetchUpdatesByHandle', 'Magento\Core\Model\Resource\Layout', 'Magento\Widget\Model\Resource\Layout\Update'],
     ['flush', 'Magento\Framework\App\Cache', 'Magento_Cache_FrontendInterface::clean()'],
     ['flush', 'Magento\Framework\App\Cache\Proxy', 'Magento_Cache_FrontendInterface::clean()'],
     ['flush', 'Magento\Framework\App\CacheInterface', 'Magento_Cache_FrontendInterface::clean()'],

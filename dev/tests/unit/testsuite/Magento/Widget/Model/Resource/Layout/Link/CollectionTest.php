@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Layout\Link;
+namespace Magento\Widget\Model\Resource\Layout\Link;
 
-class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCase
+class CollectionTest extends \Magento\Widget\Model\Resource\Layout\AbstractTestCase
 {
     /**
      * Name of test table
      */
-    const TEST_TABLE = 'core_layout_update';
+    const TEST_TABLE = 'layout_update';
 
     /**
      * Name of main table alias
@@ -21,13 +21,13 @@ class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCas
 
     /**
      * @param \Zend_Db_Select $select
-     * @return \Magento\Core\Model\Resource\Layout\Link\Collection
+     * @return \Magento\Widget\Model\Resource\Layout\Link\Collection
      */
     protected function _getCollection(\Zend_Db_Select $select)
     {
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
-        return new \Magento\Core\Model\Resource\Layout\Link\Collection(
+        return new \Magento\Widget\Model\Resource\Layout\Link\Collection(
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false),
             $this->getMock('Psr\Log\LoggerInterface'),
             $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface'),
@@ -77,7 +77,7 @@ class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCas
     }
 
     /**
-     * @covers \Magento\Core\Model\Resource\Layout\Link\Collection::_joinWithUpdate
+     * @covers \Magento\Widget\Model\Resource\Layout\Link\Collection::_joinWithUpdate
      */
     public function testJoinWithUpdate()
     {

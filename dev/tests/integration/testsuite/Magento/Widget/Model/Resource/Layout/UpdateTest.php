@@ -3,24 +3,24 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Layout;
+namespace Magento\Widget\Model\Resource\Layout;
 
 class UpdateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Resource\Layout\Update
+     * @var \Magento\Widget\Model\Resource\Layout\Update
      */
     protected $_resourceModel;
 
     protected function setUp()
     {
         $this->_resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Layout\Update'
+            'Magento\Widget\Model\Resource\Layout\Update'
         );
     }
 
     /**
-     * @magentoDataFixture Magento/Core/_files/layout_update.php
+     * @magentoDataFixture Magento/Widget/_files/layout_update.php
      */
     public function testFetchUpdatesByHandle()
     {
@@ -41,7 +41,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Backend/controllers/_files/cache/application_cache.php
-     * @magentoDataFixture Magento/Core/_files/layout_cache.php
+     * @magentoDataFixture Magento/Widget/_files/layout_cache.php
      */
     public function testSaveAfterClearCache()
     {
@@ -55,9 +55,9 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($appCache->load('APPLICATION_FIXTURE'));
         $this->assertNotEmpty($layoutCache->load('LAYOUT_CACHE_FIXTURE'));
 
-        /** @var $layoutUpdate \Magento\Core\Model\Layout\Update */
+        /** @var $layoutUpdate \Magento\Widget\Model\Layout\Update */
         $layoutUpdate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Layout\Update'
+            'Magento\Widget\Model\Layout\Update'
         );
         $layoutUpdate->setHasDataChanges(true);
         $this->_resourceModel->save($layoutUpdate);

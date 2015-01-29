@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Core\Model\Resource\Layout;
+namespace Magento\Widget\Model\Resource\Layout;
 
 /**
  * Layout update resource model
@@ -35,7 +35,7 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('core_layout_update', 'layout_update_id');
+        $this->_init('layout_update', 'layout_update_id');
     }
 
     /**
@@ -77,7 +77,7 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ['layout_update' => $this->getMainTable()],
             ['xml']
         )->join(
-            ['link' => $this->getTable('core_layout_link')],
+            ['link' => $this->getTable('layout_link')],
             'link.layout_update_id=layout_update.layout_update_id',
             ''
         )->where(
@@ -100,7 +100,7 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Update a "layout update link" if relevant data is provided
      *
-     * @param \Magento\Core\Model\Layout\Update|\Magento\Framework\Model\AbstractModel $object
+     * @param \Magento\Widget\Model\Layout\Update|\Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
@@ -108,7 +108,7 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $data = $object->getData();
         if (isset($data['store_id']) && isset($data['theme_id'])) {
             $this->_getWriteAdapter()->insertOnDuplicate(
-                $this->getTable('core_layout_link'),
+                $this->getTable('layout_link'),
                 [
                     'store_id' => $data['store_id'],
                     'theme_id' => $data['theme_id'],

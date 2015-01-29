@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Layout\Link;
+namespace Magento\Widget\Model\Resource\Layout\Update;
 
 /**
  * Layout update collection model
@@ -16,13 +16,27 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $dateTime;
 
     /**
+     * Name prefix of events that are dispatched by model
+     *
+     * @var string
+     */
+    protected $_eventPrefix = 'layout_update_collection';
+
+    /**
+     * Name of event parameter
+     *
+     * @var string
+     */
+    protected $_eventObject = 'layout_update_collection';
+
+    /**
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -45,7 +59,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Core\Model\Layout\Link', 'Magento\Core\Model\Resource\Layout\Link');
+        $this->_init('Magento\Widget\Model\Layout\Update', 'Magento\Widget\Model\Resource\Layout\Update');
     }
 
     /**
@@ -56,23 +70,60 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addThemeFilter($themeId)
     {
-        $this->addFieldToFilter('theme_id', $themeId);
+        $this->_joinWithLink();
+        $this->getSelect()->where('link.theme_id = ?', $themeId);
+
         return $this;
     }
 
     /**
-     * Join with layout update table
+     * Add filter by store id
+     *
+     * @param int $storeId
+     * @return $this
+     */
+    public function addStoreFilter($storeId)
+    {
+        $this->_joinWithLink();
+        $this->getSelect()->where('link.store_id = ?', $storeId);
+
+        return $this;
+    }
+
+    /**
+     * Join with layout link table
+     *
+     * @return $this
+     */
+    protected function _joinWithLink()
+    {
+        $flagName = 'joined_with_link_table';
+        if (!$this->getFlag($flagName)) {
+            $this->getSelect()->join(
+                ['link' => $this->getTable('layout_link')],
+                'link.layout_update_id = main_table.layout_update_id',
+                ['store_id', 'theme_id']
+            );
+
+            $this->setFlag($flagName, true);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Left Join with layout link table
      *
      * @param array $fields
      * @return $this
      */
-    protected function _joinWithUpdate($fields = [])
+    protected function _joinLeftWithLink($fields = [])
     {
-        $flagName = 'joined_with_update_table';
+        $flagName = 'joined_left_with_link_table';
         if (!$this->getFlag($flagName)) {
-            $this->getSelect()->join(
-                ['update' => $this->getTable('core_layout_update')],
-                'update.layout_update_id = main_table.layout_update_id',
+            $this->getSelect()->joinLeft(
+                ['link' => $this->getTable('layout_link')],
+                'link.layout_update_id = main_table.layout_update_id',
                 [$fields]
             );
             $this->setFlag($flagName, true);
@@ -82,19 +133,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     }
 
     /**
-     * Filter by temporary flag
-     *
-     * @param bool $isTemporary
-     * @return $this
-     */
-    public function addTemporaryFilter($isTemporary)
-    {
-        $this->addFieldToFilter('main_table.is_temporary', $isTemporary ? 1 : 0);
-        return $this;
-    }
-
-    /**
-     * Get links for layouts that are older than specified number of days
+     * Get layouts that are older then specified number of days
      *
      * @param string $days
      * @return $this
@@ -106,15 +145,41 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $datetime->sub($storeInterval);
         $formattedDate = $this->dateTime->formatDate($datetime->getTimestamp());
 
-        $this->_joinWithUpdate();
         $this->addFieldToFilter(
-            'update.updated_at',
+            'main_table.updated_at',
             ['notnull' => true]
         )->addFieldToFilter(
-            'update.updated_at',
+            'main_table.updated_at',
             ['lt' => $formattedDate]
         );
 
+        return $this;
+    }
+
+    /**
+     * Get layouts without links
+     *
+     * @return $this
+     */
+    public function addNoLinksFilter()
+    {
+        $this->_joinLeftWithLink();
+        $this->addFieldToFilter('link.layout_update_id', ['null' => true]);
+
+        return $this;
+    }
+
+    /**
+     * Delete updates in collection
+     *
+     * @return $this
+     */
+    public function delete()
+    {
+        /** @var $update \Magento\Widget\Model\Layout\Update */
+        foreach ($this->getItems() as $update) {
+            $update->delete();
+        }
         return $this;
     }
 }

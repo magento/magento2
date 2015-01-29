@@ -3,21 +3,21 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Layout\Update;
+namespace Magento\Widget\Model\Resource\Layout\Update;
 
-class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCase
+class CollectionTest extends \Magento\Widget\Model\Resource\Layout\AbstractTestCase
 {
     /**
      * Retrieve layout update collection instance
      *
      * @param \Zend_Db_Select $select
-     * @return \Magento\Core\Model\Resource\Layout\Update\Collection
+     * @return \Magento\Widget\Model\Resource\Layout\Update\Collection
      */
     protected function _getCollection(\Zend_Db_Select $select)
     {
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
-        return new \Magento\Core\Model\Resource\Layout\Update\Collection(
+        return new \Magento\Widget\Model\Resource\Layout\Update\Collection(
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false),
             $this->getMock('Psr\Log\LoggerInterface'),
             $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface'),
@@ -49,7 +49,7 @@ class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCas
     }
 
     /**
-     * @covers \Magento\Core\Model\Resource\Layout\Update\Collection::_joinWithLink
+     * @covers \Magento\Widget\Model\Resource\Layout\Update\Collection::_joinWithLink
      */
     public function testJoinWithLink()
     {
@@ -59,7 +59,7 @@ class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCas
         )->method(
             'join'
         )->with(
-            ['link' => 'core_layout_link'],
+            ['link' => 'layout_link'],
             'link.layout_update_id = main_table.layout_update_id',
             $this->isType('array')
         );
@@ -77,7 +77,7 @@ class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCas
         )->method(
             'joinLeft'
         )->with(
-            ['link' => 'core_layout_link'],
+            ['link' => 'layout_link'],
             'link.layout_update_id = main_table.layout_update_id',
             [[]]
         );

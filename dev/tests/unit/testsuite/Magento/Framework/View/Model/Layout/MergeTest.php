@@ -76,7 +76,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $storeManager = $this->getMockForAbstractClass('Magento\Framework\Store\StoreManagerInterface');
         $storeManager->expects($this->once())->method('getStore')->with(null)->will($this->returnValue($this->_store));
 
-        $this->_resource = $this->getMock('Magento\Core\Model\Resource\Layout\Update', [], [], '', false);
+        $this->_resource = $this->getMock('Magento\Widget\Model\Resource\Layout\Update', [], [], '', false);
 
         $this->_appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
 
