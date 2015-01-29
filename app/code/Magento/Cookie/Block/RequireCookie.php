@@ -7,7 +7,7 @@
 /**
  * Frontend form key content block
  */
-namespace Magento\Core\Block;
+namespace Magento\Cookie\Block;
 
 class RequireCookie extends \Magento\Framework\View\Element\Template
 {
