@@ -2563,84 +2563,84 @@ fieldset[disabled] .notifications-close.action {
   right: 0 !important;
 }
 /*
-    Reports - Customer Segment
+    Reports - test
 -------------------------------------- */
 /*
-    Reports - Customer Segment Report
+    Reports - test Report
 -------------------------------------- */
 .filter-segments {
   list-style: none;
   padding: 0;
 }
-.adminhtml-report-customer-customersegment-detail .col-id {
+.adminhtml-report-customer-test-detail .col-id {
   width: 35px;
 }
-.adminhtml-report-customer-customersegment-detail .col-period {
+.adminhtml-report-customer-test-detail .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-customer-customersegment-detail .col-zip {
+.adminhtml-report-customer-test-detail .col-zip {
   width: 50px;
 }
 /*
-    Reports - Customer Segments
+    Reports - tests
 -------------------------------------- */
-.adminhtml-report-customer-customersegment-segment .col-id {
+.adminhtml-report-customer-test-segment .col-id {
   width: 35px;
 }
-.adminhtml-report-customer-customersegment-segment .col-status {
+.adminhtml-report-customer-test-segment .col-status {
   width: 65px;
 }
-.adminhtml-report-customer-customersegment-segment .col-qty {
+.adminhtml-report-customer-test-segment .col-qty {
   width: 145px;
 }
-.adminhtml-report-customer-customersegment-segment .col-segment,
-.adminhtml-report-customer-customersegment-segment .col-website {
+.adminhtml-report-customer-test-segment .col-segment,
+.adminhtml-report-customer-test-segment .col-website {
   width: 35%;
 }
-.adminhtml-report-customer-customersegment-segment .col-select {
+.adminhtml-report-customer-test-segment .col-select {
   width: 45px;
 }
 /*
-    Gift Registry
+    GFR
 --------------------------------------*/
-.giftregistry-custom-attributes {
+.test-custom-attributes {
   margin-bottom: 20px;
 }
 /*
-    Gift Wrapping
+    GFW
 --------------------------------------*/
-.adminhtml-giftwrapping-index th.col-id {
+.adminhtml-test-index th.col-id {
   text-align: left;
 }
-.adminhtml-giftwrapping-index .col-price {
+.adminhtml-test-index .col-price {
   text-align: right;
   width: 50px;
 }
-.adminhtml-giftwrapping-index .col-actions {
+.adminhtml-test-index .col-actions {
   width: 50px;
 }
-.adminhtml-giftwrapping-index .col-select {
+.adminhtml-test-index .col-select {
   width: 60px;
 }
-.adminhtml-giftwrapping-edit .field-image .control {
+.adminhtml-test-edit .field-image .control {
   line-height: 28px;
 }
-.adminhtml-giftwrapping-edit .field-image a {
+.adminhtml-test-edit .field-image a {
   display: inline-block;
   margin: 0 5px 0 0;
 }
-.adminhtml-giftwrapping-edit .field-image img {
+.adminhtml-test-edit .field-image img {
   vertical-align: middle;
 }
-.adminhtml-giftwrapping-new .field-image .input-file,
-.adminhtml-giftwrapping-edit .field-image .input-file {
+.adminhtml-test-new .field-image .input-file,
+.adminhtml-test-edit .field-image .input-file {
   display: inline-block;
   margin: 0 15px 0 0;
   width: auto;
 }
-.adminhtml-giftwrapping-new .field-image .addafter,
-.adminhtml-giftwrapping-edit .field-image .addafter {
+.adminhtml-test-new .field-image .addafter,
+.adminhtml-test-edit .field-image .addafter {
   border: 0;
   box-shadow: none;
   display: inline-block;
@@ -2648,42 +2648,42 @@ fieldset[disabled] .notifications-close.action {
   height: auto;
   width: auto;
 }
-.adminhtml-giftwrapping-new .field-image .delete-image,
-.adminhtml-giftwrapping-edit .field-image .delete-image {
+.adminhtml-test-new .field-image .delete-image,
+.adminhtml-test-edit .field-image .delete-image {
   display: inline-block;
   white-space: nowrap;
 }
-.adminhtml-giftwrapping-edit .field-image .delete-image input {
+.adminhtml-test-edit .field-image .delete-image input {
   margin: -3px 5px 0 0;
   width: auto;
   display: inline-block;
 }
-.adminhtml-giftwrapping-edit .field-image .addon .delete-image input:focus + label {
+.adminhtml-test-edit .field-image .addon .delete-image input:focus + label {
   border: 0;
   box-shadow: none;
 }
-.adminhtml-giftwrapping-index .col-id {
+.adminhtml-test-index .col-id {
   width: 35px;
 }
-.adminhtml-giftwrapping-index .col-status {
+.adminhtml-test-index .col-status {
   white-space: normal;
   width: 75px;
 }
-.adminhtml-giftwrapping-index .col-websites {
+.adminhtml-test-index .col-websites {
   white-space: nowrap;
   width: 200px;
 }
-.adminhtml-giftwrapping-index .col-price .label {
+.adminhtml-test-index .col-price .label {
   display: inline-block;
   min-width: 60px;
   white-space: nowrap;
 }
-.adminhtml-giftwrapping-index .col-price .price-excl-tax .price,
-.adminhtml-giftwrapping-index .col-price .price-incl-tax .price {
+.adminhtml-test-index .col-price .price-excl-tax .price,
+.adminhtml-test-index .col-price .price-incl-tax .price {
   font-weight: bold;
 }
 /*
-    Invitations
+    tests
 --------------------------------------*/
 .invitee_information,
 .inviter_information {
@@ -2695,21 +2695,21 @@ fieldset[disabled] .notifications-close.action {
 .inviter_information {
   float: right;
 }
-.invitation_information .data-table th,
+.test_information .data-table th,
 .invitee_information .data-table th,
 .inviter_information .data-table th {
   width: 20%;
   white-space: nowrap;
 }
-.invitation_information .data-table textarea,
-.invitation_information .data-table input {
+.test_information .data-table textarea,
+.test_information .data-table input {
   width: 100%;
 }
-.invitations-history ul {
+.tests-history ul {
   margin: 0;
   padding-left: 25px;
 }
-.invitations-history ul .status:before {
+.tests-history ul .status:before {
   display: inline-block;
   content: "|";
   margin: 0 10px;
@@ -2717,61 +2717,61 @@ fieldset[disabled] .notifications-close.action {
 /*
     Reports - Order Conversion Rate
 -------------------------------------- */
-.adminhtml-report-invitation-order .col-period {
+.adminhtml-report-test-order .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-invitation-order .col-inv-sent,
-.adminhtml-report-invitation-order .col-inv-acc,
-.adminhtml-report-invitation-order .col-acc,
-.adminhtml-report-invitation-order .col-rate {
+.adminhtml-report-test-order .col-inv-sent,
+.adminhtml-report-test-order .col-inv-acc,
+.adminhtml-report-test-order .col-acc,
+.adminhtml-report-test-order .col-rate {
   text-align: right;
   width: 23%;
 }
 /*
-    Reports - Invitations - Customer
+    Reports - tests - Customer
 -------------------------------------- */
-.adminhtml-report-invitation-customer .col-id {
+.adminhtml-report-test-customer .col-id {
   width: 35px;
 }
-.adminhtml-report-invitation-customer .col-period {
+.adminhtml-report-test-customer .col-period {
   white-space: nowrap;
   width: 70px;
 }
-.adminhtml-report-invitation-customer .col-inv-sent,
-.adminhtml-report-invitation-customer .col-inv-acc {
+.adminhtml-report-test-customer .col-inv-sent,
+.adminhtml-report-test-customer .col-inv-acc {
   text-align: right;
   width: 120px;
 }
 /*
-    Reports - Invitations - General
+    Reports - tests - General
 -------------------------------------- */
-.adminhtml-report-invitation-index .col-period {
+.adminhtml-report-test-index .col-period {
   white-space: nowrap;
 }
-.adminhtml-report-invitation-index .col-inv-sent,
-.adminhtml-report-invitation-index .col-inv-acc,
-.adminhtml-report-invitation-index .col-inv-disc,
-.adminhtml-report-invitation-index .col-inv-acc-rate,
-.adminhtml-report-invitation-index .col-inv-disc-rate {
+.adminhtml-report-test-index .col-inv-sent,
+.adminhtml-report-test-index .col-inv-acc,
+.adminhtml-report-test-index .col-inv-disc,
+.adminhtml-report-test-index .col-inv-acc-rate,
+.adminhtml-report-test-index .col-inv-disc-rate {
   text-align: right;
   width: 19%;
 }
 /*
-    Invitation Data table - alternative view
+    test Data table - alternative view
 -------------------------------------- */
-.invitation_information .data-table,
+.test_information .data-table,
 .invitee_information .data-table,
 .inviter_information .data-table {
   width: 100%;
 }
-.invitation_information .data-table tbody tr th,
+.test_information .data-table tbody tr th,
 .invitee_information .data-table tbody tr th,
 .inviter_information .data-table tbody tr th {
   font-weight: bold;
 }
-.invitation_information .data-table tbody tr td,
-.invitation_information .data-table tbody tr th,
+.test_information .data-table tbody tr td,
+.test_information .data-table tbody tr th,
 .invitee_information .data-table tbody tr td,
 .invitee_information .data-table tbody tr th,
 .inviter_information .data-table tbody tr td,
@@ -2782,51 +2782,51 @@ fieldset[disabled] .notifications-close.action {
   color: #666;
   vertical-align: top;
 }
-.invitation_information .data-table tbody tr:nth-child(2n+1) td,
-.invitation_information .data-table tbody tr:nth-child(2n+1) th,
+.test_information .data-table tbody tr:nth-child(2n+1) td,
+.test_information .data-table tbody tr:nth-child(2n+1) th,
 .invitee_information .data-table tbody tr:nth-child(2n+1) td,
 .invitee_information .data-table tbody tr:nth-child(2n+1) th,
 .inviter_information .data-table tbody tr:nth-child(2n+1) td,
 .inviter_information .data-table tbody tr:nth-child(2n+1) th {
   background-color: #fbfaf6;
 }
-[class^=" adminhtml-giftregistry-"] .fieldset-wrapper-content .data-table .col-sort-order {
+[class^=" adminhtml-test-"] .fieldset-wrapper-content .data-table .col-sort-order {
   width: 80px;
 }
-[class^=" adminhtml-giftregistry-"] .fieldset-wrapper-content .data-table td,
-[class^=" adminhtml-giftregistry-"] .fieldset-wrapper-content .accordion .config .data-table td {
+[class^=" adminhtml-test-"] .fieldset-wrapper-content .data-table td,
+[class^=" adminhtml-test-"] .fieldset-wrapper-content .accordion .config .data-table td {
   vertical-align: top;
 }
-[class^=" adminhtml-giftregistry-"] .fieldset-wrapper-content .data-table td select,
-[class^=" adminhtml-giftregistry-"] .fieldset-wrapper-content .accordion .config .data-table td select {
+[class^=" adminhtml-test-"] .fieldset-wrapper-content .data-table td select,
+[class^=" adminhtml-test-"] .fieldset-wrapper-content .accordion .config .data-table td select {
   display: block;
   width: 100%;
 }
-[class^=" adminhtml-giftregistry-"] .fieldset-wrapper-content .data-table td .input-radio.global-scope,
-[class^=" adminhtml-giftregistry-"] .fieldset-wrapper-content .accordion .config .data-table td .input-radio.global-scope {
+[class^=" adminhtml-test-"] .fieldset-wrapper-content .data-table td .input-radio.global-scope,
+[class^=" adminhtml-test-"] .fieldset-wrapper-content .accordion .config .data-table td .input-radio.global-scope {
   margin-top: 9px;
 }
-.sales-order-create-index .ui-dialog .content > .giftcard .field.text .input-text {
+.sales-order-create-index .ui-dialog .content > .test .field.text .input-text {
   width: 100%;
 }
-.sales-order-create-index .ui-dialog .content > .giftcard .note .price {
+.sales-order-create-index .ui-dialog .content > .test .note .price {
   font-weight: 600;
 }
-.sales-order-create-index .ui-dialog .content > .giftcard .note .price:before {
+.sales-order-create-index .ui-dialog .content > .test .note .price:before {
   content: ": ";
 }
-.sales-order-create-index .ui-dialog .content > .giftcard .fixed.amount .label:after {
+.sales-order-create-index .ui-dialog .content > .test .fixed.amount .label:after {
   content: ": ";
 }
-.sales-order-create-index .ui-dialog .content > .giftcard .fixed.amount .control {
+.sales-order-create-index .ui-dialog .content > .test .fixed.amount .control {
   display: inline-block;
   font-weight: 600;
 }
-.sales-order-create-index .ui-dialog .content > .giftcard .fixed.amount .control .control-value {
+.sales-order-create-index .ui-dialog .content > .test .fixed.amount .control .control-value {
   margin: -2px 0 0;
   padding: 0;
 }
-.eq-ie9 [class^=" adminhtml-giftregistry-"] .custom-options .data-table {
+.eq-ie9 [class^=" adminhtml-test-"] .custom-options .data-table {
   word-wrap: normal;
   table-layout: auto;
 }
@@ -5946,8 +5946,8 @@ table tfoot tr td:last-child {
 .catalog-product-attribute-index [class^=' col-is_'],
 .catalog-product-attribute-index .col-required,
 .catalog-product-attribute-index .col-system,
-.adminhtml-giftregistry-index .col-is_listed,
-[class^=' invitations-report-invitation'] [class^='col-inv-'] {
+.adminhtml-test-index .col-is_listed,
+[class^=' tests-report-test'] [class^='col-inv-'] {
   width: 70px;
 }
 .grid .col-phone,
@@ -5994,9 +5994,9 @@ table tfoot tr td:last-child {
 .adminhtml-export-index .col-code,
 .adminhtml-scheduled-operation-index .grid .col-name,
 .adminhtml-logging-index .grid .col-fullaction,
-.multiplewishlist-report-customer-wishlist-wishlist .grid .col-name,
-.multiplewishlist-report-customer-wishlist-wishlist .grid .col-subject,
-.multiplewishlist-report-customer-wishlist-wishlist .grid .col-product {
+.test-report-customer-wishlist-wishlist .grid .col-name,
+.test-report-customer-wishlist-wishlist .grid .col-subject,
+.test-report-customer-wishlist-wishlist .grid .col-product {
   max-width: 220px;
   width: 220px;
 }
@@ -6045,7 +6045,7 @@ table tfoot tr td:last-child {
 .adminhtml-rma-item-attribute-index .col-label,
 .adminhtml-system-variable-index .grid .col-code,
 .ui-tabs-panel .dashboard-data .col-name,
-.adminhtml-giftregistry-index .col-label {
+.adminhtml-test-index .col-label {
   max-width: 370px;
   width: 370px;
 }
@@ -6064,7 +6064,7 @@ table tfoot tr td:last-child {
 }
 .reports-report-sales-invoiced .grid .col-period,
 .reports-report-sales-refunde .grid .col-period,
-[class^=' invitations-report-invitation'] .grid .col-period {
+[class^=' tests-report-test'] .grid .col-period {
   width: auto;
 }
 .grid .col-select,
