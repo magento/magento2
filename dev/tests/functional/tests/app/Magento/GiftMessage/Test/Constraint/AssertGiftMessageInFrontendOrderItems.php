@@ -6,7 +6,7 @@
 
 namespace Magento\GiftMessage\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Sales\Test\Page\OrderHistory;
@@ -27,7 +27,7 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
      * Assert that message from dataSet is displayed for each items on order(s) view page on frontend
      *
      * @param GiftMessage $giftMessage
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param OrderHistory $orderHistory
      * @param OrderView $orderView
      * @param CustomerAccountLogout $customerAccountLogout
@@ -37,7 +37,7 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
      */
     public function processAssert(
         GiftMessage $giftMessage,
-        CustomerInjectable $customer,
+        Customer $customer,
         OrderHistory $orderHistory,
         OrderView $orderView,
         CustomerAccountLogout $customerAccountLogout,

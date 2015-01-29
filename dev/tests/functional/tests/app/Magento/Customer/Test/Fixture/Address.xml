@@ -7,13 +7,13 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
-         class="Magento\Customer\Test\Fixture\AddressInjectable">
+         class="Magento\Customer\Test\Fixture\Address">
     <module>Magento_Customer</module>
     <type>eav</type>
     <entity_type>customer_address</entity_type>
     <collection>Magento\Customer\Model\Resource\Address\Collection</collection>
-    <repository_class>Magento\Customer\Test\Repository\AddressInjectable</repository_class>
-    <handler_interface>Magento\Customer\Test\Handler\AddressInjectable\AddressInjectableInterface</handler_interface>
+    <repository_class>Magento\Customer\Test\Repository\Address</repository_class>
+    <handler_interface>Magento\Customer\Test\Handler\Address\AddressInterface</handler_interface>
     <dataset name="default">
         <field name="firstname" xsi:type="string">John</field>
         <field name="lastname" xsi:type="string">Doe</field>

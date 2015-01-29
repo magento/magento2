@@ -8,7 +8,7 @@ namespace Magento\Weee\Test\TestCase;
 
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
@@ -72,7 +72,7 @@ class CreateTaxWithFptTest extends Injectable
         FixtureFactory $fixtureFactory
     ) {
         $this->fixtureFactory = $fixtureFactory;
-        $customer = $fixtureFactory->createByCode('customerInjectable', ['dataSet' => 'johndoe_with_addresses']);
+        $customer = $fixtureFactory->createByCode('customer', ['dataSet' => 'johndoe_with_addresses']);
         $customer->persist();
         $taxRule = $fixtureFactory->createByCode('taxRule', ['dataSet' => 'tax_rule_default']);
         $taxRule->persist();
@@ -88,10 +88,10 @@ class CreateTaxWithFptTest extends Injectable
     /**
      * Login customer.
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return void
      */
-    protected function loginCustomer(CustomerInjectable $customer)
+    protected function loginCustomer(Customer $customer)
     {
         $this->objectManager->create(
             'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
@@ -103,7 +103,7 @@ class CreateTaxWithFptTest extends Injectable
      * Test product prices with tax.
      *
      * @param string $configData
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CatalogAttributeSet $productTemplate
      * @param array $productData
      * @return array
@@ -111,7 +111,7 @@ class CreateTaxWithFptTest extends Injectable
     public function test(
         $productData,
         $configData,
-        CustomerInjectable $customer,
+        Customer $customer,
         CatalogAttributeSet $productTemplate
     ) {
         $product = $this->fixtureFactory->createByCode(

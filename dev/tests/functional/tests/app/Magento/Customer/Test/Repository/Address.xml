@@ -6,7 +6,7 @@
  */
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Customer\Test\Repository\AddressInjectable">
+    <storage class="Magento\Customer\Test\Repository\Address">
         <dataset name="US_address">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>

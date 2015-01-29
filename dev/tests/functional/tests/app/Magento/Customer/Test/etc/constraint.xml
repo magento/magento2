@@ -27,30 +27,33 @@
     <assertCustomerInGrid module="Magento_Customer">
         <severity>middle</severity>
         <require>
-            <customer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
+            <customer class="Magento\Customer\Test\Fixture\Customer" />
             <pageCustomerIndex class="Magento\Customer\Test\Page\Adminhtml\CustomerIndex" />
         </require>
     </assertCustomerInGrid>
     <assertCustomerNotInGrid module="Magento_Customer">
         <severity>middle</severity>
         <require>
-            <customer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
+            <customer class="Magento\Customer\Test\Fixture\Customer" />
             <customerIndexPage class="Magento\Customer\Test\Page\Adminhtml\CustomerIndex" />
         </require>
     </assertCustomerNotInGrid>
     <assertCustomerForm module="Magento_Customer">
         <severity>middle</severity>
         <require>
-            <customer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
+            <customer class="Magento\Customer\Test\Fixture\Customer" />
             <pageCustomerIndex class="Magento\Customer\Test\Page\Adminhtml\CustomerIndex" />
             <pageCustomerIndexEdit class="Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit" />
         </require>
     </assertCustomerForm>
+    <assertCustomerTitle module="Magento_Customer">
+        <severity>middle</severity>
+    </assertCustomerTitle>
     <assertCustomerInvalidEmail module="Magento_Customer">
         <severity>middle</severity>
         <require>
-            <customer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
-            <addresses class="Magento\Customer\Test\Fixture\AddressInjectable" />
+            <customer class="Magento\Customer\Test\Fixture\Customer" />
+            <addresses class="Magento\Customer\Test\Fixture\Address" />
             <pageCustomerIndexNew class="Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew" />
         </require>
     </assertCustomerInvalidEmail>
@@ -100,7 +103,7 @@
         <severity>low</severity>
         <require>
             <customerAccountIndex class="Magento\Customer\Test\Page\CustomerAccountIndex" />
-            <address class="Magento\Customer\Test\Fixture\AddressInjectable" />
+            <address class="Magento\Customer\Test\Fixture\Address" />
         </require>
     </assertCustomerDefaultAddresses>
     <assertCustomerMassDeleteSuccessMessage module="Magento_Customer">

@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Test\Handler\CustomerInjectable;
+namespace Magento\Customer\Test\Handler\Customer;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\System\Config;
@@ -18,7 +18,7 @@ use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
  * Class Curl
  * Curl handler for creating customer through registration page.
  */
-class Curl extends AbstractCurl implements CustomerInjectableInterface
+class Curl extends AbstractCurl implements CustomerInterface
 {
     /**
      * Default customer group
@@ -69,7 +69,7 @@ class Curl extends AbstractCurl implements CustomerInjectableInterface
     {
         $address = [];
         $result = [];
-        /** @var CustomerInjectable $customer */
+        /** @var Customer $customer */
         $url = $_ENV['app_frontend_url'] . 'customer/account/createpost/?nocookie=true';
         $data = $customer->getData();
         $data['group_id'] = $this->getCustomerGroup($customer);
