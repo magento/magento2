@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
+         class="Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity">
+    <module>Magento_CurrencySymbol</module>
+    <type>flat</type>
+    <entity_type>core_config_data</entity_type>
+    <repository_class>Magento\CurrencySymbol\Test\Repository\CurrencySymbolEntity</repository_class>
+    <handler_interface>Magento\CurrencySymbol\Test\Handler\CurrencySymbolEntity\CurrencySymbolEntityInterface</handler_interface>
+    <dataset name="default">
+        <field name="inherit_custom_currency_symbol" xsi:type="string">Yes</field>
+    </dataset>
+    <fields>
+        <field name="config_id">
+            <attribute_code>config_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="scope">
+            <attribute_code>scope</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value xsi:type="string">default</default_value>
+            <input />
+        </field>
+        <field name="scope_id">
+            <attribute_code>scope_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
+            <input />
+        </field>
+        <field name="path">
+            <attribute_code>path</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value xsi:type="string">general</default_value>
+            <input />
+        </field>
+        <field name="value">
+            <attribute_code>value</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="inherit_custom_currency_symbol">
+            <attribute_code>inherit_custom_currency_symbol</attribute_code>
+            <backend_type>virtual</backend_type>
+            <input>checkbox</input>
+            <default_value xsi:type="string">Yes</default_value>
+        </field>
+        <field name="custom_currency_symbol">
+            <attribute_code>custom_currency_symbol</attribute_code>
+            <backend_type>virtual</backend_type>
+            <input />
+        </field>
+        <field name="code">
+            <attribute_code>code</attribute_code>
+            <backend_type>virtual</backend_type>
+            <input />
+        </field>
+    </fields>
+</fixture>

@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogSearch\Model;
 
+/**
+ * Class AdvancedTest
+ * @see \Magento\CatalogSearch\Model\Advanced
+ */
 class AdvancedTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -23,14 +27,9 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
     protected $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\Resource\Engine
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\Resource\ResourceProvider
      */
-    protected $engine;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\Resource\EngineProvider
-     */
-    protected $engineProvider;
+    protected $resourceProvider;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Resource\Eav\Attribute
@@ -73,20 +72,15 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->engine = $this->getMock(
-            'Magento\CatalogSearch\Model\Resource\Engine',
-            ['getResource', '__wakeup', 'getAdvancedResultCollection'],
+
+        $this->resourceProvider = $this->getMock(
+            'Magento\CatalogSearch\Model\Resource\ResourceProvider',
+            ['getResource', 'getResourceCollection', 'getAdvancedResultCollection'],
             [],
             '',
             false
         );
-        $this->engineProvider = $this->getMock(
-            'Magento\CatalogSearch\Model\Resource\EngineProvider',
-            ['get'],
-            [],
-            '',
-            false
-        );
+
         $this->attribute = $this->getMock(
             'Magento\Catalog\Model\Resource\Eav\Attribute',
             ['getAttributeCode', 'getStoreLabel', 'getFrontendInput', 'getBackend', 'getBackendType', '__wakeup'],
@@ -107,6 +101,17 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
     {
         $registry = new \Magento\Framework\Registry();
         $values = ['sku' => 'simple'];
+
+        $this->resourceProvider->expects($this->once())
+            ->method('getResource')
+            ->willReturn($this->resource);
+        $this->resourceProvider->expects($this->once())
+            ->method('getResourceCollection')
+            ->willReturn($this->collection);
+        $this->resourceProvider->expects($this->once())
+            ->method('getAdvancedResultCollection')
+            ->willReturn($this->collection);
+
         $this->skuAttribute->expects($this->once())->method('getTable')
             ->will($this->returnValue('catalog_product_entity'));
         $this->collection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
@@ -118,10 +123,6 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         $this->resource->expects($this->any())->method('prepareCondition')
             ->will($this->returnValue(['like' => '%simple%']));
         $this->resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('entity_id'));
-        $this->engine->expects($this->any())->method('getResource')->will($this->returnValue($this->resource));
-        $this->engine->expects($this->any())->method('getAdvancedResultCollection')
-            ->will($this->returnValue($this->collection));
-        $this->engineProvider->expects($this->any())->method('get')->will($this->returnValue($this->engine));
         $this->attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue('sku'));
         $this->attribute->expects($this->any())->method('getStoreLabel')->will($this->returnValue('SKU'));
         $this->attribute->expects($this->any())->method('getFrontendInput')->will($this->returnValue('text'));
@@ -135,7 +136,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogSearch\Model\Advanced',
             [
                 'registry' => $registry,
-                'engineProvider' => $this->engineProvider,
+                'resourceProvider' => $this->resourceProvider,
                 'data' => ['attributes' => $this->dataCollection]
             ]
         );
