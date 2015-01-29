@@ -21,7 +21,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_cmsPage;
 
     /**
-     * @var \Magento\Framework\View\Model\PageLayout\Config\Builder
+     * @var \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
      */
     protected $pageLayoutBuilder;
 
@@ -30,7 +30,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Cms\Model\Page $cmsPage
      * @param \Magento\Cms\Model\Resource\Page\Grid\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\View\Model\PageLayout\Config\Builder $pageLayoutBuilder
+     * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
      * @param array $data
      */
     public function __construct(
@@ -38,7 +38,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Cms\Model\Page $cmsPage,
         \Magento\Cms\Model\Resource\Page\Grid\CollectionFactory $collectionFactory,
-        \Magento\Framework\View\Model\PageLayout\Config\Builder $pageLayoutBuilder,
+        \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder,
         array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;

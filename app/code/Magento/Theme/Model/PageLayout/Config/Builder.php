@@ -5,12 +5,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Model\PageLayout\Config;
+namespace Magento\Theme\Model\PageLayout\Config;
 
 /**
  * Page layout config builder
  */
-class Builder
+class Builder implements \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

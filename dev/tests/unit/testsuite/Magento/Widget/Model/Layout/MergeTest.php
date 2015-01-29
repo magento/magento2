@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Model\Layout;
+namespace Magento\Widget\Model\Layout;
 
 class MergeTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     const FIXTURE_LAYOUT_XML = '<block class="Magento\Framework\View\Element\Template" template="fixture.phtml"/>';
 
     /**
-     * @var \Magento\Framework\View\Model\Layout\Merge
+     * @var \Magento\Widget\Model\Layout\Merge
      */
     protected $_model;
 

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Model\Layout;
+namespace Magento\Widget\Model\Layout;
 
 use Magento\Framework\View\Model\Layout\Update\Validator;
 use Magento\Framework\App\Filesystem\DirectoryList;

@@ -33,7 +33,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     protected $layout;
 
     /**
-     * @var \Magento\Framework\View\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $layoutMerge;
 
@@ -73,7 +73,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->layoutFactory->expects($this->any())->method('create')->will($this->returnValue($this->layout));
-        $this->layoutMerge = $this->getMockBuilder('Magento\Framework\View\Model\Layout\Merge')
+        $this->layoutMerge = $this->getMockBuilder('Magento\Widget\Model\Layout\Merge')
             ->disableOriginalConstructor()
             ->getMock();
 
