@@ -82,6 +82,7 @@ class Context extends \Magento\Framework\App\Action\Context
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\App\ViewInterface $view,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Framework\View\DesignLoader $designLoader,
         \Magento\Backend\Model\Session $session,
         \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Backend\Model\Auth $auth,
@@ -89,7 +90,6 @@ class Context extends \Magento\Framework\App\Action\Context
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\View\DesignLoader $designLoader,
         $canUseBaseUrl = false
     ) {
         parent::__construct(
