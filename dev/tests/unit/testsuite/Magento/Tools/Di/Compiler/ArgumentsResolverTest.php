@@ -116,30 +116,16 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
             'type_dependency' => [
                 '_i_' => 'Type\Dependency',
                 '_s_' => false,
-                '_v_' => null,
-                '_a_' => null,
-                '_d_' => null
             ],
             'type_dependency_shared' => [
                 '_i_' => 'Type\Dependency\Shared',
                 '_s_' => true,
-                '_v_' => null,
-                '_a_' => null,
-                '_d_' => null
             ],
             'value' => [
-                '_i_' => null,
-                '_s_' => false,
                 '_v_' => 'value',
-                '_a_' => null,
-                '_d_' => null
             ],
             'value_array' => [
-                '_i_' => null,
-                '_s_' => false,
                 '_v_' => ['default_value1', 'default_value2'],
-                '_a_' => null,
-                '_d_' => null
             ],
         ];
     }
@@ -183,70 +169,41 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
             'type_dependency_configured' => [
                 '_i_' => 'Type\Dependency\Configured',
                 '_s_' => false,
-                '_v_' => null,
-                '_a_' => null,
-                '_d_' => null
             ],
             'type_dependency_shared_configured' => [
                 '_i_' => 'Type\Dependency\Shared\Configured',
                 '_s_' => true,
-                '_v_' => null,
-                '_a_' => null,
-                '_d_' => null
             ],
             'global_argument' => [
-                '_i_' => null,
-                '_s_' => false,
-                '_v_' => null,
                 '_a_' => 'global_argument_configured',
                 '_d_' => null
             ],
             'global_argument_def' => [
-                '_i_' => null,
-                '_s_' => false,
-                '_v_' => null,
                 '_a_' => 'global_argument_configured',
                 '_d_' => []
             ],
             'value_configured' => [
-                '_i_' => null,
-                '_s_' => false,
                 '_v_' => 'value_configured',
-                '_a_' => null,
-                '_d_' => null
             ],
             'value_array_configured' => [
-                '_i_' => null,
-                '_s_' => false,
                 '_v_' => [
                     'array_value' => 'value',
                     'array_configured_instance' => [
                         '_i_' => 'Type\Dependency\Shared\Configured',
                         '_s_' => true,
-                        '_v_' => null,
-                        '_a_' => null,
-                        '_d_' => null
                     ],
                     'array_configured_array' => [
                         'array_array_value' => 'value',
                         'array_array_configured_instance' => [
                             '_i_' => 'Type\Dependency\Shared\Configured',
                             '_s_' => false,
-                            '_v_' => null,
-                            '_a_' => null,
-                            '_d_' => null
                         ],
                     ],
                     'array_global_argument' => [
-                        '_i_' => null,
-                        '_s_' => false,
-                        '_v_' => null,
                         '_a_' => 'global_argument_configured',
                         '_d_' => null
                     ]
                 ],
-                '_a_' => null,
-                '_d_' => null
             ]
         ];
     }

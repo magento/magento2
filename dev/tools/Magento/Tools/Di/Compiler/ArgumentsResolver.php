@@ -15,14 +15,30 @@ class ArgumentsResolver
     private $diContainerConfig;
 
     /**
-     * Argument pattern used for configuration
+     * Instance argument pattern used for configuration
      *
      * @var array
      */
-    private $argumentPattern = [
+    private $instanceArgumentPattern = [
         '_i_' => null,
         '_s_' => false,
+    ];
+
+    /**
+     * Value argument pattern used for configuration
+     *
+     * @var array
+     */
+    private $valueArgumentPattern = [
         '_v_' => null,
+    ];
+
+    /**
+     * Configured argument pattern used for configuration
+     *
+     * @var array
+     */
+    private $configuredArgumentPattern = [
         '_a_' => null,
         '_d_' => null
     ];
@@ -90,6 +106,10 @@ class ArgumentsResolver
         return $this->getNonObjectArgument($configuredArgument);
     }
 
+    /**
+     * @param array $array
+     * @return mixed
+     */
     private function getConfiguredArrayAttribute($array)
     {
         foreach ($array as $key => $value) {
@@ -143,7 +163,7 @@ class ArgumentsResolver
      */
     private function getInstanceArgument($instanceType)
     {
-        $argument = $this->argumentPattern;
+        $argument = $this->instanceArgumentPattern;
         $argument['_i_'] = $instanceType;
         $argument['_s_'] = $this->diContainerConfig->isShared($instanceType);
         return $argument;
@@ -157,7 +177,7 @@ class ArgumentsResolver
      */
     private function getNonObjectArgument($value)
     {
-        $argument = $this->argumentPattern;
+        $argument = $this->valueArgumentPattern;
         if (is_array($value)) {
             $value = $this->getConfiguredArrayAttribute($value);
         }
@@ -174,7 +194,7 @@ class ArgumentsResolver
      */
     private function getGlobalArgument($value, $default)
     {
-        $argument = $this->argumentPattern;
+        $argument = $this->configuredArgumentPattern;
         $argument['_a_'] = $value;
         $argument['_d_'] = $default;
         return $argument;
