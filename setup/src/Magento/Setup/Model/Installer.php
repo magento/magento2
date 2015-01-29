@@ -244,7 +244,7 @@ class Installer
         $this->maintenanceMode = $maintenanceMode;
         $this->filesystem = $filesystem;
         $this->sampleData = $sampleData;
-        $this->installInfo[self::INFO_MESSAGE] = array();
+        $this->installInfo[self::INFO_MESSAGE] = [];
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerFactory = $objectManagerFactory;
     }
@@ -855,6 +855,7 @@ class Installer
      * Validates that deployment configuration exists
      *
      * @throws \Magento\Setup\Exception
+     * @return void
      */
     private function assertDeploymentConfigExists()
     {

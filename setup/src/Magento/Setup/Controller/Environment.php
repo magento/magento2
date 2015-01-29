@@ -52,7 +52,7 @@ class Environment extends AbstractActionController
      */
     public function phpVersionAction()
     {
-        try{
+        try {
             $requiredVersion = $this->phpInformation->getRequiredPhpVersion();
         } catch (\Exception $e) {
             return new JsonModel(
@@ -88,7 +88,7 @@ class Environment extends AbstractActionController
      */
     public function phpExtensionsAction()
     {
-        try{
+        try {
             $required = $this->phpInformation->getRequired();
             $current = $this->phpInformation->getCurrent();
 

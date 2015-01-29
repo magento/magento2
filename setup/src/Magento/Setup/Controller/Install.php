@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\App\DeploymentConfig\EncryptConfig;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\DeploymentConfigMapper;
 use Magento\Setup\Model\Installer;
@@ -80,13 +81,11 @@ class Install extends AbstractActionController
             $this->installer->install($data);
             $json->setVariable(
                 'key',
-                $this->installer->getInstallInfo()[
-                    \Magento\Framework\App\DeploymentConfig\EncryptConfig::KEY_ENCRYPTION_KEY
-                ]
+                $this->installer->getInstallInfo()[EncryptConfig::KEY_ENCRYPTION_KEY]
             );
             $json->setVariable('success', true);
             $json->setVariable('messages', $this->installer->getInstallInfo()[Installer::INFO_MESSAGE]);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->log->logError($e);
             $json->setVariable('success', false);
         }

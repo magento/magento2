@@ -72,6 +72,6 @@ class RouteListener extends \Zend\Mvc\RouteListener
     public function attach(EventManagerInterface $events)
     {
         // set a higher priority than default route listener so it gets triggered first
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), 10);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute'], 10);
     }
 }
