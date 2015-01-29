@@ -331,7 +331,12 @@ class MergeTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertSame($expected, $this->_model->getAllDesignAbstractions());
+        $actualAbstractions = $this->_model->getAllDesignAbstractions();
+        foreach ($actualAbstractions as $key => $abstraction) {
+            $actualAbstractions[$key]['label'] = (string)$abstraction['label'];
+        }
+
+        $this->assertSame($expected, $actualAbstractions);
     }
 
     public function testIsPageLayoutDesignAbstractions()

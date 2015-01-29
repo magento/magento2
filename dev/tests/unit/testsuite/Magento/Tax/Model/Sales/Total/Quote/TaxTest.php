@@ -701,7 +701,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $taxTotalsCalcModel = $objectManager->getObject('Magento\Tax\Model\Sales\Total\Quote\Tax');
-        $this->assertSame($taxTotalsCalcModel->getLabel(), __('Tax'));
+        $this->assertSame((string)$taxTotalsCalcModel->getLabel(), (string)__('Tax'));
     }
 
     /**
