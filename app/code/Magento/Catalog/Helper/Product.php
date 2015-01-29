@@ -107,7 +107,7 @@ class Product extends \Magento\Core\Helper\Url
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Registry $coreRegistry
@@ -123,7 +123,7 @@ class Product extends \Magento\Core\Helper\Url
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Registry $coreRegistry,
@@ -341,7 +341,7 @@ class Product extends \Magento\Core\Helper\Url
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_USE_PRODUCT_CANONICAL_TAG,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

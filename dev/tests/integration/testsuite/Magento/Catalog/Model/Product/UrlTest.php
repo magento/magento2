@@ -82,6 +82,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('category/product.html', $this->urlPathGenerator->getUrlPath($product, $category));
     }
 
+    /**
+     * @magentoAppArea frontend
+     */
     public function testGetUrl()
     {
         /** @var $product \Magento\Catalog\Model\Product */
@@ -95,6 +98,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product'
         );
         $product->setId(100);
-        $this->assertStringEndsWith('catalog/product/view/id/100/', $this->_model->getUrl($product));
+        $this->assertContains('catalog/product/view/id/100/', $this->_model->getUrl($product));
     }
 }

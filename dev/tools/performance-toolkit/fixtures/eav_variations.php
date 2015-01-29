@@ -61,7 +61,6 @@ class EavVariationsFixture extends \Magento\ToolkitFramework\Fixture
             'default_value_date'            => '',
             'default_value_textarea'        => '',
             'is_unique'                     => '0',
-            'is_configurable'               => '1',
             'is_searchable'                 => '0',
             'is_visible_in_advanced_search' => '0',
             'is_comparable'                 => '0',

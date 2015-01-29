@@ -125,11 +125,11 @@ class Config
         return [
             '/* {{ host }} */' => $this->_scopeConfig->getValue(
                 self::XML_VARNISH_PAGECACHE_BACKEND_HOST,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             ),
             '/* {{ port }} */' => $this->_scopeConfig->getValue(
                 self::XML_VARNISH_PAGECACHE_BACKEND_PORT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             ),
             '/* {{ ips }} */' => $this->_getAccessList(),
             '/* {{ design_exceptions_code }} */' => $this->_getDesignExceptions()
@@ -152,7 +152,7 @@ class Config
         $tpl = "    \"%s\";";
         $accessList = $this->_scopeConfig->getValue(
             self::XML_VARNISH_PAGECACHE_ACCESS_LIST,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if (!empty($accessList)) {
             $ips = explode(',', $accessList);
@@ -179,7 +179,7 @@ class Config
 
         $expressions = $this->_scopeConfig->getValue(
             self::XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if ($expressions) {
             $rules = array_values(unserialize($expressions));

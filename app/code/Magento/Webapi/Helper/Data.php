@@ -9,7 +9,6 @@ use Magento\Integration\Controller\Adminhtml\Integration as IntegrationControlle
 
 /**
  * Class Data
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -72,6 +71,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $preserveVersion Should version be preserved during class name conversion into service name
      * @return string[]
      * @throws \InvalidArgumentException When class is not valid API service.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getServiceNameParts($className, $preserveVersion = false)
     {
