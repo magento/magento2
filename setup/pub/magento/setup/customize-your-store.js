@@ -5,7 +5,7 @@
 
 'use strict';
 angular.module('customize-your-store', ['ngStorage'])
-    .controller('customizeYourStoreController', ['$scope', '$localStorage', function ($scope, $localStorage) {
+    .controller('customizeYourStoreController', ['$scope', '$state', '$localStorage', '$http', function ($scope, $state, $localStorage, $http) {
         $scope.store = {
             timezone: 'America/Los_Angeles',
             currency: 'USD',
@@ -22,6 +22,16 @@ angular.module('customize-your-store', ['ngStorage'])
         if ($localStorage.store) {
             $scope.store = $localStorage.store;
         }
+
+        $scope.checkModuleConstraints = function () {
+            $http.post('index.php/module-check', $scope.store)
+                .success(function (data) {
+                    $scope.checkModuleConstraints.result = data;
+                    if (!(($scope.checkModuleConstraints.result !== undefined) && (!$scope.checkModuleConstraints.result.success))) {
+                        $scope.nextState();
+                    }
+                });
+        };
 
         $scope.$on('nextState', function () {
             $localStorage.store = $scope.store;
@@ -79,4 +89,26 @@ angular.module('customize-your-store', ['ngStorage'])
                 $scope.store.allModules.push(value);
             }
         };
+
+        // Listens on form validate event, dispatched by parent controller
+        $scope.$on('validate-' + $state.current.id, function() {
+            $scope.validate();
+        });
+
+        // Dispatch 'validation-response' event to parent controller
+        $scope.validate = function() {
+            if ($scope.customizeStore.$valid) {
+                $scope.$emit('validation-response', true);
+            } else {
+                $scope.$emit('validation-response', false);
+                $scope.customizeStore.submitted = true;
+            }
+        }
+
+        // Update 'submitted' flag
+        $scope.$watch(function() { return $scope.customizeStore.$valid }, function(valid) {
+            if (valid) {
+                $scope.customizeStore.submitted = false;
+            }
+        });
     }]);
