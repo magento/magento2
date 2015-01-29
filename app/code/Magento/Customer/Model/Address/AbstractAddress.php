@@ -7,9 +7,9 @@
 namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AddressDataBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\RegionDataBuilder;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Framework\Api\AttributeValueFactory;
@@ -99,14 +99,19 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
     protected $_addressMetadataService;
 
     /**
-     * @var AddressDataBuilder
+     * @var AddressInterfaceFactory
      */
-    protected $_addressBuilder;
+    protected $addressDataFactory;
 
     /**
-     * @var RegionDataBuilder
+     * @var RegionInterfaceFactory
      */
-    protected $_regionBuilder;
+    protected $regionDataFactory;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -119,8 +124,9 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param AddressMetadataInterface $addressMetadataService
-     * @param AddressDataBuilder $addressBuilder
-     * @param RegionDataBuilder $regionBuilder
+     * @param AddressInterfaceFactory $addressDataFactory
+     * @param RegionInterfaceFactory $regionDataFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -137,8 +143,9 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
         AddressMetadataInterface $addressMetadataService,
-        AddressDataBuilder $addressBuilder,
-        RegionDataBuilder $regionBuilder,
+        AddressInterfaceFactory $addressDataFactory,
+        RegionInterfaceFactory $regionDataFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -150,8 +157,9 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
         $this->_regionFactory = $regionFactory;
         $this->_countryFactory = $countryFactory;
         $this->_addressMetadataService = $addressMetadataService;
-        $this->_addressBuilder = $addressBuilder;
-        $this->_regionBuilder = $regionBuilder;
+        $this->addressDataFactory = $addressDataFactory;
+        $this->regionDataFactory = $regionDataFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct(
             $context,
             $registry,
@@ -494,35 +502,30 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
         }
 
         /** @var RegionInterface $region */
-        $region = $this->_regionBuilder
-            ->populateWithArray(
-                [
-                    RegionInterface::REGION => $this->getRegion(),
-                    RegionInterface::REGION_ID => $this->getRegionId(),
-                    RegionInterface::REGION_CODE => $this->getRegionCode(),
-                ]
-            )
-            ->create();
+        $region = $this->regionDataFactory->create();
+        $region->setRegion($this->getRegion())
+            ->setRegionCode($this->getRegionCode())
+            ->setRegionId($this->getRegionId());
 
         $addressData[AddressData::REGION] = $region;
 
-        $this->_addressBuilder->populateWithArray($addressData);
+        $addressDataObject = $this->addressDataFactory->create();
+        $this->dataObjectHelper->populateWithArray($addressDataObject, $addressData);
         if ($addressId) {
-            $this->_addressBuilder->setId($addressId);
+            $addressDataObject->setId($addressId);
         }
 
         if ($this->getCustomerId() || $this->getParentId()) {
             $customerId = $this->getCustomerId() ?: $this->getParentId();
-            $this->_addressBuilder->setCustomerId($customerId);
+            $addressDataObject->setCustomerId($customerId);
             if ($defaultBillingAddressId == $addressId) {
-                $this->_addressBuilder->setDefaultBilling(true);
+                $addressDataObject->setIsDefaultBilling(true);
             }
             if ($defaultShippingAddressId == $addressId) {
-                $this->_addressBuilder->setDefaultShipping(true);
+                $addressDataObject->setIsDefaultShipping(true);
             }
         }
 
-        $addressDataObject = $this->_addressBuilder->create();
         return $addressDataObject;
     }
 

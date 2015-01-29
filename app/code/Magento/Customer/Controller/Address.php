@@ -35,14 +35,14 @@ class Address extends \Magento\Framework\App\Action\Action
     protected $_formFactory;
 
     /**
-     * @var \Magento\Customer\Model\Data\AddressDataBuilder
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
      */
-    protected $_addressDataBuilder;
+    protected $addressDataFactory;
 
     /**
-     * @var \Magento\Customer\Api\Data\RegionDataBuilder
+     * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
      */
-    protected $_regionDataBuilder;
+    protected $regionDataFactory;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
@@ -50,14 +50,20 @@ class Address extends \Magento\Framework\App\Action\Action
     protected $_dataProcessor;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
-     * @param \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder
-     * @param \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder
+     * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory
+     * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -66,17 +72,19 @@ class Address extends \Magento\Framework\App\Action\Action
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder,
-        \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
+        \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
+        \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->_customerSession = $customerSession;
         $this->_formKeyValidator = $formKeyValidator;
         $this->_formFactory = $formFactory;
         $this->_addressRepository = $addressRepository;
-        $this->_addressDataBuilder = $addressDataBuilder;
-        $this->_regionDataBuilder = $regionDataBuilder;
+        $this->addressDataFactory = $addressDataFactory;
+        $this->regionDataFactory = $regionDataFactory;
         $this->_dataProcessor = $dataProcessor;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct($context);
     }
 

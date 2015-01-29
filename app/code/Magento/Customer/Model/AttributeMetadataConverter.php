@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Api\Data\OptionDataBuilder;
-use Magento\Customer\Api\Data\ValidationRuleDataBuilder;
+use Magento\Customer\Api\Data\OptionInterfaceFactory;
+use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 
 /**
  * Converter for AttributeMetadata
@@ -14,14 +14,14 @@ use Magento\Customer\Api\Data\ValidationRuleDataBuilder;
 class AttributeMetadataConverter
 {
     /**
-     * @var OptionDataBuilder
+     * @var OptionInterfaceFactory
      */
-    private $_optionBuilder;
+    private $optionFactory;
 
     /**
-     * @var ValidationRuleDataBuilder
+     * @var ValidationRuleInterfaceFactory
      */
-    private $_validationRuleBuilder;
+    private $validationRuleFactory;
 
     /**
      * @var AttributeMetadataDataBuilder
@@ -29,20 +29,27 @@ class AttributeMetadataConverter
     private $_attributeMetadataBuilder;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+    /**
      * Initialize the Converter
      *
-     * @param OptionDataBuilder $optionBuilder
-     * @param ValidationRuleDataBuilder $validationRuleBuilder
+     * @param OptionInterfaceFactory $optionFactory
+     * @param ValidationRuleInterfaceFactory $validationRuleFactory
      * @param AttributeMetadataDataBuilder $attributeMetadataBuilder
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        OptionDataBuilder $optionBuilder,
-        ValidationRuleDataBuilder $validationRuleBuilder,
-        AttributeMetadataDataBuilder $attributeMetadataBuilder
+        OptionInterfaceFactory $optionFactory,
+        ValidationRuleInterfaceFactory $validationRuleFactory,
+        AttributeMetadataDataBuilder $attributeMetadataBuilder,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
-        $this->_optionBuilder = $optionBuilder;
-        $this->_validationRuleBuilder = $validationRuleBuilder;
+        $this->optionFactory = $optionFactory;
+        $this->validationRuleFactory = $validationRuleFactory;
         $this->_attributeMetadataBuilder = $attributeMetadataBuilder;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -56,24 +63,28 @@ class AttributeMetadataConverter
         $options = [];
         if ($attribute->usesSource()) {
             foreach ($attribute->getSource()->getAllOptions() as $option) {
+                $optionDataObject = $this->optionFactory->create();
                 if (!is_array($option['value'])) {
-                    $this->_optionBuilder->setValue($option['value']);
+                    $optionDataObject->setValue($option['value']);
                 } else {
                     $optionArray = [];
                     foreach ($option['value'] as $optionArrayValues) {
-                        $optionArray[] = $this->_optionBuilder->populateWithArray($optionArrayValues)->create();
+                        $optionObject = $this->optionFactory->create();
+                        $this->dataObjectHelper->populateWithArray($optionObject, $optionArrayValues);
+                        $optionArray[] = $optionObject;
                     }
-                    $this->_optionBuilder->setOptions($optionArray);
+                    $optionDataObject->setOptions($optionArray);
                 }
-                $this->_optionBuilder->setLabel($option['label']);
-                $options[] = $this->_optionBuilder->create();
+                $optionDataObject->setLabel($option['label']);
+                $options[] = $optionDataObject;
             }
         }
         $validationRules = [];
         foreach ($attribute->getValidateRules() as $name => $value) {
-            $validationRules[] = $this->_validationRuleBuilder->setName($name)
-                ->setValue($value)
-                ->create();
+            $validationRule = $this->validationRuleFactory->create()
+                ->setName($name)
+                ->setValue($value);
+            $validationRules[] = $validationRule;
         }
 
         $this->_attributeMetadataBuilder->setAttributeCode($attribute->getAttributeCode())

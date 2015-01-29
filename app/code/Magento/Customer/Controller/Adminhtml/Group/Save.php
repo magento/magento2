@@ -6,7 +6,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
-use Magento\Customer\Api\Data\GroupDataBuilder;
+use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 
@@ -22,18 +22,18 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param GroupRepositoryInterface $groupRepository
-     * @param GroupDataBuilder $groupDataBuilder
+     * @param GroupInterfaceFactory $groupDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         GroupRepositoryInterface $groupRepository,
-        GroupDataBuilder $groupDataBuilder,
+        GroupInterfaceFactory $groupDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
-        parent::__construct($context, $coreRegistry, $groupRepository, $groupDataBuilder);
+        parent::__construct($context, $coreRegistry, $groupRepository, $groupDataFactory);
     }
 
     /**
@@ -66,15 +66,16 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
             $id = $this->getRequest()->getParam('id');
             try {
                 if (!is_null($id)) {
-                    $this->groupDataBuilder->populate($this->groupRepository->getById((int)$id));
+                    $customerGroup = $this->groupRepository->getById((int)$id);
+                } else {
+                    $customerGroup = $this->groupDataFactory->create();
                 }
                 $customerGroupCode = (string)$this->getRequest()->getParam('code');
                 if (empty($customerGroupCode)) {
                     $customerGroupCode = null;
                 }
-                $this->groupDataBuilder->setCode($customerGroupCode);
-                $this->groupDataBuilder->setTaxClassId($taxClass);
-                $customerGroup = $this->groupDataBuilder->create();
+                $customerGroup->setCode($customerGroupCode);
+                $customerGroup->setTaxClassId($taxClass);
 
                 $this->groupRepository->save($customerGroup);
 

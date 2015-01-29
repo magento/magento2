@@ -9,7 +9,6 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Core\App\Action\FormKeyValidator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
@@ -27,9 +26,6 @@ class EditPost extends \Magento\Customer\Controller\Account
     /** @var CustomerRepositoryInterface  */
     protected $customerRepository;
 
-    /** @var CustomerDataBuilder */
-    protected $customerDataBuilder;
-
     /** @var FormKeyValidator */
     protected $formKeyValidator;
 
@@ -41,7 +37,6 @@ class EditPost extends \Magento\Customer\Controller\Account
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
-     * @param CustomerDataBuilder $customerDataBuilder
      * @param FormKeyValidator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -51,13 +46,11 @@ class EditPost extends \Magento\Customer\Controller\Account
         Session $customerSession,
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
-        CustomerDataBuilder $customerDataBuilder,
         FormKeyValidator $formKeyValidator,
         CustomerExtractor $customerExtractor
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
-        $this->customerDataBuilder = $customerDataBuilder;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
         parent::__construct($context, $customerSession);
@@ -79,8 +72,7 @@ class EditPost extends \Magento\Customer\Controller\Account
         if ($this->getRequest()->isPost()) {
             $customerId = $this->_getSession()->getCustomerId();
             $customer = $this->customerExtractor->extract('customer_account_edit', $this->_request);
-            $this->customerDataBuilder->populate($customer);
-            $this->customerDataBuilder->setId($customerId);
+            $customer->setId($customerId);
 
             if ($this->getRequest()->getParam('change_password')) {
                 $currPass = $this->getRequest()->getPost('current_password');
@@ -109,7 +101,7 @@ class EditPost extends \Magento\Customer\Controller\Account
             }
 
             try {
-                $this->customerRepository->save($this->customerDataBuilder->create());
+                $this->customerRepository->save($customer);
             } catch (AuthenticationException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (InputException $e) {

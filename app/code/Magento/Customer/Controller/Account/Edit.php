@@ -7,7 +7,7 @@
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 
@@ -16,23 +16,23 @@ class Edit extends \Magento\Customer\Controller\Account
     /** @var CustomerRepositoryInterface  */
     protected $customerRepository;
 
-    /** @var CustomerDataBuilder */
-    protected $customerBuilder;
+    /** @var DataObjectHelper */
+    protected $dataObjectHelper;
 
     /**
      * @param Context $context
      * @param Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
-     * @param CustomerDataBuilder $customerBuilder
+     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         CustomerRepositoryInterface $customerRepository,
-        CustomerDataBuilder $customerBuilder
+        DataObjectHelper $dataObjectHelper
     ) {
         $this->customerRepository = $customerRepository;
-        $this->customerBuilder = $customerBuilder;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct($context, $customerSession);
     }
 
@@ -55,8 +55,7 @@ class Edit extends \Magento\Customer\Controller\Account
         $customerId = $this->_getSession()->getCustomerId();
         $customerDataObject = $this->customerRepository->getById($customerId);
         if (!empty($data)) {
-            $customerDataObject = $this->customerBuilder->mergeDataObjectWithArray($customerDataObject, $data)
-                ->create();
+            $this->dataObjectHelper->populateWithArray($customerDataObject, $data);
         }
         $this->_getSession()->setCustomerData($customerDataObject);
         $this->_getSession()->setChangePassword($this->getRequest()->getParam('changepass') == 1);

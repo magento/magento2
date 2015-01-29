@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml;
 
-use Magento\Customer\Api\Data\GroupDataBuilder;
+use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\GroupRepositoryInterface;
 
 /**
@@ -26,9 +26,9 @@ class Group extends \Magento\Backend\App\Action
     protected $groupRepository;
 
     /**
-     * @var GroupDataBuilder
+     * @var GroupInterfaceFactory
      */
-    protected $groupDataBuilder;
+    protected $groupDataFactory;
 
     /**
      * Initialize Group Controller
@@ -36,17 +36,17 @@ class Group extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param GroupRepositoryInterface $groupRepository
-     * @param GroupDataBuilder $groupDataBuilder
+     * @param GroupInterfaceFactory $groupDataFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         GroupRepositoryInterface $groupRepository,
-        GroupDataBuilder $groupDataBuilder
+        GroupInterfaceFactory $groupDataFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->groupRepository = $groupRepository;
-        $this->groupDataBuilder = $groupDataBuilder;
+        $this->groupDataFactory = $groupDataFactory;
         parent::__construct($context);
     }
 
