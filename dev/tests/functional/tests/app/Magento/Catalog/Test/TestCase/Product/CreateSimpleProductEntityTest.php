@@ -10,11 +10,10 @@ use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
+ * Steps:
  * 1. Login to the backend.
  * 2. Navigate to Products > Catalog.
  * 3. Start to create simple product.
@@ -34,13 +33,6 @@ class CreateSimpleProductEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Object Manager.
-     *
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
-    /**
      * Configuration setting.
      *
      * @var string
@@ -50,15 +42,13 @@ class CreateSimpleProductEntityTest extends Injectable
     /**
      * Prepare data.
      *
-     * @param ObjectManager $objectManager
      * @param Category $category
      * @return array
      */
-    public function __prepare(ObjectManager $objectManager, Category $category)
+    public function __prepare(Category $category)
     {
-        $this->objectManager = $objectManager;
-
         $category->persist();
+
         return [
             'category' => $category
         ];
