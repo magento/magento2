@@ -6,8 +6,8 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AddressDataBuilder;
-use Magento\Customer\Api\Data\RegionDataBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Api\Data\OrderAddressInterface;
@@ -73,9 +73,10 @@ class Address extends AbstractAddress implements OrderAddressInterface
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param AddressMetadataInterface $addressMetadataService
-     * @param AddressDataBuilder $addressBuilder
-     * @param RegionDataBuilder $regionBuilder
+     * @param AddressInterfaceFactory $addressDataFactory
+     * @param RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -92,9 +93,10 @@ class Address extends AbstractAddress implements OrderAddressInterface
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
         AddressMetadataInterface $addressMetadataService,
-        AddressDataBuilder $addressBuilder,
-        RegionDataBuilder $regionBuilder,
+        AddressInterfaceFactory $addressDataFactory,
+        RegionInterfaceFactory $regionDataFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -110,8 +112,9 @@ class Address extends AbstractAddress implements OrderAddressInterface
             $regionFactory,
             $countryFactory,
             $addressMetadataService,
-            $addressBuilder,
-            $regionBuilder,
+            $addressDataFactory,
+            $regionDataFactory,
+            $dataObjectHelper,
             $resource,
             $resourceCollection,
             $data
