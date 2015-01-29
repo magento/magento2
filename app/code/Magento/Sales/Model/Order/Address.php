@@ -76,6 +76,7 @@ class Address extends AbstractAddress implements OrderAddressInterface
      * @param AddressInterfaceFactory $addressDataFactory
      * @param RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -95,6 +96,7 @@ class Address extends AbstractAddress implements OrderAddressInterface
         AddressInterfaceFactory $addressDataFactory,
         RegionInterfaceFactory $regionDataFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -112,6 +114,7 @@ class Address extends AbstractAddress implements OrderAddressInterface
             $addressMetadataService,
             $addressDataFactory,
             $regionDataFactory,
+            $dataObjectHelper,
             $resource,
             $resourceCollection,
             $data
