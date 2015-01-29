@@ -107,9 +107,9 @@ class Current extends \Magento\Framework\View\Element\Template
             $html .= '</li>';
         } else {
             $html = '<li class="nav item' . $highlight . '"><a href="' . $this->escapeHtml($this->getHref()) . '"';
-            $html .= $this->getTitle() ?
-                ' title="' . $this->escapeHtml((string)new \Magento\Framework\Phrase($this->getTitle())) . '"' :
-                '';
+            $html .= $this->getTitle()
+                ? ' title="' . $this->escapeHtml((string)new \Magento\Framework\Phrase($this->getTitle())) . '"'
+                : '';
             $html .= '>' . $this->escapeHtml((string)new \Magento\Framework\Phrase($this->getLabel())) . '</a></li>';
         }
 
