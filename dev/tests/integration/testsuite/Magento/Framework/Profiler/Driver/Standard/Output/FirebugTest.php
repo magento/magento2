@@ -15,7 +15,7 @@ class FirebugTest extends \PHPUnit_Framework_TestCase
     protected $_output;
 
     /**
-     * @var \Zend_Controller_Response_Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_response;
 

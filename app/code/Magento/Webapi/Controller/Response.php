@@ -7,7 +7,7 @@
  */
 namespace Magento\Webapi\Controller;
 
-class Response extends \Zend_Controller_Response_Http implements \Magento\Framework\App\Response\HttpInterface
+class Response extends \Magento\Framework\App\Response\Http implements \Magento\Framework\App\Response\HttpInterface
 {
     /**
      * Character set which must be used in response.

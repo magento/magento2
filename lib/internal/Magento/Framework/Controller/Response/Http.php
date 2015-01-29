@@ -7,6 +7,6 @@
  */
 namespace Magento\Framework\Controller\Response;
 
-class Http extends \Zend_Controller_Response_Http
+class Http extends \Zend\Http\PhpEnvironment\Response
 {
 }

@@ -19,7 +19,7 @@ class Firebug extends AbstractOutput
     protected $_request;
 
     /**
-     * @var \Zend_Controller_Response_Abstract
+     * @var \Zend\Http\PhpEnvironment\Response
      */
     protected $_response;
 
@@ -100,7 +100,7 @@ class Firebug extends AbstractOutput
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = new \Zend_Controller_Request_Http();
+            $this->_request = new \Zend\Http\PhpEnvironment\Response();
         }
         return $this->_request;
     }
@@ -108,10 +108,10 @@ class Firebug extends AbstractOutput
     /**
      * Response setter
      *
-     * @param \Zend_Controller_Response_Abstract $response
+     * @param \Zend\Http\PhpEnvironment\Response
      * @return void
      */
-    public function setResponse(\Zend_Controller_Response_Abstract $response)
+    public function setResponse(\Zend\Http\PhpEnvironment\Response $response)
     {
         $this->_response = $response;
     }
@@ -119,12 +119,12 @@ class Firebug extends AbstractOutput
     /**
      * Request getter
      *
-     * @return \Zend_Controller_Response_Abstract
+     * @return \Zend\Http\PhpEnvironment\Response
      */
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = new \Zend_Controller_Response_Http();
+            $this->_response = new \Zend\Http\PhpEnvironment\Response();
         }
         return $this->_response;
     }

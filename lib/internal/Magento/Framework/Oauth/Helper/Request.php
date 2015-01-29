@@ -189,7 +189,7 @@ class Request
      * @param \Zend_Controller_Response_Http $response OPTIONAL If NULL - will use internal getter
      * @return array
      */
-    public function prepareErrorResponse(\Exception $exception, \Zend_Controller_Response_Http $response = null)
+    public function prepareErrorResponse(\Exception $exception, \Zend\Http\PhpEnvironment\Response $response = null)
     {
         $errorMsg = $exception->getMessage();
 

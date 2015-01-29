@@ -27,7 +27,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareErrorResponse($exception, $response, $expected)
     {
-        /* @var $response \Zend_Controller_Response_Http */
+        /* @var $response \Zend\Http\PhpEnvironment\Response */
         $errorResponse = $this->_oauthHelper->prepareErrorResponse($exception, $response);
         $this->assertEquals(['oauth_problem' => $expected[0]], $errorResponse);
         $this->assertEquals($expected[1], $response->getHttpResponseCode());
@@ -38,17 +38,17 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 new \Magento\Framework\Oauth\OauthInputException('msg'),
-                new \Zend_Controller_Response_Http(),
+                new \Zend\Http\PhpEnvironment\Response(),
                 ['msg', \Magento\Framework\Oauth\Helper\Request::HTTP_BAD_REQUEST],
             ],
             [
                 new \Exception('msg'),
-                new \Zend_Controller_Response_Http(),
+                new \Zend\Http\PhpEnvironment\Response(),
                 ['internal_error&message=msg', \Magento\Framework\Oauth\Helper\Request::HTTP_INTERNAL_ERROR]
             ],
             [
                 new \Exception(),
-                new \Zend_Controller_Response_Http(),
+                new \Zend\Http\PhpEnvironment\Response(),
                 [
                     'internal_error&message=empty_message',
                     \Magento\Framework\Oauth\Helper\Request::HTTP_INTERNAL_ERROR

@@ -29,6 +29,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     protected $contextMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\Header\Manager
+     */
+    protected $headerManager;
+
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -38,12 +43,14 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')->disableOriginalConstructor()
             ->getMock();
+        $this->headerManager = new \Magento\Framework\HTTP\Header\Manager();
         $this->model = $objectManager->getObject(
             'Magento\Framework\App\Response\Http',
             [
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
-                'context' => $this->contextMock
+                'context' => $this->contextMock,
+                'headerManager' => $this->headerManager
             ]
         );
         $this->model->headersSentThrowsException = false;
@@ -58,8 +65,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testGetHeaderWhenHeaderNameIsEqualsName()
     {
         $expected = ['name' => 'Name', 'value' => 'value', 'replace' => false];
-        $actual = $this->model->getHeader('Name');
-        $this->assertEquals($expected, $actual);
+        $header = $this->model->getHeader('Name');
+        $this->assertEquals($expected['name'], $header->getFieldName());
+        $this->assertEquals($expected['value'], $header->getFieldValue());
     }
 
     public function testGetHeaderWhenHeaderNameIsNotEqualsName()
@@ -108,12 +116,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->with('/')
             ->will($this->returnSelf());
-
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createCookieMetadata')
             ->with()
             ->will($this->returnValue($cookieMetadataMock));
-
         $this->cookieManagerMock->expects($this->once())
             ->method('deleteCookie')
             ->with($expectedCookieName, $cookieMetadataMock);
@@ -127,13 +133,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $ttl = 120;
         $pragma = 'cache';
-        $cacheControl = 'public, max-age=' . $ttl . ', s-maxage=' . $ttl;
+        $cacheControl = 'max-age=' . $ttl . ', public, s-maxage=' . $ttl;
         $between = 1000;
 
         $this->model->setPublicHeaders($ttl);
-        $this->assertEquals($pragma, $this->model->getHeader('Pragma')['value']);
-        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')['value']);
-        $expiresResult = time($this->model->getHeader('Expires')['value']);
+        $this->assertEquals($pragma, $this->model->getHeader('Pragma')->getFieldValue());
+        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
+        $expiresResult = time($this->model->getHeader('Expires')->getFieldValue());
         $this->assertTrue($expiresResult > $between || $expiresResult < $between);
     }
 
@@ -156,13 +162,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $ttl = 120;
         $pragma = 'cache';
-        $cacheControl = 'private, max-age=' . $ttl;
+        $cacheControl = 'max-age=' . $ttl . ', private';
         $expires = gmdate('D, d M Y H:i:s T', strtotime('+' . $ttl . ' seconds'));
 
         $this->model->setPrivateHeaders($ttl);
-        $this->assertEquals($pragma, $this->model->getHeader('Pragma')['value']);
-        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')['value']);
-        $this->assertEquals($expires, $this->model->getHeader('Expires')['value']);
+        $this->assertEquals($pragma, $this->model->getHeader('Pragma')->getFieldValue());
+        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
+        $this->assertEquals($expires, $this->model->getHeader('Expires')->getFieldValue());
     }
 
     /**
@@ -183,13 +189,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testSetNoCacheHeaders()
     {
         $pragma = 'no-cache';
-        $cacheControl = 'no-store, no-cache, must-revalidate, max-age=0';
+        $cacheControl = 'max-age=0, must-revalidate, no-cache, no-store';
         $expires = gmdate('D, d M Y H:i:s T', strtotime('-1 year'));
 
         $this->model->setNoCacheHeaders();
-        $this->assertEquals($pragma, $this->model->getHeader('Pragma')['value']);
-        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')['value']);
-        $this->assertEquals($expires, $this->model->getHeader('Expires')['value']);
+        $this->assertEquals($pragma, $this->model->getHeader('Pragma')->getFieldValue());
+        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
+        $this->assertEquals($expires, $this->model->getHeader('Expires')->getFieldValue());
     }
 
     /**
@@ -199,7 +205,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setHeader('Content-Type', 'text/javascript');
         $this->model->representJson('json_string');
-        $this->assertEquals('application/json', $this->model->getHeader('Content-Type')['value']);
+        $this->assertEquals('application/json', $this->model->getHeader('Content-Type')->getFieldValue());
         $this->assertEquals('json_string', $this->model->getBody('default'));
     }
 
@@ -213,7 +219,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testGetHeaderExists($header)
     {
         $this->model->setHeader($header['name'], $header['value'], $header['replace']);
-        $this->assertEquals($header, $this->model->getHeader($header['name']));
+        $this->assertEquals($header['name'], $this->model->getHeader($header['name'])->getFieldName());
+        $this->assertEquals($header['value'], $this->model->getHeader($header['name'])->getFieldValue());
     }
 
     /**
@@ -238,6 +245,110 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setHeader('Name', 'value', true);
         $this->assertFalse($this->model->getHeader('Wrong name'));
+    }
+
+    /**
+     * Test for setHeader method.
+     *
+     * @covers \Magento\Framework\App\Response\Http::setHeader
+     */
+    public function testSetHeader()
+    {
+        $this->model->setHeader('test-name', 'testValue');
+        $header = $this->model->getHeader('testName');
+        $this->assertEquals('Test-Name', $header->getFieldName());
+        $this->assertEquals('testValue', $header->getFieldValue());
+    }
+
+    /**
+     * Test for clearHeader method.
+     *
+     * @covers \Magento\Framework\App\Response\Http::clearHeader
+     */
+    public function testClearHeader()
+    {
+        $this->model->setHeader('test-name', 'testValue');
+        $this->model->clearHeader('test-name');
+        $this->assertFalse($this->model->getHeader('test-name'));
+    }
+
+    /**
+     * Test for canSendHeaders method.
+     *
+     * @covers \Magento\Framework\App\Response\Http::canSendHeaders
+     */
+    public function testCanSendHeadersWithoutException()
+    {
+        $this->model->canSendHeaders(false);
+    }
+
+    /**
+     * Test for setRedirect method.
+     *
+     * @covers \Magento\Framework\App\Response\Http::setRedirect
+     */
+    public function testSetRedirect()
+    {
+        /** @var \Magento\Framework\App\Response\Http $response */
+        $response = $this->getMock(
+            'Magento\Framework\App\Response\Http',
+            ['canSendHeaders', 'setHeader', 'setHttpResponseCode', 'sendHeaders'],
+            [],
+            '',
+            false
+        );
+
+        $response
+            ->expects($this->once())
+            ->method('canSendHeaders')
+            ->with(true)
+            ->will($this->returnValue(true));
+        $response
+            ->expects($this->once())
+            ->method('setHeader')
+            ->with('Location', 'testUrl', true)
+            ->will($this->returnSelf());
+        $response
+            ->expects($this->once())
+            ->method('setHttpResponseCode')
+            ->with(302)
+            ->will($this->returnSelf());
+        $response
+            ->expects($this->once())
+            ->method('sendHeaders')
+            ->will($this->returnSelf());
+
+        $response->setRedirect('testUrl');
+    }
+
+    /**
+     * Test for setHttpResponseCode method.
+     *
+     * @covers \Magento\Framework\App\Response\Http::setHttpResponseCode
+     */
+    public function testSetHttpResponseCode()
+    {
+        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException');
+        $this->model->setHttpResponseCode(2);
+    }
+    /**
+     * Test for setHttpResponseCode method.
+     *
+     * @covers \Magento\Framework\App\Response\Http::setHttpResponseCode
+     */
+    public function testSetHttpResponseCodeWithoutException()
+    {
+        $this->model->setHttpResponseCode(200);
+    }
+
+    /**
+     * Test for getHeaders method.
+     *
+     * @covers \Magento\Framework\App\Response\Http::getHeaders
+     */
+    public function testGetHeaders()
+    {
+        $this->assertInstanceOf('Magento\Framework\HTTP\Header\Manager', $this->model->getHeaders());
     }
 
     /**
@@ -270,11 +381,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Framework\Stdlib\CookieManagerInterface')
             ->will($this->returnValue($this->cookieManagerMock));
-
-        $objectManagerMock->expects($this->once())
+        $objectManagerMock->expects($this->at(1))
             ->method('get')
             ->with('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory')
             ->will($this->returnValue($this->cookieMetadataFactoryMock));
+
+        $objectManagerMock->expects($this->at(2))
+            ->method('get')
+            ->with('Magento\Framework\HTTP\Header\Manager')
+            ->will($this->returnValue($this->headerManager));
 
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
         $this->model->__wakeup();

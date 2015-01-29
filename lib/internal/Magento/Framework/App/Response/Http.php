@@ -12,7 +12,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
-class Http extends \Zend_Controller_Response_Http implements HttpInterface
+use Magento\Framework\HTTP\Header as Header;
+
+class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
 {
     /**
      * Cookie to store page vary string
@@ -35,18 +37,53 @@ class Http extends \Zend_Controller_Response_Http implements HttpInterface
     protected $context;
 
     /**
+     * @var int
+     */
+    protected $httpResponseCode;
+
+    /**
+     * Flag; is this response a redirect?
+     * @var boolean
+     */
+    protected $isRedirect = false;
+
+    /**
+     * Exception stack
+     * @var \Exception
+     */
+    protected $exceptions = [];
+
+    /**
+     * Flag; if true, when header operations are called after headers have been
+     * sent, an exception will be raised; otherwise, processing will continue
+     * as normal. Defaults to true.
+     *
+     * @see canSendHeaders()
+     * @var boolean
+     */
+    public $headersSentThrowsException = true;
+
+    /**
+     * @var \Magento\Framework\HTTP\Header\Manager
+     */
+    protected $headerManager;
+
+    /**
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\Http\Context $context
+     * @param \Magento\Framework\HTTP\Manager
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
-        Context $context
+        Context $context,
+        Header\Manager $headerManager
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->context = $context;
+        $this->headerManager = $headerManager;
     }
 
     /**
@@ -55,16 +92,140 @@ class Http extends \Zend_Controller_Response_Http implements HttpInterface
      * If header with specified name was not found returns false.
      *
      * @param string $name
-     * @return array|bool
+     * @return \Zend\Http\Header\Interface
      */
     public function getHeader($name)
     {
-        foreach ($this->_headers as $header) {
-            if ($header['name'] == $name) {
-                return $header;
+        $header = false;
+        if ($this->headerManager->has($name)) {
+            $header = $this->headerManager->get($name);
+        }
+        return $header;
+    }
+
+    /**
+     * Send the response, including all headers, rendering exceptions if so
+     * requested.
+     *
+     * @return void
+     */
+    public function sendResponse()
+    {
+        $this->sendVary();
+        $this->send();
+    }
+
+    /**
+     * @param string $value
+     */
+    public function appendBody($value)
+    {
+        $body = $this->getContent();
+        $this->setContent($body . $value);
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setBody($value)
+    {
+        $this->setContent($value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->getContent();
+    }
+
+
+    /**
+     * Set a header
+     *
+     * If $replace is true, replaces any headers already defined with that
+     * $name.
+     *
+     * @param string $name
+     * @param string $value
+     * @param boolean $replace
+     * @return \Magento\Framework\App\Response\Http
+     */
+    public function setHeader($name, $value, $replace = false)
+    {
+        $this->canSendHeaders(true);
+        $name  = $this->normalizeHeader($name);
+        $value = (string)$value;
+
+        if ($replace) {
+            $this->clearHeader($name);
+        }
+
+        $this->headerManager->addHeaderLine($name, $value);
+        return $this;
+    }
+
+    /**
+     * Remove header by name from header stack
+     *
+     * @param string $name
+     */
+    public function clearHeader($name)
+    {
+        $name  = $this->normalizeHeader($name);
+        if ($this->headerManager->has($name)) {
+            foreach ($this->headerManager as $header) {
+                if ($header->getFieldName() == $name) {
+                    $this->headerManager->removeHeader($header);
+                }
             }
         }
-        return false;
+    }
+
+    /**
+     * Remove all headers
+     */
+    public function clearHeaders()
+    {
+        foreach ($this->headerManager as $header) {
+            $this->headerManager->removeHeader($header);
+        }
+    }
+
+    /**
+     * Can we send headers?
+     *
+     * @param boolean $throw Whether or not to throw an exception if headers have been sent; defaults to false
+     * @return boolean
+     * @throws \Zend\Http\Exception\InvalidArgumentException
+     */
+    public function canSendHeaders($throw = false)
+    {
+        $ok = headers_sent($file, $line);
+        if ($ok && $throw && $this->headersSentThrowsException) {
+            throw new \Zend\Http\Exception\InvalidArgumentException(
+                'Cannot send headers; headers already sent in ' . $file . ', line ' . $line
+            );
+        }
+
+        return !$ok;
+    }
+
+    /**
+     * Normalize a header name
+     *
+     * Normalizes a header name to X-Capitalized-Names
+     *
+     * @param  string $name
+     * @return string
+     */
+    protected function normalizeHeader($name)
+    {
+        $filtered = str_replace(['-', '_'], ' ', (string)$name);
+        $filtered = ucwords(strtolower($filtered));
+        $filtered = str_replace(' ', '-', $filtered);
+        return $filtered;
     }
 
     /**
@@ -86,18 +247,6 @@ class Http extends \Zend_Controller_Response_Http implements HttpInterface
                 ->setPath('/');
             $this->cookieManager->deleteCookie(self::COOKIE_VARY_STRING, $cookieMetadata);
         }
-    }
-
-    /**
-     * Send the response, including all headers, rendering exceptions if so
-     * requested.
-     *
-     * @return void
-     */
-    public function sendResponse()
-    {
-        $this->sendVary();
-        parent::sendResponse();
     }
 
     /**
@@ -156,7 +305,96 @@ class Http extends \Zend_Controller_Response_Http implements HttpInterface
     public function representJson($content)
     {
         $this->setHeader('Content-Type', 'application/json', true);
-        return $this->setBody($content);
+        return $this->setContent($content);
+    }
+
+    /**
+     * Set redirect URL
+     *
+     * Sets Location header and response code. Forces replacement of any prior
+     * redirects.
+     *
+     * @param string $url
+     * @param int $code
+     * @return \Magento\Framework\App\Response\Http
+     */
+    public function setRedirect($url, $code = 302)
+    {
+        $this->canSendHeaders(true);
+        $this->setHeader('Location', $url, true)
+            ->setHttpResponseCode($code);
+
+        $this->sendHeaders();
+
+        return $this;
+    }
+
+    /**
+     * @return Header\Manager
+     */
+    public function getHeaders()
+    {
+        return $this->headerManager;
+    }
+
+    /**
+     * Set HTTP response code to use with headers
+     *
+     * @param int $code
+     * @return \Magento\Framework\App\Response\Http
+     */
+    public function setHttpResponseCode($code)
+    {
+        if (!is_int($code) || (100 > $code) || (599 < $code)) {
+            throw new \Zend\Http\Exception\InvalidArgumentException('Invalid HTTP response code');
+        }
+
+        $this->isRedirect = (300 <= $code && 307 >= $code) ? true : false;
+
+        $this->setStatusCode($code);
+        return $this;
+    }
+
+    /**
+     * Get response code
+     *
+     * @return int
+     */
+    public function getHttpResponseCode()
+    {
+        return $this->getStatusCode();
+    }
+
+    /**
+     * Is this a redirect?
+     *
+     * @return boolean
+     */
+    public function isRedirect()
+    {
+        return $this->isRedirect;
+    }
+
+    /**
+     * Register an exception with the response
+     *
+     * @param $e
+     * @return $this
+     */
+    public function setException($e)
+    {
+        $this->exceptions[] = $e;
+        return $this;
+    }
+
+    /**
+     * Return list of exceptions
+     *
+     * @return array
+     */
+    public function getExceptions()
+    {
+        return $this->exceptions;
     }
 
     /**
@@ -164,7 +402,7 @@ class Http extends \Zend_Controller_Response_Http implements HttpInterface
      */
     public function __sleep()
     {
-        return ['_body', '_exceptions', '_headers', '_headersRaw', '_httpResponseCode', 'context'];
+        return ['content', 'isRedirect', 'exceptions', 'headerManager', 'statusCode', 'context'];
     }
 
     /**
@@ -177,5 +415,6 @@ class Http extends \Zend_Controller_Response_Http implements HttpInterface
         $objectManager = ObjectManager::getInstance();
         $this->cookieManager = $objectManager->create('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactory = $objectManager->get('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory');
+        $this->headerManager = $objectManager->get('Magento\Framework\HTTP\Header\Manager');
     }
 }
