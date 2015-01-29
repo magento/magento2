@@ -55,6 +55,7 @@ class Tokenizer
      *
      * @param string $className
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isMatchingClass($className)
     {
