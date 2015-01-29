@@ -58,26 +58,24 @@ define([
         },
 
         /**
-         * _renderOption
          * @param {String} key
          * @param {String} row
          * @private
          */
         _renderOption: function (key, row) {
-            var template,
-                message;
+            var template;
 
             if (row && row.length > 0 && row[0] !== null) {
                 template = this.element
                     .closest(this.options.summaryContainer)
                     .find(this.options.templates.summaryBlock)
                     .html();
-                template = mageTemplate($.trim(template));
-                message = template({
+                template = mageTemplate($.trim(template), {
                     _label_: this.cache.currentElement.options[key].title
                 });
+
                 this.cache.currentKey = key;
-                this.cache.summaryContainer = $(message);
+                this.cache.summaryContainer = $(template);
                 this.element.append(this.cache.summaryContainer);
 
                 $.each(row, this._renderOptionRow.bind(this));
@@ -89,28 +87,24 @@ define([
         },
 
         /**
-         * _renderOptionRow
          * @param {String} key
          * @param {String} optionIndex
          * @private
          */
         _renderOptionRow: function (key, optionIndex) {
-            var template,
-                message,
-                option = {};
-
-            option._quantity_ = this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].qty;
-            option._label_ = this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].name;
+            var template;
 
             template = this.element
                 .closest(this.options.summaryContainer)
                 .find(this.options.templates.optionBlock)
                 .html();
-            template = mageTemplate($.trim(template));
-            message = template(option);
+            template = mageTemplate($.trim(template), {
+                _quantity_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].qty,
+                _label_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].name
+            });
             this.cache.summaryContainer
                 .find(this.options.optionSelector)
-                .append(message);
+                .append(template);
         }
     });
 
