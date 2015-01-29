@@ -2,21 +2,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
 define([
-    "jquery",
-    "Magento_Catalog/js/price-utils",
-    "underscore",
-    "mage/template",
-    "jquery/ui"
-], function ($, utils, _, mageTemplate) {
-    "use strict";
+    'jquery',
+    'Magento_Catalog/js/price-utils',
+    'underscore',
+    'jquery/ui'
+], function ($, utils, _) {
+    'use strict';
 
     var globalOptions = {
         productId: null,
         priceConfig: null,
         prices: {},
-        priceTemplate: '<span class="price"><%= formatted %></span>'
+        priceTemplate: '<span class="price"><%- formatted %></span>'
     };
 
     $.widget('mage.priceBox', {
@@ -90,9 +88,11 @@ define([
         var keys = [];
 
         this.cache.additionalPriceObject = this.cache.additionalPriceObject || {};
+
         if (newPrices) {
             $.extend(this.cache.additionalPriceObject, newPrices);
         }
+
         if (!_.isEmpty(additionalPrice)) {
             keys = _.keys(additionalPrice);
         } else if (!_.isEmpty(prices)) {
@@ -145,7 +145,7 @@ define([
         var box = this.element;
         var prices = this.cache.displayPrices;
         var priceFormat = this.options.priceConfig && this.options.priceConfig.priceFormat || {};
-        var priceTemplate = mageTemplate(this.options.priceTemplate);
+        var priceTemplate = hbs(this.options.priceTemplate);
 
         _.each(prices, function (price, priceCode) {
             var html,
@@ -185,31 +185,41 @@ define([
         if ('disabled' in options) {
             this._setOption('disabled', options.disabled);
         }
+
         return this;
     }
 
-
+    /**
+     * setDefaultsFromDataSet
+     */
     function setDefaultsFromDataSet() {
         /*jshint validthis: true */
         var box = this.element;
         var priceHolders = $('[data-price-type]', box);
         var prices = this.options.prices;
         this.options.productId = box.data('productId');
+
         if (_.isEmpty(prices)) {
             priceHolders.each(function (index, element) {
                 var type = $(element).data('priceType');
                 var amount = $(element).data('priceAmount');
 
                 if(type && amount) {
-                    prices[type] = {amount: amount};
+                    prices[type] = {
+                        amount: amount
+                    };
                 }
             });
         }
     }
 
+    /**
+     * setDefaultsFromPriceConfig
+     */
     function setDefaultsFromPriceConfig() {
         /*jshint validthis: true */
         var config = this.options.priceConfig;
+
         if (config) {
             if (+config.productId !== +this.options.productId) {
                 return;
