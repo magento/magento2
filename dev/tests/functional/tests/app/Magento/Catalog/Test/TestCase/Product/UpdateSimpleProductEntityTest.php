@@ -71,14 +71,6 @@ class UpdateSimpleProductEntityTest extends Injectable
      *
      * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
-     * @throws \Exception
-     * @return array
-     */
-
-
-    /**
-     * @param CatalogProductSimple $initialProduct
-     * @param CatalogProductSimple $product
      * @return array
      */
     public function test(CatalogProductSimple $initialProduct, CatalogProductSimple $product)
