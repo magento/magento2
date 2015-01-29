@@ -50,7 +50,6 @@ class Session extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param Data $persistentData
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
@@ -60,7 +59,6 @@ class Session extends \Magento\Core\Helper\Data
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Persistent\Model\SessionFactory $sessionFactory
@@ -73,8 +71,7 @@ class Session extends \Magento\Core\Helper\Data
             $context,
             $scopeConfig,
             $storeManager,
-            $appState,
-            $priceCurrency
+            $appState
         );
     }
 

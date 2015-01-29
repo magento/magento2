@@ -25,7 +25,6 @@ class Reorder extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
@@ -33,7 +32,6 @@ class Reorder extends \Magento\Core\Helper\Data
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Customer\Model\Session $customerSession
     ) {
         $this->_customerSession = $customerSession;
@@ -41,8 +39,7 @@ class Reorder extends \Magento\Core\Helper\Data
             $context,
             $scopeConfig,
             $storeManager,
-            $appState,
-            $priceCurrency
+            $appState
         );
     }
 

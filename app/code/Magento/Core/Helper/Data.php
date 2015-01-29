@@ -5,8 +5,6 @@
  */
 namespace Magento\Core\Helper;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-
 /**
  * Core data helper
  */
@@ -65,54 +63,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_appState;
 
     /**
-     * @var PriceCurrencyInterface
-     */
-    protected $_priceCurrency;
-
-    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
-     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
-        PriceCurrencyInterface $priceCurrency
+        \Magento\Framework\App\State $appState
     ) {
         parent::__construct($context);
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_appState = $appState;
-        $this->_priceCurrency =  $priceCurrency;
-    }
-
-    /**
-     * Convert and format price value for specified store
-     *
-     * @param   float $value
-     * @param   int|\Magento\Store\Model\Store $store
-     * @param   bool $format
-     * @param   bool $includeContainer
-     * @return  float|string
-     */
-    public function currencyByStore($value, $store = null, $format = true, $includeContainer = true)
-    {
-        if ($format) {
-            $value = $this->_priceCurrency->convertAndFormat(
-                $value,
-                $includeContainer,
-                PriceCurrencyInterface::DEFAULT_PRECISION,
-                $store
-            );
-        } else {
-            $value = $this->_priceCurrency->convert($value, $store);
-        }
-
-        return $value;
     }
 
     /**

@@ -32,7 +32,6 @@ class Data extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
@@ -40,15 +39,13 @@ class Data extends \Magento\Core\Helper\Data
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         DeploymentConfig $deploymentConfig
     ) {
         parent::__construct(
             $context,
             $scopeConfig,
             $storeManager,
-            $appState,
-            $priceCurrency
+            $appState
         );
         $this->_installDate = $deploymentConfig->get(self::INSTALL_DATE);
     }

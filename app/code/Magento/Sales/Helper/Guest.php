@@ -71,7 +71,6 @@ class Guest extends \Magento\Core\Helper\Data
      * @param App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
@@ -87,7 +86,6 @@ class Guest extends \Magento\Core\Helper\Data
         App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -107,8 +105,7 @@ class Guest extends \Magento\Core\Helper\Data
             $context,
             $scopeConfig,
             $storeManager,
-            $appState,
-            $priceCurrency
+            $appState
         );
     }
 

@@ -26,40 +26,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $amount
-     * @param string $store
-     * @param bool $format
-     * @param bool $includeContainer
-     * @param string $result
-     * @dataProvider currencyByStoreDataProvider
-     */
-    public function testCurrencyByStore($amount, $store, $format, $includeContainer, $result)
-    {
-        if ($format) {
-            $this->priceCurrencyMock->expects($this->once())
-                ->method('convertAndFormat')
-                ->with($amount, $includeContainer, PriceCurrencyInterface::DEFAULT_PRECISION, $store)
-                ->will($this->returnValue($result));
-        } else {
-            $this->priceCurrencyMock->expects($this->once())
-                ->method('convert')
-                ->with($amount, $store)
-                ->will($this->returnValue($result));
-        }
-        $helper = $this->getHelper(['priceCurrency' => $this->priceCurrencyMock]);
-        $this->assertEquals($result, $helper->currencyByStore($amount, $store, $format, $includeContainer));
-    }
-
-    public function currencyByStoreDataProvider()
-    {
-        return [
-            ['amount' => '10', 'store' => 1, 'format' => true, 'includeContainer' => true, 'result' => '10grn.'],
-            ['amount' => '115', 'store' => 4,  'format' => true, 'includeContainer' => false, 'result' => '1150'],
-            ['amount' => '120', 'store' => 5,  'format' => false, 'includeContainer' => null, 'result' => '1200'],
-        ];
-    }
-
-    /**
      * @param array $allowedIps
      * @param bool $expected
      * @dataProvider isDevAllowedDataProvider

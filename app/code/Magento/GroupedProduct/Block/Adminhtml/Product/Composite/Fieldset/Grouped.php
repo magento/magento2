@@ -15,23 +15,23 @@ namespace Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset;
 class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
 {
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Pricing\Helper\Data
      */
-    protected $_coreHelper;
+    protected $pricingHelper;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Core\Helper\Data $pricingHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Pricing\Helper\Data $pricingHelper,
         array $data = []
     ) {
-        $this->_coreHelper = $coreHelper;
+        $this->pricingHelper = $pricingHelper;
         parent::__construct(
             $context,
             $arrayUtils,
@@ -150,6 +150,6 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
     public function getCurrencyPrice($price)
     {
         $store = $this->getProduct()->getStore();
-        return $this->_coreHelper->currencyByStore($price, $store, false);
+        return $this->pricingHelper->currencyByStore($price, $store, false);
     }
 }
