@@ -16,11 +16,11 @@ class DefaultNoRoute extends \Magento\Framework\App\Action\Action
     protected $resultLayoutFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
     ) {
         $this->resultLayoutFactory = $resultLayoutFactory;
