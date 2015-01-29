@@ -6,7 +6,6 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Setup\Model\Lists;
-use Magento\Setup\Model\ModuleStatus;
 use Magento\Setup\Model\SampleData;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -24,20 +23,13 @@ class CustomizeYourStore extends AbstractActionController
     protected $sampleData;
 
     /**
-     * @var ModuleStatus
-     */
-    protected $allModules;
-
-    /**
      * @param Lists $list
      * @param SampleData $sampleData
-     * @param ModuleStatus $allModules
      */
-    public function __construct(Lists $list, SampleData $sampleData,ModuleStatus $allModules)
+    public function __construct(Lists $list, SampleData $sampleData)
     {
         $this->list = $list;
         $this->sampleData = $sampleData;
-        $this->allModules = $allModules;
     }
 
     /**
@@ -50,7 +42,6 @@ class CustomizeYourStore extends AbstractActionController
             'currency' => $this->list->getCurrencyList(),
             'language' => $this->list->getLocaleList(),
             'isSampledataEnabled' => $this->sampleData->isDeployed(),
-            'modules' => $this->allModules->getAllModules(),
         ]);
         $view->setTerminal(true);
         return $view;

@@ -13,10 +13,7 @@
     <h1>{{$state.current.header}}</h1>
 </div>
 
-<?php foreach ($this->modules as $label => $value):?>
-    {{add(<?php echo '"' . $label . '", "' .$value['selected'] .'"';?>);}}
-<?php endforeach; ?>
-{{checkIfAllAreSelected();}}
+
 
 <form novalidate name="customizeStore" class="form-horizontal" role="form">
 <form class="form-horizontal" role="form">

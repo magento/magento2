@@ -9,7 +9,7 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
-use Magento\Framework\App\DeploymentConfig\Reader as ConfigReader;
+use Magento\Framework\App\DeploymentConfig;
 
 class ModuleStatus
 {
@@ -21,22 +21,22 @@ class ModuleStatus
     protected $allModules;
 
     /**
-     * Configuration Reader
+     * Deployment Config
      *
-     * @var ConfigReader
+     * @var DeploymentConfig
      */
-    protected $configReader;
+    protected $deploymentConfig;
 
     /**
      * Constructor
      *
      * @param ModuleLoader $moduleLoader
-     * @param ConfigReader $configReader
+     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(ModuleLoader $moduleLoader, ConfigReader $configReader)
+    public function __construct(ModuleLoader $moduleLoader, DeploymentConfig $deploymentConfig)
     {
         $this->allModules = $moduleLoader->load();
-        $this->configReader = $configReader;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -52,9 +52,8 @@ class ModuleStatus
                 $allModules[$module]['selected'] = true;
             }
 
-            $existingModules = $this->configReader->load();
-            if (isset($existingModules['modules'])) {
-                $existingModules = $existingModules['modules'];
+            $existingModules = $this->deploymentConfig->getSegment('modules');
+            if (isset($existingModules)) {
                 foreach ($existingModules as $module => $value) {
                     if(!$value) {
                         $allModules[$module]['selected'] = false;

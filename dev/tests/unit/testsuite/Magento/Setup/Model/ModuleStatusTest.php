@@ -14,14 +14,14 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
     private $moduleLoader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Magento\Framework\App\DeploymentConfig\Reader
+     * @var \PHPUnit_Framework_MockObject_MockObject|Magento\Framework\App\DeploymentConfig
      */
-    private $configReader;
+    private $deploymentConfig;
 
     public function setUp()
     {
         $this->moduleLoader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-        $this->configReader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
 
     }
 
@@ -35,9 +35,10 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
     public function testGetAllModules($expectedAllModules, $expectedConfig, $expectedResult)
     {
         $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
-        $this->configReader->expects($this->once())->method('load')->will($this->returnValue($expectedConfig));
+        $this->deploymentConfig->expects($this->once())->method('getSegment')
+            ->will($this->returnValue($expectedConfig));
 
-        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->configReader);
+        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig);
         $allModules = $moduleStatus->getAllModules();
         $this->assertSame($expectedResult[0], $allModules['module1']['selected']);
         $this->assertSame($expectedResult[1], $allModules['module2']['selected']);
@@ -61,9 +62,9 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
     public function testGetAllModulesWithNull()
     {
         $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue(null));
-        $this->configReader->expects($this->never())->method('load');
+        $this->deploymentConfig->expects($this->never())->method('getSegment');
 
-        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->configReader);
+        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig);
         $allModules = $moduleStatus->getAllModules();
         $this->assertSame([], $allModules);
     }

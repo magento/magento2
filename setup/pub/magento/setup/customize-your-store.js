@@ -5,13 +5,14 @@
 
 'use strict';
 angular.module('customize-your-store', ['ngStorage'])
-    .controller('customizeYourStoreController', ['$scope', '$state', '$localStorage', '$http', function ($scope, $state, $localStorage, $http) {
+    .controller('customizeYourStoreController', ['$scope', '$localStorage' , '$state', 'moduleService', function ($scope, $localStorage, $state, moduleService) {
         $scope.store = {
             timezone: 'America/Los_Angeles',
             currency: 'USD',
             language: 'en_US',
             useSampleData: false,
-            selectAll: false,
+            loadedAllModules: false,
+            selectAll: true,
             allModules: [],
             selectedModules : [],
             advanced: {
@@ -23,21 +24,33 @@ angular.module('customize-your-store', ['ngStorage'])
             $scope.store = $localStorage.store;
         }
 
-        $scope.checkModuleConstraints = function () {
-            $http.post('index.php/module-check', $scope.store)
-                .success(function (data) {
-                    $scope.checkModuleConstraints.result = data;
-                    if (!(($scope.checkModuleConstraints.result !== undefined) && (!$scope.checkModuleConstraints.result.success))) {
-                        $scope.nextState();
-                    }
-                });
-        };
-
+        if (!$scope.store.loadedAllModules) {
+            moduleService.load();
+        }
+        
         $scope.$on('nextState', function () {
+            if (!$scope.store.loadedAllModules) {
+                $state.loadModules();
+            }
             $localStorage.store = $scope.store;
         });
 
+        $state.loadModules= function(){
+            if(!$scope.store.loadedAllModules) {
+                var allModules = $scope.$state.loadedModules.modules;
+                for(var i=0;i<allModules.length;i++) {
+                    $scope.store.allModules.push(allModules[i].name);
+                    if(allModules[i].selected) {
+                        $scope.store.selectedModules.push(allModules[i].name);
+                    }
+                }
+                $scope.store.loadedAllModules = true;
+                $scope.checkIfAllAreSelected();
+            }
+        }
+
         $scope.updateOnExpand = function(obj) {
+            $state.loadModules();
             obj.expanded = !obj.expanded;
         };
 
@@ -57,58 +70,32 @@ angular.module('customize-your-store', ['ngStorage'])
         }
 
         $scope.toggleAllModules = function() {
-            if (!$scope.store.selectAll) {
-                $scope.store.selectedModules = $scope.store.allModules;
-                $scope.store.selectAll = true;
-            } else {
-                $scope.store.selectedModules = [];
-                $scope.store.selectAll = false;
+            $scope.store.selectAll = !$scope.store.selectAll;
+            $scope.store.selectedModules = [];
+            if ($scope.store.selectAll) {
+                for(var i=0;i<$scope.store.allModules.length;i++) {
+                    $scope.store.selectedModules[i] = $scope.store.allModules[i];
+                }
             }
         };
 
         $scope.checkIfAllAreSelected = function() {
-            if ($scope.store.selectedModules.length === $scope.store.allModules.length) {
+            if ($scope.store.selectedModules.length === $scope.store.allModules.length &&
+                $scope.store.selectedModules.length !== 0 ) {
                 $scope.store.selectAll = true;
             } else {
                 $scope.store.selectAll = false;
             }
         }
-
-        $scope.add = function(value, selected) {
-            var addToArray=true;
-            for(var i=0;i<$scope.store.allModules.length;i++) {
-                if($scope.store.allModules[i]===value) {
-                    addToArray=false;
-                    break;
-                }
-            }
-            if(addToArray) {
-                if(selected) {
-                    $scope.store.selectedModules.push(value);
-                }
-                $scope.store.allModules.push(value);
-            }
-        };
-
-        // Listens on form validate event, dispatched by parent controller
-        $scope.$on('validate-' + $state.current.id, function() {
-            $scope.validate();
-        });
-
-        // Dispatch 'validation-response' event to parent controller
-        $scope.validate = function() {
-            if ($scope.customizeStore.$valid) {
-                $scope.$emit('validation-response', true);
-            } else {
-                $scope.$emit('validation-response', false);
-                $scope.customizeStore.submitted = true;
+    }])
+    .service('moduleService', ['$state', '$http', function ( $state, $http) {
+        return {
+            mainState: {},
+            states: [],
+            load: function () {
+                $http.get('index.php/modules').success(function (data) {
+                    $state.loadedModules = data;
+                });
             }
         }
-
-        // Update 'submitted' flag
-        $scope.$watch(function() { return $scope.customizeStore.$valid }, function(valid) {
-            if (valid) {
-                $scope.customizeStore.submitted = false;
-            }
-        });
     }]);
