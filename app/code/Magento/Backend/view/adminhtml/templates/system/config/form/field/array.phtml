@@ -37,7 +37,7 @@ $_colspan = $this->isAddAfter() ? 2 : 1;
     <input type="hidden" name="<?php echo $this->getElement()->getName(); ?>[__empty]" value="" />
 
     <script>
-
+        require(['prototype'], function(){
         // create row creator
         var arrayRow<?php echo $_htmlId ?> = {
 
@@ -117,6 +117,6 @@ $_colspan = $this->isAddAfter() ? 2 : 1;
         <?php if ($this->getElement()->getDisabled()):?>
         toggleValueElements({checked: true}, $('grid<?php echo $_htmlId; ?>').parentNode);
             <?php endif;?>
-
+        });
     </script>
 </div>

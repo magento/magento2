@@ -12,8 +12,7 @@
 <div id="<?php echo $_divId ?>" class="tree"></div>
 
 <script>
-require(['prototype'], function(){
-//<![CDATA[
+require(["prototype", "extjs/ext-tree-checkbox"], function(){
 
 var tree<?php echo $this->getId() ?>;
 
@@ -183,7 +182,6 @@ Ext.onReady(function()
     tree<?php echo $this->getId() ?>.loadTree({parameters:parameters, data:<?php echo $this->getTreeJson() ?>},true);
 
 });
-//]]>
 
 });
 </script>

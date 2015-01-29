@@ -6,6 +6,7 @@
 define([
     "jquery",
     "jquery/ui",
+    "loadingPopup",
     "mage/translate",
     "jquery/file-uploader"
 ], function($){

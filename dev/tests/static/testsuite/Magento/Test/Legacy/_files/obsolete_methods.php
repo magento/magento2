@@ -2030,7 +2030,15 @@ return [
     ['getAllNonNominalItems', 'Magento\Sales\Model\Quote\Address'],
     ['getAllNominalItems', 'Magento\Sales\Model\Quote\Address'],
     ['isNominal', 'Magento\Sales\Model\Order\Item'],
+    ['getIsConfigurable', 'Magento\Catalog\Api\Data\EavAttributeInterface'],
+    ['getIsConfigurable', 'Magento\Catalog\Model\Category\Attribute'],
+    ['getIsConfigurable', 'Magento\Catalog\Model\Resource\Eav\Attribute'],
     ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem'],
     ['checkQuoteAmount', 'Magento\Sales\Helper\Data'],
-    ['getEntityTypeId', 'Magento\Customer\Model\Customer']
+    ['getResource', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getResourceCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getAdvancedResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getEntityTypeId', 'Magento\Customer\Model\Customer'],
+    ['setIsConfigurable', 'Magento\Catalog\Api\Data\ProductAttributeDataBuilder'],
 ];
