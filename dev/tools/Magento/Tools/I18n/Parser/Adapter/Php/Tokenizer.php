@@ -67,10 +67,10 @@ class Tokenizer
         $state = 1;
         $classString = '';
         while ($token = $this->getNextRealToken()) {
-            if ($token->isNamespaceSeparator() && ($state != 2)) {
+            if ($token->isNamespaceSeparator() && $state != 2) {
                 $classString .= $token->getValue();
                 $state = 2;
-            } elseif ($token->isIdentifier() && ($state != 3)) {
+            } elseif ($token->isIdentifier() && $state != 3) {
                 $classString .= $token->getValue();
                 $state = 3;
             } elseif ($token->isOpenBrace() && $state == 3) {
