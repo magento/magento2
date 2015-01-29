@@ -6,13 +6,13 @@
 
 namespace Magento\Tax\Test\Constraint;
 
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Sales\Test\Page\OrderView;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Checks that prices excluding tax on order review and customer order pages are equal to specified in dataset.
