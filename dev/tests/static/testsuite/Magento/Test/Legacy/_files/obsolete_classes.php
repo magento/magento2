@@ -2912,5 +2912,6 @@ return [
     ['Magento\Backend\Model\Config\Backend\Domain', 'Magento\Cookie\Model\Config\Domain'],
     ['Magento\Backend\Model\Config\Backend\Lifetime', 'Magento\Cookie\Model\Config\Lifetime'],
     ['Magento\Backend\Model\Config\Backend\Path', 'Magento\Cookie\Model\Config\Path'],
-    ['Magento\Core\Block\RequireCookie', 'Magento\Cookie\Block\RequireCookie']
+    ['Magento\Core\Block\RequireCookie', 'Magento\Cookie\Block\RequireCookie'],
+    ['Magento\Core\Controller\Index\NoCookies', 'Magento\Cookie\Controller\Index\NoCookies']
 ];

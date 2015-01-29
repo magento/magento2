@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Controller\Index;
+namespace Magento\Cookie\Controller\Index;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
 class NoCookiesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Controller\Index\NoCookies
+     * @var \Magento\Cookie\Controller\Index\NoCookies
      */
     private $controller;
 
@@ -58,7 +58,7 @@ class NoCookiesTest extends \PHPUnit_Framework_TestCase
         $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
 
         $this->controller = $objectManager->getObject(
-            'Magento\Core\Controller\Index\NoCookies',
+            'Magento\Cookie\Controller\Index\NoCookies',
             [
                 'eventManager' => $this->eventManagerMock,
                 'request' => $this->requestMock,
