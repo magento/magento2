@@ -14,10 +14,11 @@
         <css src="mui/components.css"/>
         <css src="css/admin.css"/>
         <css src="css/pages.css"/>
-        <css src="css/styles.css"/>
+        <css src="css/styles-old.css"/>
         <css src="mui/utils.css"/>
         <css src="Magento_Theme::prototype/magento.css"/>
         <css src="mui/print.css" media="print"/>
     </head>
+
     <body/>
 </page>

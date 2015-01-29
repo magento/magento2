@@ -150,7 +150,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\Store\StoreManagerInterface'
             )->getStore(),
             $this->_model->getCurrentStore()
         );

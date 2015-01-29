@@ -8,7 +8,7 @@ namespace Magento\Email\Model;
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filter\Template as FilterTemplate;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Template model
@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * \Magento\Email\Model\TemplateFactory $templateFactory
  * $templateFactory->create()->load($this->_scopeConfig->getValue(
  *  'path_to_email_template_id_config',
- *  \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+ *  \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
  *  ));
  * $variables = array(
  *    'someObject' => $this->_coreResourceEmailTemplate
@@ -158,7 +158,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
@@ -213,7 +213,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $store = $this->_storeManager->getStore($store);
         $fileName = $this->_scopeConfig->getValue(
             self::XML_PATH_DESIGN_EMAIL_LOGO,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($fileName) {
@@ -236,7 +236,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     public function getDefaultEmailLogo()
     {
         return $this->_assetRepo->getUrlWithParams(
-            'Magento_Email::logo_email.gif',
+            'Magento_Email::logo_email.png',
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND]
         );
     }
@@ -252,7 +252,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $store = $this->_storeManager->getStore($store);
         $alt = $this->_scopeConfig->getValue(
             self::XML_PATH_DESIGN_EMAIL_LOGO_ALT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($alt) {

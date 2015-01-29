@@ -91,7 +91,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         )->setClass(
             'product-custom-option datetime-picker input-text'
         )->setImage(
-            $this->getViewFileUrl('Magento_Theme::calendar.gif')
+            $this->getViewFileUrl('Magento_Theme::calendar.png')
         )->setDateFormat(
             $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
         )->setValue(

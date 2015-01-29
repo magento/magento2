@@ -50,6 +50,13 @@
             <argument name="fileName" xsi:type="string">deployed_version.txt</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="theme_setup" xsi:type="string">Magento\Theme\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Url\ScopeInterface">
         <plugin name="urlSignature" type="Magento\Theme\Model\Url\Plugin\Signature"/>
     </type>

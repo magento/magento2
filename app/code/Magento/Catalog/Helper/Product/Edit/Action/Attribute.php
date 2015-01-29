@@ -52,7 +52,7 @@ class Attribute extends \Magento\Backend\Helper\Data
     protected $_eavConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -67,7 +67,7 @@ class Attribute extends \Magento\Backend\Helper\Data
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productsFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -81,7 +81,7 @@ class Attribute extends \Magento\Backend\Helper\Data
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Backend\Model\Session $session,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productsFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->_eavConfig = $eavConfig;
         $this->_session = $session;

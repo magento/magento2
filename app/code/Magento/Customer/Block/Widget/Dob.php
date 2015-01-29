@@ -138,7 +138,7 @@ class Dob extends AbstractWidget
             'class' => $this->getHtmlClass(),
             'value' => $this->getValue(),
             'date_format' => $this->getDateFormat(),
-            'image' => $this->getViewFileUrl('Magento_Theme::calendar.gif'),
+            'image' => $this->getViewFileUrl('Magento_Theme::calendar.png'),
         ]);
         return $this->dateElement->getHtml();
     }

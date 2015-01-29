@@ -9,7 +9,7 @@
 namespace Magento\Quote\Model;
 
 use Magento\Quote\Model\Quote\Address;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 /**
@@ -932,10 +932,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->setStoreId($storeId);
 
         $valueMap = [
-            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/multi_address', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
         $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')
@@ -958,10 +958,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->setStoreId($storeId);
 
         $valueMap = [
-            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/multi_address', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/amount', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/tax_including', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
         $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')
