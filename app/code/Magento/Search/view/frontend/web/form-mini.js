@@ -3,14 +3,15 @@
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
+/*global Handlebars*/
 define([
     "jquery",
     "underscore",
-    "mage/template",
     "jquery/ui",
+    "jquery/template",
     "handlebars",
     "mage/translate"
-], function($, _, mageTemplate){
+], function($, _){
     "use strict";
 
     /**
@@ -29,10 +30,7 @@ define([
             minSearchLength: 2,
             responseFieldElements: 'ul li',
             selectClass: 'selected',
-            template: '<li class="<%= row_class %>" id="qs-option-<%= index %>" role="option">'
-                + '<span class="qs-option-name"><%= title %></span>'
-                + '<span aria-hidden="true" class="amount"><%= num_of_results %></span>'
-                + '</li>',
+            template: '<li class="{{row_class}}" id="qs-option-{{index}}" role="option"><span class="qs-option-name">{{title}}</span><span aria-hidden="true" class="amount">{{num_of_results}}</span></li>',
             submitBtn: 'button[type="submit"]',
             searchLabel: '[data-role=minisearch-label]'
         },
@@ -210,7 +208,7 @@ define([
                     width: searchField.outerWidth()
                 },
                 source = this.options.template,
-                template = mageTemplate(source),
+                template = Handlebars.compile(source),
                 dropdown = $('<ul role="listbox"></ul>'),
                 value = this.element.val();
 
