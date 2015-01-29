@@ -44,6 +44,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * @param AddressInterfaceFactory $addressDataFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param ObjectFactory $objectFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
@@ -74,6 +75,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         ObjectFactory $objectFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
@@ -102,6 +104,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $addressDataFactory,
             $customerMapper,
             $dataObjectProcessor,
+            $dataObjectHelper,
             $objectFactory,
             $layoutFactory,
             $resultLayoutFactory,
