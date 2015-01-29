@@ -27,39 +27,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $amount
-     * @param bool $format
-     * @param bool $includeContainer
-     * @param string $result
-     * @dataProvider currencyDataProvider
-     */
-    public function testCurrency($amount, $format, $includeContainer, $result)
-    {
-        if ($format) {
-            $this->priceCurrencyMock->expects($this->once())
-                ->method('convertAndFormat')
-                ->with($amount, $includeContainer)
-                ->will($this->returnValue($result));
-        } else {
-            $this->priceCurrencyMock->expects($this->once())
-                ->method('convert')
-                ->with($amount)
-                ->will($this->returnValue($result));
-        }
-        $helper = $this->getHelper(['priceCurrency' => $this->priceCurrencyMock]);
-        $this->assertEquals($result, $helper->currency($amount, $format, $includeContainer));
-    }
-
-    public function currencyDataProvider()
-    {
-        return [
-            ['amount' => '100', 'format' => true, 'includeContainer' => true, 'result' => '100grn.'],
-            ['amount' => '115', 'format' => true, 'includeContainer' => false, 'result' => '1150'],
-            ['amount' => '120', 'format' => false, 'includeContainer' => null, 'result' => '1200'],
-        ];
-    }
-
-    /**
-     * @param string $amount
      * @param string $store
      * @param bool $format
      * @param bool $includeContainer

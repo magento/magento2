@@ -28,13 +28,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_dateTime->setTimezone(new \DateTimeZone(self::DATE_TIMEZONE));
     }
 
-    public function testCurrency()
-    {
-        $price = 10.00;
-        $priceHtml = '<span class="price">$10.00</span>';
-        $this->assertEquals($priceHtml, $this->_helper->currency($price));
-    }
-
     /**
      * @magentoAppIsolation enabled
      */

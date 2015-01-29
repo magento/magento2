@@ -322,6 +322,7 @@ return [
     ['createDirIfNotExists', '', 'mkdir()'],
     ['createEntityTables', 'Magento\Eav\Model\Entity\Setup'],
     ['createOrderItem', 'Magento\CatalogInventory\Model\Observer'],
+    ['currency', 'Magento\Core\Helper\Data', 'Magento\Framework\Pricing\Helper\Data::currency'],
     ['debugRequest', 'Magento\Paypal\Model\Api\Standard'],
     ['decodeFilter', 'Magento\Backend\Helper\Data'],
     ['decorateArray', 'Magento\Core\Helper\Data', 'Magento\Framework\Stdlib\ArrayUtils::decorateArray'],

@@ -91,21 +91,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Convert and format price value for current application store
-     *
-     * @param   float $value
-     * @param   bool $format
-     * @param   bool $includeContainer
-     * @return  float|string
-     */
-    public function currency($value, $format = true, $includeContainer = true)
-    {
-        return $format
-            ? $this->_priceCurrency->convertAndFormat($value, $includeContainer)
-            : $this->_priceCurrency->convert($value);
-    }
-
-    /**
      * Convert and format price value for specified store
      *
      * @param   float $value

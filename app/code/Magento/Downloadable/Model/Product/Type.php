@@ -55,6 +55,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     protected $_linkFactory;
 
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreData;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -102,12 +107,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         $this->_samplesFactory = $samplesFactory;
         $this->_sampleFactory = $sampleFactory;
         $this->_linkFactory = $linkFactory;
+        $this->_coreData = $coreData;
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
             $catalogProductType,
             $eventManager,
-            $coreData,
             $fileStorageDb,
             $filesystem,
             $coreRegistry,
