@@ -14,11 +14,9 @@ class Server
     /**#@+
      * Path in config to Webapi settings.
      */
-    const CONFIG_PATH_WSDL_CACHE_ENABLED = 'webapi/soap/wsdl_cache_enabled';
-
     const CONFIG_PATH_SOAP_CHARSET = 'webapi/soap/charset';
-
     /**#@-*/
+
     const REQUEST_PARAM_SERVICES = 'services';
 
     const REQUEST_PARAM_WSDL = 'wsdl';
@@ -101,16 +99,6 @@ class Server
         $this->_soapServerFactory = $soapServerFactory;
         $this->_typeProcessor = $typeProcessor;
         $this->_scopeConfig = $scopeConfig;
-        /** Enable or disable SOAP extension WSDL cache depending on Magento configuration. */
-        $wsdlCacheEnabled = $this->_scopeConfig->isSetFlag(
-            self::CONFIG_PATH_WSDL_CACHE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        if ($wsdlCacheEnabled) {
-            ini_set('soap.wsdl_cache_enabled', '1');
-        } else {
-            ini_set('soap.wsdl_cache_enabled', '0');
-        }
     }
 
     /**

@@ -1,0 +1,88 @@
+<?php
+/**
+ * Hhvm ini_get/ini_set compatibility test
+ *
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ */
+namespace Magento\Test\HhvmCompatibility;
+
+use Magento\Framework\Test\Utility\Files;
+
+class IniGetSetTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var array
+     */
+    protected $allowedDirectives = [
+        'session.cookie_secure',
+        'session.cookie_httponly',
+        'session.use_cookies',
+        'session.use_only_cookies',
+        'session.referer_check',
+        'session.save_path',
+        'session.save_handler',
+        'session.cookie_lifetime',
+        'session.cookie_secure',
+        'date.timezone',
+        'memory_limit',
+        'max_execution_time',
+    ];
+
+    public function testAllowedGetSetDirectives()
+    {
+        $deniedDirectives = [];
+        foreach ($this->_getFiles() as $file) {
+            $fileDirectives = $this->_parseDirectives($file);
+            if ($fileDirectives) {
+                $fileDeniedDirectives = array_diff($fileDirectives, $this->allowedDirectives);
+                if ($fileDeniedDirectives) {
+                    $deniedDirectives[$file] = array_unique($fileDeniedDirectives);
+                }
+            }
+        }
+        if ($deniedDirectives) {
+            $this->fail($this->createMessage($deniedDirectives));
+        }
+    }
+
+    /**
+     * @return array
+     */
+    protected function _getFiles()
+    {
+        return \array_merge(
+            Files::init()->getPhpFiles(true, true, true, false),
+            Files::init()->getPhtmlFiles(false, false),
+            Files::init()->getFiles([Files::init()->getPathToSource() . '/dev/'], '*.php')
+        );
+    }
+
+    /**
+     * @param string $file
+     * @return null|array
+     */
+    protected function _parseDirectives($file)
+    {
+        $content = file_get_contents($file);
+        $pattern = '/.*ini_[g|s]et\(\s*[\'|"]([\w\._]+?)[\'|"][\s\w,\'"]*\).*/';
+        preg_match_all($pattern, $content, $matches);
+
+        return $matches ? $matches[1] : null;
+    }
+
+    /**
+     * @param array $deniedDirectives
+     * @return string
+     */
+    protected function createMessage($deniedDirectives)
+    {
+        $rootPath = Files::init()->getPathToSource();
+        $message = 'HHVM-incompatible ini_get/ini_set options were found:';
+        foreach ($deniedDirectives as $file => $fileDeniedDirectives) {
+            $message .= "\n" . str_replace($rootPath, '', $file) . ': [' . \implode(', ', $fileDeniedDirectives) . ']';
+        }
+        return $message;
+    }
+}

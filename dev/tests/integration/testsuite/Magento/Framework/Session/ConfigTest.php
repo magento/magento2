@@ -210,9 +210,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame((bool)ini_get('session.cookie_secure'), $this->_model->getCookieSecure());
     }
 
-    public function testCookieSecureIsMutable()
+    public function testSetCookieSecureInOptions()
     {
-        $value = ini_get('session.cookie_secure') ? false : true;
+        $value = 'baz';
         $this->_model->setCookieSecure($value);
         $this->assertEquals($value, $this->_model->getCookieSecure());
     }
@@ -243,9 +243,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($preVal, $this->_model->getCookieDomain());
     }
 
-    public function testCookieHttpOnlyIsMutable()
+    public function testSetCookieHttpOnlyInOptions()
     {
-        $value = ini_get('session.cookie_httponly') ? false : true;
+        $value = 'baz';
         $this->_model->setCookieHttpOnly($value);
         $this->assertEquals($value, $this->_model->getCookieHttpOnly());
     }
@@ -255,9 +255,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame((bool)ini_get('session.use_cookies'), $this->_model->getUseCookies());
     }
 
-    public function testUseCookiesIsMutable()
+    public function testSetUseCookiesInOptions()
     {
-        $value = ini_get('session.use_cookies') ? false : true;
+        $value = 'baz';
         $this->_model->setUseCookies($value);
         $this->assertEquals($value, (bool)$this->_model->getUseCookies());
     }
@@ -267,9 +267,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame((bool)ini_get('session.use_only_cookies'), $this->_model->getUseOnlyCookies());
     }
 
-    public function testUseOnlyCookiesIsMutable()
+    public function testSetUseOnlyCookiesInOptions()
     {
-        $value = ini_get('session.use_only_cookies') ? false : true;
+        $value = 'baz';
         $this->_model->setOption('use_only_cookies', $value);
         $this->assertEquals($value, (bool)$this->_model->getOption('use_only_cookies'));
     }
