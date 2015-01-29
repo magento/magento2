@@ -345,6 +345,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testIndexerAfterDeleteCommitProduct()
     {
+        $this->model->isDeleted(true);
         $this->categoryIndexerMock->expects($this->once())->method('reindexRow');
         $this->productFlatProcessor->expects($this->once())->method('reindexRow');
         $this->productPriceProcessor->expects($this->once())->method('reindexRow');
