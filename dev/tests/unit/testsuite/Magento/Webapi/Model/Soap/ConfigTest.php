@@ -81,12 +81,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
+        /**
+         * @var $cacheMock \Magento\Webapi\Model\Cache\Type
+         */
+        $cacheMock = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_soapConfig = new \Magento\Webapi\Model\Soap\Config(
             $objectManagerMock,
             $fileSystemMock,
             $this->_configMock,
             $classReflection,
-            $this->_helperMock
+            $this->_helperMock,
+            $cacheMock
         );
         parent::setUp();
     }
