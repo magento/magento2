@@ -6,7 +6,7 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\Data\Form\FormKey\FormKeyValidator;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerDataBuilder;
@@ -32,7 +32,7 @@ class EditPost extends \Magento\Customer\Controller\Account
     /** @var CustomerDataBuilder */
     protected $customerDataBuilder;
 
-    /** @var FormKeyValidator */
+    /** @var Validator */
     protected $formKeyValidator;
 
     /** @var CustomerExtractor */
@@ -46,7 +46,7 @@ class EditPost extends \Magento\Customer\Controller\Account
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerDataBuilder $customerDataBuilder
-     * @param \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -58,7 +58,7 @@ class EditPost extends \Magento\Customer\Controller\Account
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         CustomerDataBuilder $customerDataBuilder,
-        FormKeyValidator $formKeyValidator,
+        Validator $formKeyValidator,
         CustomerExtractor $customerExtractor
     ) {
         $this->customerAccountManagement = $customerAccountManagement;

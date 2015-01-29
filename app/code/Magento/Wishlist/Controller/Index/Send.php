@@ -47,13 +47,13 @@ class Send extends Action\Action implements IndexInterface
     protected $_customerSession;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $_formKeyValidator;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
@@ -63,7 +63,7 @@ class Send extends Action\Action implements IndexInterface
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
         \Magento\Wishlist\Model\Config $wishlistConfig,

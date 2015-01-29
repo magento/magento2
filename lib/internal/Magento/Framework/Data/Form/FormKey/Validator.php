@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Form\FormKey;
 
-class FormKeyValidator
+class Validator
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey

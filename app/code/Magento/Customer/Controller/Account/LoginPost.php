@@ -17,7 +17,7 @@ use Magento\Framework\Url\DecoderInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Data\Form\FormKey\FormKeyValidator;
+use Magento\Framework\Data\Form\FormKey\Validator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -39,7 +39,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /** @var CustomerUrl */
     protected $customerUrl;
 
-    /** @var FormKeyValidator */
+    /** @var Validator */
     protected $formKeyValidator;
 
     /**
@@ -52,7 +52,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
      * @param AccountManagementInterface $customerAccountManagement
      * @param DecoderInterface $urlDecoder
      * @param CustomerUrl $customerHelperData
-     * @param \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -66,7 +66,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
         AccountManagementInterface $customerAccountManagement,
         DecoderInterface $urlDecoder,
         CustomerUrl $customerHelperData,
-        FormKeyValidator $formKeyValidator
+        Validator $formKeyValidator
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;

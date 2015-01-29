@@ -32,7 +32,7 @@ class Context extends \Magento\Framework\App\Action\Context
     protected $_backendUrl;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $_formKeyValidator;
 
@@ -66,7 +66,7 @@ class Context extends \Magento\Framework\App\Action\Context
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\Helper\Data $helper
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
-     * @param \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\View\DesignLoader $designLoader
      * @param bool $canUseBaseUrl
@@ -88,7 +88,7 @@ class Context extends \Magento\Framework\App\Action\Context
         \Magento\Backend\Model\Auth $auth,
         \Magento\Backend\Helper\Data $helper,
         \Magento\Backend\Model\UrlInterface $backendUrl,
-        \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         $canUseBaseUrl = false
     ) {
@@ -149,7 +149,7 @@ class Context extends \Magento\Framework\App\Action\Context
     }
 
     /**
-     * @return \Magento\Framework\Data\Form\FormKey\FormKeyValidator
+     * @return \Magento\Framework\Data\Form\FormKey\Validator
      */
     public function getFormKeyValidator()
     {

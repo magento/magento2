@@ -44,7 +44,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
 
-    /** @var \Magento\Framework\Data\Form\FormKey\FormKeyValidator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject */
     protected $formKeyValidatorMock;
 
     /** @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */

@@ -21,7 +21,7 @@ class Index extends \Magento\Customer\Controller\Address
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder
@@ -36,7 +36,7 @@ class Index extends \Magento\Customer\Controller\Address
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Data\Form\FormKey\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder,

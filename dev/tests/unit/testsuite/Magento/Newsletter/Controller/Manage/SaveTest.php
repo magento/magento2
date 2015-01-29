@@ -46,7 +46,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     private $customerSessionMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\FormKeyValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $formKeyValidatorMock;
 

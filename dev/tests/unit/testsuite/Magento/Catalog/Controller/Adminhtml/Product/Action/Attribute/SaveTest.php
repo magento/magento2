@@ -69,7 +69,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\Model\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $backendUrl;
 
-    /** @var \Magento\Framework\Data\Form\FormKey\FormKeyValidator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject */
     protected $formKeyValidator;
 
     /** @var \Magento\Framework\App\Action\Title|\PHPUnit_Framework_MockObject_MockObject */
