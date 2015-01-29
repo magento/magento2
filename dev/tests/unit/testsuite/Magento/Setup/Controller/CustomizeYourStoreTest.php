@@ -17,10 +17,8 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
     {
         $sampleData = $this->getMock('\Magento\Setup\Model\SampleData', [], [], '', false);
         $lists = $this->getMock('\Magento\Setup\Model\Lists', [], [], '', false);
-        $modules = $this->getMock('\Magento\Setup\Model\ModuleStatus', [], [], '', false);
-        $controller = new CustomizeYourStore($lists, $sampleData, $modules);
+        $controller = new CustomizeYourStore($lists, $sampleData);
 
-        $modules->expects($this->once())->method('getAllModules')->willReturn($expected['modules']);
         $sampleData->expects($this->once())->method('isDeployed')->willReturn($expected['isSampledataEnabled']);
         $lists->expects($this->once())->method('getTimezoneList')->willReturn($expected['timezone']);
         $lists->expects($this->once())->method('getCurrencyList')->willReturn($expected['currency']);
@@ -35,7 +33,6 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('timezone', $variables);
         $this->assertArrayHasKey('currency', $variables);
         $this->assertArrayHasKey('language', $variables);
-        $this->assertArrayHasKey('modules', $variables);
         $this->assertSame($expected, $variables);
     }
 
@@ -47,23 +44,19 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $timezones = ['timezone' => ['America/New_York'=>'EST', 'America/Chicago' => 'CST']];
         $currency = ['currency' => ['USD'=>'US Dollar', 'EUR' => 'Euro']];
         $language = ['language' => ['en_US'=>'English (USA)', 'en_UK' => 'English (UK)']];
-        $modules = ['modules' => ['module1', 'module2']];
-        $noModules = ['modules' => null];
-        $key = 'isSampledataEnabled';
-        $sampleData = [$key => true];
-        $noSampleData = [$key => false];
+        $sampleDataTrue = ['isSampledataEnabled' => true];
+        $sampleDataFalse = ['isSampledataEnabled' => false];
 
         return [
-            'with_all_data' => [array_merge($timezones, $currency, $language, $sampleData, $noModules)],
-            'no_currency_data' => [array_merge($timezones, ['currency' => null], $language, $sampleData, $noModules)],
-            'no_timezone_data' => [array_merge(['timezone' => null], $currency, $language, $sampleData, $noModules)],
-            'no_language_data' => [array_merge($timezones, $currency, ['language' => null], $sampleData, $noModules)],
-            'empty_currency_data' => [array_merge($timezones, ['currency' => []], $language, $sampleData, $noModules)],
-            'empty_timezone_data' => [array_merge(['timezone' => []], $currency, $language, $sampleData, $noModules)],
-            'empty_language_data' => [array_merge($timezones, $currency, ['language' => []], $sampleData, $noModules)],
-            'false_sample_data' => [array_merge($timezones, $currency, $language, $noSampleData, $noModules)],
-            'no_sample_data' => [array_merge($timezones, $currency, $language, [$key => null], $noModules)],
-            'with_modules'=> [array_merge($timezones, $currency, $language, $sampleData, $modules)],
+            'with_all_data' => [array_merge($timezones, $currency, $language, $sampleDataTrue)],
+            'no_currency_data' => [array_merge($timezones, ['currency' => null], $language, $sampleDataTrue)],
+            'no_timezone_data' => [array_merge(['timezone' => null], $currency, $language, $sampleDataTrue)],
+            'no_language_data' => [array_merge($timezones, $currency, ['language' => null], $sampleDataTrue)],
+            'empty_currency_data' => [array_merge($timezones, ['currency' => []], $language, $sampleDataTrue)],
+            'empty_timezone_data' => [array_merge(['timezone' => []], $currency, $language, $sampleDataTrue)],
+            'empty_language_data' => [array_merge($timezones, $currency, ['language' => []], $sampleDataTrue)],
+            'false_sample_data' => [array_merge($timezones, $currency, $language, $sampleDataFalse)],
+            'no_sample_data' => [array_merge($timezones, $currency, $language, ['isSampledataEnabled' => null])],
         ];
     }
 }

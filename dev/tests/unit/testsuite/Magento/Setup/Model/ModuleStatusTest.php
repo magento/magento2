@@ -51,7 +51,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
     public function testGetAllModulesDataProvider()
     {
         $expectedAllModules = ['module1' => '' , 'module2' => '' , 'module3' => '' ];
-        $expectedConfig = ['modules' =>['module1' => 0, 'module3' => 0]];
+        $expectedConfig = ['module1' => 0, 'module3' => 0];
         return [
             [$expectedAllModules, $expectedConfig, [false, true, false]],
             [$expectedAllModules, null, [true, true, true]],
