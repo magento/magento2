@@ -29,11 +29,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     protected $contextMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\Header\Manager
-     */
-    protected $headerManager;
-
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -43,14 +38,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')->disableOriginalConstructor()
             ->getMock();
-        $this->headerManager = new \Magento\Framework\HTTP\Header\Manager();
         $this->model = $objectManager->getObject(
             'Magento\Framework\App\Response\Http',
             [
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
-                'context' => $this->contextMock,
-                'headerManager' => $this->headerManager
+                'context' => $this->contextMock
             ]
         );
         $this->model->headersSentThrowsException = false;
@@ -273,16 +266,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test for canSendHeaders method.
-     *
-     * @covers \Magento\Framework\App\Response\Http::canSendHeaders
-     */
-    public function testCanSendHeadersWithoutException()
-    {
-        $this->model->canSendHeaders(false);
-    }
-
-    /**
      * Test for setRedirect method.
      *
      * @covers \Magento\Framework\App\Response\Http::setRedirect
@@ -292,17 +275,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\App\Response\Http $response */
         $response = $this->getMock(
             'Magento\Framework\App\Response\Http',
-            ['canSendHeaders', 'setHeader', 'setHttpResponseCode', 'sendHeaders'],
+            ['setHeader', 'setHttpResponseCode', 'sendHeaders'],
             [],
             '',
             false
         );
-
-        $response
-            ->expects($this->once())
-            ->method('canSendHeaders')
-            ->with(true)
-            ->will($this->returnValue(true));
         $response
             ->expects($this->once())
             ->method('setHeader')
@@ -328,7 +305,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetHttpResponseCode()
     {
-        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException');
+        $this->setExpectedException('InvalidArgumentException');
         $this->model->setHttpResponseCode(2);
     }
     /**
@@ -339,16 +316,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testSetHttpResponseCodeWithoutException()
     {
         $this->model->setHttpResponseCode(200);
-    }
-
-    /**
-     * Test for getHeaders method.
-     *
-     * @covers \Magento\Framework\App\Response\Http::getHeaders
-     */
-    public function testGetHeaders()
-    {
-        $this->assertInstanceOf('Magento\Framework\HTTP\Header\Manager', $this->model->getHeaders());
     }
 
     /**
@@ -381,15 +348,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Framework\Stdlib\CookieManagerInterface')
             ->will($this->returnValue($this->cookieManagerMock));
-        $objectManagerMock->expects($this->at(1))
+        $objectManagerMock->expects($this->once())
             ->method('get')
             ->with('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory')
             ->will($this->returnValue($this->cookieMetadataFactoryMock));
-
-        $objectManagerMock->expects($this->at(2))
-            ->method('get')
-            ->with('Magento\Framework\HTTP\Header\Manager')
-            ->will($this->returnValue($this->headerManager));
 
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
         $this->model->__wakeup();

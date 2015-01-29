@@ -12,8 +12,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
-use Magento\Framework\HTTP\Header as Header;
-
 class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
 {
     /**
@@ -54,36 +52,18 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
     protected $exceptions = [];
 
     /**
-     * Flag; if true, when header operations are called after headers have been
-     * sent, an exception will be raised; otherwise, processing will continue
-     * as normal. Defaults to true.
-     *
-     * @see canSendHeaders()
-     * @var boolean
-     */
-    public $headersSentThrowsException = true;
-
-    /**
-     * @var \Magento\Framework\HTTP\Header\Manager
-     */
-    protected $headerManager;
-
-    /**
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\Http\Context $context
-     * @param \Magento\Framework\HTTP\Manager
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
-        Context $context,
-        Header\Manager $headerManager
+        Context $context
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->context = $context;
-        $this->headerManager = $headerManager;
     }
 
     /**
@@ -92,13 +72,14 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
      * If header with specified name was not found returns false.
      *
      * @param string $name
-     * @return \Zend\Http\Header\Interface
+     * @return \Zend\Http\Header\Interface|bool
      */
     public function getHeader($name)
     {
         $header = false;
-        if ($this->headerManager->has($name)) {
-            $header = $this->headerManager->get($name);
+        $headers = $this->getHeaders();
+        if ($headers->has($name)) {
+            $header = $headers->get($name);
         }
         return $header;
     }
@@ -133,15 +114,6 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
     }
 
     /**
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->getContent();
-    }
-
-
-    /**
      * Set a header
      *
      * If $replace is true, replaces any headers already defined with that
@@ -154,7 +126,6 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
      */
     public function setHeader($name, $value, $replace = false)
     {
-        $this->canSendHeaders(true);
         $name  = $this->normalizeHeader($name);
         $value = (string)$value;
 
@@ -162,7 +133,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
             $this->clearHeader($name);
         }
 
-        $this->headerManager->addHeaderLine($name, $value);
+        $this->getHeaders()->addHeaderLine($name, $value);
         return $this;
     }
 
@@ -174,10 +145,11 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
     public function clearHeader($name)
     {
         $name  = $this->normalizeHeader($name);
-        if ($this->headerManager->has($name)) {
-            foreach ($this->headerManager as $header) {
+        $headers = $this->getHeaders();
+        if ($headers->has($name)) {
+            foreach ($headers as $header) {
                 if ($header->getFieldName() == $name) {
-                    $this->headerManager->removeHeader($header);
+                    $headers->removeHeader($header);
                 }
             }
         }
@@ -188,28 +160,8 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
      */
     public function clearHeaders()
     {
-        foreach ($this->headerManager as $header) {
-            $this->headerManager->removeHeader($header);
-        }
-    }
-
-    /**
-     * Can we send headers?
-     *
-     * @param boolean $throw Whether or not to throw an exception if headers have been sent; defaults to false
-     * @return boolean
-     * @throws \Zend\Http\Exception\InvalidArgumentException
-     */
-    public function canSendHeaders($throw = false)
-    {
-        $ok = headers_sent($file, $line);
-        if ($ok && $throw && $this->headersSentThrowsException) {
-            throw new \Zend\Http\Exception\InvalidArgumentException(
-                'Cannot send headers; headers already sent in ' . $file . ', line ' . $line
-            );
-        }
-
-        return !$ok;
+        $headers = $this->getHeaders();
+        $headers->clearHeaders();
     }
 
     /**
@@ -320,21 +272,12 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
      */
     public function setRedirect($url, $code = 302)
     {
-        $this->canSendHeaders(true);
         $this->setHeader('Location', $url, true)
             ->setHttpResponseCode($code);
 
         $this->sendHeaders();
 
         return $this;
-    }
-
-    /**
-     * @return Header\Manager
-     */
-    public function getHeaders()
-    {
-        return $this->headerManager;
     }
 
     /**
@@ -346,7 +289,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
     public function setHttpResponseCode($code)
     {
         if (!is_int($code) || (100 > $code) || (599 < $code)) {
-            throw new \Zend\Http\Exception\InvalidArgumentException('Invalid HTTP response code');
+            throw new \InvalidArgumentException('Invalid HTTP response code');
         }
 
         $this->isRedirect = (300 <= $code && 307 >= $code) ? true : false;
@@ -402,7 +345,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
      */
     public function __sleep()
     {
-        return ['content', 'isRedirect', 'exceptions', 'headerManager', 'statusCode', 'context'];
+        return ['content', 'isRedirect', 'exceptions', 'statusCode', 'context'];
     }
 
     /**
@@ -415,6 +358,5 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
         $objectManager = ObjectManager::getInstance();
         $this->cookieManager = $objectManager->create('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactory = $objectManager->get('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory');
-        $this->headerManager = $objectManager->get('Magento\Framework\HTTP\Header\Manager');
     }
 }
