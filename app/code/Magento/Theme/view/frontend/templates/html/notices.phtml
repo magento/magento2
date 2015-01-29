@@ -58,7 +58,7 @@ require(['jquery'], function(jQuery){
         </div>
     </div>
 <?php endif; ?>
-<?php if ($this->helper('Magento\Store\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
+<?php if ($this->helper('Magento\Cookie\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
     <div class="message global cookie" id="notice-cookie-block" style="display: none">
         <div class="content">
             <p>
@@ -81,9 +81,9 @@ require([
 // <![CDATA[
     $('#notice-cookie-block').mage('cookieBlock', {
         cookieAllowButtonSelector: '#btn-cookie-allow',
-        cookieName: '<?php echo \Magento\Store\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
-        cookieValue: '<?php echo $this->helper('Magento\Store\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
-        cookieLifetime: <?php echo $this->helper('Magento\Store\Helper\Cookie')->getCookieRestrictionLifetime()?>,
+        cookieName: '<?php echo \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
+        cookieValue: '<?php echo $this->helper('Magento\Cookie\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
+        cookieLifetime: <?php echo $this->helper('Magento\Cookie\Helper\Cookie')->getCookieRestrictionLifetime()?>,
         noCookiesUrl: '<?php echo $this->getUrl('cookie/index/noCookies') ?>'
     });
 // ]]>

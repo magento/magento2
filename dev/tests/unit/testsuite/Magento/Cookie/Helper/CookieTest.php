@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\Helper;
+namespace Magento\Cookie\Helper;
 
 class CookieTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Store\Helper\Cookie
+     * @var \Magento\Cookie\Helper\Cookie
      */
     protected $_object;
 
@@ -31,7 +31,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $context =
             $this->getMock('Magento\Framework\App\Helper\Context', ['getRequest'], [], '', false, false);
         $context->expects($this->once())->method('getRequest')->will($this->returnValue($request));
-        $this->_object = new \Magento\Store\Helper\Cookie(
+        $this->_object = new \Magento\Cookie\Helper\Cookie(
             $context,
             $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false, false),
             $this->_getConfigStub(),
@@ -64,7 +64,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->equalTo('web/cookie/cookie_restriction_lifetime')
         );
-        $this->_object = new \Magento\Store\Helper\Cookie(
+        $this->_object = new \Magento\Cookie\Helper\Cookie(
             $this->_context,
             $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false, false),
             $scopeConfig,
@@ -80,7 +80,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->_context =
             $this->getMock('Magento\Framework\App\Helper\Context', ['getRequest'], [], '', false, false);
         $this->_context->expects($this->once())->method('getRequest')->will($this->returnValue($this->_request));
-        $this->_object = new \Magento\Store\Helper\Cookie(
+        $this->_object = new \Magento\Cookie\Helper\Cookie(
             $this->_context,
             $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false, false),
             $this->_getConfigStub(),
