@@ -5,8 +5,6 @@
  */
 namespace Magento\Core\Helper;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -14,14 +12,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $priceCurrencyMock;
-
     public function setUp()
     {
-        $this->priceCurrencyMock = $this->getMock('Magento\Framework\Pricing\PriceCurrencyInterface');
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
     }
 

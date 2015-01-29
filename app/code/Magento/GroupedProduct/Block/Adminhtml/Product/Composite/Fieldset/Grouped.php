@@ -22,7 +22,7 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
-     * @param \Magento\Core\Helper\Data $pricingHelper
+     * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param array $data
      */
     public function __construct(
