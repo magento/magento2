@@ -77,7 +77,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
         $themeId = 2;
         $uploadUrl = 'upload_url';
         $themeMock = $this->getMock(
-            'Magento\Core\Model\Theme',
+            'Magento\Theme\Model\Theme',
             ['isVirtual', 'getId', '__wakeup'],
             [],
             '',

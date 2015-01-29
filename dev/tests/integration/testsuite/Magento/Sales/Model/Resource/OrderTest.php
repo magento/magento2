@@ -91,7 +91,12 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->setCustomerEmail('customer@null.com')
             ->setBillingAddress($billingAddress)
             ->setShippingAddress($shippingAddress)
-            ->setStoreId($this->objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId())
+            ->setStoreId(
+                $this->objectManager
+                    ->get('Magento\Framework\Store\StoreManagerInterface')
+                    ->getStore()
+                    ->getId()
+            )
             ->addItem($orderItem)
             ->setPayment($payment);
 

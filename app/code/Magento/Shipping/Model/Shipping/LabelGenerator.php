@@ -95,7 +95,7 @@ class LabelGenerator
         $carrierCode = $carrier->getCarrierCode();
         $carrierTitle = $this->scopeConfig->getValue(
             'carriers/' . $carrierCode . '/title',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $shipment->getStoreId()
         );
         if (!empty($trackingNumbers)) {

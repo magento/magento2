@@ -234,7 +234,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->will($this->returnValue(true));
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')
-            ->with('checkout/cart_link/use_qty', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('checkout/cart_link/use_qty', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($useQty));
 
         $qtyMethodName = ($useQty) ? 'getItemsQty' : 'getItemsCount';
