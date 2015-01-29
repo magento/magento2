@@ -385,8 +385,13 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
      * @param string[] $expectedModules
      * @dataProvider moduleActionEnabledSuggestionMessageDataProvider
      */
-    public function testModuleActionEnabledSuggestionMessage($command, $modules, $isForce, $expectedIsEnabled, $expectedModules)
-    {
+    public function testModuleActionEnabledSuggestionMessage(
+        $command,
+        $modules,
+        $isForce,
+        $expectedIsEnabled,
+        $expectedModules
+    ) {
         $status = $this->getModuleActionMocks($command, $modules, $isForce, false);
         $status->expects($this->once())->method('getModulesToChange')->willReturn($expectedModules);
         if (!$isForce) {
