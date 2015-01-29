@@ -2039,5 +2039,4 @@ return [
     ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem'],
     ['checkQuoteAmount', 'Magento\Sales\Helper\Data'],
     ['getEntityTypeId', 'Magento\Customer\Model\Customer'],
-    ['useDbCompatibleMode', 'Magento\Core\Helper\Data']
 ];
