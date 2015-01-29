@@ -2,7 +2,7 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.42.0-beta4",
+    "version": "0.42.0-beta5",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -166,7 +166,7 @@
             "linkorb/jsmin-php": "lib/internal/JSMin",
             "phpseclib/phpseclib": "lib/internal/phpseclib",
             "components/jquery": [
-                "lib/web/jquery/jquery.js",
+                "lib/web/jquery.js",
                 "lib/web/jquery/jquery.min.js",
                 "lib/web/jquery/jquery-migrate.js",
                 "lib/web/jquery/jquery-migrate.min.js"
@@ -177,8 +177,7 @@
                 "lib/web/jquery/jquery-ui.min.js"
             ],
             "twbs/bootstrap": [
-                "lib/web/jquery/jquery.tabs.js",
-                "lib/web/jquery/jquery.popups.js"
+                "lib/web/jquery/jquery.tabs.js"
             ],
             "tinymce/tinymce": "lib/web/tiny_mce"
         }

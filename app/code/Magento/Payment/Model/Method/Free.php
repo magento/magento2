@@ -41,22 +41,41 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     protected $priceCurrency;
 
     /**
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Psr\Log\LoggerInterface $logger
      * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Psr\Log\LoggerInterface $logger,
         PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($eventManager, $paymentData, $scopeConfig, $logger, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeFactory,
+            $paymentData,
+            $scopeConfig,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->priceCurrency = $priceCurrency;
     }
 

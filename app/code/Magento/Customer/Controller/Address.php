@@ -55,6 +55,21 @@ class Address extends \Magento\Framework\App\Action\Action
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Framework\Controller\Result\Redirect
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
@@ -64,6 +79,9 @@ class Address extends \Magento\Framework\App\Action\Action
      * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -75,7 +93,10 @@ class Address extends \Magento\Framework\App\Action\Action
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->_customerSession = $customerSession;
         $this->_formKeyValidator = $formKeyValidator;
@@ -85,6 +106,9 @@ class Address extends \Magento\Framework\App\Action\Action
         $this->regionDataFactory = $regionDataFactory;
         $this->_dataProcessor = $dataProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
+        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 

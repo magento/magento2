@@ -23,6 +23,7 @@ class Attributes
             $mapEnabled->setAfterElementHtml(
                 '<script>' .
                 "
+                require(['prototype'], function(){
                 function changePriceTypeMap() {
                     if ($('price_type').value == " . \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC . ") {
                         $('msrp_display_actual_price_type').setValue(" . Price::TYPE_USE_CONFIG . ");
@@ -34,9 +35,10 @@ class Attributes
                         $('msrp').enable();
                     }
                 }
-                document.observe('dom:loaded', function() {
-                    $('price_type').observe('change', changePriceTypeMap);
-                    changePriceTypeMap();
+                
+                $('price_type').observe('change', changePriceTypeMap);
+                changePriceTypeMap();
+
                 });
                 " .
                 '</script>'

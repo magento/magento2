@@ -11,6 +11,8 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
@@ -35,6 +37,8 @@ class EditPost extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
+     * @param RedirectFactory $resultRedirectFactory
+     * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param FormKeyValidator $formKeyValidator
@@ -44,6 +48,8 @@ class EditPost extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
+        RedirectFactory $resultRedirectFactory,
+        PageFactory $resultPageFactory,
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         FormKeyValidator $formKeyValidator,
@@ -53,20 +59,22 @@ class EditPost extends \Magento\Customer\Controller\Account
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
-        parent::__construct($context, $customerSession);
+        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
     }
 
     /**
      * Change customer password action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         if (!$this->formKeyValidator->validate($this->getRequest())) {
-            $this->_redirect('*/*/edit');
-            return;
+            $resultRedirect->setPath('*/*/edit');
+            return $resultRedirect;
         }
 
         if ($this->getRequest()->isPost()) {
@@ -115,15 +123,16 @@ class EditPost extends \Magento\Customer\Controller\Account
 
             if ($this->messageManager->getMessages()->getCount() > 0) {
                 $this->_getSession()->setCustomerFormData($this->getRequest()->getPost());
-                $this->_redirect('*/*/edit');
-                return;
+                $resultRedirect->setPath('*/*/edit');
+                return $resultRedirect;
             }
 
             $this->messageManager->addSuccess(__('The account information has been saved.'));
-            $this->_redirect('customer/account');
-            return;
+            $resultRedirect->setPath('customer/account');
+            return $resultRedirect;
         }
 
-        $this->_redirect('*/*/edit');
+        $resultRedirect->setPath('*/*/edit');
+        return $resultRedirect;
     }
 }

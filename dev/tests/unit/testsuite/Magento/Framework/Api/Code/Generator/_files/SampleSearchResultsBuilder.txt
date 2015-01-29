@@ -1,7 +1,7 @@
 namespace \Magento\Framework\Api\Code\Generator;
 
 /**
- * SearchResultsBuilder class for \Magento\Framework\Api\Code\Generator\Sample
+ * SearchResultsBuilder class for @see \Magento\Framework\Api\Code\Generator\Sample
  */
 class SampleSearchResultsBuilder extends \Magento\Framework\Api\AbstractSearchResultsBuilder
 {

@@ -124,15 +124,22 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataObjectHelperMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactoryMock;
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         /**
          * This test can be unskipped when the Unit test object manager helper is enabled to return correct DataBuilders
          * For now the \Magento\Customer\Controller\AccountTest sufficiently covers the SUT
          */
+        $this->markTestSkipped('Cannot be unit tested with the auto generated builder dependencies');
         $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
         $this->redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface');
         $this->responseMock = $this->getMock('Magento\Webapi\Controller\Response');
@@ -208,24 +215,36 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
             ->method('getEventManager')
             ->will($this->returnValue($eventManagerMock));
 
-        $this->model = new \Magento\Customer\Controller\Account\CreatePost(
-            $contextMock,
-            $this->customerSessionMock,
-            $this->scopeConfigMock,
-            $this->storeManagerMock,
-            $this->accountManagement,
-            $this->addressHelperMock,
-            $urlFactoryMock,
-            $formFactoryMock,
-            $subscriberFactoryMock,
-            $regionFactoryMock,
-            $addressFactoryMock,
-            $this->customerDetailsFactoryMock,
-            $this->customerUrl,
-            $this->registration,
-            $escaperMock,
-            $this->customerExtractorMock,
-            $this->dataObjectHelperMock
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(
+            'Magento\Framework\Controller\Result\RedirectFactory'
+        )->setMethods(['create'])
+            ->getMock();
+        $this->resultRedirectFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->redirectMock);
+
+        $this->model = $objectManager->getObject(
+            'Magento\Customer\Controller\Account\CreatePost',
+            [
+                'context' => $contextMock,
+                'customerSession' => $this->customerSessionMock,
+                'scopeConfig' => $this->scopeConfigMock,
+                'storeManager' => $this->storeManagerMock,
+                'accountManagement' => $this->accountManagement,
+                'addressHelper' => $this->addressHelperMock,
+                'urlFactory' => $urlFactoryMock,
+                'formFactory' => $formFactoryMock,
+                'subscriberFactory' => $subscriberFactoryMock,
+                'regionDataFactory' => $regionFactoryMock,
+                'addressDataFactory' => $addressFactoryMock,
+                'customerDetailsFactory' => $this->customerDetailsFactoryMock,
+                'customerUrl' => $this->customerUrl,
+                'registration' => $this->registration,
+                'escape' => $escaperMock,
+                'customerExtractor' => $this->customerExtractorMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock,
+            ]
         );
     }
 

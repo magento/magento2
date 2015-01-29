@@ -66,19 +66,19 @@ class FormPost extends \Magento\Customer\Controller\Address
     /**
      * Process address form save
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
-            $this->_redirect('*/*/');
-            return;
+            return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
 
         if (!$this->getRequest()->isPost()) {
             $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
-            $this->getResponse()->setRedirect($this->_redirect->error($this->_buildUrl('*/*/edit')));
-            return;
+            return $this->resultRedirectFactory->create()->setUrl(
+                $this->_redirect->error($this->_buildUrl('*/*/edit'))
+            );
         }
 
         try {
@@ -86,8 +86,7 @@ class FormPost extends \Magento\Customer\Controller\Address
             $this->_addressRepository->save($address);
             $this->messageManager->addSuccess(__('The address has been saved.'));
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
-            $this->getResponse()->setRedirect($this->_redirect->success($url));
-            return;
+            return $this->resultRedirectFactory->create()->setUrl($this->_redirect->success($url));
         } catch (InputException $e) {
             $this->messageManager->addError($e->getMessage());
             foreach ($e->getErrors() as $error) {
@@ -99,6 +98,6 @@ class FormPost extends \Magento\Customer\Controller\Address
 
         $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
         $url = $this->_buildUrl('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
-        $this->getResponse()->setRedirect($this->_redirect->error($url));
+        return $this->resultRedirectFactory->create()->setUrl($this->_redirect->error($url));
     }
 }

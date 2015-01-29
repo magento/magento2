@@ -13,7 +13,7 @@
                     <first>setupConfiguration</first>
                     <step name="setupConfiguration" module="Magento_Core">
                         <arguments>
-                            <item name="configData">cashondelivery, enableGiftMessages</item>
+                            <item name="configData">cashondelivery, enable_gift_messages</item>
                         </arguments>
                         <next>createProducts</next>
                     </step>
@@ -56,7 +56,7 @@
                     <first>setupConfiguration</first>
                     <step name="setupConfiguration" module="Magento_Core">
                         <arguments>
-                            <item name="configData">cashondelivery, enableGiftMessages</item>
+                            <item name="configData">cashondelivery, enable_gift_messages</item>
                         </arguments>
                         <next>createProducts</next>
                     </step>

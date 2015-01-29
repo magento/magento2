@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,7 +10,7 @@ class MassAssignGroup extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customer mass assign group action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -28,6 +27,8 @@ class MassAssignGroup extends \Magento\Customer\Controller\Adminhtml\Index
         if ($customersUpdated) {
             $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', $customersUpdated));
         }
-        $this->_redirect('customer/*/index');
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('customer/*/index');
+        return $resultRedirect;
     }
 }

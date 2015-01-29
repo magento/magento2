@@ -12,14 +12,19 @@ use Magento\Payment\Model\Checks\PaymentMethodChecksInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Quote\Api\Data\PaymentMethodInterface;
 
 /**
  * Payment method abstract model
  * @method AbstractMethod setStore()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractMethod extends \Magento\Framework\Object implements MethodInterface, PaymentMethodChecksInterface
+abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    MethodInterface,
+    PaymentMethodChecksInterface,
+    PaymentMethodInterface
 {
     const ACTION_ORDER = 'order';
 
@@ -215,24 +220,40 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     protected $logger;
 
     /**
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($data);
-        $this->logger = $logger;
-        $this->_eventManager = $eventManager;
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_paymentData = $paymentData;
         $this->_scopeConfig = $scopeConfig;
+        $this->_eventManager = $context->getEventDispatcher();
+        $this->logger = $context->getLogger();
     }
 
     /**

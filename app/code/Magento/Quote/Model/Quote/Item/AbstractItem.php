@@ -6,6 +6,7 @@
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Quote\Model\Quote\Item;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Quote item abstract model
@@ -44,7 +45,7 @@ use Magento\Quote\Model\Quote\Item;
  * @method float getPriceInclTax()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractItem extends \Magento\Framework\Model\AbstractModel implements
+abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
 {
     /**
@@ -82,6 +83,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractModel imple
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -91,13 +94,23 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractModel imple
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->productRepository = $productRepository;
         $this->priceCurrency = $priceCurrency;
     }

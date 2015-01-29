@@ -9,7 +9,7 @@
  * @return array
  */
 return [
-    '/lib/web/jquery/jquery.js',
+    '/lib/web/jquery.js',
     '/lib/web/jquery/jquery-migrate.js',
     '/lib/web/jquery/jquery-ui-1.9.2.js',
     '/dev/tests/js/framework/requirejs-util.js',
