@@ -60,6 +60,7 @@ class AssertConfigurableProductDuplicateForm extends AssertConfigurableProductFo
     protected function prepareFixtureData(array $data, array $sortFields = [])
     {
         $data['url_key'] = $this->prepareUrlKey($data['url_key']);
+        $data['quantity_and_stock_status']['is_in_stock'] = 'Out of Stock';
         return parent::prepareFixtureData($data, $sortFields);
     }
 

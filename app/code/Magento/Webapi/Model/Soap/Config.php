@@ -8,6 +8,7 @@ namespace Magento\Webapi\Model\Soap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Webapi\Model\Config\Converter;
+use Magento\Webapi\Model\Cache\Type as WebApiCache;
 
 /**
  * Webapi Config Model for Soap.
@@ -28,6 +29,8 @@ class Config
     const KEY_IS_REQUIRED = 'inputRequired';
 
     const KEY_ACL_RESOURCES = 'resources';
+
+    const CACHE_ID = 'soap-services-config';
 
     /**#@-*/
 
@@ -58,8 +61,15 @@ class Config
     /** @var \Magento\Webapi\Helper\Data */
     protected $_helper;
 
-    /** @var \Magento\Webapi\Model\Config\ClassReflector */
+    /**
+     * @var \Magento\Webapi\Model\Config\ClassReflector
+     */
     protected $_classReflector;
+
+    /**
+     * @var WebApiCache
+     */
+    protected $cache;
 
     /**
      * Initialize dependencies.
@@ -69,21 +79,24 @@ class Config
      * @param \Magento\Webapi\Model\Config $config
      * @param \Magento\Webapi\Model\Config\ClassReflector $classReflector
      * @param \Magento\Webapi\Helper\Data $helper
+     * @param WebApiCache $cache
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Webapi\Model\Config $config,
         \Magento\Webapi\Model\Config\ClassReflector $classReflector,
-        \Magento\Webapi\Helper\Data $helper
+        \Magento\Webapi\Helper\Data $helper,
+        WebApiCache $cache
     ) {
-        // TODO: Check if Service specific XSD is already cached
         $this->modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
         $this->_config = $config;
         $this->_objectManager = $objectManager;
         $this->_helper = $helper;
         $this->_classReflector = $classReflector;
-        $this->_initServicesMetadata();
+        $this->cache = $cache;
+        //Initialize cache
+        $this->_soapServices = $this->_initServicesMetadata();
     }
 
     /**
@@ -122,38 +135,54 @@ class Config
     }
 
     /**
+     * Return services loaded from cache if enabled or from files merged previously
+     *
+     * @return array
+     */
+    protected function getSoapServicesConfig()
+    {
+        if (null === $this->_soapServices) {
+            $soapServicesConfig = $this->cache->load(self::CACHE_ID);
+            if ($soapServicesConfig && is_string($soapServicesConfig)) {
+                $this->_soapServices = unserialize($soapServicesConfig);
+            } else {
+                $this->_soapServices = $this->_initServicesMetadata();
+                $this->cache->save(serialize($this->_soapServices), self::CACHE_ID);
+            }
+        }
+        return $this->_soapServices;
+    }
+
+    /**
      * Collect the list of services with their operations available in SOAP.
      *
      * @return array
      */
     protected function _initServicesMetadata()
     {
-        // TODO: Implement caching if this approach is approved
-        if (is_null($this->_soapServices)) {
-            $this->_soapServices = [];
-            foreach ($this->_config->getServices()[Converter::KEY_SERVICES] as $serviceClass => $serviceData) {
-                $serviceName = $this->_helper->getServiceName($serviceClass);
-                foreach ($serviceData as $methodName => $methodMetadata) {
-                    $this->_soapServices[$serviceName][self::KEY_SERVICE_METHODS][$methodName] = [
-                        self::KEY_METHOD => $methodName,
-                        self::KEY_IS_REQUIRED => (bool)$methodMetadata[Converter::KEY_SECURE],
-                        self::KEY_IS_SECURE => $methodMetadata[Converter::KEY_SECURE],
-                        self::KEY_ACL_RESOURCES => $methodMetadata[Converter::KEY_ACL_RESOURCES],
-                    ];
-                    $this->_soapServices[$serviceName][self::KEY_CLASS] = $serviceClass;
-                }
-                $reflectedMethodsMetadata = $this->_classReflector->reflectClassMethods(
-                    $serviceClass,
-                    $this->_soapServices[$serviceName][self::KEY_SERVICE_METHODS]
-                );
-                // TODO: Consider service documentation extraction via reflection
-                $this->_soapServices[$serviceName][self::KEY_SERVICE_METHODS] = array_merge_recursive(
-                    $this->_soapServices[$serviceName][self::KEY_SERVICE_METHODS],
-                    $reflectedMethodsMetadata
-                );
+        $soapServices = [];
+        foreach ($this->_config->getServices()[Converter::KEY_SERVICES] as $serviceClass => $serviceData) {
+            $serviceName = $this->_helper->getServiceName($serviceClass);
+            foreach ($serviceData as $methodName => $methodMetadata) {
+                $soapServices[$serviceName][self::KEY_SERVICE_METHODS][$methodName] = [
+                    self::KEY_METHOD => $methodName,
+                    self::KEY_IS_REQUIRED => (bool)$methodMetadata[Converter::KEY_SECURE],
+                    self::KEY_IS_SECURE => $methodMetadata[Converter::KEY_SECURE],
+                    self::KEY_ACL_RESOURCES => $methodMetadata[Converter::KEY_ACL_RESOURCES],
+                ];
+                $soapServices[$serviceName][self::KEY_CLASS] = $serviceClass;
             }
+            $reflectedMethodsMetadata = $this->_classReflector->reflectClassMethods(
+                $serviceClass,
+                $soapServices[$serviceName][self::KEY_SERVICE_METHODS]
+            );
+            $soapServices[$serviceName][self::KEY_SERVICE_METHODS] = array_merge_recursive(
+                $soapServices[$serviceName][self::KEY_SERVICE_METHODS],
+                $reflectedMethodsMetadata
+            );
         }
-        return $this->_soapServices;
+
+        return $soapServices;
     }
 
     /**
@@ -191,9 +220,10 @@ class Config
     public function getRequestedSoapServices(array $requestedServices)
     {
         $services = [];
+        $soapServicesConfig = $this->getSoapServicesConfig();
         foreach ($requestedServices as $serviceName) {
-            if (isset($this->_soapServices[$serviceName])) {
-                $services[] = $this->_soapServices[$serviceName];
+            if (isset($soapServicesConfig[$serviceName])) {
+                $services[] = $soapServicesConfig[$serviceName];
             }
         }
         return $services;
@@ -222,9 +252,10 @@ class Config
      */
     public function getServiceMetadata($serviceName)
     {
-        if (!isset($this->_soapServices[$serviceName]) || !is_array($this->_soapServices[$serviceName])) {
+        $soapServicesConfig = $this->getSoapServicesConfig();
+        if (!isset($soapServicesConfig[$serviceName]) || !is_array($soapServicesConfig[$serviceName])) {
             throw new \RuntimeException(__('Requested service is not available: "%1"', $serviceName));
         }
-        return $this->_soapServices[$serviceName];
+        return $soapServicesConfig[$serviceName];
     }
 }
