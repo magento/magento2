@@ -79,7 +79,8 @@ define([
 
                 tmplData = {
                     value: key,
-                    title: value.name
+                    title: value.name,
+                    isSelected: false
                 };
 
                 if (this.options.defaultRegion === key) {
