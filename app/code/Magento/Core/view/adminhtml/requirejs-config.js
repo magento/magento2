@@ -6,7 +6,7 @@
 var config = {
     map: {
         '*': {
-            requireCookie: 'Magento_Core/js/require-cookie'
+            requireCookie: 'Magento_Cookie/js/require-cookie'
         }
     } 
 };
