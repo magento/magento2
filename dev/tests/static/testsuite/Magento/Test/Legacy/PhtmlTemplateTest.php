@@ -35,4 +35,31 @@ class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Test\Utility\Files::init()->getPhtmlFiles()
         );
     }
+
+    public function testObsoleteJavascriptAttributeType()
+    {
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker(
+        /**
+         * Test usage of protected and private methods and variables in template
+         *
+         * According to naming convention (B5.8, B6.2) all class members
+         * in protected or private scope should be prefixed with underscore.
+         * Member variables declared "public" should never start with an underscore.
+         * Access to protected and private members of Block class is obsolete in phtml templates
+         * since introduction of multiple template engines support
+         *
+         * @param string $file
+         */
+            function ($file) {
+                $this->assertNotRegexp(
+                    '/type="text\/javascript"/',
+                    file_get_contents($file),
+                    'Please do not use "text/javascript" type attribute due to HTML5 standards.' .
+                    ' For more details please go to "http://www.w3.org/TR/html5/scripting-1.html".'
+                );
+            },
+            \Magento\Framework\Test\Utility\Files::init()->getPhtmlFiles()
+        );
+    }
 }
