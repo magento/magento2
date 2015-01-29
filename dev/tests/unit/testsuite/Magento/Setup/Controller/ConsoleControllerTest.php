@@ -446,7 +446,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
      * @param string $modules
      * @param bool $isForce
      * @param bool $expectedIsEnabled
-     * @param string[] $expectedModules
      * @param string[] $modulesToChange
      * @dataProvider moduleActionPartialNoChangesDataProvider
      */
@@ -455,7 +454,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $modules,
         $isForce,
         $expectedIsEnabled,
-        $expectedModules,
         $modulesToChange
     ) {
         $status = $this->getModuleActionMocks($command, $modules, $isForce, false);
@@ -481,7 +479,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
                 'Module_Foo,Module_Bar',
                 false,
                 true,
-                ['Module_Foo', 'Module_Bar'],
                 ['Module_Bar'],
             ],
             [
@@ -489,7 +486,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
                 'Module_Foo,Module_Bar',
                 true,
                 true,
-                ['Module_Foo', 'Module_Bar'],
                 ['Module_Bar'],
             ],
             [
@@ -497,7 +493,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
                 'Module_Foo,Module_Bar',
                 false,
                 false,
-                ['Module_Foo', 'Module_Bar'],
                 ['Module_Bar'],
             ],
             [
@@ -505,7 +500,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
                 'Module_Foo,Module_Bar',
                 true,
                 false,
-                ['Module_Foo', 'Module_Bar'],
                 ['Module_Bar'],
             ],
         ];
