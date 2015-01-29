@@ -12,27 +12,27 @@
  * @var $this \Magento\Sendfriend\Block\Send
  */
 ?>
-<script id="add-recipient-tmpl" type="text/x-jQuery-tmpl">
+<script id="add-recipient-tmpl" type="text/x-magento-template">
     <div class="actions-toolbar">
         <div class="secondary">
-            <button type="button" id="btn-remove${_index_}" class="action remove"
+            <button type="button" id="btn-remove<%= _index_ %>" class="action remove"
                title="<?php echo $this->escapeJsQuote(__('Remove')) ?>"><span><?php echo $this->escapeJsQuote(__('Remove')) ?></span></button>
         </div>
     </div>
     <fieldset class="fieldset">
         <div class="field name required">
-            <label for="recipients-name${_index_}" class="label"><span><?php echo __('Name')?></span></label>
+            <label for="recipients-name<%= _index_ %>" class="label"><span><?php echo __('Name')?></span></label>
             <div class="control">
-                <input name="recipients[name][${_index_}]" type="text" title="<?php echo __('Name') ?>" class="input-text"
-                       id="recipients-name${_index_}" data-validate="{required:true}"/>
+                <input name="recipients[name][<%= _index_ %>]" type="text" title="<?php echo __('Name') ?>" class="input-text"
+                       id="recipients-name<%= _index_ %>" data-validate="{required:true}"/>
             </div>
         </div>
 
         <div class="field email required">
-            <label for="recipients-email${_index_}" class="label"><span><?php echo __('Email') ?></span></label>
+            <label for="recipients-email<%= _index_ %>" class="label"><span><?php echo __('Email') ?></span></label>
             <div class="control">
-                <input name="recipients[email][${_index_}]" title="<?php echo __('Email') ?>"
-                       id="recipients-email${_index_}" type="email" class="input-text"
+                <input name="recipients[email][<%= _index_ %>]" title="<?php echo __('Email') ?>"
+                       id="recipients-email<%= _index_ %>" type="email" class="input-text"
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>
