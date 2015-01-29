@@ -21,6 +21,7 @@
             <data name="updatedProduct/data/description">Configurable Product description %isolation%</data>
             <data name="updatedProduct/data/weight">3</data>
             <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+            <data name="product/data/url_key">configurable-product-%isolation%</data>
             <data name="updatedProduct/data/affected_attribute_set">-</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertProductInCategory, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart, assertChildProductIsNotDisplayedSeparately</data>
         </variation>
@@ -37,6 +38,7 @@
             <data name="updatedProduct/data/description">Configurable Product description %isolation%</data>
             <data name="updatedProduct/data/weight">3</data>
             <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+            <data name="product/data/url_key">configurable-product-%isolation%</data>
             <data name="updatedProduct/data/affected_attribute_set">custom_attribute_set_%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart</data>
         </variation>
@@ -54,6 +56,7 @@
             <data name="updatedProduct/data/description">Configurable Product description %isolation%</data>
             <data name="updatedProduct/data/weight">3</data>
             <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+            <data name="product/data/url_key">configurable-product-%isolation%</data>
             <data name="updatedProduct/data/affected_attribute_set">-</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid,  assertConfigurableProductForm, assertProductInCategory, assertProductInStock, assertConfigurableProductInCart, assertConfigurableAttributesAbsentOnProductPage</data>
         </variation>
@@ -70,6 +73,7 @@
             <data name="updatedProduct/data/description">Configurable Product description %isolation%</data>
             <data name="updatedProduct/data/weight">3</data>
             <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+            <data name="product/data/url_key">configurable-product-%isolation%</data>
             <data name="updatedProduct/data/affected_attribute_set">-</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertConfigurableProductForm, assertConfigurableAttributesBlockIsAbsentOnProductPage, assertProductOutOfStock</data>
         </variation>

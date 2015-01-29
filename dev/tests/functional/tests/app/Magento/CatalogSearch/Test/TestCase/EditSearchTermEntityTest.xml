@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
     <testCase name="EditSearchTermEntityTest">
         <variation name="EditSearchTermEntityTestVariation1">
-            <data name="searchTerm/data/query_text/value">catalogProductSimple::getSku</data>
+            <data name="searchTerm/data/query_text/value">catalogProductSimple::sku</data>
             <data name="searchTerm/data/store_id">Main Website/Main Website Store/Default Store View</data>
             <data name="searchTerm/data/num_results">1</data>
             <data name="searchTerm/data/popularity">20</data>

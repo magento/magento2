@@ -10,13 +10,13 @@
         <variation name="AbandonedCartsReportEntityTestVariation1">
             <data name="description">add product to cart as registered user and check product in Report</data>
             <data name="customer/dataSet">default</data>
-            <data name="products">catalogProductSimple::100_dollar_product</data>
+            <data name="products">catalogProductSimple::product_100_dollar</data>
             <data name="constraint">assertAbandonedCartCustomerInfoResult</data>
         </variation>
         <variation name="AbandonedCartsReportEntityTestVariation2">
             <data name="description">add two products to cart as registered user and check product in Report</data>
             <data name="customer/dataSet">default</data>
-            <data name="products">catalogProductSimple::100_dollar_product,catalogProductSimple::100_dollar_product</data>
+            <data name="products">catalogProductSimple::product_100_dollar,catalogProductSimple::product_100_dollar</data>
             <data name="constraint">assertAbandonedCartCustomerInfoResult</data>
         </variation>
     </testCase>

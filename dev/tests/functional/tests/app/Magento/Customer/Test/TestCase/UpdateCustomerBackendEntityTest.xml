@@ -35,6 +35,7 @@
             <data name="address/data/fax">-</data>
             <data name="address/data/vat_id">-</data>
             <data name="constraint">assertCustomerSuccessSaveMessage, assertCustomerForm, assertCustomerInGrid</data>
+            <data name="issue">Bug: MAGETWO-31689</data>
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation2">
             <data name="initialCustomer/dataSet">default</data>
@@ -93,6 +94,7 @@
             <data name="address/data/fax">-</data>
             <data name="address/data/vat_id">987654321</data>
             <data name="constraint">assertCustomerSuccessSaveMessage, assertCustomerForm, assertCustomerInGrid</data>
+            <data name="issue">Bug: MAGETWO-31689</data>
         </variation>
     </testCase>
 </config>

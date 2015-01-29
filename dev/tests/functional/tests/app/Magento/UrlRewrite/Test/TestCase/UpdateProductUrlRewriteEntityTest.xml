@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
     <testCase name="UpdateProductUrlRewriteEntityTest">
         <variation name="UpdateProductUrlRewriteEntityTestVariation1">
-            <data name="urlRewrite/data/target_path/entity">product/%catalogProductSimple::100_dollar_product%</data>
+            <data name="urlRewrite/data/target_path/entity">product/%catalogProductSimple::product_100_dollar%</data>
             <data name="urlRewrite/data/store_id">Main Website/Main Website Store/Default Store View</data>
             <data name="urlRewrite/data/request_path">test_%isolation%.html</data>
             <data name="urlRewrite/data/redirect_type">Temporary (302)</data>

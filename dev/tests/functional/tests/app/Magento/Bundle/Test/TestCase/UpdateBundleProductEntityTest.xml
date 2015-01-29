@@ -9,9 +9,9 @@
     <testCase name="UpdateBundleProductEntityTest">
         <variation name="UpdateBundleProductEntityTestVariation1">
             <data name="originalProduct/dataSet">bundle_dynamic_product</data>
-            <data name="product/data/name">bundle_dynamic_%isolation%</data>
+            <data name="product/data/name">bundle_fixed_%isolation%</data>
             <data name="product/data/sku_type">Fixed</data>
-            <data name="product/data/sku">bundle_dynamic_%isolation%</data>
+            <data name="product/data/sku">bundle_fixed_%isolation%</data>
             <data name="product/data/price/preset">dynamic-100</data>
             <data name="product/data/weight_type">Fixed</data>
             <data name="product/data/weight">1</data>
@@ -21,6 +21,7 @@
             <data name="product/data/bundle_selections/preset">default_dynamic</data>
             <data name="product/data/checkout_data/preset">default</data>
             <data name="product/data/visibility">-</data>
+            <data name="product/data/url_key">bundle-fixed-url-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertBundleItemsOnProductPage, assertBundleProductForm, assertBundleProductPage, assertProductInStock, assertBundlePriceView, assertBundlePriceType</data>
         </variation>
         <variation name="UpdateBundleProductEntityTestVariation2">
@@ -37,6 +38,7 @@
             <data name="product/data/bundle_selections/preset">default_fixed</data>
             <data name="product/data/checkout_data/preset">default</data>
             <data name="product/data/visibility">Catalog, Search</data>
+            <data name="product/data/url_key">bundle-dynamic-url-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertBundleItemsOnProductPage, assertBundleProductForm, assertBundleProductPage, assertProductInStock, assertProductVisibleInCategory, assertBundlePriceView, assertBundlePriceType</data>
         </variation>
     </testCase>

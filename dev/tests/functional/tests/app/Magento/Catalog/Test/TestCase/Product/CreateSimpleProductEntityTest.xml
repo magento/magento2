@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
     <testCase name="CreateSimpleProductEntityTest">
         <variation name="CreateSimpleProductEntityTestVariation1">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -28,6 +29,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation2">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -48,6 +50,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation3">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -68,6 +71,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation4">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -88,6 +92,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation5">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -108,6 +113,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation6">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -128,6 +134,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation7">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -148,6 +155,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation8">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -168,6 +176,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductInCategory, assertProductPage, assertProductInCart</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation9">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -188,6 +197,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductVisibleInCategory, assertProductPage</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation10">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -208,6 +218,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInStock</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation11">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -227,6 +238,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductOutOfStock</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation12">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -247,6 +259,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductSearchableBySku</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation13">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -267,6 +280,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductInStock, assertProductSearchableBySku, assertProductPage</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation14">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
@@ -287,9 +301,10 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductInStock, assertProductVisibleInCategory, assertProductPage</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation15">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/price/value">10014</data>
             <data name="product/data/special_price">-</data>
             <data name="product/data/short_description">Simple Product short_description %isolation%</data>
@@ -307,9 +322,10 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductInStock, assertProductVisibleInCategory, assertProductPage, assertProductGroupedPriceOnProductPage</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation16">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/price/value">10015</data>
             <data name="product/data/special_price">-</data>
             <data name="product/data/short_description">Simple Product short_description %isolation%</data>
@@ -327,6 +343,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductInStock, assertProductVisibleInCategory, assertProductPage, assertProductSpecialPriceOnProductPage</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation17">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">None</data>
@@ -347,6 +364,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductInStock, assertProductVisibleInCategory, assertProductPage, assertProductTierPriceOnProductPage</data>
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation18">
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="product/data/name">Simple Product %isolation%</data>
             <data name="product/data/sku">simple_sku_%isolation%</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
