@@ -47,7 +47,9 @@ class WordsFinder
      *
      * @var array
      */
-    protected $copyrightSkipList = [];
+    protected $copyrightSkipList = [
+        'lib/web/legacy-build.min.js'
+    ];
 
     /**
      * Whether copyright presence should be checked or not

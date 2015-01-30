@@ -128,6 +128,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {

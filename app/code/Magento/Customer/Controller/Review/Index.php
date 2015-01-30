@@ -6,14 +6,6 @@
  */
 namespace Magento\Customer\Controller\Review;
 
-class Index extends \Magento\Framework\App\Action\Action
+class Index extends \Magento\Customer\Controller\Review
 {
-    /**
-     * @return void
-     */
-    public function execute()
-    {
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
-    }
 }

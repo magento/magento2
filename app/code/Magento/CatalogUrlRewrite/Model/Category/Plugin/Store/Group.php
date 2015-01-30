@@ -15,6 +15,9 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Store\Model\Store;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Group
 {
     /** @var UrlPersistInterface */

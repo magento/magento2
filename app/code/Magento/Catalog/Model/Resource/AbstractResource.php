@@ -345,6 +345,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param mixed $valueId
      * @param mixed $value
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
@@ -490,6 +491,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param AbstractAttribute $attribute
      * @param mixed $value
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _isAttributeValueEmpty(AbstractAttribute $attribute, $value)
     {

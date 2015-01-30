@@ -236,7 +236,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     public function getDefaultEmailLogo()
     {
         return $this->_assetRepo->getUrlWithParams(
-            'Magento_Email::logo_email.gif',
+            'Magento_Email::logo_email.png',
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND]
         );
     }
