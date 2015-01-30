@@ -27,6 +27,7 @@
             <attribute_code>address</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Customer\Test\Fixture\Customer\Address</source>
+            <group>addresses</group>
         </field>
         <field name="confirmation">
             <attribute_code>confirmation</attribute_code>

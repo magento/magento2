@@ -20,7 +20,10 @@ class ForgotPasswordOnFrontendTest extends Functional
     public function testForgotPassword()
     {
         // Create Customer
-        $customer = Factory::getFixtureFactory()->getMagentoCustomerCustomer(['dataSet' => 'customer_US_1']);
+        $customer = ObjectManager::getInstance()->create(
+            'Magento\Customer\Test\Fixture\Customer',
+            ['dataSet' => 'customer_US_1']
+        );
         $customer->persist();
 
         $customerAccountLoginPage = Factory::getPageFactory()->getCustomerAccountLogin();
