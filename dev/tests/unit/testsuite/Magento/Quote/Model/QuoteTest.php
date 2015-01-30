@@ -562,29 +562,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('getAddresses')
             ->will($this->returnValue($addresses));
 
-        $this->customerBuilderMock->expects($this->atLeastOnce())
-            ->method('populate')
-            ->with($customerMock)
-            ->will($this->returnSelf());
-        $addresses[] = $addressMock;
-        $this->customerBuilderMock->expects($this->atLeastOnce())
-            ->method('setAddresses')
-            ->will($this->returnSelf());
-        $this->customerBuilderMock->expects($this->atLeastOnce())
-            ->method('create')
-            ->will($this->returnValue($customerResultMock));
-        $this->objectFactoryMock->expects($this->once())
-        ->method('create')
-        ->with(['create-result'])
-        ->will($this->returnValue('return-value'));
-        $this->extensibleDataObjectConverterMock->expects($this->once())
-            ->method('toFlatArray')
-            ->with($customerMock)
-            ->will($this->returnValue(['create-result']));
-        $this->objectCopyServiceMock->expects($this->once())
-            ->method('copyFieldsetToTarget')
-            ->with('customer_account', 'to_quote', 'return-value', $this->quote);
-
         $result = $this->quote->setCustomerAddressData([$addressMock]);
         $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
         $this->assertEquals($customerResultMock, $this->quote->getCustomer());

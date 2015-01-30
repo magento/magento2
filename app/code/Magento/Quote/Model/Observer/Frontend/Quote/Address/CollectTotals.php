@@ -23,9 +23,9 @@ class CollectTotals
     protected $vatValidator;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
-    protected $customerBuilder;
+    protected $customerDataFactory;
 
     /**
      * Group Management
@@ -35,26 +35,34 @@ class CollectTotals
     protected $groupManagement;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Customer\Helper\Address $customerAddressHelper
      * @param \Magento\Customer\Model\Vat $customerVat
      * @param VatValidator $vatValidator
-     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
+     * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddressHelper,
         \Magento\Customer\Model\Vat $customerVat,
         VatValidator $vatValidator,
-        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
-        \Magento\Customer\Api\GroupManagementInterface $groupManagement
+        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
+        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->customerVat = $customerVat;
         $this->customerAddressHelper = $customerAddressHelper;
         $this->vatValidator = $vatValidator;
-        $this->customerBuilder = $customerBuilder;
+        $this->customerDataFactory = $customerDataFactory;
         $this->groupManagement = $groupManagement;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -99,7 +107,8 @@ class CollectTotals
         if ($groupId) {
             $quoteAddress->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
             $quote->setCustomerGroupId($groupId);
-            $customer = $this->customerBuilder->mergeDataObjectWithArray($customer, ['group_id' => $groupId])->create();
+            $customer = $this->customerDataFactory->create();
+            $this->dataObjectHelper->populateWithArray($customer, ['group_id' => $groupId]);
             $quote->setCustomer($customer);
         }
     }

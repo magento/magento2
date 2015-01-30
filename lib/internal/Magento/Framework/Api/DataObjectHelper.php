@@ -167,4 +167,27 @@ class DataObjectHelper
         $dataObject->$methodName($object);
         return $this;
     }
+
+    /**
+     * Merges second object onto the first
+     *
+     * @param string                  $className
+     * @param ExtensibleDataInterface $firstDataObject
+     * @param ExtensibleDataInterface $secondDataObject
+     * @return $this
+     */
+    public function mergeDataObjects(
+        $className,
+        ExtensibleDataInterface $firstDataObject,
+        ExtensibleDataInterface $secondDataObject
+    ) {
+        if (!$firstDataObject instanceof $className || !$secondDataObject instanceof $className) {
+            throw new \LogicException('Wrong prototype object given. It can only be of "' . $className . '" type.');
+        }
+        $firstObjectArray = $this->objectProcessor->buildOutputDataArray($firstDataObject, $className);
+        $secondObjectArray = $this->objectProcessor->buildOutputDataArray($secondDataObject, $className);
+        $this->_setDataValues($this, $firstObjectArray);
+        $this->_setDataValues($this, $secondObjectArray);
+        return $this;
+    }
 }

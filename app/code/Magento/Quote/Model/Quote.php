@@ -311,14 +311,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $extensibleDataObjectConverter;
 
     /**
-     * @var \Magento\Customer\Api\Data\AttributeValueFactory
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
      */
-    protected $addressFactory;
+    protected $addressDataFactory;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
-    protected $customerBuilder;
+    protected $customerDataFactory;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
@@ -329,6 +329,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @var Cart\CurrencyFactory
      */
     protected $currencyFactory;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -357,9 +362,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
-     * @param \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder
-     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
+     * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory
+     * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param Cart\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -394,9 +400,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder,
-        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
+        \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
+        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Quote\Model\Cart\CurrencyFactory $currencyFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -425,9 +432,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->stockRegistry = $stockRegistry;
         $this->itemProcessor = $itemProcessor;
         $this->objectFactory = $objectFactory;
-        $this->addressFactory = $addressBuilder;
-        $this->customerBuilder = $customerBuilder;
+        $this->addressDataFactory = $addressDataFactory;
+        $this->customerDataFactory = $customerDataFactory;
         $this->customerRepository = $customerRepository;
+        $this->dataObjectHelper = $dataObjectHelper;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->currencyFactory = $currencyFactory;
         parent::__construct(
@@ -823,14 +831,17 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         /* @TODO: Remove the method after all external usages are refactored in MAGETWO-19930 */
         $this->_customer = $customer;
         $this->setCustomerId($customer->getId());
-        $customerData = $this->objectFactory->create(
+        $customerData = $this->customerDataFactory->create();
+        $customerData->populate($customer);
+        $customerData->setAddresses([]);
+        $customerDataFlatArray = $this->objectFactory->create(
             $this->extensibleDataObjectConverter->toFlatArray(
-                $this->customerBuilder->populate($customer)->setAddresses([])->create(),
+                $customerData,
                 [],
                 '\Magento\Customer\Api\Data\CustomerInterface'
             )
         );
-        $this->_objectCopyService->copyFieldsetToTarget('customer_account', 'to_quote', $customerData, $this);
+        $this->_objectCopyService->copyFieldsetToTarget('customer_account', 'to_quote', $customerDataFlatArray, $this);
 
         return $this;
     }
@@ -850,7 +861,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             try {
                 $this->_customer = $this->customerRepository->getById($this->getCustomerId());
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $this->_customer = $this->customerBuilder->setId(null)->create();
+                $this->_customer = $this->customerDataFactory->create();
+                $this->_customer->setId(null);
             }
         }
 
@@ -886,10 +898,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $addresses = (array)$this->getCustomer()->getAddresses();
         $addresses[] = $address;
-        $customer = $this->customerBuilder->populate($this->getCustomer())
-            ->setAddresses($addresses)
-            ->create();
-        $this->setCustomer($customer);
+        $this->getCustomer()->setAddresses($addresses);
         return $this;
     }
 
@@ -901,8 +910,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function updateCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
-        $customer = $this->customerBuilder->mergeDataObjects($this->getCustomer(), $customer)
-            ->create();
+        $customer = $this->customerDataFactory->mergeDataObjects(get_class($this->getCustomer()),
+            $this->getCustomer(), $customer);
         $this->setCustomer($customer);
         return $this;
     }
