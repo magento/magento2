@@ -116,7 +116,7 @@ class DataObjectProcessor
                     $valueResult = [];
                     $arrayElementType = substr($returnType, 0, -2);
                     foreach ($value as $singleValue) {
-                        if (is_object($singleValue)) {
+                        if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
                             $singleValue = $this->buildOutputDataArray($singleValue, $arrayElementType);
                         }
                         $valueResult[] = $this->castValueToType($singleValue, $arrayElementType);

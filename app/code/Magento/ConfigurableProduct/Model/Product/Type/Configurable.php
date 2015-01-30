@@ -847,7 +847,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getSpecifyOptionMessage()
     {
-        return __('Please specify the product\'s option(s).');
+        return (string)__('Please specify the product\'s option(s).');
     }
 
     /**
