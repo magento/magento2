@@ -2051,4 +2051,8 @@ return [
     ['getResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getAdvancedResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['setIsConfigurable', 'Magento\Catalog\Api\Data\ProductAttributeDataBuilder'],
+    ['_getSendfriendModel', 'Magento\Sendfriend\Block\Send'],
+    ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
+    ['register', 'Magento\Sendfriend\Model\Sendfriend'],
+    ['_getImageHelper', 'Magento\Catalog\Model\Product'],
 ];

@@ -8,7 +8,7 @@
 
 ?>
 <?php  foreach ($types as $type) {
-     if ($messages = $this->getMessages($type)) {
+     if ($messages = $block->getMessages($type)) {
          if (!$html) {
              $html .= '<div class="messages">';
          }

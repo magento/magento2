@@ -12,7 +12,7 @@
 /**
  * Template for displaying product price at product view page, gift registry and wishlist
  *
- * @var $this \Magento\Catalog\Block\Product\Price
+ * @var $block \Magento\Catalog\Block\Product\Price
  */
 ?>
 <?php
@@ -22,7 +22,7 @@
     $_catalogHelper = $this->helper('Magento\Catalog\Helper\Data');
 
     /** @var $_product \Magento\Catalog\Model\Product */
-    $_product = $this->getProduct();
+    $_product = $block->getProduct();
     $_id = $_product->getId();
     $_msrpPrice = '';
 ?>
@@ -32,14 +32,14 @@
         <span class="old-price" ><?php echo $_msrpPrice ?></span>
     <?php endif; ?>
     <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
-        <?php $priceElementId = 'product-price-' . $_id . $this->getIdSuffix(); ?>
+        <?php $priceElementId = 'product-price-' . $_id . $block->getIdSuffix(); ?>
         <span id="<?php echo $priceElementId ?>" style="display: none"></span>
-        <?php $popupId = 'msrp-popup-' . $_id . $this->getRandomString(20); ?>
+        <?php $popupId = 'msrp-popup-' . $_id . $block->getRandomString(20); ?>
         <a href="#"
            id="<?php echo($popupId);?>"
            data-mage-init='{"addToCart":{"popupId": "#<?php echo($popupId);?>",
                                          "productName": "<?php echo $_product->getName() ?>",
-                                         "realPrice": <?php echo $this->getRealPriceJs($_product) ?>,
+                                         "realPrice": <?php echo $block->getRealPriceJs($_product) ?>,
                                          "msrpPrice": "<?php echo $_msrpPrice ?>",
                                          "priceElementId":"<?php echo $priceElementId ?>",
                                          "popupCartButtonId": "#map-popup-button",
@@ -50,6 +50,6 @@
             <?php echo $_catalogHelper->getMsrpPriceMessage($_product) ?>
         </span>
     <?php endif; ?>
-    <?php $helpLinkId = 'msrp-help-' . $_id . $this->getRandomString(20); ?>
+    <?php $helpLinkId = 'msrp-help-' . $_id . $block->getRandomString(20); ?>
     <a href="#" id="<?php echo($helpLinkId);?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?php echo($helpLinkId);?>", "productName": "<?php echo $_product->getName() ?>"}}' class="link tip"><?php echo __("What's this?"); ?></a>
 </div>
