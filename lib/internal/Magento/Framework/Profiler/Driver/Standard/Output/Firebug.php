@@ -100,7 +100,7 @@ class Firebug extends AbstractOutput
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = new \Zend\Http\PhpEnvironment\Response();
+            $this->_request = new \Zend_Controller_Request_Http();
         }
         return $this->_request;
     }

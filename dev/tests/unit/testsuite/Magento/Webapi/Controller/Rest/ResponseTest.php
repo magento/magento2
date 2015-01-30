@@ -35,23 +35,68 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->_appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
 
+        $cookieMetadataFactory = $this->getMock(
+            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory',
+            ['createCookieMetadata', 'setPath'],
+            [],
+            '',
+            false
+        );
+        $cookieManager = $this->getMock(
+            'Magento\Framework\Stdlib\Cookie\PhpCookieManager',
+            ['deleteCookie'],
+            [],
+            '',
+            false
+        );
+        $context = $this->getMock(
+            'Magento\Framework\App\Http\Context',
+            ['getData']
+        );
+        $headerManager = new \Magento\Framework\App\Response\Headers();
+
+        if (in_array($this->getName(), ['testSendResponseWithException', 'testSendResponseSuccessHandling'])) {
+            $cookieMetadataFactory
+                ->expects($this->once())
+                ->method('createCookieMetadata')
+                ->will($this->returnSelf());
+            $cookieMetadataFactory
+                ->expects($this->once())
+                ->method('setPath')
+                ->will($this->returnValue(null));
+            $context
+                ->expects($this->once())
+                ->method('getData')
+                ->will($this->returnValue(null));
+            $cookieManager
+                ->expects($this->once())
+                ->method('deleteCookie')
+                ->will($this->returnValue(null));
+        }
+
         /** Init SUP. */
         $this->_responseRest = new \Magento\Webapi\Controller\Rest\Response(
             $rendererFactoryMock,
             $this->_errorProcessorMock,
-            $this->_appStateMock
+            $this->_appStateMock,
+            $cookieManager,
+            $cookieMetadataFactory,
+            $context,
+            $headerManager
         );
         $this->_responseRest->headersSentThrowsException = false;
-        parent::setUp();
     }
 
     protected function tearDown()
     {
-        unset($this->_responseRest);
-        unset($this->_appStateMock);
-        unset($this->_rendererMock);
-        unset($this->_errorProcessorMock);
-        parent::tearDown();
+        unset(
+            $this->_responseRest,
+            $this->_appStateMock,
+            $this->_appStateMock,
+            $this->_rendererMock,
+            $this->_errorProcessorMock
+        );
+
     }
 
     /**
@@ -162,6 +207,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($exception)
         );
+
         $this->_responseRest->setException($exception);
         /** Start output buffering. */
         ob_start();

@@ -69,8 +69,14 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     public function testSetAuthenticationFailed()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+
+        $headerManager = new \Magento\Framework\App\Response\Headers();
+
         $request = $objectManager->getObject('Magento\Framework\App\Request\Http');
-        $response = $objectManager->getObject('Magento\Framework\App\Response\Http');
+        $response = $objectManager->getObject(
+            'Magento\Framework\App\Response\Http',
+            ['headerManager' => $headerManager]
+        );
 
         $authentication = $objectManager->getObject(
             'Magento\Framework\HTTP\Authentication',
@@ -80,13 +86,12 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $realm = uniqid();
-        $response->headersSentThrowsException = false;
         $authentication->setAuthenticationFailed($realm);
         $headers = $response->getHeaders();
-        $this->assertArrayHasKey(0, $headers);
-        $this->assertEquals('401 Unauthorized', $headers[0]['value']);
-        $this->assertArrayHasKey(1, $headers);
-        $this->assertContains('realm="' . $realm . '"', $headers[1]['value']);
+
+        $this->assertTrue($headers->has('WWW-Authenticate'));
+        $header  = $headers->get('WWW-Authenticate');
+        $this->assertEquals('Basic realm="' . $realm . '"', $header->current()->getFieldValue());
         $this->assertContains('401', $response->getBody());
     }
 }

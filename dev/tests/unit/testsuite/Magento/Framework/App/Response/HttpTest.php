@@ -38,12 +38,14 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')->disableOriginalConstructor()
             ->getMock();
+        $headerManager = new \Magento\Framework\App\Response\Headers();
         $this->model = $objectManager->getObject(
             'Magento\Framework\App\Response\Http',
             [
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
-                'context' => $this->contextMock
+                'context' => $this->contextMock,
+                'headerManager' => $headerManager
             ]
         );
         $this->model->headersSentThrowsException = false;

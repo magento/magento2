@@ -51,19 +51,41 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
      */
     protected $exceptions = [];
 
+    /** @var Headers */
+    protected $headerManager;
+
+
     /**
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
-     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Framework\App\Http\Context $context
+     * @param CookieManagerInterface $cookieManager
+     * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param Context $context
+     * @param Headers $headerManager
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
-        Context $context
+        Context $context,
+        Headers $headerManager
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->context = $context;
+        $this->headerManager = $headerManager;
+    }
+
+    /**
+     * Return the header container responsible for headers
+     *
+     * @return Headers
+     */
+    public function getHeaders()
+    {
+        if ($this->headers === null || is_string($this->headers)) {
+            // this is only here for fromString lazy loading
+            $this->headers = (is_string($this->headers)) ? Headers::fromString($this->headers) : $this->headerManager;
+        }
+
+        return $this->headers;
     }
 
     /**
@@ -331,13 +353,40 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
     }
 
     /**
-     * Return list of exceptions
+     * Has an exception been registered with the response?
+     *
+     * @return boolean
+     */
+    public function isException()
+    {
+        return !empty($this->exceptions);
+    }
+
+    /**
+     * Retrieve the exception stack
      *
      * @return array
      */
-    public function getExceptions()
+    public function getException()
     {
         return $this->exceptions;
+    }
+
+    /**
+     * Does the response object contain an exception of a given type?
+     *
+     * @param  string $type
+     * @return boolean
+     */
+    public function hasExceptionOfType($type)
+    {
+        foreach ($this->exceptions as $e) {
+            if ($e instanceof $type) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -84,10 +84,9 @@ class Authentication
      */
     public function setAuthenticationFailed($realm)
     {
+        $this->response->setStatusCode(401);
+        $this->response->setReasonPhrase('Unauthorized');
         $this->response->setHeader(
-            'HTTP/1.1',
-            '401 Unauthorized'
-        )->setHeader(
             'WWW-Authenticate',
             'Basic realm="' . $realm . '"'
         )->setBody(

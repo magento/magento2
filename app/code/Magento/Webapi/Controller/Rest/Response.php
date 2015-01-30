@@ -7,6 +7,10 @@
  */
 namespace Magento\Webapi\Controller\Rest;
 
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\App\Http\Context;
+
 class Response extends \Magento\Webapi\Controller\Response
 {
     /** @var \Magento\Webapi\Controller\ErrorProcessor */
@@ -30,11 +34,16 @@ class Response extends \Magento\Webapi\Controller\Response
     public function __construct(
         \Magento\Webapi\Controller\Rest\Response\Renderer\Factory $rendererFactory,
         \Magento\Webapi\Controller\ErrorProcessor $errorProcessor,
-        \Magento\Framework\App\State $appState
+        \Magento\Framework\App\State $appState,
+        CookieManagerInterface $cookieManager,
+        CookieMetadataFactory $cookieMetadataFactory,
+        Context $context,
+        \Magento\Framework\App\Response\Headers $headerManager
     ) {
         $this->_renderer = $rendererFactory->get();
         $this->_errorProcessor = $errorProcessor;
         $this->_appState = $appState;
+        parent::__construct($cookieManager, $cookieMetadataFactory, $context, $headerManager);
     }
 
     /**
