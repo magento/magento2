@@ -13,24 +13,12 @@ use Zend\Code\Scanner\FileScanner;
 class ClassesScanner
 {
     /**
-     * @var ClassReaderDecorator
-     */
-    private $classReaderDecorator;
-
-    /**
-     * @param ClassReaderDecorator $classReaderDecorator
-     */
-    public function __construct(ClassReaderDecorator $classReaderDecorator)
-    {
-        $this->classReaderDecorator = $classReaderDecorator;
-    }
-
-    /**
-     * Retrieves list of classes and arguments for given path
-     * [CLASS NAME => ConstructorArgument[]]
+     * Retrieves list of classes for given path
      *
      * @param string $path
+     *
      * @return array
+     *
      * @throws FilesystemException
      */
     public function getList($path)
@@ -39,14 +27,16 @@ class ClassesScanner
         if (!(bool)$realPath) {
             throw new FilesystemException();
         }
-        $classes = [];
+
         $recursiveIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($realPath, \FilesystemIterator::FOLLOW_SYMLINKS),
             \RecursiveIteratorIterator::SELF_FIRST
         );
-        /** @var $fileItem \SplFileInfo */
+
+        $classes = [];
         foreach ($recursiveIterator as $fileItem) {
-            if (!$this->isPhpFile($fileItem)) {
+            /** @var $fileItem \SplFileInfo */
+            if ($fileItem->getExtension() !== 'php') {
                 continue;
             }
             $fileScanner = new FileScanner($fileItem->getRealPath());
@@ -55,20 +45,9 @@ class ClassesScanner
                 if (!class_exists($className)) {
                     require_once $fileItem->getRealPath();
                 }
-                $classes[$className] =  $this->classReaderDecorator->getConstructor($className);
+                $classes[] = $className;
             }
         }
         return $classes;
-    }
-
-    /**
-     * Whether file is .php file
-     *
-     * @param \SplFileInfo $item
-     * @return bool
-     */
-    private function isPhpFile(\SplFileInfo $item)
-    {
-        return $item->isFile() && pathinfo($item->getRealPath(), PATHINFO_EXTENSION) == 'php';
     }
 }

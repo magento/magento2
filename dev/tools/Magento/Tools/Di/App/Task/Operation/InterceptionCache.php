@@ -6,6 +6,8 @@
 namespace Magento\Tools\Di\App\Task\Operation;
 
 use Magento\Tools\Di\App\Task\OperationInterface;
+use Magento\Tools\Di\Code\Reader\ClassesScanner;
+use Magento\Tools\Di\Code\Reader\InstancesNamesList;
 
 class InterceptionCache implements OperationInterface
 {
@@ -19,16 +21,24 @@ class InterceptionCache implements OperationInterface
      */
     private $configInterface;
 
+    private $interceptionsInstancesNamesList;
+
     /**
      * @param \Magento\Framework\Interception\Config\Config $configInterface
-     * @param array $data
+     * @param ClassesScanner                                $classesScanner
+     * @param InstancesNamesList\Interceptions              $interceptionsInstancesNamesList
+     * @param array                                         $data
      */
     public function __construct(
         \Magento\Framework\Interception\Config\Config $configInterface,
-        $data = []
+        ClassesScanner $classesScanner,
+        InstancesNamesList\Interceptions $interceptionsInstancesNamesList,
+        array $data = []
     ) {
         $this->data = $data;
         $this->configInterface = $configInterface;
+        $this->classesScanner = $classesScanner;
+        $this->interceptionsInstancesNamesList = $interceptionsInstancesNamesList;
     }
 
     /**
@@ -42,24 +52,13 @@ class InterceptionCache implements OperationInterface
             return;
         }
 
-        $logWriter = new \Magento\Tools\Di\Compiler\Log\Writer\Quiet();
-        $errorWriter = new \Magento\Tools\Di\Compiler\Log\Writer\Console();
-
-        $log = new \Magento\Tools\Di\Compiler\Log\Log($logWriter, $errorWriter);
-
-        $validator = new \Magento\Framework\Code\Validator();
-        $validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
-        $validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
-
-        $directoryCompiler = new \Magento\Tools\Di\Compiler\Directory($log, $validator);
+        $definitions = [];
         foreach ($this->data as $path) {
             if (is_readable($path)) {
-                $directoryCompiler->compile($path);
-            }
+                array_merge($definitions, $this->interceptionsInstancesNamesList->getList($path));
+           }
         }
 
-        list($definitions, ) = $directoryCompiler->getResult();
-
-        $this->configInterface->initialize(array_keys($definitions));
+        $this->configInterface->initialize($definitions);
     }
 }
