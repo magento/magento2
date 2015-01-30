@@ -212,9 +212,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCookieSecureInOptions()
     {
-        $value = 'baz';
-        $this->_model->setCookieSecure($value);
-        $this->assertEquals($value, $this->_model->getCookieSecure());
+        $this->_model->setCookieSecure(true);
+        $this->assertTrue($this->_model->getCookieSecure());
     }
 
     public function testCookieDomainIsMutable()
@@ -245,9 +244,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCookieHttpOnlyInOptions()
     {
-        $value = 'baz';
-        $this->_model->setCookieHttpOnly($value);
-        $this->assertEquals($value, $this->_model->getCookieHttpOnly());
+        $this->_model->setCookieHttpOnly(true);
+        $this->assertTrue($this->_model->getCookieHttpOnly());
     }
 
     public function testUseCookiesDefaultsToIniSettings()
@@ -257,9 +255,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSetUseCookiesInOptions()
     {
-        $value = 'baz';
-        $this->_model->setUseCookies($value);
-        $this->assertEquals($value, (bool)$this->_model->getUseCookies());
+        $this->_model->setUseCookies(true);
+        $this->assertTrue($value, (bool)$this->_model->getUseCookies());
     }
 
     public function testUseOnlyCookiesDefaultsToIniSettings()
@@ -269,9 +266,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSetUseOnlyCookiesInOptions()
     {
-        $value = 'baz';
-        $this->_model->setOption('use_only_cookies', $value);
-        $this->assertEquals($value, (bool)$this->_model->getOption('use_only_cookies'));
+        $this->_model->setOption('use_only_cookies', true);
+        $this->assertTrue($value, (bool)$this->_model->getOption('use_only_cookies'));
     }
 
     public function testRefererCheckDefaultsToIniSettings()

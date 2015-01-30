@@ -28,6 +28,13 @@ class IniGetSetTest extends \PHPUnit_Framework_TestCase
         'date.timezone',
         'memory_limit',
         'max_execution_time',
+        'short_open_tag',
+        'disable_functions',
+        'asp_tags',
+        'apc.enabled',
+        'eaccelerator.enable',
+        'mime_magic.magicfile',
+        'display_errors',
     ];
 
     public function testAllowedGetSetDirectives()
