@@ -136,6 +136,14 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
     }
 
     /**
+     * Clear body
+     */
+    public function clearBody()
+    {
+        $this->setContent('');
+    }
+
+    /**
      * Set a header
      *
      * If $replace is true, replaces any headers already defined with that
@@ -387,6 +395,108 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
         }
 
         return false;
+    }
+
+    /**
+     * Does the response object contain an exception with a given message?
+     *
+     * @param  string $message
+     * @return boolean
+     */
+    public function hasExceptionOfMessage($message)
+    {
+        foreach ($this->exceptions as $e) {
+            if ($message == $e->getMessage()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Does the response object contain an exception with a given code?
+     *
+     * @param  int $code
+     * @return boolean
+     */
+    public function hasExceptionOfCode($code)
+    {
+        $code = (int)$code;
+        foreach ($this->exceptions as $e) {
+            if ($code == $e->getCode()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Retrieve all exceptions of a given type
+     *
+     * @param  string $type
+     * @return false|array
+     */
+    public function getExceptionByType($type)
+    {
+        $exceptions = [];
+        foreach ($this->_exceptions as $e) {
+            if ($e instanceof $type) {
+                $exceptions[] = $e;
+            }
+        }
+
+        if (empty($exceptions)) {
+            $exceptions = false;
+        }
+
+        return $exceptions;
+    }
+
+    /**
+     * Retrieve all exceptions of a given message
+     *
+     * @param  string $message
+     * @return false|array
+     */
+    public function getExceptionByMessage($message)
+    {
+        $exceptions = [];
+        foreach ($this->_exceptions as $e) {
+            if ($message == $e->getMessage()) {
+                $exceptions[] = $e;
+            }
+        }
+
+        if (empty($exceptions)) {
+            $exceptions = false;
+        }
+
+        return $exceptions;
+    }
+
+    /**
+     * Retrieve all exceptions of a given code
+     *
+     * @param mixed $code
+     * @return void
+     */
+    public function getExceptionByCode($code)
+    {
+        $code = (int)$code;
+        $exceptions = [];
+        foreach ($this->_exceptions as $e) {
+            if ($code == $e->getCode()) {
+                $exceptions[] = $e;
+            }
+        }
+
+        if (empty($exceptions)) {
+            $exceptions = false;
+        }
+
+        return $exceptions;
     }
 
     /**
