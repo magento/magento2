@@ -127,19 +127,19 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $themes = ['frontend' => 'test_default', 'adminhtml' => 'test_default'];
-        $design = $objectManager->create('Magento\Core\Model\View\Design', ['themes' => $themes]);
-        $objectManager->addSharedInstance($design, 'Magento\Core\Model\View\Design');
+        $design = $objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
+        $objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
 
-        $collection = $objectManager->create('Magento\Core\Model\Resource\Theme\Collection');
+        $collection = $objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
         $themeId = $collection->getThemeByFullPath('frontend/test_default')->getId();
         $objectManager->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
             \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
             $themeId,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         /** @var $layout \Magento\Framework\View\LayoutInterface */
