@@ -35,11 +35,6 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
 
     public function testTest()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\App\State $appState */
-        $appState = $objectManager->get('Magento\Framework\App\State');
-        $appState->setAreaCode(\Magento\ToolkitFramework\Application::AREA_CODE);
-
         $config = \Magento\ToolkitFramework\Config::getInstance();
         $config->loadConfig(self::$_generatorWorkingDir . '/profiles/ce/small.xml');
         /** @var \Magento\TestFramework\Application $itfApplication */
