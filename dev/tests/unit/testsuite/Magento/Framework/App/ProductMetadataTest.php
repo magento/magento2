@@ -12,11 +12,6 @@ class ProductMetadataTest extends \PHPUnit_Framework_TestCase
      */
     protected $productMetadata;
 
-    /**
-     * @var array
-     */
-    protected $productEdition = array('Community', 'Enterprise');
-
     protected function setUp()
     {
         $this->productMetadata = new ProductMetadata();
@@ -35,6 +30,5 @@ class ProductMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $productEdition = $this->productMetadata->getEdition();
         $this->assertNotEmpty($productEdition, 'Empty product edition');
-        $this->assertContains($productEdition, $this->productEdition, 'Invalid product edition');
     }
 }
