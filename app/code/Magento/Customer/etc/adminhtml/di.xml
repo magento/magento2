@@ -12,7 +12,7 @@
             <argument name="modelName" xsi:type="string">Magento\Customer\Model\Backend\Customer</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Url\SecurityInfo">
+    <type name="Magento\Framework\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
                 <item name="customer" xsi:type="string">/customer/</item>

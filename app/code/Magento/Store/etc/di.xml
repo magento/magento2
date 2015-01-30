@@ -9,7 +9,7 @@
     <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
-                <item name="store_setup" xsi:type="string">Magento\Core\Model\Resource\Setup</item>
+                <item name="store_setup" xsi:type="string">Magento\Framework\Module\DataSetup</item>
             </argument>
         </arguments>
     </type>
@@ -26,17 +26,17 @@
     <type name="Magento\Store\Model\Config\Reader\Store">
         <arguments>
             <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Framework\Store\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Resolver\Store">
         <arguments>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Framework\Store\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Resolver\Website">
         <arguments>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Framework\Store\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Config\Reader\ReaderPool">
@@ -126,33 +126,33 @@
     </type>
     <type name="Magento\Framework\Module\Output\Config">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Session\Config">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Session\SidResolver">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Session\Validator">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout\Element\Layout">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\DesignExceptions">
         <arguments>
             <argument name="exceptionConfigPath" xsi:type="string">design/theme/ua_regexp</argument>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Router\NoRouteHandlerList">

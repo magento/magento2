@@ -77,7 +77,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
             ',',
             $this->_scopeConfig->getValue(
                 'system/currency/installed',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         );
     }

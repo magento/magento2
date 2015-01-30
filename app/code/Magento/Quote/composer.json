@@ -8,7 +8,6 @@
       "magento/module-customer": "0.42.0-beta5",
       "magento/module-authorization": "0.42.0-beta5",
       "magento/module-payment": "0.42.0-beta5",
-      "magento/module-core": "0.42.0-beta5",
       "magento/module-sales": "0.42.0-beta5",
       "magento/module-backend": "0.42.0-beta5",
       "magento/module-directory": "0.42.0-beta5",

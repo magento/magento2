@@ -8,7 +8,7 @@
 
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Test class for \Magento\Sales\Model\Order

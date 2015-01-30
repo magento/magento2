@@ -100,7 +100,7 @@ class ConfigureTest extends \Magento\TestFramework\AbstractControllerTest
         $session = $this->getMockBuilder('Magento\Checkout\Model\Session')
             ->disableOriginalConstructor()
             ->getMock();
-        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $formKeyValidator = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\FormKeyValidator')
