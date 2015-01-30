@@ -7,7 +7,7 @@ namespace Magento\Tools\Di\App\Task\Operation;
 
 use Magento\Tools\Di\App\Task\OperationInterface;
 use Magento\Tools\Di\Code\Reader\ClassesScanner;
-use Magento\Tools\Di\Code\Reader\InstancesNamesList;
+use Magento\Tools\Di\Code\Reader\InstancesNamesListInterface;
 
 class InterceptionCache implements OperationInterface
 {
@@ -21,6 +21,9 @@ class InterceptionCache implements OperationInterface
      */
     private $configInterface;
 
+    /**
+     * @var InstancesNamesList\Interceptions
+     */
     private $interceptionsInstancesNamesList;
 
     /**
@@ -56,7 +59,7 @@ class InterceptionCache implements OperationInterface
         foreach ($this->data as $path) {
             if (is_readable($path)) {
                 array_merge($definitions, $this->interceptionsInstancesNamesList->getList($path));
-           }
+            }
         }
 
         $this->configInterface->initialize($definitions);

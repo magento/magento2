@@ -10,12 +10,13 @@ namespace Magento\Tools\Di\Code\Reader;
  *
  * @package Magento\Tools\Di\Code\Reader
  */
-interface InstancesNamesList {
+interface InstancesNamesListInterface
+{
 
     /**
      * Retrieves list of classes for given path
      *
-     * @param $path
+     * @param string $path path to dir with files
      *
      * @return array
      */

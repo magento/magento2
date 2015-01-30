@@ -49,7 +49,7 @@ try {
 
     /** @var Writer\WriterInterface $logWriter Writer model for success messages */
     $logWriter = $opt->getOption('v') ? new Writer\Console() : new Writer\Quiet();
-    $log = new Log($logWriter,  new Writer\Console());
+    $log = new Log($logWriter, new Writer\Console());
 
     $serializer = $opt->getOption('serializer') == Igbinary::NAME ? new Igbinary() : new Standard();
 

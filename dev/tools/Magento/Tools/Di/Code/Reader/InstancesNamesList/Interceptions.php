@@ -13,7 +13,7 @@ use Magento\Tools\Di\Compiler\Log\Log;
  *
  * @package Magento\Tools\Di\Code\Reader\InstancesNamesList
  */
-class Interceptions implements \Magento\Tools\Di\Code\Reader\InstancesNamesList
+class Interceptions implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInterface
 {
     /**
      * @var \Magento\Tools\Di\Code\Reader\ClassReaderDecorator
@@ -59,7 +59,7 @@ class Interceptions implements \Magento\Tools\Di\Code\Reader\InstancesNamesList
     /**
      * Retrieves list of classes for given path
      *
-     * @param $path
+     * @param string $path path to dir with files
      *
      * @return array
      *

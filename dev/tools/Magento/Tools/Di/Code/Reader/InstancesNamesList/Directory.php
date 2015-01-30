@@ -13,7 +13,7 @@ use Magento\Tools\Di\Compiler\Log\Log;
  *
  * @package Magento\Tools\Di\Code\Reader\InstancesNamesList
  */
-class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesList
+class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInterface
 {
     /**
      * @var string
@@ -46,11 +46,11 @@ class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesList
     private $classesScanner;
 
     /**
-     * @param Log $log
-     * @param     $generationDir
+     * @param Log $log Logging object
+     * @param string $generationDir directory where generated files is
      */
-    public function __construct(Log $log, $generationDir) {
-
+    public function __construct(Log $log, $generationDir)
+    {
         $this->classReader = new ClassReader();
         $this->classesScanner = new \Magento\Tools\Di\Code\Reader\ClassesScanner();
 
@@ -80,7 +80,7 @@ class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesList
     /**
      * Retrieves list of classes for given path
      *
-     * @param $path
+     * @param string $path path to dir with files
      *
      * @return array
      *

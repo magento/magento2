@@ -8,7 +8,7 @@ namespace Magento\Tools\Di\App\Task\Operation;
 use Magento\Tools\Di\App\Task\OperationInterface;
 use Magento\Framework\App;
 use Magento\Tools\Di\Code\Reader\ClassesScanner;
-use Magento\Tools\Di\Code\Reader\InstancesNamesList;
+use Magento\Tools\Di\Code\Reader\InstancesNamesListInterface;
 use Magento\Tools\Di\Compiler\Config;
 use Magento\Tools\Di\Definition\Collection as DefinitionsCollection;
 
@@ -20,7 +20,7 @@ class Area implements OperationInterface
     private $areaList;
 
     /**
-     * @var InstancesNamesList
+     * @var InstancesNamesListInterface
      */
     private $areaInstancesNamesList;
 
@@ -41,7 +41,7 @@ class Area implements OperationInterface
 
     /**
      * @param App\AreaList $areaList
-     * @param InstancesNamesList $instancesNamesList
+     * @param InstancesNamesListInterface $instancesNamesList
      * @param Config\Reader $configReader
      * @param Config\WriterInterface $configWriter
      * @param array $data

@@ -10,7 +10,7 @@ namespace Magento\Tools\Di\Code\Reader\InstancesNamesList;
  *
  * @package Magento\Tools\Di\Code\Reader\InstancesNamesList
  */
-class Area implements \Magento\Tools\Di\Code\Reader\InstancesNamesList
+class Area implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInterface
 {
     /**
      * @var \Magento\Tools\Di\Code\Reader\ClassReaderDecorator
@@ -37,7 +37,7 @@ class Area implements \Magento\Tools\Di\Code\Reader\InstancesNamesList
     /**
      * Retrieves list of classes for given path
      *
-     * @param $path
+     * @param string $path path to dir with files
      *
      * @return array
      *
