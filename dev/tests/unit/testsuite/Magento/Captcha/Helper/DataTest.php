@@ -84,7 +84,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             'customer/captcha/enable',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue('1')
         );

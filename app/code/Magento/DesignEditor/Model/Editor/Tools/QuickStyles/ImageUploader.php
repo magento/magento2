@@ -88,7 +88,7 @@ class ImageUploader extends \Magento\Framework\Object
     /**
      * Get theme
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      * @throws \InvalidArgumentException
      */
     protected function _getTheme()

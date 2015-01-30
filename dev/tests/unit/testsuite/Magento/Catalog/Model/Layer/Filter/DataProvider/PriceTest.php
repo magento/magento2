@@ -199,23 +199,23 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     {
         return [
             Price::XML_PATH_RANGE_CALCULATION => [
-                'scope' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'scope' => \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 'value' => 111,
             ],
             Price::XML_PATH_RANGE_STEP => [
-                'scope' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'scope' => \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 'value' => 222,
             ],
             Price::XML_PATH_ONE_PRICE_INTERVAL => [
-                'scope' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'scope' => \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 'value' => 333,
             ],
             Price::XML_PATH_INTERVAL_DIVISION_LIMIT => [
-                'scope' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'scope' => \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 'value' => 444,
             ],
             Price::XML_PATH_RANGE_MAX_INTERVALS => [
-                'scope' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'scope' => \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 'value' => 555,
             ],
         ];

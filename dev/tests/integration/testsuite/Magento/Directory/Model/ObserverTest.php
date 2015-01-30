@@ -9,7 +9,7 @@
 namespace Magento\Directory\Model;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -43,15 +43,23 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = Bootstrap::getObjectManager();
 
         $this->scopeConfig = $this->objectManager->create('Magento\Framework\App\MutableScopeConfig');
-        $this->scopeConfig->setValue(Observer::IMPORT_ENABLE, 1, ScopeInterface::SCOPE_STORE);
-        $this->scopeConfig->setValue(Observer::CRON_STRING_PATH, 'cron-string-path', ScopeInterface::SCOPE_STORE);
-        $this->scopeConfig->setValue(Observer::IMPORT_SERVICE, 'webservicex', ScopeInterface::SCOPE_STORE);
+        $this->scopeConfig->setValue(Observer::IMPORT_ENABLE, 1, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+        $this->scopeConfig->setValue(
+            Observer::CRON_STRING_PATH,
+            'cron-string-path',
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+        );
+        $this->scopeConfig->setValue(
+            Observer::IMPORT_SERVICE,
+            'webservicex',
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+        );
 
         $this->configResource = $this->objectManager->get('Magento\Core\Model\Resource\Config');
         $this->configResource->saveConfig(
             $this->baseCurrencyPath,
             $this->baseCurrency,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             0
         );
 
@@ -74,7 +82,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->configResource->saveConfig(
             $this->allowedCurrenciesPath,
             $allowedCurrencies,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             0
         );
         $this->observer->scheduledUpdateCurrencyRates(null);

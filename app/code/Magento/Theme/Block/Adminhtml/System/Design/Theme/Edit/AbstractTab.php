@@ -47,7 +47,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic im
     /**
      * Get theme that is edited currently
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      */
     protected function _getCurrentTheme()
     {
