@@ -47,7 +47,7 @@ $order->setIncrementId(
 )->setShippingAddress(
     $shippingAddress
 )->setStoreId(
-    $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore('fixturestore')->getId()
+    $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore('fixturestore')->getId()
 )->addItem(
     $orderItem
 )->setPayment(

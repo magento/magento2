@@ -40,7 +40,7 @@ class SaveBilling extends \Magento\Checkout\Controller\Onepage
                         'error' => -1,
                         'message' => $this->scopeConfig->getValue(
                             'sales/minimum_order/error_message',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             $quote->getStoreId()
                         ),
                     ];

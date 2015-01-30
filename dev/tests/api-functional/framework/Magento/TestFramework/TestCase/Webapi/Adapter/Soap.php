@@ -127,10 +127,13 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         /** Sort list of services to avoid having different WSDL URLs for the identical lists of services. */
         //TODO: This may change since same resource of multiple versions may be allowed after namespace changes
         ksort($services);
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        /** @var \Magento\Framework\Store\StoreManagerInterface $storeManager */
         $storeCode = !is_null($storeCode)
             ? (string)$storeCode
-            : Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getCode();
+            : Bootstrap::getObjectManager()
+                ->get('Magento\Framework\Store\StoreManagerInterface')
+                ->getStore()
+                ->getCode();
 
         /** TESTS_BASE_URL is initialized in PHPUnit configuration */
         $wsdlUrl = rtrim(TESTS_BASE_URL, '/') . self::WSDL_BASE_PATH . '/' . $storeCode . '?wsdl=1&services=';
