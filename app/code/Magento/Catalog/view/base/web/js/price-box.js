@@ -3,24 +3,21 @@
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
-/*global Handlebars*/
 define([
     "jquery",
     "Magento_Catalog/js/price-utils",
     "underscore",
-    "handlebars",
+    "mage/template",
     "jquery/ui"
-], function ($, utils, _) {
+], function ($, utils, _, mageTemplate) {
     "use strict";
 
     var globalOptions = {
         productId: null,
         priceConfig: null,
         prices: {},
-        priceTemplate: '<span class="price">{{formatted}}</span>'
+        priceTemplate: '<span class="price"><%= formatted %></span>'
     };
-    var hbs = Handlebars.compile;
-
 
     $.widget('mage.priceBox', {
         options: globalOptions,
@@ -148,7 +145,7 @@ define([
         var box = this.element;
         var prices = this.cache.displayPrices;
         var priceFormat = this.options.priceConfig && this.options.priceConfig.priceFormat || {};
-        var priceTemplate = hbs(this.options.priceTemplate);
+        var priceTemplate = mageTemplate(this.options.priceTemplate);
 
         _.each(prices, function (price, priceCode) {
             var html,
