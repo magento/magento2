@@ -74,7 +74,7 @@ class AdvancedTest extends PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

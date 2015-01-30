@@ -13,7 +13,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_salesConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -24,13 +24,13 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {

@@ -43,7 +43,7 @@ class CarrierFactory implements CarrierFactoryInterface
     {
         $className = $this->_scopeConfig->getValue(
             'carriers/' . $carrierCode . '/model',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if (!$className) {
             return false;
@@ -64,7 +64,7 @@ class CarrierFactory implements CarrierFactoryInterface
     {
         $className = $this->_scopeConfig->getValue(
             'carriers/' . $carrierCode . '/model',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if (!$className) {
@@ -88,7 +88,7 @@ class CarrierFactory implements CarrierFactoryInterface
     {
         return $this->_scopeConfig->isSetFlag(
             'carriers/' . $carrierCode . '/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) ? $this->get(
             $carrierCode
         ) : false;
@@ -105,7 +105,7 @@ class CarrierFactory implements CarrierFactoryInterface
     {
         return $this->_scopeConfig->isSetFlag(
             'carriers/' . $carrierCode . '/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) ? $this->create(
             $carrierCode,
             $storeId

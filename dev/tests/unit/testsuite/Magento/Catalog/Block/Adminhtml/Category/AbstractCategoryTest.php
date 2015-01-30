@@ -69,7 +69,7 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManagerMock = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('\Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

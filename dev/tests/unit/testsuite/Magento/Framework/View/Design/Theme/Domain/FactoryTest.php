@@ -16,7 +16,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $themeMock = $this->getMock('Magento\Core\Model\Theme', ['__wakeup', 'getType'], [], '', false);
+        $themeMock = $this->getMock('Magento\Theme\Model\Theme', ['__wakeup', 'getType'], [], '', false);
         $themeMock->expects(
             $this->any()
         )->method(
@@ -25,7 +25,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL)
         );
 
-        $newThemeMock = $this->getMock('Magento\Core\Model\Theme', [], [], '', false);
+        $newThemeMock = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
 
         $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManager->expects(
@@ -49,7 +49,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithWrongThemeType()
     {
         $wrongThemeType = 'wrong_theme_type';
-        $themeMock = $this->getMock('Magento\Core\Model\Theme', ['__wakeup', 'getType'], [], '', false);
+        $themeMock = $this->getMock('Magento\Theme\Model\Theme', ['__wakeup', 'getType'], [], '', false);
         $themeMock->expects($this->any())->method('getType')->will($this->returnValue($wrongThemeType));
 
         $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');

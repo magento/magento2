@@ -47,7 +47,7 @@ class EraserTest extends \PHPUnit_Framework_TestCase
             [2, 'store_2_flat'],
         ]));
 
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->model = new \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser(
             $resource,
             $this->indexerHelper,

@@ -6,10 +6,10 @@
 
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
 $websiteId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Store\Model\StoreManagerInterface'
+    'Magento\Framework\Store\StoreManagerInterface'
 )->getWebsite()->getId();
 $groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Store\Model\StoreManagerInterface'
+    'Magento\Framework\Store\StoreManagerInterface'
 )->getWebsite()->getDefaultGroupId();
 $store->setCode(
     'fixture_second_store'
@@ -28,5 +28,5 @@ $store->save();
 
 /* Refresh stores memory cache */
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Store\Model\StoreManagerInterface'
+    'Magento\Framework\Store\StoreManagerInterface'
 )->reinitStores();

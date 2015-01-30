@@ -40,7 +40,7 @@ class Store extends \Magento\Framework\Object
     private $_isAdminScopeAllowed = true;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -48,9 +48,9 @@ class Store extends \Magento\Framework\Object
      * Init model
      * Load Website, Group and Store collections
      *
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Framework\Store\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
         return $this->reload();
@@ -406,13 +406,13 @@ class Store extends \Magento\Framework\Object
             $this->_loadStoreCollection();
         } else {
             switch ($type) {
-                case \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE:
+                case \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE:
                     $this->_loadWebsiteCollection();
                     break;
-                case \Magento\Store\Model\ScopeInterface::SCOPE_GROUP:
+                case \Magento\Framework\Store\ScopeInterface::SCOPE_GROUP:
                     $this->_loadGroupCollection();
                     break;
-                case \Magento\Store\Model\ScopeInterface::SCOPE_STORE:
+                case \Magento\Framework\Store\ScopeInterface::SCOPE_STORE:
                     $this->_loadStoreCollection();
                     break;
                 default:
