@@ -29,7 +29,7 @@ try {
 
     $shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer(), $logger);
 
-    $application = new \Magento\ToolkitFramework\Application($applicationBaseDir, $shell);
+    $application = new \Magento\ToolkitFramework\Application($applicationBaseDir, $shell, []);
     $application->bootstrap();
     $application->loadFixtures();
 

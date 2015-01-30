@@ -131,33 +131,6 @@ class Application
     }
 
     /**
-     * Work on application, so that it has all and only $fixtures applied. May require reinstall, if
-     * excessive fixtures has been applied before.
-     *
-     * @param array $fixtures
-     *
-     * @return void
-     */
-    public function applyFixtures(array $fixtures)
-    {
-        // Apply fixtures
-        $fixturesToApply = array_diff($fixtures, $this->_fixtures);
-        if (!$fixturesToApply) {
-            return;
-        }
-
-        $this->_bootstrap();
-        foreach ($fixturesToApply as $fixtureFile) {
-            $this->applyFixture($fixtureFile);
-        }
-        $this->_fixtures = $fixtures;
-
-        $this->reindex()
-            ->_updateFilesystemPermissions();
-    }
-
-
-    /**
      * Load fixtures
      *
      * @return $this
@@ -201,18 +174,6 @@ class Application
     public function getFixtures()
     {
         return $this->_fixtures;
-    }
-
-    /**
-     * Apply fixture file
-     *
-     * @param string $fixtureFilename
-     *
-     * @return void
-     */
-    public function applyFixture($fixtureFilename)
-    {
-        require $fixtureFilename;
     }
 
     /**
