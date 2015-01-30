@@ -256,7 +256,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testSetUseCookiesInOptions()
     {
         $this->_model->setUseCookies(true);
-        $this->assertTrue($value, (bool)$this->_model->getUseCookies());
+        $this->assertTrue((bool)$this->_model->getUseCookies());
     }
 
     public function testUseOnlyCookiesDefaultsToIniSettings()
@@ -267,7 +267,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testSetUseOnlyCookiesInOptions()
     {
         $this->_model->setOption('use_only_cookies', true);
-        $this->assertTrue($value, (bool)$this->_model->getOption('use_only_cookies'));
+        $this->assertTrue((bool)$this->_model->getOption('use_only_cookies'));
     }
 
     public function testRefererCheckDefaultsToIniSettings()
