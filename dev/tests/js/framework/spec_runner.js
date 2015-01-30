@@ -17,7 +17,7 @@ function buildConfig(type, dir, port) {
         src: '<%= path.spec %>/shim.js',
         options: {
             host: 'http://localhost:' + port,
-            specs: '<%= path.spec %>/' + type + '/**/' + dir + '/**/*Spec.js',
+            specs: '<%= path.spec %>/' + type + '/**/' + dir + '/**/*.js',
             templateOptions: {
                 requireConfigFile: [
                     '<%= path.spec %>/require.config.js',
