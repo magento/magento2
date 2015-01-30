@@ -136,7 +136,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 'getValue'
             )->with(
                 $dependentPath,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 self::STORE_CODE
             )->will(
                 $this->returnValue(self::VALUE_IN_STORE)

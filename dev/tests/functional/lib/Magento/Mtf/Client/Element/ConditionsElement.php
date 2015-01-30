@@ -192,8 +192,12 @@ class ConditionsElement extends SimpleElement
     protected function addConditionsCombination($condition, ElementInterface $context)
     {
         $condition = $this->parseCondition($condition);
+
+        $this->driver->selectWindow();
         $newCondition = $context->find($this->newCondition, Locator::SELECTOR_XPATH);
         $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
+
+        $this->driver->selectWindow();
         $typeNewCondition = $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select');
         $typeNewCondition->setValue($condition['type']);
 
@@ -235,16 +239,23 @@ class ConditionsElement extends SimpleElement
     {
         $condition = $this->parseCondition($condition);
 
+        $this->driver->selectWindow();
         $newCondition = $context->find($this->newCondition, Locator::SELECTOR_XPATH);
         $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
+
         $typeNew = $this->typeNew;
         $newCondition->waitUntil(
             function () use ($newCondition, $typeNew) {
                 $element = $newCondition->find($typeNew, Locator::SELECTOR_XPATH, 'select');
-                return $element->isVisible() ? true : null;
+                if ($element->isVisible()) {
+                    return true;
+                }
+                $this->driver->selectWindow();
+                return null;
             }
         );
         $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select')->setValue($condition['type']);
+
         $createdCondition = $context->find($this->created, Locator::SELECTOR_XPATH);
         $this->waitForCondition($createdCondition);
         $this->fillCondition($condition['rules'], $createdCondition);
@@ -264,6 +275,8 @@ class ConditionsElement extends SimpleElement
         foreach ($rules as $rule) {
             /** @var ElementInterface $param */
             $param = $this->findNextParam($element);
+
+            $this->driver->selectWindow();
             $param->find('a')->click();
 
             if (preg_match('`%(.*?)%`', $rule, $chooserGrid)) {
@@ -392,7 +405,11 @@ class ConditionsElement extends SimpleElement
     {
         $this->waitUntil(
             function () use ($element) {
-                return $element->getAttribute('class') == 'rule-param-wait' ? null : true;
+                if ($element->getAttribute('class') == 'rule-param-wait') {
+                    $this->driver->selectWindow();
+                    return null;
+                }
+                return true;
             }
         );
     }

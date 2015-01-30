@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
+
+class IndexTest extends \Magento\Backend\Utility\Controller
+{
+    /**
+     * Test index action
+     */
+    public function testIndexAction()
+    {
+        $this->dispatch('backend/admin/system_currency/index');
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('id="rate-form"', $body);
+        $this->assertContains('save primary save-currency-rates', $body);
+        $this->assertContains('data-ui-id="page-actions-toolbar-reset-button"', $body);
+    }
+}

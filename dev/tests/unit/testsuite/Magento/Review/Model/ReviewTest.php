@@ -37,7 +37,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Review\Model\Review\Summary|\PHPUnit_Framework_MockObject_MockObject */
     protected $summaryMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
 
     /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -82,7 +82,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->summaryMock = $this->getMock('Magento\Review\Model\Review\Summary', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->urlInterfaceMock = $this->getMock('Magento\Framework\UrlInterface');
         $this->resource = $this->getMock('Magento\Review\Model\Resource\Review', [], [], '', false);
 

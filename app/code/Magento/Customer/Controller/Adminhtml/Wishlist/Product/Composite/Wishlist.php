@@ -46,11 +46,8 @@ class Wishlist extends \Magento\Backend\App\Action
             throw new CoreException(__('Please load the wish list item.'));
         }
 
-        $this->_wishlist = $this->_objectManager->create(
-            'Magento\Wishlist\Model\Wishlist'
-        )->load(
-            $wishlistItem->getWishlistId()
-        );
+        $this->_wishlist = $this->_objectManager->create('Magento\Wishlist\Model\Wishlist')
+            ->load($wishlistItem->getWishlistId());
 
         $this->_wishlistItem = $wishlistItem;
 

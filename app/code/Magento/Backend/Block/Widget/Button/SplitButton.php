@@ -123,7 +123,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
         }
 
         $attributes = ['title' => $title, 'class' => join(' ', $classes), 'disabled' => $disabled];
-        $this->_getDataAttributes(['toggle' => 'dropdown'], $attributes);
+        $this->_getDataAttributes(['mage-init' => '{"dropdown": {}}', 'toggle' => 'dropdown'], $attributes);
 
         $html = $this->_getAttributesString($attributes);
         $html .= $this->getUiId('dropdown');

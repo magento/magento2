@@ -115,12 +115,12 @@ return [
     ['RULE_PERM_ALLOW', '\Magento\Framework\Math\Random'],
     ['RULE_PERM_DENY', '\Magento\Framework\Math\Random'],
     ['RULE_PERM_INHERIT', '\Magento\Framework\Math\Random'],
-    ['SCOPE_TYPE_GROUP', 'Magento\Core\Model\App', 'Magento\Store\Model\ScopeInterface::SCOPE_GROUP'],
-    ['SCOPE_TYPE_STORE', 'Magento\Core\Model\App', 'Magento\Store\Model\ScopeInterface::SCOPE_STORE'],
+    ['SCOPE_TYPE_GROUP', 'Magento\Core\Model\App', 'Magento\Framework\Store\ScopeInterface::SCOPE_GROUP'],
+    ['SCOPE_TYPE_STORE', 'Magento\Core\Model\App', 'Magento\Framework\Store\ScopeInterface::SCOPE_STORE'],
     [
         'SCOPE_TYPE_WEBSITE',
         'Magento\Core\Model\App',
-        'Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE'
+        'Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE'
     ],
     ['SEESION_MAX_COOKIE_LIFETIME'],
     ['TYPE_BINARY', null, 'Magento_DB_Ddl_Table::TYPE_BLOB'],

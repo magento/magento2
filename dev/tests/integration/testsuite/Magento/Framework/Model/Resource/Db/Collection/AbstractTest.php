@@ -42,7 +42,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         );
 
         $entityFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\EntityFactory'
+            'Magento\Framework\Data\Collection\EntityFactory'
         );
         $logger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Psr\Log\LoggerInterface');
 
