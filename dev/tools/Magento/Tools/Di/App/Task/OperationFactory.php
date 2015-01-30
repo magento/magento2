@@ -28,6 +28,11 @@ class OperationFactory
     const INTERCEPTION_CACHE = 'interception_cache';
 
     /**
+     * Repository generator
+     */
+    const REPOSITORY_GENERATOR = 'repository_generator';
+
+    /**
      * Operations definitions
      *
      * @var array
@@ -36,6 +41,7 @@ class OperationFactory
         self::AREA => 'Magento\Tools\Di\App\Task\Operation\Area',
         self::INTERCEPTION => 'Magento\Tools\Di\App\Task\Operation\Interception',
         self::INTERCEPTION_CACHE => 'Magento\Tools\Di\App\Task\Operation\InterceptionCache',
+        self::REPOSITORY_GENERATOR => 'Magento\Tools\Di\App\Task\Operation\RepositoryGenerator'
     ];
 
     /**
@@ -62,6 +68,7 @@ class OperationFactory
                 OperationException::UNAVAILABLE_OPERATION
             );
         }
+
         return $this->objectManager->create($this->operationsDefinitions[$operationAlias], ['data' => $arguments]);
     }
 }
