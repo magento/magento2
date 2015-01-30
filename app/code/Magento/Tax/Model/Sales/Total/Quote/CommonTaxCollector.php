@@ -113,9 +113,9 @@ class CommonTaxCollector extends AbstractTotal
     protected $quoteDetailsBuilder;
 
     /**
-     * @var CustomerAddressInterface
+     * @var CustomerAddressFactory
      */
-    protected $customerAddressInterface;
+    protected $customerAddressFactory;
 
     /**
      * @var CustomerAddressRegionFactory
