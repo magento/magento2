@@ -85,7 +85,7 @@ class Items extends \Magento\Backend\App\Action
     public function _getStore()
     {
         $store = $this->_objectManager->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\Store\StoreManagerInterface'
         )->getStore(
             (int)$this->getRequest()->getParam('store', 0)
         );
