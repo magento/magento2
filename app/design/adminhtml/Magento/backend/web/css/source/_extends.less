@@ -33,3 +33,30 @@ button {
         margin-left: 3px;
     }
 }
+
+//  Visually hidden
+.abs-visually-hidden {
+    .visually-hidden();
+}
+
+.extend__visually-hidden() {
+    &:extend(.abs-visually-hidden all);
+}
+
+//  Clearfix
+.abs-clearfix {
+    .clearfix();
+}
+
+.extend__clearfix() {
+    &:extend(.abs-clearfix all);
+}
+
+//  Reset list styles
+.abs-list-reset-styles {
+    .list-reset-styles();
+}
+
+.extend__list-reset-styles() {
+    &:extend(.abs-list-reset-styles all);
+}
