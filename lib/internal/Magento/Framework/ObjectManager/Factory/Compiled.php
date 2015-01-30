@@ -22,33 +22,28 @@ class Compiled extends AbstractFactory
         $type = $this->config->getInstanceType($requestedType);
         $requestedType = ltrim($requestedType, '\\');
         $args = $this->config->getArguments($requestedType);
-        if ($args == null) {
+        if ($args === null) {
             return new $type();
         }
 
         foreach ($args as $key => &$argument) {
             if (isset($arguments[$key])) {
                 $argument = $arguments[$key];
-            } else {
+            } elseif (isset($argument['_i_'])) {
+                if ($argument['_s_']) {
+                    $argument = $this->objectManager->get($argument['_i_']);
+                } else {
+                    $argument = $this->objectManager->create($argument['_i_']);
+                }
+            } elseif (isset($argument['_v_'])) {
+                $argument = $argument['_v_'];
                 if ($argument === (array)$argument) {
-                    if (isset($argument['_v_'])) {
-                        $argument = $argument['_v_'];
-                        if ($argument === (array)$argument) {
-                            $this->parseArray($argument);
-                        }
-                    } elseif (isset($argument['_i_'])) {
-                        if ($argument['_s_']) {
-                            $argument = $this->objectManager->get($argument['_i_']);
-                        } else {
-                            $argument = $this->objectManager->create($argument['_i_']);
-                        }
-                    } elseif (isset($argument['_a_'])) {
-                        if (isset($this->globalArguments[$argument['_a_']])) {
-                            $argument = $this->globalArguments[$argument['_a_']];
-                        } else {
-                            $argument = $argument['_d_'];
-                        }
-                    }
+                    $this->parseArray($argument);
+                }
+            } elseif (isset($argument['_a_'])) {
+                $argument = $argument['_d_'];
+                if (isset($this->globalArguments[$argument['_a_']])) {
+                    $argument = $this->globalArguments[$argument['_a_']];
                 }
             }
         }
@@ -73,23 +68,23 @@ class Compiled extends AbstractFactory
      */
     protected function parseArray(&$array)
     {
-        foreach ($array as $key => $item) {
-            if ($item === (array)$item) {
-                if (isset($item['_i_'])) {
-                    if ($item['_s_']) {
-                        $array[$key] = $this->objectManager->get($item['_i_']);
+        foreach ($array as $key => &$argument) {
+            if ($argument === (array)$argument) {
+                if (isset($argument['_i_'])) {
+                    if ($argument['_s_']) {
+                        $argument = $this->objectManager->get($argument['_i_']);
                     } else {
-                        $array[$key] = $this->objectManager->create($item['_i_']);
+                        $argument = $this->objectManager->create($argument['_i_']);
                     }
 
-                } elseif (isset($item['_a_'])) {
-                    if (isset($this->globalArguments[$item['_a_']])) {
-                        $array[$key] = $this->globalArguments[$item['_a_']];
+                } elseif (isset($argument['_a_'])) {
+                    if (isset($this->globalArguments[$argument['_a_']])) {
+                        $argument = $this->globalArguments[$argument['_a_']];
                     } else {
-                        $array[$key] = $item['_d_'];
+                        $argument = $argument['_d_'];
                     }
                 } else {
-                    $this->parseArray($array[$key]);
+                    $this->parseArray($argument);
                 }
             }
         }
