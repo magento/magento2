@@ -74,6 +74,11 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Dependency\Shared\StdClass')
             ->willReturn(new \StdClass);
+        $this->factory->setArguments(
+            [
+                'globalValue' => 'GLOBAL_ARGUMENT',
+            ]
+        );
 
         /** @var \Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting $result */
         $result = $this->factory->create($requestedType, []);
@@ -86,6 +91,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('StdClass', $result->getNonSharedDependency());
         $this->assertEquals('value', $result->getValue());
         $this->assertEquals(['default_value1', 'default_value2'], $result->getValueArray());
+        $this->assertEquals('GLOBAL_ARGUMENT', $result->getGlobalValue());
     }
 
     public function testCreateSimpleConfiguredArguments()
@@ -111,7 +117,12 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Dependency\Shared\StdClass')
             ->willReturn(new \StdClass);
-        $this->factory->setArguments(['array_global_existing_argument' => 'GLOBAL_ARGUMENT']);
+        $this->factory->setArguments(
+            [
+                'array_global_existing_argument' => 'GLOBAL_ARGUMENT',
+                'globalValue' => 'GLOBAL_ARGUMENT',
+            ]
+        );
 
         /** @var \Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting $result */
         $result = $this->factory->create($requestedType, []);
@@ -137,6 +148,8 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             ],
             $result->getValueArray()
         );
+        $this->assertEquals('GLOBAL_ARGUMENT', $result->getGlobalValue());
+
     }
 
     /**
@@ -147,11 +160,11 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     private function getSimpleConfig()
     {
         return [
-            'type_dependency' => [
+            'nonSharedDependency' => [
                 '_i_' => 'Dependency\StdClass',
                 '_s_' => false,
             ],
-            'type_dependency_shared' => [
+            'sharedDependency' => [
                 '_i_' => 'Dependency\Shared\StdClass',
                 '_s_' => true,
             ],
@@ -161,6 +174,10 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             'value_array' => [
                 '_v_' => ['default_value1', 'default_value2'],
             ],
+            'globalValue' => [
+                '_a_' => 'globalValue',
+                '_d_' => null
+            ]
         ];
     }
 
@@ -172,11 +189,11 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     private function getSimpleNestedConfig()
     {
         return [
-            'type_dependency' => [
+            'nonSharedDependency' => [
                 '_i_' => 'Dependency\StdClass',
                 '_s_' => false,
             ],
-            'type_dependency_shared' => [
+            'sharedDependency' => [
                 '_i_' => 'Dependency\Shared\StdClass',
                 '_s_' => true,
             ],
@@ -210,6 +227,10 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                         '_d_' => 'DEFAULT_VALUE'
                     ]
                 ],
+            ],
+            'globalValue' => [
+                '_a_' => 'globalValue',
+                '_d_' => null
             ]
         ];
     }

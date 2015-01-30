@@ -12,24 +12,33 @@ class SimpleClassTesting
      * @var \StdClass
      */
     private $nonSharedDependency;
+
     /**
      * @var \StdClass
      */
     private $sharedDependency;
+
     /**
      * @var string
      */
     private $value;
+
     /**
      * @var array
      */
     private $valueArray;
 
     /**
+     * @var string
+     */
+    private $globalValue;
+
+    /**
      * @param \StdClass $nonSharedDependency
      * @param \StdClass $sharedDependency
      * @param string $value
      * @param array $valueArray
+     * @param string $globalValue
      */
     public function __construct(
         \StdClass $nonSharedDependency,
@@ -38,13 +47,23 @@ class SimpleClassTesting
         array $valueArray = [
             'default_value1',
             'default_value2'
-        ]
+        ],
+        $globalValue = ''
     ) {
 
         $this->nonSharedDependency = $nonSharedDependency;
         $this->sharedDependency = $sharedDependency;
         $this->value = $value;
         $this->valueArray = $valueArray;
+        $this->globalValue = $globalValue;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGlobalValue()
+    {
+        return $this->globalValue;
     }
 
     /**

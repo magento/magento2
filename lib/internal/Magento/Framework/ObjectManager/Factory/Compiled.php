@@ -41,9 +41,10 @@ class Compiled extends AbstractFactory
                     $this->parseArray($argument);
                 }
             } elseif (isset($argument['_a_'])) {
-                $argument = $argument['_d_'];
                 if (isset($this->globalArguments[$argument['_a_']])) {
                     $argument = $this->globalArguments[$argument['_a_']];
+                } else {
+                    $argument = $argument['_d_'];
                 }
             }
         }
