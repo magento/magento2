@@ -86,7 +86,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->getMock('\Magento\Framework\App\Request\Http', ['getParam'], [], '', false);
         $this->response = $this->getMock('\Magento\Framework\App\Response\Http', ['setRedirect'], [], '', false);
         $this->formKeyValidator = $this->getMock(
-            '\Magento\Core\App\Action\FormKeyValidator',
+            'Magento\Core\App\Action\Validator',
             ['validate'],
             [],
             '',

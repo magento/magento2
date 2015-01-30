@@ -133,7 +133,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_formKeyValidator = $this->getMock(
-            'Magento\Framework\Data\Form\FormKey\FormKeyValidator',
+            'Magento\Framework\Data\Form\FormKey\Validator',
             [],
             [],
             '',
