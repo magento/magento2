@@ -185,9 +185,12 @@ class VerboseValidator
     /**
      * Validates the parameters.
      *
-     * @param $expectedParams
-     * @param $userParams
+     * @param array $expectedParams
+     * @param array $userParams
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function validateParameters($expectedParams, $userParams)
     {

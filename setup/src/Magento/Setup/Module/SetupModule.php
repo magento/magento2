@@ -216,11 +216,11 @@ class SetupModule extends Setup
         $arrRes = [];
         switch ($actionType) {
             case self::TYPE_DB_INSTALL:
-                $arrRes = $this->prepareDbInstallFileCollection($toVersion, $arrFiles, $arrRes);
+                $arrRes = $this->prepareDbInstallFileCollection($toVersion, $arrFiles);
                 break;
 
             case self::TYPE_DB_UPGRADE:
-                $arrRes = $this->prepareDbUpgradeFileCollection($fromVersion, $toVersion, $arrFiles, $arrRes);
+                $arrRes = $this->prepareDbUpgradeFileCollection($fromVersion, $toVersion, $arrFiles);
                 break;
 
             default:
@@ -247,13 +247,13 @@ class SetupModule extends Setup
     /**
      * Get the files to do data modification during an install.
      *
-     * @param $toVersion
-     * @param $arrFiles
-     * @param $arrRes
-     * @return mixed
+     * @param string $toVersion
+     * @param array $arrFiles
+     * @return array
      */
-    private function prepareDbInstallFileCollection($toVersion, $arrFiles, $arrRes)
+    private function prepareDbInstallFileCollection($toVersion, $arrFiles)
     {
+        $arrRes = [];
         uksort($arrFiles, 'version_compare');
         foreach ($arrFiles as $version => $file) {
             if (version_compare($version, $toVersion, '<=')) {
@@ -269,14 +269,14 @@ class SetupModule extends Setup
     /**
      * Get the files to do data modification during an upgrade.
      *
-     * @param $fromVersion
-     * @param $toVersion
-     * @param $arrFiles
-     * @param $arrRes
+     * @param string $fromVersion
+     * @param string $toVersion
+     * @param array $arrFiles
      * @return array
      */
-    private function prepareDbUpgradeFileCollection($fromVersion, $toVersion, $arrFiles, $arrRes)
+    private function prepareDbUpgradeFileCollection($fromVersion, $toVersion, $arrFiles)
     {
+        $arrRes = [];
         uksort($arrFiles, 'version_compare');
         foreach ($arrFiles as $version => $file) {
             $versionInfo = explode('-', $version);
