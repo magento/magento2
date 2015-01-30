@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php if ($_entity = $this->getEntity()): ?>
+<?php if ($_entity = $block->getEntity()): ?>
 <div id="comments_block">
     <div class="field-row">
         <label class="normal" for="history_comment"><?php echo __('Comment Text') ?></label>
@@ -15,10 +15,10 @@
     </div>
     <div class="clearfix">
         <div class="actions">
-            <?php echo $this->getChildHtml('submit_button') ?>
+            <?php echo $block->getChildHtml('submit_button') ?>
         </div>
         <div class="order-history-comments-options">
-            <?php if ($this->canSendCommentEmail()): ?>
+            <?php if ($block->canSendCommentEmail()): ?>
                 <input name="comment[is_customer_notified]" type="checkbox" id="history_notify" value="1" /><label class="normal" for="history_notify"><?php echo __('Notify Customer by Email') ?></label><br />
             <?php endif; ?>
             <input name="comment[is_visible_on_front]" type="checkbox" id="history_visible" value="1" /><label class="normal" for="history_visible"> <?php echo __('Visible on Frontend') ?></label>
@@ -27,8 +27,8 @@
     <ul class="note-list">
     <?php foreach ($_entity->getCommentsCollection(true) as $_comment): ?>
         <li>
-            <span class="note-list-date"><?php echo $this->formatDate($_comment->getCreatedAtDate(), 'medium') ?></span>
-            <span class="note-list-time"><?php echo $this->formatTime($_comment->getCreatedAtDate(), 'medium') ?></span>
+            <span class="note-list-date"><?php echo $block->formatDate($_comment->getCreatedAtDate(), 'medium') ?></span>
+            <span class="note-list-time"><?php echo $block->formatTime($_comment->getCreatedAtDate(), 'medium') ?></span>
             <span class="note-list-customer">
                 <?php echo __('Customer') ?>
                 <?php if ($_comment->getIsCustomerNotified()): ?>
@@ -37,7 +37,7 @@
                     <span class="note-list-customer-not-notified"><?php echo __('Not Notified') ?></span>
                 <?php endif; ?>
             </span>
-            <div class="note-list-comment"><?php echo $this->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u']) ?></div>
+            <div class="note-list-comment"><?php echo $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u']) ?></div>
         </li>
     <?php endforeach; ?>
     </ul>
@@ -46,7 +46,7 @@
 require(['prototype'], function(){
 
 submitComment = function() {
-    submitAndReloadArea($('comments_block').parentNode, '<?php echo $this->getSubmitUrl() ?>')
+    submitAndReloadArea($('comments_block').parentNode, '<?php echo $block->getSubmitUrl() ?>')
 }
 
 if ($('submit_comment_button')) {

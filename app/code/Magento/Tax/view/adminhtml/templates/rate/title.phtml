@@ -8,8 +8,8 @@
 
 ?>
 <div id="tax-rate-titles-table" class="form-inline">
-    <?php $_labels = $this->getTitles() ?>
-    <?php foreach ($this->getStores() as $_store): ?>
+    <?php $_labels = $block->getTitles() ?>
+    <?php foreach ($block->getStores() as $_store): ?>
         <div class="field">
             <label class="label"><span><?php echo $_store->getName() ?></span></label>
             <div class="control">

@@ -5,14 +5,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  *
- * @var \Magento\Webapi\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi $this
+ * @var \Magento\Webapi\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi $block
  */
 
 // @codingStandardsIgnoreFile
 
 ?>
 <fieldset class="fieldset form-inline entry-edit">
-    <?php if ($this->isTreeEmpty()): ?>
+    <?php if ($block->isTreeEmpty()): ?>
         <p class="empty"><?php echo __('No permissions requested'); ?></p>
     <?php else: ?>
         <div class="field" data-role="tree-resources-container">
@@ -22,7 +22,7 @@
         </div>
     <?php endif ?>
 </fieldset>
-<?php if (!$this->isTreeEmpty()): ?>
+<?php if (!$block->isTreeEmpty()): ?>
     <script>
 require(["jquery", "Magento_User/js/roles-tree"], function($){
 
@@ -36,8 +36,8 @@ require(["jquery", "Magento_User/js/roles-tree"], function($){
     });
 
     $('[data-role="resource-tree"]').rolesTree({
-        'treeInitData': <?php echo $this->getResourcesTreeJson() ?>,
-        'treeInitSelectedData': <?php echo $this->getSelectedResourcesJson() ?>
+        'treeInitData': <?php echo $block->getResourcesTreeJson() ?>,
+        'treeInitSelectedData': <?php echo $block->getSelectedResourcesJson() ?>
     });
 
 });
