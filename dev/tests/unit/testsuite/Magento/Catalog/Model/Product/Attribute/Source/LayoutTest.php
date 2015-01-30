@@ -24,9 +24,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         $this->pageLayoutBuilder = $this->getMockBuilder(
             'Magento\Framework\View\Model\PageLayout\Config\BuilderInterface'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->layoutModel = $this->objectManagerHelper->getObject(
