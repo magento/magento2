@@ -13,21 +13,23 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
     /**
      * @var \Magento\Backend\App\ConfigInterface
      */
-    protected $_config;
+    protected $config;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\App\Config\Helper\Data
      */
-    protected $_helper;
+    protected $configHelper;
 
     /**
      * @param \Magento\Backend\App\ConfigInterface $config
-     * @param \Magento\Core\Helper\Data $helper
+     * @param \Magento\Framework\App\Config\Helper\Data $helper
      */
-    public function __construct(\Magento\Backend\App\ConfigInterface $config, \Magento\Core\Helper\Data $helper)
-    {
-        $this->_config = $config;
-        $this->_helper = $helper;
+    public function __construct(
+        \Magento\Backend\App\ConfigInterface $config,
+        \Magento\Framework\App\Config\Helper\Data $helper
+    ) {
+        $this->config = $config;
+        $this->configHelper = $helper;
     }
 
     /**
@@ -35,7 +37,7 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
      */
     public function isActive($scope = null)
     {
-        return $this->_config->isSetFlag('dev/translate_inline/active_admin');
+        return $this->config->isSetFlag('dev/translate_inline/active_admin');
     }
 
     /**
@@ -43,6 +45,6 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
      */
     public function isDevAllowed($scope = null)
     {
-        return $this->_helper->isDevAllowed($scope);
+        return $this->configHelper->isDevAllowed($scope);
     }
 }

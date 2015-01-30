@@ -10,6 +10,8 @@
 
 namespace Magento\Core\Model\TemplateEngine\Plugin;
 
+use Magento\Store\Model\ScopeInterface;
+
 class DebugHints
 {
     /**#@+
@@ -24,31 +26,31 @@ class DebugHints
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $_objectManager;
+    private $objectManager;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    private $_scopeConfig;
+    private $scopeConfig;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\App\Config\Helper\Data
      */
-    private $_coreData;
+    private $configHelper;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\App\Config\Helper\Data $configHelper
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Core\Helper\Data $coreData
+        \Magento\Framework\App\Config\Helper\Data $configHelper
     ) {
-        $this->_objectManager = $objectManager;
-        $this->_scopeConfig = $scopeConfig;
-        $this->_coreData = $coreData;
+        $this->objectManager = $objectManager;
+        $this->scopeConfig = $scopeConfig;
+        $this->configHelper = $configHelper;
     }
 
     /**
@@ -64,9 +66,13 @@ class DebugHints
         \Magento\Framework\View\TemplateEngineFactory $subject,
         \Magento\Framework\View\TemplateEngineInterface $invocationResult
     ) {
-        if ($this->_scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE) && $this->_coreData->isDevAllowed()) {
-            $showBlockHints = $this->_scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-            return $this->_objectManager->create(
+        if ($this->scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS, ScopeInterface::SCOPE_STORE) &&
+            $this->configHelper->isDevAllowed()) {
+            $showBlockHints = $this->scopeConfig->getValue(
+                self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS,
+                ScopeInterface::SCOPE_STORE
+            );
+            return $this->objectManager->create(
                 'Magento\Core\Model\TemplateEngine\Decorator\DebugHints',
                 ['subject' => $invocationResult, 'showBlockHints' => $showBlockHints]
             );

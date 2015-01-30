@@ -10,22 +10,22 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var DebugHints
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectManager;
+    protected $objectManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_scopeConfig;
+    protected $scopeConfigMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_coreData;
+    protected $configHelperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -34,9 +34,9 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_coreData = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->configHelperMock = $this->getMock('Magento\Framework\App\Config\Helper\Data', [], [], '', false);
         $this->subjectMock = $this->getMock(
             'Magento\Framework\View\TemplateEngineFactory',
             [],
@@ -44,7 +44,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_model = new DebugHints($this->_objectManager, $this->_scopeConfig, $this->_coreData);
+        $this->model = new DebugHints($this->objectManagerMock, $this->scopeConfigMock, $this->configHelperMock);
     }
 
     /**
@@ -53,11 +53,11 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterCreateActive($showBlockHints)
     {
-        $this->_coreData->expects($this->once())->method('isDevAllowed')->will($this->returnValue(true));
+        $this->configHelperMock->expects($this->once())->method('isDevAllowed')->will($this->returnValue(true));
         $this->_setupConfigFixture(true, $showBlockHints);
         $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
         $engineDecorated = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
-        $this->_objectManager->expects(
+        $this->objectManagerMock->expects(
             $this->once()
         )->method(
             'create'
@@ -67,7 +67,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($engineDecorated)
         );
-        $this->assertEquals($engineDecorated, $this->_model->afterCreate($this->subjectMock, $engine));
+        $this->assertEquals($engineDecorated, $this->model->afterCreate($this->subjectMock, $engine));
     }
 
     public function afterCreateActiveDataProvider()
@@ -82,11 +82,11 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterCreateInactive($isDevAllowed, $showTemplateHints)
     {
-        $this->_coreData->expects($this->any())->method('isDevAllowed')->will($this->returnValue($isDevAllowed));
+        $this->configHelperMock->expects($this->any())->method('isDevAllowed')->will($this->returnValue($isDevAllowed));
         $this->_setupConfigFixture($showTemplateHints, true);
-        $this->_objectManager->expects($this->never())->method('create');
+        $this->objectManagerMock->expects($this->never())->method('create');
         $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface', [], [], '', false);
-        $this->assertSame($engine, $this->_model->afterCreate($this->subjectMock, $engine));
+        $this->assertSame($engine, $this->model->afterCreate($this->subjectMock, $engine));
     }
 
     public function afterCreateInactiveDataProvider()
@@ -106,7 +106,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
      */
     protected function _setupConfigFixture($showTemplateHints, $showBlockHints)
     {
-        $this->_scopeConfig->expects(
+        $this->scopeConfigMock->expects(
             $this->atLeastOnce()
         )->method(
             'getValue'

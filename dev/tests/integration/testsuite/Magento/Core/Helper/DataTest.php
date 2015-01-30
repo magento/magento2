@@ -28,44 +28,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_dateTime->setTimezone(new \DateTimeZone(self::DATE_TIMEZONE));
     }
 
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testIsDevAllowedDefault()
-    {
-        $this->assertTrue($this->_helper->isDevAllowed());
-    }
-
-    /**
-     * @magentoConfigFixture current_store dev/restrict/allow_ips 192.168.0.1
-     * @magentoAppIsolation enabled
-     */
-    public function testIsDevAllowedTrue()
-    {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var \Magento\TestFramework\Request $request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
-        $request->setServer(['REMOTE_ADDR' => '192.168.0.1']);
-
-        $this->assertTrue($this->_helper->isDevAllowed());
-    }
-
-    /**
-     * @magentoConfigFixture current_store dev/restrict/allow_ips 192.168.0.1
-     * @magentoAppIsolation enabled
-     */
-    public function testIsDevAllowedFalse()
-    {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var \Magento\TestFramework\Request $request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
-        $request->setServer(['REMOTE_ADDR' => '192.168.0.3']);
-
-        $this->assertFalse($this->_helper->isDevAllowed());
-    }
-
     public function testJsonEncodeDecode()
     {
         $data = ['one' => 1, 'two' => 'two'];

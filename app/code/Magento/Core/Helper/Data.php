@@ -26,7 +26,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
     const XML_PATH_DEFAULT_TIMEZONE = 'general/locale/timezone';
     const XML_PATH_DEFAULT_COUNTRY = 'general/country/default';
-    const XML_PATH_DEV_ALLOW_IPS = 'dev/restrict/allow_ips';
     const XML_PATH_CONNECTION_TYPE = 'global/resources/default_setup/connection/type';
     /**#@- */
 
@@ -78,32 +77,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_appState = $appState;
-    }
-
-    /**
-     * @param null $storeId
-     * @return bool
-     */
-    public function isDevAllowed($storeId = null)
-    {
-        $allow = true;
-
-        $allowedIps = $this->_scopeConfig->getValue(
-            self::XML_PATH_DEV_ALLOW_IPS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-        $remoteAddr = $this->_remoteAddress->getRemoteAddress();
-        if (!empty($allowedIps) && !empty($remoteAddr)) {
-            $allowedIps = preg_split('#\s*,\s*#', $allowedIps, null, PREG_SPLIT_NO_EMPTY);
-            if (array_search($remoteAddr, $allowedIps) === false
-                && array_search($this->_httpHeader->getHttpHost(), $allowedIps) === false
-            ) {
-                $allow = false;
-            }
-        }
-
-        return $allow;
     }
 
     /**
