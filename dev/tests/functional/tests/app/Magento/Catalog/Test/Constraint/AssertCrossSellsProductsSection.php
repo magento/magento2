@@ -11,11 +11,9 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class AssertCrossSellsProductsSection
- * Assert that product is displayed in cross-sell section
+ * Assert that product is displayed in cross-sell section.
  */
 class AssertCrossSellsProductsSection extends AbstractConstraint
 {
@@ -24,30 +22,30 @@ class AssertCrossSellsProductsSection extends AbstractConstraint
     /* end tags */
 
     /**
-     * Assert that product is displayed in cross-sell section
+     * Assert that product is displayed in cross-sell section.
      *
      * @param BrowserInterface $browser
      * @param CheckoutCart $checkoutCart
      * @param CatalogProductSimple $product
      * @param CatalogProductView $catalogProductView
-     * @param InjectableFixture[] $relatedProducts
      * @return void
      */
     public function processAssert(
         BrowserInterface $browser,
         CheckoutCart $checkoutCart,
         CatalogProductSimple $product,
-        CatalogProductView $catalogProductView,
-        array $relatedProducts
+        CatalogProductView $catalogProductView
     ) {
+        $relatedProducts = $product->getDataFieldConfig('cross_sell_products')['source']->getProducts();
+        $errors = [];
+
         $checkoutCart->open();
         $checkoutCart->getCartBlock()->clearShoppingCart();
 
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->addToCart($product);
-        $errors = [];
         foreach ($relatedProducts as $relatedProduct) {
-            if (!$checkoutCart->getCrosssellBlock()->verifyProductCrosssell($relatedProduct)) {
+            if (!$checkoutCart->getCrosssellBlock()->getProductItem($relatedProduct)->isVisible()) {
                 $errors[] = 'Product \'' . $relatedProduct->getName() . '\' is absent in cross-sell section.';
             }
         }
@@ -56,7 +54,7 @@ class AssertCrossSellsProductsSection extends AbstractConstraint
     }
 
     /**
-     * Text success product is displayed in cross-sell section
+     * Text success product is displayed in cross-sell section.
      *
      * @return string
      */

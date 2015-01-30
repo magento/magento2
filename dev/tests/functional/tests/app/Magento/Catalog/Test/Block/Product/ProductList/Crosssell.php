@@ -9,45 +9,72 @@ namespace Magento\Catalog\Test\Block\Product\ProductList;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Catalog\Test\Fixture\Product;
 
 /**
- * Class Crosssell
- * Crosssell product block on the page
+ * Cross-sell product block on the checkout page.
  */
 class Crosssell extends Block
 {
     /**
-     * Link selector
+     * Product item block.
      *
      * @var string
      */
-    protected $linkSelector = '.product.name [title="%s"]';
+    protected $productItem = 'li.product-item';
 
     /**
-     * Verify cross-sell item
+     * Product item block by product name.
      *
-     * @param FixtureInterface $crosssell
+     * @var string
+     */
+    protected $productItemByName = './/*[contains(@class,"product-item-link") and @title="%s"]/ancestor::li';
+
+    /**
+     * Check whether block is visible.
+     *
      * @return bool
      */
-    public function verifyProductCrosssell(FixtureInterface $crosssell)
+    public function isVisible()
     {
-        $match = $this->_rootElement->find(sprintf($this->linkSelector, $crosssell->getName()), Locator::SELECTOR_CSS);
-        return $match->isVisible();
+        return $this->_rootElement->isVisible();
     }
 
     /**
-     * Click on cross-sell product link
+     * Return product item block.
      *
-     * @param Product $product
-     * @return SimpleElement
+     * @param FixtureInterface $product
+     * @return ProductItem
      */
-    public function clickLink($product)
+    public function getProductItem(FixtureInterface $product)
     {
-        $this->_rootElement->find(
-            sprintf($this->linkSelector, $product->getName()),
-            Locator::SELECTOR_CSS
-        )->click();
+        $locator = sprintf($this->productItemByName, $product->getName());
+
+        return $this->blockFactory->create(
+            'Magento\Catalog\Test\Block\Product\ProductList\ProductItem',
+            ['element' => $this->_rootElement->find($locator, Locator::SELECTOR_XPATH)]
+        );
+    }
+
+    /**
+     * Get list of product names.
+     *
+     * @return array
+     */
+    public function getProductNames()
+    {
+        $productItems = $this->_rootElement->getElements($this->productItem, Locator::SELECTOR_CSS);
+        $names = [];
+
+        foreach ($productItems as $productItem) {
+            /** @var ProductItem $productItemBlock */
+            $productItemBlock = $this->blockFactory->create(
+                'Magento\Catalog\Test\Block\Product\ProductList\ProductItem',
+                ['element' => $productItem]
+            );
+
+            $names[] = $productItemBlock->getProductName();
+        }
+
+        return $names;
     }
 }

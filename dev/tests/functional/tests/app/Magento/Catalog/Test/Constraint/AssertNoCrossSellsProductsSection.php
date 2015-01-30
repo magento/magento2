@@ -14,8 +14,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class AssertNoCrossSellsProductsSection
- * Assert that product is not displayed in cross-sell section
+ * Assert that product is not displayed in cross-sell section.
  */
 class AssertNoCrossSellsProductsSection extends AbstractConstraint
 {
@@ -24,7 +23,7 @@ class AssertNoCrossSellsProductsSection extends AbstractConstraint
     /* end tags */
 
     /**
-     * Assert that product is not displayed in cross-sell section
+     * Assert that product is not displayed in cross-sell section.
      *
      * @param BrowserInterface $browser
      * @param CatalogProductSimple $product
@@ -47,14 +46,14 @@ class AssertNoCrossSellsProductsSection extends AbstractConstraint
         $catalogProductView->getViewBlock()->addToCart($product);
         foreach ($relatedProducts as $relatedProduct) {
             \PHPUnit_Framework_Assert::assertFalse(
-                $checkoutCart->getCrosssellBlock()->verifyProductCrosssell($relatedProduct),
+                $checkoutCart->getCrosssellBlock()->getProductItem($relatedProduct)->isVisible(),
                 'Product \'' . $relatedProduct->getName() . '\' is exist in cross-sell section.'
             );
         }
     }
 
     /**
-     * Text success product is not displayed in cross-sell section
+     * Text success product is not displayed in cross-sell section.
      *
      * @return string
      */

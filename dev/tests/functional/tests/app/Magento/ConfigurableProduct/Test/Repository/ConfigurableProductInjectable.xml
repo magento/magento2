@@ -235,6 +235,9 @@
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">custom_attribute_set</item>
             </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="preset" xsi:type="string">two_options_with_fixed_price</item>
+            </field>
         </dataset>
     </storage>
 </repository>

@@ -1,0 +1,3 @@
+"products";"promotedProducts";"order";"crossSell";"tag"
+"simple1::catalogProductSimple::product_with_category,simple2::catalogProductSimple::product_with_category,simple3::catalogProductSimple::product_with_category";"simple1:simple2,simple3;simple3:simple1,simple2";"simple1,simple3";"simple2";""
+"simple1::catalogProductSimple::product_with_category,simple2::catalogProductSimple::product_with_category,config1::configurableProductInjectable::two_options_with_fixed_price";"simple1:simple2,config1;config1:simple1,simple2";"simple1,config1,simple2";"";"test_type:acceptance_test"

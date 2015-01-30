@@ -487,11 +487,23 @@
             <group>null</group>
             <source>Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable\CheckoutData</source>
         </field>
+        <field name="cross_sell_products">
+            <attribute_code>cross_sell_products</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>crosssells</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CrossSellProducts</source>
+        </field>
         <field name="up_sell_products">
             <attribute_code>up_sell_products</attribute_code>
             <backend_type>virtual</backend_type>
             <group>upsells</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\UpSellProducts</source>
+        </field>
+        <field name="related_products">
+            <attribute_code>related_products</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>related-products</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\RelatedProducts</source>
         </field>
     </fields>
 </fixture>
