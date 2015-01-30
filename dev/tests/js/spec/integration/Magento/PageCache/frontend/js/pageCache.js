@@ -2,14 +2,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/*global describe*/
-/*global beforeEach*/
-/*global afterEach*/
-/*global it*/
-/*global expect*/
-/*global jasmine*/
-/*global spyOn*/
 define([
     'jquery',
     'Magento_PageCache/js/page-cache'
