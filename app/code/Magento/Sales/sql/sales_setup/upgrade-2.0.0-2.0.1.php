@@ -26,17 +26,17 @@ $tables = [
 /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
 $connection = $this->getConnection();
 foreach ($tables as $table) {
-    $columns = $connection->describeTable($table);
+    $columns = $connection->describeTable($this->getTable($table));
     if (isset($columns['created_at'])) {
         $createdAt = $columns['created_at'];
         $createdAt['DEFAULT'] = Table::TIMESTAMP_INIT;
         $createdAt['TYPE'] = Table::TYPE_TIMESTAMP;
-        $connection->modifyColumn($table, 'created_at', $createdAt);
+        $connection->modifyColumn($this->getTable($table), 'created_at', $createdAt);
     }
     if (isset($columns['updated_at'])) {
         $updatedAt = $columns['updated_at'];
         $updatedAt['DEFAULT'] = Table::TIMESTAMP_UPDATE;
         $updatedAt['TYPE'] = Table::TYPE_TIMESTAMP;
-        $connection->modifyColumn($table, 'updated_at', $updatedAt);
+        $connection->modifyColumn($this->getTable($table), 'updated_at', $updatedAt);
     }
 }
