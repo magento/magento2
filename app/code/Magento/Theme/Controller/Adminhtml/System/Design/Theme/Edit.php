@@ -29,8 +29,8 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             /** @var $tab \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css */
             $tab = $this->_view->getLayout()->getBlock('theme_edit_tabs_tab_css_tab');
             if ($tab && $tab->canShowTab()) {
-                /** @var $helper \Magento\Core\Helper\Theme */
-                $helper = $this->_objectManager->get('Magento\Core\Helper\Theme');
+                /** @var $helper \Magento\Theme\Helper\Theme */
+                $helper = $this->_objectManager->get('Magento\Theme\Helper\Theme');
                 $files = $helper->getCssAssets($theme);
                 $tab->setFiles($files);
             }

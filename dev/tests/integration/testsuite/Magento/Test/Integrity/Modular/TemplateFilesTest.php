@@ -8,7 +8,7 @@ namespace Magento\Test\Integrity\Modular;
 use Magento\Customer\Model\Context;
 
 /**
- * @magentoAppIsolation
+ * @magentoAppIsolation enabled
  */
 class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 {
@@ -51,7 +51,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
         try {
             /** @var $website \Magento\Store\Model\Website */
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\Store\StoreManagerInterface'
             )->getStore()->setWebsiteId(
                 0
             );
