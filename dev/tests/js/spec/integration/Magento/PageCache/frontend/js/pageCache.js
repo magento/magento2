@@ -302,12 +302,5 @@ define([
 
             expect(wdContainer.html()).toEqual('<span>FAKE_HTML</span>');
         });
-
-        it('widget exist on load on body', function (done) {
-            $(function () {
-                expect($('body').data('magePageCache')).toBeDefined();
-                done();
-            });
-        });
     });
 });
