@@ -6,8 +6,9 @@ define([
     'jquery',
     'Magento_Catalog/js/price-utils',
     'underscore',
+    'mage/template',
     'jquery/ui'
-], function ($, utils, _) {
+], function ($, utils, _, mageTemplate) {
     'use strict';
 
     var globalOptions = {
@@ -83,9 +84,9 @@ define([
      */
     function updatePrices(newPrices) {
         /*jshint validthis: true */
-        var prices = this.cache.displayPrices;
-        var additionalPrice = {};
-        var keys = [];
+        var prices = this.cache.displayPrices,
+            additionalPrice = {},
+            keys = [];
 
         this.cache.additionalPriceObject = this.cache.additionalPriceObject || {};
 
@@ -142,14 +143,15 @@ define([
      */
     function reDrawPrices() {
         /*jshint validthis: true */
-        var box = this.element;
-        var prices = this.cache.displayPrices;
-        var priceFormat = this.options.priceConfig && this.options.priceConfig.priceFormat || {};
-        var priceTemplate = hbs(this.options.priceTemplate);
+        var box = this.element,
+            prices = this.cache.displayPrices,
+            priceFormat = this.options.priceConfig && this.options.priceConfig.priceFormat || {},
+            priceTemplate = mageTemplate(this.options.priceTemplate);
 
         _.each(prices, function (price, priceCode) {
             var html,
                 finalPrice = price.amount;
+
             _.each(price.adjustments, function (adjustmentAmount) {
                 finalPrice += adjustmentAmount;
             });
@@ -194,17 +196,17 @@ define([
      */
     function setDefaultsFromDataSet() {
         /*jshint validthis: true */
-        var box = this.element;
-        var priceHolders = $('[data-price-type]', box);
-        var prices = this.options.prices;
+        var box = this.element,
+            priceHolders = $('[data-price-type]', box),
+            prices = this.options.prices;
         this.options.productId = box.data('productId');
 
         if (_.isEmpty(prices)) {
             priceHolders.each(function (index, element) {
-                var type = $(element).data('priceType');
-                var amount = $(element).data('priceAmount');
+                var type = $(element).data('priceType'),
+                    amount = $(element).data('priceAmount');
 
-                if(type && amount) {
+                if (type && amount) {
                     prices[type] = {
                         amount: amount
                     };
