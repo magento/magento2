@@ -6,7 +6,7 @@
  */
 -->
 <constraint>
-    <assertOrderSuccessPlacedMessage module="Magento_Multishipping">
+    <AssertMultishippingOrderSuccessPlacedMessage module="Magento_Multishipping">
         <severity>high</severity>
-    </assertOrderSuccessPlacedMessage>
+    </AssertMultishippingOrderSuccessPlacedMessage>
 </constraint>

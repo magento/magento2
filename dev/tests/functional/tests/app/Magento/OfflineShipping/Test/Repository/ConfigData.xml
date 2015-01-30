@@ -15,6 +15,15 @@
             <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
         </dataset>
 
+        <dataset name="freeshipping_minimum_order_amount_100">
+            <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="carriers/freeshipping/free_shipping_subtotal" scope="carriers" scope_id="1" label="" xsi:type="string">100</field>
+        </dataset>
+
+        <dataset name="freeshipping_minimum_order_amount_100_rollback">
+            <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">0</field>
+        </dataset>
+
         <dataset name="freeshipping_specificcountry_gb">
             <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/freeshipping/sallowspecific" scope="carriers" scope_id="1" label="Specific Countries" xsi:type="string">1</field>

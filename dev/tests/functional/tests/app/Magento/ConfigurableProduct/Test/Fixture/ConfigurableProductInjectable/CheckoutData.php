@@ -165,6 +165,11 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     ],
                 ],
                 'qty' => 1,
+                'cartItem' => [
+                    'price' => 10,
+                    'qty' => 1,
+                    'subtotal' => 10,
+                ],
             ],
         ];
         return isset($presets[$name]) ? $presets[$name] : null;

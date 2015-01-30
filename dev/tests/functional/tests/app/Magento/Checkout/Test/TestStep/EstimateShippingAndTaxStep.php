@@ -141,21 +141,23 @@ class EstimateShippingAndTaxStep implements TestStepInterface
             $this->checkoutCart->getShippingBlock()->selectShippingMethod($this->shipping);
         }
         /** @var \Magento\Checkout\Test\Fixture\Cart $cart */
-        $cart = $this->fixtureFactory->createByCode(
-            'cart',
-            ['data' => array_merge($this->cart->getData(), ['items' => ['products' => $this->products]])]
-        );
-        if($cart->hasData('tax_amount')) {
-            $this->assertTaxInShoppingCart->processAssert($this->checkoutCart, $cart);
-        }
-        if($cart->hasData('subtotal')) {
-            $this->assertSubtotalInShoppingCart->processAssert($this->checkoutCart, $cart);
-        }
-        if($cart->hasData('grand_total')) {
-            $this->assertGrandTotalInShoppingCart->processAssert($this->checkoutCart, $cart);
-        }
-        if($cart->hasData('shipping_amount')) {
-            $this->assertShippingInShoppingCart->processAssert($this->checkoutCart, $cart);
+        if(!empty($this->cart->hasData())) {
+            $cart = $this->fixtureFactory->createByCode(
+                'cart',
+                ['data' => array_merge($this->cart->getData(), ['items' => ['products' => $this->products]])]
+            );
+            if($cart->hasData('tax_amount')) {
+                $this->assertTaxInShoppingCart->processAssert($this->checkoutCart, $cart);
+            }
+            if($cart->hasData('subtotal')) {
+                $this->assertSubtotalInShoppingCart->processAssert($this->checkoutCart, $cart);
+            }
+            if($cart->hasData('grand_total')) {
+                $this->assertGrandTotalInShoppingCart->processAssert($this->checkoutCart, $cart);
+            }
+            if($cart->hasData('shipping_amount')) {
+                $this->assertShippingInShoppingCart->processAssert($this->checkoutCart, $cart);
+            }
         }
     }
 }

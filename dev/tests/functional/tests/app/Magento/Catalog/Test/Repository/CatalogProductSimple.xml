@@ -325,6 +325,9 @@
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="preset" xsi:type="string">order_special_price</item>
+            </field>
         </dataset>
 
         <dataset name="adc_123_simple_for_advancedsearch">
