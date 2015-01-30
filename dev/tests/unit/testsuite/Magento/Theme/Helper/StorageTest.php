@@ -52,7 +52,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected $contextHelper;
 
     /**
-     * @var \Magento\Core\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $theme;
 
@@ -85,7 +85,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->theme = $this->getMock('Magento\Core\Model\Theme', [], [], '', false);
+        $this->theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
         $this->customization = $this->getMock(
             'Magento\Framework\View\Design\Theme\Customization',
             [],
