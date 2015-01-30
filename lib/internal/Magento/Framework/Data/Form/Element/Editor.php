@@ -261,17 +261,19 @@ class Editor extends Textarea
             );
         }
 
-        foreach ($this->getConfig('plugins') as $plugin) {
-            if (isset($plugin['options']) && $this->_checkPluginButtonOptions($plugin['options'])) {
-                $buttonOptions = $this->_prepareButtonOptions($plugin['options']);
-                if (!$visible) {
-                    $configStyle = '';
-                    if (isset($buttonOptions['style'])) {
-                        $configStyle = $buttonOptions['style'];
+        if (is_array($this->getConfig('plugins'))) {
+            foreach ($this->getConfig('plugins') as $plugin) {
+                if (isset($plugin['options']) && $this->_checkPluginButtonOptions($plugin['options'])) {
+                    $buttonOptions = $this->_prepareButtonOptions($plugin['options']);
+                    if (!$visible) {
+                        $configStyle = '';
+                        if (isset($buttonOptions['style'])) {
+                            $configStyle = $buttonOptions['style'];
+                        }
+                        $buttonOptions = array_merge($buttonOptions, ['style' => 'display:none;' . $configStyle]);
                     }
-                    $buttonOptions = array_merge($buttonOptions, ['style' => 'display:none;' . $configStyle]);
+                    $buttonsHtml .= $this->_getButtonHtml($buttonOptions);
                 }
-                $buttonsHtml .= $this->_getButtonHtml($buttonOptions);
             }
         }
 

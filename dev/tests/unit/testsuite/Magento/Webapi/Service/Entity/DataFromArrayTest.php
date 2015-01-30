@@ -18,9 +18,14 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
         $objectFactory = new \Magento\Webapi\Service\Entity\WebapiBuilderFactory($objectManager);
         /** @var \Magento\Framework\Reflection\TypeProcessor $typeProcessor */
         $typeProcessor = $objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
+        $cache = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cache->expects($this->any())->method('load')->willReturn(false);
+
         $this->serializer = $objectManager->getObject(
             'Magento\Webapi\Controller\ServiceArgsSerializer',
-            ['typeProcessor' => $typeProcessor, 'builderFactory' => $objectFactory]
+            ['typeProcessor' => $typeProcessor, 'builderFactory' => $objectFactory, 'cache' => $cache]
         );
     }
 

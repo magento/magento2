@@ -11,7 +11,7 @@ namespace Magento\Catalog\Helper\Product\Edit\Action;
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -30,7 +30,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            'Magento\Framework\Store\StoreManagerInterface',
             [],
             '',
             false

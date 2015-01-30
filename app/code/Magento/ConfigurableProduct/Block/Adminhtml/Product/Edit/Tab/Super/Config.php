@@ -190,7 +190,6 @@ class Config extends Widget implements TabInterface
                                         'attribute' => [
                                             'is_global' => 1,
                                             'frontend_input' => 'select',
-                                            'is_configurable' => 1,
                                         ],
                                     ]
                                 ]
