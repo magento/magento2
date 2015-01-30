@@ -2042,4 +2042,5 @@ return [
     ['getAdvancedResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getEntityTypeId', 'Magento\Customer\Model\Customer'],
     ['setIsConfigurable', 'Magento\Catalog\Api\Data\ProductAttributeDataBuilder'],
+    ['isPhpFile', '\Magento\Tools\Di\Code\Reader\ClassesScanner'],
 ];
