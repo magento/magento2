@@ -9,7 +9,7 @@ class ItemsUpdaterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param bool $argument
-     * @dataProvider myDataProvider
+     * @dataProvider updateDataProvider
      */
     public function testUpdate($argument)
     {
@@ -28,7 +28,7 @@ class ItemsUpdaterTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function myDataProvider()
+    public function updateDataProvider()
     {
         return [
             [true],
