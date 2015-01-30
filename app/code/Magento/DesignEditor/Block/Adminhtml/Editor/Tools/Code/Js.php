@@ -139,7 +139,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Get custom js files
      *
-     * @return \Magento\Core\Model\Resource\Theme\File\Collection
+     * @return \Magento\Theme\Model\Resource\Theme\File\Collection
      */
     public function getFiles()
     {

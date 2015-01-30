@@ -75,7 +75,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
         $this->taxClassManagementMock = $this->getMock('\Magento\Tax\Api\TaxClassManagementInterface');
 
         $objectManager = new ObjectManager($this);

@@ -69,7 +69,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -92,7 +92,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      *
      * @param \Magento\Catalog\Model\Resource\Category $catalogCategory
      * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
@@ -101,7 +101,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     public function __construct(
         \Magento\Catalog\Model\Resource\Category $catalogCategory,
         \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
