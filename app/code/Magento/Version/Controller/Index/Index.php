@@ -33,7 +33,7 @@ class Index extends Action
     }
 
     /**
-     * Get product version and edition
+     * Sets the response body with ProductName/Version (Edition). E.g.: Magento/0.42.0-beta3 (Community)
      *
      * @return void
      */
