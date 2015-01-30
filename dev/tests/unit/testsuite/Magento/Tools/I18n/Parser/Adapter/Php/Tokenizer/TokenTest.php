@@ -104,7 +104,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      * @param int $name
      * @param string $value
      * @return Token
-    */
+     */
     protected function createToken($name, $value)
     {
         $line = 110;
