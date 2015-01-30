@@ -95,7 +95,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
     public function testIsRssAllowed()
     {
         $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')
-            ->with('rss/order/status', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('rss/order/status', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
         $this->assertTrue($this->rss->isRssAllowed());
     }

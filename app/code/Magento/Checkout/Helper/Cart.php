@@ -49,14 +49,14 @@ class Cart extends \Magento\Core\Helper\Url
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Model\Session $checkoutSession
@@ -210,6 +210,6 @@ class Cart extends \Magento\Core\Helper\Url
      */
     public function getShouldRedirectToCart($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(self::XML_PATH_REDIRECT_TO_CART, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->_scopeConfig->isSetFlag(self::XML_PATH_REDIRECT_TO_CART, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store);
     }
 }

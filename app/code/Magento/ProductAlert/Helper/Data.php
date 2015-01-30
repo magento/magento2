@@ -42,14 +42,14 @@ class Data extends \Magento\Core\Helper\Url
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -137,7 +137,7 @@ class Data extends \Magento\Core\Helper\Url
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\ProductAlert\Model\Observer::XML_PATH_STOCK_ALLOW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -150,7 +150,7 @@ class Data extends \Magento\Core\Helper\Url
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\ProductAlert\Model\Observer::XML_PATH_PRICE_ALLOW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 }

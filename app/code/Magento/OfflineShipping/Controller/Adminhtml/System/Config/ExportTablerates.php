@@ -18,7 +18,7 @@ class ExportTablerates extends \Magento\Backend\Controller\Adminhtml\System\Abst
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -27,14 +27,14 @@ class ExportTablerates extends \Magento\Backend\Controller\Adminhtml\System\Abst
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param ConfigSectionChecker $sectionChecker
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Backend\Model\Config\Structure $configStructure,
         ConfigSectionChecker $sectionChecker,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->_storeManager = $storeManager;
         $this->_fileFactory = $fileFactory;
