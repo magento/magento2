@@ -83,33 +83,23 @@ class PackageInfo
     private function load()
     {
         if ($this->packageModuleMap === null) {
-            /**
-             * array keys: module name in module.xml; array values: raw content from composer.json
-             * this raw data is used to create a dependency graph and also a package name-module name mapping
-             */
-            $rawData = [];
             $jsonData = $this->reader->getComposerJsonFiles()->toArray();
             foreach (array_keys($this->loader->load()) as $moduleName) {
                 $key = $this->string->upperCaseWords($moduleName, '_', '/') . '/composer.json';
                 if (isset($jsonData[$key])) {
-                    $rawData[$moduleName] = $jsonData[$key];
-                } else {
-                    $rawData[$moduleName] = '{}';
-                }
-            }
-            foreach ($rawData as $moduleName => $jsonData) {
-                $jsonData = \Zend_Json::decode($jsonData);
-                if (isset($jsonData['name'])) {
-                    $this->packageModuleMap[$jsonData['name']] = $moduleName;
-                }
-                if (isset($jsonData['version'])) {
-                    $this->modulePackageVersionMap[$moduleName] = $jsonData['version'];
-                }
-                if (!empty($jsonData['require'])) {
-                    $this->requireMap[$moduleName] = array_keys($jsonData['require']);
-                }
-                if (!empty($jsonData['conflict'])) {
-                    $this->conflictMap[$moduleName] = $jsonData['conflict'];
+                    $packageData = \Zend_Json::decode($jsonData[$key]);
+                    if (isset($packageData['name'])) {
+                        $this->packageModuleMap[$packageData['name']] = $moduleName;
+                    }
+                    if (isset($packageData['version'])) {
+                        $this->modulePackageVersionMap[$moduleName] = $packageData['version'];
+                    }
+                    if (!empty($packageData['require'])) {
+                        $this->requireMap[$moduleName] = array_keys($packageData['require']);
+                    }
+                    if (!empty($packageData['conflict'])) {
+                        $this->conflictMap[$moduleName] = $packageData['conflict'];
+                    }
                 }
             }
         }
