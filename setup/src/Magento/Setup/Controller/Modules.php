@@ -7,7 +7,7 @@ namespace Magento\Setup\Controller;
 
 use Magento\Setup\Model\ModuleStatus;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 class Modules extends AbstractActionController
 {
@@ -25,15 +25,10 @@ class Modules extends AbstractActionController
     }
 
     /**
-     * @return ViewModel
+     * @return JsonModel
      */
     public function indexAction()
     {
-        $view = new ViewModel([
-            'modules' => $this->allModules->getAllModules(),
-        ]);
-        $view->setTemplate('/magento/setup/modules.phtml');
-        $view->setTerminal(true);
-        return $view;
+        return new JsonModel(['modules' => $this->allModules->getAllModules() ]);
     }
 }

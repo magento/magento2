@@ -10,6 +10,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Module\ModuleList\DeploymentConfig as ModuleDeployment;
 
 class ModuleStatus
 {
@@ -52,7 +53,7 @@ class ModuleStatus
                 $allModules[$module]['selected'] = true;
             }
 
-            $existingModules = $this->deploymentConfig->getSegment('modules');
+            $existingModules = $this->deploymentConfig->getSegment(ModuleDeployment::CONFIG_KEY);
             if (isset($existingModules)) {
                 foreach ($existingModules as $module => $value) {
                     if(!$value) {
