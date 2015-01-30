@@ -2036,6 +2036,7 @@ return [
     ['getIsConfigurable', 'Magento\Catalog\Model\Resource\Eav\Attribute'],
     ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem'],
     ['checkQuoteAmount', 'Magento\Sales\Helper\Data'],
+    ['getEntityTypeId', 'Magento\Customer\Model\Customer'],
     ['getResource', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getResourceCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
