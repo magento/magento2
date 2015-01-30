@@ -42,13 +42,13 @@
     <assertProductReviewMassActionSuccessMessage module="Magento_Review">
         <severity>high</severity>
         <require>
-            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
+            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex" />
         </require>
     </assertProductReviewMassActionSuccessMessage>
     <assertProductReviewMassActionSuccessDeleteMessage module="Magento_Review">
         <severity>high</severity>
         <require>
-            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
+            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex" />
         </require>
     </assertProductReviewMassActionSuccessDeleteMessage>
     <assertProductReviewBackendSuccessSaveMessage module="Magento_Review">

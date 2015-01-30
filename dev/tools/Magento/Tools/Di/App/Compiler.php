@@ -65,6 +65,10 @@ class Compiler implements \Magento\Framework\AppInterface
         );
 
         $operations = [
+            Task\OperationFactory::REPOSITORY_GENERATOR => [
+                'path' => BP . '/' . 'app/code',
+                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
+            ],
             Task\OperationFactory::AREA => [
                 BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
             ],

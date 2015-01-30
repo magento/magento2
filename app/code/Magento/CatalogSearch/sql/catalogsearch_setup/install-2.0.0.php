@@ -62,7 +62,7 @@ $table = $installer->getConnection()
     )
     ->setOption(
         'type',
-        'MyISAM'
+        'InnoDB'
     )
     ->setComment('Catalog search result table');
 
