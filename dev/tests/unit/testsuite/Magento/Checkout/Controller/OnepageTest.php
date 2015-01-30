@@ -9,7 +9,7 @@ namespace Magento\Checkout\Controller;
  * Class OnepageTest
  * @package Magento\Checkout\Controller
  */
-class OnepageTest extends \Magento\TestFramework\AbstractControllerTest
+class OnepageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Onepage
@@ -41,6 +41,11 @@ class OnepageTest extends \Magento\TestFramework\AbstractControllerTest
      */
     protected $quote;
 
+    /**
+     * @var  \Magento\Framework\App\Action\Context | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $contextMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -64,13 +69,14 @@ class OnepageTest extends \Magento\TestFramework\AbstractControllerTest
             ->with('Magento\Customer\Model\Session')
             ->willReturn($this->customerSession);
 
-        $this->setUpContext(
-            [
-                'objectManager' => $objectManagerMock,
-                'response' => $this->response,
-                'request' => $this->request,
-            ]
-        );
+        $contextData = [
+            'objectManager' => $objectManagerMock,
+            'response' => $this->response,
+            'request' => $this->request,
+        ];
+
+        $this->contextMock = $objectManager->makeContextMock($contextData);
+
         $this->controller = $objectManager->getObject(
             'Magento\Checkout\Controller\Onepage',
             [

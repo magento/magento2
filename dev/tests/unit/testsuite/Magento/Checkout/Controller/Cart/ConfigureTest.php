@@ -8,7 +8,7 @@ namespace Magento\Checkout\Controller\Cart;
 /**
  * Shopping cart edit tests
  */
-class ConfigureTest extends \Magento\TestFramework\AbstractControllerTest
+class ConfigureTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -58,6 +58,8 @@ class ConfigureTest extends \Magento\TestFramework\AbstractControllerTest
 
     public function setUp()
     {
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+
         $viewMock = $this->getMockBuilder('Magento\Framework\App\ViewInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -92,7 +94,7 @@ class ConfigureTest extends \Magento\TestFramework\AbstractControllerTest
             'view' => $viewMock
         ];
 
-        $this->setUpContext($contextData);
+        $this->contextMock = $objectManager->makeContextMock($contextData);
 
         $scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
