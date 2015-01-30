@@ -80,7 +80,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             'date_format' => $this->_localeDate->getDateFormat(
                 \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
             ),
-            'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+            'image' => $this->getViewFileUrl('images/grid-cal.png'),
         ];
         /** @var $selectBlock \Magento\Framework\View\Element\Html\Date */
         $dateBlock = $this->_layout->createBlock(
@@ -379,6 +379,8 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param Attribute $row
      * @return string|false
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getRowUrl($row)
     {

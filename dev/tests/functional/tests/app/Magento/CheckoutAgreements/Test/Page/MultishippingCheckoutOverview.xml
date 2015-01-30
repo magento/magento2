@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page mca="multishipping/checkout/overview">
+    <blocks>
+        <agreementReview>
+            <class>\Magento\CheckoutAgreements\Test\Block\Multishipping\MultishippingAgreementReview</class>
+            <locator>#checkout-agreements</locator>
+            <strategy>css selector</strategy>
+        </agreementReview>
+    </blocks>
+</page>

@@ -43,7 +43,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'isSetFlag'
         )->with(
             $this->equalTo('dev/translate_inline/active'),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->equalTo($store)
         )->will(
             $this->returnValue($result)
