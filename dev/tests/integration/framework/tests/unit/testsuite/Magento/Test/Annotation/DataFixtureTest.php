@@ -56,8 +56,7 @@ class DataFixtureTest extends \PHPUnit_Framework_TestCase
         $eventParam = new \Magento\TestFramework\Event\Param\Transaction();
         $this->_object->startTransaction($this);
         $this->_object->startTestTransactionRequest($this, $eventParam);
-        $this->assertFalse($eventParam->isTransactionStartRequested());
-        $this->assertFalse($eventParam->isTransactionRollbackRequested());
+        $this->assertTrue($eventParam->isTransactionStartRequested());
     }
 
     /**
@@ -75,7 +74,26 @@ class DataFixtureTest extends \PHPUnit_Framework_TestCase
         $this->_object->startTransaction($this);
         $this->_object->startTestTransactionRequest($this, $eventParam);
         $this->assertTrue($eventParam->isTransactionStartRequested());
-        $this->assertTrue($eventParam->isTransactionRollbackRequested());
+        $this->assertFalse($eventParam->isTransactionRollbackRequested());
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture sampleFixtureTwo
+     * @magentoDataFixture path/to/fixture/script.php
+     */
+    public function testDisabledDbIsolation()
+    {
+        $eventParam = new \Magento\TestFramework\Event\Param\Transaction();
+        $this->_object->startTestTransactionRequest($this, $eventParam);
+        $this->assertFalse($eventParam->isTransactionStartRequested());
+        $this->assertFalse($eventParam->isTransactionRollbackRequested());
+
+        $eventParam = new \Magento\TestFramework\Event\Param\Transaction();
+        $this->_object->startTransaction($this);
+        $this->_object->startTestTransactionRequest($this, $eventParam);
+        $this->assertFalse($eventParam->isTransactionStartRequested());
+        $this->assertFalse($eventParam->isTransactionRollbackRequested());
     }
 
     /**

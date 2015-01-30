@@ -93,7 +93,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'date_format' => $dateFormat,
                     'time_format' => $timeFormat,
                     'label' => __('Queue Date Start'),
-                    'image' => $this->getViewFileUrl('images/grid-cal.gif')
+                    'image' => $this->getViewFileUrl('images/grid-cal.png')
                 ]
             );
 
@@ -104,7 +104,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     [
                         'name' => 'stores[]',
                         'label' => __('Subscribers From'),
-                        'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                        'image' => $this->getViewFileUrl('images/grid-cal.png'),
                         'values' => $this->_systemStore->getStoreValuesForForm(),
                         'value' => $queue->getStores()
                     ]
@@ -127,7 +127,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'date_format' => $dateFormat,
                     'time_format' => $timeFormat,
                     'label' => __('Queue Date Start'),
-                    'image' => $this->getViewFileUrl('images/grid-cal.gif')
+                    'image' => $this->getViewFileUrl('images/grid-cal.png')
                 ]
             );
 
@@ -138,7 +138,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     [
                         'name' => 'stores[]',
                         'label' => __('Subscribers From'),
-                        'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                        'image' => $this->getViewFileUrl('images/grid-cal.png'),
                         'required' => true,
                         'values' => $this->_systemStore->getStoreValuesForForm(),
                         'value' => $queue->getStores()

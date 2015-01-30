@@ -9,7 +9,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Customer url model

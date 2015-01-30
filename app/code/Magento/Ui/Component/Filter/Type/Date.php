@@ -141,7 +141,7 @@ class Date extends FilterAbstract
             $dateObj->setTimezone(
                 $this->scopeConfig->getValue(
                     $this->localeDate->getDefaultTimezonePath(),
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             );
 

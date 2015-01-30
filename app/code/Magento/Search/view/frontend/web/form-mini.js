@@ -30,7 +30,7 @@ define([
             minSearchLength: 2,
             responseFieldElements: 'ul li',
             selectClass: 'selected',
-            template: '<li class="{{row_class}}" title="{{title}}">{{title}}<span class="amount">{{num_of_results}}</span></li>',
+            template: '<li class="{{row_class}}" id="qs-option-{{index}}" role="option"><span class="qs-option-name">{{title}}</span><span aria-hidden="true" class="amount">{{num_of_results}}</span></li>',
             submitBtn: 'button[type="submit"]',
             searchLabel: '[data-role=minisearch-label]'
         },
@@ -55,6 +55,7 @@ define([
                         this.searchLabel.removeClass('active');
                     }
                     this.autoComplete.hide();
+                    this._updateAriaHasPopup(false);
                 }, this), 250);
             }, this));
 
@@ -66,7 +67,10 @@ define([
             this.element.on('keydown', this._onKeyDown);
             this.element.on('input propertychange', this._onPropertyChange);
 
-            this.searchForm.on('submit', this._onSubmit);
+            this.searchForm.on('submit', $.proxy(function() {
+                this._onSubmit();
+                this._updateAriaHasPopup(false);
+            }, this));
         },
         /**
          * @private
@@ -82,6 +86,18 @@ define([
          */
         _getLastElement: function() {
             return this.responseList.indexList ? this.responseList.indexList.last() : false;
+        },
+
+        /**
+         * @private
+         * @param {Boolean} show Set attribute aria-haspopup to "true/false" for element.
+         */
+        _updateAriaHasPopup: function(show) {
+            if (show) {
+                this.element.attr('aria-haspopup', 'true');
+            } else {
+                this.element.attr('aria-haspopup', 'false');
+            }
         },
 
         /**
@@ -108,9 +124,9 @@ define([
             if (isEmpty(value)) {
                 e.preventDefault();
             }
-            
+
             if (this.responseList.selected) {
-                this.element.val(this.responseList.selected.attr('title'));
+                this.element.val(this.responseList.selected.find('.qs-option-name').text());
             }
         },
 
@@ -153,6 +169,8 @@ define([
                             this._getFirstVisibleElement().addClass(this.options.selectClass);
                             this.responseList.selected = this._getFirstVisibleElement();
                         }
+                        this.element.val(this.responseList.selected.find('.qs-option-name').text());
+                        this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
                     }
                     break;
                 case $.ui.keyCode.UP:
@@ -165,6 +183,8 @@ define([
                             this._getLastElement().addClass(this.options.selectClass);
                             this.responseList.selected = this._getLastElement();
                         }
+                        this.element.val(this.responseList.selected.find('.qs-option-name').text());
+                        this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
                     }
                     break;
                 default:
@@ -189,14 +209,15 @@ define([
                 },
                 source = this.options.template,
                 template = Handlebars.compile(source),
-                dropdown = $('<ul></ul>'),
+                dropdown = $('<ul role="listbox"></ul>'),
                 value = this.element.val();
 
             this.submitBtn.disabled = isEmpty(value);
 
             if (value.length >= parseInt(this.options.minSearchLength, 10)) {
                 $.get(this.options.url, {q: value}, $.proxy(function (data) {
-                    $.each(data, function(index, element){
+                    $.each(data, function(index, element) {
+                        element.index = index;
                         var html = template(element);
                         dropdown.append(html);
                     });
@@ -206,7 +227,14 @@ define([
                         .find(this.options.responseFieldElements + ':visible');
 
                     this._resetResponseList(false);
-                    
+                    this.element.removeAttr('aria-activedescendant');
+
+                    if (this.responseList.indexList.length) {
+                        this._updateAriaHasPopup(true);
+                    } else {
+                        this._updateAriaHasPopup(false);
+                    }
+
                     this.responseList.indexList
                         .on('click', function (e) {
                             this.responseList.selected = $(e.target);
@@ -216,6 +244,7 @@ define([
                             this.responseList.indexList.removeClass(this.options.selectClass);
                             $(e.target).addClass(this.options.selectClass);
                             this.responseList.selected = $(e.target);
+                            this.element.attr('aria-activedescendant', $(e.target).attr('id'));
                         }.bind(this))
                         .on('mouseout', function (e) {
                             if (!this._getLastElement() && this._getLastElement().hasClass(this.options.selectClass)) {
@@ -227,6 +256,8 @@ define([
             } else {
                 this._resetResponseList(true);
                 this.autoComplete.hide();
+                this._updateAriaHasPopup(false);
+                this.element.removeAttr('aria-activedescendant');
             }
         }
     });

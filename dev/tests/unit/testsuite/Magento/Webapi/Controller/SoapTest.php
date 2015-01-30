@@ -85,8 +85,6 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $localeResolverMock->expects($this->any())->method('getLocale')->will($this->returnValue($localeMock));
 
-        $layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface');
-
         $this->_responseMock->expects($this->any())->method('clearHeaders')->will($this->returnSelf());
         $this->_responseMock
             ->expects($this->any())
@@ -107,7 +105,6 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             $this->_soapServerMock,
             $this->_errorProcessorMock,
             $this->_appStateMock,
-            $layoutMock,
             $localeResolverMock,
             $pathProcessorMock,
             $areaListMock
