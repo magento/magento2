@@ -67,6 +67,7 @@ class PackageInfo
      *
      * @param ModuleList\Loader $loader
      * @param Dir\Reader $reader
+     * @param \Magento\Framework\Stdlib\String $string
      */
     public function __construct(ModuleList\Loader $loader, Dir\Reader $reader, String $string)
     {
