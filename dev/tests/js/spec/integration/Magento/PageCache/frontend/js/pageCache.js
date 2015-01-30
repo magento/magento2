@@ -231,8 +231,8 @@ define([
                 .pageCache();
 
             nodes = wdContainer.comments();
-            searches = wdContainer.data('pageCache')._searchPlaceholders(nodes);
-            expect(wdContainer.data('pageCache')._searchPlaceholders()).toEqual([]);
+            searches = wdContainer.data('magePageCache')._searchPlaceholders(nodes);
+            expect(wdContainer.data('magePageCache')._searchPlaceholders()).toEqual([]);
             expect(searches[0]).toEqual(jasmine.objectContaining({
                 name: 'FAKE_BLOCK'
             }));
