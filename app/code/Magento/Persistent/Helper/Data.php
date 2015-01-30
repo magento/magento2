@@ -9,7 +9,7 @@
  */
 namespace Magento\Persistent\Helper;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 class Data extends \Magento\Core\Helper\Data
 {
@@ -45,7 +45,7 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
      * @param \Magento\Framework\Escaper $escaper
@@ -53,7 +53,7 @@ class Data extends \Magento\Core\Helper\Data
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
         \Magento\Framework\Escaper $escaper

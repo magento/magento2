@@ -21,14 +21,14 @@ class LoadThemeList extends \Magento\DesignEditor\Controller\Adminhtml\System\De
         $page = $this->getRequest()->getParam('page', 1);
         $pageSize = $this->getRequest()->getParam(
             'page_size',
-            \Magento\Core\Model\Resource\Theme\Collection::DEFAULT_PAGE_SIZE
+            \Magento\Theme\Model\Resource\Theme\Collection::DEFAULT_PAGE_SIZE
         );
 
         try {
             $this->_view->loadLayout();
-            /** @var $collection \Magento\Core\Model\Resource\Theme\Collection */
+            /** @var $collection \Magento\Theme\Model\Resource\Theme\Collection */
             $collection = $this->_objectManager->get(
-                'Magento\Core\Model\Resource\Theme\Collection'
+                'Magento\Theme\Model\Resource\Theme\Collection'
             )->filterPhysicalThemes(
                 $page,
                 $pageSize

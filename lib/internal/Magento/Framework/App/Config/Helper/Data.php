@@ -50,7 +50,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $allowedIps = $this->_scopeConfig->getValue(
             self::XML_PATH_DEV_ALLOW_IPS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $remoteAddr = $this->_remoteAddress->getRemoteAddress();

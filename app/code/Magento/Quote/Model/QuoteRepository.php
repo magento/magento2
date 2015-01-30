@@ -7,7 +7,7 @@ namespace Magento\Quote\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Quote\Model\Resource\Quote\Collection as QuoteCollection;
@@ -31,7 +31,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     protected $quoteFactory;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 

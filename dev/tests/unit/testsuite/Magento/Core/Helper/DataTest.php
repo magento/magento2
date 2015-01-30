@@ -90,7 +90,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 Data::XML_PATH_DEFAULT_COUNTRY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             )->will($this->returnValue($country));
 

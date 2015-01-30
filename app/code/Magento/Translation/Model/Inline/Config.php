@@ -41,7 +41,7 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
     {
         return $this->scopeConfig->isSetFlag(
             'dev/translate_inline/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $scope
         );
     }

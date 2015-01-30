@@ -69,7 +69,7 @@ class Guest extends \Magento\Core\Helper\Data
     /**
      * @param App\Helper\Context $context
      * @param App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
@@ -84,7 +84,7 @@ class Guest extends \Magento\Core\Helper\Data
     public function __construct(
         App\Helper\Context $context,
         App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,

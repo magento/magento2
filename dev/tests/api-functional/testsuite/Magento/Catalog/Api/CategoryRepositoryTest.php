@@ -24,7 +24,7 @@ class CategoryRepositoryTest extends WebapiAbstract
     {
         $expected = [
             'parent_id' => 2,
-            'path' => '1/2/3',
+            'path' => '1/2/333',
             'position' => 1,
             'level' => 2,
             'available_sort_by' => ['position', 'name'],

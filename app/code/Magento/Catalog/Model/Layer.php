@@ -40,7 +40,7 @@ class Layer extends \Magento\Framework\Object
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -90,7 +90,7 @@ class Layer extends \Magento\Framework\Object
      * @param Layer\StateFactory $layerStateFactory
      * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param Resource\Product $catalogProduct
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
@@ -100,7 +100,7 @@ class Layer extends \Magento\Framework\Object
         \Magento\Catalog\Model\Layer\StateFactory $layerStateFactory,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Catalog\Model\Resource\Product $catalogProduct,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         CategoryRepositoryInterface $categoryRepository,
         array $data = []

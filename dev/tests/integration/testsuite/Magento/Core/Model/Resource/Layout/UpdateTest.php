@@ -33,7 +33,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
             'test_handle',
             $theme,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\Store\StoreManagerInterface'
             )->getStore()
         );
         $this->assertEquals('not_temporary', $result);

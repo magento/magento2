@@ -86,14 +86,6 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
     /**
      * {@inheritdoc}
      */
-    public function getIsConfigurable()
-    {
-        return $this->getData(self::IS_CONFIGURABLE);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getIsVisibleInAdvancedSearch()
     {
         return $this->getData(self::IS_VISIBLE_IN_ADVANCED_SEARCH);

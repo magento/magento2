@@ -22,8 +22,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
 
     const APPLY_TO = 'apply_to';
 
-    const IS_CONFIGURABLE = 'is_configurable';
-
     const IS_SEARCHABLE = 'is_searchable';
 
     const IS_VISIBLE_IN_ADVANCED_SEARCH = 'is_visible_in_advanced_search';
@@ -95,12 +93,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      */
     public function getApplyTo();
 
-    /**
-     * Whether the attribute can be used for configurable products
-     *
-     * @return string|null
-     */
-    public function getIsConfigurable();
     /**
      * Whether the attribute can be used in Quick Search
      *
