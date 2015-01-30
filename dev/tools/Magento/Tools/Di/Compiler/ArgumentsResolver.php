@@ -19,9 +19,17 @@ class ArgumentsResolver
      *
      * @var array
      */
-    private $instanceArgumentPattern = [
+    private $sharedInstanceArgumentPattern = [
         '_i_' => null,
-        '_s_' => false,
+    ];
+
+    /**
+     * Instance argument pattern used for configuration
+     *
+     * @var array
+     */
+    private $notSharedInstanceArgumentPattern = [
+        '_ins_' => null,
     ];
 
     /**
@@ -96,8 +104,7 @@ class ArgumentsResolver
     private function getConfiguredArgument($configuredArgument, ConstructorArgument $constructorArgument)
     {
         if ($constructorArgument->getType()) {
-            $argument = $this->getInstanceArgument($configuredArgument['instance']);
-            $argument['_s_'] = isset($configuredArgument['shared']) ? $configuredArgument['shared'] : $argument['_s_'];
+            $argument = $this->getConfiguredInstanceArgument($configuredArgument);
             return $argument;
         } elseif (isset($configuredArgument['argument'])) {
             return $this->getGlobalArgument($configuredArgument['argument'], $constructorArgument->getDefaultValue());
@@ -118,8 +125,7 @@ class ArgumentsResolver
             }
 
             if (isset($value['instance'])) {
-                $array[$key] = $this->getInstanceArgument($value['instance']);
-                $array[$key]['_s_'] = isset($value['shared']) ? $value['shared'] : $array[$key]['_s_'];
+                $array[$key] = $this->getConfiguredInstanceArgument($value);
                 continue;
             }
 
@@ -132,6 +138,21 @@ class ArgumentsResolver
         }
 
         return $array;
+    }
+
+    private function getConfiguredInstanceArgument($config) {
+        $argument = $this->getInstanceArgument($config['instance']);
+        if (isset($config['shared'])) {
+            if ($config['shared']) {
+                $pattern = $this->sharedInstanceArgumentPattern;
+                $pattern['_i_'] = current($argument);
+            } else {
+                $pattern = $this->notSharedInstanceArgumentPattern;
+                $pattern['_ins_'] = current($argument);
+            }
+            $argument = $pattern;
+        }
+        return $argument;
     }
 
     /**
@@ -163,9 +184,13 @@ class ArgumentsResolver
      */
     private function getInstanceArgument($instanceType)
     {
-        $argument = $this->instanceArgumentPattern;
-        $argument['_i_'] = $instanceType;
-        $argument['_s_'] = $this->diContainerConfig->isShared($instanceType);
+        if ($this->diContainerConfig->isShared($instanceType)) {
+            $argument = $this->sharedInstanceArgumentPattern;
+            $argument['_i_'] = $instanceType;
+        } else {
+            $argument = $this->notSharedInstanceArgumentPattern;
+            $argument['_ins_'] = $instanceType;
+        }
         return $argument;
     }
 

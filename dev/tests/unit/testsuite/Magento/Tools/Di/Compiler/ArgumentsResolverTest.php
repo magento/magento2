@@ -112,12 +112,10 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'type_dependency' => [
-                '_i_' => 'Type\Dependency',
-                '_s_' => false,
+                '_ins_' => 'Type\Dependency',
             ],
             'type_dependency_shared' => [
                 '_i_' => 'Type\Dependency\Shared',
-                '_s_' => true,
             ],
             'value' => [
                 '_v_' => 'value',
@@ -165,12 +163,10 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'type_dependency_configured' => [
-                '_i_' => 'Type\Dependency\Configured',
-                '_s_' => false,
+                '_ins_' => 'Type\Dependency\Configured',
             ],
             'type_dependency_shared_configured' => [
                 '_i_' => 'Type\Dependency\Shared\Configured',
-                '_s_' => true,
             ],
             'global_argument' => [
                 '_a_' => 'global_argument_configured',
@@ -188,13 +184,11 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
                     'array_value' => 'value',
                     'array_configured_instance' => [
                         '_i_' => 'Type\Dependency\Shared\Configured',
-                        '_s_' => true,
                     ],
                     'array_configured_array' => [
                         'array_array_value' => 'value',
                         'array_array_configured_instance' => [
-                            '_i_' => 'Type\Dependency\Shared\Configured',
-                            '_s_' => false,
+                            '_ins_' => 'Type\Dependency\Shared\Configured',
                         ],
                     ],
                     'array_global_argument' => [

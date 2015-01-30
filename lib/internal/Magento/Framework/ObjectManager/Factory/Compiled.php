@@ -20,7 +20,6 @@ class Compiled extends AbstractFactory
     public function create($requestedType, array $arguments = [])
     {
         $type = $this->config->getInstanceType($requestedType);
-        $requestedType = ltrim($requestedType, '\\');
         $args = $this->config->getArguments($requestedType);
         if ($args === null) {
             return new $type();
@@ -30,11 +29,9 @@ class Compiled extends AbstractFactory
             if (isset($arguments[$key])) {
                 $argument = $arguments[$key];
             } elseif (isset($argument['_i_'])) {
-                if ($argument['_s_']) {
-                    $argument = $this->objectManager->get($argument['_i_']);
-                } else {
-                    $argument = $this->objectManager->create($argument['_i_']);
-                }
+                $argument = $this->objectManager->get($argument['_i_']);
+            } elseif (isset($argument['_ins_'])) {
+                $argument = $this->objectManager->create($argument['_ins_']);
             } elseif (isset($argument['_v_'])) {
                 $argument = $argument['_v_'];
                 if ($argument === (array)$argument) {
@@ -72,12 +69,9 @@ class Compiled extends AbstractFactory
         foreach ($array as $key => &$argument) {
             if ($argument === (array)$argument) {
                 if (isset($argument['_i_'])) {
-                    if ($argument['_s_']) {
-                        $argument = $this->objectManager->get($argument['_i_']);
-                    } else {
-                        $argument = $this->objectManager->create($argument['_i_']);
-                    }
-
+                    $argument = $this->objectManager->get($argument['_i_']);
+                } elseif (isset($argument['_ins_'])) {
+                    $argument = $this->objectManager->create($argument['_ins_']);
                 } elseif (isset($argument['_a_'])) {
                     if (isset($this->globalArguments[$argument['_a_']])) {
                         $argument = $this->globalArguments[$argument['_a_']];

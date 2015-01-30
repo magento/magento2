@@ -161,12 +161,10 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'nonSharedDependency' => [
-                '_i_' => 'Dependency\StdClass',
-                '_s_' => false,
+                '_ins_' => 'Dependency\StdClass',
             ],
             'sharedDependency' => [
                 '_i_' => 'Dependency\Shared\StdClass',
-                '_s_' => true,
             ],
             'value' => [
                 '_v_' => 'value',
@@ -190,12 +188,10 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'nonSharedDependency' => [
-                '_i_' => 'Dependency\StdClass',
-                '_s_' => false,
+                '_ins_' => 'Dependency\StdClass',
             ],
             'sharedDependency' => [
                 '_i_' => 'Dependency\Shared\StdClass',
-                '_s_' => true,
             ],
             'value' => [
                 '_v_' => 'value',
@@ -205,13 +201,11 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                     'array_value' => 'value',
                     'array_configured_instance' => [
                         '_i_' => 'Dependency\Shared\StdClass',
-                        '_s_' => true,
                     ],
                     'array_configured_array' => [
                         'array_array_value' => 'value',
                         'array_array_configured_instance' => [
-                            '_i_' => 'Dependency\StdClass',
-                            '_s_' => false,
+                            '_ins_' => 'Dependency\StdClass',
                         ],
                     ],
                     'array_global_argument' => [
