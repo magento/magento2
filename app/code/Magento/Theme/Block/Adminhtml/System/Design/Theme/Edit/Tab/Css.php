@@ -28,7 +28,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
     /**
      * Theme custom css file
      *
-     * @var \Magento\Core\Model\Theme\File
+     * @var \Magento\Theme\Model\Theme\File
      */
     protected $_customCssFile;
 

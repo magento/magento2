@@ -10,7 +10,7 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\Data\SearchResultIteratorFactory;
 use Magento\Framework\DB\QueryInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Framework\Data\SearchResultProcessorFactory;
 use Magento\Framework\Data\SearchResultProcessor;
 
@@ -34,7 +34,7 @@ class Collection extends AbstractSearchResult
      * @param EntityFactoryInterface $entityFactory
      * @param ManagerInterface $eventManager
      * @param SearchResultIteratorFactory $resultIteratorFactory
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param SearchResultProcessorFactory $searchResultProcessorFactory
      */
     public function __construct(

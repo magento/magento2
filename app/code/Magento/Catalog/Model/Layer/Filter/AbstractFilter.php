@@ -36,7 +36,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -58,7 +58,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      * Constructor
      *
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
      * @param array $data
@@ -66,7 +66,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
         array $data = []
@@ -128,6 +128,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
