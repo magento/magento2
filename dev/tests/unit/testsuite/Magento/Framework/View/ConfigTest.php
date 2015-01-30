@@ -64,7 +64,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetViewConfig()
     {
         $themeMock = $this->getMock(
-            'Magento\Core\Model\Theme',
+            'Magento\Theme\Model\Theme',
             ['getId', 'getCustomization', 'getCustomViewConfigPath'],
             [],
             '',

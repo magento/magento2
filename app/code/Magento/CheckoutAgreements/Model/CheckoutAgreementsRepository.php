@@ -11,8 +11,8 @@ namespace Magento\CheckoutAgreements\Model;
 use Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;
 use Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
 
 /**
@@ -30,7 +30,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     /**
      * Store manager.
      *
-     * @var  \Magento\Store\Model\StoreManagerInterface
+     * @var  \Magento\Framework\Store\StoreManagerInterface
      */
     private $storeManager;
 
@@ -45,7 +45,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * Constructs a checkout agreement data object.
      *
      * @param AgreementCollectionFactory $collectionFactory Collection factory.
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager.
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager Store manager.
      * @param ScopeConfigInterface $scopeConfig Scope config.
      */
     public function __construct(
