@@ -169,8 +169,8 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         if ($urlConstraint) {
             $actualUrl = '';
             foreach ($this->getResponse()->getHeaders() as $header) {
-                if ($header['name'] == 'Location') {
-                    $actualUrl = $header['value'];
+                if ($header->getFieldName() == 'Location') {
+                    $actualUrl = $header->getFieldValue();
                     break;
                 }
             }
