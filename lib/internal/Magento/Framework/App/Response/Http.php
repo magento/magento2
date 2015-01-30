@@ -522,5 +522,6 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
         $objectManager = ObjectManager::getInstance();
         $this->cookieManager = $objectManager->create('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactory = $objectManager->get('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory');
+        $this->headerManager = $objectManager->get('Magento\Framework\App\Response\Headers');
     }
 }
