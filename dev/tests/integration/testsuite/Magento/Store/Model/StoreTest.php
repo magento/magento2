@@ -120,7 +120,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->model->getWebsite());
         $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\Store\StoreManagerInterface'
         )->getWebsite();
         $this->model->setWebsite($website);
         $actualResult = $this->model->getWebsite();
@@ -157,14 +157,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             \Magento\Store\Model\Store::XML_PATH_USE_REWRITES,
             $useRewrites,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
             \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
             $useStoreCode,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         $actual = $this->model->getBaseUrl($type);
@@ -244,14 +244,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             \Magento\Store\Model\Store::XML_PATH_USE_REWRITES,
             false,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
             \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
             $useStoreCode,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         // emulate custom entry point

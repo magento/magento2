@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,7 +12,7 @@ class Newsletter extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customer newsletter grid
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
@@ -25,8 +24,7 @@ class Newsletter extends \Magento\Customer\Controller\Adminhtml\Index
             ->loadByCustomerId($customerId);
 
         $this->_coreRegistry->register('subscriber', $subscriber);
-        $this->_view->loadLayout();
-        $this->prepareDefaultCustomerTitle();
-        $this->_view->renderLayout();
+        $resultLayout = $this->resultLayoutFactory->create();
+        return $resultLayout;
     }
 }

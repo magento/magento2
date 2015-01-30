@@ -99,7 +99,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             '",
                     buttonImage: "' .
             $this->getViewFileUrl(
-                'images/grid-cal.gif'
+                'images/grid-cal.png'
             ) . '",
                         buttonText: "' . $this->escapeHtml(__('Date selector')) .
             '",
@@ -203,7 +203,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             $dateObj->setTimezone(
                 $this->_scopeConfig->getValue(
                     $this->_localeDate->getDefaultTimezonePath(),
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             );
 

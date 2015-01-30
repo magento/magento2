@@ -10,7 +10,6 @@ define([
     "jquery",
     "jquery/ui",
     "mage/validation/validation",
-    "Magento_Checkout/js/accordion",
     "mage/translate"
 ], function($){
     'use strict';
