@@ -9,7 +9,7 @@ define([
     "mage/cookies"
 ], function($){
 
-    $.widget('mage.cookieBlock', {
+    $.widget('mage.cookieNotices', {
         _create: function() {
             if ($.mage.cookies.get(this.options.cookieName)) {
                 this.element.hide();
@@ -28,5 +28,5 @@ define([
         }
     });
 
-    return $.mage.cookieBlock;
+    return $.mage.cookieNotices;
 });
