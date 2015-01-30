@@ -80,7 +80,7 @@ interface AddressInterface extends ExtensibleDataInterface
      * @param \Magento\Customer\Api\Data\RegionInterface $region
      * @return $this
      */
-    public function setRegion(RegionInterface $region);
+    public function setRegion(RegionInterface $region = null);
 
     /**
      * Two-letter country code in ISO_3166-2 format

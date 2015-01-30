@@ -319,5 +319,5 @@ interface CustomerInterface extends ExtensibleDataInterface
      * @param \Magento\Customer\Api\Data\AddressInterface[] $addresses
      * @return $this
      */
-    public function setAddresses(array $addresses);
+    public function setAddresses(array $addresses = null);
 }

@@ -687,9 +687,7 @@ class AccountManagement implements AccountManagementInterface
         $customerModel = $this->customerFactory->create()->updateData(
             $customer->setAddresses([])
         );
-        if (!is_null($oldAddresses)) {
-            $customer->setAddresses($oldAddresses);
-        }
+        $customer->setAddresses($oldAddresses);
 
         $result = $customerModel->validate();
         if (true !== $result && is_array($result)) {

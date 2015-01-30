@@ -63,5 +63,5 @@ interface OptionInterface
      * @param \Magento\Customer\Api\Data\OptionInterface[] $options
      * @return $this
      */
-    public function setOptions(array $options);
+    public function setOptions(array $options = null);
 }
