@@ -9,10 +9,10 @@
 ?>
 <?php
 /**
- * @var $this \Magento\Theme\Block\Html\Notices
+ * @var $block \Magento\Theme\Block\Html\Notices
  */
 ?>
-<?php if ($this->displayNoscriptNotice()): ?>
+<?php if ($block->displayNoscriptNotice()): ?>
     <noscript>
         <div class="message global noscript">
             <div class="content">
@@ -24,7 +24,7 @@
         </div>
     </noscript>
 <?php endif; ?>
-<?php if ($this->displayNoLocalStorageNotice()): ?>
+<?php if ($block->displayNoLocalStorageNotice()): ?>
     <div class="notice global site local_storage" style="display: none;">
         <div class="content">
             <p>
@@ -51,7 +51,7 @@ require(['jquery'], function(jQuery){
 });
 </script>
 <?php endif; ?>
-<?php if ($this->displayDemoNotice()): ?>
+<?php if ($block->displayDemoNotice()): ?>
     <div class="message global demo">
         <div class="content">
             <p><?php echo __('This is demo store. All orders will not be transferred.') ?></p>
@@ -64,7 +64,7 @@ require(['jquery'], function(jQuery){
             <p>
                 <strong><?php echo __('We use cookies to make your experience better.') ?></strong>
                 <span><?php echo __('To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.') ?></span>
-                <?php echo __('<a href="%1">Learn more</a>.', $this->getPrivacyPolicyLink()) ?></p>
+                <?php echo __('<a href="%1">Learn more</a>.', $block->getPrivacyPolicyLink()) ?></p>
             <div class="actions">
                 <button id="btn-cookie-allow" class="action allow primary">
                     <span><?php echo __('Allow Cookies');?></span>
@@ -84,7 +84,7 @@ require([
         cookieName: '<?php echo \Magento\Store\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
         cookieValue: '<?php echo $this->helper('Magento\Store\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
         cookieLifetime: <?php echo $this->helper('Magento\Store\Helper\Cookie')->getCookieRestrictionLifetime()?>,
-        noCookiesUrl: '<?php echo $this->getUrl('cms/index/noCookies') ?>'
+        noCookiesUrl: '<?php echo $block->getUrl('cms/index/noCookies') ?>'
     });
 // ]]>
 
