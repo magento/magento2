@@ -23,6 +23,11 @@ class Increment
     protected $incrementValue;
 
     /**
+     * @var string
+     */
+	protected $entityType;
+
+    /**
      * @param EavConfig $eavConfig
      */
     public function __construct(
@@ -40,6 +45,16 @@ class Increment
     {
         return $this->incrementValue;
     }
+	
+	/*
+	* Sets the entity type
+	* @param string $entityType
+	* @return Magento\Sales\Model\Increment
+	*/
+	public function setEntityType($entityType){
+		$this->entityType = $entityType;
+		return $this;
+	}
 
     /**
      * Returns new value of increment id
@@ -51,8 +66,13 @@ class Increment
      */
     public function getNextValue($storeId)
     {
+		if(empty($this->entityType)){
+			throw new \Magento\Framework\Model\Exception(
+				__('EntityType is empty')
+			);
+		}
         $this->incrementValue =
-            $this->eavConfig->getEntityType(Order::ENTITY)->fetchNewIncrementId($storeId);
+            $this->eavConfig->getEntityType($this->entityType)->fetchNewIncrementId($storeId);
         return $this->incrementValue;
     }
 }
