@@ -16,25 +16,6 @@ define([
 ], function ($) {
     'use strict';
 
-    if (!Function.prototype.bind) {
-        /**
-         * @param   {Object} bind
-         * @returns {Function}
-         */
-        Function.prototype.bind = function (bind) {
-            var self = this;
-
-            /**
-             * @returns {Function}
-             */
-            return function () {
-                var args = Array.prototype.slice.call(arguments);
-
-                return self.apply(bind || null, args);
-            };
-        };
-    }
-
     describe('Testing html-comments-parser $.fn.comments behavior', function () {
         var element,
             iframe,

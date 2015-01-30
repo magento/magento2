@@ -9,8 +9,7 @@ module.exports = function (grunt) {
 
     //  Required plugins
     //  _____________________________________________
-    var specRunner = require('./dev/tests/js/framework/spec_runner');
-    specRunner.init(grunt);
+    var specRunner = require('./dev/tests/js/framework/spec_runner')(grunt);
 
     require('./dev/tools/grunt/tasks/mage-minify')(grunt);
 
@@ -489,10 +488,10 @@ module.exports = function (grunt) {
                 template: require('grunt-template-jasmine-requirejs'),
                 ignoreEmpty: true
             },
-            'backend-unit':           specRunner.build('unit', 'adminhtml', 8000),
-            'backend-integration':    specRunner.build('integration', 'adminhtml', 8000),
-            'frontend-unit':          specRunner.build('unit', 'frontend', 3000),
-            'frontend-integration':   specRunner.build('integration', 'frontend', 3000)
+            'backend-unit':           specRunner.configure('unit', 'adminhtml', 8000),
+            'backend-integration':    specRunner.configure('integration', 'adminhtml', 8000),
+            'frontend-unit':          specRunner.configure('unit', 'frontend', 3000),
+            'frontend-integration':   specRunner.configure('integration', 'frontend', 3000)
         }
     });
 

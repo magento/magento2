@@ -19,11 +19,11 @@ define([
 
             $(document.body).append(element);
 
-            ko.applyBindingsToNode(element, { datepicker: observable });
+            ko.applyBindingsToNode(element[0], { datepicker: observable });
         });
 
         afterEach(function () {
-            $(element).remove();
+            element.remove();
         });
 
         it('writes picked date\'s value to assigned observable', function () {
@@ -33,7 +33,7 @@ define([
                 dateFormat,
                 result;
 
-            dateFormat  = $(element).datepicker('option', 'dateFormat');
+            dateFormat  = element.datepicker('option', 'dateFormat');
             todayDate   = moment().format(dateFormat);
 
             openBtn  = $('img.ui-datepicker-trigger');

@@ -2,14 +2,33 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-/* global __dirname: true */
-
 /**
- * Initializes 'specRunner' grunt task.
+ * Creates jasmine configuration object
  *
- * @param  {Object} grunt
+ * @param  {String} type - type of tests
+ * @param  {String} dir - area dir
+ * @param  {Number} port - port to run on
+ * @return {Object}
  */
-module.exports.init = function (grunt) {
+function buildConfig(type, dir, port) {
+    'use strict';
+
+    return {
+        src: '<%= path.spec %>/shim.js',
+        options: {
+            host: 'http://localhost:' + port,
+            specs: '<%= path.spec %>/' + type + '/**/' + dir + '/**/*Spec.js',
+            templateOptions: {
+                requireConfigFile: [
+                    '<%= path.spec %>/require.config.js',
+                    '<%= path.spec %>/' + type + '/config/' + dir + '.js'
+                ]
+            }
+        }
+    };
+}
+
+module.exports = function (grunt) {
     'use strict';
 
     var connect     = require('connect'),
@@ -167,27 +186,6 @@ module.exports.init = function (grunt) {
     function canModify(url) {
         return url.match(/^\/(\.grunt)|(dev\/tests)|(dev\\tests)|(_SpecRunner\.html)/) === null;
     }
-};
 
-/**
- * Creates jasmine configuration object
- *
- * @param  {String} type - type of tests
- * @param  {String} dir - area dir
- * @param  {Number} port - port to run on
- * @return {Object}
- */
-module.exports.build = function (type, dir, port) {
-    'use strict';
-
-    return {
-        src: '<%= path.spec %>/env.js',
-        options: {
-            host: 'http://localhost:' + port,
-            specs: '<%= path.spec %>/' + type + '/**/' + dir + '/**/*Spec.js',
-            templateOptions: {
-                requireConfigFile: '<%= path.spec %>/' + type + '/config.js'
-            }
-        }
-    };
+    return { configure: buildConfig };
 };
