@@ -32,6 +32,11 @@ class SimpleClassTesting
      * @var string
      */
     private $globalValue;
+    
+    /**
+     * @var
+     */
+    private $nullValue;
 
     /**
      * @param \StdClass $nonSharedDependency
@@ -39,6 +44,7 @@ class SimpleClassTesting
      * @param string $value
      * @param array $valueArray
      * @param string $globalValue
+     * @param null $nullValue
      */
     public function __construct(
         \StdClass $nonSharedDependency,
@@ -48,7 +54,8 @@ class SimpleClassTesting
             'default_value1',
             'default_value2'
         ],
-        $globalValue = ''
+        $globalValue = '',
+        $nullValue = null
     ) {
 
         $this->nonSharedDependency = $nonSharedDependency;
@@ -56,6 +63,15 @@ class SimpleClassTesting
         $this->value = $value;
         $this->valueArray = $valueArray;
         $this->globalValue = $globalValue;
+        $this->nullValue = $nullValue;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNullValue()
+    {
+        return $this->nullValue;
     }
 
     /**

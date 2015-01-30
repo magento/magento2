@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tools\Di\Compiler;
 
 class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
@@ -41,6 +39,7 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
             new ConstructorArgument(['type_dependency_shared', 'Type\Dependency\Shared', true, null]),
             new ConstructorArgument(['value', null, false, 'value']),
             new ConstructorArgument(['value_array', null, false, ['default_value1', 'default_value2']]),
+            new ConstructorArgument(['value_null', null, false, null]),
         ];
         $this->diContainerConfig->expects($this->any())
             ->method('isShared')
@@ -74,6 +73,7 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
             new ConstructorArgument(['global_argument_def', null, false, []]),
             new ConstructorArgument(['value_configured', null, false, 'value']),
             new ConstructorArgument(['value_array_configured', null, false, []]),
+            new ConstructorArgument(['value_null', null, false, null]),
         ];
 
 
@@ -123,6 +123,9 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
             'value_array' => [
                 '_v_' => ['default_value1', 'default_value2'],
             ],
+            'value_null' => [
+                '_vn_' => true,
+            ],
         ];
     }
 
@@ -150,7 +153,8 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
                     ]
                 ],
                 'array_global_argument' => ['argument' => 'global_argument_configured']
-            ]
+            ],
+            'value_null' => null,
         ];
     }
 
@@ -196,7 +200,10 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
                         '_d_' => null
                     ]
                 ],
-            ]
+            ],
+            'value_null' => [
+                '_vn_' => true,
+            ],
         ];
     }
 }

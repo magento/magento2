@@ -15,7 +15,7 @@ class ArgumentsResolver
     private $diContainerConfig;
 
     /**
-     * Instance argument pattern used for configuration
+     * Shared instance argument pattern used for configuration
      *
      * @var array
      */
@@ -39,6 +39,15 @@ class ArgumentsResolver
      */
     private $valueArgumentPattern = [
         '_v_' => null,
+    ];
+
+    /**
+     * Value argument pattern used for configuration
+     *
+     * @var array
+     */
+    private $nullValueArgumentPattern = [
+        '_vn_' => true,
     ];
 
     /**
@@ -114,6 +123,8 @@ class ArgumentsResolver
     }
 
     /**
+     * Returns configured array attribute
+     *
      * @param array $array
      * @return mixed
      */
@@ -140,7 +151,14 @@ class ArgumentsResolver
         return $array;
     }
 
-    private function getConfiguredInstanceArgument($config) {
+    /**
+     * Returns configured instance argument
+     *
+     * @param $config
+     * @return array|mixed
+     */
+    private function getConfiguredInstanceArgument($config)
+    {
         $argument = $this->getInstanceArgument($config['instance']);
         if (isset($config['shared'])) {
             if ($config['shared']) {
@@ -202,6 +220,10 @@ class ArgumentsResolver
      */
     private function getNonObjectArgument($value)
     {
+        if (is_null($value)) {
+            return $this->nullValueArgumentPattern;
+        }
+
         $argument = $this->valueArgumentPattern;
         if (is_array($value)) {
             $value = $this->getConfiguredArrayAttribute($value);

@@ -92,6 +92,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value', $result->getValue());
         $this->assertEquals(['default_value1', 'default_value2'], $result->getValueArray());
         $this->assertEquals('GLOBAL_ARGUMENT', $result->getGlobalValue());
+        $this->assertNull($result->getNullValue());
     }
 
     public function testCreateSimpleConfiguredArguments()
@@ -149,7 +150,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             $result->getValueArray()
         );
         $this->assertEquals('GLOBAL_ARGUMENT', $result->getGlobalValue());
-
+        $this->assertNull($result->getNullValue());
     }
 
     /**
@@ -175,6 +176,9 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             'globalValue' => [
                 '_a_' => 'globalValue',
                 '_d_' => null
+            ],
+            'nullValue' => [
+                '_vn_' => true
             ]
         ];
     }
@@ -225,6 +229,9 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             'globalValue' => [
                 '_a_' => 'globalValue',
                 '_d_' => null
+            ],
+            'nullValue' => [
+                '_vn_' => true
             ]
         ];
     }
