@@ -76,6 +76,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @param Mapper $addressMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,

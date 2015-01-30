@@ -527,7 +527,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         }
         $customerAddressData = array_merge($customerAddressData, $customerAddressDataWithRegion);
 
-        return $this->addressDataFactory->populateWithArray($customerAddressData)->create();
+        $addressDataObject = $this->addressDataFactory->create();
+        $this->dataObjectHelper->populateWithArray($addressDataObject, $customerAddressData);
+        return $addressDataObject;
     }
 
     /**
