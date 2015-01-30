@@ -8,8 +8,6 @@
 
 namespace Magento\Tools\Di\Compiler;
 
-use Magento\Tools\Di\Compiler\ConstructorArgument;
-
 class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**

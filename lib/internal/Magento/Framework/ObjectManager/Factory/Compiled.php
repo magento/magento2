@@ -31,22 +31,24 @@ class Compiled extends AbstractFactory
                 $argument = $arguments[$key];
             } else {
                 if ($argument === (array)$argument) {
-                    if (isset($argument['__val__']) || array_key_exists('__val__', $argument)) {
-                        $argument = $argument['__val__'];
+                    if (isset($argument['_v_'])) {
+                        $argument = $argument['_v_'];
                         if ($argument === (array)$argument) {
                             $this->parseArray($argument);
                         }
-                    } elseif (isset($argument['__non_shared__'])) {
-                        $argument = $this->objectManager->create($argument['__instance__']);
-                    } elseif (isset($argument['__arg__'])) {
-                        if (isset($this->globalArguments[$argument['__arg__']])) {
-                            $argument = $this->globalArguments[$argument['__arg__']];
+                    } elseif (isset($argument['_i_'])) {
+                        if ($argument['_s_']) {
+                            $argument = $this->objectManager->get($argument['_i_']);
                         } else {
-                            $argument = $argument['__default__'];
+                            $argument = $this->objectManager->create($argument['_i_']);
+                        }
+                    } elseif (isset($argument['_a_'])) {
+                        if (isset($this->globalArguments[$argument['_a_']])) {
+                            $argument = $this->globalArguments[$argument['_a_']];
+                        } else {
+                            $argument = $argument['_d_'];
                         }
                     }
-                } else {
-                    $argument = $this->objectManager->get($argument);
                 }
             }
         }
@@ -60,5 +62,36 @@ class Compiled extends AbstractFactory
         }
 
         return $this->createObject($type, $args);
+    }
+
+    /**
+     * Parse array argument
+     *
+     * @param array $array
+     *
+     * @return void
+     */
+    protected function parseArray(&$array)
+    {
+        foreach ($array as $key => $item) {
+            if ($item === (array)$item) {
+                if (isset($item['_i_'])) {
+                    if ($item['_s_']) {
+                        $array[$key] = $this->objectManager->get($item['_i_']);
+                    } else {
+                        $array[$key] = $this->objectManager->create($item['_i_']);
+                    }
+
+                } elseif (isset($item['_a_'])) {
+                    if (isset($this->globalArguments[$item['_a_']])) {
+                        $array[$key] = $this->globalArguments[$item['_a_']];
+                    } else {
+                        $array[$key] = $item['_d_'];
+                    }
+                } else {
+                    $this->parseArray($array[$key]);
+                }
+            }
+        }
     }
 }
