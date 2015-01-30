@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Module;
 
+use Magento\Framework\Stdlib\String;
+
 /**
  * Provide information of dependencies and conflicts in composer.json files, mapping of package name to module name,
  * and mapping of module name to package version
@@ -54,15 +56,23 @@ class PackageInfo
     private $reader;
 
     /**
+     * String utilities
+     *
+     * @var String
+     */
+    private $string;
+
+    /**
      * Constructor
      *
      * @param ModuleList\Loader $loader
      * @param Dir\Reader $reader
      */
-    public function __construct(ModuleList\Loader $loader, Dir\Reader $reader)
+    public function __construct(ModuleList\Loader $loader, Dir\Reader $reader, String $string)
     {
         $this->loader = $loader;
         $this->reader = $reader;
+        $this->string = $string;
     }
 
     /**
@@ -77,13 +87,21 @@ class PackageInfo
              * array keys: module name in module.xml; array values: raw content from composer.json
              * this raw data is used to create a dependency graph and also a package name-module name mapping
              */
-            $rawData = array_combine(
-                array_keys($this->loader->load()),
-                $this->reader->getComposerJsonFiles()->toArray()
-            );
+            $rawData = [];
+            $jsonData = $this->reader->getComposerJsonFiles()->toArray();
+            foreach (array_keys($this->loader->load()) as $moduleName) {
+                $key = $this->string->upperCaseWords($moduleName, '_', '/') . '/composer.json';
+                if (isset($jsonData[$key])) {
+                    $rawData[$moduleName] = $jsonData[$key];
+                } else {
+                    $rawData[$moduleName] = '{}';
+                }
+            }
             foreach ($rawData as $moduleName => $jsonData) {
                 $jsonData = \Zend_Json::decode($jsonData);
-                $this->packageModuleMap[$jsonData['name']] = $moduleName;
+                if (isset($jsonData['name'])) {
+                    $this->packageModuleMap[$jsonData['name']] = $moduleName;
+                }
                 if (isset($jsonData['version'])) {
                     $this->modulePackageVersionMap[$moduleName] = $jsonData['version'];
                 }

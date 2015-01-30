@@ -31,11 +31,11 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['A' => [], 'B' => [], 'C' => [], 'D' => [], 'E' => []]));
 
         $composerData = [
-            'A' => '{"name":"a", "require":{"b":"0.1"}, "conflict":{"c":"0.1"}, "version":"0.1"}',
-            'B' => '{"name":"b", "require":{"d":"0.3"}, "version":"0.2"}',
-            'C' => '{"name":"c", "require":{"e":"0.1"}, "version":"0.1"}',
-            'D' => '{"name":"d", "conflict":{"c":"0.1"}, "version":"0.3"}',
-            'E' => '{"name":"e", "version":"0.4"}',
+            'A/composer.json' => '{"name":"a", "require":{"b":"0.1"}, "conflict":{"c":"0.1"}, "version":"0.1"}',
+            'B/composer.json' => '{"name":"b", "require":{"d":"0.3"}, "version":"0.2"}',
+            'C/composer.json' => '{"name":"c", "require":{"e":"0.1"}, "version":"0.1"}',
+            'D/composer.json' => '{"name":"d", "conflict":{"c":"0.1"}, "version":"0.3"}',
+            'E/composer.json' => '{"name":"e", "version":"0.4"}',
         ];
         $fileIteratorMock = $this->getMock('Magento\Framework\Config\FileIterator', [], [], '', false);
         $fileIteratorMock->expects($this->once())
@@ -45,7 +45,7 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
             ->method('getComposerJsonFiles')
             ->will($this->returnValue($fileIteratorMock));
 
-        $this->packageInfo = new PackageInfo($this->loader, $this->reader);
+        $this->packageInfo = new PackageInfo($this->loader, $this->reader, new \Magento\Framework\Stdlib\String());
     }
 
     public function testGetModuleName()

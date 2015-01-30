@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Module;
 
-use Composer\Package\LinkConstraint\VersionConstraint;
 use Composer\Package\Version\VersionParser;
 
 /**
