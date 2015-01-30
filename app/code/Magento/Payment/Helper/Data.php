@@ -6,7 +6,7 @@
 namespace Magento\Payment\Helper;
 
 use Magento\Payment\Model\Method\Substitution;
-use Magento\Sales\Model\Quote;
+use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use Magento\Payment\Block\Form;
 use Magento\Payment\Model\Info;
@@ -18,6 +18,7 @@ use Magento\Payment\Model\MethodInterface;
 
 /**
  * Payment module base helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -52,7 +53,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * App emulation model
      *
-     * @var \Magento\Core\Model\App\Emulation
+     * @var \Magento\Store\Model\App\Emulation
      */
     protected $_appEmulation;
 
@@ -68,7 +69,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param LayoutFactory $layoutFactory
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
-     * @param \Magento\Core\Model\App\Emulation $appEmulation
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param \Magento\Framework\App\Config\Initial $initialConfig
      */
@@ -77,7 +78,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         LayoutFactory $layoutFactory,
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
-        \Magento\Core\Model\App\Emulation $appEmulation,
+        \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Payment\Model\Config $paymentConfig,
         \Magento\Framework\App\Config\Initial $initialConfig
     ) {
@@ -111,7 +112,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $class = $this->_scopeConfig->getValue(
             $this->getMethodModelConfigName($code),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         if (!$class) {
@@ -136,7 +137,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         foreach (array_keys($methods) as $code) {
             $model = $this->_scopeConfig->getValue(
                 $this->getMethodModelConfigName($code),
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             );
             if (!$model) {
@@ -265,6 +266,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $withGroups
      * @param Store|null $store
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getPaymentMethodList($sorted = true, $asLabelValue = false, $withGroups = false, $store = null)
     {
@@ -322,7 +325,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             \Magento\Payment\Model\Method\Free::XML_PATH_PAYMENT_FREE_ACTIVE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -337,7 +340,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             \Magento\Payment\Model\Method\Free::XML_PATH_PAYMENT_FREE_ORDER_STATUS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -352,7 +355,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             \Magento\Payment\Model\Method\Free::XML_PATH_PAYMENT_FREE_PAYMENT_ACTION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

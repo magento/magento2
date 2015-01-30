@@ -603,6 +603,16 @@
     line-height: 28px;
 }
 
+.rule-tree .fieldset {
+    min-width: 0; // Fixed Chrome fieldset issue
+}
+
+@-moz-document url-prefix() { // Fixed Firefox fieldset issue
+    .rule-tree .fieldset {
+        display: table-cell;
+    }
+}
+
 .rule-tree ul {
     list-style: none;
     padding-left: 16px;
@@ -676,6 +686,7 @@
     border: solid 1px #CCC;
     margin: 20px;
     padding: 15px 10px 5px;
+    overflow: auto;
 }
 
 .rule-param-wait {

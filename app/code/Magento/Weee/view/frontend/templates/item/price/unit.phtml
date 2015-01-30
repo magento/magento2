@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $this \Magento\Weee\Block\Item\Price\Renderer */
 
 $item = $this->getItem();
@@ -12,7 +14,7 @@ $item = $this->getItem();
     <span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Incl. Tax')); ?>">
         <?php if ($this->displayPriceWithWeeeDetails()): ?>
             <span class="cart-tax-total"
-                data-tax-toggle='{"itemTaxId" : "#unit-item-tax-details<?php echo $item->getId(); ?>"}'>
+                data-mage-init='{"taxtToggle": {"itemTaxId" : "#unit-item-tax-details<?php echo $item->getId(); ?>"}}'>
         <?php else: ?>
             <span class="cart-price">
         <?php endif; ?>
@@ -30,7 +32,7 @@ $item = $this->getItem();
 
             <?php if ($this->displayFinalPrice()): ?>
                 <span class="cart-tax-total"
-                    data-tax-toggle='{"itemTaxId" : "#unit-item-tax-details<?php echo $item->getId(); ?>"}'>
+                    data-mage-init='{"taxtToggle": {"itemTaxId" : "#unit-item-tax-details<?php echo $item->getId(); ?>"}}'>
                     <span class="weee" data-label="<?php echo $this->escapeHtml(__('Total incl. tax')); ?>">
                         <?php echo $this->formatPrice($this->getFinalUnitDisplayPriceInclTax()); ?>
                     </span>
@@ -44,7 +46,7 @@ $item = $this->getItem();
     <span class="price-excluding-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax')); ?>">
         <?php if ($this->displayPriceWithWeeeDetails()): ?>
             <span class="cart-tax-total"
-                data-tax-toggle='{"itemTaxId" : "#eunit-item-tax-details<?php echo $item->getId(); ?>"}'>
+                data-mage-init='{"taxtToggle": {"itemTaxId" : "#eunit-item-tax-details<?php echo $item->getId(); ?>"}}'>
         <?php else: ?>
             <span class="cart-price">
         <?php endif; ?>
@@ -63,7 +65,7 @@ $item = $this->getItem();
 
             <?php if ($this->displayFinalPrice()): ?>
                 <span class="cart-tax-total"
-                    data-tax-toggle='{"itemTaxId" : "#eunit-item-tax-details<?php echo $item->getId(); ?>"}'>
+                    data-mage-init='{"taxtToggle": {"itemTaxId" : "#eunit-item-tax-details<?php echo $item->getId(); ?>"}}'>
                     <span class="weee" data-label="<?php echo $this->escapeHtml(__('Total')); ?>">
                         <?php echo $this->formatPrice($this->getFinalUnitDisplayPriceExclTax()); ?>
                     </span>

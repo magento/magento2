@@ -24,8 +24,8 @@ class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Optio
      */
     public function setValidationContainer($elementId, $containerId)
     {
-        return '<script type="text/javascript">
-            $(\'' .
+        return '<script>
+            document.getElementById(\'' .
             $elementId .
             '\').advaiceContainer = \'' .
             $containerId .

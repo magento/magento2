@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <p class="switcher"><label for="store_switcher"><?php echo __('View Statistics For:') ?></label>
 <?php echo $this->getHintHtml() ?>
@@ -31,25 +34,30 @@
     <?php endforeach; ?>
 </select>
 </p>
-<script type="text/javascript">
-    function switchStore(obj){
-        if (obj.options[obj.selectedIndex].getAttribute('website') == 'true') {
-            var selectionType = 'website';
-        } else if (obj.options[obj.selectedIndex].getAttribute('group') == 'true') {
-            var selectionType = 'group';
-        } else {
-            var selectionType = 'store';
+<script>
+    require([
+        'prototype'
+    ], function () {
+
+        window.switchStore = function (obj) {
+            if (obj.options[obj.selectedIndex].getAttribute('website') == 'true') {
+                var selectionType = 'website';
+            } else if (obj.options[obj.selectedIndex].getAttribute('group') == 'true') {
+                var selectionType = 'group';
+            } else {
+                var selectionType = 'store';
+            }
+            var storeParam = obj.value ? selectionType + '/' + obj.value + '/' : '';
+            if (obj.switchParams) {
+                storeParam += obj.switchParams;
+            }
+            if ($('diagram_tab_orders_content').style.display != 'none') {
+                var select = $('order_orders_period');
+            } else if ($('diagram_tab_amounts_content').style.display != 'none') {
+                var select = $('order_amounts_period');
+            }
+            var periodParam = select.value ? 'period/' + select.value + '/' : '';
+            setLocation('<?php echo $this->getSwitchUrl() ?>' + storeParam + periodParam);
         }
-        var storeParam = obj.value ? selectionType + '/' + obj.value + '/' : '';
-        if(obj.switchParams){
-            storeParam+= obj.switchParams;
-        }
-        if ($('diagram_tab_orders_content').style.display != 'none') {
-            var select = $('order_orders_period');
-        } else if ($('diagram_tab_amounts_content').style.display != 'none') {
-            var select = $('order_amounts_period');
-        }
-        var periodParam = select.value ? 'period/'+select.value + '/' : '';
-        setLocation('<?php echo $this->getSwitchUrl() ?>'+storeParam+periodParam);
-    }
+    });
 </script>

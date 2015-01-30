@@ -18,7 +18,7 @@ class WordsFinder
      */
     protected $_binaryExtensions = [
         'jpg', 'jpeg', 'png', 'gif', 'swf', 'mp3', 'avi', 'mov', 'flv', 'jar', 'zip',
-        'eot', 'ttf', 'woff', 'ico', 'svg',
+        'eot', 'ttf', 'woff', 'woff2', 'ico', 'svg',
     ];
 
     /**
@@ -47,7 +47,9 @@ class WordsFinder
      *
      * @var array
      */
-    protected $copyrightSkipList = [];
+    protected $copyrightSkipList = [
+        'lib/web/legacy-build.min.js'
+    ];
 
     /**
      * Whether copyright presence should be checked or not

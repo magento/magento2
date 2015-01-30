@@ -3,11 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
 /**
  * Test class for \Magento\CatalogSearch\Model\Layer\Filter\Category.
  *
+ * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/Catalog/_files/categories.php
  */
 class CategoryTest extends \PHPUnit_Framework_TestCase

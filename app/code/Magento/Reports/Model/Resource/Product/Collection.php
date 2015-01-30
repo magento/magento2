@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\Resource\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     const SELECT_COUNT_SQL_TYPE_CART = 1;
@@ -54,7 +57,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     protected $_productType;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -63,7 +66,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -81,7 +84,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -90,7 +93,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -236,10 +239,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         if ($this->_selectCountSqlType == self::SELECT_COUNT_SQL_TYPE_CART) {
             $countSelect = clone $this->getSelect();
             $countSelect->reset()->from(
-                ['quote_item_table' => $this->getTable('sales_quote_item')],
+                ['quote_item_table' => $this->getTable('quote_item')],
                 ['COUNT(DISTINCT quote_item_table.product_id)']
             )->join(
-                ['quote_table' => $this->getTable('sales_quote')],
+                ['quote_table' => $this->getTable('quote')],
                 'quote_table.entity_id = quote_item_table.quote_id AND quote_table.is_active = 1',
                 []
             );
@@ -269,10 +272,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $countSelect->reset();
 
         $countSelect->from(
-            ['quote_items' => $this->getTable('sales_quote_item')],
+            ['quote_items' => $this->getTable('quote_item')],
             'COUNT(*)'
         )->join(
-            ['quotes' => $this->getTable('sales_quote')],
+            ['quotes' => $this->getTable('quote')],
             'quotes.entity_id = quote_items.quote_id AND quotes.is_active = 1',
             []
         )->where(

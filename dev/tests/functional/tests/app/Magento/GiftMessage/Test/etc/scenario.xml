@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<scenarios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Config/etc/scenario.xsd">
+<scenarios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Config/etc/scenario.xsd">
     <scenario name="CheckoutWithGiftMessagesTest" module="Magento_GiftMessage">
         <methods>
             <method name="test">
@@ -13,7 +13,7 @@
                     <first>setupConfiguration</first>
                     <step name="setupConfiguration" module="Magento_Core">
                         <arguments>
-                            <item name="configData">cashondelivery, enableGiftMessages</item>
+                            <item name="configData">cashondelivery, enable_gift_messages</item>
                         </arguments>
                         <next>createProducts</next>
                     </step>
@@ -56,7 +56,7 @@
                     <first>setupConfiguration</first>
                     <step name="setupConfiguration" module="Magento_Core">
                         <arguments>
-                            <item name="configData">cashondelivery, enableGiftMessages</item>
+                            <item name="configData">cashondelivery, enable_gift_messages</item>
                         </arguments>
                         <next>createProducts</next>
                     </step>

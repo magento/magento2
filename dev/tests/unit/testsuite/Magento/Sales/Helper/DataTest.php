@@ -37,7 +37,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -60,67 +60,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMockBuilder('Magento\Sales\Model\Store')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
-            ->setMethods(['getHasError', 'setHasError', 'addMessage', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
-    public function testCheckQuoteAmountExistingError()
-    {
-        $this->quoteMock->expects($this->once())
-            ->method('getHasError')
-            ->will($this->returnValue(true));
-
-        $this->quoteMock->expects($this->never())
-            ->method('setHasError');
-
-        $this->quoteMock->expects($this->never())
-            ->method('addMessage');
-
-        $this->assertSame(
-            $this->helper,
-            $this->helper->checkQuoteAmount($this->quoteMock, Data::MAXIMUM_AVAILABLE_NUMBER + 1)
-        );
-    }
-
-    public function testCheckQuoteAmountAmountLessThanAvailable()
-    {
-        $this->quoteMock->expects($this->once())
-            ->method('getHasError')
-            ->will($this->returnValue(false));
-
-        $this->quoteMock->expects($this->never())
-            ->method('setHasError');
-
-        $this->quoteMock->expects($this->never())
-            ->method('addMessage');
-
-        $this->assertSame(
-            $this->helper,
-            $this->helper->checkQuoteAmount($this->quoteMock, Data::MAXIMUM_AVAILABLE_NUMBER - 1)
-        );
-    }
-
-    public function testCheckQuoteAmountAmountGreaterThanAvailable()
-    {
-        $this->quoteMock->expects($this->once())
-            ->method('getHasError')
-            ->will($this->returnValue(false));
-
-        $this->quoteMock->expects($this->once())
-            ->method('setHasError')
-            ->with(true);
-
-        $this->quoteMock->expects($this->once())
-            ->method('addMessage')
-            ->with(__('This item price or quantity is not valid for checkout.'));
-
-        $this->assertSame(
-            $this->helper,
-            $this->helper->checkQuoteAmount($this->quoteMock, Data::MAXIMUM_AVAILABLE_NUMBER + 1)
-        );
     }
 
     /**
@@ -259,7 +198,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(
                 $flagName,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this->storeMock
             )
             ->will($this->returnValue($returnValue));

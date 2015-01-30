@@ -13,6 +13,9 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManagementInterface
 {
     /**
@@ -26,7 +29,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     protected $priceBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -53,7 +56,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\Data\ProductTierPriceDataBuilder $priceBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param PriceModifier $priceModifier
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param GroupManagementInterface $groupManagement
@@ -62,7 +65,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     public function __construct(
         ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Api\Data\ProductTierPriceDataBuilder $priceBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\PriceModifier $priceModifier,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         GroupManagementInterface $groupManagement,
@@ -90,7 +93,8 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
         $tierPrices = $product->getData('tier_price');
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $found = false;
@@ -145,7 +149,8 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     {
         $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $this->priceModifier->removeTierPrice($product, $customerGroupId, $qty, $websiteIdentifier);
@@ -160,7 +165,8 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
 
         $priceKey = 'website_price';
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) == 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        if ($value == 0) {
             $priceKey = 'price';
         }
 

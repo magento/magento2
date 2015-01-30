@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Test theme image model
  */
@@ -34,7 +36,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected $_uploaderMock;
 
     /**
-     * @var \Magento\Core\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_themeMock;
 
@@ -49,7 +51,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected $_rootDirectoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Theme\Image\Path
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Theme\Image\Path
      */
     protected $imagePathMock;
 
@@ -88,7 +90,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $imageFactory->expects($this->any())->method('create')->will($this->returnValue($this->_imageMock));
 
         $logger = $this->getMock('Psr\Log\LoggerInterface');
-        $this->_themeMock = $this->getMock('Magento\Core\Model\Theme', ['__wakeup'], [], '', false, false);
+        $this->_themeMock = $this->getMock('Magento\Theme\Model\Theme', ['__wakeup'], [], '', false, false);
         $this->_uploaderMock = $this->getMock(
             'Magento\Framework\View\Design\Theme\Image\Uploader',
             [],
@@ -121,11 +123,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Theme\Image\Path
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Theme\Image\Path
      */
     protected function _getImagePathMock()
     {
-        $imagePathMock = $this->getMock('Magento\Core\Model\Theme\Image\Path', [], [], '', false);
+        $imagePathMock = $this->getMock('Magento\Theme\Model\Theme\Image\Path', [], [], '', false);
         $testBaseUrl = 'http://localhost/media_path/';
 
         $imagePathMock->expects($this->any())->method('getPreviewImageDefaultUrl')
@@ -224,7 +226,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->method('getPreviewImagePath')
             ->will($this->returnValue($previewImage));
 
-        $themeMock = $this->getMockBuilder('Magento\Core\Model\Theme')
+        $themeMock = $this->getMockBuilder('Magento\Theme\Model\Theme')
             ->disableOriginalConstructor()
             ->setMethods(['getThemeImage', 'getPreviewImage', '__wakeup'])
             ->getMock();

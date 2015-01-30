@@ -11,12 +11,18 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 {
     /**
      * Prepare attributes form
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

@@ -5,6 +5,6 @@
  */
 require_once dirname(__DIR__) . '/' . 'bootstrap.php';
 
-$objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-$objectManager->create('Mtf\Util\Generate\Repository')->launch();
-\Mtf\Util\Generate\GenerateResult::displayResults();
+$magentoObjectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
+$collectionProvider = $magentoObjectManager->create('\Magento\Mtf\Util\Generate\Repository\CollectionProvider');
+$objectManager->create('Magento\Mtf\Util\Generate\Repository', ['collectionProvider' => $collectionProvider])->launch();

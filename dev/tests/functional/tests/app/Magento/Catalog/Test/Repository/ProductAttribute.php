@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class Product Attribute Repository
@@ -43,7 +43,6 @@ class ProductAttribute extends AbstractRepository
      */
     protected function buildNewAttributeData(array $defaultData)
     {
-        unset($defaultData['fields']['is_configurable']);
         unset($defaultData['fields']['attribute_code']);
         return $defaultData;
     }

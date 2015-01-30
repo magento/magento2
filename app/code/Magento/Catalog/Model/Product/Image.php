@@ -15,6 +15,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Image extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -156,14 +161,14 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
@@ -174,11 +179,13 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\Filesystem $filesystem,
@@ -381,6 +388,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param string|null $file
      * @return float|int
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getNeedMemoryForFile($file = null)
     {
@@ -436,6 +444,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param string $file
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function setBaseFile($file)
     {
@@ -459,7 +469,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             // check if placeholder defined in config
             $isConfigPlaceholder = $this->_scopeConfig->getValue(
                 "catalog/placeholder/{$this->getDestinationSubdir()}_placeholder",
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
             $configPlaceholder = '/placeholder/' . $isConfigPlaceholder;
             if (!empty($isConfigPlaceholder) && $this->_fileExists($baseDir . $configPlaceholder)) {
@@ -611,6 +621,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param int $height
      * @param int $opacity
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function setWatermark(
         $file,

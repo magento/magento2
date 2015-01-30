@@ -6,6 +6,10 @@
 
 namespace Magento\Wishlist\Controller\Index;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CartTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -88,6 +92,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected $urlMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->wishlistProviderMock = $this->getMockBuilder('Magento\Wishlist\Controller\WishlistProviderInterface')
@@ -263,6 +270,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->responseMock, $this->model->execute());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testExecuteWithQuantityArray()
     {
         $itemId = 2;
@@ -410,7 +420,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->willReturnSelf();
 
-        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->setMethods(['getHasError', 'collectTotals'])
             ->getMock();
@@ -473,6 +483,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->responseMock, $this->model->execute());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testExecuteWithoutQuantityArrayAndOutOfStock()
     {
         $itemId = 2;
@@ -633,6 +646,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->responseMock, $this->model->execute());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testExecuteWithoutQuantityArrayAndConfigurable()
     {
         $itemId = 2;

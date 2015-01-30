@@ -11,7 +11,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetAdd;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for CreateAttributeSetEntity
@@ -25,11 +25,16 @@ use Mtf\TestCase\Injectable;
  * 6. Save new Product Template.
  * 7. Verify created Product Template.
  *
- * @group Product_Attributes_(CS)
+ * @group Product_Attributes_(MX)
  * @ZephyrId MAGETWO-25104
  */
 class CreateAttributeSetEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog Product Set page
      *

@@ -3,10 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Shipping\Model\Carrier;
 
-use Magento\Sales\Model\Quote\Address\AbstractCarrierInterface;
-use Magento\Sales\Model\Quote\Address\RateResult\Error;
+use Magento\Quote\Model\Quote\Address\AbstractCarrierInterface;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
 
 abstract class AbstractCarrier extends \Magento\Framework\Object implements AbstractCarrierInterface
@@ -82,7 +85,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory
      */
     protected $_rateErrorFactory;
 
@@ -93,13 +96,13 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
         array $data = []
     ) {
@@ -123,7 +126,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
         $path = 'carriers/' . $this->_code . '/' . $field;
         return $this->_scopeConfig->getValue(
             $path,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStore()
         );
     }
@@ -133,6 +136,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param string $field
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getConfigFlag($field)
     {
@@ -142,7 +146,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
         $path = 'carriers/' . $this->_code . '/' . $field;
         return $this->_scopeConfig->isSetFlag(
             $path,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStore()
         );
     }
@@ -150,11 +154,11 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     /**
      * Collect and get rates
      *
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result|bool|null
      * @abstract
      */
-    abstract public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request);
+    abstract public function collectRates(\Magento\Quote\Model\Quote\Address\RateRequest $request);
 
     /**
      * Do request to shipment
@@ -162,6 +166,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param Request $request
      * @return \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function requestToShipment($request)
     {
@@ -174,6 +179,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param Request $request
      * @return \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function returnOfShipment($request)
     {
@@ -185,6 +191,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param \Magento\Framework\Object|null $params
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getContainerTypes(\Magento\Framework\Object $params = null)
     {
@@ -196,6 +203,8 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param \Magento\Framework\Object|null $params
      * @return array|bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getAllowedContainers(\Magento\Framework\Object $params = null)
     {
@@ -259,6 +268,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param \Magento\Framework\Object|null $params
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDeliveryConfirmationTypes(\Magento\Framework\Object $params = null)
     {
@@ -266,10 +276,11 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function checkAvailableShipCountries(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function checkAvailableShipCountries(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         $speCountriesAllow = $this->getConfigData('sallowspecific');
         /*
@@ -312,10 +323,11 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     /**
      * Processing additional validation to check is carrier applicable.
      *
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this|bool|Error
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function proccessAdditionalValidation(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function proccessAdditionalValidation(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         return $this;
     }
@@ -372,8 +384,10 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _updateFreeMethodQuote($request)
     {
@@ -405,12 +419,12 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
 
             $result = $this->_getQuotes();
             if ($result && ($rates = $result->getAllRates()) && count($rates) > 0) {
-                if (count($rates) == 1 && $rates[0] instanceof \Magento\Sales\Model\Quote\Address\RateResult\Method) {
+                if (count($rates) == 1 && $rates[0] instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method) {
                     $price = $rates[0]->getPrice();
                 }
                 if (count($rates) > 1) {
                     foreach ($rates as $rate) {
-                        if ($rate instanceof \Magento\Sales\Model\Quote\Address\RateResult\Method &&
+                        if ($rate instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method &&
                             $rate->getMethod() == $freeMethod
                         ) {
                             $price = $rate->getPrice();
@@ -554,6 +568,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param string|null $countryId
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isZipCodeRequired($countryId = null)
     {
@@ -577,6 +592,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      * Define if debugging is enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDebugFlag()
     {
@@ -609,6 +625,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param \Magento\Framework\Object $params
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getContentTypes(\Magento\Framework\Object $params)
     {

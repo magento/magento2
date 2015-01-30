@@ -7,7 +7,7 @@ namespace Magento\Customer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Customer VAT model
@@ -94,7 +94,7 @@ class Vat
     {
         return (string)$this->scopeConfig->getValue(
             self::XML_PATH_MERCHANT_COUNTRY_CODE,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -109,7 +109,7 @@ class Vat
     {
         return (string)$this->scopeConfig->getValue(
             self::XML_PATH_MERCHANT_VAT_NUMBER,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -128,7 +128,7 @@ class Vat
 
         $isAutoGroupAssign = $this->scopeConfig->isSetFlag(
             self::XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
         if (!$isAutoGroupAssign) {
@@ -147,7 +147,7 @@ class Vat
         if (isset($vatClassToGroupXmlPathMap[$vatClass])) {
             $groupId = (int)$this->scopeConfig->getValue(
                 $vatClassToGroupXmlPathMap[$vatClass],
-                ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
@@ -290,7 +290,7 @@ class Vat
             ',',
             $this->scopeConfig->getValue(
                 self::XML_PATH_EU_COUNTRIES_LIST,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             )
         );

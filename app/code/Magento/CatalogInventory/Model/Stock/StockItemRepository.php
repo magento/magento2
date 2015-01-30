@@ -23,6 +23,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class StockItemRepository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockItemRepository implements StockItemRepositoryInterface
 {
@@ -87,6 +88,7 @@ class StockItemRepository implements StockItemRepositoryInterface
      * @param MapperFactory $mapperFactory
      * @param TimezoneInterface $localeDate
      * @param Processor $indexProcessor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,

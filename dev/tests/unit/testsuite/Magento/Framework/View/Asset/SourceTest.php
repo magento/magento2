@@ -4,9 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -245,9 +248,9 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $this->varDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
 
         $readDirMap = [
-            [DirectoryList::ROOT, $this->rootDirRead],
-            [DirectoryList::STATIC_VIEW, $this->staticDirRead],
-            [DirectoryList::VAR_DIR, $this->varDir],
+            [DirectoryList::ROOT, DriverPool::FILE, $this->rootDirRead],
+            [DirectoryList::STATIC_VIEW, DriverPool::FILE, $this->staticDirRead],
+            [DirectoryList::VAR_DIR, DriverPool::FILE, $this->varDir],
         ];
 
         $this->filesystem->expects($this->any())

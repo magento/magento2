@@ -1,14 +1,13 @@
 <?php
 /**
- * @spi
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Theme\Test\Block;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Page Top Links block.
@@ -79,7 +78,10 @@ class Links extends Block
      */
     public function getLinkUrl($linkTitle)
     {
-        return trim($this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->getUrl());
+        $link = $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)
+            ->getAttribute('href');
+
+        return trim($link);
     }
 
     /**

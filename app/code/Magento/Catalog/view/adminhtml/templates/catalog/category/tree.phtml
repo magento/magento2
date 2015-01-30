@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="categories-side-col">
     <div class="sidebar-actions">
@@ -23,18 +26,19 @@
     </div>
 <?php if ($this->getRoot()): ?>
     <div class="tree-holder">
-        <div id="tree-div" style="width:100%; overflow:auto;"></div>
+        <div id="tree-div" class="tree-wrapper"></div>
     </div>
 </div>
 <div data-id="information-dialog-tree" style="display: none;">
     <span class="messages"><?php echo __('This operation can take much time'); ?><span>
 </div>
-<script type="text/javascript">
+<script>
 var tree;
 require([
     "jquery",
     "jquery/ui",
     "prototype",
+    "extjs/ext-tree-checkbox",
     "mage/adminhtml/form",
     "mage/translate"
 ], function(jQuery){

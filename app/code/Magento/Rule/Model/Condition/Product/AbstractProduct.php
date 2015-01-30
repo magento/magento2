@@ -11,6 +11,10 @@
  */
 namespace Magento\Rule\Model\Condition\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCondition
 {
     /**
@@ -189,6 +193,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *  'value_option' - hashed array: array($value => $label, ...),
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _prepareValueOptions()
     {
@@ -421,7 +426,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         if (is_object($this->getAttributeObject())) {
             switch ($this->getAttributeObject()->getFrontendInput()) {
                 case 'date':
-                    $element->setImage($this->_assetRepo->getUrl('images/grid-cal.gif'));
+                    $element->setImage($this->_assetRepo->getUrl('images/grid-cal.png'));
                     break;
                 default:
                     break;
@@ -457,6 +462,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Retrieve Explicit Apply
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getExplicitApply()
     {
@@ -483,6 +489,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *
      * @param array $arr
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function loadArray($arr)
     {
@@ -526,6 +533,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {

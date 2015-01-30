@@ -4,6 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Controller\Cart;
 
 class Index extends \Magento\Checkout\Controller\Cart
@@ -15,13 +18,14 @@ class Index extends \Magento\Checkout\Controller\Cart
      */
     public function execute()
     {
+        $this->_eventManager->dispatch('collect_totals_failed_items');
         if ($this->cart->getQuote()->getItemsCount()) {
             $this->cart->init();
             $this->cart->save();
 
             if (!$this->cart->getQuote()->validateMinimumAmount()) {
                 $currencyCode = $this->_objectManager->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    'Magento\Framework\Store\StoreManagerInterface'
                 )->getStore()->getCurrentCurrencyCode();
                 $minimumAmount = $this->_objectManager->get(
                     'Magento\Framework\Locale\CurrencyInterface'
@@ -30,16 +34,16 @@ class Index extends \Magento\Checkout\Controller\Cart
                 )->toCurrency(
                     $this->_scopeConfig->getValue(
                         'sales/minimum_order/amount',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     )
                 );
 
                 $warning = $this->_scopeConfig->getValue(
                     'sales/minimum_order/description',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 ) ? $this->_scopeConfig->getValue(
                     'sales/minimum_order/description',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 ) : __(
                     'Minimum order amount is %1',
                     $minimumAmount

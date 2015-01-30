@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
-use Magento\CatalogSearch\Model\Resource\Product\CollectionFactory;
 use Magento\Framework\Model\Resource\Db\AbstractDb;
 
 /**
@@ -25,28 +24,11 @@ class Engine extends AbstractDb implements EngineInterface
     protected $_catalogProductVisibility;
 
     /**
-     * Product Collection Factory
-     *
-     * @var \Magento\CatalogSearch\Model\Resource\Product\CollectionFactory
-     */
-    protected $productCollectionFactory;
-
-    /**
      * Array of product collection factory names
      *
      * @var array
      */
     protected $productFactoryNames;
-
-    /**
-     * @var \Magento\CatalogSearch\Model\Resource\Advanced
-     */
-    protected $_searchResource;
-
-    /**
-     * @var \Magento\CatalogSearch\Model\Resource\Advanced\Collection
-     */
-    protected $_searchResourceCollection;
 
     /**
      * Catalog search data
@@ -66,26 +48,20 @@ class Engine extends AbstractDb implements EngineInterface
      * Construct
      *
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\CatalogSearch\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\CatalogSearch\Model\Resource\Advanced $searchResource
-     * @param \Magento\CatalogSearch\Model\Resource\Advanced\Collection $searchResourceCollection
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\Search\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogSearch\Model\Resource\Advanced $searchResource,
-        \Magento\CatalogSearch\Model\Resource\Advanced\Collection $searchResourceCollection,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
         \Magento\Search\Model\Resource\Helper $resourceHelper
     ) {
-        $this->productCollectionFactory = $productCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_searchResource = $searchResource;
-        $this->_searchResourceCollection = $searchResourceCollection;
         $this->_catalogSearchData = $catalogSearchData;
         $this->_resourceHelper = $resourceHelper;
         parent::__construct($resource);
@@ -241,50 +217,6 @@ class Engine extends AbstractDb implements EngineInterface
     public function prepareEntityIndex($index, $separator = ' ')
     {
         return $this->_catalogSearchData->prepareIndexdata($index, $separator);
-    }
-
-    /**
-     * Return resource model for the full text search
-     *
-     * @return \Magento\CatalogSearch\Model\Resource\Advanced
-     */
-    public function getResource()
-    {
-        return $this->_searchResource;
-    }
-
-    /**
-     * Return resource collection model for the full text search
-     *
-     * @return \Magento\CatalogSearch\Model\Resource\Advanced\Collection
-     */
-    public function getResourceCollection()
-    {
-        return $this->_searchResourceCollection;
-    }
-
-    /**
-     * Retrieve fulltext search result data collection
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
-     */
-    public function getResultCollection()
-    {
-        return $this->productCollectionFactory->create(
-            \Magento\CatalogSearch\Model\Resource\Product\CollectionFactory::PRODUCT_COLLECTION_FULLTEXT
-        );
-    }
-
-    /**
-     * Retrieve advanced search result data collection
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
-     */
-    public function getAdvancedResultCollection()
-    {
-        return $this->productCollectionFactory->create(
-            \Magento\CatalogSearch\Model\Resource\Product\CollectionFactory::PRODUCT_COLLECTION_ADVANCED
-        );
     }
 
     /**

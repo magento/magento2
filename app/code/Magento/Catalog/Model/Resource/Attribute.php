@@ -28,14 +28,14 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param LockValidatorInterface $lockValidator
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,
         LockValidatorInterface $lockValidator
@@ -89,7 +89,6 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
             $attributeStoreIds = array_keys($this->_storeManager->getStores());
             if (!empty($attributeStoreIds)) {
                 $delCondition = [
-                    'entity_type_id=?' => $object->getEntityTypeId(),
                     'attribute_id = ?' => $object->getId(),
                     'store_id IN(?)' => $attributeStoreIds,
                 ];
@@ -146,7 +145,6 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
                 );
 
                 $clearCondition = [
-                    'entity_type_id =?' => $attribute->getEntityTypeId(),
                     'attribute_id =?' => $attribute->getId(),
                     'entity_id IN (?)' => $select,
                 ];

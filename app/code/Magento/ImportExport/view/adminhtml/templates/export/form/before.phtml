@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<script type="text/javascript">
+<script>
 require(['prototype'], function(){
 
 //<![CDATA[
@@ -54,6 +54,7 @@ require(['prototype'], function(){
                             $('export_filter_grid_container').update(responseText);
                             this.modifyFilterGrid();
                             $('export_filter_container').show();
+                            $('messages').update();
                         }.bind(this)
                     });
                 } else {

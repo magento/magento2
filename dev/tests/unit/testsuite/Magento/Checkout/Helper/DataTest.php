@@ -3,10 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Helper;
 
 use Magento\TestFramework\Helper\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,49 +81,49 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'checkout/payment_failed/template',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             8,
                             'fixture_email_template_payment_failed'
                         ],
                         [
                             'checkout/payment_failed/receiver',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             8,
                             'sysadmin'
                         ],
                         [
                             'trans_email/ident_sysadmin/email',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             8,
                             'sysadmin@example.com'
                         ],
                         [
                             'trans_email/ident_sysadmin/name',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             8,
                             'System Administrator'
                         ],
                         [
                             'checkout/payment_failed/identity',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             8,
                             'noreply@example.com'
                         ],
                         [
                             'carriers/ground/title',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             null,
                             'Ground Shipping'
                         ],
                         [
                             'payment/fixture-payment-method/title',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             null,
                             'Check Money Order'
                         ],
                         [
                             'checkout/options/onepage_checkout_enabled',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             null,
                             'One Page Checkout'
                         ]
@@ -128,7 +131,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->_storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
 
         $this->_checkoutSession = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
 
@@ -281,7 +284,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetQuote()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->_checkoutSession->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $this->assertEquals($quoteMock, $this->_helper->getQuote());
     }
@@ -289,7 +292,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testFormatPrice()
     {
         $price = 5.5;
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $storeMock = $this->getMock(
             'Magento\Store\Model\Store',
             ['formatPrice', '__wakeup'],
@@ -339,7 +342,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->_scopeConfig->expects($this->once())->method('isSetFlag')->with(
             'checkout/options/customer_must_be_logged',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )->will($this->returnValue(true));
         $this->assertTrue($this->_helper->isCustomerMustBeLogged());
     }
@@ -359,7 +362,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $rowTotal = 15;
         $roundPrice = 17;
         $expected = 17;
-        $storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             '\Magento\Checkout\Helper\Data',
@@ -418,7 +421,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBasePriceInclTaxWithoutQty()
     {
-        $storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             '\Magento\Checkout\Helper\Data',
@@ -435,7 +438,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBasePriceInclTax()
     {
-        $storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             '\Magento\Checkout\Helper\Data',
@@ -468,7 +471,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testIsAllowedGuestCheckoutWithoutStore()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $store = null;
         $quoteMock->expects($this->once())->method('getStoreId')->will($this->returnValue(1));
         $this->_scopeConfig->expects($this->once())

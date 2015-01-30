@@ -57,17 +57,17 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     protected $_orderEntityField;
 
     /**
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory
+     * @var \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory
      */
     protected $_quoteItemFactory;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -77,15 +77,15 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\Object\Copy\Config $fieldsetConfig
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
-     * @param \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory
      * @param mixed $connection
      * @param string $modelName
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -95,8 +95,8 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Object\Copy\Config $fieldsetConfig,
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
-        \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory,
         $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
     ) {

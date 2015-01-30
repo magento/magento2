@@ -36,7 +36,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteMock;
 
@@ -84,7 +84,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
             ->will($this->returnValue($this->stockItemMock));
-        $this->quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -206,7 +206,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
                 return false;
         }
 
-        $quoteItem = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $quoteItem = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $quoteItem->expects($this->once())
             ->method('getProduct')
             ->will($this->returnValue($product));
@@ -222,7 +222,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $quoteId = 1;
         $itemsCount = 1;
         $quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             ['getItemsCount', 'getItemsQty', '__wakeup'],
             [],
             '',
@@ -234,7 +234,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->will($this->returnValue(true));
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')
-            ->with('checkout/cart_link/use_qty', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('checkout/cart_link/use_qty', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($useQty));
 
         $qtyMethodName = ($useQty) ? 'getItemsQty' : 'getItemsCount';

@@ -15,27 +15,6 @@ use Magento\Store\Model\Store;
 class Data extends \Magento\Core\Helper\Data
 {
     /**
-     * Maximum available number
-     */
-    const MAXIMUM_AVAILABLE_NUMBER = 99999999;
-
-    /**
-     * Check quote amount
-     *
-     * @param \Magento\Sales\Model\Quote $quote
-     * @param float $amount
-     * @return $this
-     */
-    public function checkQuoteAmount(\Magento\Sales\Model\Quote $quote, $amount)
-    {
-        if (!$quote->getHasError() && $amount >= self::MAXIMUM_AVAILABLE_NUMBER) {
-            $quote->setHasError(true);
-            $quote->addMessage(__('This item price or quantity is not valid for checkout.'));
-        }
-        return $this;
-    }
-
-    /**
      * Check allow to send new order confirmation email
      *
      * @param null|string|bool|int|Store $store
@@ -45,7 +24,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\OrderIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -71,7 +50,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -86,7 +65,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -101,7 +80,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -116,7 +95,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -131,7 +110,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -146,7 +125,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -161,7 +140,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

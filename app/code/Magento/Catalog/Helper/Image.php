@@ -164,25 +164,25 @@ class Image extends AbstractHelper
         $this->setWatermark(
             $this->_scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_image",
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkImageOpacity(
             $this->_scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity",
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkPosition(
             $this->_scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_position",
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkSize(
             $this->_scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_size",
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         );
 
@@ -249,6 +249,7 @@ class Image extends AbstractHelper
      * @param bool $flag
      * @param string[] $position
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function keepFrame($flag, $position = ['center', 'middle'])
     {
@@ -267,6 +268,7 @@ class Image extends AbstractHelper
      * @param bool $flag
      * @param int $alphaOpacity
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function keepTransparency($flag, $alphaOpacity = null)
     {

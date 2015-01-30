@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\GiftMessage\Model\Type\Plugin;
 
 class OnepageTest extends \PHPUnit_Framework_TestCase
@@ -46,7 +48,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('giftmessage')
             ->will($this->returnValue('giftMessage'));
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $subjectMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $this->messageMock->expects($this->once())->method('add')->with('giftMessage', $quoteMock);
 

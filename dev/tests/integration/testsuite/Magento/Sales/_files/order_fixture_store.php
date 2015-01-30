@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 require __DIR__ . '/../../../Magento/Core/_files/store.php';
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_duplicated.php';
@@ -45,7 +47,7 @@ $order->setIncrementId(
 )->setShippingAddress(
     $shippingAddress
 )->setStoreId(
-    $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore('fixturestore')->getId()
+    $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore('fixturestore')->getId()
 )->addItem(
     $orderItem
 )->setPayment(

@@ -34,7 +34,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_directoryBlock;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface
+     * @var \Magento\Quote\Model\Quote\Address\CarrierFactoryInterface
      */
     protected $_carrierFactory;
 
@@ -48,7 +48,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Directory\Block\Data $directoryBlock
-     * @param \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
+     * @param \Magento\Quote\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
@@ -57,7 +57,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Directory\Block\Data $directoryBlock,
-        \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
+        \Magento\Quote\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
         PriceCurrencyInterface $priceCurrency,
         array $data = []
     ) {
@@ -76,7 +76,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getConfig($path)
     {
-        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -104,7 +104,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * Get Address Model
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return \Magento\Quote\Model\Quote\Address
      */
     public function getAddress()
     {
@@ -124,7 +124,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     {
         if ($name = $this->_scopeConfig->getValue(
             'carriers/' . $carrierCode . '/title',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $name;
@@ -196,6 +196,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * Show City in Shipping Estimation
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCityActive()
     {
@@ -206,6 +207,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * Show State in Shipping Estimation. Result updated using plugins
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getStateActive()
     {
@@ -297,10 +299,10 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * Get shipping price html
      *
-     * @param \Magento\Sales\Model\Quote\Address\Rate $shippingRate
+     * @param \Magento\Quote\Model\Quote\Address\Rate $shippingRate
      * @return string
      */
-    public function getShippingPriceHtml(\Magento\Sales\Model\Quote\Address\Rate $shippingRate)
+    public function getShippingPriceHtml(\Magento\Quote\Model\Quote\Address\Rate $shippingRate)
     {
         /** @var \Magento\Checkout\Block\Shipping\Price $block */
         $block = $this->getLayout()->getBlock('checkout.shipping.price');

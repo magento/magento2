@@ -6,7 +6,7 @@
 namespace Magento\Directory\Model;
 
 use Magento\Framework\App\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Store\Model\Store;
 
@@ -16,7 +16,7 @@ use Magento\Store\Model\Store;
 class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -31,7 +31,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     protected $logger;
 
     /**
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param CurrencyFactory $currencyFactory
      * @param Logger $logger
      */
@@ -58,18 +58,12 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * Convert and round price value for specified store or passed currency
-     *
-     * @param float $amount
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @param Currency|string|null $currency
-     * @param int $precision
-     * @return float
+     * {@inheritdoc}
      */
-    public function convertAndRound($amount, $store = null, $currency = null, $precision = self::DEFAULT_PRECISION)
+    public function convertAndRound($amount, $scope = null, $currency = null, $precision = self::DEFAULT_PRECISION)
     {
-        $currentCurrency = $this->getCurrency($store, $currency);
-        $convertedValue = $this->getStore($store)->getBaseCurrency()->convert($amount, $currentCurrency);
+        $currentCurrency = $this->getCurrency($scope, $currency);
+        $convertedValue = $this->getStore($scope)->getBaseCurrency()->convert($amount, $currentCurrency);
         return round($convertedValue, $precision);
     }
 

@@ -4,8 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Catalog\Model\Category */
@@ -23,7 +29,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     /** @var \Magento\Catalog\Model\Resource\Category\Tree|\PHPUnit_Framework_MockObject_MockObject */
@@ -89,7 +95,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->cacheManager));
 
         $this->registry = $this->getMock('Magento\Framework\Registry');
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->categoryTreeResource = $this->getMock('Magento\Catalog\Model\Resource\Category\Tree', [], [], '', false);
         $this->categoryTreeFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Category\TreeFactory',

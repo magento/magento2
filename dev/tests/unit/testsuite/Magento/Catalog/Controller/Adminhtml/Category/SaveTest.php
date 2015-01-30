@@ -7,6 +7,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 /**
  * Class SaveTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,6 +80,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      * Set up
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
@@ -208,6 +210,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      * @return void
      *
      * @dataProvider dataProviderExecute
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecute($categoryId, $storeId, $activeTabId, $parentId)
     {
@@ -325,11 +328,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
         /**
-         * @var \Magento\Store\Model\StoreManagerInterface
+         * @var \Magento\Framework\Store\StoreManagerInterface
          * |\PHPUnit_Framework_MockObject_MockObject $storeManagerMock
          */
         $storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            'Magento\Framework\Store\StoreManagerInterface',
             [],
             '',
             false,
@@ -405,7 +408,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                         ['Magento\Backend\Model\Auth\Session', $sessionMock],
                         ['Magento\Framework\Registry', $registryMock],
                         ['Magento\Cms\Model\Wysiwyg\Config', $wysiwygConfigMock],
-                        ['Magento\Store\Model\StoreManagerInterface', $storeManagerMock],
+                        ['Magento\Framework\Store\StoreManagerInterface', $storeManagerMock],
                     ]
                 )
             );

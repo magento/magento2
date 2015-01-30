@@ -6,6 +6,7 @@
 define([
     "jquery",
     "jquery/ui",
+    "loadingPopup",
     "mage/translate",
     "jquery/template",
     "Magento_DesignEditor/js/dialog"

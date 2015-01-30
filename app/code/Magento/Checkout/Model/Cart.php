@@ -13,6 +13,7 @@ use Magento\Framework\Object;
 
 /**
  * Shopping cart model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cart extends Object implements CartInterface
 {
@@ -45,7 +46,7 @@ class Cart extends Object implements CartInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -80,7 +81,7 @@ class Cart extends Object implements CartInterface
     protected $stockState;
 
     /**
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -92,28 +93,29 @@ class Cart extends Object implements CartInterface
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Resource\Cart $resourceCart
      * @param Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param ProductRepositoryInterface $productRepository
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Resource\Cart $resourceCart,
         Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         ProductRepositoryInterface $productRepository,
         array $data = []
     ) {
@@ -195,7 +197,7 @@ class Cart extends Object implements CartInterface
     /**
      * Get quote object associated with cart. By default it is current customer session quote
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {
@@ -208,10 +210,10 @@ class Cart extends Object implements CartInterface
     /**
      * Set quote object associated with the cart
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      */
-    public function setQuote(\Magento\Sales\Model\Quote $quote)
+    public function setQuote(\Magento\Quote\Model\Quote $quote)
     {
         $this->setData('quote', $quote);
         return $this;
@@ -330,6 +332,7 @@ class Cart extends Object implements CartInterface
      * @param \Magento\Framework\Object|int|array $requestInfo
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addProduct($productInfo, $requestInfo = null)
     {
@@ -473,6 +476,8 @@ class Cart extends Object implements CartInterface
      * @param  array $data
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function updateItems($data)
     {
@@ -618,7 +623,7 @@ class Cart extends Object implements CartInterface
         if ($quoteId && $this->_summaryQty === null) {
             $useQty = $this->_scopeConfig->getValue(
                 'checkout/cart_link/use_qty',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
             $this->_summaryQty = $useQty ? $this->getItemsQty() : $this->getItemsCount();
         }
@@ -653,10 +658,11 @@ class Cart extends Object implements CartInterface
      * @param int $itemId
      * @param int|array|\Magento\Framework\Object $requestInfo
      * @param null|array|\Magento\Framework\Object $updatingParams
-     * @return \Magento\Sales\Model\Quote\Item|string
+     * @return \Magento\Quote\Model\Quote\Item|string
      * @throws \Magento\Framework\Model\Exception
      *
-     * @see \Magento\Sales\Model\Quote::updateItem()
+     * @see \Magento\Quote\Model\Quote::updateItem()
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function updateItem($itemId, $requestInfo = null, $updatingParams = null)
     {

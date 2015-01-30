@@ -1,8 +1,13 @@
 /**
- * @category    design
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// Import vars
+@import "source/lib/lib.less"; // Import all lib files
+@import "source/theme.less"; // import theme styles
+
+@baseDir: "../"; //default
 
 // Magento/blank
 .page-print {
@@ -13,7 +18,8 @@
     }
 }
 @media print {
-    *{background: transparent !important;
+    * {
+        background: transparent !important;
         color: black !important;
         text-shadow: none !important;
         -webkit-filter: none !important; // Use in 41 Chrome
@@ -29,7 +35,7 @@
     // Don't show links for images, or javascript/internal links */
     pre,
     blockquote {
-        border: 1px solid #999;
+        border: 1px solid @color-gray60;
         page-break-inside: avoid;
     }
     thead {
@@ -42,7 +48,7 @@
         }
         table-layout: fixed;
         & > tfoot > tr:first-child {
-            border-top: 1px solid #999;
+            border-top: 1px solid @color-gray60;
         }
     }
     .box,

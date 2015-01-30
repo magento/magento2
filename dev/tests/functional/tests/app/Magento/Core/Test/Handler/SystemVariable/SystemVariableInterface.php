@@ -6,7 +6,7 @@
 
 namespace Magento\Core\Test\Handler\SystemVariable;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface SystemVariableInterface

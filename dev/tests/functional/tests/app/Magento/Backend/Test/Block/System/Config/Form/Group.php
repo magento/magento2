@@ -8,9 +8,12 @@
 
 namespace Magento\Backend\Test\Block\System\Config\Form;
 
+use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Form;
-use Mtf\Client\Element;
 
+/**
+ * Class Group
+ */
 class Group extends Form
 {
     /**
@@ -67,14 +70,14 @@ class Group extends Form
 
         $element = $this->_rootElement->find(
             sprintf($this->element, $field),
-            Element\Locator::SELECTOR_XPATH,
+            Locator::SELECTOR_XPATH,
             $input
         );
 
         if ($element->isDisabled()) {
             $checkbox = $this->_rootElement->find(
                 sprintf($this->defaultCheckbox, $field),
-                Element\Locator::SELECTOR_XPATH,
+                Locator::SELECTOR_XPATH,
                 'checkbox'
             );
             $checkbox->setValue('No');

@@ -30,6 +30,8 @@ class ConstructorIntegrity implements ValidatorInterface
      * @param string $className
      * @return bool
      * @throws \Magento\Framework\Code\ValidationException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validate($className)
     {

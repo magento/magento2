@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -72,6 +75,16 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
     protected $messageManager;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactoryMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+
+    /**
      * Prepare required values
      *
      * @return void
@@ -130,6 +143,18 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->setMethods(
             ['addSuccess', 'addMessage', 'addException']
         )->getMock();
+
+        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
 
         $contextArgs = [
             'getHelper',
@@ -197,6 +222,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             'context' => $contextMock,
             'customerAccountManagement' => $this->_customerAccountManagementMock,
             'customerRepository' => $this->_customerRepositoryMock,
+            'resultRedirectFactory' => $this->resultRedirectFactoryMock
         ];
 
         $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -208,7 +234,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
 
     public function testResetPasswordActionNoCustomer()
     {
-        $redirectLink = 'http://example.com/customer/';
+        $redirectLink = 'customer/index';
         $this->_request->expects(
             $this->once()
         )->method(
@@ -220,24 +246,19 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(false)
         );
 
-        $this->_helper->expects(
-            $this->once()
-        )->method(
-            'getUrl'
-        )->with(
-            $this->equalTo('customer/index'),
-            $this->equalTo([])
-        )->will(
-            $this->returnValue($redirectLink)
-        );
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with($this->equalTo($redirectLink));
 
-        $this->_response->expects($this->once())->method('setRedirect')->with($this->equalTo($redirectLink));
-        $this->_testedObject->execute();
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Redirect',
+            $this->_testedObject->execute()
+        );
     }
 
     public function testResetPasswordActionInvalidCustomerId()
     {
-        $redirectLink = 'http://example.com/customer/';
+        $redirectLink = 'customer/index';
         $customerId = 1;
 
         $this->_request->expects(
@@ -258,7 +279,8 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         )->with(
             $customerId
         )->will(
-            $this->throwException(new NoSuchEntityException(
+            $this->throwException(
+                new NoSuchEntityException(
                     NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                     ['fieldName' => 'customerId', 'fieldValue' => $customerId]
                 )
@@ -276,8 +298,14 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($redirectLink)
         );
 
-        $this->_response->expects($this->once())->method('setRedirect')->with($this->equalTo($redirectLink));
-        $this->_testedObject->execute();
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with($this->equalTo($redirectLink));
+
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Redirect',
+            $this->_testedObject->execute()
+        );
     }
 
     public function testResetPasswordActionCoreException()
@@ -405,7 +433,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         $email = 'test@example.com';
         $websiteId = 1;
-        $redirectLink = 'http://example.com';
+        $redirectLink = 'customer/*/edit';
 
         $this->_request->expects(
             $this->once()
@@ -468,8 +496,16 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($redirectLink)
         );
 
-        $this->_response->expects($this->once())->method('setRedirect')->with($this->equalTo($redirectLink));
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with(
+                $redirectLink,
+                ['id' => $customerId, '_current' => true]
+            );
 
-        $this->_testedObject->execute();
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Redirect',
+            $this->_testedObject->execute()
+        );
     }
 }

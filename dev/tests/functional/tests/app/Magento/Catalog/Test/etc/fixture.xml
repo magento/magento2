@@ -26,13 +26,13 @@
                 <backend_type>virtual</backend_type>
             </attribute_set_id>
         </fields>
-        <data_set>
+        <dataset>
             <sku />
             <name />
             <short_description />
             <description />
             <tax_class_id />
-        </data_set>
+        </dataset>
         <data_config>
             <create_url_params>
                 <type>simple</type>
@@ -61,13 +61,13 @@
                 <backend_type>virtual</backend_type>
             </attribute_set_id>
         </fields>
-        <data_set>
+        <dataset>
             <sku />
             <name />
             <short_description />
             <description />
             <tax_class_id />
-        </data_set>
+        </dataset>
         <data_config>
             <create_url_params>
                 <type>virtual</type>
@@ -76,11 +76,11 @@
             <input_prefix>product</input_prefix>
         </data_config>
     </catalogProductVirtual>
-    <catalogCategory module="Magento_Catalog">
+    <category module="Magento_Catalog">
         <type>flat</type>
         <entity_type>catalog_category_entity</entity_type>
         <collection>Magento\Catalog\Model\Resource\Category\Collection</collection>
-    </catalogCategory>
+    </category>
     <catalogProductVirtual module="Magento_Catalog">
         <type>eav</type>
         <entity_type>catalog_product</entity_type>
@@ -101,13 +101,13 @@
                 <backend_type>virtual</backend_type>
             </attribute_set_id>
         </fields>
-        <data_set>
+        <dataset>
             <sku />
             <name />
             <short_description />
             <description />
             <tax_class_id />
-        </data_set>
+        </dataset>
         <data_config>
             <create_url_params>
                 <type>virtual</type>

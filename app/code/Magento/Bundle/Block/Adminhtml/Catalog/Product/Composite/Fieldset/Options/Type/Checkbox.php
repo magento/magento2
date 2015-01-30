@@ -24,8 +24,8 @@ class Checkbox extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Op
      */
     public function setValidationContainer($elementId, $containerId)
     {
-        return '<script type="text/javascript">
-            $(\'' .
+        return '<script>
+            document.getElementById(\'' .
             $elementId .
             '\').advaiceContainer = \'' .
             $containerId .

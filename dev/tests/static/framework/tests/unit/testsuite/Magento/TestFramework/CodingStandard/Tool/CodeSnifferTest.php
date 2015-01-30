@@ -40,7 +40,6 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
     public function testRun()
     {
         $whiteList = ['test' . rand(), 'test' . rand()];
-        $blackList = ['test' . rand(), 'test' . rand()];
         $extensions = ['test' . rand(), 'test' . rand()];
 
         $this->_wrapper->expects($this->once())->method('getDefaults')->will($this->returnValue([]));
@@ -48,22 +47,18 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
         $expectedCliEmulation = [
             'files' => $whiteList,
             'standard' => [self::RULE_SET],
-            'ignored' => $blackList,
             'extensions' => $extensions,
             'reportFile' => self::REPORT_FILE,
             'warningSeverity' => 0,
             'reports' => ['checkstyle' => null],
         ];
 
+        $this->_tool->setExtensions($extensions);
+
         $this->_wrapper->expects($this->once())->method('setValues')->with($this->equalTo($expectedCliEmulation));
 
         $this->_wrapper->expects($this->once())->method('process');
 
-        $this->_tool->run($whiteList, $blackList, $extensions);
-    }
-
-    public function testGetReportFile()
-    {
-        $this->assertEquals(self::REPORT_FILE, $this->_tool->getReportFile());
+        $this->_tool->run($whiteList);
     }
 }

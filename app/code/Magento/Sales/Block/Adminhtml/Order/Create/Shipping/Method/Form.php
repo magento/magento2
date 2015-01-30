@@ -67,7 +67,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Retrieve quote shipping address model
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return \Magento\Quote\Model\Quote\Address
      */
     public function getAddress()
     {
@@ -97,7 +97,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         if ($name = $this->_scopeConfig->getValue(
             'carriers/' . $carrierCode . '/title',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStore()->getId()
         )
         ) {
@@ -130,7 +130,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Retrieve rate of active shipping method
      *
-     * @return \Magento\Sales\Model\Quote\Address\Rate|false
+     * @return \Magento\Quote\Model\Quote\Address\Rate|false
      */
     public function getActiveMethodRate()
     {

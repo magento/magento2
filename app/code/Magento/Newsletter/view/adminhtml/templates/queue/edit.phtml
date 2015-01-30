@@ -3,9 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /* @var $this \Magento\Newsletter\Block\Adminhtml\Queue\Edit */
 ?>
-<div class="page-actions">
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <?php echo $this->getBackButtonHtml() ?>
     <?php echo $this->getPreviewButtonHtml(); ?>
     <?php if (!$this->getIsPreview()): ?>
@@ -30,8 +33,13 @@
         <input type="hidden" id="preview_id" name="id" value="" />
     </div>
 </form>
-<script type="text/javascript">
-require(['jquery', 'mage/mage', 'prototype'], function(jQuery){
+<script>
+require([
+    'jquery',
+    'tinymce',
+    'mage/mage',
+    'prototype'
+], function(jQuery, tinyMCE){
 
 //<![CDATA[
 jQuery('#queue_edit_form').mage('form').mage('validation');

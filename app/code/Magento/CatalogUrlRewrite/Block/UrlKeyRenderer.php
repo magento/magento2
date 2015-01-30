@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Block;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Renderer for URL key input

@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Items;
  * Abstract block for display sales (quote/order/invoice etc.) items
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class AbstractItems extends \Magento\Framework\View\Element\Template
 {
@@ -23,6 +24,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
      * @param string $type
      * @return \Magento\Framework\View\Element\AbstractBlock
      * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getItemRenderer($type)
     {
@@ -47,6 +49,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Framework\View\Element\AbstractBlock $renderer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _prepareItem(\Magento\Framework\View\Element\AbstractBlock $renderer)
     {
@@ -63,7 +66,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
     {
         if ($item->getOrderItem()) {
             $type = $item->getOrderItem()->getProductType();
-        } elseif ($item instanceof \Magento\Sales\Model\Quote\Address\Item) {
+        } elseif ($item instanceof \Magento\Quote\Model\Quote\Address\Item) {
             $type = $item->getQuoteItem()->getProductType();
         } else {
             $type = $item->getProductType();

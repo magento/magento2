@@ -11,6 +11,9 @@ use Magento\Framework\App\Action\NotFoundException;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Wishlist\Controller\IndexInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Send extends Action\Action implements IndexInterface
 {
     /**
@@ -83,6 +86,9 @@ class Send extends Action\Action implements IndexInterface
      *
      * @return ResponseInterface|void
      * @throws NotFoundException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {
@@ -149,12 +155,12 @@ class Send extends Action\Action implements IndexInterface
 
             try {
                 $scopeConfig = $this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
-                $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+                $storeManager = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface');
                 foreach ($emails as $email) {
                     $transport = $this->_transportBuilder->setTemplateIdentifier(
                         $scopeConfig->getValue(
                             'wishlist/email/email_template',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                         )
                     )->setTemplateOptions(
                         [
@@ -175,7 +181,7 @@ class Send extends Action\Action implements IndexInterface
                     )->setFrom(
                         $scopeConfig->getValue(
                             'wishlist/email/email_identity',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                         )
                     )->addTo(
                         $email

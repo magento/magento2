@@ -5,6 +5,10 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Address extends AbstractCustomer
 {
     /**#@+
@@ -215,7 +219,7 @@ class Address extends AbstractCustomer
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
@@ -226,6 +230,8 @@ class Address extends AbstractCustomer
      * @param \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param array $data
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
@@ -234,7 +240,7 @@ class Address extends AbstractCustomer
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
@@ -451,6 +457,8 @@ class Address extends AbstractCustomer
      *
      * @param array $rowData
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
@@ -493,7 +501,6 @@ class Address extends AbstractCustomer
         // entity table data
         $entityRow = [
             'entity_id' => $addressId,
-            'entity_type_id' => $this->getEntityTypeId(),
             'parent_id' => $customerId,
             'created_at' => $this->dateTime->now(),
             'updated_at' => $this->dateTime->now(),
@@ -563,7 +570,6 @@ class Address extends AbstractCustomer
                 foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = [
                         'entity_id' => $addressId,
-                        'entity_type_id' => $this->getEntityTypeId(),
                         'attribute_id' => $attributeId,
                         'value' => $value,
                     ];
@@ -579,12 +585,12 @@ class Address extends AbstractCustomer
      *
      * @param array $defaults
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _saveCustomerDefaults(array $defaults)
     {
         /** @var $entity \Magento\Customer\Model\Customer */
         $entity = $this->_customerFactory->create();
-        $entityTypeId = $entity->getEntityTypeId();
 
         foreach ($defaults as $tableName => $data) {
             $tableData = [];
@@ -592,7 +598,6 @@ class Address extends AbstractCustomer
                 foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = [
                         'entity_id' => $customerId,
-                        'entity_type_id' => $entityTypeId,
                         'attribute_id' => $attributeId,
                         'value' => $value,
                     ];
@@ -645,6 +650,8 @@ class Address extends AbstractCustomer
      * @param array $rowData
      * @param int $rowNumber
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _validateRowForUpdate(array $rowData, $rowNumber)
     {

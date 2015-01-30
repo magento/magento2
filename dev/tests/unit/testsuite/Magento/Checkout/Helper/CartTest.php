@@ -3,11 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Helper;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\Object;
-use Magento\Sales\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item;
 
 class CartTest extends \PHPUnit_Framework_TestCase
 {
@@ -77,7 +80,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilderMock));
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $contextMock->expects($this->any())->method('getUrlEncoder')->will($this->returnValue($this->urlEncoder));
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
         $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
         $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->cartMock = $this->getMock('\Magento\Checkout\Model\Cart', [], [], '', false);
@@ -100,7 +103,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testGetRemoveUrl()
     {
         $quoteItemId = 1;
-        $quoteItemMock = $this->getMock('\Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $quoteItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', [], [], '', false);
         $quoteItemMock->expects($this->any())->method('getId')->will($this->returnValue($quoteItemId));
         $currentUrl = 'http://www.example.com/';
         $this->urlBuilderMock->expects($this->any())->method('getCurrentUrl')->will($this->returnValue($currentUrl));
@@ -120,7 +123,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     public function testGetQuote()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $this->assertEquals($quoteMock, $this->helper->getQuote());
     }
@@ -149,7 +152,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testGetIsVirtualQuote()
     {
         $isVirtual = true;
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue($isVirtual));
         $this->assertEquals($isVirtual, $this->helper->getIsVirtualQuote());
@@ -159,7 +162,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
         $this->scopeConfigMock->expects($this->once())->method('isSetFlag')
-            ->with(Cart::XML_PATH_REDIRECT_TO_CART, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+            ->with(Cart::XML_PATH_REDIRECT_TO_CART, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId)
             ->will($this->returnValue(true));
         $this->assertTrue($this->helper->getShouldRedirectToCart($storeId));
     }
@@ -201,10 +204,11 @@ class CartTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedPostData
      *
      * @dataProvider deletePostJsonDataProvider
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetDeletePostJson($id, $url, $isAjax, $expectedPostData)
     {
-        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
         $coreData = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
         $scopeConfig = $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface');
         $checkoutCart = $this->getMock('\Magento\Checkout\Model\Cart', [], [], '', false);
@@ -219,7 +223,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->method('getUrlEncoder')
             ->willReturn($this->urlEncoder);
 
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $request = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
         $context->expects($this->once())
             ->method('getRequest')

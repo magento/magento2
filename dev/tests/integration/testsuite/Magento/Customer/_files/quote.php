@@ -33,13 +33,13 @@ $product->setTypeId(
 )->save();
 $product->load(1);
 
-/** @var $quote \Magento\Sales\Model\Quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+/** @var $quote \Magento\Quote\Model\Quote */
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
 $quoteItem = $quote->setCustomerId(
     1
 )->setStoreId(
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+        'Magento\Framework\Store\StoreManagerInterface'
     )->getStore()->getId()
 )->setReservedOrderId(
     'test01'
@@ -47,7 +47,7 @@ $quoteItem = $quote->setCustomerId(
     $product,
     10
 );
-/** @var $quoteItem \Magento\Sales\Model\Quote\Item */
+/** @var $quoteItem \Magento\Quote\Model\Quote\Item */
 $quoteItem->setQty(1);
 $quote->getPayment()->setMethod('checkmo');
 $quote->getBillingAddress();

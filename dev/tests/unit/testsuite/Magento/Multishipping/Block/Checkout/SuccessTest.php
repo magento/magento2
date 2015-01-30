@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Multishipping\Block\Checkout;
 
 class SuccessTest extends \PHPUnit_Framework_TestCase
@@ -43,7 +45,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->contextMock = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $this->storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->contextMock->expects($this->once())->method('getSession')->will($this->returnValue($this->sessionMock));

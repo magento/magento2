@@ -6,8 +6,8 @@
 
 namespace Magento\Reports\Test\Block\Adminhtml\Customer;
 
-use Mtf\Client\Element\Locator;
-use Mtf\ObjectManager;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Class AccountsGrid
@@ -87,7 +87,7 @@ class AccountsGrid extends \Magento\Backend\Test\Block\Widget\Grid
                 continue;
             }
             $date = ObjectManager::getInstance()->create(
-                '\Magento\Backend\Test\Fixture\Date',
+                '\Magento\Backend\Test\Fixture\Source\Date',
                 ['params' => [], 'data' => ['pattern' => $reportFilter]]
             );
             $customersReport[$name] = $date->getData();

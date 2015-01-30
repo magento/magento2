@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 ?>
-<script type="text/javascript">
-//<![CDATA[
+<script>
+require([
+    'prototype'
+], function () {
+
 var CountryModel = Class.create();
 CountryModel.prototype = {
     initialize : function()
@@ -108,5 +111,5 @@ CountryModel.prototype = {
 
 }
 countryApply = new CountryModel();
-//]]>
+});
 </script>

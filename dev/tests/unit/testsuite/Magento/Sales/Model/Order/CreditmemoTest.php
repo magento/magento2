@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Model\Resource\OrderFactory;
@@ -56,7 +59,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             'orderFactory' => $this->orderFactory,
             'cmItemCollectionFactory' => $this->cmItemCollectionFactoryMock,
             'calculatorFactory' => $this->getMock('Magento\Framework\Math\CalculatorFactory', [], [], '', false),
-            'storeManager' => $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false),
+            'storeManager' => $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false),
             'commentFactory' => $this->getMock(
                     'Magento\Sales\Model\Order\Creditmemo\CommentFactory',
                     [],

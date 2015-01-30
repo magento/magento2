@@ -9,6 +9,7 @@ namespace Magento\ProductAlert\Model;
  * ProductAlert Email processor
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Email extends \Magento\Framework\Model\AbstractModel
 {
@@ -82,7 +83,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -92,7 +93,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
     protected $customerRepository;
 
     /**
-     * @var \Magento\Core\Model\App\Emulation
+     * @var \Magento\Store\Model\App\Emulation
      */
     protected $_appEmulation;
 
@@ -111,24 +112,25 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\ProductAlert\Helper\Data $productAlertData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Helper\View $customerHelper
-     * @param \Magento\Core\Model\App\Emulation $appEmulation
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\ProductAlert\Helper\Data $productAlertData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Helper\View $customerHelper,
-        \Magento\Core\Model\App\Emulation $appEmulation,
+        \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -281,6 +283,9 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Send customer email
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function send()
     {
@@ -308,14 +313,14 @@ class Email extends \Magento\Framework\Model\AbstractModel
 
         if ($this->_type == 'price' && !$this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_PRICE_TEMPLATE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         )
         ) {
             return false;
         } elseif ($this->_type == 'stock' && !$this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_STOCK_TEMPLATE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         )
         ) {
@@ -337,7 +342,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
             $block = $this->_getPriceBlock();
             $templateId = $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_PRICE_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         } else {
@@ -349,7 +354,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
             $block = $this->_getStockBlock();
             $templateId = $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_STOCK_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }
@@ -372,7 +377,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_IDENTITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             )
         )->addTo(

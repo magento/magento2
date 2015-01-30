@@ -176,6 +176,10 @@ use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryColle
  * @method bool hasForcedCanCreditmemo()
  * @method bool getIsInProcess()
  * @method \Magento\Customer\Model\Customer getCustomer()
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
 {
@@ -300,7 +304,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     protected $entityType = 'order';
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -391,7 +395,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Order\Config $orderConfig
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
@@ -412,6 +416,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -420,7 +425,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         AttributeDataBuilder $customAttributeBuilder,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory,
@@ -530,6 +535,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * Return flag for order if it can sends new email to customer.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanSendNewEmailFlag()
     {
@@ -590,6 +596,8 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * Retrieve order cancel availability
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function canCancel()
     {
@@ -649,6 +657,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * Retrieve order invoice availability
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function canInvoice()
     {
@@ -759,6 +768,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * Retrieve order shipment availability
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function canShip()
     {
@@ -842,6 +852,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      *
      * @param bool $ignoreSalable
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _canReorder($ignoreSalable = false)
     {
@@ -957,6 +968,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     {
         foreach ($this->getPayments() as $payment) {
             if (!$payment->isDeleted()) {
+                $payment->setOrder($this);
                 return $payment;
             }
         }
@@ -2001,6 +2013,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsNotVirtual()
     {

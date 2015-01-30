@@ -3,11 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php if (is_array($this->getChildBlock('diagrams')->getTabsIds())) : ?>
-<script type="text/javascript">
-function changeDiagramsPeriod(periodObj) {
+<script>
+require(['prototype'], function(){
+
+window.changeDiagramsPeriod = function(periodObj) {
     periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
 <?php foreach ($this->getChildBlock('diagrams')->getTabsIds() as $tabId): ?>
     ajaxBlockParam = 'block/tab_<?php echo $tabId ?>/';
@@ -60,10 +65,7 @@ function changeDiagramsPeriod(periodObj) {
     });
 }
 
-function toggleCal(id) {
-    $('dashboard_'+id+'_cal_div').toggle();
-    $('dashboard_'+id+'_range_div').toggle();
-}
+});
 </script>
 <?php endif; ?>
  <div class="dashboard-container">

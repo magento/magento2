@@ -80,6 +80,7 @@ class Save extends \Magento\Framework\Object
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getSaved()
     {
@@ -243,6 +244,7 @@ class Save extends \Magento\Framework\Object
      *
      * @param  \Magento\Framework\Object $item
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsAllowedQuoteItem($item)
     {
@@ -352,7 +354,7 @@ class Save extends \Magento\Framework\Object
     /**
      * Retrieve quote object
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     protected function _getQuote()
     {

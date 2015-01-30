@@ -6,9 +6,9 @@
 
 namespace Magento\Customer\Test\Fixture;
 
-use Mtf\Factory\Factory;
-use Mtf\Fixture\DataFixture;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Fixture\DataFixture;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Address

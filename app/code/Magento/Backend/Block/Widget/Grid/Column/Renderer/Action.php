@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
@@ -116,6 +119,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      * @param string &$actionCaption
      * @param \Magento\Framework\Object $row
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _transformActionData(&$action, &$actionCaption, \Magento\Framework\Object $row)
     {

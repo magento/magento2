@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $this \Magento\Weee\Block\Item\Price\Renderer */
 
 $_item = $this->getItem();
@@ -12,7 +14,7 @@ $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
 ?>
 <?php $_incl = $_item->getRowTotalInclTax(); ?>
 <?php if ($this->displayPriceWithWeeeDetails()): ?>
-    <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#subtotal-item-tax-details<?php echo $_item->getId(); ?>"}'>
+    <span class="cart-tax-total" data-mage-init='{"taxtToggle": {"itemTaxId" : "#subtotal-item-tax-details<?php echo $_item->getId(); ?>"}}'>
 <?php else: ?>
     <span class="cart-price">
 <?php endif; ?>
@@ -29,7 +31,7 @@ $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
     </span>
 
     <?php if ($this->displayFinalPrice()): ?>
-        <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#subtotal-item-tax-details<?php echo $_item->getId(); ?>"}'>
+        <span class="cart-tax-total" data-mage-init='{"taxtToggle": {"itemTaxId" : "#subtotal-item-tax-details<?php echo $_item->getId(); ?>"}}'>
             <span class="weee" data-label="<?php echo __('Total incl. tax'); ?>">
                 <?php echo $this->formatPrice($this->getFinalRowDisplayPriceInclTax()); ?>
             </span>

@@ -7,8 +7,8 @@
 namespace Magento\Customer\Test\Fixture\CustomerInjectable;
 
 use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class GroupId

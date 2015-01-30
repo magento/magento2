@@ -6,8 +6,8 @@
 
 namespace Magento\Reports\Test\Block\Adminhtml\Customer\Totals;
 
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Grid
@@ -62,7 +62,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      * @param array $filter
      * @param bool $isSearchable
      * @param bool $isStrict
-     * @return Element
+     * @return SimpleElement
      */
     protected function getRow(array $filter, $isSearchable = true, $isStrict = true)
     {

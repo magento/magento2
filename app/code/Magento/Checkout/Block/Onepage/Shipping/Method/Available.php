@@ -7,10 +7,11 @@ namespace Magento\Checkout\Block\Onepage\Shipping\Method;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Config as AddressConfig;
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * One page checkout status
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
@@ -37,6 +38,7 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -101,7 +103,7 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     {
         if ($name = $this->_scopeConfig->getValue(
             'carriers/' . $carrierCode . '/title',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $name;

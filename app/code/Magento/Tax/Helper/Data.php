@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Helper;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -22,6 +25,8 @@ use Magento\Sales\Model\EntityInterface;
 
 /**
  * Catalog data helper
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -71,7 +76,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -156,7 +161,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Registry                                   $coreRegistry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface            $scopeConfig
      * @param Config                                                        $taxConfig
-     * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface                    $storeManager
      * @param \Magento\Framework\Locale\FormatInterface                     $localeFormat
      * @param \Magento\Eav\Model\Entity\AttributeFactory                    $attributeFactory
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory       $taxItemFactory
@@ -170,6 +175,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Helper\Data                                  $catalogHelper
      * @param OrderTaxManagementInterface                                   $orderTaxManagement
      * @param PriceCurrencyInterface                                        $priceCurrency
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -177,7 +183,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         Config $taxConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $taxItemFactory,
@@ -574,7 +580,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             Config::CONFIG_XML_PATH_BASED_ON,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -589,7 +595,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int) $this->_scopeConfig->getValue(
             Config::CONFIG_XML_PATH_APPLY_ON,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         ) == 0;
     }
@@ -604,7 +610,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int) $this->_scopeConfig->getValue(
             Config::CONFIG_XML_PATH_APPLY_ON,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         ) == 1;
     }
@@ -629,7 +635,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  null|string|bool|int|Store $store
      * @return string
      */
-    public function getCalculationAgorithm($store = null)
+    public function getCalculationAlgorithm($store = null)
     {
         return $this->_config->getAlgorithm($store);
     }
@@ -737,7 +743,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::CONFIG_DEFAULT_CUSTOMER_TAX_CLASS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -750,7 +756,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::CONFIG_DEFAULT_PRODUCT_TAX_CLASS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -790,29 +796,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  EntityInterface $order
      * @param  EntityInterface $salesItem
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function calculateTaxForItems(EntityInterface $order, EntityInterface $salesItem)
     {
         $taxClassAmount = [];
 
         $orderTaxDetails = $this->orderTaxManagement->getOrderTaxDetails($order->getId());
-
-        // Apply any taxes for shipping
-        $shippingTaxAmount = $salesItem->getShippingTaxAmount();
-        $originalShippingTaxAmount = $order->getShippingTaxAmount();
-        if ($shippingTaxAmount && $originalShippingTaxAmount &&
-            $shippingTaxAmount != 0 && floatval($originalShippingTaxAmount)
-        ) {
-            //An invoice or credit memo can have a different qty than its order
-            $shippingRatio = $shippingTaxAmount / $originalShippingTaxAmount;
-            $itemTaxDetails = $orderTaxDetails->getItems();
-            foreach ($itemTaxDetails as $itemTaxDetail) {
-                //Aggregate taxable items associated with shipping
-                if ($itemTaxDetail->getType() == \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING) {
-                    $taxClassAmount = $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $shippingRatio);
-                }
-            }
-        }
 
         // Apply any taxes for the items
         /** @var $item \Magento\Sales\Model\Order\Invoice\Item|\Magento\Sales\Model\Order\Creditmemo\Item */
@@ -841,6 +831,23 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                         }
                     }
                     $taxClassAmount = $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $ratio);
+                }
+            }
+        }
+
+        // Apply any taxes for shipping
+        $shippingTaxAmount = $salesItem->getShippingTaxAmount();
+        $originalShippingTaxAmount = $order->getShippingTaxAmount();
+        if ($shippingTaxAmount && $originalShippingTaxAmount &&
+            $shippingTaxAmount != 0 && floatval($originalShippingTaxAmount)
+        ) {
+            //An invoice or credit memo can have a different qty than its order
+            $shippingRatio = $shippingTaxAmount / $originalShippingTaxAmount;
+            $itemTaxDetails = $orderTaxDetails->getItems();
+            foreach ($itemTaxDetails as $itemTaxDetail) {
+                //Aggregate taxable items associated with shipping
+                if ($itemTaxDetail->getType() == \Magento\Quote\Model\Quote\Address::TYPE_SHIPPING) {
+                    $taxClassAmount = $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $shippingRatio);
                 }
             }
         }

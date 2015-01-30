@@ -7,6 +7,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 return [
     ['ADMIN_STORE_ID', 'Magento\Framework\AppInterface'],
     ['BACKORDERS_BELOW'],
@@ -112,12 +115,12 @@ return [
     ['RULE_PERM_ALLOW', '\Magento\Framework\Math\Random'],
     ['RULE_PERM_DENY', '\Magento\Framework\Math\Random'],
     ['RULE_PERM_INHERIT', '\Magento\Framework\Math\Random'],
-    ['SCOPE_TYPE_GROUP', 'Magento\Core\Model\App', 'Magento\Store\Model\ScopeInterface::SCOPE_GROUP'],
-    ['SCOPE_TYPE_STORE', 'Magento\Core\Model\App', 'Magento\Store\Model\ScopeInterface::SCOPE_STORE'],
+    ['SCOPE_TYPE_GROUP', 'Magento\Core\Model\App', 'Magento\Framework\Store\ScopeInterface::SCOPE_GROUP'],
+    ['SCOPE_TYPE_STORE', 'Magento\Core\Model\App', 'Magento\Framework\Store\ScopeInterface::SCOPE_STORE'],
     [
         'SCOPE_TYPE_WEBSITE',
         'Magento\Core\Model\App',
-        'Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE'
+        'Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE'
     ],
     ['SEESION_MAX_COOKIE_LIFETIME'],
     ['TYPE_BINARY', null, 'Magento_DB_Ddl_Table::TYPE_BLOB'],
@@ -181,7 +184,7 @@ return [
     ['XML_PATH_LOCALE_INHERITANCE', 'Mage_Core_Model_Translate'],
     ['XML_PATH_PRODUCT_ATTRIBUTES', 'Magento\Wishlist\Model\Config'],
     ['XML_PATH_PRODUCT_COLLECTION_ATTRIBUTES', 'Magento\Catalog\Model\Config'],
-    ['XML_PATH_QUOTE_PRODUCT_ATTRIBUTES', 'Magento\Sales\Model\Quote\Config'],
+    ['XML_PATH_QUOTE_PRODUCT_ATTRIBUTES', 'Magento\Quote\Model\Quote\Config'],
     ['XML_PATH_SENDING_SET_RETURN_PATH', 'Mage_Newsletter_Model_Subscriber'],
     [
         'XML_PATH_SKIP_PROCESS_MODULES_UPDATES',

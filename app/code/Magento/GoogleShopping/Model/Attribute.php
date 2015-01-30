@@ -109,6 +109,7 @@ class Attribute extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $setId attribute set id
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getAllowedAttributes($setId)
     {

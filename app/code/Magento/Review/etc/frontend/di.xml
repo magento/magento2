@@ -26,7 +26,7 @@
             <argument name="reviewSession" xsi:type="object">Magento\Review\Model\Session</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Url\SecurityInfo">
+    <type name="Magento\Framework\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
                 <item name="review_customer" xsi:type="string">/review/customer/</item>

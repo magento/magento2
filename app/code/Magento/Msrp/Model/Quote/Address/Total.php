@@ -8,7 +8,7 @@ namespace Magento\Msrp\Model\Quote\Address;
 /**
  * Msrp items total
  */
-class Total extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
+class Total extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
      * @var \Magento\Msrp\Helper\Data
@@ -26,10 +26,10 @@ class Total extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     /**
      * Collect information about MSRP price enabled
      *
-     * @param  \Magento\Sales\Model\Quote\Address $address
+     * @param  \Magento\Quote\Model\Quote\Address $address
      * @return $this
      */
-    public function collect(\Magento\Sales\Model\Quote\Address $address)
+    public function collect(\Magento\Quote\Model\Quote\Address $address)
     {
         parent::collect($address);
 

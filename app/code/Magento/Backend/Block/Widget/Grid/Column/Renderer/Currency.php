@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
@@ -27,7 +30,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Application object
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -48,7 +51,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
@@ -56,7 +59,7 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,

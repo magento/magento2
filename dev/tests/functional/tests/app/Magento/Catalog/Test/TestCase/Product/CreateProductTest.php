@@ -7,8 +7,8 @@
 namespace Magento\Catalog\Test\TestCase\Product;
 
 use Magento\Catalog\Test\Fixture\SimpleProduct;
-use Mtf\Factory\Factory;
-use Mtf\TestCase\Functional;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\TestCase\Functional;
 
 /**
  * Class CreateProductTest
@@ -16,6 +16,10 @@ use Mtf\TestCase\Functional;
  */
 class CreateProductTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Login into backend area before test
      *

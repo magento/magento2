@@ -8,9 +8,8 @@ namespace Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
 
 use Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid;
 use Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection;
-use Mtf\Block\Form;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Option
@@ -92,9 +91,9 @@ class Option extends Form
     {
         $mapping = $this->dataMapping($fields);
         $this->_fill($mapping);
-        $selections = $this->_rootElement->find($this->removeSelection)->getElements();
+        $selections = $this->_rootElement->getElements($this->removeSelection);
         if (count($selections)) {
-            foreach ($selections as $itemSelection) {
+            foreach (array_reverse($selections) as $itemSelection) {
                 $itemSelection->click();
             }
         }

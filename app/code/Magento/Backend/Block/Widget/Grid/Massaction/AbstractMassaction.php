@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\Template;
 /**
  * Grid widget massaction block
  *
- * @method \Magento\Sales\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
+ * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -295,6 +295,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve select all functionality flag check
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseSelectAll()
     {

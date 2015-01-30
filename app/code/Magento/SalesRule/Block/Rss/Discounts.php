@@ -14,7 +14,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -73,10 +73,10 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
             'store_id' => $storeId,
             'cid' => $customerGroupId,
         ]);
-        $title = __('%1 - Discounts and Coupons', $storeModel->getName());
+        $title = __('%1 - Discounts and Coupons', $storeModel->getFrontendName());
         $lang = $this->_scopeConfig->getValue(
             'general/locale/code',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeModel
         );
 
@@ -150,7 +150,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
     {
         return $this->_scopeConfig->isSetFlag(
             'rss/catalog/discounts',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 

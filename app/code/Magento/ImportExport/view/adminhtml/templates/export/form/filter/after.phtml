@@ -4,14 +4,17 @@
  * See COPYING.txt for license details.
  */
 ?>
-<script type="text/javascript">
-//<![CDATA[
-if (window['export_filter_gridJsObject'] != undefined) {
-    export_filter_gridJsObject.resetFilter = function () {
-        return varienGrid.prototype.resetFilter.call(this, varienExport.modifyFilterGrid);
-    };
-    export_filter_gridJsObject.doFilter = function () {
-        return varienGrid.prototype.doFilter.call(this, varienExport.modifyFilterGrid);
-    };
-}
+<script>
+require([
+    'mage/adminhtml/grid'
+], function(){
+    if (window['export_filter_gridJsObject'] != undefined) {
+        export_filter_gridJsObject.resetFilter = function () {
+            return varienGrid.prototype.resetFilter.call(this, varienExport.modifyFilterGrid);
+        };
+        export_filter_gridJsObject.doFilter = function () {
+            return varienGrid.prototype.doFilter.call(this, varienExport.modifyFilterGrid);
+        };
+    }
+});
 </script>

@@ -5,9 +5,11 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Multishipping\Block\Checkout;
 
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 
 class OverviewTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +33,7 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->addressMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             [
                 'getShippingMethod',
                 'getShippingRateByCode',
@@ -55,7 +57,7 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetShippingRateByCode()
     {
-        $rateMock = $this->getMock('Magento\Sales\Model\Quote\Address\Rate', [], [], '', false);
+        $rateMock = $this->getMock('Magento\Quote\Model\Quote\Address\Rate', [], [], '', false);
         $this->addressMock->expects($this->once())
             ->method('getShippingMethod')->will($this->returnValue('shipping method'));
         $this->addressMock->expects($this->once())

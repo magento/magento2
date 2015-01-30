@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\Product\Attribute;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInterface
 {
     /**
@@ -72,6 +75,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * @param \Magento\Framework\Api\Config\MetadataConfig $metadataConfig
      * @param \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Attribute $attributeResource,
@@ -121,6 +125,8 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {

@@ -114,7 +114,7 @@
     &::-webkit-search-decoration,
     &::-webkit-search-results-button,
     &::-webkit-search-results-decoration {
-      -webkit-appearance:none;
+        -webkit-appearance: none;
     }
 }
 
@@ -134,8 +134,8 @@
     @_disabled-color: '',
     @_placeholder-color: ''
 ) {
-    .css(border-color, @_border-color);
     .css(background, @_background);
+    .css(border-color, @_border-color);
     .css(color, @_color);
     &:focus {
         ._form-element-state-add-border-color(@_focus-border-color, @_border-color);
@@ -637,7 +637,7 @@
     }
 
     .additional {
-        margin-top: @_additional-vertical-indent;
+        .css(margin-top, @_additional-vertical-indent);
     }
 
     ._form-field-required(
@@ -931,7 +931,6 @@
     @_column-padding: @form-field-column-padding,
     @_column-number: @form-field-column-number
 ) when (@_column = true) {
-
     box-sizing: border-box;
     //float: left;
     display: inline-block;
@@ -1017,7 +1016,6 @@
             @_font-style
         );
     }
-
 }
 
 ._form-hasrequired-position(

@@ -1,6 +1,5 @@
 <?php
 /**
- * @spi
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,7 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Upsell\Grid as UpsellGrid;
-use Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Upsell
@@ -33,12 +32,13 @@ class Upsell extends AbstractRelated
     /**
      * Return related products grid
      *
-     * @param Element|null $element [optional]
+     * @param SimpleElement|null $element [optional]
      * @return UpsellGrid
      */
-    protected function getRelatedGrid(Element $element = null)
+    protected function getRelatedGrid(SimpleElement $element = null)
     {
         $element = $element ? $element : $this->_rootElement;
+
         return $this->blockFactory->create(
             '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Upsell\Grid',
             ['element' => $element->find($this->crossSellGrid)]
