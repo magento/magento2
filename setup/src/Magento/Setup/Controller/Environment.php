@@ -66,7 +66,7 @@ class Environment extends AbstractActionController
             );
         }
         $multipleConstraints = $this->versionParser->parseConstraints($requiredVersion);
-        $currentPhpVersion = new VersionConstraint('=', PHP_VERSION);
+        $currentPhpVersion = $this->versionParser->parseConstraints(PHP_VERSION);
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         if (!$multipleConstraints->matches($currentPhpVersion)) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;

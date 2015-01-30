@@ -39,46 +39,7 @@ class VerboseValidator
             }
             // parse user parameters
             $userParams = $this->parseUserParams($data);
-
-            $missingParams = $this->checkMissingParameter($expectedParams, $userParams);
-            $extraParams = $this->checkExtraParameter($expectedParams, $userParams);
-            $missingValues = $this->checkMissingValue($expectedParams, $userParams);
-            $extraValues = $this->checkExtraValue($expectedParams, $userParams);
-
-            $validationMessages = PHP_EOL;
-
-            if (!empty($missingParams)) {
-                $validationMessages .= 'Missing required parameters:' . PHP_EOL;
-                foreach ($missingParams as $missingParam) {
-                    $validationMessages .= $missingParam . PHP_EOL;
-                }
-                $validationMessages .= PHP_EOL;
-            }
-            if (!empty($extraParams)) {
-                $validationMessages .= 'Unidentified parameters:' . PHP_EOL;
-                foreach ($extraParams as $extraParam) {
-                    $validationMessages .= $extraParam . PHP_EOL;
-                }
-                $validationMessages .= PHP_EOL;
-            }
-            if (!empty($missingValues)) {
-                $validationMessages .= 'Parameters missing value:' . PHP_EOL;
-                foreach ($missingValues as $missingValue) {
-                    $validationMessages .= $missingValue . PHP_EOL;
-                }
-                $validationMessages .= PHP_EOL;
-            }
-            if (!empty($extraValues)) {
-                $validationMessages .= 'Parameters that don\'t need value:' . PHP_EOL;
-                foreach ($extraValues as $extraValue) {
-                    $validationMessages .= $extraValue . PHP_EOL;
-                }
-                $validationMessages .= PHP_EOL;
-            }
-            if (empty($missingParams) && empty($extraParams) && empty($missingValues) && empty($extraValue)) {
-                $validationMessages .= 'Please make sure parameters are in correct format and are not repeated.';
-                $validationMessages .= PHP_EOL . PHP_EOL;
-            }
+            $validationMessages = $this->validateParameters($expectedParams, $userParams);
 
             // add usage message
             $usages = ConsoleController::getCommandUsage();
@@ -219,5 +180,55 @@ class VerboseValidator
             }
         }
         return $extraValues;
+    }
+
+    /**
+     * Validates the parameters.
+     *
+     * @param $expectedParams
+     * @param $userParams
+     * @return string
+     */
+    private function validateParameters($expectedParams, $userParams)
+    {
+        $missingParams = $this->checkMissingParameter($expectedParams, $userParams);
+        $extraParams = $this->checkExtraParameter($expectedParams, $userParams);
+        $missingValues = $this->checkMissingValue($expectedParams, $userParams);
+        $extraValues = $this->checkExtraValue($expectedParams, $userParams);
+        $validationMessages = PHP_EOL;
+        if (!empty($missingParams)) {
+            $validationMessages .= 'Missing required parameters:' . PHP_EOL;
+            foreach ($missingParams as $missingParam) {
+                $validationMessages .= $missingParam . PHP_EOL;
+            }
+            $validationMessages .= PHP_EOL;
+        }
+        if (!empty($extraParams)) {
+            $validationMessages .= 'Unidentified parameters:' . PHP_EOL;
+            foreach ($extraParams as $extraParam) {
+                $validationMessages .= $extraParam . PHP_EOL;
+            }
+            $validationMessages .= PHP_EOL;
+        }
+        if (!empty($missingValues)) {
+            $validationMessages .= 'Parameters missing value:' . PHP_EOL;
+            foreach ($missingValues as $missingValue) {
+                $validationMessages .= $missingValue . PHP_EOL;
+            }
+            $validationMessages .= PHP_EOL;
+        }
+        if (!empty($extraValues)) {
+            $validationMessages .= 'Parameters that don\'t need value:' . PHP_EOL;
+            foreach ($extraValues as $extraValue) {
+                $validationMessages .= $extraValue . PHP_EOL;
+            }
+            $validationMessages .= PHP_EOL;
+        }
+        if (empty($missingParams) && empty($extraParams) && empty($missingValues) && empty($extraValue)) {
+            $validationMessages .= 'Please make sure parameters are in correct format and are not repeated.';
+            $validationMessages .= PHP_EOL . PHP_EOL;
+            return $validationMessages;
+        }
+        return $validationMessages;
     }
 }

@@ -23,7 +23,7 @@ use Magento\Setup\Model\ObjectManagerFactory;
 /**
  * Controller that handles all setup commands via command line interface.
  *
- * @package Magento\Setup\Controller
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConsoleController extends AbstractActionController
 {
@@ -180,6 +180,7 @@ class ConsoleController extends AbstractActionController
      * The CLI that this controller implements
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private static function getCliConfig()
     {
@@ -318,6 +319,7 @@ class ConsoleController extends AbstractActionController
      * Adding Check for Allowing only console application to come through
      *
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function setEventManager(EventManagerInterface $events)
     {
@@ -441,6 +443,8 @@ class ConsoleController extends AbstractActionController
      * Action for "maintenance" command
      *
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      */
     public function maintenanceAction()
     {

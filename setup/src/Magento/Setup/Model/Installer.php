@@ -30,6 +30,8 @@ use Magento\Store\Model\Store;
 /**
  * Class Installer contains the logic to install Magento application.
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Installer
 {
@@ -212,6 +214,8 @@ class Installer
      * @param Filesystem $filesystem
      * @param SampleData $sampleData
      * @param ObjectManagerFactory $objectManagerFactory
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FilePermissions $filePermissions,
@@ -611,6 +615,8 @@ class Installer
      *
      * @param string $orderIncrementPrefix Value to use for order increment prefix
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
@@ -684,6 +690,8 @@ class Installer
      * Enables caches after installing application
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
     private function enableCaches()
     {
@@ -702,6 +710,8 @@ class Installer
      *
      * @param int $value
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
     private function setMaintenanceMode($value)
     {
@@ -887,6 +897,8 @@ class Installer
      *
      * @param array $request
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
     private function installSampleData($request)
     {

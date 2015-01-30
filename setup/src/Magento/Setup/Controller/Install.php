@@ -19,6 +19,11 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Install controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Install extends AbstractActionController
 {
     /**
@@ -116,6 +121,7 @@ class Install extends AbstractActionController
      * Maps data from request to format of deployment config model
      *
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function importDeploymentConfigForm()
     {
@@ -139,6 +145,8 @@ class Install extends AbstractActionController
      * Maps data from request to format of user config model
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function importUserConfigForm()
     {

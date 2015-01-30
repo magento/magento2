@@ -9,27 +9,19 @@ namespace Magento\Setup\Controller;
 use Composer\Json\JsonFile;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Model\ViewModel;
 
 class Landing extends AbstractActionController
 {
-    /**
-     * @var ServiceLocatorInterface
-     */
-    protected $serviceLocator;
-
     /**
      * @var array
      */
     protected $composerJson;
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
      * @param DirectoryList $directoryList
      */
     public function __construct(
-        ServiceLocatorInterface $serviceLocator,
         DirectoryList $directoryList
     ) {
         $jsonFile = new JsonFile($directoryList->getRoot() . '/composer.json');

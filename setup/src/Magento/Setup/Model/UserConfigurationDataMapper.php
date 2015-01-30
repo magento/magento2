@@ -57,6 +57,8 @@ class UserConfigurationDataMapper
      *
      * @param array $data
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getConfigData($data)
     {
