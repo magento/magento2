@@ -120,6 +120,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
 
     /**
      * @param string $value
+     * @return void
      */
     public function appendBody($value)
     {
@@ -129,6 +130,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
 
     /**
      * @param string $value
+     * @return void
      */
     public function setBody($value)
     {
@@ -137,6 +139,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
 
     /**
      * Clear body
+     * @return void
      */
     public function clearBody()
     {
@@ -171,6 +174,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
      * Remove header by name from header stack
      *
      * @param string $name
+     * @return void
      */
     public function clearHeader($name)
     {
@@ -187,6 +191,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
 
     /**
      * Remove all headers
+     * @return void
      */
     public function clearHeaders()
     {
@@ -441,7 +446,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
     public function getExceptionByType($type)
     {
         $exceptions = [];
-        foreach ($this->_exceptions as $e) {
+        foreach ($this->exceptions as $e) {
             if ($e instanceof $type) {
                 $exceptions[] = $e;
             }
@@ -463,7 +468,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
     public function getExceptionByMessage($message)
     {
         $exceptions = [];
-        foreach ($this->_exceptions as $e) {
+        foreach ($this->exceptions as $e) {
             if ($message == $e->getMessage()) {
                 $exceptions[] = $e;
             }
@@ -480,13 +485,13 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
      * Retrieve all exceptions of a given code
      *
      * @param mixed $code
-     * @return void
+     * @return false|array
      */
     public function getExceptionByCode($code)
     {
         $code = (int)$code;
         $exceptions = [];
-        foreach ($this->_exceptions as $e) {
+        foreach ($this->exceptions as $e) {
             if ($code == $e->getCode()) {
                 $exceptions[] = $e;
             }

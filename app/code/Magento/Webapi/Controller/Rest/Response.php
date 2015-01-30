@@ -27,18 +27,22 @@ class Response extends \Magento\Webapi\Controller\Response
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Webapi\Controller\Rest\Response\Renderer\Factory $rendererFactory
+     * @param CookieManagerInterface $cookieManager
+     * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param Context $context
+     * @param \Magento\Framework\App\Response\Headers $headerManager
+     * @param Response\Renderer\Factory $rendererFactory
      * @param \Magento\Webapi\Controller\ErrorProcessor $errorProcessor
      * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
-        \Magento\Webapi\Controller\Rest\Response\Renderer\Factory $rendererFactory,
-        \Magento\Webapi\Controller\ErrorProcessor $errorProcessor,
-        \Magento\Framework\App\State $appState,
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         Context $context,
-        \Magento\Framework\App\Response\Headers $headerManager
+        \Magento\Framework\App\Response\Headers $headerManager,
+        \Magento\Webapi\Controller\Rest\Response\Renderer\Factory $rendererFactory,
+        \Magento\Webapi\Controller\ErrorProcessor $errorProcessor,
+        \Magento\Framework\App\State $appState
     ) {
         $this->_renderer = $rendererFactory->get();
         $this->_errorProcessor = $errorProcessor;

@@ -108,7 +108,7 @@ class Firebug extends AbstractOutput
     /**
      * Response setter
      *
-     * @param \Zend\Http\PhpEnvironment\Response
+     * @param \Zend\Http\PhpEnvironment\Response $response
      * @return void
      */
     public function setResponse(\Zend\Http\PhpEnvironment\Response $response)
