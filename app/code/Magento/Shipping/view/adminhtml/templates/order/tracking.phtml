@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /** @var $this Magento\Shipping\Block\Adminhtml\Order\Tracking */?>
+<?php /** @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking */?>
 <script>
 require(['prototype'], function(){
 
@@ -68,15 +68,15 @@ require(['prototype'], function(){
     </thead>
     <tfoot>
     <tr>
-        <td colspan="4" class="last col-actions-add"><?php echo $this->getChildHtml('add_button') ?></td>
+        <td colspan="4" class="last col-actions-add"><?php echo $block->getChildHtml('add_button') ?></td>
     </tr>
     </tfoot>
     <tbody id="track_row_container">
     <tr id="track_row_template" class="template no-display">
         <td class="col-carrier">
             <select name="tracking[__index__][carrier_code]" id="trackingC__index__" class="select carrier" disabled="disabled">
-                <?php foreach ($this->getCarriers() as $_code => $_name): ?>
-                    <option value="<?php echo $_code ?>"><?php echo $this->escapeHtml($_name) ?></option>
+                <?php foreach ($block->getCarriers() as $_code => $_name): ?>
+                    <option value="<?php echo $_code ?>"><?php echo $block->escapeHtml($_name) ?></option>
                 <?php endforeach; ?>
             </select>
         </td>
