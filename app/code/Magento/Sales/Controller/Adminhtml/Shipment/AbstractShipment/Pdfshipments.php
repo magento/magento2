@@ -6,25 +6,36 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Backend\Model\View\Result\RedirectFactory;
 
 abstract class Pdfshipments extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @var RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param Context $context
+     * @param FileFactory $fileFactory
+     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        Context $context,
+        FileFactory $fileFactory,
+        RedirectFactory $resultRedirectFactory
     ) {
         $this->_fileFactory = $fileFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -37,7 +48,7 @@ abstract class Pdfshipments extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return ResponseInterface|void
+     * @return ResponseInterface|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -65,6 +76,8 @@ abstract class Pdfshipments extends \Magento\Backend\App\Action
                 'application/pdf'
             );
         }
-        $this->_redirect('sales/*/');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('sales/*/');
     }
 }

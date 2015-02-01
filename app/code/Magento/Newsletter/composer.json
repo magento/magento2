@@ -12,6 +12,7 @@
         "magento/module-email": "0.42.0-beta5",
         "magento/module-cron": "0.42.0-beta5",
         "magento/module-eav": "0.42.0-beta5",
+        "magento/module-require-js": "0.42.0-beta5",
         "magento/framework": "0.42.0-beta5",
         "magento/magento-composer-installer": "*"
     },
