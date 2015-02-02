@@ -35,9 +35,4 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($jsonData, $this->_helper->jsonEncode($data));
         $this->assertEquals($data, $this->_helper->jsonDecode($jsonData));
     }
-
-    public function testGetDefaultCountry()
-    {
-        $this->assertEquals('US', $this->_helper->getDefaultCountry());
-    }
 }

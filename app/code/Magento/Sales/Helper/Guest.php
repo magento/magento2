@@ -68,7 +68,6 @@ class Guest extends \Magento\Core\Helper\Data
 
     /**
      * @param App\Helper\Context $context
-     * @param App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Registry $coreRegistry
@@ -83,7 +82,6 @@ class Guest extends \Magento\Core\Helper\Data
      */
     public function __construct(
         App\Helper\Context $context,
-        App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Registry $coreRegistry,
@@ -103,7 +101,6 @@ class Guest extends \Magento\Core\Helper\Data
         $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct(
             $context,
-            $scopeConfig,
             $storeManager,
             $appState
         );

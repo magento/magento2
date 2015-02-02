@@ -45,13 +45,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     ];
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
@@ -63,18 +56,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState
     ) {
         parent::__construct($context);
-        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_appState = $appState;
     }
@@ -121,20 +111,5 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function jsonDecode($encodedValue, $objectDecodeType = \Zend_Json::TYPE_ARRAY)
     {
         return \Zend_Json::decode($encodedValue, $objectDecodeType);
-    }
-
-    /**
-     * Return default country code
-     *
-     * @param \Magento\Store\Model\Store|string|int $store
-     * @return string
-     */
-    public function getDefaultCountry($store = null)
-    {
-        return $this->_scopeConfig->getValue(
-            self::XML_PATH_DEFAULT_COUNTRY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
-            $store
-        );
     }
 }

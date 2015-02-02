@@ -22,14 +22,12 @@ class Reorder extends \Magento\Core\Helper\Data
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\Customer\Model\Session $customerSession
@@ -37,7 +35,6 @@ class Reorder extends \Magento\Core\Helper\Data
         $this->_customerSession = $customerSession;
         parent::__construct(
             $context,
-            $scopeConfig,
             $storeManager,
             $appState
         );
@@ -59,7 +56,7 @@ class Reorder extends \Magento\Core\Helper\Data
      */
     public function isAllowed($store = null)
     {
-        if ($this->_scopeConfig->getValue(self::XML_PATH_SALES_REORDER_ALLOW, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)) {
+        if ($this->scopeConfig->getValue(self::XML_PATH_SALES_REORDER_ALLOW, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)) {
             return true;
         }
         return false;

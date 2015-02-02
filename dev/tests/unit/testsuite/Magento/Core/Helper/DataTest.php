@@ -78,30 +78,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('"valueToDecode"', $helper->jsonEncode('valueToDecode'));
     }
 
-    public function testGetDefaultCountry()
-    {
-        $storeId = 'storeId';
-        $country = 'country';
-
-        $scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with(
-                Data::XML_PATH_DEFAULT_COUNTRY,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
-                $storeId
-            )->will($this->returnValue($country));
-
-        $helper = $this->getHelper(
-            [
-                'scopeConfig' => $scopeConfigMock,
-            ]
-        );
-        $this->assertEquals($country, $helper->getDefaultCountry($storeId));
-    }
-
     /**
      * Get helper instance
      *

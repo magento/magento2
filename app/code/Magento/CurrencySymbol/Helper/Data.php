@@ -20,14 +20,12 @@ class Data extends \Magento\Core\Helper\Data
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory
@@ -35,7 +33,6 @@ class Data extends \Magento\Core\Helper\Data
         $this->_symbolFactory = $symbolFactory;
         parent::__construct(
             $context,
-            $scopeConfig,
             $storeManager,
             $appState
         );

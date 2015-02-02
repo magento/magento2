@@ -34,11 +34,6 @@ class Addresses extends GenericMetadata
     protected $_jsonEncoder;
 
     /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
      * @var \Magento\Customer\Model\Options
      */
     protected $options;
@@ -80,7 +75,6 @@ class Addresses extends GenericMetadata
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Store\Model\System\Store $systemStore
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Customer\Model\Renderer\RegionFactory $regionFactory
      * @param \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory
@@ -104,7 +98,6 @@ class Addresses extends GenericMetadata
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Store\Model\System\Store $systemStore,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Customer\Model\Renderer\RegionFactory $regionFactory,
         \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory,
@@ -121,7 +114,6 @@ class Addresses extends GenericMetadata
     ) {
         $this->options = $options;
         $this->_addressHelper = $addressHelper;
-        $this->_coreData = $coreData;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_regionFactory = $regionFactory;
         $this->_metadataFormFactory = $metadataFormFactory;
@@ -237,10 +229,10 @@ class Addresses extends GenericMetadata
         $this->_addressBuilder->populateWithArray([]);
         if (!empty($account) && isset($account['store_id'])) {
             $this->_addressBuilder->setCountryId(
-                $this->_coreData->getDefaultCountry($this->_storeManager->getStore($account['store_id']))
+                $this->_directoryHelper->getDefaultCountry($this->_storeManager->getStore($account['store_id']))
             );
         } else {
-            $this->_addressBuilder->setCountryId($this->_coreData->getDefaultCountry());
+            $this->_addressBuilder->setCountryId($this->_directoryHelper->getDefaultCountry());
         }
         $address = $this->_addressBuilder->create();
 

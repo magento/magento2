@@ -44,7 +44,7 @@ class Data extends \Magento\Core\Helper\Data
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
@@ -52,7 +52,6 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
@@ -60,10 +59,8 @@ class Data extends \Magento\Core\Helper\Data
     ) {
         $this->_modulesReader = $modulesReader;
         $this->_escaper = $escaper;
-
         parent::__construct(
             $context,
-            $scopeConfig,
             $storeManager,
             $appState
         );
@@ -77,7 +74,7 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function isEnabled($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ENABLED,
             ScopeInterface::SCOPE_STORE,
             $store
@@ -92,7 +89,7 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function isRememberMeEnabled($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_REMEMBER_ME_ENABLED,
             ScopeInterface::SCOPE_STORE,
             $store
@@ -107,7 +104,7 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function isRememberMeCheckedDefault($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_REMEMBER_ME_DEFAULT,
             ScopeInterface::SCOPE_STORE,
             $store
@@ -122,7 +119,7 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function isShoppingCartPersist($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_PERSIST_SHOPPING_CART,
             ScopeInterface::SCOPE_STORE,
             $store
@@ -138,7 +135,7 @@ class Data extends \Magento\Core\Helper\Data
     public function getLifeTime($store = null)
     {
         $lifeTime = intval(
-            $this->_scopeConfig->getValue(
+            $this->scopeConfig->getValue(
                 self::XML_PATH_LIFE_TIME,
                 ScopeInterface::SCOPE_STORE,
                 $store
@@ -155,7 +152,7 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function getClearOnLogout()
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_LOGOUT_CLEAR,
             ScopeInterface::SCOPE_STORE
         );

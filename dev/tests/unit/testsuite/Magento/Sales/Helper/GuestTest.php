@@ -23,9 +23,6 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $appContextHelperMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $scopeConfigInterfaceMock;
-
     /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerInterfaceMock;
 
@@ -56,7 +53,6 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->appContextHelperMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->scopeConfigInterfaceMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->storeManagerInterfaceMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->registryMock = $this->getMock('Magento\Framework\Registry');
@@ -78,7 +74,6 @@ class GuestTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Helper\Guest',
             [
                 'context' => $this->appContextHelperMock,
-                'scopeConfig' => $this->scopeConfigInterfaceMock,
                 'storeManager' => $this->storeManagerInterfaceMock,
                 'appState' => $this->stateMock,
                 'coreRegistry' => $this->registryMock,
