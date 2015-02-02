@@ -177,7 +177,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         return [
             // Each element is: array(Accept HTTP header value, expected result))
-            ['', []],
+            ['', ['*/*']],
             [
                 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 ['text/html', 'application/xhtml+xml', 'application/xml', '*/*']

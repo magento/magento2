@@ -33,7 +33,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         );
         try {
             if ($this->getRequest()->getPost()) {
-                /** @var $theme \Magento\Core\Model\Theme */
+                /** @var $theme \Magento\Theme\Model\Theme */
                 if (!empty($themeData['theme_id'])) {
                     $theme = $themeFactory->create($themeData['theme_id']);
                 } else {
