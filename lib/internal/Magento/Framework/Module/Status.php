@@ -113,8 +113,8 @@ class Status
 
         foreach ($errorModulesConflict as $moduleName => $conflictingModules) {
             if (!empty($conflictingModules)) {
-                $errorMessages[] = "Cannot enable $moduleName, conflicting modules:";
-                $errorMessages[] = implode(', ', $conflictingModules);
+                $errorMessages[] = "Cannot enable $moduleName, conflicting with other modules:";
+                $errorMessages[] = implode("\n", $conflictingModules);
             }
         }
 

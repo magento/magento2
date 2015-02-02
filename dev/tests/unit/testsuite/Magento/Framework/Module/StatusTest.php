@@ -92,9 +92,9 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             "Module_Baz: Module_Foo->Module_Baz",
             'Cannot enable Module_Bar, depending on disabled modules:',
             "Module_Baz: Module_Bar->Module_Baz",
-            'Cannot enable Module_Foo, conflicting modules:',
+            'Cannot enable Module_Foo, conflicting with other modules:',
             "Module_Bar",
-            'Cannot enable Module_Bar, conflicting modules:',
+            'Cannot enable Module_Bar, conflicting with other modules:',
             "Module_Foo",
         ];
         $this->assertEquals($expect, $result);

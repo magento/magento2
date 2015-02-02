@@ -49,7 +49,7 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
                 [['Vendor_A', ['Vendor_B' => '0.1']], ['Vendor_B', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
-                ['Vendor_B' => ['Vendor_A']]
+                ['Vendor_B' => ['Vendor_A conflicts with Vendor_B version 0.1 (current 0.1)']]
             ],
             [
                 [['Vendor_A', ['Vendor_B' => '0.1']], ['Vendor_B', []]],
@@ -61,7 +61,7 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
                 [['Vendor_B', ['Vendor_A' => '0.1']], ['Vendor_A', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
-                ['Vendor_B' => ['Vendor_A']]
+                ['Vendor_B' => ['Vendor_B conflicts with Vendor_A version 0.1 (current 0.1)']]
             ],
             [
                 [['Vendor_B', ['Vendor_A' => '0.1']], ['Vendor_A', []]],
@@ -85,25 +85,25 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
                 [['Vendor_A', ['Vendor_C' => '0.1']], ['Vendor_B', []], ['Vendor_C', []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
-                ['Vendor_B' => [], 'Vendor_C' => ['Vendor_A']]
+                ['Vendor_B' => [], 'Vendor_C' => ['Vendor_A conflicts with Vendor_C version 0.1 (current 0.1)']]
             ],
             [
                 [['Vendor_A', []], ['Vendor_B', ['Vendor_C' => '0.1']], ['Vendor_C', []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
-                ['Vendor_B' => ['Vendor_C'], 'Vendor_C' => ['Vendor_B']]
+                ['Vendor_B' => ['Vendor_B conflicts with Vendor_C version 0.1 (current 0.1)'], 'Vendor_C' => ['Vendor_B conflicts with Vendor_C version 0.1 (current 0.1)']]
             ],
             [
                 [['Vendor_A', ['Vendor_B' => '>=0.1']], ['Vendor_B', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
-                ['Vendor_B' => ['Vendor_A']]
+                ['Vendor_B' => ['Vendor_A conflicts with Vendor_B version >=0.1 (current 0.1)']]
             ],
             [
                 [['Vendor_A', ['Vendor_B' => '~0.1']], ['Vendor_B', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
-                ['Vendor_B' => ['Vendor_A']]
+            ['Vendor_B' => ['Vendor_A conflicts with Vendor_B version ~0.1 (current 0.1)']]
             ],
         ];
     }
@@ -131,7 +131,7 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($packageInfoMock));
         $conflictChecker = new ConflictChecker($moduleListMock, $packageInfoFactoryMock);
         $this->assertEquals(
-            ['Vendor_C' => ['Vendor_A']],
+            ['Vendor_C' => ['Vendor_C conflicts with Vendor_A version >=0.2,<0.3 (current 0.2)']],
             $conflictChecker->checkConflictsWhenEnableModules(['Vendor_C'])
         );
     }

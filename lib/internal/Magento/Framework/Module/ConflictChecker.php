@@ -52,8 +52,9 @@ class ConflictChecker
         foreach ($moduleNames as $moduleName) {
             $conflicts = [];
             foreach ($enabledModules as $enabledModule) {
-                if ($this->checkIfConflict($enabledModule, $moduleName)) {
-                    $conflicts[] = $enabledModule;
+                $messages = $this->getConflictMessages($enabledModule, $moduleName);
+                if (!empty($messages)) {
+                    $conflicts[] = implode("\n", $messages);
                 }
             }
             $conflictsAll[$moduleName] = $conflicts;
@@ -62,14 +63,15 @@ class ConflictChecker
     }
 
     /**
-     * Check if two modules are conflicted
+     * Check if two modules are conflicted and get the message for display
      *
      * @param string $moduleA
      * @param string $moduleB
-     * @return bool
+     * @return string[]
      */
-    private function checkIfConflict($moduleA, $moduleB)
+    private function getConflictMessages($moduleA, $moduleB)
     {
+        $messages = [];
         $versionParser = new VersionParser();
         if (isset($this->packageInfo->getConflict($moduleB)[$moduleA]) &&
             $this->packageInfo->getConflict($moduleB)[$moduleA] &&
@@ -78,7 +80,9 @@ class ConflictChecker
             $constraintA = $versionParser->parseConstraints($this->packageInfo->getConflict($moduleB)[$moduleA]);
             $constraintB = $versionParser->parseConstraints($this->packageInfo->getVersion($moduleA));
             if ($constraintA->matches($constraintB)) {
-                return true;
+                $messages[] = "$moduleB conflicts with $moduleA version " .
+                    $this->packageInfo->getConflict($moduleB)[$moduleA] .
+                    ' (current ' . $this->packageInfo->getVersion($moduleA) . ')';
             }
         }
         if (isset($this->packageInfo->getConflict($moduleA)[$moduleB]) &&
@@ -88,9 +92,11 @@ class ConflictChecker
             $constraintA = $versionParser->parseConstraints($this->packageInfo->getConflict($moduleA)[$moduleB]);
             $constraintB = $versionParser->parseConstraints($this->packageInfo->getVersion($moduleB));
             if ($constraintA->matches($constraintB)) {
-                return true;
+                $messages[] = "$moduleA conflicts with $moduleB version " .
+                    $this->packageInfo->getConflict($moduleA)[$moduleB] .
+                    ' (current ' . $this->packageInfo->getVersion($moduleA) . ')';;
             }
         }
-        return false;
+        return $messages;
     }
 }
