@@ -134,12 +134,10 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
         $id = 1;
         $uenc = strtr(base64_encode($url), '+/=', '-_,');
         $data = ['product' => $id, \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $uenc];
-        $expectedPostData = json_encode(
-            [
-                'action' => $url,
-                'data' => ['product' => $id, 'uenc' => $uenc],
-            ]
-        );
+        $expectedPostData = [
+            'action' => $url,
+            'data' => ['product' => $id, 'uenc' => $uenc],
+        ];
 
         $this->typeInstanceMock->expects($this->once())
             ->method('hasRequiredOptions')
@@ -159,10 +157,6 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             ->method('getEncodedUrl')
             ->with($this->equalTo($url))
             ->will($this->returnValue($uenc));
-        $this->postDataHelperMock->expects($this->once())
-            ->method('getPostData')
-            ->with($this->equalTo($url), $this->equalTo($data))
-            ->will($this->returnValue($expectedPostData));
         $result = $this->block->getAddToCartPostParams($this->productMock);
         $this->assertEquals($expectedPostData, $result);
     }

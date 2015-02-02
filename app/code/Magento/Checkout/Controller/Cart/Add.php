@@ -88,7 +88,7 @@ class Add extends \Magento\Checkout\Controller\Cart
              * Check product availability
              */
             if (!$product) {
-                $this->_goBack();
+                $this->goBack();
                 return;
             }
 
@@ -117,7 +117,7 @@ class Add extends \Magento\Checkout\Controller\Cart
                     );
                     $this->messageManager->addSuccess($message);
                 }
-                $this->_goBack();
+                $this->goBack(null, $product);
             }
         } catch (\Magento\Framework\Model\Exception $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
@@ -134,16 +134,55 @@ class Add extends \Magento\Checkout\Controller\Cart
             }
 
             $url = $this->_checkoutSession->getRedirectUrl(true);
-            if ($url) {
-                $this->getResponse()->setRedirect($url);
-            } else {
+            if (!$url) {
                 $cartUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
-                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($cartUrl));
+                $url = $this->_redirect->getRedirectUrl($cartUrl);
             }
+            $this->goBack($url);
+
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot add this item to your shopping cart'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->_goBack();
+            $this->goBack();
         }
+    }
+
+    /**
+     * Resolve response
+     *
+     * @param string $backUrl
+     * @param \Magento\Catalog\Model\Product $product
+     * @return $this|void
+     */
+    protected function goBack($backUrl = null, $product = null)
+    {
+        if (!$this->getRequest()->isAjax()) {
+            return parent::_goBack();
+        }
+
+        $result = [];
+
+        if ($backUrl || $backUrl = $this->getBackUrl()) {
+            $result['backUrl'] = $backUrl;
+        } else {
+            $this->_view->loadLayout(['default'], true, true, false);
+            $layout = $this->_view->getLayout();
+
+            $result['messages'] = $layout->getBlock('global_messages')->toHtml();
+
+            if ($this->_checkoutSession->getCartWasUpdated()) {
+                $result['minicart'] = $layout->getBlock('minicart')->toHtml();
+            }
+
+            if ($product && true /*!$product->getIsSalable()*/) {
+                $result['product'] = [
+                    'statusText' => __('Out of stock')
+                ];
+            }
+        }
+
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+        );
     }
 }
