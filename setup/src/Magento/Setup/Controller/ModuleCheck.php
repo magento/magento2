@@ -37,8 +37,8 @@ class ModuleCheck extends AbstractActionController
     public function indexAction()
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
-        $enabledModules = $params['selectedModules'];
-        $allModules = $params['allModules'];
+        $enabledModules = isset($params['selectedModules']) ? $params['selectedModules'] : [];
+        $allModules = isset($params['allModules']) ? $params['allModules'] : [];
         $status = $this->objectManager->create('Magento\Framework\Module\Status');
 
         // checking enabling constraints

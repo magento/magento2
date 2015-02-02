@@ -9,31 +9,35 @@ namespace Magento\Setup\Controller;
 class ModuleCheckTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Installer
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
      */
-    private $installer;
+    private $objectManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     */
+    private $status;
 
     /**
      * Controller
      *
-     * @var \Magento\Setup\Controller\DatabaseCheck
+     * @var \Magento\Setup\Controller\ModuleCheck
      */
     private $controller;
 
     public function setUp()
     {
-        $bjectManagerFactory = $this->getMock('Magento\Setup\Model\ObjectManagerFactory', [], [], '', false);
-        $installerFactory = $this->getMock('\Magento\Setup\Model\InstallerFactory', [], [], '', false);
-        $this->installer = $this->getMock('\Magento\Setup\Model\Installer', [], [], '', false);
-        $installerFactory->expects($this->once())->method('create')->with($webLogger)->willReturn(
-            $this->installer
-        );
-        $this->controller = new DatabaseCheck($installerFactory, $webLogger);
+        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $this->status = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
+        $objectManagerFactory = $this->getMock('Magento\Setup\Model\ObjectManagerFactory', [], [], '', false);
+        $objectManagerFactory->expects($this->once())->method('create')->willReturn($this->objectManager);
+        $this->controller = new ModuleCheck($objectManagerFactory);
     }
 
     public function testIndexAction()
     {
-        $this->installer->expects($this->once())->method('checkDatabaseConnection');
+        $this->objectManager->expects($this->once())->method('create')->will($this->returnValue($this->status));
+        $this->status->expects($this->exactly(2))->method('checkConstraints')->willReturn([]);
         $jsonModel = $this->controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -43,9 +47,10 @@ class ModuleCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testIndexActionWithError()
     {
-        $this->installer->expects($this->once())->method('checkDatabaseConnection')->will(
-            $this->throwException(new \Exception)
-        );
+        $this->objectManager->expects($this->once())->method('create')->will($this->returnValue($this->status));
+        $this->status->expects($this->once())
+            ->method('checkConstraints')
+            ->willReturn(['ModuleA', 'ModuleB']);
         $jsonModel = $this->controller->indexAction();
         $this->assertInstanceOf('\Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
