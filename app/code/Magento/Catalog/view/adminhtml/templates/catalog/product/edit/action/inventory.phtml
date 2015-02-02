@@ -46,15 +46,15 @@
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
-                        <select id="inventory_manage_stock" name="<?php echo $this->getFieldSuffix() ?>[manage_stock]"
+                        <select id="inventory_manage_stock" name="<?php echo $block->getFieldSuffix() ?>[manage_stock]"
                                 class="select" disabled="disabled">
                             <option value="1"><?php echo __('Yes') ?></option>
                             <option
-                                value="0"<?php if ($this->getConfigFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
+                                value="0"<?php if ($block->getConfigFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
                         </select>
                     </div>
                     <div class="field choice">
-                        <input name="<?php echo $this->getFieldSuffix() ?>[use_config_manage_stock]" type="checkbox"
+                        <input name="<?php echo $block->getFieldSuffix() ?>[use_config_manage_stock]" type="checkbox"
                                id="inventory_use_config_manage_stock" data-role="toggle-editability" value="1"
                                checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_manage_stock"
@@ -79,8 +79,8 @@
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text required-entry validate-number" id="inventory_qty"
-                               name="<?php echo $this->getFieldSuffix() ?>[qty]"
-                               value="<?php echo $this->getDefaultConfigValue('qty') * 1 ?>" disabled="disabled"/>
+                               name="<?php echo $block->getFieldSuffix() ?>[qty]"
+                               value="<?php echo $block->getDefaultConfigValue('qty') * 1 ?>" disabled="disabled"/>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_qty_checkbox" data-role="toggle-editability-all"/>
@@ -101,12 +101,12 @@
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_min_qty"
-                               name="<?php echo $this->getFieldSuffix() ?>[min_qty]"
-                               value="<?php echo $this->getDefaultConfigValue('min_qty') * 1 ?>" disabled="disabled"/>
+                               name="<?php echo $block->getFieldSuffix() ?>[min_qty]"
+                               value="<?php echo $block->getDefaultConfigValue('min_qty') * 1 ?>" disabled="disabled"/>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_min_qty"
-                               name="<?php echo $this->getFieldSuffix() ?>[use_config_min_qty]" value="1"
+                               name="<?php echo $block->getFieldSuffix() ?>[use_config_min_qty]" value="1"
                                data-role="toggle-editability" checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_min_qty" class="label">
                             <span><?php echo __('Use Config Settings') ?></span>
@@ -131,13 +131,13 @@
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_min_sale_qty"
-                               name="<?php echo $this->getFieldSuffix() ?>[min_sale_qty]"
-                               value="<?php echo $this->getDefaultConfigValue('min_sale_qty') * 1 ?>"
+                               name="<?php echo $block->getFieldSuffix() ?>[min_sale_qty]"
+                               value="<?php echo $block->getDefaultConfigValue('min_sale_qty') * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_min_sale_qty"
-                               name="<?php echo $this->getFieldSuffix() ?>[use_config_min_sale_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                               name="<?php echo $block->getFieldSuffix() ?>[use_config_min_sale_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_min_sale_qty"
                                class="label"><span><?php echo __('Use Config Settings') ?></span></label>
                     </div>
@@ -160,13 +160,13 @@
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_max_sale_qty"
-                               name="<?php echo $this->getFieldSuffix() ?>[max_sale_qty]"
-                               value="<?php echo $this->getDefaultConfigValue('max_sale_qty') * 1 ?>"
+                               name="<?php echo $block->getFieldSuffix() ?>[max_sale_qty]"
+                               value="<?php echo $block->getDefaultConfigValue('max_sale_qty') * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_max_sale_qty"
-                               name="<?php echo $this->getFieldSuffix() ?>[use_config_max_sale_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                               name="<?php echo $block->getFieldSuffix() ?>[use_config_max_sale_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_max_sale_qty"
                                class="label"><span><?php echo __('Use Config Settings') ?></span></label>
                     </div>
@@ -189,11 +189,11 @@
                 <div class="fields-group-2">
                     <div class="field">
                         <select id="inventory_is_qty_decimal"
-                                name="<?php echo $this->getFieldSuffix() ?>[is_qty_decimal]" class="select"
+                                name="<?php echo $block->getFieldSuffix() ?>[is_qty_decimal]" class="select"
                                 disabled="disabled">
                             <option value="0"><?php echo __('No') ?></option>
                             <option
-                                value="1"<?php if ($this->getDefaultConfigValue('is_qty_decimal') == 1): ?> selected="selected"<?php endif; ?>><?php echo __('Yes') ?></option>
+                                value="1"<?php if ($block->getDefaultConfigValue('is_qty_decimal') == 1): ?> selected="selected"<?php endif; ?>><?php echo __('Yes') ?></option>
                         </select>
                     </div>
                     <div class="field choice">
@@ -214,10 +214,10 @@
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
-                        <select id="inventory_backorders" name="<?php echo $this->getFieldSuffix() ?>[backorders]"
+                        <select id="inventory_backorders" name="<?php echo $block->getFieldSuffix() ?>[backorders]"
                                 class="select" disabled="disabled">
-                            <?php foreach ($this->getBackordersOption() as $option): ?>
-                                <?php $_selected = ($option['value'] == $this->getDefaultConfigValue('backorders')) ? ' selected="selected"' : '' ?>
+                            <?php foreach ($block->getBackordersOption() as $option): ?>
+                                <?php $_selected = ($option['value'] == $block->getDefaultConfigValue('backorders')) ? ' selected="selected"' : '' ?>
                                 <option
                                     value="<?php echo $option['value'] ?>"<?php echo $_selected ?>><?php echo $option['label'] ?></option>
                             <?php endforeach; ?>
@@ -225,7 +225,7 @@
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_backorders"
-                               name="<?php echo $this->getFieldSuffix() ?>[use_config_backorders]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                               name="<?php echo $block->getFieldSuffix() ?>[use_config_backorders]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_backorders"
                                class="label"><span><?php echo __('Use Config Settings') ?></span></label>
                     </div>
@@ -248,13 +248,13 @@
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_notify_stock_qty"
-                               name="<?php echo $this->getFieldSuffix() ?>[notify_stock_qty]"
-                               value="<?php echo $this->getDefaultConfigValue('notify_stock_qty') * 1 ?>"
+                               name="<?php echo $block->getFieldSuffix() ?>[notify_stock_qty]"
+                               value="<?php echo $block->getDefaultConfigValue('notify_stock_qty') * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_notify_stock_qty"
-                               name="<?php echo $this->getFieldSuffix() ?>[use_config_notify_stock_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                               name="<?php echo $block->getFieldSuffix() ?>[use_config_notify_stock_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_notify_stock_qty"
                                class="label"><span><?php echo __('Use Config Settings') ?></span></label>
                     </div>
@@ -277,16 +277,16 @@
                 <div class="fields-group-2">
                     <div class="field">
                         <select id="inventory_enable_qty_increments"
-                                name="<?php echo $this->getFieldSuffix() ?>[enable_qty_increments]" class="select"
+                                name="<?php echo $block->getFieldSuffix() ?>[enable_qty_increments]" class="select"
                                 disabled="disabled">
                             <option value="1"><?php echo __('Yes') ?></option>
                             <option
-                                value="0"<?php if ($this->getDefaultConfigValue('enable_qty_increments') == 0): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
+                                value="0"<?php if ($block->getDefaultConfigValue('enable_qty_increments') == 0): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
                         </select>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_enable_qty_increments"
-                               name="<?php echo $this->getFieldSuffix() ?>[use_config_enable_qty_increments]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                               name="<?php echo $block->getFieldSuffix() ?>[use_config_enable_qty_increments]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_enable_qty_increments"
                                class="label"><span><?php echo __('Use Config Settings') ?></span></label>
                     </div>
@@ -309,13 +309,13 @@
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_qty_increments"
-                               name="<?php echo $this->getFieldSuffix() ?>[qty_increments]"
-                               value="<?php echo $this->getDefaultConfigValue('qty_increments') * 1 ?>"
+                               name="<?php echo $block->getFieldSuffix() ?>[qty_increments]"
+                               value="<?php echo $block->getDefaultConfigValue('qty_increments') * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_qty_increments"
-                               name="<?php echo $this->getFieldSuffix() ?>[use_config_qty_increments]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                               name="<?php echo $block->getFieldSuffix() ?>[use_config_qty_increments]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_qty_increments"
                                class="label"><span><?php echo __('Use Config Settings') ?></span></label>
                     </div>
@@ -338,11 +338,11 @@
                 <div class="fields-group-2">
                     <div class="field">
                         <select id="inventory_stock_availability"
-                                name="<?php echo $this->getFieldSuffix() ?>[is_in_stock]" class="select"
+                                name="<?php echo $block->getFieldSuffix() ?>[is_in_stock]" class="select"
                                 disabled="disabled">
                             <option value="1"><?php echo __('In Stock') ?></option>
                             <option
-                                value="0"<?php if ($this->getDefaultConfigValue('is_in_stock') == 0): ?> selected<?php endif; ?>><?php echo __('Out of Stock') ?></option>
+                                value="0"<?php if ($block->getDefaultConfigValue('is_in_stock') == 0): ?> selected<?php endif; ?>><?php echo __('Out of Stock') ?></option>
                         </select>
                     </div>
                     <div class="field choice">
