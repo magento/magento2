@@ -32,11 +32,6 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
-        $resultForward = $this->resultForwardFactory->create();
-        $resultForward->setHeader('HTTP/1.1', '404 Not Found');
-        $resultForward->setHeader('Status', '404 File not found');
-
         $pageId = $this->_objectManager->get(
             'Magento\Framework\App\Config\ScopeConfigInterface',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -47,11 +42,16 @@ class Index extends \Magento\Framework\App\Action\Action
         /** @var \Magento\Cms\Helper\Page $pageHelper */
         $pageHelper = $this->_objectManager->get('Magento\Cms\Helper\Page');
         $resultPage = $pageHelper->prepareResultPage($this, $pageId);
-        if (!$resultPage) {
+        if ($resultPage) {
+            $resultPage->setHeader('HTTP/1.1', '404 Not Found');
+            $resultPage->setHeader('Status', '404 File not found');
+            return $resultPage;
+        } else {
+            /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+            $resultForward = $this->resultForwardFactory->create();
             $resultForward->setController('index');
             $resultForward->forward('defaultNoRoute');
             return $resultForward;
         }
-        return $resultPage;
     }
 }
