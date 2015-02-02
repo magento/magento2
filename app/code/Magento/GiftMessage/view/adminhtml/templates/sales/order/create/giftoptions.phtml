@@ -8,9 +8,9 @@
 
 ?>
 
-<?php $_item = $this->getItem() ?>
+<?php $_item = $block->getItem() ?>
 <?php if ($_item): ?>
-    <?php $_childHtml = trim($this->getChildHtml('', false));?>
+    <?php $_childHtml = trim($block->getChildHtml('', false));?>
     <?php if ($_childHtml): ?>
         <tr class="border">
             <td colspan="8">
