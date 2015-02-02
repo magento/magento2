@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-$attributes = $this->getCssClass() ? ' class="' . $this->getCssClass() . '"' : '';
-$attr = $this->getAttributes();
+$attributes = $block->getCssClass() ? ' class="' . $block->getCssClass() . '"' : '';
+$attr = $block->getAttributes();
 if (!empty($attr)) {
-    foreach ($this->getAttributes() as $attribute => $value) {
+    foreach ($block->getAttributes() as $attribute => $value) {
         $attributes .= ' ' . $attribute . '="' . $value . '"';
     }
 };
 echo
-    '<' . $this->getTag() . $attributes . '>' . $this->getText() . '</' . $this->getTag() . '>';
+    '<' . $block->getTag() . $attributes . '>' . $block->getText() . '</' . $block->getTag() . '>';
