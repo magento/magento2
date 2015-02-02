@@ -113,14 +113,15 @@ class PhraseCollectorTest extends \PHPUnit_Framework_TestCase
                 'file' => $file,
                 'isEndOfLoopReturnValues' => [
                     false, //before $phrase1
-                    false, //before =
-                    false, //before new \Magento\Framework\Phrase('Testing')
-                    false, //before ;
-                    false, //before $phrase2
-                    false, //before =
-                    false, //before __('More testing')
-                    false, //before ;
-                    true //end of loop
+                    false, //at $phrase1
+                    false, //at =
+                    false, //at new
+                    false, //at ;
+                    false, //at $phrase2
+                    false, //at =
+                    false, //at __
+                    false, //at ;
+                    true //after ;
                 ],
                 'getNextRealTokenReturnValues' => [
                     $this->createToken(false, false, false, false, '$phrase1'),
@@ -130,24 +131,26 @@ class PhraseCollectorTest extends \PHPUnit_Framework_TestCase
                     $this->createToken(false, false, false, false, '$phrase2'),
                     $this->createToken(false, false, false, false, '='),
                     $this->createToken(true, false, false, false, '__', $line),
-                    $this->createToken(false, true, false, false, '(')
+                    $this->createToken(false, true, false, false, '('),
+                    $this->createToken(false, false, false, false, ';'),
+                    false
                 ],
                 'getFunctionArgumentsTokensReturnValues' => [
-                    [[$this->createToken(false, false, false, true, 'Testing')]], // 'Testing')
-                    [[$this->createToken(false, false, false, true, 'More testing')]] // 'More testing')
+                    [[$this->createToken(false, false, false, true, '\'Testing\'')]], // 'Testing')
+                    [[$this->createToken(false, false, false, true, '\'More testing\'')]] // 'More testing')
                 ],
                 'isMatchingClassReturnValues' => [
                     true // \Magento\Framework\Phrase(
                 ],
                 'result' => [
                     [
-                        'phrase' => 'Testing',
+                        'phrase' => '\'Testing\'',
                         'arguments' => 0,
                         'file' => $file,
                         'line' => $line
                     ],
                     [
-                        'phrase' => 'More testing',
+                        'phrase' => '\'More testing\'',
                         'arguments' => 0,
                         'file' => $file,
                         'line' => $line

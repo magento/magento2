@@ -81,15 +81,15 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         //We have 27 total tokens in objectsCode.php file (excluding whitespaces)
         //So the isEndOfLoop function should return true after we pick 28th non-existent token
         for ($i = 0; $i < 28; $i += 1) {
-            $this->assertEquals(false, $this->tokenizer->isEndOfLoop());
+            $this->assertFalse($this->tokenizer->isEndOfLoop());
             $this->tokenizer->getNextRealToken();
         }
-        $this->assertEquals(true, $this->tokenizer->isEndOfLoop());
+        $this->assertTrue($this->tokenizer->isEndOfLoop());
     }
 
     protected function parseFile()
     {
-        $file = __DIR__.'/_files/objectsCode.php';
+        $file = __DIR__.'/_files/objectsCode.php.txt';
         $this->tokenizer->parse($file);
     }
 }
