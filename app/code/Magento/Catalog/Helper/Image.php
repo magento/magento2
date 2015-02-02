@@ -247,11 +247,10 @@ class Image extends AbstractHelper
      *
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
-     * @param string[] $position
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function keepFrame($flag, $position = ['center', 'middle'])
+    public function keepFrame($flag)
     {
         $this->_getModel()->setKeepFrame($flag);
         return $this;
@@ -266,11 +265,10 @@ class Image extends AbstractHelper
      *
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
-     * @param int $alphaOpacity
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function keepTransparency($flag, $alphaOpacity = null)
+    public function keepTransparency($flag)
     {
         $this->_getModel()->setKeepTransparency($flag);
         return $this;
@@ -410,6 +408,34 @@ class Image extends AbstractHelper
             $url = $this->getDefaultPlaceholderUrl();
         }
         return $url;
+    }
+
+    /**
+     * @return $this
+     */
+    public function save()
+    {
+        $model = $this->_getModel();
+
+        if ($this->getImageFile()) {
+            $model->setBaseFile($this->getImageFile());
+        } else {
+            $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
+        }
+
+        if ($model->isCached()) {
+            return $this;
+        }
+
+        if ($this->_scheduleResize) {
+            $model->resize();
+        }
+        if ($this->getWatermark()) {
+            $model->setWatermark($this->getWatermark());
+        }
+
+        $model->saveFile();
+        return $this;
     }
 
     /**

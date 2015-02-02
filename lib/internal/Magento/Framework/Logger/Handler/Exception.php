@@ -8,7 +8,7 @@ namespace Magento\Framework\Logger\Handler;
 
 use Monolog\Logger;
 
-class Critical extends System
+class Exception extends Base
 {
     /**
      * @var string
@@ -18,5 +18,5 @@ class Critical extends System
     /**
      * @var int
      */
-    protected $loggerType = Logger::CRITICAL;
+    protected $loggerType = Logger::INFO;
 }

@@ -4,5 +4,5 @@
  * See COPYING.txt for license details.
  */
 ?>
-<p><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></p>
-<p><?php echo __('Purchase Order Number: %1', $this->escapeHtml($this->getInfo()->getPoNumber())) ?></p>
+<p><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></p>
+<p><?php echo __('Purchase Order Number: %1', $block->escapeHtml($block->getInfo()->getPoNumber())) ?></p>

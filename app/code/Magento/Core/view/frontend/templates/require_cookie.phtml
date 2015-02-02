@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var \Magento\Core\Block\RequireCookie $this */ ?>
+<?php /** @var \Magento\Core\Block\RequireCookie $block */ ?>
 <script>
 require([
     "jquery",
     "mage/mage"
 ], function($){
-    $('body').mage('requireCookie', <?php echo $this->getScriptOptions(); ?>);
+    $('body').mage('requireCookie', <?php echo $block->getScriptOptions(); ?>);
 });
 </script>

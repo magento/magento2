@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /* @var $this \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options */ ?>
-<?php $option = $this->getOption(); ?>
+<?php /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options */ ?>
+<?php $option = $block->getOption(); ?>
 <div class="field">
-    <label class="label"><?php echo $this->escapeHtml($option->getTitle()) ?></label>
+    <label class="label"><?php echo $block->escapeHtml($option->getTitle()) ?></label>
 </div>
