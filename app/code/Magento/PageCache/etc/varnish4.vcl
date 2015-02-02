@@ -1,91 +1,73 @@
+vcl 4.0;
+ 
 import std;
-# The minimal Varnish version is 3.0.5
-
+# The minimal Varnish version is 4.0
+ 
 backend default {
-    .host = "{{ host }}";
-    .port = "{{ port }}";
+    .host = "/* {{ host }} */";
+    .port = "/* {{ port }} */";
 }
 
 acl purge {
-{{ ips }}
+/* {{ ips }} */
 }
 
 sub vcl_recv {
-    if (req.restarts == 0) {
-        if (req.http.x-forwarded-for) {
-            set req.http.X-Forwarded-For =
-            req.http.X-Forwarded-For + ", " + client.ip;
-        } else {
-            set req.http.X-Forwarded-For = client.ip;
-        }
-    }
-
-    if (req.request == "PURGE") {
+    if (req.method == "PURGE") {
         if (client.ip !~ purge) {
-            error 405 "Method not allowed";
+            return (synth(405, "Method not allowed"));
         }
         if (!req.http.X-Magento-Tags-Pattern) {
-            error 400 "X-Magento-Tags-Pattern header required";
+            return (synth(400, "X-Magento-Tags-Pattern header required"));
         }
         ban("obj.http.X-Magento-Tags ~ " + req.http.X-Magento-Tags-Pattern);
-        error 200 "Purged";
+        return (synth(200, "Purged"));
     }
-
-    if (req.request != "GET" &&
-        req.request != "HEAD" &&
-        req.request != "PUT" &&
-        req.request != "POST" &&
-        req.request != "TRACE" &&
-        req.request != "OPTIONS" &&
-        req.request != "DELETE") {
+ 
+    if (req.method != "GET" &&
+        req.method != "HEAD" &&
+        req.method != "PUT" &&
+        req.method != "POST" &&
+        req.method != "TRACE" &&
+        req.method != "OPTIONS" &&
+        req.method != "DELETE") {
           /* Non-RFC2616 or CONNECT which is weird. */
           return (pipe);
     }
-
+ 
     # We only deal with GET and HEAD by default
-    if (req.request != "GET" && req.request != "HEAD") {
+    if (req.method != "GET" && req.method != "HEAD") {
         return (pass);
     }
-    
-    # normalize url in case of leading HTTP scheme and domain
-    set req.url = regsub(req.url, "^http[s]?://[^/]+", "");
-
-    # collect all cookies
-    std.collect(req.http.Cookie);
-
-    # static files are always cacheable. remove SSL flag and cookie
-    if (req.url ~ "^/(pub/)?(media|static)/.*\.(png|jpg|jpeg|gif|css|js|swf|ico|woff|svg)$") {
-        unset req.http.Https;
-        unset req.http.Cookie;
-    }
-
-    set req.grace = 1m;
-
-    return (lookup);
+ 
+    return (hash);
 }
 
 sub vcl_hash {
     if (req.http.cookie ~ "X-Magento-Vary=") {
         hash_data(regsub(req.http.cookie, "^.*?X-Magento-Vary=([^;]+);*.*$", "\1"));
     }
-    {{ design_exceptions_code }}
+    /* {{ design_exceptions_code }} */
 }
 
-sub vcl_fetch {
+sub vcl_backend_response {
     if (beresp.http.content-type ~ "text") {
         set beresp.do_esi = true;
     }
 
-    if (req.url ~ "\.js$" || beresp.http.content-type ~ "text") {
+    if (bereq.url ~ "\.js$" || beresp.http.content-type ~ "text") {
         set beresp.do_gzip = true;
     }
-
+ 
     # cache only successfully responses
     if (beresp.status != 200) {
         set beresp.ttl = 0s;
-        return (hit_for_pass);
+        set beresp.uncacheable = true;
+        return (deliver);
     } elsif (beresp.http.Cache-Control ~ "private") {
-        return (hit_for_pass);
+        set beresp.uncacheable = true;
+        set beresp.ttl = 120s;
+        return (deliver);
     }
 
     if (beresp.http.X-Magento-Debug) {
@@ -94,20 +76,21 @@ sub vcl_fetch {
 
     # validate if we need to cache it and prevent from setting cookie
     # images, css and js are cacheable by default so we have to remove cookie also
-    if (beresp.ttl > 0s && (req.request == "GET" || req.request == "HEAD")) {
+    if (beresp.ttl > 0s && (bereq.method == "GET" || bereq.method == "HEAD")) {
         unset beresp.http.set-cookie;
-        if (req.url !~ "\.(css|js|jpg|png|gif|tiff|bmp|gz|tgz|bz2|tbz|mp3|ogg|svg|swf|woff)(\?|$)") {
+        if (bereq.url !~ "\.(css|js|jpg|png|gif|tiff|bmp|gz|tgz|bz2|tbz|mp3|ogg|svg|swf|woff)(\?|$)") {
             set beresp.http.Pragma = "no-cache";
             set beresp.http.Expires = "-1";
             set beresp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
             set beresp.grace = 1m;
         }
     }
+    return (deliver);
 }
 
 sub vcl_deliver {
     if (resp.http.X-Magento-Debug) {
-        if (obj.hits > 0) {
+        if (resp.http.x-varnish ~ " ") {
             set resp.http.X-Magento-Cache-Debug = "HIT";
         } else {
             set resp.http.X-Magento-Cache-Debug = "MISS";

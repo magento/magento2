@@ -80,7 +80,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_ACCESS_LIST,
                         \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                         null,
-                        '127.0.0.1, 192.168.0.1'
+                        '127.0.0.1, 192.168.0.1,127.0.0.2'
                     ],
                     [
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX,
@@ -104,7 +104,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVcl()
     {
-        $test = $this->_model->getVclFile();
+        $test = $this->_model->getVclFile(Config::VARNISH_3_CONFIGURATION_PATH);
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
     }
 
