@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $this \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection */
+/** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection */
 ?>
 <script id="bundle-option-selection-box-template" type="text/x-jquery-tmpl">
     <table class="data-table">
@@ -16,7 +16,7 @@
                 <th class="col-default"><?php echo __('Default') ?></th>
                 <th class="col-name"><?php echo __('Name') ?></th>
                 <th class="col-sku"><?php echo __('SKU') ?></th>
-            <?php if ($this->getCanReadPrice() !== false): ?>
+            <?php if ($block->getCanReadPrice() !== false): ?>
                 <th class="col-price price-type-box"><?php echo __('Price') ?></th>
                 <th class="col-price price-type-box"><?php echo __('Price Type') ?></th>
             <?php endif; ?>
@@ -33,65 +33,65 @@
 <script id="bundle-option-selection-row-template" type="text/x-jquery-tmpl">
     <td class="col-draggable">
         <span data-role="draggable-handle" class="draggable-handle"></span>
-        <input type="hidden" id="<?php echo $this->getFieldId() ?>_id_{{index}}"
-               name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][selection_id]"
+        <input type="hidden" id="<?php echo $block->getFieldId() ?>_id_{{index}}"
+               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][selection_id]"
                value="{{selection_id}}"/>
-        <input type="hidden" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][option_id]"
+        <input type="hidden" name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][option_id]"
                value="{{option_id}}"/>
         <input type="hidden" class="product"
-               name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][product_id]"
+               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][product_id]"
                value="{{product_id}}"/>
-        <input type="hidden" name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][delete]"
+        <input type="hidden" name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][delete]"
                value="" class="delete"/>
     </td>
     <td class="col-default">
         <input onclick="bSelection.checkGroup(event)" type="{{option_type}}" class="default"
-               name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][is_default]"
+               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][is_default]"
                value="1" {{checked}} />
     </td>
     <td class="col-name">{{name}}</td>
     <td class="col-sku">{{sku}}</td>
-<?php if ($this->getCanReadPrice() !== false): ?>
+<?php if ($block->getCanReadPrice() !== false): ?>
     <td class="col-price price-type-box">
-        <input id="<?php echo $this->getFieldId() ?>_{{index}}_price_value"
+        <input id="<?php echo $block->getFieldId() ?>_{{index}}_price_value"
                class="input-text required-entry validate-zero-or-greater" type="text"
-               name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][selection_price_value]"
+               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][selection_price_value]"
                value="{{selection_price_value}}"
-            <?php if ($this->getCanEditPrice() === false): ?>
+            <?php if ($block->getCanEditPrice() === false): ?>
                disabled="disabled"
             <?php endif; ?>/>
     </td>
     <td class="col-price price-type-box">
-        <?php echo $this->getPriceTypeSelectHtml() ?>
-        <div><?php echo $this->getCheckboxScopeHtml() ?></div>
+        <?php echo $block->getPriceTypeSelectHtml() ?>
+        <div><?php echo $block->getCheckboxScopeHtml() ?></div>
     </td>
 <?php else: ?>
-    <input type="hidden" id="<?php echo $this->getFieldId(); ?>_{{index}}_price_value"
-           name="<?php echo $this->getFieldName(); ?>[{{parentIndex}}][{{index}}][selection_price_value]" value="0" />
-    <input type="hidden" id="<?php echo $this->getFieldId(); ?>_{{index}}_price_type"
-           name="<?php echo $this->getFieldName(); ?>[{{parentIndex}}][{{index}}][selection_price_type]" value="0" />
-    <?php if ($this->isUsedWebsitePrice()): ?>
-    <input type="hidden" id="<?php echo $this->getFieldId(); ?>_{{index}}_price_scope"
-           name="<?php echo $this->getFieldName(); ?>[{{parentIndex}}][{{index}}][default_price_scope]" value="1" />
+    <input type="hidden" id="<?php echo $block->getFieldId(); ?>_{{index}}_price_value"
+           name="<?php echo $block->getFieldName(); ?>[{{parentIndex}}][{{index}}][selection_price_value]" value="0" />
+    <input type="hidden" id="<?php echo $block->getFieldId(); ?>_{{index}}_price_type"
+           name="<?php echo $block->getFieldName(); ?>[{{parentIndex}}][{{index}}][selection_price_type]" value="0" />
+    <?php if ($block->isUsedWebsitePrice()): ?>
+    <input type="hidden" id="<?php echo $block->getFieldId(); ?>_{{index}}_price_scope"
+           name="<?php echo $block->getFieldName(); ?>[{{parentIndex}}][{{index}}][default_price_scope]" value="1" />
     <?php endif; ?>
 <?php endif; ?>
     <td class="col-qty">
         <input class="input-text required-entry validate-greater-zero-based-on-option validate-zero-or-greater" type="text"
-               name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][selection_qty]"
+               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][selection_qty]"
                value="{{selection_qty}}" />
     </td>
     <td class="col-uqty qty-box">
         <input type="checkbox" class="is-user-defined-qty" checked="checked" />
-        <span style="display:none"><?php echo $this->getQtyTypeSelectHtml() ?></span>
+        <span style="display:none"><?php echo $block->getQtyTypeSelectHtml() ?></span>
     </td>
     <td class="col-order type-order" style="display:none">
         <input class="input-text required-entry validate-zero-or-greater" type="text"
-               name="<?php echo $this->getFieldName() ?>[{{parentIndex}}][{{index}}][position]"
+               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][position]"
                value="{{position}}" />
     </td>
     <td class="col-actions">
         <span title="Delete Row">
-            <?php echo $this->getSelectionDeleteButtonHtml() ?>
+            <?php echo $block->getSelectionDeleteButtonHtml() ?>
         </span>
     </td>
 </script>
@@ -102,8 +102,8 @@ var bundleTemplateBox = jQuery('#bundle-option-selection-box-template').html(),
 
 Bundle.Selection = Class.create();
 Bundle.Selection.prototype = {
-    idLabel : '<?php echo $this->getFieldId() ?>',
-    scopePrice : <?php echo (int)$this->isUsedWebsitePrice() ?>,
+    idLabel : '<?php echo $block->getFieldId() ?>',
+    scopePrice : <?php echo (int)$block->isUsedWebsitePrice() ?>,
     templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
     templateBox : '',
     templateRow : '',
@@ -112,7 +112,7 @@ Bundle.Selection.prototype = {
     gridSelection: new Hash(),
     gridRemoval: new Hash(),
     gridSelectedProductSkus: [],
-    selectionSearchUrl: '<?php echo $this->getSelectionSearchUrl() ?>',
+    selectionSearchUrl: '<?php echo $block->getSelectionSearchUrl() ?>',
 
     initialize : function() {
         this.templateBox = '<div class="tier form-list" id="' + this.idLabel + '_box_{{parentIndex}}">' + bundleTemplateBox + '</div>';
