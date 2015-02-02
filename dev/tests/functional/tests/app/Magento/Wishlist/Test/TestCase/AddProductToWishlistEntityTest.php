@@ -53,7 +53,6 @@ class AddProductToWishlistEntityTest extends AbstractWishlistTest
      */
     public function test(Customer $customer, $product)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-32813');
         $product = $this->createProducts($product)[0];
 
         // Steps:

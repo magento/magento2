@@ -15,6 +15,13 @@ use Magento\Mtf\Client\Locator;
 class OptgroupselectElement extends SelectElement
 {
     /**
+     * Option locator
+     *
+     * @var string
+     */
+    protected $optionByIndex = './/optgroup/option[%d]';
+
+    /**
      * Option group selector
      *
      * @var string
