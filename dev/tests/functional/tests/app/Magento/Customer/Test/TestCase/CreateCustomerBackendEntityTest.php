@@ -13,9 +13,7 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
 
 /**
- * Test Coverage for CreateCustomerBackendEntityTest.
- *
- * General Flow:
+ * Steps:
  * 1. Log in as default admin user.
  * 2. Go to Customers > All Customers.
  * 3. Press "Add New Customer" button.

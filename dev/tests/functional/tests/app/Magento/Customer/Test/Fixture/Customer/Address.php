@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Fixture\Customer;
 
-use Magento\Customer\Test\Fixture\Address as AddressInjectable;
+use Magento\Customer\Test\Fixture\Address as AddressFixture;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 
@@ -51,14 +51,14 @@ class Address implements FixtureInterface
         if (isset($data['presets'])) {
             $data['presets'] = explode(',', $data['presets']);
             foreach ($data['presets'] as $value) {
-                /** @var AddressInjectable $addresses*/
+                /** @var AddressFixture $addresses*/
                 $addresses = $fixtureFactory->createByCode('address', ['dataSet' => $value]);
                 $this->data[] = $addresses->getData();
                 $this->addressesFixture[] = $addresses;
             }
         } elseif (empty($data['presets']) && !empty($data['addresses'])) {
             foreach ($data['addresses'] as $addresses) {
-                /** @var AddressInjectable $addresses */
+                /** @var AddressFixture $addresses */
                 $this->data[] = $addresses->getData();
                 $this->addressesFixture[] = $addresses;
             }

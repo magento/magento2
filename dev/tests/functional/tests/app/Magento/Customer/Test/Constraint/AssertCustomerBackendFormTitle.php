@@ -13,7 +13,7 @@ use Magento\Customer\Test\Fixture\Customer;
 /**
  * Assert that edit page of customer account contains correct title.
  */
-class AssertCustomerTitle extends AbstractConstraint
+class AssertCustomerBackendFormTitle extends AbstractConstraint
 {
     /* tags */
     const SEVERITY = 'middle';
@@ -42,6 +42,6 @@ class AssertCustomerTitle extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Assert that title is correct.';
+        return 'Customer backend edit form title is correct.';
     }
 }

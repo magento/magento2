@@ -46,9 +46,9 @@
             <pageCustomerIndexEdit class="Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit" />
         </require>
     </assertCustomerForm>
-    <assertCustomerTitle module="Magento_Customer">
+    <assertCustomerBackendFormTitle module="Magento_Customer">
         <severity>middle</severity>
-    </assertCustomerTitle>
+    </assertCustomerBackendFormTitle>
     <assertCustomerInvalidEmail module="Magento_Customer">
         <severity>middle</severity>
         <require>
