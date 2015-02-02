@@ -174,7 +174,7 @@ class Add extends \Magento\Checkout\Controller\Cart
                 $result['minicart'] = $layout->getBlock('minicart')->toHtml();
             }
 
-            if ($product && true /*!$product->getIsSalable()*/) {
+            if ($product && !$product->getIsSalable()) {
                 $result['product'] = [
                     'statusText' => __('Out of stock')
                 ];
