@@ -70,13 +70,8 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $headerManager = new \Magento\Framework\App\Response\Headers();
-
         $request = $objectManager->getObject('Magento\Framework\App\Request\Http');
-        $response = $objectManager->getObject(
-            'Magento\Framework\App\Response\Http',
-            ['headerManager' => $headerManager]
-        );
+        $response = $objectManager->getObject('Magento\Framework\App\Response\Http');
 
         $authentication = $objectManager->getObject(
             'Magento\Framework\HTTP\Authentication',

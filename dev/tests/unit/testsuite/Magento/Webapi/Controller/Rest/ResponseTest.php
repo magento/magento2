@@ -53,7 +53,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\App\Http\Context',
             ['getData']
         );
-        $headerManager = new \Magento\Framework\App\Response\Headers();
 
         if (in_array($this->getName(), ['testSendResponseWithException', 'testSendResponseSuccessHandling'])) {
             $cookieMetadataFactory
@@ -79,7 +78,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             $cookieManager,
             $cookieMetadataFactory,
             $context,
-            $headerManager,
             $rendererFactoryMock,
             $this->_errorProcessorMock,
             $this->_appStateMock

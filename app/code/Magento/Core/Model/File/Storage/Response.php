@@ -30,16 +30,14 @@ class Response extends Http implements \Magento\Framework\App\Response\FileInter
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\Http\Context $context
      * @param \Magento\Framework\File\Transfer\Adapter\Http $transferAdapter
-     * @param \Magento\Framework\App\Response\Headers $headerManager
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\App\Http\Context $context,
-        \Magento\Framework\App\Response\Headers $headerManager,
         \Magento\Framework\File\Transfer\Adapter\Http $transferAdapter
     ) {
-        parent::__construct($cookieManager, $cookieMetadataFactory, $context, $headerManager);
+        parent::__construct($cookieManager, $cookieMetadataFactory, $context);
         $this->_transferAdapter = $transferAdapter;
     }
 
