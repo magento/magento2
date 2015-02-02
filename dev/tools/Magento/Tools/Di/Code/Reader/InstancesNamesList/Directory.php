@@ -5,7 +5,6 @@
  */
 namespace Magento\Tools\Di\Code\Reader\InstancesNamesList;
 
-use Magento\Framework\Code\Reader\ClassReader;
 use Magento\Tools\Di\Compiler\Log\Log;
 
 /**
@@ -21,7 +20,7 @@ class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInter
     private $current;
 
     /**
-     * @var Log
+     * @var \Magento\Tools\Di\Compiler\Log\Log
      */
     private $log;
 
@@ -36,7 +35,7 @@ class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInter
     private $validator;
 
     /**
-     * @var \Magento\Tools\Di\Code\Reader\ClassReaderDecorator
+     * @var \Magento\Framework\Code\Reader\ClassReader
      */
     private $classReader;
 
@@ -46,20 +45,24 @@ class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInter
     private $classesScanner;
 
     /**
-     * @param Log $log Logging object
-     * @param string $generationDir directory where generated files is
+     * @param \Magento\Tools\Di\Compiler\Log\Log           $log           Logging object
+     * @param \Magento\Framework\Code\Reader\ClassReader   $classReader
+     * @param \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner
+     * @param \Magento\Framework\Code\Validator            $validator
+     * @param string                                       $generationDir directory where generated files is
      */
-    public function __construct(Log $log, $generationDir)
-    {
-        $this->classReader = new ClassReader();
-        $this->classesScanner = new \Magento\Tools\Di\Code\Reader\ClassesScanner();
-
+    public function __construct(
+        \Magento\Tools\Di\Compiler\Log\Log $log,
+        \Magento\Framework\Code\Reader\ClassReader $classReader,
+        \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner,
+        \Magento\Framework\Code\Validator $validator,
+        $generationDir
+    ) {
         $this->log = $log;
+        $this->classReader = $classReader;
+        $this->classesScanner = $classesScanner;
+        $this->validator = $validator;
         $this->generationDir = $generationDir;
-
-        $this->validator = new \Magento\Framework\Code\Validator();
-        $this->validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
-        $this->validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
 
         set_error_handler([$this, 'errorHandler'], E_STRICT);
     }
@@ -83,8 +86,6 @@ class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInter
      * @param string $path path to dir with files
      *
      * @return array
-     *
-     * @throws \Magento\Framework\Filesystem\FilesystemException
      */
     public function getList($path)
     {

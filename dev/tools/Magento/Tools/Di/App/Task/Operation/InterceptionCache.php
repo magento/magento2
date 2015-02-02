@@ -6,8 +6,6 @@
 namespace Magento\Tools\Di\App\Task\Operation;
 
 use Magento\Tools\Di\App\Task\OperationInterface;
-use Magento\Tools\Di\Code\Reader\ClassesScanner;
-use Magento\Tools\Di\Code\Reader\InstancesNamesListInterface;
 
 class InterceptionCache implements OperationInterface
 {
@@ -22,20 +20,20 @@ class InterceptionCache implements OperationInterface
     private $configInterface;
 
     /**
-     * @var InstancesNamesList\Interceptions
+     * @var \Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions
      */
     private $interceptionsInstancesNamesList;
 
     /**
-     * @param \Magento\Framework\Interception\Config\Config $configInterface
-     * @param ClassesScanner                                $classesScanner
-     * @param InstancesNamesList\Interceptions              $interceptionsInstancesNamesList
-     * @param array                                         $data
+     * @param \Magento\Framework\Interception\Config\Config                  $configInterface
+     * @param \Magento\Tools\Di\Code\Reader\ClassesScanner                   $classesScanner
+     * @param \Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions $interceptionsInstancesNamesList
+     * @param array                                                           $data
      */
     public function __construct(
         \Magento\Framework\Interception\Config\Config $configInterface,
-        ClassesScanner $classesScanner,
-        InstancesNamesList\Interceptions $interceptionsInstancesNamesList,
+        \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner,
+        \Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions $interceptionsInstancesNamesList,
         array $data = []
     ) {
         $this->data = $data;

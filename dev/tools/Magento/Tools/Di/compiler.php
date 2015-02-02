@@ -140,7 +140,19 @@ try {
 
     // 2. Compilation
     // 2.1 Code scan
-    $directoryInstancesNamesList = new \Magento\Tools\Di\Code\Reader\InstancesNamesList\Directory($log, $generationDir);
+
+    $validator = new \Magento\Framework\Code\Validator();
+    $validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
+    $validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
+
+    $directoryInstancesNamesList = new \Magento\Tools\Di\Code\Reader\InstancesNamesList\Directory(
+        $log,
+        new \Magento\Framework\Code\Reader\ClassReader(),
+        new \Magento\Tools\Di\Code\Reader\ClassesScanner(),
+        $validator,
+        $generationDir
+    );
+
     foreach ($compilationDirs as $path) {
         if (is_readable($path)) {
             $directoryInstancesNamesList->getList($path);

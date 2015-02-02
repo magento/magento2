@@ -5,7 +5,6 @@
  */
 namespace Magento\Tools\Di\Code\Reader\InstancesNamesList;
 
-use Magento\Framework\Code\Reader\ClassReader;
 use Magento\Tools\Di\Compiler\Log\Log;
 
 /**
@@ -26,7 +25,7 @@ class Interceptions implements \Magento\Tools\Di\Code\Reader\InstancesNamesListI
     private $classesScanner;
 
     /**
-     * @var Log
+     * @var \Magento\Tools\Di\Compiler\Log\Log
      */
     private $log;
 
@@ -37,21 +36,21 @@ class Interceptions implements \Magento\Tools\Di\Code\Reader\InstancesNamesListI
 
     /**
      * @param \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner
-     * @param ClassReader                                  $classReader
+     * @param \Magento\Framework\Code\Reader\ClassReader   $classReader
+     * @param \Magento\Framework\Code\Validator            $validator
+     * @param Log                                          $log
      */
     public function __construct(
         \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner,
-        ClassReader $classReader
+        \Magento\Framework\Code\Reader\ClassReader $classReader,
+        \Magento\Framework\Code\Validator $validator,
+        Log $log
     ) {
         $this->classReader = $classReader;
         $this->classesScanner = $classesScanner;
+        $this->validator = $validator;
+        $this->log = $log;
 
-        $this->log = new \Magento\Tools\Di\Compiler\Log\Log(
-            new \Magento\Tools\Di\Compiler\Log\Writer\Quiet(),
-            new \Magento\Tools\Di\Compiler\Log\Writer\Console()
-        );
-
-        $this->validator = new \Magento\Framework\Code\Validator();
         $this->validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
         $this->validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
     }
@@ -62,8 +61,6 @@ class Interceptions implements \Magento\Tools\Di\Code\Reader\InstancesNamesListI
      * @param string $path path to dir with files
      *
      * @return array
-     *
-     * @throws \Magento\Framework\Filesystem\FilesystemException
      */
     public function getList($path)
     {
