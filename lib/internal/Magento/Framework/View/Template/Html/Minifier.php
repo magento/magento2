@@ -57,19 +57,15 @@ class Minifier
     public function minify($file)
     {
         $content = preg_replace(
-            '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre)\b))*+)(?:<(?>textarea|pre)\b|\z))#',
+            '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)(?:<(?>textarea|pre|script)\b|\z))#',
             ' ',
             preg_replace(
-                '#\<\?php\s*\?\>#',
+                '#(?<!:)//(?!\<\!\[)(?!]]\>)[^\n\r]*#',
                 '',
                 preg_replace(
-                    '#/\*.*?\*/#s',
-                    '',
-                    preg_replace(
-                        '![ \t]*//.*[ \t]*[\r\n]!',
-                        '',
-                        $this->fileDriver->fileGetContents($file)
-                    )
+                    '#//[^\n\r]*(\s\?\>)#',
+                    '$1',
+                    $this->fileDriver->fileGetContents($file)
                 )
             )
         );
