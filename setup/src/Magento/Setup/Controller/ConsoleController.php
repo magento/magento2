@@ -487,27 +487,30 @@ class ConsoleController extends AbstractActionController
         $status = $this->getObjectManager()->create('Magento\Framework\Module\Status');
 
         $modulesToChange = $status->getModulesToChange($isEnable, $modules);
+        $message = '';
         if (!empty($modulesToChange)) {
             if (!$request->getParam('force')) {
                 $constraints = $status->checkConstraints($isEnable, $modulesToChange);
                 if ($constraints) {
-                    $message = "Unable to change status of modules because of the following constraints:\n"
+                    $message .= "Unable to change status of modules because of the following constraints:\n"
                         . implode("\n", $constraints);
                     throw new \Magento\Setup\Exception($message);
                 }
+            } else {
+                $message .= "Alert: Your store may not operate properly because of dependencies to this module(s).\n";
             }
             $status->setIsEnabled($isEnable, $modulesToChange);
             $updateAfterEnableMessage = '';
             if ($isEnable) {
-                $message = 'The following modules have been enabled:';
+                $message .= 'The following modules have been enabled:';
                 $updateAfterEnableMessage = "\nTo make sure that the enabled modules are properly registered,"
                                             . " run 'update' command.";
             } else {
-                $message = 'The following modules have been disabled:';
+                $message .= 'The following modules have been disabled:';
             }
             $message .= ' ' . implode(', ', $modulesToChange) . $updateAfterEnableMessage;
         } else {
-            $message = 'There have been no changes to any modules.';
+            $message .= 'There have been no changes to any modules.';
         }
         $this->log->log($message);
     }
