@@ -59,6 +59,16 @@ class VoidTest extends \PHPUnit_Framework_TestCase
      */
     protected $controller;
 
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactoryMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultForwardFactoryMock;
+
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -128,10 +138,22 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->method('getHelper')
             ->will($this->returnValue($this->helperMock));
 
+        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->resultForwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $this->controller = $objectManager->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\Void',
             [
-                'context' => $contextMock
+                'context' => $contextMock,
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock,
+                'resultForwardFactory' => $this->resultForwardFactoryMock
             ]
         );
     }
@@ -163,6 +185,9 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         $invoiceMock->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($orderMock));
+        $invoiceMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($invoiceId));
 
         $transactionMock = $this->getMockBuilder('Magento\Framework\DB\Transaction')
             ->disableOriginalConstructor()
@@ -192,7 +217,17 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->method('addSuccess')
             ->with('The invoice has been voided.');
 
-        $this->controller->execute();
+        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
+
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($resultRedirect));
+
+        $this->assertSame($resultRedirect, $this->controller->execute());
     }
 
     public function testExecuteNoInvoice()
@@ -222,7 +257,17 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects($this->never())
             ->method('addSuccess');
 
-        $this->controller->execute();
+        $resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->will($this->returnSelf());
+
+        $this->resultForwardFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($resultForward));
+
+        $this->assertSame($resultForward, $this->controller->execute());
     }
 
     public function testExecuteModelException()
@@ -247,6 +292,9 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         $invoiceMock->expects($this->once())
             ->method('void')
             ->will($this->throwException($e));
+        $invoiceMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($invoiceId));
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
@@ -255,6 +303,17 @@ class VoidTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError');
-        $this->controller->execute();
+
+        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
+
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($resultRedirect));
+
+        $this->assertSame($resultRedirect, $this->controller->execute());
     }
 }

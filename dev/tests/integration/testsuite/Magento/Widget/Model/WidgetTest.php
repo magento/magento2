@@ -60,7 +60,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         return [
             'custom image' => [
                 'Magento\Catalog\Block\Product\Widget\NewWidget',
-                'Magento_Catalog/images/product_widget_new.gif',
+                'Magento_Catalog/images/product_widget_new.png',
             ],
             'default image' => ['non_existing_widget_type', 'Magento_Widget/placeholder.gif']
         ];

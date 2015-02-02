@@ -8,10 +8,10 @@
 
 ?>
 <?php
-/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid $this */
+/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid $block */
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 ?>
 
 <?php $_rowTotalWithoutDiscount = $_item->getRowTotal() - $_item->getTotalDiscountAmount(); ?>
-<?php echo $this->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
+<?php echo $block->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>

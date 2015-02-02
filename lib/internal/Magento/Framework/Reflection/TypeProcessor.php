@@ -7,6 +7,7 @@ namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Exception\SerializationException;
 use Zend\Code\Reflection\ClassReflection;
+use Zend\Code\Reflection\ParameterReflection;
 
 /**
  * Type processor of config reader properties
@@ -458,5 +459,54 @@ class TypeProcessor
             );
         }
         return $value;
+    }
+
+    /**
+     * Get the parameter type
+     *
+     * @param ParameterReflection $param
+     * @return string
+     */
+    public function getParamType(ParameterReflection $param)
+    {
+        $type = $param->getType();
+        if ($type == 'array') {
+            // try to determine class, if it's array of objects
+            $docBlock = $param->getDeclaringFunction()->getDocBlock();
+            $pattern = "/\@param\s+([\w\\\_]+\[\])\s+\\\${$param->getName()}\n/";
+            if (preg_match($pattern, $docBlock->getContents(), $matches)) {
+                return $matches[1];
+            }
+            return "{$type}[]";
+        }
+        return $type;
+    }
+
+    /**
+     * Find the getter method name for a property from the given class
+     *
+     * @param ClassReflection $class
+     * @param string $camelCaseProperty
+     * @return string processed method name
+     * @throws \Exception If $camelCaseProperty has no corresponding getter method
+     */
+    public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
+    {
+        $getterName = 'get' . $camelCaseProperty;
+        $boolGetterName = 'is' . $camelCaseProperty;
+        if ($class->hasMethod($getterName)) {
+            $methodName = $getterName;
+        } elseif ($class->hasMethod($boolGetterName)) {
+            $methodName = $boolGetterName;
+        } else {
+            throw new \Exception(
+                sprintf(
+                    'Property :"%s" does not exist in the provided class: "%s".',
+                    $camelCaseProperty,
+                    $class->getName()
+                )
+            );
+        }
+        return $methodName;
     }
 }

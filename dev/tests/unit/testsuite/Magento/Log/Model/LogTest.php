@@ -61,7 +61,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
     public function testGetLogCleanTime()
     {
         $this->scopeConfig->expects($this->once())->method('getValue')
-            ->with(Log::XML_LOG_CLEAN_DAYS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with(Log::XML_LOG_CLEAN_DAYS, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(30));
         $this->assertEquals(2592000, $this->log->getLogCleanTime());
     }
@@ -76,7 +76,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig->expects($this->once())->method('getValue')
             ->with(
                 'customer/online_customers/online_minutes_interval',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )->will($this->returnValue(10));
 
         $this->assertEquals(10, $this->log->getOnlineMinutesInterval());

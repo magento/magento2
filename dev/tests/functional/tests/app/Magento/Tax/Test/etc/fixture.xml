@@ -17,7 +17,7 @@
                 <backend_type>virtual</backend_type>
             </id>
         </fields>
-        <data_set />
+        <dataset />
         <data_config />
     </taxClass>
     <taxRate module="Magento_Tax">
@@ -31,7 +31,7 @@
                 <backend_type>virtual</backend_type>
             </id>
         </fields>
-        <data_set />
+        <dataset />
         <data_config />
     </taxRate>
     <taxRule module="Magento_Tax">
@@ -53,7 +53,7 @@
                 <backend_type>virtual</backend_type>
             </tax_product_class>
         </fields>
-        <data_set />
+        <dataset />
         <data_config />
     </taxRule>
 </fixture>

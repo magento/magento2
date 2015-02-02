@@ -10,24 +10,24 @@
 <?php
 /**
  * Temlate for \Magento\Customer\Block\Address\Book block
- * @var $this \Magento\Customer\Block\Address\Book
+ * @var $block \Magento\Customer\Block\Address\Book
  */
 ?>
 <div class="block block-addresses-default">
     <div class="block-title"><strong><?php echo __('Default Addresses') ?></strong></div>
     <div class="block-content">
-        <?php if ($_pAddsses = $this->getDefaultBilling()): ?>
-            <div class="box box-billing-address">
+        <?php if ($_pAddsses = $block->getDefaultBilling()): ?>
+            <div class="box box-address-billing">
                 <strong class="box-title">
                     <span><?php echo __('Default Billing Address') ?></span>
                 </strong>
                 <div class="box-content">
                     <address>
-                        <?php echo $this->getAddressHtml($this->getAddressById($_pAddsses)) ?>
+                        <?php echo $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?php echo $this->getAddressEditUrl($_pAddsses) ?>">
+                    <a class="action edit" href="<?php echo $block->getAddressEditUrl($_pAddsses) ?>">
                         <span><?php echo __('Change Billing Address') ?></span>
                     </a>
                 </div>
@@ -41,18 +41,18 @@
             </div>
         <?php endif ?>
 
-        <?php if ($_pAddsses = $this->getDefaultShipping()): ?>
-            <div class="box box-shipping-address">
+        <?php if ($_pAddsses = $block->getDefaultShipping()): ?>
+            <div class="box box-address-shipping">
                 <strong class="box-title">
                     <span><?php echo __('Default Shipping Address') ?></span>
                 </strong>
                 <div class="box-content">
                     <address>
-                        <?php echo $this->getAddressHtml($this->getAddressById($_pAddsses)) ?>
+                        <?php echo $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?php echo $this->getAddressEditUrl($_pAddsses) ?>">
+                    <a class="action edit" href="<?php echo $block->getAddressEditUrl($_pAddsses) ?>">
                         <span><?php echo __('Change Shipping Address') ?></span>
                     </a>
                 </div>
@@ -71,15 +71,15 @@
 <div class="block block-addresses-list">
     <div class="block-title"><strong><?php echo __('Additional Address Entries') ?></strong></div>
     <div class="block-content">
-        <?php if ($_pAddsses = $this->getAdditionalAddresses()): ?>
+        <?php if ($_pAddsses = $block->getAdditionalAddresses()): ?>
             <ol class="items addresses">
                 <?php foreach ($_pAddsses as $_address): ?>
                     <li class="item">
                         <address>
-                            <?php echo $this->getAddressHtml($_address) ?><br />
+                            <?php echo $block->getAddressHtml($_address) ?><br />
                         </address>
                         <div class="item actions">
-                            <a class="action edit" href="<?php echo $this->getUrl('customer/address/edit', ['id' => $_address->getId()]) ?>"><span><?php echo __('Edit Address') ?></span></a>
+                            <a class="action edit" href="<?php echo $block->getUrl('customer/address/edit', ['id' => $_address->getId()]) ?>"><span><?php echo __('Edit Address') ?></span></a>
                             <a class="action delete" href="#" role="delete-address" data-address="<?php echo $_address->getId() ?>"><span><?php echo __('Delete Address') ?></span></a>
                         </div>
                     </li>
@@ -96,7 +96,7 @@
         <button type="button" role="add-address" title="<?php echo __('Add New Address') ?>" class="action primary add"><span><?php echo __('Add New Address') ?></span></button>
     </div>
     <div class="secondary">
-        <a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a>
+        <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a>
     </div>
 </div>
 
@@ -105,9 +105,9 @@ require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('.page-main').mage('address', {
         deleteAddress: "li.item a[role='delete-address']",
-        deleteUrlPrefix: '<?php echo $this->getDeleteUrl() ?>id/',
+        deleteUrlPrefix: '<?php echo $block->getDeleteUrl() ?>id/',
         addAddress: "button[role='add-address']",
-        addAddressLocation: '<?php echo $this->getAddAddressUrl() ?>'
+        addAddressLocation: '<?php echo $block->getAddAddressUrl() ?>'
     });
 
 });

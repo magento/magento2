@@ -5,6 +5,5 @@
  */
 require([
     "Magento_Backend/variables",
-    "mage/adminhtml/browser",
-    "mage/adminhtml/wysiwyg/widget"
+    "mage/adminhtml/browser"
 ]);
