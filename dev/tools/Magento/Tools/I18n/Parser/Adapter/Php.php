@@ -34,7 +34,8 @@ class Php extends AbstractAdapter
      */
     protected function _parse()
     {
-        $this->_phraseCollector->parse($this->_file, true);
+        $this->_phraseCollector->setIncludeObjects();
+        $this->_phraseCollector->parse($this->_file);
 
         foreach ($this->_phraseCollector->getPhrases() as $phrase) {
             $this->_addPhrase($phrase['phrase'], $phrase['line']);

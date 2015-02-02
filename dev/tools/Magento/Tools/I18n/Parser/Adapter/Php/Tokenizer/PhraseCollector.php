@@ -32,13 +32,22 @@ class PhraseCollector
     protected $_file;
 
     /**
+     * Are the Phrase objects are parsed as well
+     *
+     * @var bool
+     */
+    protected $includeObjects = false;
+
+    /**
      * Construct
      *
      * @param Tokenizer $tokenizer
+     * @param bool $includeObjects
      */
-    public function __construct(Tokenizer $tokenizer)
+    public function __construct(Tokenizer $tokenizer, $includeObjects = false)
     {
         $this->_tokenizer = $tokenizer;
+        $this->includeObjects = $includeObjects;
     }
 
     /**
@@ -55,29 +64,27 @@ class PhraseCollector
      * Parse given files for phrase
      *
      * @param string $file
-     * @param bool $searchObjects
      * @return void
      */
-    public function parse($file, $searchObjects = false)
+    public function parse($file)
     {
         $this->_phrases = [];
         $this->_file = $file;
         $this->_tokenizer->parse($file);
         while (!$this->_tokenizer->isEndOfLoop()) {
-            $this->_extractPhrases($searchObjects);
+            $this->_extractPhrases();
         }
     }
 
     /**
      * Extract phrases from given tokens. e.g.: __('phrase', ...)
      *
-     * @param bool $searchObjects
      * @return void
      */
-    protected function _extractPhrases($searchObjects)
+    protected function _extractPhrases()
     {
         if ($firstToken = $this->_tokenizer->getNextRealToken()) {
-            if (!$this->extractMethodPhrase($firstToken) && $searchObjects) {
+            if (!$this->extractMethodPhrase($firstToken) && $this->includeObjects) {
                 $this->extractObjectPhrase($firstToken);
             }
         }
@@ -160,5 +167,15 @@ class PhraseCollector
             'file' => $file,
             'line' => $line,
         ];
+    }
+
+    /**
+     * @param bool $includeObjects
+     * @return $this
+     */
+    public function setIncludeObjects($includeObjects = true)
+    {
+        $this->includeObjects = (bool)$includeObjects;
+        return $this;
     }
 }
