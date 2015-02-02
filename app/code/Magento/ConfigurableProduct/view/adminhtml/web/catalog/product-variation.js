@@ -3,14 +3,14 @@
  * See COPYING.txt for license details.
  */
 define([
-    "jquery",
-    "jquery/ui",
-    "jquery/template",
-    "useDefault",
-    "collapsable"
-], function($){
-    "use strict";
-    
+    'jquery',
+    'mage/template',
+    'jquery/ui',
+    'useDefault',
+    'collapsable'
+], function ($, mageTemplate) {
+    'use strict';
+
     $.widget('mage.variationsAttributes', {
         _create: function () {
             var widgetContainer = $(this.element);
@@ -26,8 +26,8 @@ define([
             });
             var updateGenerateVariationsButtonAvailability = function () {
                 var isDisabled = widgetContainer.find(
-                        '[data-role=configurable-attribute]:not(:has(input[name$="[include]"]:checked))'
-                    ).length > 0 || !widgetContainer.find('[data-role=configurable-attribute]').length;
+                    '[data-role=configurable-attribute]:not(:has(input[name$="[include]"]:checked))'
+                ).length > 0 || !widgetContainer.find('[data-role=configurable-attribute]').length;
                 widgetContainer.closest('[data-panel=product-variations]')
                     .find('[data-action=generate]').prop('disabled', isDisabled).toggleClass('disabled', isDisabled);
             };
@@ -48,7 +48,7 @@ define([
                     updateGenerateVariationsButtonAvailability();
                     event.stopImmediatePropagation();
                 },
-                'click [data-column=actions] [data-action=delete]':  function (event) {
+                'click [data-column=actions] [data-action=delete]': function (event) {
                     $(event.target).closest('[data-role=option-container]').remove();
                     updateGenerateVariationsButtonAvailability();
                     event.stopPropagation();
@@ -58,11 +58,19 @@ define([
                 },
                 'click input.include': updateGenerateVariationsButtonAvailability,
                 add: function (event, attribute) {
-                    widgetContainer.find('[data-template-for=configurable-attribute]').tmpl({attribute: attribute})
+                    var attributeTmpl = widgetContainer.find('[data-template-for=configurable-attribute]').html();
+
+                    attributeTmpl = mageTemplate(attributeTmpl, {
+                        data: attribute
+                    });
+
+                    $(attributeTmpl)
                         .appendTo($(event.target)).trigger('contentUpdated')
                         .find('[data-attribute-id]').collapsable().collapse('show')
                         .find('[data-role=dropdown-menu]').each(function (index, element) {
-                            $(element).trigger('menuselect', {item: $(element).find('[data-value="0"]')});
+                            $(element).trigger('menuselect', {
+                                item: $(element).find('[data-value="0"]')
+                            });
                         });
                     $('#attribute-' + attribute.code + '-container select').prop('disabled', true);
                     $('[data-store-label]').useDefault();
@@ -75,6 +83,7 @@ define([
                 });
             });
             updateGenerateVariationsButtonAvailability();
+
             if ($('[data-form=edit-product]').data('product-id')) {
                 widgetContainer.find('[data-attribute-id]').collapsable().collapse('hide');
             }
@@ -89,6 +98,7 @@ define([
                 $(this.element).find('[data-role=configurable-attribute]') || [],
                 function (attribute) {
                     var $attribute = $(attribute);
+
                     return {
                         id: $attribute.find('[name$="[attribute_id]"]').val(),
                         code: $attribute.find('[name$="[code]"]').val(),
@@ -99,6 +109,6 @@ define([
             );
         }
     });
-    
+
     return $.mage.variationsAttributes;
 });

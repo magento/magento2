@@ -21,13 +21,13 @@
         </div>
     </div>
 
-<script data-template-for="product-attribute-search-<?php echo $block->getGroupId(); ?>" type="text/x-jquery-tmpl">
+<script data-template-for="product-attribute-search-<?php echo $block->getGroupId(); ?>" type="text/x-magento-template">
     <ul data-mage-init='{"menu":[]}'>
-        {{if items.length}}
-        {{each items}}
-        <li {{html optionData($value)}}><a href="#">${$value.label}</a></li>
-        {{/each}}
-        {{else}}<span class="mage-suggest-no-records">${noRecordsText}</span>{{/if}}
+        <% if (data.items.length) { %>
+        <% _.each(data.items, function(value){ %>
+        <li <%= data.optionData(value) %>><a href="#"><%= value.label %></a></li>
+        <% }); %>
+        <% } else { %><span class="mage-suggest-no-records"><%= data.noRecordsText %></span><% } %>
     </ul>
     <div class="actions"><?php echo $block->getAttributeCreate()?></div>
 </script>
@@ -50,7 +50,8 @@
                 data: {'template_id': data.id}
             });
         });
-        $suggest.mage('suggest',<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
+        
+        $suggest.mage('suggest', <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
             .on('suggestselect', function (e, ui) {
                 $(this).val('');
                 var templateId = $('#attribute_set_id').val();

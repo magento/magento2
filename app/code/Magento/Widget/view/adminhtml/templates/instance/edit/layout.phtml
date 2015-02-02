@@ -16,13 +16,17 @@
     </div>
 </fieldset>
 <script>
-require(["prototype", "extjs/ext-tree-checkbox"], function(){
+require([
+    'mage/template',
+    "prototype",
+    "extjs/ext-tree-checkbox"
+], function (mageTemplate) {
 
 //<![CDATA[
 
-var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="page_group_container_{{id}}">'+
+var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="page_group_container_<%= data.id %>">'+
     '<div class="fieldset-wrapper-title">'+
-        '<label for="widget_instance[{{id}}][page_group]">Display on <span class="required">*</span></label>'+
+        '<label for="widget_instance[<%= data.id %>][page_group]">Display on <span class="required">*</span></label>'+
         '<?php echo $block->getDisplayOnSelectHtml(); ?>'+
         '<div class="actions">'+
         <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getRemoveLayoutButtonHtml()) ?> +
@@ -30,10 +34,10 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
     '</div>'+
     '<div class="fieldset-wrapper-content">'+
 <?php foreach ($block->getDisplayOnContainers() as $container): ?>
-    '<div class="no-display <?php echo $container['code'] ?> group_container" id="<?php echo $container['name'] ?>_{{id}}">'+
-        '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[{{id}}][<?php echo $container['name'] ?>]" />'+
-        '<input disabled="disabled" type="hidden" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][page_id]" value="{{page_id}}" />'+
-        '<input disabled="disabled" type="hidden" class="layout_handle_pattern" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][layout_handle]" value="<?php echo $container['layout_handle'] ?>" />'+
+    '<div class="no-display <?php echo $container['code'] ?> group_container" id="<?php echo $container['name'] ?>_<%= data.id %>">'+
+        '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>]" />'+
+        '<input disabled="disabled" type="hidden" name="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>][page_id]" value="<%= data.page_id %>" />'+
+        '<input disabled="disabled" type="hidden" class="layout_handle_pattern" name="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>][layout_handle]" value="<?php echo $container['layout_handle'] ?>" />'+
         '<table cellspacing="0" class="data-table">'+
             '<col width="200" />'+
             '<thead>'+
@@ -46,10 +50,10 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
             '<tbody>'+
                 '<tr>'+
                     '<td>'+
-                        '<input disabled="disabled" type="radio" class="radio for_all" id="all_<?php echo $container['name'] ?>_{{id}}" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][for]" value="all" onclick="WidgetInstance.togglePageGroupChooser(this)" checked="checked" />&nbsp;'+
-                        '<label for="all_<?php echo $container['name'] ?>_{{id}}"><?php echo $block->escapeJsQuote(__('All')) ?></label><br />'+
-                        '<input disabled="disabled" type="radio" class="radio for_specific" id="specific_<?php echo $container['name'] ?>_{{id}}" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][for]" value="specific" onclick="WidgetInstance.togglePageGroupChooser(this)" />&nbsp;'+
-                        '<label for="specific_<?php echo $container['name'] ?>_{{id}}"><?php echo $block->escapeJsQuote(__('Specific %1', $container['label'])) ?></label>'+
+                        '<input disabled="disabled" type="radio" class="radio for_all" id="all_<?php echo $container['name'] ?>_<%= data.id %>" name="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>][for]" value="all" onclick="WidgetInstance.togglePageGroupChooser(this)" checked="checked" />&nbsp;'+
+                        '<label for="all_<?php echo $container['name'] ?>_<%= data.id %>"><?php echo $this->escapeJsQuote(__('All')) ?></label><br />'+
+                        '<input disabled="disabled" type="radio" class="radio for_specific" id="specific_<?php echo $container['name'] ?>_<%= data.id %>" name="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>][for]" value="specific" onclick="WidgetInstance.togglePageGroupChooser(this)" />&nbsp;'+
+                        '<label for="specific_<?php echo $container['name'] ?>_<%= data.id %>"><?php echo $this->escapeJsQuote(__('Specific %1', $container['label'])) ?></label>'+
                     '</td>'+
                     '<td>'+
                         '<div class="block_reference_container">'+
@@ -64,27 +68,27 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
                 '</tr>'+
             '</tbody>'+
         '</table>'+
-        '<div class="no-display chooser_container" id="<?php echo $container['name'] ?>_ids_{{id}}">'+
-            '<input disabled="disabled" type="hidden" class="is_anchor_only" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][is_anchor_only]" value="<?php echo $container['is_anchor_only'] ?>" />'+
-            '<input disabled="disabled" type="hidden" class="product_type_id" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][product_type_id]" value="<?php echo $container['product_type_id'] ?>" />'+
+        '<div class="no-display chooser_container" id="<?php echo $container['name'] ?>_ids_<%= data.id %>">'+
+            '<input disabled="disabled" type="hidden" class="is_anchor_only" name="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>][is_anchor_only]" value="<?php echo $container['is_anchor_only'] ?>" />'+
+            '<input disabled="disabled" type="hidden" class="product_type_id" name="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>][product_type_id]" value="<?php echo $container['product_type_id'] ?>" />'+
             '<p>' +
-                '<input disabled="disabled" type="text" class="input-text entities" name="widget_instance[{{id}}][<?php echo $container['name'] ?>][entities]" value="{{<?php echo $container['name'] ?>_entities}}" readonly="readonly" />&nbsp;' +
-                '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?php echo $container['code'] ?>\', \'<?php echo $container['name'] ?>_ids_{{id}}\')"  title="<?php echo $block->escapeJsQuote(__('Open Chooser')) ?>">' +
-                    '<img src="<?php echo $block->getViewFileUrl('images/rule_chooser_trigger.gif') ?>" alt="<?php echo $block->escapeJsQuote(__('Open Chooser')); ?>" />' +
+                '<input disabled="disabled" type="text" class="input-text entities" name="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>][entities]" value="<%= data.<?php echo $container['name'] ?>_entities %>" readonly="readonly" />&nbsp;' +
+                '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?php echo $container['code'] ?>\', \'<?php echo $container['name'] ?>_ids_<%= data.id %>\')"  title="<?php echo $this->escapeJsQuote(__('Open Chooser')) ?>">' +
+                    '<img src="<?php echo $this->getViewFileUrl('images/rule_chooser_trigger.gif') ?>" alt="<?php echo $this->escapeJsQuote(__('Open Chooser')); ?>" />' +
                 '</a>&nbsp;' +
-                '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?php echo $container['name'] ?>_ids_{{id}}\')" title="<?php echo $block->escapeJsQuote(__('Apply')); ?>">' +
-                    '<img src="<?php echo $block->getViewFileUrl('images/rule_component_apply.gif') ?>" alt="<?php echo $block->escapeJsQuote(__('Apply')); ?>" />' +
+                '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?php echo $container['name'] ?>_ids_<%= data.id %>\')" title="<?php echo $this->escapeJsQuote(__('Apply')); ?>">' +
+                    '<img src="<?php echo $this->getViewFileUrl('images/rule_component_apply.gif') ?>" alt="<?php echo $this->escapeJsQuote(__('Apply')); ?>" />' +
                 '</a>' +
             '</p>'+
             '<div class="chooser"></div>'+
         '</div>'+
     '</div>'+
 <?php endforeach; ?>
-'<div class="no-display all_pages group_container" id="all_pages_{{id}}">'+
-    '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[{{id}}][all_pages]" />'+
-    '<input disabled="disabled" type="hidden" name="widget_instance[{{id}}][all_pages][page_id]" value="{{page_id}}" />'+
-    '<input disabled="disabled" type="hidden" class="layout_handle_pattern" name="widget_instance[{{id}}][all_pages][layout_handle]" value="default" />'+
-    '<input disabled="disabled" type="hidden" class="for_all" name="widget_instance[{{id}}][all_pages][for]" value="all" />'+
+'<div class="no-display all_pages group_container" id="all_pages_<%= data.id %>">'+
+    '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[<%= data.id %>][all_pages]" />'+
+    '<input disabled="disabled" type="hidden" name="widget_instance[<%= data.id %>][all_pages][page_id]" value="<%= data.page_id %>" />'+
+    '<input disabled="disabled" type="hidden" class="layout_handle_pattern" name="widget_instance[<%= data.id %>][all_pages][layout_handle]" value="default" />'+
+    '<input disabled="disabled" type="hidden" class="for_all" name="widget_instance[<%= data.id %>][all_pages][for]" value="all" />'+
     '<table cellspacing="0" class="data-table">'+
         '<col width="200" />'+
         '<thead>'+
@@ -111,10 +115,10 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '</tbody>'+
     '</table>'+
 '</div>'+
-'<div class="no-display ignore-validate pages group_container" id="pages_{{id}}">'+
-    '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[{{id}}][pages]" />'+
-    '<input disabled="disabled" type="hidden" name="widget_instance[{{id}}][pages][page_id]" value="{{page_id}}" />'+
-    '<input disabled="disabled" type="hidden" class="for_all" name="widget_instance[{{id}}][pages][for]" value="all" />'+
+'<div class="no-display ignore-validate pages group_container" id="pages_<%= data.id %>">'+
+    '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[<%= data.id %>][pages]" />'+
+    '<input disabled="disabled" type="hidden" name="widget_instance[<%= data.id %>][pages][page_id]" value="<%= data.page_id %>" />'+
+    '<input disabled="disabled" type="hidden" class="for_all" name="widget_instance[<%= data.id %>][pages][for]" value="all" />'+
     '<table cellspacing="0" class="data-table">'+
         '<col width="200" />'+
         '<thead>'+
@@ -142,10 +146,10 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '</tbody>'+
     '</table>'+
 '</div>'+
-'<div class="no-display ignore-validate pages group_container" id="page_layouts_{{id}}">'+
-    '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[{{id}}][page_layouts]" />'+
-    '<input disabled="disabled" type="hidden" name="widget_instance[{{id}}][page_layouts][page_id]" value="{{page_id}}" />'+
-    '<input disabled="disabled" type="hidden" class="for_all" name="widget_instance[{{id}}][page_layouts][for]" value="all" />'+
+'<div class="no-display ignore-validate pages group_container" id="page_layouts_<%= data.id %>">'+
+    '<input disabled="disabled" type="hidden" class="container_name" name="__[container_name]" value="widget_instance[<%= data.id %>][page_layouts]" />'+
+    '<input disabled="disabled" type="hidden" name="widget_instance[<%= data.id %>][page_layouts][page_id]" value="<%= data.page_id %>" />'+
+    '<input disabled="disabled" type="hidden" class="for_all" name="widget_instance[<%= data.id %>][page_layouts][for]" value="all" />'+
     '<table cellspacing="0" class="data-table">'+
         '<col width="200" />'+
         '<thead>'+
@@ -181,7 +185,6 @@ window.pageGroupTemplate = pageGroupTemplate;
 var WidgetInstance = {
     pageGroupTemplate    : pageGroupTemplate,
     pageGroupContainerId : 'page_group_container',
-    templatePattern : /(^|.|\r|\n)({{(\w+)}})/,
     count : 0,
     activePageGroups : $H({}),
     selectedItems : {},
@@ -202,9 +205,13 @@ var WidgetInstance = {
                     }
                 }
             }
-            pageGroupTemplateObj = new Template(this.pageGroupTemplate, this.templatePattern);
-            Element.insert(pageGroupContainer, {'bottom':pageGroupTemplateObj.evaluate(data)});
-            if (data.group) {
+            pageGroupTemplateObj = mageTemplate(this.pageGroupTemplate);
+                Element.insert(pageGroupContainer, {
+                    'bottom': pageGroupTemplateObj({
+                        data: data
+                    })
+                });
+                if (data.group) {
                 pageGroup = $(data.group+'_'+data.id);
                 additional = {};
                 additional.selectedLayoutHandle = data.layout_handle;

@@ -105,10 +105,10 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         <img class="spacer" src="{$spacerImage}"/>
         <p class="image-placeholder-text">{$imagePlaceholderText}</p>
     </div>
-    <script id="{$htmlId}-template" class="image-template" type="text/x-jquery-tmpl">
+    <script id="{$htmlId}-template" class="image-template" type="text/x-magento-template">
         <div class="image">
             <img class="spacer" src="{$spacerImage}"/>
-            <img class="product-image" src="\${url}" data-position="\${position}" alt="\${label}" />
+            <img class="product-image" src="<%= data.url %>" data-position="<%= data.position %>" alt="<%= data.label %>" />
             <div class="actions">
                 <button class="action-delete" data-role="delete-button" title="{$deleteImageText}">
                     <span>{$deleteImageText}</span>
