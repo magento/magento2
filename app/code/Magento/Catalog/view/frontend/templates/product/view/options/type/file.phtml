@@ -7,8 +7,8 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $_option = $this->getOption(); ?>
-<?php $_fileInfo = $this->getFileInfo(); ?>
+<?php $_option = $block->getOption(); ?>
+<?php $_fileInfo = $block->getFileInfo(); ?>
 <?php $_fileExists = $_fileInfo->hasData(); ?>
 <?php $_fileName = 'options_' . $_option->getId() . '_file'; ?>
 <?php $_fieldNameAction = $_fileName . '_action'; ?>
@@ -18,8 +18,8 @@
 
 <div class="field file<?php echo $class; ?>">
     <label class="label">
-        <span><?php echo  $this->escapeHtml($_option->getTitle()) ?></span>
-        <?php echo $this->getFormatedPrice() ?>
+        <span><?php echo  $block->escapeHtml($_option->getTitle()) ?></span>
+        <?php echo $block->getFormatedPrice() ?>
     </label>
     <?php if ($_fileExists): ?>
     <div class="control">
