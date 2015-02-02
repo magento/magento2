@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model\Observer\Backend;
 
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Customer\Model\Config\Share as ShareConfig;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\Framework\Event\Observer;

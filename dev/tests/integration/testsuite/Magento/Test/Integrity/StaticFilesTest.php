@@ -228,7 +228,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Find invocations of $this->getViewFileUrl() and extract the first argument value
+     * Find invocations of $block->getViewFileUrl() and extract the first argument value
      *
      * @param string $file
      * @return array
@@ -236,7 +236,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
     private function collectGetViewFileUrl($file)
     {
         $result = [];
-        if (preg_match_all('/\$this->getViewFileUrl\(\'([^\']+?)\'\)/', file_get_contents($file), $matches)) {
+        if (preg_match_all('/\$block->getViewFileUrl\(\'([^\']+?)\'\)/', file_get_contents($file), $matches)) {
             foreach ($matches[1] as $fileId) {
                 $result[] = $fileId;
             }

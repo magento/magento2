@@ -35,7 +35,7 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
     protected $_storeFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -45,7 +45,7 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
      * @param \Magento\Store\Model\Config\Converter $converter
      * @param \Magento\Store\Model\Resource\Config\Collection\ScopedFactory $collectionFactory
      * @param \Magento\Store\Model\StoreFactory $storeFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Config\Initial $initialConfig,
@@ -53,7 +53,7 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
         \Magento\Store\Model\Config\Converter $converter,
         \Magento\Store\Model\Resource\Config\Collection\ScopedFactory $collectionFactory,
         \Magento\Store\Model\StoreFactory $storeFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->_initialConfig = $initialConfig;
         $this->_scopePool = $scopePool;
@@ -85,13 +85,13 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
             throw NoSuchEntityException::singleField('storeCode', $code);
         }
         $websiteConfig = $this->_scopePool->getScope(
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE,
             $store->getWebsite()->getCode()
         )->getSource();
         $config = array_replace_recursive($websiteConfig, $this->_initialConfig->getData("stores|{$code}"));
 
         $collection = $this->_collectionFactory->create(
-            ['scope' => \Magento\Store\Model\ScopeInterface::SCOPE_STORES, 'scopeId' => $store->getId()]
+            ['scope' => \Magento\Framework\Store\ScopeInterface::SCOPE_STORES, 'scopeId' => $store->getId()]
         );
         $dbStoreConfig = [];
         foreach ($collection as $item) {
