@@ -77,23 +77,47 @@ class PhraseCollector
     protected function _extractPhrases($searchObjects)
     {
         if ($firstToken = $this->_tokenizer->getNextRealToken()) {
-            if ($firstToken->isEqualFunction('__')) {
-                $secondToken = $this->_tokenizer->getNextRealToken();
-                if ($secondToken && $secondToken->isOpenBrace()) {
-                    $arguments = $this->_tokenizer->getFunctionArgumentsTokens();
-                    $phrase = $this->_collectPhrase(array_shift($arguments));
-                    if (null !== $phrase) {
-                        $this->_addPhrase($phrase, count($arguments), $this->_file, $firstToken->getLine());
-                    }
-                }
-            } elseif ($searchObjects && $firstToken->isNew() && $this->_tokenizer->isMatchingClass('Phrase')) {
+            if (!$this->extractMethodPhrase($firstToken) && $searchObjects) {
+                $this->extractObjectPhrase($firstToken);
+            }
+        }
+    }
+
+    /**
+     * @param Token $firstToken
+     * @return bool
+     */
+    protected function extractMethodPhrase(Token $firstToken)
+    {
+        if ($firstToken->isEqualFunction('__')) {
+            $secondToken = $this->_tokenizer->getNextRealToken();
+            if ($secondToken && $secondToken->isOpenBrace()) {
                 $arguments = $this->_tokenizer->getFunctionArgumentsTokens();
                 $phrase = $this->_collectPhrase(array_shift($arguments));
                 if (null !== $phrase) {
                     $this->_addPhrase($phrase, count($arguments), $this->_file, $firstToken->getLine());
+                    return true;
                 }
             }
         }
+        return false;
+    }
+
+    /**
+     * @param Token $firstToken
+     * @return bool
+     */
+    protected function extractObjectPhrase(Token $firstToken)
+    {
+        if ($firstToken->isNew() && $this->_tokenizer->isMatchingClass('Phrase')) {
+            $arguments = $this->_tokenizer->getFunctionArgumentsTokens();
+            $phrase = $this->_collectPhrase(array_shift($arguments));
+            if (null !== $phrase) {
+                $this->_addPhrase($phrase, count($arguments), $this->_file, $firstToken->getLine());
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
