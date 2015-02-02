@@ -166,7 +166,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
                 if ($getViewGetUpdated == $getStateGetUpdated) {
                     $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
                 } else {
-                    $this->assertEquals($getStateGetUpdated, $this->model->getLatestUpdated());
+                    $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
                 }
             }
         } else {
