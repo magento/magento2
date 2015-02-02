@@ -32,11 +32,19 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $forwardMock;
 
+    /**
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultPageMock;
+
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $this->resultPageMock = $this->getMockBuilder('\Magento\Framework\View\Result\Page')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->forwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -47,26 +55,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->forwardFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->forwardMock);
-        $this->forwardMock->expects(
-            $this->at(0)
-        )->method(
-            'setHeader'
-        )->with(
-            'HTTP/1.1',
-            '404 Not Found'
-        )->will(
-            $this->returnSelf()
-        );
-        $this->forwardMock->expects(
-            $this->at(1)
-        )->method(
-            'setHeader'
-        )->with(
-            'Status',
-            '404 File not found'
-        )->will(
-            $this->returnSelf()
-        );
 
         $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
@@ -97,25 +85,63 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param bool $renderPage
-     * @dataProvider indexActionDataProvider
-     */
-    public function testIndexAction($renderPage)
+    public function testExecuteResultPage()
     {
+        $this->resultPageMock->expects(
+            $this->at(0)
+        )->method(
+            'setHeader'
+        )->with(
+            'HTTP/1.1', '404 Not Found'
+        )->will(
+            $this->returnSelf()
+        );
+        $this->resultPageMock->expects(
+            $this->at(1)
+        )->method(
+            'setHeader'
+        )->with(
+            'Status', '404 File not found'
+        )->will(
+            $this->returnSelf()
+        );
         $this->_cmsHelperMock->expects(
             $this->once()
         )->method(
             'prepareResultPage'
         )->will(
-            $this->returnValue($renderPage)
+            $this->returnValue($this->resultPageMock)
         );
-        $this->_requestMock->expects($this->any())->method('setActionName')->with('defaultNoRoute');
-        $this->_controller->execute();
+        $this->assertInstanceOf('Magento\Framework\View\Result\Page', $this->_controller->execute());
     }
 
-    public function indexActionDataProvider()
+    public function testExecuteResultForward()
     {
-        return ['renderPage_return_true' => [true], 'renderPage_return_false' => [false]];
+        $this->forwardMock->expects(
+            $this->once()
+        )->method(
+            'setController'
+        )->with(
+            'index'
+        )->will(
+            $this->returnSelf()
+        );
+        $this->forwardMock->expects(
+            $this->once()
+        )->method(
+            'forward'
+        )->with(
+            'defaultNoRoute'
+        )->will(
+            $this->returnSelf()
+        );
+        $this->_cmsHelperMock->expects(
+            $this->once()
+        )->method(
+            'prepareResultPage'
+        )->will(
+            $this->returnValue(false)
+        );
+        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->_controller->execute());
     }
 }
