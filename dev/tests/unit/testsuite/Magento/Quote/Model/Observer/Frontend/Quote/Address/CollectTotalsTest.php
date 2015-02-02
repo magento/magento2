@@ -280,7 +280,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
             ->method('setPrevQuoteCustomerGroupId')
             ->with('customerGroupId');
         $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with('defaultCustomerGroupId');
-        $this->dataObjectHelperMock->expects($this->once())
+        $this->dataObjectHelperMock->expects($this->never())
             ->method('populateWithArray')
             ->with($this->customerMock, ['group_id' => 'defaultCustomerGroupId'])
             ->will($this->returnSelf());
@@ -336,7 +336,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with('customerGroupId');
         $this->quoteMock->expects($this->once())->method('setCustomer')->with($this->customerMock);
-        $this->dataObjectHelperMock->expects($this->once())
+        $this->dataObjectHelperMock->expects($this->never())
             ->method('populateWithArray')
             ->with($this->customerMock, ['group_id' => 'customerGroupId'])
             ->will($this->returnSelf());

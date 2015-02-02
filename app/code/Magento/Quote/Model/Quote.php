@@ -831,16 +831,16 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         /* @TODO: Remove the method after all external usages are refactored in MAGETWO-19930 */
         $this->_customer = $customer;
         $this->setCustomerId($customer->getId());
-        $customerData = $this->customerDataFactory->create();
-        $customerData->populate($customer);
-        $customerData->setAddresses([]);
+        $origAddresses = $customer->getAddresses();
+        $customer->setAddresses([]);
         $customerDataFlatArray = $this->objectFactory->create(
             $this->extensibleDataObjectConverter->toFlatArray(
-                $customerData,
+                $customer,
                 [],
                 '\Magento\Customer\Api\Data\CustomerInterface'
             )
         );
+        $customer->setAddresses($origAddresses);
         $this->_objectCopyService->copyFieldsetToTarget('customer_account', 'to_quote', $customerDataFlatArray, $this);
 
         return $this;

@@ -35,11 +35,6 @@ class CollectTotals
     protected $groupManagement;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
-     */
-    protected $dataObjectHelper;
-
-    /**
      * Initialize dependencies.
      *
      * @param \Magento\Customer\Helper\Address $customerAddressHelper
@@ -47,22 +42,19 @@ class CollectTotals
      * @param VatValidator $vatValidator
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddressHelper,
         \Magento\Customer\Model\Vat $customerVat,
         VatValidator $vatValidator,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
-        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Customer\Api\GroupManagementInterface $groupManagement
     ) {
         $this->customerVat = $customerVat;
         $this->customerAddressHelper = $customerAddressHelper;
         $this->vatValidator = $vatValidator;
         $this->customerDataFactory = $customerDataFactory;
         $this->groupManagement = $groupManagement;
-        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -107,8 +99,7 @@ class CollectTotals
         if ($groupId) {
             $quoteAddress->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
             $quote->setCustomerGroupId($groupId);
-            $customer = $this->customerDataFactory->create();
-            $this->dataObjectHelper->populateWithArray($customer, ['group_id' => $groupId]);
+            $customer->setGroupId($groupId);
             $quote->setCustomer($customer);
         }
     }
