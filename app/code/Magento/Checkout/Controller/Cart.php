@@ -67,9 +67,9 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
      *
      * @return $this
      */
-    protected function _goBack()
+    protected function _goBack($backUrl = null)
     {
-        if ($backUrl = $this->getBackUrl($this->_redirect->getRefererUrl())) {
+        if ($backUrl || $backUrl = $this->getBackUrl($this->_redirect->getRefererUrl())) {
             $this->getResponse()->setRedirect($backUrl);
         }
         return $this;

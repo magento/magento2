@@ -157,7 +157,7 @@ class Add extends \Magento\Checkout\Controller\Cart
     protected function goBack($backUrl = null, $product = null)
     {
         if (!$this->getRequest()->isAjax()) {
-            return parent::_goBack();
+            return parent::_goBack($backUrl);
         }
 
         $result = [];
