@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -228,5 +229,81 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
         $messagesCacheKey = ['storage_types' => 'a:1:{i:0;s:7:"default";}'];
         $this->messages->addStorageType(ManagerInterface::DEFAULT_GROUP);
         $this->assertEquals($messagesCacheKey, $this->messages->getCacheKeyInfo());
+    }
+
+    public function testGetGroupedHtml()
+    {
+        $this->messages->setNameInLayout('nameInLayout');
+
+        $resultHtml = '<div class="messages">';
+        $resultHtml .= '<div class="message error"><div data-ui-id="nameinlayout-message-error" >';
+        $resultHtml .= 'Error message without HTML!';
+        $resultHtml .= '</div></div>';
+        $resultHtml .= '<div class="message warning"><div data-ui-id="nameinlayout-message-warning" >';
+        $resultHtml .= 'Warning message with <strong>HTML</strong>!';
+        $resultHtml .= '</div></div>';
+        $resultHtml .= '<div class="message warning"><div data-ui-id="nameinlayout-message-warning" >';
+        $resultHtml .= 'Warning message with <strong>HTML</strong>!';
+        $resultHtml .= '</div></div>';
+        $resultHtml .= '<div class="message notice"><div data-ui-id="nameinlayout-message-notice" >';
+        $resultHtml .= 'Notice message without HTML!';
+        $resultHtml .= '</div></div>';
+        $resultHtml .= '<div class="message notice"><div data-ui-id="nameinlayout-message-notice" >';
+        $resultHtml .= 'Notice message without HTML!';
+        $resultHtml .= '</div></div>';
+        $resultHtml .= '<div class="message notice"><div data-ui-id="nameinlayout-message-notice" >';
+        $resultHtml .= 'Notice message without HTML!';
+        $resultHtml .= '</div></div>';
+        $resultHtml .= '<div class="message success"><div data-ui-id="nameinlayout-message-success" >';
+        $resultHtml .= 'Success message with <strong>HTML</strong>!';
+        $resultHtml .= '</div></div>';
+        $resultHtml .= '<div class="message success"><div data-ui-id="nameinlayout-message-success" >';
+        $resultHtml .= 'Success message with <strong>HTML</strong>!';
+        $resultHtml .= '</div></div>';
+        $resultHtml .= '<div class="message success"><div data-ui-id="nameinlayout-message-success" >';
+        $resultHtml .= 'Success message with <strong>HTML</strong>!';
+        $resultHtml .= '</div></div>';
+        $resultHtml .= '<div class="message success"><div data-ui-id="nameinlayout-message-success" >';
+        $resultHtml .= 'Success message with <strong>HTML</strong>!';
+        $resultHtml .= '</div></div>';
+        $resultHtml .= '</div>';
+
+        $errorMock = $this->getMockBuilder('Magento\Framework\Message\MessageInterface')
+            ->getMockForAbstractClass();
+        $errorMock->expects($this->once())
+            ->method('getText')
+            ->willReturn('Error message without HTML!');
+
+        $warningMock = $this->getMockBuilder('Magento\Framework\Message\MessageInterface')
+            ->getMockForAbstractClass();
+        $warningMock->expects($this->exactly(2))
+            ->method('getText')
+            ->willReturn('Warning message with <strong>HTML</strong>!');
+
+        $noticeMock = $this->getMockBuilder('Magento\Framework\Message\MessageInterface')
+            ->getMockForAbstractClass();
+        $noticeMock->expects($this->exactly(3))
+            ->method('getText')
+            ->willReturn('Notice message without HTML!');
+
+        $successMock = $this->getMockBuilder('Magento\Framework\Message\MessageInterface')
+            ->getMockForAbstractClass();
+        $successMock->expects($this->exactly(4))
+            ->method('getText')
+            ->willReturn('Success message with <strong>HTML</strong>!');
+
+        $collectionMock = $this->initMessageCollection();
+        $collectionMock->expects($this->exactly(4))
+            ->method('getItemsByType')
+            ->willReturnMap(
+                [
+                    [MessageInterface::TYPE_ERROR, [$errorMock]],
+                    [MessageInterface::TYPE_WARNING, [$warningMock, $warningMock]],
+                    [MessageInterface::TYPE_NOTICE, [$noticeMock, $noticeMock, $noticeMock]],
+                    [MessageInterface::TYPE_SUCCESS, [$successMock, $successMock, $successMock, $successMock]],
+                ]
+            );
+
+        $this->assertEquals($resultHtml, $this->messages->getGroupedHtml());
     }
 }

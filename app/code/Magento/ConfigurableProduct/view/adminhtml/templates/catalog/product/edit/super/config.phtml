@@ -1,20 +1,24 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
- /** @var $this \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config */
 
-use \Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+// @codingStandardsIgnoreFile
+
+ /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config */
+
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 ?>
-<div class="entry-edit form-inline" id="<?php echo $this->getId() ?>">
-    <div class="fieldset-wrapper collapsable-wrapper" id="<?php echo $this->getId() ?>-wrapper" data-panel="product-variations">
+<div class="entry-edit form-inline" id="<?php echo $block->getId() ?>">
+    <div class="fieldset-wrapper collapsable-wrapper" id="<?php echo $block->getId() ?>-wrapper" data-panel="product-variations">
         <div class="fieldset-wrapper-title">
-            <strong class="title" data-toggle="collapse" data-target="#<?php echo $this->getId() ?>-content">
+            <strong class="title" data-toggle="collapse" data-target="#<?php echo $block->getId() ?>-content">
                 <span><?php echo __('Variations') ?></span>
             </strong>
         </div>
 
-        <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php echo $this->getId() ?>-content">
+        <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php echo $block->getId() ?>-content">
             <fieldset class="fieldset">
                 <div class="field" id="variations-search-field">
                     <label class="label" for="configurable-attribute-selector"><span>Search</span></label>
@@ -23,14 +27,14 @@ use \Magento\ConfigurableProduct\Model\Product\Type\Configurable;
                                placeholder="start typing to search attribute" title="Select Attribute"
                                autocomplete="off"/>
                     </div>
-                    <?php echo $this->getChildHtml('add_attribute'); ?>
+                    <?php echo $block->getChildHtml('add_attribute'); ?>
                 </div>
 
-                <?php echo $this->getChildHtml('generator'); ?>
+                <?php echo $block->getChildHtml('generator'); ?>
 
                 <!-- Select Associated Product popup -->
                 <div id="associated-products-container">
-                    <?php echo $this->getGridHtml(); ?>
+                    <?php echo $block->getGridHtml(); ?>
                 </div>
 
                 <input type="hidden" name="affect_configurable_product_attributes" value="1" />
@@ -38,7 +42,7 @@ use \Magento\ConfigurableProduct\Model\Product\Type\Configurable;
         </div>
     </div>
 </div>
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'jquery/ui',
@@ -49,8 +53,8 @@ require([
 ], function($){
     'use strict';
 
-    var variationsContainer = $("#<?php echo $this->getId()?>"),
-        collapsableWrapper = $("#<?php echo $this->getId()?>-wrapper"),
+    var variationsContainer = $("#<?php echo $block->getId()?>"),
+        collapsableWrapper = $("#<?php echo $block->getId()?>-wrapper"),
         collapsableArea = $('> .collapse', collapsableWrapper),
         stockAvailabilityField = $('#quantity_and_stock_status'),
         qtyField = $('#qty'),
@@ -58,7 +62,7 @@ require([
         inventoryAvailabilityField = $('#inventory_stock_availability'),
         currentProductTemplateControl = $('#product-template-suggest-container .action-dropdown > .action-toggle'),
         attributesInput = $("input[name='attributes[]']", variationsContainer),
-        hasVariations = <?php echo($this->getProduct()->getTypeId() == Configurable::TYPE_CODE || $this->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
+        hasVariations = <?php echo($block->getProduct()->getTypeId() == Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
         isLocked = function (element) {
             return element.is('[data-locked]');
         },
@@ -157,7 +161,7 @@ require([
         })
         .on('click', '[data-action=choose]', function(event) {
             event.preventDefault();
-            var grid = window.<?php echo $this->getGridJsObject() ?>;
+            var grid = window.<?php echo $block->getGridJsObject() ?>;
             var $button = $(this);
             var attributeIds = [];
             variationsContainer.find("input[name='attributes[]']").each(function () {

@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
@@ -32,7 +33,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         );
         try {
             if ($this->getRequest()->getPost()) {
-                /** @var $theme \Magento\Core\Model\Theme */
+                /** @var $theme \Magento\Theme\Model\Theme */
                 if (!empty($themeData['theme_id'])) {
                     $theme = $themeFactory->create($themeData['theme_id']);
                 } else {

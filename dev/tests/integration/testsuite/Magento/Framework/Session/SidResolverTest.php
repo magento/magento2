@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
 
@@ -92,7 +93,7 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue($useFrontedSid)
         );

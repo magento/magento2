@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\TestCase;
@@ -11,8 +12,8 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
-use Mtf\Client\Browser;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for ProductsInCartReportEntity
@@ -35,6 +36,11 @@ use Mtf\TestCase\Injectable;
  */
 class ProductsInCartReportEntity extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Cms index page
      *
@@ -103,14 +109,14 @@ class ProductsInCartReportEntity extends Injectable
      * @param CustomerInjectable $customer
      * @param CatalogProductSimple $product
      * @param string $isGuest
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
     public function test(
         CustomerInjectable $customer,
         CatalogProductSimple $product,
         $isGuest,
-        Browser $browser
+        BrowserInterface $browser
     ) {
         // Preconditions
         $product->persist();

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -40,7 +41,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
             false
         );
         $collectionFactory = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\File\CollectionFactory',
+            'Magento\Theme\Model\Resource\Theme\File\CollectionFactory',
             ['create'],
             [],
             '',
@@ -55,7 +56,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->theme = $this->getMock(
-            'Magento\Core\Model\Theme',
+            'Magento\Theme\Model\Theme',
             ['__wakeup', 'save', 'load'],
             [],
             '',
@@ -115,7 +116,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerationOfFileInfo()
     {
-        $file = $this->getMock('Magento\Core\Model\Theme\File', ['__wakeup', 'getFileInfo'], [], '', false);
+        $file = $this->getMock('Magento\Theme\Model\Theme\File', ['__wakeup', 'getFileInfo'], [], '', false);
         $file->expects($this->once())->method('getFileInfo')->will($this->returnValue(['sample-generation']));
         $this->assertEquals([['sample-generation']], $this->model->generateFileInfo([$file]));
     }
@@ -196,7 +197,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
         $files = [];
         $type = 'sample-type';
         foreach ($filesContent as $fileContent) {
-            $file = $this->getMock('Magento\Core\Model\Theme\File', ['__wakeup', 'save'], [], '', false);
+            $file = $this->getMock('Magento\Theme\Model\Theme\File', ['__wakeup', 'save'], [], '', false);
             $file->expects($fileContent['isCalled'])->method('save')->will($this->returnSelf());
             $file->setData($fileContent['content']);
             $files[] = $file;
@@ -268,7 +269,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $file = $this->getMock('Magento\Core\Model\Theme\File', ['__wakeup', 'delete'], [], '', false);
+        $file = $this->getMock('Magento\Theme\Model\Theme\File', ['__wakeup', 'delete'], [], '', false);
         $file->expects($this->once())->method('delete')->will($this->returnSelf());
         $file->setData(
             [

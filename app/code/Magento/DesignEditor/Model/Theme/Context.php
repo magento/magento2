@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\DesignEditor\Model\Theme;
 
@@ -12,7 +13,7 @@ use Magento\Framework\Model\Exception as CoreException;
 class Context
 {
     /**
-     * @var \Magento\Core\Model\ThemeFactory
+     * @var \Magento\Theme\Model\ThemeFactory
      */
     protected $_themeFactory;
 
@@ -22,23 +23,23 @@ class Context
     protected $_copyService;
 
     /**
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\Theme\Model\Theme
      */
     protected $_theme;
 
     /**
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\Theme\Model\Theme
      */
     protected $_stagingTheme;
 
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Core\Model\ThemeFactory $themeFactory
+     * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      * @param \Magento\Theme\Model\CopyService $copyService
      */
     public function __construct(
-        \Magento\Core\Model\ThemeFactory $themeFactory,
+        \Magento\Theme\Model\ThemeFactory $themeFactory,
         \Magento\Theme\Model\CopyService $copyService
     ) {
         $this->_themeFactory = $themeFactory;
@@ -78,7 +79,7 @@ class Context
     /**
      * Get current editable theme
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      * @throws CoreException
      */
     public function getEditableTheme()
@@ -92,7 +93,7 @@ class Context
     /**
      * Get staging theme
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      * @throws CoreException
      */
     public function getStagingTheme()
@@ -112,7 +113,7 @@ class Context
     /**
      * Theme which can be rendered on store designer
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      */
     public function getVisibleTheme()
     {

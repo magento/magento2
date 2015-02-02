@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php
-/** @var $this \Magento\ImportExport\Block\Adminhtml\Import\Edit\Before */
+/** @var $block \Magento\ImportExport\Block\Adminhtml\Import\Edit\Before */
 ?>
-<script type="text/javascript">
+<script>
 require(['jquery', 'prototype'], function(jQuery){
 
 //<![CDATA[
@@ -22,13 +23,13 @@ require(['jquery', 'prototype'], function(jQuery){
          * List of existing behavior sets
          * @type {Array}
          */
-        uniqueBehaviors: <?php echo $this->getUniqueBehaviors() ?>,
+        uniqueBehaviors: <?php echo $block->getUniqueBehaviors() ?>,
 
         /**
          * Behaviour codes for import entities
          * @type {Array}
          */
-        entityBehaviors: <?php echo $this->getEntityBehaviors() ?>,
+        entityBehaviors: <?php echo $block->getEntityBehaviors() ?>,
 
         /**
          * Reset selected index

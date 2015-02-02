@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Subscriber;
 
@@ -9,7 +10,7 @@ use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Context;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 
 class NewAction extends \Magento\Newsletter\Controller\Subscriber
@@ -75,7 +76,7 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
         if ($this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
                 ->getValue(
                     \Magento\Newsletter\Model\Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 ) != 1
             && !$this->_customerSession->isLoggedIn()
         ) {

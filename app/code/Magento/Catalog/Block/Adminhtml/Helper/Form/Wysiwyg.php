@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -92,7 +93,7 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
                 ]
             )->toHtml();
             $html .= <<<HTML
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'mage/adminhtml/wysiwyg/tiny_mce/setup'
@@ -137,6 +138,7 @@ HTML;
      * Check whether wysiwyg enabled or not
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsWysiwygEnabled()
     {

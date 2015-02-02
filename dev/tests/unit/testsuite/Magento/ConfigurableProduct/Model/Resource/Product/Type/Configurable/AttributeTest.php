@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable;
 
@@ -17,7 +18,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected $catalogData;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -35,7 +36,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['isPriceGlobal'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

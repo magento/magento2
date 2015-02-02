@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
 
@@ -32,7 +33,8 @@ class Import extends \Magento\Framework\Data\Form\Element\AbstractElement
         $html .= '<input id="time_condition" type="hidden" name="' . $this->getName() . '" value="' . time() . '" />';
 
         $html .= <<<EndHTML
-        <script type="text/javascript">
+        <script>
+        require(['prototype'], function(){
         Event.observe($('carriers_tablerate_condition_name'), 'change', checkConditionName.bind(this));
         function checkConditionName(event)
         {
@@ -41,6 +43,7 @@ class Import extends \Magento\Framework\Data\Form\Element\AbstractElement
                 $('time_condition').value = '_' + conditionNameElement.value + '/' + Math.random();
             }
         }
+        });
         </script>
 EndHTML;
 

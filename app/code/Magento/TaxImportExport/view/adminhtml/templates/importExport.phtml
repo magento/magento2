@@ -1,25 +1,29 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="import-export-tax-rates">
-    <?php if (!$this->getIsReadonly()): ?>
+    <?php if (!$block->getIsReadonly()): ?>
     <div class="import-tax-rates">
-        <?php if ($this->getUseContainer()): ?>
-        <form id="import-form" action="<?php echo $this->getUrl('tax/rate/importPost') ?>" method="post" enctype="multipart/form-data">
+        <?php if ($block->getUseContainer()): ?>
+        <form id="import-form" action="<?php echo $block->getUrl('tax/rate/importPost') ?>" method="post" enctype="multipart/form-data">
         <?php endif; ?>
-            <?php echo $this->getBlockHtml('formkey')?>
+            <?php echo $block->getBlockHtml('formkey')?>
             <fieldset class="fieldset">
                 <legend class="legend"><span><?php echo __('Import Tax Rates') ?></span></legend>
                 <input type="file" name="import_rates_file" class="input-file required-entry"/>
-                <?php echo $this->getButtonHtml('Import Tax Rates', '', 'import-submit') ?>
+                <?php echo $block->getButtonHtml('Import Tax Rates', '', 'import-submit') ?>
             </fieldset>
-        <?php if ($this->getUseContainer()): ?>
+        <?php if ($block->getUseContainer()): ?>
         </form>
         <?php endif; ?>
-        <script type="text/javascript">
-require(['jquery', "mage/mage", "js/theme"], function(jQuery){
+        <script>
+require(['jquery', "mage/mage", "loadingPopup"], function(jQuery){
 
     jQuery('#import-form').mage('form').mage('validation');
     (function ($) {
@@ -38,16 +42,16 @@ require(['jquery', "mage/mage", "js/theme"], function(jQuery){
 </script>
     </div>
     <?php endif; ?>
-    <div class="export-tax-rates <?php if ($this->getIsReadonly()): ?>box-left<?php else: ?>box-right<?php endif; ?>">
-        <?php if ($this->getUseContainer()): ?>
-        <form id="export_form" action="<?php echo $this->getUrl('tax/rate/exportPost') ?>" method="post" enctype="multipart/form-data">
+    <div class="export-tax-rates <?php if ($block->getIsReadonly()): ?>box-left<?php else: ?>box-right<?php endif; ?>">
+        <?php if ($block->getUseContainer()): ?>
+        <form id="export_form" action="<?php echo $block->getUrl('tax/rate/exportPost') ?>" method="post" enctype="multipart/form-data">
         <?php endif; ?>
-            <?php echo $this->getBlockHtml('formkey')?>
+            <?php echo $block->getBlockHtml('formkey')?>
             <fieldset class="fieldset">
                 <legend class="legend"><span><?php echo __('Export Tax Rates') ?></span></legend>
-                <?php echo $this->getButtonHtml('Export Tax Rates', "this.form.submit()") ?>
+                <?php echo $block->getButtonHtml('Export Tax Rates', "this.form.submit()") ?>
             </fieldset>
-        <?php if ($this->getUseContainer()): ?>
+        <?php if ($block->getUseContainer()): ?>
         </form>
         <?php endif; ?>
     </div>

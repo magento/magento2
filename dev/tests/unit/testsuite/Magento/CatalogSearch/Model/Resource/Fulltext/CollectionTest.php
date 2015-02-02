@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 
@@ -60,7 +61,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

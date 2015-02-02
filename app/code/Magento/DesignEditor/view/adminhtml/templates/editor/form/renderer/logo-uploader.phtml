@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\LogoUploader */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\LogoUploader */ ?>
 <?php /** @var $element \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\LogoUploader */?>
-<?php $element = $this->getElement(); ?>
-<?php $stores = $this->getStoresList(); ?>
+<?php $element = $block->getElement(); ?>
+<?php $stores = $block->getStoresList(); ?>
 
 <?php if (null === $stores): ?>
     <?php echo __('Please assign this theme to a store view and upload your store logo.'); ?>
@@ -17,7 +21,7 @@
             <div class="custom-file-for-store-view"><?php echo $store->getName(); ?>:</div>
 
             <div id="<?php echo $elementId; ?>-container" class="action-add">
-                <?php echo $this->getHtml(); ?>
+                <?php echo $block->getHtml(); ?>
             </div>
             <label for="<?php echo $elementId; ?>"><?php echo __('Upload a Logo'); ?></label>
 
@@ -33,7 +37,7 @@
             </div>
         </div>
 
-        <script type="text/javascript">
+        <script>
 require([
     'jquery',
     'Magento_DesignEditor/js/quick-style-uploader'
@@ -42,9 +46,9 @@ require([
     $(document.getElementById('<?php echo $elementId; ?>-uploader')).quickStyleUploader({
         uploader_id:   '<?php echo $elementId; ?>',
         container:     '<?php echo $elementId; ?>-uploader',
-        value:         '<?php echo $this->getLogoImage($store); ?>',
-        url:           '<?php echo $this->getLogoUploadUrl($store); ?>',
-        remove_url:    '<?php echo $this->getLogoRemoveUrl($store); ?>',
+        value:         '<?php echo $block->getLogoImage($store); ?>',
+        url:           '<?php echo $block->getLogoUploadUrl($store); ?>',
+        remove_url:    '<?php echo $block->getLogoRemoveUrl($store); ?>',
         hide_uploader: false
     });
 

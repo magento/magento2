@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Html;
 
@@ -698,7 +699,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'design/pagination/anchor_text_for_previous',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -711,7 +712,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'design/pagination/anchor_text_for_next',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 

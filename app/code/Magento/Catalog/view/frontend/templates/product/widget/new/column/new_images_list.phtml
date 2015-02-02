@@ -1,28 +1,32 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if (($_products = $this->getProductCollection()) && $_products->getSize()): ?>
-    <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
+<?php if (($_products = $block->getProductCollection()) && $_products->getSize()): ?>
+    <?php $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
     <div class="block widget block-new-products-images">
         <div class="block-title">
             <strong><?php echo __('New Products') ?></strong>
         </div>
         <div class="block-content">
-            <?php $suffix = $this->getNameInLayout(); ?>
+            <?php $suffix = $block->getNameInLayout(); ?>
             <ol id="widget-new-products-<?php echo $suffix; ?>" class="product-items product-items-images">
                 <?php foreach ($_products->getItems() as $_product): ?>
                     <li class="product-item">
                         <a class="product-item-photo" href="<?php echo $_product->getProductUrl() ?>"
-                           title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
+                           title="<?php echo $block->stripTags($_product->getName(), null, true) ?>">
                             <?php /* new_products_images_only_widget */ ?>
                             <?php echo $imageBlock->init($_product, 'new_products_images_only_widget')->toHtml() ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
             </ol>
-            <?php echo $this->getPagerHtml() ?>
+            <?php echo $block->getPagerHtml() ?>
         </div>
     </div>
 <?php endif; ?>

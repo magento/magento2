@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App;
@@ -179,6 +180,14 @@ class SetupInfoTest extends \PHPUnit_Framework_TestCase
                     SetupInfo::PARAM_NOT_INSTALLED_URL_PATH => basename(__DIR__)
                 ],
                 false
+            ],
+            'root within doc root, existent sub-directory, trailing slash' => [
+                [
+                    'DOCUMENT_ROOT' => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+                    'SCRIPT_FILENAME' => __FILE__,
+                    SetupInfo::PARAM_NOT_INSTALLED_URL_PATH => '_files'
+                ],
+                true
             ],
         ];
     }

@@ -1,32 +1,33 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php
 /**
  * Category layered navigation
  *
- * @var $this \Magento\LayeredNavigation\Block\Navigation
+ * @var $block \Magento\LayeredNavigation\Block\Navigation
  */
 ?>
 
-<?php if ($this->canShowBlock()): ?>
+<?php if ($block->canShowBlock()): ?>
     <div class="block filter" id="layered-filter-block" data-mage-init='{"collapsible":{"openedState": "active", "collapsible": true, "active": false, "collateral": { "openedState": "filter-active", "element": "body" } }}'>
-        <?php $filtered = count($this->getLayer()->getState()->getFilters()) ?>
+        <?php $filtered = count($block->getLayer()->getState()->getFilters()) ?>
         <div class="block-title filter-title" data-count="<?php echo $filtered; ?>">
             <strong data-role="title"><?php echo __('Shop By') ?></strong>
         </div>
         <div class="block-content filter-content">
-            <?php echo $this->getChildHtml('state') ?>
+            <?php echo $block->getChildHtml('state') ?>
 
-            <?php if ($this->getLayer()->getState()->getFilters()): ?>
+            <?php if ($block->getLayer()->getState()->getFilters()): ?>
                 <div class="block-actions filter-actions">
-                    <a href="<?php echo $this->getClearUrl() ?>" class="action clear filter-clear"><span><?php echo __('Clear All') ?></span></a>
+                    <a href="<?php echo $block->getClearUrl() ?>" class="action clear filter-clear"><span><?php echo __('Clear All') ?></span></a>
                 </div>
             <?php endif; ?>
             <?php $wrapOptions = false; ?>
-            <?php foreach ($this->getFilters() as $filter): ?>
+            <?php foreach ($block->getFilters() as $filter): ?>
                 <?php if ($filter->getItemsCount()): ?>
                     <?php if (!$wrapOptions): ?>
                         <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?php echo __('Shopping Options') ?></strong>
@@ -34,7 +35,7 @@
                     <?php  $wrapOptions = true; endif; ?>
                     <div data-role="collapsible" class="filter-options-item">
                         <div data-role="title" class="filter-options-title"><?php echo __($filter->getName()) ?></div>
-                        <div data-role="content" class="filter-options-content"><?php echo $this->getChildBlock('renderer')->render($filter); ?></div>
+                        <div data-role="content" class="filter-options-content"><?php echo $block->getChildBlock('renderer')->render($filter); ?></div>
                     </div>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -42,7 +43,11 @@
                 </div>
             <?php else: ?>
                 <script>
-                    jQuery('#layered-filter-block').addClass('filter-no-options');
+                    require([
+                        'jquery'
+                    ], function ($) {
+                        $('#layered-filter-block').addClass('filter-no-options');
+                    });
                 </script>
             <?php endif; ?>
         </div>

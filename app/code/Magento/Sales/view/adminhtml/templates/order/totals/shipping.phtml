@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $_source  = $this->getSource() ?>
-<?php $this->setPriceDataObject($_source) ?>
+<?php $_source  = $block->getSource() ?>
+<?php $block->setPriceDataObject($_source) ?>
 
 <?php if ((float) $_source->getShippingAmount() || $_source->getShippingDescription()): ?>
     <tr>
         <td class="label"><?php echo __('Shipping &amp; Handling') ?></td>
-        <td><?php echo $this->displayPriceAttribute('shipping_amount') ?></td>
+        <td><?php echo $block->displayPriceAttribute('shipping_amount') ?></td>
     </tr>
 <?php endif; ?>

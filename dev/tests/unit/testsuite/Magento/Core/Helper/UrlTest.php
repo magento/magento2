@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Helper;
 
@@ -18,7 +19,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCurrentBase64Url()
     {
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
         ->disableOriginalConstructor()
         ->getMock();
         $urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
@@ -54,7 +55,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEncodedUrl($url, $callNum)
     {
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
@@ -95,7 +96,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHomeUrl()
     {
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')

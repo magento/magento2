@@ -1,19 +1,23 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->getRating() && $this->getRating()->getSize()): ?>
+<?php if ($block->getRating() && $block->getRating()->getSize()): ?>
     <div class="nested">
-        <?php foreach ($this->getRating() as $_rating): ?>
+        <?php foreach ($block->getRating() as $_rating): ?>
         <div class="field field-rating">
-            <label class="label"><span><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></span></label>
+            <label class="label"><span><?php echo $block->escapeHtml($_rating->getRatingCode()) ?></span></label>
             <?php $_iterator = 1; ?>
             <?php $_options = ($_rating->getRatingOptions()) ? $_rating->getRatingOptions() : $_rating->getOptions() ?>
             <div class="control" data-widget="ratingControl">
             <?php foreach (array_reverse($_options) as $_option): ?>
-                <input type="radio" name="ratings[<?php echo($_rating->getVoteId()) ? $_rating->getVoteId() : $_rating->getId() ?>]" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" <?php if ($this->isSelected($_option, $_rating)): ?>checked="checked"<?php endif; ?> />
-                <label for="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>">&#9733;</label>
+                <input type="radio" name="ratings[<?php echo($_rating->getVoteId()) ? $_rating->getVoteId() : $_rating->getId() ?>]" id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" <?php if ($block->isSelected($_option, $_rating)): ?>checked="checked"<?php endif; ?> />
+                <label for="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>">&#9733;</label>
             <?php $_iterator++ ?>
             <?php endforeach; ?>
             </div>
@@ -21,7 +25,7 @@
         <?php endforeach; ?>
         <input type="hidden" name="validate_rating" class="validate-rating" value="" />
     </div>
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "mage/mage",

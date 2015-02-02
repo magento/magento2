@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
@@ -87,13 +88,15 @@ use Magento\Sales\Api\Data\OrderItemInterface;
  * @method \Magento\Sales\Model\Order\Item setBaseHiddenTaxInvoiced(float $value)
  * @method \Magento\Sales\Model\Order\Item setHiddenTaxRefunded(float $value)
  * @method \Magento\Sales\Model\Order\Item setBaseHiddenTaxRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Item setIsNominal(int $value)
  * @method \Magento\Sales\Model\Order\Item setTaxCanceled(float $value)
  * @method \Magento\Sales\Model\Order\Item setHiddenTaxCanceled(float $value)
  * @method \Magento\Sales\Model\Order\Item setTaxRefunded(float $value)
  * @method \Magento\Sales\Model\Order\Item setBaseTaxRefunded(float $value)
  * @method \Magento\Sales\Model\Order\Item setDiscountRefunded(float $value)
  * @method \Magento\Sales\Model\Order\Item setBaseDiscountRefunded(float $value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends AbstractExtensibleModel implements OrderItemInterface
 {
@@ -149,11 +152,6 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     protected $_order = null;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|null
-     */
-    protected $_parentItem = null;
-
-    /**
      * @var array
      */
     protected $_children = [];
@@ -169,7 +167,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     protected $productRepository;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -184,8 +182,9 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -193,7 +192,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         AttributeDataBuilder $customAttributeBuilder,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -232,7 +231,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     public function setParentItem($item)
     {
         if ($item) {
-            $this->_parentItem = $item;
+            $this->setData(OrderItemInterface::PARENT_ITEM, $item);
             $item->setHasChildren(true);
             $item->addChildItem($this);
         }
@@ -246,7 +245,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      */
     public function getParentItem()
     {
-        return $this->_parentItem;
+        return $this->getData(OrderItemInterface::PARENT_ITEM);
     }
 
     /**
@@ -376,6 +375,8 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * Retrieve item status identifier
      *
      * @return int
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getStatusId()
     {
@@ -630,6 +631,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * Check if discount has to be applied to parent item
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getForceApplyDiscountToParentItem()
     {
@@ -673,6 +675,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      *
      * @param bool $shipment
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isDummy($shipment = false)
     {
@@ -1269,16 +1272,6 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     public function getHiddenTaxRefunded()
     {
         return $this->getData(OrderItemInterface::HIDDEN_TAX_REFUNDED);
-    }
-
-    /**
-     * Returns is_nominal
-     *
-     * @return int
-     */
-    public function getIsNominal()
-    {
-        return $this->getData(OrderItemInterface::IS_NOMINAL);
     }
 
     /**

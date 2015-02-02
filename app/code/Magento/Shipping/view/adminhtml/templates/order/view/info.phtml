@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\Shipping\Block\Adminhtml\View */ ?>
-<?php $order = $this->getOrder() ?>
+<?php /** @var $block \Magento\Shipping\Block\Adminhtml\View */ ?>
+<?php $order = $block->getOrder() ?>
 <?php if ($order->getIsVirtual()) : return '';endif; ?>
 <div class="order-shipping-method">
     <!--Shipping Method-->
@@ -17,14 +21,14 @@
                 <p><a href="#" id="linkId" onclick="popWin('<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($order) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?php echo __('Track Order') ?>"><?php echo __('Track Order') ?></a></p>
             <?php endif; ?>
             <?php if ($order->getShippingDescription()): ?>
-                <strong><?php echo $this->escapeHtml($order->getShippingDescription()) ?></strong>
+                <strong><?php echo $block->escapeHtml($order->getShippingDescription()) ?></strong>
 
                 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
-                    <?php $_excl = $this->displayShippingPriceInclTax($order); ?>
+                    <?php $_excl = $block->displayShippingPriceInclTax($order); ?>
                 <?php else: ?>
-                    <?php $_excl = $this->displayPriceAttribute('shipping_amount', false, ' '); ?>
+                    <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
                 <?php endif; ?>
-                <?php $_incl = $this->displayShippingPriceInclTax($order); ?>
+                <?php $_incl = $block->displayShippingPriceInclTax($order); ?>
 
                 <?php echo $_excl; ?>
                 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>

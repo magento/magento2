@@ -1,14 +1,21 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Add extends \Magento\Checkout\Controller\Cart
 {
     /**
@@ -20,7 +27,7 @@ class Add extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param CustomerCart $cart
      * @param ProductRepositoryInterface $productRepository
@@ -29,7 +36,7 @@ class Add extends \Magento\Checkout\Controller\Cart
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         CustomerCart $cart,
         ProductRepositoryInterface $productRepository
@@ -47,7 +54,7 @@ class Add extends \Magento\Checkout\Controller\Cart
     {
         $productId = (int)$this->getRequest()->getParam('product');
         if ($productId) {
-            $storeId = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId();
+            $storeId = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getId();
             try {
                 return $this->productRepository->getById($productId, false, $storeId);
             } catch (NoSuchEntityException $e) {
@@ -61,6 +68,7 @@ class Add extends \Magento\Checkout\Controller\Cart
      * Add product to shopping cart action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

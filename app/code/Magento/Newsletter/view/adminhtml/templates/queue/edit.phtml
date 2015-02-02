@@ -1,36 +1,45 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Newsletter\Block\Adminhtml\Queue\Edit */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Newsletter\Block\Adminhtml\Queue\Edit */
 ?>
-<div class="page-actions">
-    <?php echo $this->getBackButtonHtml() ?>
-    <?php echo $this->getPreviewButtonHtml(); ?>
-    <?php if (!$this->getIsPreview()): ?>
-        <?php echo $this->getResetButtonHtml() ?>
-        <?php echo $this->getSaveButtonHtml() ?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions">
+    <?php echo $block->getBackButtonHtml() ?>
+    <?php echo $block->getPreviewButtonHtml(); ?>
+    <?php if (!$block->getIsPreview()): ?>
+        <?php echo $block->getResetButtonHtml() ?>
+        <?php echo $block->getSaveButtonHtml() ?>
     <?php endif ?>
-    <?php if ($this->getCanResume()): ?>
-        <?php echo $this->getResumeButtonHtml() ?>
+    <?php if ($block->getCanResume()): ?>
+        <?php echo $block->getResumeButtonHtml() ?>
     <?php endif ?>
 </div>
 
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="queue_edit_form">
-    <?php echo $this->getBlockHtml('formkey')?>
-    <?php echo $this->getChildHtml('form') ?>
+<form action="<?php echo $block->getSaveUrl() ?>" method="post" id="queue_edit_form">
+    <?php echo $block->getBlockHtml('formkey')?>
+    <?php echo $block->getChildHtml('form') ?>
 </form>
-<form action="<?php echo $this->getPreviewUrl() ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
-    <?php echo $this->getBlockHtml('formkey')?>
+<form action="<?php echo $block->getPreviewUrl() ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
+    <?php echo $block->getBlockHtml('formkey')?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?php echo $this->getIsTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?php echo $block->getIsTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />
     </div>
 </form>
-<script type="text/javascript">
-require(['jquery', 'mage/mage', 'prototype'], function(jQuery){
+<script>
+require([
+    'jquery',
+    'tinymce',
+    'mage/mage',
+    'prototype'
+], function(jQuery, tinyMCE){
 
 //<![CDATA[
 jQuery('#queue_edit_form').mage('form').mage('validation');

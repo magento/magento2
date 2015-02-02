@@ -1,8 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Catalog\Product\View\Type;
+
+use Magento\Bundle\Model\Option;
+use Magento\Catalog\Model\Product;
 
 /**
  * Catalog bundle product info block
@@ -11,22 +15,23 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type;
  */
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {
+
     /**
      * @var array
      */
-    protected $_options;
+    protected $options;
 
     /**
      * Catalog product
      *
      * @var \Magento\Catalog\Helper\Product
      */
-    protected $_catalogProduct;
+    protected $catalogProduct;
 
     /**
      * @var \Magento\Bundle\Model\Product\PriceFactory
      */
-    protected $_productPrice;
+    protected $productPriceFactory;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
@@ -36,7 +41,12 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * @var \Magento\Framework\Locale\FormatInterface
      */
-    protected $_localeFormat;
+    protected $localeFormat;
+
+    /**
+     * @var array
+     */
+    private $selectedOptions = [];
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -46,7 +56,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param array $data
-     * @param array $priceBlockTypes
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -55,13 +64,12 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         \Magento\Bundle\Model\Product\PriceFactory $productPrice,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        array $data = [],
-        array $priceBlockTypes = []
+        array $data = []
     ) {
-        $this->_catalogProduct = $catalogProduct;
-        $this->_productPrice = $productPrice;
+        $this->catalogProduct = $catalogProduct;
+        $this->productPriceFactory = $productPrice;
         $this->jsonEncoder = $jsonEncoder;
-        $this->_localeFormat = $localeFormat;
+        $this->localeFormat = $localeFormat;
         parent::__construct(
             $context,
             $arrayUtils,
@@ -74,7 +82,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     public function getOptions()
     {
-        if (!$this->_options) {
+        if (!$this->options) {
             $product = $this->getProduct();
             $typeInstance = $product->getTypeInstance();
             $typeInstance->setStoreFilter($product->getStoreId(), $product);
@@ -86,14 +94,14 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 $product
             );
 
-            $this->_options = $optionCollection->appendSelections(
+            $this->options = $optionCollection->appendSelections(
                 $selectionCollection,
                 false,
-                $this->_catalogProduct->getSkipSaleableCheck()
+                $this->catalogProduct->getSkipSaleableCheck()
             );
         }
 
-        return $this->_options;
+        return $this->options;
     }
 
     /**
@@ -102,7 +110,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     public function hasOptions()
     {
         $this->getOptions();
-        if (empty($this->_options) || !$this->getProduct()->isSalable()) {
+        if (empty($this->options) || !$this->getProduct()->isSalable()) {
             return false;
         }
         return true;
@@ -113,107 +121,27 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      *
      * @return string
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getJsonConfig()
     {
-        /** @var \Magento\Bundle\Model\Option[] $optionsArray */
+        /** @var Option[] $optionsArray */
         $optionsArray = $this->getOptions();
         $options = [];
-        $selected = [];
         $currentProduct = $this->getProduct();
 
-        if ($preConfiguredFlag = $currentProduct->hasPreconfiguredValues()) {
-            $preConfiguredValues = $currentProduct->getPreconfiguredValues();
-            $defaultValues = [];
-        }
-
+        $defaultValues = [];
+        $preConfiguredFlag = $currentProduct->hasPreconfiguredValues();
+        /** @var \Magento\Framework\Object|null $preConfiguredValues */
+        $preConfiguredValues = $preConfiguredFlag ? $currentProduct->getPreconfiguredValues() : null;
 
         $position = 0;
         foreach ($optionsArray as $optionItem) {
-            /* @var $optionItem \Magento\Bundle\Model\Option */
+            /* @var $optionItem Option */
             if (!$optionItem->getSelections()) {
                 continue;
             }
-
             $optionId = $optionItem->getId();
-            $option = [
-                'selections' => [],
-                'title' => $optionItem->getTitle(),
-                'isMulti' => in_array($optionItem->getType(), ['multi', 'checkbox']),
-                'position' => $position++
-            ];
-
-            $selectionCount = count($optionItem->getSelections());
-
-            foreach ($optionItem->getSelections() as $selectionItem) {
-                /* @var $selectionItem \Magento\Catalog\Model\Product */
-                $selectionId = $selectionItem->getSelectionId();
-                $qty = !($selectionItem->getSelectionQty() * 1) ? '1' : $selectionItem->getSelectionQty() * 1;
-                // recalculate currency
-                $tierPrices = $selectionItem->getPriceInfo()
-                    ->getPrice(\Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE)
-                    ->getTierPriceList();
-
-                foreach ($tierPrices as &$tierPriceInfo) {
-                    /** @var \Magento\Framework\Pricing\Amount\Base $price */
-                    $price = $tierPriceInfo['price'];
-
-                    $priceBaseAmount = $price->getBaseAmount();
-                    $priceValue = $price->getValue();
-
-                    $bundleProductPrice = $this->_productPrice->create();
-                    $priceBaseAmount = $bundleProductPrice->getLowestPrice($currentProduct, $priceBaseAmount);
-                    $priceValue = $bundleProductPrice->getLowestPrice($currentProduct, $priceValue);
-
-                    $tierPriceInfo['prices'] = [
-                        'oldPrice' => [
-                            'amount' => $priceBaseAmount
-                        ],
-                        'basePrice' => [
-                            'amount' => $priceBaseAmount
-                        ],
-                        'finalPrice' => [
-                            'amount' => $priceValue
-                        ]
-                    ];
-                }
-                $bundleOptionPriceAmount = $currentProduct->getPriceInfo()->getPrice('bundle_option')
-                    ->getOptionSelectionAmount($selectionItem);
-                $finalPrice = $bundleOptionPriceAmount->getValue();
-                $basePrice = $bundleOptionPriceAmount->getBaseAmount();
-
-                $selection = [
-                    'qty' => $qty,
-                    'customQty' => $selectionItem->getSelectionCanChangeQty(),
-                    'prices' => [
-                        'oldPrice' => [
-                            'amount' => $basePrice
-                        ],
-                        'basePrice' => [
-                            'amount' => $basePrice
-                        ],
-                        'finalPrice' => [
-                            'amount' => $finalPrice
-                        ]
-                    ],
-                    'priceType' => $selectionItem->getSelectionPriceType(),
-                    'tierPrice' => $tierPrices,
-                    'name' => $selectionItem->getName(),
-                    'canApplyMsrp' => false
-                ];
-
-                $option['selections'][$selectionId] = $selection;
-
-                if (($selectionItem->getIsDefault() || $selectionCount == 1 && $optionItem->getRequired())
-                    && $selectionItem->isSalable()
-                ) {
-                    $selected[$optionId][] = $selectionId;
-                }
-            }
-            $options[$optionId] = $option;
+            $options[$optionId] = $this->getOptionItemData($optionItem, $currentProduct, $position);
 
             // Add attribute default value (if set)
             if ($preConfiguredFlag) {
@@ -222,38 +150,9 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                     $defaultValues[$optionId] = $configValue;
                 }
             }
+            $position++;
         }
-        $isFixedPrice = $this->getProduct()->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED;
-
-        $productAmount = $currentProduct
-            ->getPriceInfo()
-            ->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
-            ->getPriceWithoutOption();
-
-        $baseProductAmount = $currentProduct
-            ->getPriceInfo()
-            ->getPrice(\Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE)
-            ->getAmount();
-
-        $config = [
-            'options' => $options,
-            'selected' => $selected,
-            'bundleId' => $currentProduct->getId(),
-            'priceFormat' => $this->_localeFormat->getPriceFormat(),
-            'prices' => [
-                'oldPrice' => [
-                    'amount' => $isFixedPrice ?  $baseProductAmount->getValue() : 0
-                ],
-                'basePrice' => [
-                    'amount' => $isFixedPrice ? $productAmount->getBaseAmount() : 0
-                ],
-                'finalPrice' => [
-                    'amount' => $isFixedPrice ? $productAmount->getValue() : 0
-                ]
-            ],
-            'priceType' => $currentProduct->getPriceType(),
-            'isFixedPrice' => $isFixedPrice,
-        ];
+        $config = $this->getConfigData($currentProduct, $options);
 
         if ($preConfiguredFlag && !empty($defaultValues)) {
             $config['defaultValues'] = $defaultValues;
@@ -265,15 +164,180 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Get html for option
      *
-     * @param \Magento\Bundle\Model\Option $option
+     * @param Option $option
      * @return string
      */
-    public function getOptionHtml($option)
+    public function getOptionHtml(Option $option)
     {
         $optionBlock = $this->getChildBlock($option->getType());
         if (!$optionBlock) {
             return __('There is no defined renderer for "%1" option type.', $option->getType());
         }
         return $optionBlock->setOption($option)->toHtml();
+    }
+
+    /**
+     * Get formed data from option selection item
+     *
+     * @param Product $product
+     * @param Product $selection
+     * @return array
+     */
+    private function getSelectionItemData(Product $product, Product $selection)
+    {
+        $qty = ($selection->getSelectionQty() * 1) ?: '1';
+
+        $optionPriceAmount = $product->getPriceInfo()
+            ->getPrice('bundle_option')
+            ->getOptionSelectionAmount($selection);
+        $finalPrice = $optionPriceAmount->getValue();
+        $basePrice = $optionPriceAmount->getBaseAmount();
+
+        $selection = [
+            'qty' => $qty,
+            'customQty' => $selection->getSelectionCanChangeQty(),
+            'prices' => [
+                'oldPrice' => [
+                    'amount' => $basePrice
+                ],
+                'basePrice' => [
+                    'amount' => $basePrice
+                ],
+                'finalPrice' => [
+                    'amount' => $finalPrice
+                ]
+            ],
+            'priceType' => $selection->getSelectionPriceType(),
+            'tierPrice' => $this->getTierPrices($product, $selection),
+            'name' => $selection->getName(),
+            'canApplyMsrp' => false
+        ];
+        return $selection;
+    }
+
+    /**
+     * Get tier prices from option selection item
+     *
+     * @param Product $product
+     * @param Product $selection
+     * @return array
+     */
+    private function getTierPrices(Product $product, Product $selection)
+    {
+        // recalculate currency
+        $tierPrices = $selection->getPriceInfo()
+            ->getPrice(\Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE)
+            ->getTierPriceList();
+
+        foreach ($tierPrices as &$tierPriceInfo) {
+            /** @var \Magento\Framework\Pricing\Amount\Base $price */
+            $price = $tierPriceInfo['price'];
+
+            $priceBaseAmount = $price->getBaseAmount();
+            $priceValue = $price->getValue();
+
+            $bundleProductPrice = $this->productPriceFactory->create();
+            $priceBaseAmount = $bundleProductPrice->getLowestPrice($product, $priceBaseAmount);
+            $priceValue = $bundleProductPrice->getLowestPrice($product, $priceValue);
+
+            $tierPriceInfo['prices'] = [
+                'oldPrice' => [
+                    'amount' => $priceBaseAmount
+                ],
+                'basePrice' => [
+                    'amount' => $priceBaseAmount
+                ],
+                'finalPrice' => [
+                    'amount' => $priceValue
+                ]
+            ];
+        }
+        return $tierPrices;
+    }
+
+    /**
+     * Get formed data from selections of option
+     *
+     * @param Option $option
+     * @param Product $product
+     * @return array
+     */
+    private function getSelections(Option $option, Product $product)
+    {
+        $selections = [];
+        $selectionCount = count($option->getSelections());
+        foreach ($option->getSelections() as $selectionItem) {
+            /* @var $selectionItem Product */
+            $selectionId = $selectionItem->getSelectionId();
+            $selections[$selectionId] = $this->getSelectionItemData($product, $selectionItem);
+
+            if (($selectionItem->getIsDefault() || $selectionCount == 1 && $option->getRequired())
+                && $selectionItem->isSalable()
+            ) {
+                $this->selectedOptions[$option->getId()][] = $selectionId;
+            }
+        }
+        return $selections;
+    }
+
+    /**
+     * Get formed data from option
+     *
+     * @param Option $option
+     * @param Product $product
+     * @param int $position
+     * @return array
+     */
+    private function getOptionItemData(Option $option, Product $product, $position)
+    {
+        return [
+            'selections' => $this->getSelections($option, $product),
+            'title' => $option->getTitle(),
+            'isMulti' => in_array($option->getType(), ['multi', 'checkbox']),
+            'position' => $position
+        ];
+    }
+
+    /**
+     * Get formed config data from calculated options data
+     *
+     * @param Product $product
+     * @param array $options
+     * @return array
+     */
+    private function getConfigData(Product $product, array $options)
+    {
+        $isFixedPrice = $this->getProduct()->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED;
+
+        $productAmount = $product
+            ->getPriceInfo()
+            ->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
+            ->getPriceWithoutOption();
+
+        $baseProductAmount = $product
+            ->getPriceInfo()
+            ->getPrice(\Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE)
+            ->getAmount();
+
+        $config = [
+            'options' => $options,
+            'selected' => $this->selectedOptions,
+            'bundleId' => $product->getId(),
+            'priceFormat' => $this->localeFormat->getPriceFormat(),
+            'prices' => [
+                'oldPrice' => [
+                    'amount' => $isFixedPrice ? $baseProductAmount->getValue() : 0
+                ],
+                'basePrice' => [
+                    'amount' => $isFixedPrice ? $productAmount->getBaseAmount() : 0
+                ],
+                'finalPrice' => [
+                    'amount' => $isFixedPrice ? $productAmount->getValue() : 0
+                ]
+            ],
+            'priceType' => $product->getPriceType(),
+            'isFixedPrice' => $isFixedPrice,
+        ];
+        return $config;
     }
 }

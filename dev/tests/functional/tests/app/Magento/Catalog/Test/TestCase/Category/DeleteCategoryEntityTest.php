@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\TestCase\Category;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for DeleteCategoryEntity
@@ -29,6 +30,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteCategoryEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog category index page
      *
@@ -59,12 +65,11 @@ class DeleteCategoryEntityTest extends Injectable
     /**
      * Delete category
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
-    public function test(CatalogCategory $category)
+    public function test(Category $category)
     {
-        $this->markTestIncomplete('MAGETWO-31723');
         $category->persist();
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($category);

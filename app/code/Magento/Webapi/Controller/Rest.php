@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
 
@@ -22,38 +23,57 @@ use Magento\Webapi\Model\PathProcessor;
  * TODO: Consider warnings suppression removal
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Rest implements \Magento\Framework\App\FrontControllerInterface
 {
-    /** @var Router */
+    /**
+     * @var Router
+     */
     protected $_router;
 
-    /** @var Route */
+    /**
+     * @var Route
+     */
     protected $_route;
 
-    /** @var RestRequest */
+    /**
+     * @var RestRequest
+     */
     protected $_request;
 
-    /** @var RestResponse */
+    /**
+     * @var RestResponse
+     */
     protected $_response;
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     protected $_objectManager;
 
-    /** @var \Magento\Framework\App\State */
+    /**
+     * @var \Magento\Framework\App\State
+     */
     protected $_appState;
 
-    /** @var AuthorizationInterface */
+    /**
+     * @var AuthorizationInterface
+     */
     protected $_authorization;
 
-    /** @var ServiceArgsSerializer */
+    /**
+     * @var ServiceArgsSerializer
+     */
     protected $_serializer;
 
-    /** @var ErrorProcessor */
+    /**
+     * @var ErrorProcessor
+     */
     protected $_errorProcessor;
 
-    /** @var PathProcessor */
+    /**
+     * @var PathProcessor
+     */
     protected $_pathProcessor;
 
     /**
@@ -225,7 +245,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param array &$nestedArray
      * @param string[] $arrayKeys
      * @param string $valueToSet
-     * @return bool true if array value is set
+     * @return void
      */
     protected function setNestedArrayValue(&$nestedArray, $arrayKeys, $valueToSet)
     {

@@ -1,8 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Framework\View\Element\Template */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Framework\View\Element\Template */
 ?>
 <script data-template-for="configurable-attribute" type="text/x-jquery-tmpl">
     <div class="entry-edit" data-role="configurable-attribute" data-attribute="${JSON.stringify(attribute)}">
@@ -84,10 +88,10 @@
                                                         <div class="actions dropdown actions-select">
                                                             <input name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][is_percent]" type="hidden" value="0"/>
                                                             <button type="button" class="action toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
-                                                                <span><?php echo $this->getBaseCurrency()->getSymbol() ?></span>
+                                                                <span><?php echo $block->getBaseCurrency()->getSymbol() ?></span>
                                                             </button>
                                                             <ul class="dropdown" data-role="dropdown-menu" data-mage-init='{"menu":{}}'>
-                                                                <li data-value="0"><a class="item"><?php echo $this->getBaseCurrency()->getSymbol() ?></a></li>
+                                                                <li data-value="0"><a class="item"><?php echo $block->getBaseCurrency()->getSymbol() ?></a></li>
                                                                 <li data-value="1"><a class="item"><?php echo __('%')?></a></li>
                                                             </ul>
                                                         </div>
@@ -117,7 +121,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="4" class="col-actions-add"><?php echo $this->getChildHtml('add_option'); ?></td>
+                                        <td colspan="4" class="col-actions-add"><?php echo $block->getChildHtml('add_option'); ?></td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -153,10 +157,10 @@
                             <div class="actions dropdown actions-select">
                                 <input type="hidden" value="0" name="product[configurable_attributes_data][${attribute.id}][values][${option.id}][is_percent]"/>
                                 <button type="button" class="action toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
-                                    <span><?php echo $this->getBaseCurrency()->getSymbol() ?></span>
+                                    <span><?php echo $block->getBaseCurrency()->getSymbol() ?></span>
                                 </button>
                                 <ul class="dropdown" data-role="dropdown-menu" data-mage-init='{"menu":{}}'>
-                                    <li data-value="0"><a class="item"><?php echo $this->getBaseCurrency()->getSymbol() ?></a></li>
+                                    <li data-value="0"><a class="item"><?php echo $block->getBaseCurrency()->getSymbol() ?></a></li>
                                     <li data-value="1"><a class="item"><?php echo __('%')?></a></li>
                                 </ul>
                             </div>

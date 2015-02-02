@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Model;
 
@@ -43,11 +44,11 @@ class Config
     ) {
         $emailLimitInConfig = (int)$scopeConfig->getValue(
             self::XML_PATH_SHARING_EMAIL_LIMIT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         $textLimitInConfig = (int)$scopeConfig->getValue(
             self::XML_PATH_SHARING_TEXT_LIMIT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         $this->_sharingEmailLimit = $emailLimitInConfig ?: self::SHARING_EMAIL_LIMIT;
         $this->_sharignTextLimit = $textLimitInConfig ?: self::SHARING_TEXT_LIMIT;

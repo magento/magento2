@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /**
  * Widget Instance Theme Id Options
@@ -17,9 +18,9 @@ class ThemeId implements \Magento\Framework\Option\ArrayInterface
     protected $_resourceModel;
 
     /**
-     * @param \Magento\Core\Model\Resource\Theme\Collection $widgetResourceModel
+     * @param \Magento\Theme\Model\Resource\Theme\Collection $widgetResourceModel
      */
-    public function __construct(\Magento\Core\Model\Resource\Theme\Collection $widgetResourceModel)
+    public function __construct(\Magento\Theme\Model\Resource\Theme\Collection $widgetResourceModel)
     {
         $this->_resourceModel = $widgetResourceModel;
     }

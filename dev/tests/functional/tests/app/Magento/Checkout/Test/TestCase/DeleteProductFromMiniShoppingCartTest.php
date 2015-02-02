@@ -1,16 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\TestCase;
 
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
-use Mtf\ObjectManager;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Class DeleteProductFromMiniShoppingCartTest
@@ -32,6 +33,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteProductFromMiniShoppingCartTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Cms index page
      *

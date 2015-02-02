@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php /** @var $this \Magento\Backend\Block\Template */?>
+<?php /** @var $block \Magento\Backend\Block\Template */?>
 <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="theme_selector_tabs">
     <ul class="tabs-horiz" role="tablist">
         <li class="ui-state-active" role="tab" tabindex="-1" aria-controls="theme_selector_tabs_available_themes_content" aria-labelledby="theme_selector_tabs_available_themes" aria-selected="false">
@@ -16,17 +20,17 @@
 </div>
 <div id="theme_selector" class="theme-selector">
     <div class="ui-tabs-panel" id="theme_selector_tabs_available_themes_content">
-        <?php echo $this->getChildHtml('available.theme.list') ?>
+        <?php echo $block->getChildHtml('available.theme.list') ?>
     </div>
 <div>
 
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'Magento_DesignEditor/js/infinitescroll'
 ], function(jQuery){
 
-    jQuery('.infinite_scroll').infinite_scroll({url :'<?php echo $this->getUrl('*/*/loadthemelist') ?>'});
+    jQuery('.infinite_scroll').infinite_scroll({url :'<?php echo $block->getUrl('*/*/loadthemelist') ?>'});
 
 });
 </script>

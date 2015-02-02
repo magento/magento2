@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\GoogleAnalytics\Helper;
 
 use Magento\Store\Model\Store;
@@ -46,7 +50,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isGoogleAnalyticsAvailable($store = null)
     {
-        $accountId = $this->_scopeConfig->getValue(self::XML_PATH_ACCOUNT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
-        return $accountId && $this->_scopeConfig->isSetFlag(self::XML_PATH_ACTIVE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        $accountId = $this->_scopeConfig->getValue(self::XML_PATH_ACCOUNT, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store);
+        return $accountId && $this->_scopeConfig->isSetFlag(self::XML_PATH_ACTIVE, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store);
     }
 }

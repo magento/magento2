@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<select id="<?php echo $this->getId() ?>" name="<?php echo $this->getName() ?>" class="<?php echo $this->getClass() ?>" title="">
-    <?php foreach ($this->getOptions() as $_value => $_option): ?>
+<select id="<?php echo $block->getId() ?>" name="<?php echo $block->getName() ?>" class="<?php echo $block->getClass() ?>" title="">
+    <?php foreach ($block->getOptions() as $_value => $_option): ?>
         <?php if (isset($_option['is_group'])): ?>
             <?php if (isset($_option['is_close'])): ?>
                 </optgroup>

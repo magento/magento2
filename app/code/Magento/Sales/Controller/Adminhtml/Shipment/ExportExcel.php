@@ -1,29 +1,41 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\Http\FileFactory;
 
 class ExportExcel extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @var LayoutFactory
+     */
+    protected $resultLayoutFactory;
+
+    /**
+     * @param Context $context
+     * @param FileFactory $fileFactory
+     * @param LayoutFactory $resultLayoutFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        Context $context,
+        FileFactory $fileFactory,
+        LayoutFactory $resultLayoutFactory
     ) {
         $this->_fileFactory = $fileFactory;
+        $this->resultLayoutFactory = $resultLayoutFactory;
         parent::__construct($context);
     }
 
@@ -42,9 +54,10 @@ class ExportExcel extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $this->_view->loadLayout(false);
         $fileName = 'shipments.xml';
-        $grid = $this->_view->getLayout()->getChildBlock('sales.shipment.grid', 'grid.export');
+        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
+        $resultLayout = $this->resultLayoutFactory->create();
+        $grid = $resultLayout->getLayout()->getChildBlock('sales.shipment.grid', 'grid.export');
         return $this->_fileFactory->create(
             $fileName,
             $grid->getExcelFile($fileName),

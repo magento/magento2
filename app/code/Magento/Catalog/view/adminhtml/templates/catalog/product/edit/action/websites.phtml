@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <div class="fieldset-wrapper" id="add-products-to-website-wrapper">
@@ -12,19 +16,19 @@
         <br>
         <div class="store-scope">
             <div class="store-tree" id="add-products-to-website-content">
-                <?php foreach ($this->getWebsiteCollection() as $_website): ?>
+                <?php foreach ($block->getWebsiteCollection() as $_website): ?>
                     <div class="website-name">
-                        <input name="add_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if ($this->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="add_product_website_<?php echo $_website->getId() ?>" type="checkbox" />
-                        <label for="add_product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label>
+                        <input name="add_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if ($block->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="add_product_website_<?php echo $_website->getId() ?>" type="checkbox" />
+                        <label for="add_product_website_<?php echo $_website->getId() ?>"><?php echo $block->escapeHtml($_website->getName()) ?></label>
                     </div>
                     <dl class="webiste-groups" id="add_product_website_<?php echo $_website->getId() ?>_data">
-                        <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
-                            <dt><?php echo $this->escapeHtml($_group->getName()) ?></dt>
+                        <?php foreach ($block->getGroupCollection($_website) as $_group): ?>
+                            <dt><?php echo $block->escapeHtml($_group->getName()) ?></dt>
                             <dd class="group-stores">
                                 <ul>
-                                <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
+                                <?php foreach ($block->getStoreCollection($_group) as $_store): ?>
                                     <li>
-                                        <?php echo $this->escapeHtml($_store->getName()) ?>
+                                        <?php echo $block->escapeHtml($_store->getName()) ?>
                                     </li>
                                 <?php endforeach; ?>
                                 </ul>
@@ -48,19 +52,19 @@
         </div>
         <div class="store-scope">
             <div class="store-tree" id="remove-products-to-website-content">
-                <?php foreach ($this->getWebsiteCollection() as $_website): ?>
+                <?php foreach ($block->getWebsiteCollection() as $_website): ?>
                     <div class="website-name">
-                        <input name="remove_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if ($this->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="remove_product_website_<?php echo $_website->getId() ?>" type="checkbox" />
-                        <label for="remove_product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label>
+                        <input name="remove_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if ($block->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="remove_product_website_<?php echo $_website->getId() ?>" type="checkbox" />
+                        <label for="remove_product_website_<?php echo $_website->getId() ?>"><?php echo $block->escapeHtml($_website->getName()) ?></label>
                     </div>
                     <dl class="webiste-groups" id="remove_product_website_<?php echo $_website->getId() ?>_data">
-                        <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
-                            <dt><?php echo $this->escapeHtml($_group->getName()) ?></dt>
+                        <?php foreach ($block->getGroupCollection($_website) as $_group): ?>
+                            <dt><?php echo $block->escapeHtml($_group->getName()) ?></dt>
                             <dd class="group-stores">
                                 <ul>
-                                <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
+                                <?php foreach ($block->getStoreCollection($_group) as $_store): ?>
                                     <li>
-                                        <?php echo $this->escapeHtml($_store->getName()) ?>
+                                        <?php echo $block->escapeHtml($_store->getName()) ?>
                                     </li>
                                 <?php endforeach; ?>
                                 </ul>
@@ -73,7 +77,10 @@
     </fieldset>
 </div>
 
-<script type="text/javascript">
+<script>
+require([
+    'prototype'
+], function () {
     var productWebsiteCheckboxes = $$('.website-checkbox');
 
     for(var i=0;i<productWebsiteCheckboxes.length;i++){
@@ -96,4 +103,5 @@
             }
         }
     }
+});
 </script>

@@ -2,7 +2,8 @@
 /**
  * SalesRule 10% discount coupon
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /** @var \Magento\SalesRule\Model\Rule $salesRule */
@@ -13,7 +14,7 @@ $data = [
     'is_active' => true,
     'website_ids' => [
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\Store\StoreManagerInterface'
         )->getStore()->getWebsiteId()
     ],
     'customer_group_ids' => [\Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID],

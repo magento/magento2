@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php if (!empty($collection) && $collection->getSize()): ?>
     <div class="table-wrapper">
@@ -11,7 +15,7 @@
             <?php foreach ($collection as $_rating): ?>
                 <?php if ($_rating->getSummary()): ?>
                     <tr>
-                        <th class="label" scope="row"><?php echo __($this->escapeHtml($_rating->getRatingCode())) ?></th>
+                        <th class="label" scope="row"><?php echo __($block->escapeHtml($_rating->getRatingCode())) ?></th>
                         <td class="value">
                             <div class="rating box">
                                 <div class="rating" style="width:<?php echo ceil($_rating->getSummary()) ?>%;"></div>

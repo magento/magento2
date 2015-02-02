@@ -1,18 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/** @var $this \Magento\UrlRewrite\Block\Selector */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\UrlRewrite\Block\Selector */
 ?>
 <div class="form-inline">
     <fieldset class="fieldset" data-container-for="entity-type-selector">
         <div class="field field-entity-type-selector">
-            <label for="entity-type-selector" class="label"><?php echo $this->getSelectorLabel() ?></label>
+            <label for="entity-type-selector" class="label"><?php echo $block->getSelectorLabel() ?></label>
             <div class="control">
                 <?php $url = $this->helper('Magento\Backend\Helper\Data')->getUrl('adminhtml/*/*')?>
                 <select data-role="entity-type-selector" class="select" onchange="window.location = this.value;" id="entity-type-selector">
-                <?php foreach ($this->getModes() as $mode => $label): ?>
-                    <option <?php echo($this->isMode($mode) ? 'selected="selected" ' : '') ?>value="<?php echo $url . $mode ?>"><?php echo $label ?></option>
+                <?php foreach ($block->getModes() as $mode => $label): ?>
+                    <option <?php echo($block->isMode($mode) ? 'selected="selected" ' : '') ?>value="<?php echo $url . $mode ?>"><?php echo $label ?></option>
                 <?php endforeach; ?>
                 </select>
             </div>

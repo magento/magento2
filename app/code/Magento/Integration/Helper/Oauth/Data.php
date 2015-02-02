@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Helper\Oauth;
 
@@ -64,7 +65,7 @@ class Data
         // Safe get cleanup probability value from system configuration
         $configValue = (int)$this->_scopeConfig->getValue(
             self::XML_PATH_CLEANUP_PROBABILITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         return $configValue > 0 ? 1 == \Magento\Framework\Math\Random::getRandomNumber(1, $configValue) : false;
     }
@@ -78,7 +79,7 @@ class Data
     {
         $minutes = (int)$this->_scopeConfig->getValue(
             self::XML_PATH_CLEANUP_EXPIRATION_PERIOD,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         return $minutes > 0 ? $minutes : self::CLEANUP_EXPIRATION_PERIOD_DEFAULT;
     }
@@ -92,7 +93,7 @@ class Data
     {
         $seconds = (int)$this->_scopeConfig->getValue(
             self::XML_PATH_CONSUMER_EXPIRATION_PERIOD,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         return $seconds > 0 ? $seconds : self::CONSUMER_EXPIRATION_PERIOD_DEFAULT;
     }
@@ -106,7 +107,7 @@ class Data
     {
         $redirects = (int)$this->_scopeConfig->getValue(
             self::XML_PATH_CONSUMER_POST_MAXREDIRECTS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         return $redirects > 0 ? $redirects : 0;
     }
@@ -120,7 +121,7 @@ class Data
     {
         $seconds = (int)$this->_scopeConfig->getValue(
             self::XML_PATH_CONSUMER_POST_TIMEOUT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         return $seconds > 0 ? $seconds : self::CONSUMER_POST_TIMEOUT_DEFAULT;
     }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Service\V1;
 
@@ -9,19 +10,18 @@ use Magento\Integration\Helper\Oauth\Data as IntegrationOauthHelper;
 use Magento\Integration\Model\Oauth\Consumer as ConsumerModel;
 use Magento\Integration\Model\Oauth\Consumer\Factory as ConsumerFactory;
 use Magento\Integration\Model\Oauth\Token as OauthTokenModel;
-use Magento\Integration\Model\Oauth\Token\Factory as TokenFactory;
+use Magento\Integration\Model\Oauth\TokenFactory as TokenFactory;
 use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
 
 /**
  * Integration oAuth service.
  *
- * TODO: Fix coupling between objects
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Oauth implements OauthInterface
 {
     /**
-     * @var  \Magento\Store\Model\StoreManagerInterface
+     * @var  \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -63,7 +63,7 @@ class Oauth implements OauthInterface
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param ConsumerFactory $consumerFactory
      * @param TokenFactory $tokenFactory
      * @param IntegrationOauthHelper $dataHelper
@@ -73,7 +73,7 @@ class Oauth implements OauthInterface
      * @param TokenProvider $tokenProvider
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         ConsumerFactory $consumerFactory,
         TokenFactory $tokenFactory,
         IntegrationOauthHelper $dataHelper,

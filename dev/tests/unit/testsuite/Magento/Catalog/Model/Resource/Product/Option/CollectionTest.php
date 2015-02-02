@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Resource\Product\Option;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
@@ -17,7 +21,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
-     * @var \Magento\Core\Model\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityFactoryMock;
 
@@ -37,7 +41,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $optionsFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -59,7 +63,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->entityFactoryMock = $this->getMock(
-            'Magento\Core\Model\EntityFactory', ['create'], [], '', false
+            'Magento\Framework\Data\Collection\EntityFactory', ['create'], [], '', false
         );
         $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->fetchStrategyMock = $this->getMock(

@@ -1,24 +1,28 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer */ ?>
-<?php $_item = $this->getItem() ?>
+<?php /** @var $block \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer */ ?>
+<?php $_item = $block->getItem() ?>
 <?php $_item->setStoreId($_item->getInvoice()->getStoreId()) ?>
-<?php $this->setPriceDataObject($_item) ?>
+<?php $block->setPriceDataObject($_item) ?>
 <tr>
-    <td class="col-product"><?php echo $this->getColumnHtml($_item, 'name') ?></td>
+    <td class="col-product"><?php echo $block->getColumnHtml($_item, 'name') ?></td>
     <td class="col-price">
-        <?php echo $this->getColumnHtml($_item, 'price'); ?>
+        <?php echo $block->getColumnHtml($_item, 'price'); ?>
     </td>
     <td class="col-qty"><?php echo $_item->getQty()*1 ?></td>
     <td class="col-subtotal">
-        <?php echo $this->getColumnHtml($_item, 'subtotal'); ?>
+        <?php echo $block->getColumnHtml($_item, 'subtotal'); ?>
     </td>
-    <td class="col-tax"><?php echo $this->displayPriceAttribute('tax_amount') ?></td>
-    <td class="col-discount"><?php echo $this->displayPriceAttribute('discount_amount') ?></td>
+    <td class="col-tax"><?php echo $block->displayPriceAttribute('tax_amount') ?></td>
+    <td class="col-discount"><?php echo $block->displayPriceAttribute('discount_amount') ?></td>
     <td class="col-total last">
-        <?php echo $this->getColumnHtml($_item, 'total'); ?>
+        <?php echo $block->getColumnHtml($_item, 'total'); ?>
     </td>
 </tr>

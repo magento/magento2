@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Adapter;
 
@@ -143,18 +144,26 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             }
         }
 
-        $functionParameters = [$this->_imageHandler, $fileName];
+        // Enable interlace
+        imageinterlace($this->_imageHandler, true);
 
-        $quality = $this->quality();
-        if ($quality !== null) {
-            if ($this->_fileType == IMAGETYPE_PNG) {
-                // for PNG files quality param must be from 0 to 10
-                $quality = ceil($quality / 10);
-                if ($quality > 10) {
-                    $quality = 10;
-                }
-                $quality = 10 - $quality;
-            }
+        // Set image quality value
+        switch ($this->_fileType) {
+            case IMAGETYPE_PNG:
+                $quality = 9;   // For PNG files compression level must be from 0 (no compression) to 9.
+                break;
+
+            case IMAGETYPE_JPEG:
+                $quality = $this->quality();
+                break;
+
+            default:
+                $quality = null;    // No compression.
+        }
+
+        // Prepare callback method parameters
+        $functionParameters = [$this->_imageHandler, $fileName];
+        if ($quality) {
             $functionParameters[] = $quality;
         }
 
@@ -202,6 +211,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param resource &$imageResourceTo
      * @return int
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _fillBackgroundColor(&$imageResourceTo)
     {
@@ -275,6 +285,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param bool &$isAlpha
      * @param bool &$isTrueColor
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     private function _getTransparency($imageResource, $fileType, &$isAlpha = false, &$isTrueColor = false)
     {
@@ -365,6 +376,10 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param int $opacity
      * @param bool $tile
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {

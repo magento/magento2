@@ -1,11 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 /**
  * Class NewActionTest
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class NewActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,11 +49,6 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultPageMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $pageConfigMock;
 
     /**
@@ -70,29 +67,19 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
     protected $backendSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ViewInterface
-     */
-    protected $viewMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\LayoutInterface
      */
     protected $layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Element\BlockInterface
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $blockMenuMock;
+    protected $resultPageFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Menu
+     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $modelMenuMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Menu\Item
-     */
-    protected $modelMenuItem;
+    protected $resultPageMock;
 
     public function setUp()
     {
@@ -138,22 +125,10 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             []
         );
         $this->titleMock = $this->getMock('Magento\Framework\View\Page\Title', [], [], '', false);
-        $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
             ->disableOriginalConstructor()
             ->getMock();
         $this->backendSessionMock = $this->getMock('Magento\Backend\Model\Session', ['getCommentText'], [], '', false);
-        $this->viewMock = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ViewInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
         $this->layoutMock = $this->getMockForAbstractClass(
             'Magento\Framework\View\LayoutInterface',
             [],
@@ -163,16 +138,14 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->blockMenuMock = $this->getMock(
-            'Magento\Backend\Block\Menu',
-            ['setActive', 'getMenuModel'],
-            [],
-            '',
-            false
-        );
-        $this->modelMenuMock = $this->getMockBuilder('Magento\Backend\Model\Menu')
-            ->disableOriginalConstructor()->getMock();
-        $this->modelMenuItem = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
+        $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->resultPageMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Page')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->contextMock->expects($this->once())
             ->method('getRequest')
             ->will($this->returnValue($this->requestMock));
@@ -180,12 +153,18 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->method('getResponse')
             ->will($this->returnValue($this->responseMock));
         $this->contextMock->expects($this->once())
-            ->method('getView')
-            ->will($this->returnValue($this->viewMock));
-        $this->contextMock->expects($this->once())
             ->method('getObjectManager')
             ->will($this->returnValue($this->objectManagerMock));
-        $this->controller = new NewAction($this->contextMock, $this->creditmemoLoaderMock);
+
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->controller = $objectManager->getObject(
+            'Magento\Sales\Controller\Adminhtml\Order\Creditmemo\NewAction',
+            [
+                'context' => $this->contextMock,
+                'creditmemoLoader' => $this->creditmemoLoaderMock,
+                'resultPageFactory' => $this->resultPageFactoryMock
+            ]
+        );
     }
 
     /**
@@ -222,7 +201,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
         $this->invoiceMock->expects($this->once())
             ->method('getIncrementId')
             ->will($this->returnValue('invoice-increment-id'));
-        $this->titleMock->expects($this->exactly(3))
+        $this->titleMock->expects($this->exactly(2))
             ->method('prepend')
             ->will($this->returnValueMap([
                 ['Credit Memos', null],
@@ -240,34 +219,26 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
         $this->creditmemoMock->expects($this->once())
             ->method('setCommentText')
             ->with($this->equalTo('comment'));
-        $this->viewMock->expects($this->once())
-            ->method('loadLayout');
-        $this->viewMock->expects($this->once())
-            ->method('renderLayout');
-        $this->viewMock->expects($this->once())
-            ->method('getLayout')
-            ->will($this->returnValue($this->layoutMock));
-        $this->viewMock->expects($this->any())->method('getPage')->will($this->returnValue($this->resultPageMock));
         $this->resultPageMock->expects($this->any())->method('getConfig')->will(
             $this->returnValue($this->pageConfigMock)
         );
-        $this->pageConfigMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
-        $this->layoutMock->expects($this->once())
-            ->method('getBlock')
-            ->with($this->equalTo('menu'))
-            ->will($this->returnValue($this->blockMenuMock));
-        $this->blockMenuMock->expects($this->once())
-            ->method('setActive')
-            ->with($this->equalTo('Magento_Sales::sales_order'));
-        $this->blockMenuMock->expects($this->once())
-            ->method('getMenuModel')
-            ->will($this->returnValue($this->modelMenuMock));
-        $this->modelMenuMock->expects($this->once())
-            ->method('getParentItems')
-            ->will($this->returnValue([$this->modelMenuItem]));
-        $this->modelMenuItem->expects($this->once())
+        $this->pageConfigMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue('item-title'));
-        $this->assertNull($this->controller->execute());
+            ->willReturn($this->titleMock);
+        $this->resultPageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultPageMock);
+        $this->resultPageMock->expects($this->once())
+            ->method('setActiveMenu')
+            ->with('Magento_Sales::sales_order')
+            ->willReturnSelf();
+        $this->resultPageMock->expects($this->atLeastOnce())
+            ->method('getConfig')
+            ->willReturn($this->pageConfigMock);
+
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Page',
+            $this->controller->execute()
+        );
     }
 }

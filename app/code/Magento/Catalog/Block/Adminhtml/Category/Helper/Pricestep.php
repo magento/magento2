@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -52,12 +53,14 @@ class Pricestep extends \Magento\Framework\Data\Form\Element\Text
         $html .= ' onclick="toggleValueElements(this, this.parentNode);" class="checkbox" type="checkbox" />';
 
         $html .= ' <label for="' . $htmlId . '" class="normal">' . __('Use Config Settings') . '</label>';
-        $html .= '<script type="text/javascript">' .
+        $html .= '<script>' .
+            'require(["prototype"], function(){'.
             'toggleValueElements($(\'' .
             $htmlId .
             '\'), $(\'' .
             $htmlId .
             '\').parentNode);' .
+            '});'.
             '</script>';
 
         return $html;

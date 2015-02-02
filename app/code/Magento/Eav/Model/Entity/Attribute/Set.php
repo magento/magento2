@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -21,6 +22,9 @@ namespace Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Api\AttributeDataBuilder;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Eav\Api\Data\AttributeSetInterface
 {
@@ -69,6 +73,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -155,6 +160,8 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param array $data
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function organizeData($data)
     {
@@ -262,6 +269,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param array $attributes
      * @param int $setId
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addSetInfo($entityType, array $attributes, $setId = null)
     {

@@ -1,41 +1,45 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->canDisplayGiftmessage()): ?>
-<?php $_required = $this->getMessage()->getMessage() != ''?>
-<div id="<?php echo $this->getHtmlId() ?>" class="box-left giftmessage-whole-order-container">
-    <form class="entry-edit form-inline" id="<?php echo $this->getFieldId('form') ?>" action="<?php echo $this->getSaveUrl() ?>">
+<?php if ($block->canDisplayGiftmessage()): ?>
+<?php $_required = $block->getMessage()->getMessage() != ''?>
+<div id="<?php echo $block->getHtmlId() ?>" class="box-left giftmessage-whole-order-container">
+    <form class="entry-edit form-inline" id="<?php echo $block->getFieldId('form') ?>" action="<?php echo $block->getSaveUrl() ?>">
         <fieldset>
             <legend class="legend"><span><?php echo __('Gift Message for the Entire Order'); ?></span></legend>
             <br />
 
-            <input type="hidden" id="<?php echo $this->getFieldId('type'); ?>" name="<?php echo $this->getFieldName('type'); ?>" value="order" />
+            <input type="hidden" id="<?php echo $block->getFieldId('type'); ?>" name="<?php echo $block->getFieldName('type'); ?>" value="order" />
 
             <div class="field field-from-name <?php echo $_required ? 'required' : ''; ?>">
-                <label class="label" for="<?php echo $this->getFieldId('sender'); ?>"><span><?php echo __('From Name'); ?></span></label>
+                <label class="label" for="<?php echo $block->getFieldId('sender'); ?>"><span><?php echo __('From Name'); ?></span></label>
                 <div class="control">
-                    <input class="input-text <?php echo $_required ? 'required-entry' : ''; ?>" type="text" id="<?php echo $this->getFieldId('sender'); ?>" name="<?php echo $this->getFieldName('sender'); ?>" value="<?php echo $this->escapeHtml($this->getMessage()->getSender()); ?>" />
+                    <input class="input-text <?php echo $_required ? 'required-entry' : ''; ?>" type="text" id="<?php echo $block->getFieldId('sender'); ?>" name="<?php echo $block->getFieldName('sender'); ?>" value="<?php echo $block->escapeHtml($block->getMessage()->getSender()); ?>" />
                 </div>
             </div>
 
             <div class="field field-to-name <?php echo $_required ? 'required' : ''; ?>">
-                <label class="label" for="<?php echo $this->getFieldId('recipient'); ?>"><span><?php echo __('To Name'); ?></span></label>
+                <label class="label" for="<?php echo $block->getFieldId('recipient'); ?>"><span><?php echo __('To Name'); ?></span></label>
                 <div class="control">
-                    <input class="input-text <?php echo $_required ? 'required-entry' : ''; ?>" type="text" id="<?php echo $this->getFieldId('recipient'); ?>" name="<?php echo $this->getFieldName('recipient'); ?>"  value="<?php echo $this->escapeHtml($this->getMessage()->getRecipient()); ?>" />
+                    <input class="input-text <?php echo $_required ? 'required-entry' : ''; ?>" type="text" id="<?php echo $block->getFieldId('recipient'); ?>" name="<?php echo $block->getFieldName('recipient'); ?>"  value="<?php echo $block->escapeHtml($block->getMessage()->getRecipient()); ?>" />
                 </div>
             </div>
 
             <div class="field field-gift-message">
-                <label class="label" for="<?php echo $this->getFieldId('message'); ?>"><span><?php echo __('Gift Message'); ?></span></label>
+                <label class="label" for="<?php echo $block->getFieldId('message'); ?>"><span><?php echo __('Gift Message'); ?></span></label>
                 <div class="control">
-                    <textarea id="<?php echo $this->getFieldId('message'); ?>" name="<?php echo $this->getFieldName('message') ?>" rows="2" cols="15"><?php echo $this->escapeHtml($this->getMessage()->getMessage()); ?></textarea>
+                    <textarea id="<?php echo $block->getFieldId('message'); ?>" name="<?php echo $block->getFieldName('message') ?>" rows="2" cols="15"><?php echo $block->escapeHtml($block->getMessage()->getMessage()); ?></textarea>
                 </div>
             </div>
 
             <div class="actions">
-                <?php echo $this->getSaveButtonHtml(); ?>
+                <?php echo $block->getSaveButtonHtml(); ?>
             </div>
         </fieldset>
     </form>

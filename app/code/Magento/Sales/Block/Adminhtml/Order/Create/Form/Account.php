@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
@@ -45,6 +49,7 @@ class Account extends AbstractForm
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -160,7 +165,7 @@ class Account extends AbstractForm
         } catch (\Exception $e) {
             /** If customer does not exist do nothing. */
         }
-        $data = isset($customer) ? $this->_extensibleDataObjectConverter->toFlatArray($customer) : [];
+        $data = isset($customer) ? $this->_extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface') : [];
         foreach ($this->getQuote()->getData() as $key => $value) {
             if (strpos($key, 'customer_') === 0) {
                 $data[substr($key, 9)] = $value;

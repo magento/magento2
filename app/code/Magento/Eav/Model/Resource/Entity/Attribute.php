@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Resource\Entity;
 
@@ -24,7 +25,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected static $_entityAttributes = [];
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -37,12 +38,12 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Class constructor
      *
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Type $eavEntityType
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         Type $eavEntityType
     ) {
         $this->_storeManager = $storeManager;
@@ -260,6 +261,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param null $attributeGroupId
      * @param null $attributeSortOrder
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function saveInSetIncluding(
         AbstractModel $object,

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\DesignEditor\Model\Plugin;
 
@@ -40,10 +41,10 @@ class ThemeCopyServiceTest extends \PHPUnit_Framework_TestCase
         $sourceChangeTime = '21:00:00';
         $targetThemeId = 2;
 
-        $sourceThemeMock = $this->getMock('Magento\Core\Model\Theme', [], [], '', false);
+        $sourceThemeMock = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
         $sourceThemeMock->expects($this->any())->method('getId')->will($this->returnValue($sourceThemeId));
 
-        $targetThemeMock = $this->getMock('Magento\Core\Model\Theme', [], [], '', false);
+        $targetThemeMock = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
         $targetThemeMock->expects($this->any())->method('getId')->will($this->returnValue($targetThemeId));
 
         $sourceChangeMock = $this->getMock(

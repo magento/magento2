@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList;
 
@@ -55,8 +56,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             true,
             ['getChildBlock', 'getLayout']
         );
-        /** @var $themeMock \Magento\Core\Model\Theme */
-        $themeMock = $this->getMock('Magento\Core\Model\Theme', [], [], '', false);
+        /** @var $themeMock \Magento\Theme\Model\Theme */
+        $themeMock = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
         /** @var $themeBlockMock \Magento\DesignEditor\Block\Adminhtml\Theme */
         $themeBlockMock = $this->getMock(
             'Magento\DesignEditor\Block\Adminhtml\Theme',

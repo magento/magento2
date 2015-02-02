@@ -1,28 +1,32 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $_option = $this->getOption() ?>
+<?php $_option = $block->getOption() ?>
 <?php $_optionId = $_option->getId() ?>
 <?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
 <div class="field date<?php echo $class; ?>"
      data-mage-init='{"priceOptionDate":{"fromSelector":"#product_addtocart_form"}}'>
     <label class="label">
-        <span><?php echo  $this->escapeHtml($_option->getTitle()) ?></span>
-        <?php echo $this->getFormatedPrice() ?>
+        <span><?php echo  $block->escapeHtml($_option->getTitle()) ?></span>
+        <?php echo $block->getFormatedPrice() ?>
     </label>
     <div class="control">
         <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
             || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE): ?>
 
-            <?php echo $this->getDateHtml() ?>
+            <?php echo $block->getDateHtml() ?>
 
         <?php endif; ?>
 
         <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
             || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME): ?>
-            <span class="time-picker"><?php echo $this->getTimeHtml() ?></span>
+            <span class="time-picker"><?php echo $block->getTimeHtml() ?></span>
         <?php endif; ?>
 
         <?php if ($_option->getIsRequire()): ?>
@@ -38,7 +42,7 @@
                    value=""
                    data-validate="{'validate-optional-datetime':<?php echo $_optionId?>}"/>
         <?php endif; ?>
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'mage/mage'

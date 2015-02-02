@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<div class="field taxvat<?php if ($this->isRequired()) echo ' required'; ?>">
-    <label class="label" for="<?php echo $this->getFieldId('taxvat')?>"><span><?php echo __('Tax/VAT number') ?></span></label>
+<div class="field taxvat<?php if ($block->isRequired()) echo ' required'; ?>">
+    <label class="label" for="<?php echo $block->getFieldId('taxvat')?>"><span><?php echo __('Tax/VAT number') ?></span></label>
     <div class="control">
-        <input type="text" id="<?php echo $this->getFieldId('taxvat')?>" name="<?php echo $this->getFieldName('taxvat')?>" value="<?php echo $this->escapeHtml($this->getTaxvat()) ?>" title="<?php echo __('Tax/VAT number') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('taxvat') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isRequired()) echo ' data-validate="{required:true}"' ?>>
+        <input type="text" id="<?php echo $block->getFieldId('taxvat')?>" name="<?php echo $block->getFieldName('taxvat')?>" value="<?php echo $block->escapeHtml($block->getTaxvat()) ?>" title="<?php echo __('Tax/VAT number') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('taxvat') ?>" <?php echo $block->getFieldParams() ?> <?php if ($block->isRequired()) echo ' data-validate="{required:true}"' ?>>
     </div>
 </div>

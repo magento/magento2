@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
@@ -51,7 +52,7 @@ class Stock extends \Magento\ProductAlert\Controller\Unsubscribe
             )->setProductId(
                 $product->getId()
             )->setWebsiteId(
-                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
+                $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getWebsiteId()
             )->loadByParam();
             if ($model->getId()) {
                 $model->delete();

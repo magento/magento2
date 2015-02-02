@@ -1,5 +1,6 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 .data-tabs-base(@_tab-control-height-base: @tab-control-height-base) {
@@ -11,7 +12,7 @@
         width: auto;
         > .switch {
             display: block;
-            height: @_tab-control-height-base;
+            .css(height, @_tab-control-height-base);
             position: relative;
             z-index: 2;
         }
@@ -20,7 +21,7 @@
         box-sizing: border-box;
         .clearfix();
         float: right;
-        margin-top: @_tab-control-height-base;
+        .css(margin-top, @_tab-control-height-base);
         margin-left: -100%;
         width: 100%;
         &.active {
@@ -74,7 +75,7 @@
 ) {
     .data-tabs-base();
     > .item.title {
-        margin: 0 @_tab-control-margin-right 0 0;
+        .css(margin, 0 @_tab-control-margin-right 0 0);
         > .switch {
             .typography(
                 @_color: @_tab-control-color,
@@ -94,11 +95,11 @@
                 @_link-color-active: @_tab-control-color-active,
                 @_link-text-decoration-active: @_tab-control-text-decoration-active
             );
-            height: @_tab-control-height;
-            padding: @_tab-control-padding-top @_tab-control-padding-right @_tab-control-padding-bottom @_tab-control-padding-left;
-            .css(border, @_tab-content-border);
             .css(background, @_tab-control-bg);
+            .css(border, @_tab-content-border);
             border-bottom: none;
+            .css(height, @_tab-control-height);
+            .css(padding, @_tab-control-padding-top @_tab-control-padding-right @_tab-control-padding-bottom @_tab-control-padding-left);
         }
         &:not(.disabled) > .switch:focus,
         &:not(.disabled) > .switch:hover {
@@ -114,7 +115,7 @@
         &.active > .switch,
         &.active > .switch:focus,
         &.active > .switch:hover {
-            padding-bottom: @_tab-control-padding-bottom + @_tab-control-border-width;
+            .css(padding-bottom, @_tab-control-padding-bottom + @_tab-control-border-width);
         }
     }
     > .item.content {
@@ -132,7 +133,7 @@
     @_tab-content-border-top-status,
     @_tab-content-border
 ) when (@_tab-content-border-top-status = false){
-    border: @_tab-content-border;
+    .css(border, @_tab-content-border);
 }
 
 ._tab-content-border(
@@ -140,7 +141,7 @@
     @_tab-content-border
 ) when (@_tab-content-border-top-status = true){
     border: 0;
-    border-top: @_tab-content-border;
+    .css(border-top, @_tab-content-border);
 }
 
 .data-accordion-base() {
@@ -225,8 +226,8 @@
             .css(border-right,@_accordion-control-border-right);
             .css(border-bottom,@_accordion-control-border-bottom);
             .css(border-left,@_accordion-control-border-left);
-            height: @_accordion-control-height;
-            padding: @_accordion-control-padding-top @_accordion-control-padding-right @_accordion-control-padding-bottom @_accordion-control-padding-left;
+            .css(height, @_accordion-control-height);
+            .css(padding, @_accordion-control-padding-top @_accordion-control-padding-right @_accordion-control-padding-bottom @_accordion-control-padding-left);
             .typography(
                 @_color: @_accordion-control-color,
                 @_font-family: @_accordion-control-font-family,
@@ -255,7 +256,7 @@
         &.active > .switch:focus,
         &.active > .switch:hover {
             .css(background, @_accordion-control-bg-active);
-            padding-bottom: @_accordion-control-padding-bottom;
+            .css(padding-bottom, @_accordion-control-padding-bottom);
         }
     }
     > .item.content {

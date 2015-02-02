@@ -1,15 +1,14 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
-
 
 class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -17,18 +16,20 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
         $orderId = $this->getRequest()->getParam('order_id');
         $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
         if (!$this->_objectManager->get('Magento\Sales\Helper\Reorder')->canReorder($order)) {
-            $this->_forward('noroute');
-            return;
+            return $this->resultForwardFactory->create()->forward('noroute');
         }
 
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($order->getId()) {
             $order->setReordered(true);
             $this->_getSession()->setUseOldShippingMethod(true);
             $this->_getOrderCreateModel()->initFromOrder($order);
 
-            $this->_redirect('sales/*');
+            $resultRedirect->setPath('sales/*');
         } else {
-            $this->_redirect('sales/order/');
+            $resultRedirect->setPath('sales/order/');
         }
+        return $resultRedirect;
     }
 }

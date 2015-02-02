@@ -1,5 +1,6 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 /*global alert:true*/
@@ -7,7 +8,8 @@ define([
     "jquery",
     "jquery/ui",
     "jquery/template",
-    "js/theme",
+    "useDefault",
+    "collapsable",
     "mage/translate",
     "mage/backend/validation"
 ], function($){

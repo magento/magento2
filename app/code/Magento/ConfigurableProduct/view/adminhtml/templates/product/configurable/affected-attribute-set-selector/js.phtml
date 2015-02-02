@@ -1,11 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/* @var $this \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector */
 ?>
-<script type="text/javascript">
-(function($){
+<script>
+(function(){
+    'use strict';
+    
     var $form;
 
     require([
@@ -13,8 +19,6 @@
         "jquery/ui",
         "Magento_ConfigurableProduct/catalog/product-variation"
     ], function($){
-        'use strict';
-
         $form = $('#affected-attribute-set-form');
 
         var resetValidation = function() {
@@ -32,20 +36,20 @@
             .dialog({
                 title: '<?php echo __('Choose Affected Attribute Set'); ?>',
                 autoOpen: false,
-                id: '<?php echo $this->getJsId() ?>',
+                id: '<?php echo $block->getJsId() ?>',
                 minWidth: 700,
                 modal: true,
                 resizable: false,
                 close: resetValidation,
                 buttons: [{
                     text: '<?php echo __('Cancel'); ?>',
-                    id: '<?php echo $this->getJsId('close-button') ?>',
+                    id: '<?php echo $block->getJsId('close-button') ?>',
                     click: function() {
                         $form.dialog('close');
                     }
                 }, {
                     text: '<?php echo __('Confirm'); ?>',
-                    id: '<?php echo $this->getJsId('confirm-button') ?>',
+                    id: '<?php echo $block->getJsId('confirm-button') ?>',
                     'class': 'primary',
                     click: function() {
                         if ($form.find('input[name=affected-attribute-set]:checked').val() == 'current') {
@@ -63,12 +67,12 @@
 
                         $.ajax({
                             type: 'POST',
-                            url: '<?php echo $this->getAttributeSetCreationUrl()?>',
+                            url: '<?php echo $block->getAttributeSetCreationUrl()?>',
                             data: {
                                 gotoEdit: 1,
                                 attribute_set_name: $form.find('input[name=new-attribute-set-name]').val(),
                                 skeleton_set: $('#attribute_set_id').val(),
-                                form_key: '<?php echo $this->getFormKey()?>',
+                                form_key: '<?php echo $block->getFormKey()?>',
                                 return_session_messages_only: 1
                             },
                             dataType: 'json',
@@ -97,37 +101,43 @@
                 }
             });
     });
+    
+    require([
+        'jquery'
+    ], function ($) {
 
-    /**
-     * This fix was made in order to properly handle 'stopImmediatePropagation'.
-     */
-    $('#save-split-button .item').on('click', function(event) {
-        if ($('#new-variations-attribute-set-id').val() != '') {
-            return; // affected attribute set was already chosen
-        }
-
-        var extendingAttributes = [];
-
-        $.each($('#configurable-attributes-container').variationsAttributes('getAttributes'), function () {
-            if (!$('#attribute-' + this.code + '-container').length) {
-                extendingAttributes.push(this.id);
+        /**
+         * This fix was made in order to properly handle 'stopImmediatePropagation'.
+         */
+        $('#save-split-button .item').on('click', function(event) {
+            if ($('#new-variations-attribute-set-id').val() != '') {
+                return; // affected attribute set was already chosen
             }
+
+            var extendingAttributes = [];
+
+            $.each($('#configurable-attributes-container').variationsAttributes('getAttributes'), function () {
+                if (!$('#attribute-' + this.code + '-container').length) {
+                    extendingAttributes.push(this.id);
+                }
+            });
+            if (!extendingAttributes.length) {
+                $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());
+                return; // all selected configurable attributes belong to current attribute set
+            }
+            if (!$('[data-role=product-variations-matrix] [data-column=entity_id]:checked')
+                .closest('tr').has('input[name$="[name]"]').length
+            ) {
+                return; // no new simple products to save from matrix: uniting attribute set is not needed
+            }
+
+            event.stopImmediatePropagation();
+
+            $form.data('target', event.target)
+                .dialog('open');
         });
-        if (!extendingAttributes.length) {
-            $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());
-            return; // all selected configurable attributes belong to current attribute set
-        }
-        if (!$('[data-role=product-variations-matrix] [data-column=entity_id]:checked')
-            .closest('tr').has('input[name$="[name]"]').length
-        ) {
-            return; // no new simple products to save from matrix: uniting attribute set is not needed
-        }
 
-        event.stopImmediatePropagation();
-
-        $form.data('target', event.target)
-            .dialog('open');
     });
 
-})(jQuery);
+})();
 </script>

@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Msrp\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Msrp\Model\Product\Attribute\Source\Type;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
@@ -17,7 +18,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 class Data extends AbstractHelper
 {
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -43,7 +44,7 @@ class Data extends AbstractHelper
 
     /**
      * @param Context $context
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Msrp\Model\Product\Options $productOptions
      * @param \Magento\Msrp\Model\Msrp $msrp
      * @param \Magento\Msrp\Model\Config $config

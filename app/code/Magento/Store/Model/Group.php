@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -89,7 +90,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     protected $_storeListFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -98,7 +99,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Store\Model\Store $store
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -108,7 +109,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
         \Magento\Framework\Registry $registry,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -354,7 +355,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     public function beforeDelete()
     {
         $this->_configDataResource->clearScopeData(
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES,
             $this->getStoreIds()
         );
         return parent::beforeDelete();

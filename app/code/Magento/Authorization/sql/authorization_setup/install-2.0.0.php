@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /* @var $installer \Magento\Setup\Module\SetupModule */
@@ -8,16 +9,7 @@ $installer = $this;
 
 $installer->startSetup();
 
-if ($installer->getConnection()->isTableExists($installer->getTable('admin_role'))) {
-    /**
-     * Rename existing 'admin_role' table into 'authorization_role' (to avoid forcing Magento re-installation)
-     * TODO: This conditional logic can be removed some time after pull request is delivered to the mainline
-     */
-    $installer->getConnection()->renameTable(
-        $installer->getTable('admin_role'),
-        $installer->getTable('authorization_role')
-    );
-} elseif (!$installer->getConnection()->isTableExists($installer->getTable('authorization_role'))) {
+if (!$installer->getConnection()->isTableExists($installer->getTable('authorization_role'))) {
     /**
      * Create table 'authorization_role'
      */
@@ -83,16 +75,7 @@ if ($installer->getConnection()->isTableExists($installer->getTable('admin_role'
     $installer->getConnection()->createTable($table);
 }
 
-if ($installer->getConnection()->isTableExists($installer->getTable('admin_rule'))) {
-    /**
-     * Rename existing 'admin_rule' table into 'authorization_rule' (to avoid forcing Magento re-installation)
-     * TODO: This conditional logic can be removed some time after pull request is delivered to the mainline
-     */
-    $installer->getConnection()->renameTable(
-        $installer->getTable('admin_rule'),
-        $installer->getTable('authorization_rule')
-    );
-} elseif (!$installer->getConnection()->isTableExists($installer->getTable('authorization_rule'))) {
+if (!$installer->getConnection()->isTableExists($installer->getTable('authorization_rule'))) {
     /**
      * Create table 'authorization_rule'
      */

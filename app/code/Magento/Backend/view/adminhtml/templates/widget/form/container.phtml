@@ -1,20 +1,24 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/** @var $this \Magento\Backend\Block\Widget\Form\Container */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Backend\Block\Widget\Form\Container */
  ?>
-<?php echo $this->getFormInitScripts() ?>
-<?php if ($this->getButtonsHtml('header')): ?>
-    <div class="page-form-actions" <?php echo $this->getUiId('content-header') ?>><?php echo $this->getButtonsHtml('header') ?></div>
+<?php echo $block->getFormInitScripts() ?>
+<?php if ($block->getButtonsHtml('header')): ?>
+    <div class="page-form-actions" <?php echo $block->getUiId('content-header') ?>><?php echo $block->getButtonsHtml('header') ?></div>
 <?php endif; ?>
-<?php echo $this->getFormHtml() ?>
-<?php if ($this->hasFooterButtons()): ?>
+<?php echo $block->getFormHtml() ?>
+<?php if ($block->hasFooterButtons()): ?>
     <div class="content-footer">
-        <p class="form-buttons"><?php echo $this->getButtonsHtml('footer') ?></p>
+        <p class="form-buttons"><?php echo $block->getButtonsHtml('footer') ?></p>
     </div>
 <?php endif; ?>
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'mage/backend/form',
@@ -23,7 +27,7 @@ require([
 
     $('#edit_form').form()
         .validation({
-            validationUrl: '<?php echo $this->getValidationUrl() ?>',
+            validationUrl: '<?php echo $block->getValidationUrl() ?>',
             highlight: function(element) {
                 var detailsElement = $(element).closest('details');
                 if (detailsElement.length && detailsElement.is('.details')) {
@@ -37,4 +41,4 @@ require([
 
 });
 </script>
-<?php echo $this->getFormScripts() ?>
+<?php echo $block->getFormScripts() ?>

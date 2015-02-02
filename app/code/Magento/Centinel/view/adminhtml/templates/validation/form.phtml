@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <div class="centinel">
     <div class="authentication">
-        <iframe frameborder="0" border="0" id="<?php echo $this->getContainerId() ?>" src="" style="display:none;" width="100%" height="390" title="<?php echo __('Card Verification')?>"></iframe>
+        <iframe frameborder="0" border="0" id="<?php echo $block->getContainerId() ?>" src="" style="display:none;" width="100%" height="390" title="<?php echo __('Card Verification')?>"></iframe>
     </div>
 </div>
 
@@ -16,13 +20,13 @@
     </button>
 </div>
 
-<script type="text/javascript">
+<script>
 require([
 	"Magento_Centinel/order_create"
 ], function(){
 
 	//<![CDATA[
-	cardValidator = new centinelValidator('<?php echo $this->getMethodCode() ?>', '<?php echo $this->getFrameUrl() ?>', '<?php echo $this->getContainerId() ?>');
+	cardValidator = new centinelValidator('<?php echo $block->getMethodCode() ?>', '<?php echo $block->getFrameUrl() ?>', '<?php echo $block->getContainerId() ?>');
 	//]]>
 
 });

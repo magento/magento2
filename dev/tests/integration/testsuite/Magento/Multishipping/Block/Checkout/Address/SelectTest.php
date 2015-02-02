@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 namespace Magento\Multishipping\Block\Checkout\Address;
 
@@ -31,7 +34,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()->create(
-            '\Magento\Customer\Api\AddressRepositoryInterface'
+            'Magento\Customer\Api\AddressRepositoryInterface'
         );
         $fixtureAddressId = 1;
         $address = $addressRepository->getById($fixtureAddressId);

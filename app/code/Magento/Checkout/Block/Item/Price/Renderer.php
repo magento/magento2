@@ -1,10 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Item\Price;
 
-use Magento\Sales\Model\Quote\Item\AbstractItem;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 /**
  * Item price render block
@@ -21,10 +22,10 @@ class Renderer extends \Magento\Framework\View\Element\Template
     /**
      * Set item for render
      *
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
      */
-    public function setItem(\Magento\Sales\Model\Quote\Item\AbstractItem $item)
+    public function setItem(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
         $this->item = $item;
         return $this;

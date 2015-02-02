@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Block\Adminhtml\Integration\Activate\Permissions\Tab;
 
@@ -11,9 +12,6 @@ use Magento\Webapi\Helper\Data as WebapiHelper;
 
 /**
  * API permissions tab for integration activation dialog.
- *
- * TODO: Fix warnings suppression
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface

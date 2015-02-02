@@ -1,7 +1,7 @@
 namespace \Magento\Framework\Api\Code\Generator;
 
 /**
- * Mapper class for \Magento\Framework\Api\Code\Generator\Sample
+ * Mapper class for @see \Magento\Framework\Api\Code\Generator\Sample
  */
 class SampleMapper
 {

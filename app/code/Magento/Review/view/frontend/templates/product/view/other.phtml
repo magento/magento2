@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php /** @var $this \Magento\Review\Block\Product\View\Other */ ?>
-<?php $_product = $this->getProduct(); ?>
+<?php /** @var $block \Magento\Review\Block\Product\View\Other */ ?>
+<?php $_product = $block->getProduct(); ?>
 <div class="actions">
     <a href="<?php echo $_product->getProductUrl() ?>" class="action back"><span><?php echo __('Back to Main Product Info') ?></span></a>
 </div>

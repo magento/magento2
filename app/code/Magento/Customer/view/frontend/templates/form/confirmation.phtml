@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <form action="" method="post" id="form-validate" class="form send confirmation" data-mage-init='{"validation":{}}'>
     <fieldset class="fieldset" data-hasrequired="<?php echo __('* Required Fields') ?>">
@@ -9,7 +13,7 @@
         <div class="field email required">
             <label for="email_address" class="label"><span><?php echo __('Email') ?></span></label>
             <div class="control">
-                <input type="email" name="email" id="email_address" class="input-text" value="<?php echo $this->escapeHtml($this->getEmail()) ?>" data-validate="{required:true, 'validate-email':true}">
+                <input type="email" name="email" id="email_address" class="input-text" value="<?php echo $block->escapeHtml($block->getEmail()) ?>" data-validate="{required:true, 'validate-email':true}">
             </div>
         </div>
     </fieldset>
@@ -18,7 +22,7 @@
             <button type="submit" class="action send primary"><span><?php echo __('Send confirmation link') ?></span></button>
         </div>
         <div class="secondary">
-            <a href="<?php echo $this->getLoginUrl() ?>" class="action back"><span><?php echo __('Back to Login') ?></span></a>
+            <a href="<?php echo $block->getLoginUrl() ?>" class="action back"><span><?php echo __('Back to Login') ?></span></a>
         </div>
     </div>
 </form>

@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->getRatingSummary()->getCount()): ?>
+<?php if ($block->getRatingSummary()->getCount()): ?>
     <div class="rating-box">
-        <div class="rating" style="width:<?php echo ceil($this->getRatingSummary()->getSum() / ($this->getRatingSummary()->getCount())) ?>%;"></div>
+        <div class="rating" style="width:<?php echo ceil($block->getRatingSummary()->getSum() / ($block->getRatingSummary()->getCount())) ?>%;"></div>
     </div>
 <?php else: ?>
     <?php echo __("Rating isn't Available") ?>

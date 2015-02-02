@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib;
 
@@ -55,6 +56,8 @@ class ArrayUtils
      * @param string $prefix
      * @param bool $forceSetAll
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function decorateArray($array, $prefix = 'decorated_', $forceSetAll = false)
     {

@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     '@' => ['type' => 'Magento\Cms\Block\Widget\Page\Link', 'module' => 'Magento_Cms'],
     'name' => 'CMS Page Link',
     'description' => 'Link to a CMS Page',
     'is_email_compatible' => '1',
-    'placeholder_image' => 'Magento_Cms::images/widget_page_link.gif',
+    'placeholder_image' => 'Magento_Cms::images/widget_page_link.png',
     'parameters' => [
         'page_id' => [
             '@' => ['type' => 'complex'],

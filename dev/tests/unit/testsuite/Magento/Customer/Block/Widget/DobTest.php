@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Block\Widget;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -62,13 +66,13 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $locale = $objectManager->getObject(
-            '\Magento\Framework\Locale',
+            'Magento\Framework\Locale',
             ['locale' => \Magento\Framework\Locale\ResolverInterface::DEFAULT_LOCALE]
         );
         $localeResolver = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
         $localeResolver->expects($this->any())->method('getLocale')->will($this->returnValue($locale));
         $timezone = $objectManager->getObject(
-            '\Magento\Framework\Stdlib\DateTime\Timezone',
+            'Magento\Framework\Stdlib\DateTime\Timezone',
             ['localeResolver' => $localeResolver]
         );
 

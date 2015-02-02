@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Reports summary collection
@@ -25,10 +28,10 @@ class AbstractCollection extends \Magento\Framework\Data\Collection
     protected $dateTime;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
-    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Framework\Stdlib\DateTime $dateTime)
+    public function __construct(\Magento\Framework\Data\Collection\EntityFactory $entityFactory, \Magento\Framework\Stdlib\DateTime $dateTime)
     {
         $this->dateTime = $dateTime;
         parent::__construct($entityFactory);
@@ -83,6 +86,7 @@ class AbstractCollection extends \Magento\Framework\Data\Collection
      *
      * @param int $period
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setDatePeriod($period)
     {
@@ -94,6 +98,7 @@ class AbstractCollection extends \Magento\Framework\Data\Collection
      *
      * @param int $storeId
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setStoreFilter($storeId)
     {

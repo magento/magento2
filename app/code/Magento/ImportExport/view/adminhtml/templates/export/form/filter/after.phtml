@@ -1,16 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
-<script type="text/javascript">
-//<![CDATA[
-if (window['export_filter_gridJsObject'] != undefined) {
-    export_filter_gridJsObject.resetFilter = function () {
-        return varienGrid.prototype.resetFilter.call(this, varienExport.modifyFilterGrid);
-    };
-    export_filter_gridJsObject.doFilter = function () {
-        return varienGrid.prototype.doFilter.call(this, varienExport.modifyFilterGrid);
-    };
-}
+<script>
+require([
+    'mage/adminhtml/grid'
+], function(){
+    if (window['export_filter_gridJsObject'] != undefined) {
+        export_filter_gridJsObject.resetFilter = function () {
+            return varienGrid.prototype.resetFilter.call(this, varienExport.modifyFilterGrid);
+        };
+        export_filter_gridJsObject.doFilter = function () {
+            return varienGrid.prototype.doFilter.call(this, varienExport.modifyFilterGrid);
+        };
+    }
+});
 </script>

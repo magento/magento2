@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
- * @var $this \Magento\CatalogSearch\Block\Advanced\Result
+ * @var $block \Magento\CatalogSearch\Block\Advanced\Result
  */
 ?>
-<?php if ($results = $this->getResultCount()): ?>
+<?php if ($results = $block->getResultCount()): ?>
     <div class="search found">
         <?php if ($results == 1) : ?>
             <?php echo __('<strong>%1 item</strong> were found using the following search criteria', $results); ?>
@@ -19,32 +23,32 @@
 <?php else: ?>
     <div class="message error">
         <div>
-            <?php echo __('No items were found using the following search criteria.');?> <a href="<?php echo $this->getFormUrl(); ?>"><?php echo __('Modify your search'); ?></a>
+            <?php echo __('No items were found using the following search criteria.');?> <a href="<?php echo $block->getFormUrl(); ?>"><?php echo __('Modify your search'); ?></a>
         </div>
     </div>
 <?php endif; ?>
 
-<?php $searchCriterias = $this->getSearchCriterias(); ?>
+<?php $searchCriterias = $block->getSearchCriterias(); ?>
 <div class="search summary">
     <?php foreach (['left', 'right'] as $side): ?>
         <?php if (@$searchCriterias[$side]): ?>
             <ul class="items">
                 <?php foreach ($searchCriterias[$side] as $criteria): ?>
-                    <li class="item"><strong><?php echo $this->escapeHtml(__($criteria['name'])); ?>:</strong> <?php echo $this->escapeHtml($criteria['value']); ?></li>
+                    <li class="item"><strong><?php echo $block->escapeHtml(__($criteria['name'])); ?>:</strong> <?php echo $block->escapeHtml($criteria['value']); ?></li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
     <?php endforeach; ?>
 </div>
-<?php if ($this->getResultCount()): ?>
+<?php if ($block->getResultCount()): ?>
     <div class="message notice">
         <div>
             <?php echo __("Don't see what you're looking for?"); ?>
-            <a href="<?php echo $this->getFormUrl(); ?>"><?php echo __('Modify your search'); ?></a>
+            <a href="<?php echo $block->getFormUrl(); ?>"><?php echo __('Modify your search'); ?></a>
         </div>
     </div>
 <?php endif; ?>
-<?php if ($this->getResultCount()): ?>
-    <div class="search results"><?php echo $this->getProductListHtml() ?></div>
+<?php if ($block->getResultCount()): ?>
+    <div class="search results"><?php echo $block->getProductListHtml() ?></div>
 <?php endif; ?>
-<?php $this->getSearchCriterias(); ?>
+<?php $block->getSearchCriterias(); ?>

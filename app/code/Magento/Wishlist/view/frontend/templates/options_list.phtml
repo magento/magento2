@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Wishlist\Block\Customer\Wishlist\Item\Options */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Wishlist\Block\Customer\Wishlist\Item\Options */
 ?>
 
-<?php $options = $this->getOptionList(); ?>
+<?php $options = $block->getOptionList(); ?>
 <?php if ($options): ?>
 <div class="tooltip wrapper product-item-tooltip">
   <span class="action details tooltip toggle"><?php echo __('View Details') ?></span>
@@ -13,7 +17,7 @@
       <strong class="subtitle"><?php echo __('Options Details'); ?></strong>
       <dl>
           <?php foreach ($options as $option): ?>
-          <dt class="label"><?php echo $this->escapeHtml($option['label']) ?></dt>
+          <dt class="label"><?php echo $block->escapeHtml($option['label']) ?></dt>
           <dd class="values">
               <?php if (is_array($option['value'])): ?>
               <?php echo nl2br(implode("\n", $option['value'])) ?>

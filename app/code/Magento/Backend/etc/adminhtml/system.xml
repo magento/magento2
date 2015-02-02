@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
@@ -104,13 +105,13 @@
                 <field id="theme_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Design Theme</label>
                     <source_model>Magento\Framework\View\Design\Theme\Label::getLabelsCollectionForSystemConfiguration</source_model>
-                    <backend_model>Magento\Core\Model\Design\Backend\Theme</backend_model>
+                    <backend_model>Magento\Theme\Model\Design\Backend\Theme</backend_model>
                     <comment><![CDATA[If no value is specified, the system default will be used. The system default may be modified by third party extensions.]]></comment>
                 </field>
                 <field id="ua_regexp" translate="label comment tooltip" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>User-Agent Exceptions</label>
                     <frontend_model>Magento\Backend\Block\System\Config\Form\Field\Regexceptions</frontend_model>
-                    <backend_model>Magento\Core\Model\Design\Backend\Exceptions</backend_model>
+                    <backend_model>Magento\Theme\Model\Design\Backend\Exceptions</backend_model>
                     <comment>
                         <![CDATA[Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered. Examples:<br /><span style="font-family:monospace">Firefox<br />/^mozilla/i</span>]]>
                     </comment>

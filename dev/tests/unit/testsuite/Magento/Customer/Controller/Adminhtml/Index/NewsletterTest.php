@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
@@ -62,9 +63,9 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
     protected $messageManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Layout|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultPageMock;
+    protected $resultLayoutMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -85,6 +86,11 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewInterfaceMock;
+
+    /**
+     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultLayoutFactoryMock;
 
     /**
      * Prepare required values
@@ -202,7 +208,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
 
         $this->viewInterfaceMock->expects($this->any())->method('loadLayout')->will($this->returnSelf());
         $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewInterfaceMock));
-        $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+        $this->resultLayoutMock = $this->getMockBuilder('Magento\Framework\View\Result\Layout')
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
@@ -211,17 +217,15 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
         $this->customerAccountManagement = $this->getMockBuilder(
             'Magento\Customer\Api\AccountManagementInterface'
         )->getMock();
+        $this->resultLayoutFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\LayoutFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $args = ['context' => $contextMock, 'customerAccountManagement' => $this->customerAccountManagement];
-
-        $this->viewInterfaceMock->expects($this->any())->method('getPage')->will(
-            $this->returnValue($this->resultPageMock)
-        );
-        $this->resultPageMock->expects($this->any())->method('getConfig')->will(
-            $this->returnValue($this->pageConfigMock)
-        );
-
-        $this->pageConfigMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
+        $args = [
+            'context' => $contextMock,
+            'customerAccountManagement' => $this->customerAccountManagement,
+            'resultLayoutFactory' => $this->resultLayoutFactoryMock
+        ];
 
         $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_testedObject = $helperObjectManager->getObject(
@@ -239,16 +243,20 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->titleMock->expects($this->once())->method('prepend')->with(__('Customers'));
-        $this->viewInterfaceMock->expects($this->any())->method('getLayout')->will(
-            $this->returnValue($this->layoutInterfaceMock)
-        );
-        $subscriberMock->expects($this->once())->method('loadByCustomerId');
+        $this->resultLayoutFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultLayoutMock);
+        $subscriberMock->expects($this->once())
+            ->method('loadByCustomerId');
         $this->_objectManager
             ->expects($this->at(1))
             ->method('create')
             ->with('Magento\Newsletter\Model\Subscriber')
             ->will($this->returnValue($subscriberMock));
-        $this->_testedObject->execute();
+
+        $this->assertInstanceOf(
+            'Magento\Framework\View\Result\Layout',
+            $this->_testedObject->execute()
+        );
     }
 }

@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
@@ -11,6 +15,7 @@ use Magento\Framework\Model\Exception as CoreException;
  * EAV Attribute Abstract Data Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractData
 {
@@ -284,6 +289,8 @@ abstract class AbstractData
      *
      * @param string $value
      * @return string|true
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _validateInputRule($value)
     {
@@ -478,6 +485,7 @@ abstract class AbstractData
      * Return is AJAX Request
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsAjaxRequest()
     {

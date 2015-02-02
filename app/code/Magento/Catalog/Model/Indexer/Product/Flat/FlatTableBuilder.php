@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
@@ -30,7 +31,7 @@ class FlatTableBuilder
     protected $_config;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -43,14 +44,14 @@ class FlatTableBuilder
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param TableDataInterface $tableData
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface $tableData
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
@@ -97,6 +98,8 @@ class FlatTableBuilder
      * @param int|string $storeId
      * @return void
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _createTemporaryFlatTable($storeId)
     {
@@ -208,7 +211,6 @@ class FlatTableBuilder
         $statusTable = $this->_getTemporaryTableName($status->getBackendTable());
         $statusConditions = [
             'e.entity_id = dstatus.entity_id',
-            'dstatus.entity_type_id = ' . (int)$status->getEntityTypeId(),
             'dstatus.store_id = ' . (int)$storeId,
             'dstatus.attribute_id = ' . (int)$status->getId(),
         ];
@@ -290,8 +292,6 @@ class FlatTableBuilder
                 $attributeCode = $attribute->getAttributeCode();
                 if ($attribute->getBackend()->getType() != 'static') {
                     $joinCondition = 't.entity_id = e.entity_id' .
-                        ' AND t.entity_type_id = ' .
-                        $attribute->getEntityTypeId() .
                         ' AND t.attribute_id=' .
                         $attribute->getId() .
                         ' AND t.store_id = ' .

@@ -1,22 +1,26 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('main', $this->getQuote(), $this->getStoreId())): ?>
-<?php $_items = $this->getItems(); ?>
+<?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('main', $block->getQuote(), $block->getStoreId())): ?>
+<?php $_items = $block->getItems(); ?>
 <div id="order-giftmessage" class="giftmessage-order-create box-left">
     <fieldset>
         <legend><?php echo __('Gift Message for the Entire Order') ?></legend>
         <br />
-        <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('main', $this->getQuote(), $this->getStoreId())): ?>
+        <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('main', $block->getQuote(), $block->getStoreId())): ?>
             <div class="giftmessage-entire-order">
                 <p><?php echo __('If you don\'t want to leave a gift message for the entire order, leave this box blank.') ?></p>
-                <?php echo $this->getFormHtml($this->getQuote(), 'main') ?>
+                <?php echo $block->getFormHtml($block->getQuote(), 'main') ?>
             </div>
         <?php endif; ?>
     </fieldset>
-    <script type="text/javascript">
+    <script>
 require(['Magento_Sales/order/create/form'], function(){
 
     order.giftmessageFieldsBind('order-giftmessage');

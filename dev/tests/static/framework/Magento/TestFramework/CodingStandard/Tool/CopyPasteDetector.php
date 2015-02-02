@@ -1,21 +1,33 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * PHP Copy Paste Detector v1.4.0 tool wrapper
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
-class CopyPasteDetector implements \Magento\TestFramework\CodingStandard\ToolInterface
+use Magento\TestFramework\CodingStandard\ToolInterface;
+
+class CopyPasteDetector implements ToolInterface, BlacklistInterface
 {
     /**
      * Report file
      *
      * @var string
      */
-    protected $_reportFile;
+    private $reportFile;
+
+    /**
+     * List of paths to be excluded from tool run
+     *
+     * @var array
+     */
+    private $blacklist;
 
     /**
      * Constructor
@@ -24,7 +36,15 @@ class CopyPasteDetector implements \Magento\TestFramework\CodingStandard\ToolInt
      */
     public function __construct($reportFile)
     {
-        $this->_reportFile = $reportFile;
+        $this->reportFile = $reportFile;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBlackList(array $blackList)
+    {
+        $this->blacklist = $blackList;
     }
 
     /**
@@ -44,17 +64,14 @@ class CopyPasteDetector implements \Magento\TestFramework\CodingStandard\ToolInt
      * Run tool for files specified
      *
      * @param array $whiteList Files/directories to be inspected
-     * @param array $blackList Files/directories to be excluded from the inspection
-     * @param array $extensions Array of alphanumeric strings, for example: 'php', 'xml', 'phtml', 'css'...
+     * @return int
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     *
-     * @return int
      */
-    public function run(array $whiteList, array $blackList = [], array $extensions = [])
+    public function run(array $whiteList)
     {
         $blackListStr = ' ';
-        foreach ($blackList as $file) {
+        foreach ($this->blacklist as $file) {
             $file = escapeshellarg(trim($file));
             if (!$file) {
                 continue;
@@ -63,8 +80,8 @@ class CopyPasteDetector implements \Magento\TestFramework\CodingStandard\ToolInt
         }
 
         $command = 'phpcpd' . ' --log-pmd ' . escapeshellarg(
-            $this->_reportFile
-        ) . ' --min-lines 13' . $blackListStr . ' ' . BP;
+                $this->reportFile
+            ) . ' --min-lines 13' . $blackListStr . ' ' . implode(' ', $whiteList);
 
         exec($command, $output, $exitCode);
 

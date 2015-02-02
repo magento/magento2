@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\TestCase;
 
-use Magento\Review\Test\Fixture\ReviewInjectable;
-use Mtf\TestCase\Injectable;
+use Magento\Review\Test\Fixture\Review;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for ProductReviewReportEntity
@@ -25,13 +26,18 @@ use Mtf\TestCase\Injectable;
  */
 class ProductReviewReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Creation product review report entity
      *
-     * @param ReviewInjectable $review
+     * @param Review $review
      * @return void
      */
-    public function test(ReviewInjectable $review)
+    public function test(Review $review)
     {
         // Preconditions
         $review->persist();

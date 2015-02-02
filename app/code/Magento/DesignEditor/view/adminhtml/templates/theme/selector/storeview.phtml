@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\StoreView */?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\StoreView */?>
 
 <div id="dialog-message-assign" title="<?php echo __('Choose the store views you want to update.') ?>" style="display:none">
     <div class="messages"></div>
     <p class="confirm_message"></p>
     <form method="post" action="">
         <ul class="websites">
-            <?php foreach ($this->getWebsiteStructure() as $website => $stores): ?>
+            <?php foreach ($block->getWebsiteStructure() as $website => $stores): ?>
             <li class="website">
                 <h3 class="website-title"><?php echo $website; ?></h3>
                 <ul class="stores">
@@ -43,7 +47,7 @@
     <p class="confirm_message"></p>
 </div>
 
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'Magento_DesignEditor/js/theme-assign'
@@ -51,7 +55,7 @@ require([
 
 
     $(document).ready(function() {
-        $('body').themeAssign(<?php echo $this->getOptionsJson(); ?>);
+        $('body').themeAssign(<?php echo $block->getOptionsJson(); ?>);
     });
 
 });

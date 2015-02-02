@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Page\Config;
@@ -66,11 +67,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected $assetsCollection;
 
     /**
-     * @var \Magento\Framework\View\Asset\PropertyGroup|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $propertyGroupMock;
-
-    /**
      * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $titleMock;
@@ -111,10 +107,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $this->assetsCollection = $this->getMockBuilder('Magento\Framework\View\Asset\GroupedCollection')
             ->setMethods(['getGroups'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->propertyGroupMock = $this->getMockBuilder('Magento\Framework\View\Asset\PropertyGroup')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -258,30 +250,61 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $contentType
-     * @param $attributes
-     * @param $ieCondition
+     * @param $groupOne
+     * @param $groupTwo
      * @param $expectedResult
-     * @dataProvider dataProviderRenderAsset
+     * @dataProvider dataProviderRenderAssets
      */
-    public function testRenderAsset($contentType, $attributes, $ieCondition, $expectedResult)
+    public function testRenderAssets($groupOne, $groupTwo, $expectedResult)
     {
         $assetUrl = 'url';
         $assetNoRoutUrl = 'no_route_url';
 
         $exception = new \Magento\Framework\Exception('my message');
 
-        $assetMock1 = $this->getMock('Magento\Framework\View\Asset\AssetInterface');
-        $assetMock1->expects($this->once())
+        $assetMockOne = $this->getMock('Magento\Framework\View\Asset\AssetInterface');
+        $assetMockOne->expects($this->exactly(2))
             ->method('getUrl')
             ->willReturn($assetUrl);
 
-        $assetMock2 = $this->getMock('Magento\Framework\View\Asset\AssetInterface');
-        $assetMock2->expects($this->once())
+        $groupAssetsOne = [$assetMockOne, $assetMockOne];
+
+        $groupMockOne = $this->getMockBuilder('Magento\Framework\View\Asset\PropertyGroup')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $groupMockOne->expects($this->once())
+            ->method('getAll')
+            ->willReturn($groupAssetsOne);
+        $groupMockOne->expects($this->any())
+            ->method('getProperty')
+            ->willReturnMap([
+                [GroupedCollection::PROPERTY_CAN_MERGE, true],
+                [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupOne['type']],
+                ['attributes', $groupOne['attributes']],
+                ['ie_condition', $groupOne['condition']],
+            ]);
+
+        $assetMockTwo = $this->getMock('Magento\Framework\View\Asset\AssetInterface');
+        $assetMockTwo->expects($this->once())
             ->method('getUrl')
             ->willThrowException($exception);
 
-        $groupAssets = [$assetMock1, $assetMock2];
+        $groupAssetsTwo = [$assetMockTwo];
+
+        $groupMockTwo = $this->getMockBuilder('Magento\Framework\View\Asset\PropertyGroup')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $groupMockTwo->expects($this->once())
+            ->method('getAll')
+            ->willReturn($groupAssetsTwo);
+        $groupMockTwo->expects($this->any())
+            ->method('getProperty')
+            ->willReturnMap([
+                [GroupedCollection::PROPERTY_CAN_MERGE, true],
+                [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupTwo['type']],
+                ['attributes', $groupTwo['attributes']],
+                ['ie_condition', $groupTwo['condition']],
+            ]);
 
         $this->pageConfigMock->expects($this->once())
             ->method('getAssetCollection')
@@ -289,29 +312,14 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $this->assetsCollection->expects($this->once())
             ->method('getGroups')
-            ->willReturn([$this->propertyGroupMock]);
+            ->willReturn([$groupMockOne, $groupMockTwo]);
 
-        $this->propertyGroupMock->expects($this->once())
-            ->method('getAll')
-            ->willReturn($groupAssets);
-        $this->propertyGroupMock->expects($this->any())
-            ->method('getProperty')
-            ->willReturnMap([
-                [GroupedCollection::PROPERTY_CAN_MERGE, true],
-                [GroupedCollection::PROPERTY_CONTENT_TYPE, $contentType],
-                ['attributes', $attributes],
-                ['ie_condition', $ieCondition],
-            ]);
-
-        $this->assetMinifyServiceMock
-            ->expects($this->once())
+        $this->assetMinifyServiceMock->expects($this->exactly(2))
             ->method('getAssets')
-            ->with($groupAssets)
-            ->willReturn($groupAssets);
+            ->willReturnArgument(0);
 
-        $this->assetMergeServiceMock->expects($this->once())
+        $this->assetMergeServiceMock->expects($this->exactly(1))
             ->method('getMergedAssets')
-            ->with($groupAssets, $contentType)
             ->willReturnArgument(0);
 
         $this->loggerMock->expects($this->once())
@@ -329,27 +337,46 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function dataProviderRenderAsset()
+    public function dataProviderRenderAssets()
     {
-        $css = '<link  rel="stylesheet" type="text/css"  media="all" href="url" />' . "\n"
-            . '<link  rel="stylesheet" type="text/css"  media="all" href="no_route_url" />' . "\n";
-
-        $cssWithAttr = '<link  rel="stylesheet" type="text/css"  attr="value" href="url" />' . "\n"
-            . '<link  rel="stylesheet" type="text/css"  attr="value" href="no_route_url" />' . "\n";
-
-        $js = '<script  type="text/javascript"  attr="value" src="url"></script>' . "\n"
-            . '<script  type="text/javascript"  attr="value" src="no_route_url"></script>' . "\n";
-
-        $jsWithIfIe = '<!--[if lt IE 7]>' . "\n"
-            . '<script  type="text/javascript"  attr="value" src="url"></script>' . "\n"
-            . '<script  type="text/javascript"  attr="value" src="no_route_url"></script>' . "\n"
-            . '<![endif]-->' . "\n";
-
         return [
-            ['css', '', null, $css],
-            ['css', 'attr="value"', null, $cssWithAttr],
-            ['js', ['attr' => 'value'], null, $js],
-            ['js', ['attr' => 'value'], 'lt IE 7', $jsWithIfIe]
+            [
+                ['type' => 'css', 'attributes' => '', 'condition' => null],
+                ['type' => 'js', 'attributes' => 'attr="value"', 'condition' => null],
+                '<link  rel="stylesheet" type="text/css"  media="all" href="url" />' . "\n"
+                    . '<link  rel="stylesheet" type="text/css"  media="all" href="url" />' . "\n"
+                    . '<script  type="text/javascript"  attr="value" src="no_route_url"></script>' . "\n"
+            ],
+            [
+                ['type' => 'js', 'attributes' => ['attr' => 'value'], 'condition' => 'lt IE 7'],
+                ['type' => 'css', 'attributes' => 'attr="value"', 'condition' => null],
+                '<link  rel="stylesheet" type="text/css"  attr="value" href="no_route_url" />' . "\n"
+                    . '<!--[if lt IE 7]>' . "\n"
+                    . '<script  type="text/javascript"  attr="value" src="url"></script>' . "\n"
+                    . '<script  type="text/javascript"  attr="value" src="url"></script>' . "\n"
+                    . '<![endif]-->' . "\n"
+            ],
+            [
+                ['type' => 'ico', 'attributes' => 'attr="value"', 'condition' => null],
+                ['type' => 'css', 'attributes' => '', 'condition' => null],
+                '<link  rel="stylesheet" type="text/css"  media="all" href="no_route_url" />' . "\n"
+                    . '<link  attr="value" href="url" />' . "\n"
+                    . '<link  attr="value" href="url" />' . "\n"
+            ],
+            [
+                ['type' => 'js', 'attributes' => '', 'condition' => null],
+                ['type' => 'ico', 'attributes' => ['attr' => 'value'], 'condition' => null],
+                '<link  attr="value" href="no_route_url" />' . "\n"
+                    . '<script  type="text/javascript"  src="url"></script>' . "\n"
+                    . '<script  type="text/javascript"  src="url"></script>' . "\n"
+            ],
+            [
+                ['type' => 'non', 'attributes' => ['attr' => 'value'], 'condition' => null],
+                ['type' => 'ico', 'attributes' => '', 'condition' => null],
+                '<link  href="no_route_url" />' . "\n"
+                    . '<link  attr="value" href="url" />' . "\n"
+                    . '<link  attr="value" href="url" />' . "\n"
+            ],
         ];
     }
 }

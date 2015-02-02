@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Category\Rss;
 
@@ -44,7 +45,10 @@ class Link extends \Magento\Framework\View\Element\Template
      */
     public function isRssAllowed()
     {
-        return $this->_scopeConfig->getValue('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            'rss/catalog/category',
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogInventory\Api;
@@ -90,7 +91,7 @@ class StockConfigurationTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(
                 \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             )
             ->will($this->returnValue(true));
@@ -104,7 +105,7 @@ class StockConfigurationTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(
                 \Magento\CatalogInventory\Model\Configuration::XML_PATH_ITEM_AUTO_RETURN,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             )
             ->will($this->returnValue(true));
@@ -118,7 +119,7 @@ class StockConfigurationTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(
                 \Magento\CatalogInventory\Model\Configuration::XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             )
             ->will($this->returnValue(true));

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
@@ -16,6 +17,6 @@ class VariableTest extends \Magento\Backend\Utility\Controller
     {
         $this->dispatch('backend/admin/system_variable/edit');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('function toggleValueElement(element) {', $body);
+        $this->assertContains('window.toggleValueElement = function(element) {', $body);
     }
 }

@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
@@ -14,6 +15,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface
 {
     /**
@@ -29,7 +33,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     ];
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -69,7 +73,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     protected $attributeRepository;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param MediaConfig $mediaConfig
@@ -80,7 +84,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaGallery
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         MediaConfig $mediaConfig,

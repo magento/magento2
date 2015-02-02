@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
@@ -43,7 +44,7 @@ class Generator
     protected $_registeredTypes = [];
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -53,15 +54,15 @@ class Generator
      * @param \Magento\Webapi\Model\Soap\Config $apiConfig
      * @param Factory $wsdlFactory
      * @param \Magento\Webapi\Model\Cache\Type $cache
-     * @param \Framework\Magento\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Webapi\Model\Soap\Config $apiConfig,
         Factory $wsdlFactory,
         \Magento\Webapi\Model\Cache\Type $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->_apiConfig = $apiConfig;
         $this->_wsdlFactory = $wsdlFactory;
@@ -135,7 +136,7 @@ class Generator
                     $outputBinding = $bindingDataPrototype;
                     $outputMessageName = $this->_createOperationOutput($wsdl, $operationName, $methodData);
                 }
-                $faultBinding = array_merge($bindingDataPrototype, ['name' => Fault::NODE_DETAIL_WRAPPER]);
+                $faultBinding = ['name' => Fault::NODE_DETAIL_WRAPPER];
 
                 $wsdl->addPortOperation(
                     $portType,

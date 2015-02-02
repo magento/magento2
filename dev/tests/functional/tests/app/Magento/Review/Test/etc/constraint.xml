@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <constraint>
@@ -41,13 +42,13 @@
     <assertProductReviewMassActionSuccessMessage module="Magento_Review">
         <severity>high</severity>
         <require>
-            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
+            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex" />
         </require>
     </assertProductReviewMassActionSuccessMessage>
     <assertProductReviewMassActionSuccessDeleteMessage module="Magento_Review">
         <severity>high</severity>
         <require>
-            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
+            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex" />
         </require>
     </assertProductReviewMassActionSuccessDeleteMessage>
     <assertProductReviewBackendSuccessSaveMessage module="Magento_Review">
@@ -65,4 +66,16 @@
     <assertProductReviewInGridOnCustomerPage module="Magento_Review">
         <severity>low</severity>
     </assertProductReviewInGridOnCustomerPage>
+    <assertProductReviewIsAbsentOnProductPage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductReviewIsAbsentOnProductPage>
+    <assertProductReviewForm module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductReviewForm>
+    <assertSetApprovedProductReview module="Magento_Review">
+        <severeness>low</severeness>
+    </assertSetApprovedProductReview>
+    <assertReviewLinksIsPresentOnProductPage module="Magento_Review">
+        <severeness>low</severeness>
+    </assertReviewLinksIsPresentOnProductPage>
 </constraint>

@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Abstract Rule entity data model
@@ -99,6 +102,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave()
     {
@@ -296,6 +300,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $data
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _convertFlatToRecursive(array $data)
     {
@@ -350,6 +355,8 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Framework\Object $object
      * @return bool|string[] - return true if validation passed successfully. Array with errors description otherwise
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateData(\Magento\Framework\Object $object)
     {

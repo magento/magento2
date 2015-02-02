@@ -1,86 +1,94 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Tax\Test\Fixture\TaxRate">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
+         class="Magento\Tax\Test\Fixture\TaxRate">
     <module>Magento_Tax</module>
     <type>flat</type>
     <entity_type>tax_calculation_rate</entity_type>
     <collection>Magento\Tax\Model\Resource\Calculation\Rate\Collection</collection>
     <identifier>code</identifier>
+    <repository_class>Magento\Tax\Test\Repository\TaxRate</repository_class>
+    <handler_interface>Magento\Tax\Test\Handler\TaxRate\TaxRateInterface</handler_interface>
+    <dataset name="default">
+        <field name="code" xsi:type="string">Tax Rate %isolation%</field>
+        <field name="rate" xsi:type="string">10</field>
+        <field name="tax_country_id" xsi:type="string">United States</field>
+        <field name="tax_postcode" xsi:type="string">*</field>
+        <field name="tax_region_id" xsi:type="string">California</field>
+    </dataset>
     <fields>
-        <tax_calculation_rate_id>
+        <field name="tax_calculation_rate_id">
             <attribute_code>tax_calculation_rate_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </tax_calculation_rate_id>
-        <tax_country_id>
+        </field>
+        <field name="tax_country_id">
             <attribute_code>tax_country_id</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="string">United States</default_value>
             <input />
-        </tax_country_id>
-        <tax_region_id>
+        </field>
+        <field name="tax_region_id">
             <attribute_code>tax_region_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="string">California</default_value>
             <input />
-        </tax_region_id>
-        <tax_postcode>
+        </field>
+        <field name="tax_postcode">
             <attribute_code>tax_postcode</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="string">*</default_value>
             <input />
-        </tax_postcode>
-        <code>
-            <attribute_code>code</attribute_code>
+        </field>
+        <field name="code">
+             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="string">Tax Rate %isolation%</default_value>
             <input />
-        </code>
-        <rate>
+        </field>
+        <field name="rate">
             <attribute_code>rate</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="number">10</default_value>
             <input />
-        </rate>
-        <zip_is_range>
+        </field>
+        <field name="zip_is_range">
             <attribute_code>zip_is_range</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </zip_is_range>
-        <zip_from>
+        </field>
+        <field name="zip_from">
             <attribute_code>zip_from</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </zip_from>
-        <zip_to>
+        </field>
+        <field name="zip_to">
             <attribute_code>zip_to</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value />
+            <default_value xsi:type="null" />
             <input />
-        </zip_to>
-        <id>
+        </field>
+        <field name="id">
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
-        </id>
+        </field>
     </fields>
-    <data_set />
-    <data_config />
-    <repository_class>Magento\Tax\Test\Repository\TaxRate</repository_class>
-    <handler_interface>Magento\Tax\Test\Handler\TaxRate\TaxRateInterface</handler_interface>
 </fixture>

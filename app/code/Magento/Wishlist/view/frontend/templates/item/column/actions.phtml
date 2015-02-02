@@ -1,16 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /* @var \Magento\Wishlist\Model\Item $item */
 ?>
 
-<?php $children = $this->getChildNames(); ?>
+<?php $children = $block->getChildNames(); ?>
 <?php if ($children): ?>
-    <div class="<?php echo $this->getCssClass() ?>">
+    <div class="<?php echo $block->getCssClass() ?>">
         <?php foreach ($children as $childName):?>
-            <?php echo $this->getLayout()->renderElement($childName, false);?>
+            <?php echo $block->getLayout()->renderElement($childName, false);?>
         <?php endforeach;?>
     </div>
 <?php endif; ?>

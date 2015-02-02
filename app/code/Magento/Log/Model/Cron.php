@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -35,7 +36,7 @@ class Cron extends \Magento\Framework\Model\AbstractModel
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -59,19 +60,20 @@ class Cron extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Log\Model\Log $log
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Log\Model\Log $log,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -98,7 +100,7 @@ class Cron extends \Magento\Framework\Model\AbstractModel
         }
         if (!$this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $this;
@@ -108,7 +110,7 @@ class Cron extends \Magento\Framework\Model\AbstractModel
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         )->setTemplateOptions(
             [
@@ -120,12 +122,12 @@ class Cron extends \Magento\Framework\Model\AbstractModel
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_LOG_CLEAN_IDENTITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         )->addTo(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         )->getTransport();
 
@@ -145,7 +147,7 @@ class Cron extends \Magento\Framework\Model\AbstractModel
     {
         if (!$this->_scopeConfig->isSetFlag(
             self::XML_PATH_LOG_CLEAN_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $this;

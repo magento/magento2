@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -53,6 +54,9 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
      * Get Element Html
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getElementHtml()
     {
@@ -85,7 +89,8 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
                 $html;
         }
         if ($this->getDisableChild() && !$this->getElement()->getReadonly()) {
-            $html .= "<script type=\"text/javascript\">
+            $html .= "<script>
+            require(['prototype'], function(){
                 function " .
                 $switchAttributeCode .
                 "_change() {
@@ -151,6 +156,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
                 $html .= "$('" . $switchAttributeCode . "').observe('change', " . $switchAttributeCode . "_change);";
             }
             $html .= $switchAttributeCode . "_change();
+            });
             </script>";
         }
         return $html;

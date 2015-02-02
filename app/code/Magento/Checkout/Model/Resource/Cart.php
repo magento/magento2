@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model\Resource;
 
@@ -18,7 +19,7 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('sales_quote', 'entity_id');
+        $this->_init('quote', 'entity_id');
     }
 
     /**
@@ -31,7 +32,7 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $read = $this->_getReadAdapter();
         $select = $read->select()->from(
-            ['q' => $this->getTable('sales_quote')],
+            ['q' => $this->getTable('quote')],
             ['items_qty', 'items_count']
         )->where(
             'q.entity_id = :quote_id'
@@ -51,7 +52,7 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $read = $this->_getReadAdapter();
         $select = $read->select()->from(
-            ['qi' => $this->getTable('sales_quote_item')],
+            ['qi' => $this->getTable('quote_item')],
             ['id' => 'item_id', 'product_id', 'super_product_id', 'qty', 'created_at']
         )->where(
             'qi.quote_id = :quote_id'
@@ -71,7 +72,7 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getReadAdapter();
         $exclusionSelect = $adapter->select()->from(
-            $this->getTable('sales_quote_item'),
+            $this->getTable('quote_item'),
             ['product_id']
         )->where(
             'quote_id = ?',

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Template\Tokenizer;
 
@@ -13,6 +14,7 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Tokenize string and return getted variable stack path
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function tokenize()
     {
@@ -58,6 +60,7 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Get string value for method args
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getString()
     {

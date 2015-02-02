@@ -1,24 +1,28 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php /* @var $captcha \Magento\Captcha\Model\DefaultModel */ ?>
-<?php /* @var $this \Magento\Captcha\Block\Captcha\DefaultCaptcha */ ?>
-<?php $captcha = $this->getCaptchaModel() ?>
-<div class="field captcha required" role="<?php echo $this->getFormId()?>">
-    <label for="captcha_<?php echo $this->getFormId() ?>" class="label"><span><?php echo __('Please type the letters below')?></span></label>
+<?php /* @var $block \Magento\Captcha\Block\Captcha\DefaultCaptcha */ ?>
+<?php $captcha = $block->getCaptchaModel() ?>
+<div class="field captcha required" role="<?php echo $block->getFormId()?>">
+    <label for="captcha_<?php echo $block->getFormId() ?>" class="label"><span><?php echo __('Please type the letters below')?></span></label>
     <div class="control captcha">
-        <input name="<?php echo \Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $this->getFormId()?>]" type="text" class="input-text required-entry" data-validate="{required:true}" id="captcha_<?php echo $this->getFormId() ?>" />
+        <input name="<?php echo \Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $block->getFormId()?>]" type="text" class="input-text required-entry" data-validate="{required:true}" id="captcha_<?php echo $block->getFormId() ?>" />
         <div class="nested">
             <div class="field captcha no-label"
-                 data-captcha="<?php echo $this->getFormId()?>"
-                 id="captcha-container-<?php echo $this->getFormId()?>"
-                 data-mage-init='{"captcha":{"url": "<?php echo $this->getRefreshUrl()?>",
-                                            "imageLoader": "<?php echo $this->getViewFileUrl('images/loader-2.gif') ?>",
-                                             "type": "<?php echo $this->getFormId() ?>"}}'>
+                 data-captcha="<?php echo $block->getFormId()?>"
+                 id="captcha-container-<?php echo $block->getFormId()?>"
+                 data-mage-init='{"captcha":{"url": "<?php echo $block->getRefreshUrl()?>",
+                                            "imageLoader": "<?php echo $block->getViewFileUrl('images/loader-2.gif') ?>",
+                                             "type": "<?php echo $block->getFormId() ?>"}}'>
                 <div class="control captcha-image">
-                    <img alt="<?php echo __('Please type the letters below')?>" class="captcha-img" height="<?php echo $this->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>"/>
+                    <img alt="<?php echo __('Please type the letters below')?>" class="captcha-img" height="<?php echo $block->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>"/>
                     <button type="button" class="action reload captcha-reload" title="<?php echo __('Reload captcha') ?>"><span><?php echo __('Reload captcha') ?></span></button>
                 </div>
             </div>

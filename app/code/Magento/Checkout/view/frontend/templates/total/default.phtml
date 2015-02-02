@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <tr class="totals">
-    <th colspan="<?php echo $this->getColspan(); ?>" style="<?php echo $this->getTotal()->getStyle() ?>" class="mark" scope="row">
-        <?php if ($this->getRenderingArea() == $this->getTotal()->getArea()): ?><strong><?php endif; ?>
-            <?php echo $this->escapeHtml($this->getTotal()->getTitle()); ?>
-        <?php if ($this->getRenderingArea() == $this->getTotal()->getArea()): ?></strong><?php endif; ?>
+    <th colspan="<?php echo $block->getColspan(); ?>" style="<?php echo $block->getTotal()->getStyle() ?>" class="mark" scope="row">
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?><strong><?php endif; ?>
+            <?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?></strong><?php endif; ?>
     </th>
-    <td style="<?php echo $this->getTotal()->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml($this->getTotal()->getTitle()); ?>">
-        <?php if ($this->getRenderingArea() == $this->getTotal()->getArea()): ?><strong><?php endif; ?>
-            <span><?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValue()) ?></span>
-        <?php if ($this->getRenderingArea() == $this->getTotal()->getArea()): ?></strong><?php endif; ?>
+    <td style="<?php echo $block->getTotal()->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?><strong><?php endif; ?>
+            <span><?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?></span>
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?></strong><?php endif; ?>
     </td>
 </tr>

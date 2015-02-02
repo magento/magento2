@@ -1,203 +1,190 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 /**
- * Class IndexTest
+ * @covers \Magento\Customer\Controller\Adminhtml\Index\Index
  */
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Controller\Adminhtml\Index\Index
+     */
+    protected $indexController;
+
+    /**
+     * @var \Magento\Backend\App\Action\Context
+     */
+    protected $context;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $responseMock;
+    protected $resultForwardFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $sessionMock;
+    protected $resultForwardMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $actionFlagMock;
+    protected $resultPageFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $contextMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $titleMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $layoutInterfaceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $breadcrumbsBlockMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $menuBlockMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $viewInterfaceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Customer\Controller\Adminhtml\Index\Index
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $controller;
+    protected $pageTitleMock;
+
+    /**
+     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $sessionMock;
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getQuery',
+                    'getModuleName',
+                    'setModuleName',
+                    'getActionName',
+                    'setActionName',
+                    'getParam',
+                    'getCookie'
+                ]
+            )
+            ->getMock();
+        $this->resultForwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->resultForwardMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->responseMock = $this->getMockBuilder('Magento\Framework\App\Response\Http')
-            ->disableOriginalConstructor()
-            ->setMethods(['setRedirect', 'getHeader', '__wakeup'])
-            ->getMock();
-        $this->sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session')
-            ->disableOriginalConstructor()
-            ->setMethods(['unsCustomerData', '__wakeup', 'setIsUrlNotice'])
-            ->getMock();
-        $this->actionFlagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->titleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
             ->disableOriginalConstructor()
+            ->setMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->breadcrumbsBlockMock = $this->getMockBuilder('Magento\Backend\Block\Widget\Breadcrumbs')
+        $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->menuBlockMock = $this->getMockBuilder('Magento\Backend\Block\Menu')
+        $this->sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session')
             ->disableOriginalConstructor()
-            ->setMethods(['getMenuModel', 'getParentItems'])
+            ->setMethods(['unsCustomerData'])
             ->getMock();
-        $this->menuBlockMock->expects($this->any())
-            ->method('getMenuModel')
-            ->willReturnSelf();
-        $this->menuBlockMock->expects($this->any())
-            ->method('getParentItems')
-            ->willReturn([]);
-
-        $this->layoutInterfaceMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->viewInterfaceMock = $this->getMockBuilder('Magento\Framework\App\ViewInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->viewInterfaceMock->expects($this->any())->method('getPage')->will(
-            $this->returnValue($this->resultPageMock)
-        );
-        $this->resultPageMock->expects($this->any())->method('getConfig')->will(
-            $this->returnValue($this->pageConfigMock)
-        );
-
-        $this->pageConfigMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
-
-        $this->contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->requestMock);
-        $this->contextMock->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($this->responseMock);
-        $this->contextMock->expects($this->any())
-            ->method('getSession')
-            ->willReturn($this->sessionMock);
-        $this->contextMock->expects($this->any())
-            ->method('getActionFlag')
-            ->willReturn($this->actionFlagMock);
-        $this->contextMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($this->titleMock);
-        $this->contextMock->expects($this->any())
-            ->method('getView')
-            ->willReturn($this->viewInterfaceMock);
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->controller = $objectManager->getObject(
+        $this->context = $objectManager->getObject(
+            'Magento\Backend\App\Action\Context',
+            [
+                'request' => $this->requestMock,
+                'session' => $this->sessionMock
+            ]
+        );
+        $this->indexController = $objectManager->getObject(
             'Magento\Customer\Controller\Adminhtml\Index\Index',
             [
-                'context' => $this->contextMock,
+                'context' => $this->context,
+                'resultForwardFactory' => $this->resultForwardFactoryMock,
+                'resultPageFactory' => $this->resultPageFactoryMock
             ]
         );
     }
 
-    public function testExecuteAjax()
-    {
-        $this->requestMock->expects($this->once())
-            ->method('getQuery')
-            ->with('ajax')
-            ->willReturn(true);
-        $this->assertNull($this->controller->execute());
-    }
-
+    /**
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
+     */
     public function testExecute()
     {
-        $this->titleMock->expects($this->once())->method('prepend')->with(__('Customers'));
-        $this->viewInterfaceMock->expects($this->any())->method('getLayout')->will(
-            $this->returnValue($this->layoutInterfaceMock)
+        $this->prepareExecute();
+
+        $this->resultPageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultPageMock);
+        $this->resultPageMock->expects($this->once())
+            ->method('setActiveMenu')
+            ->with('Magento_Customer::customer_manage');
+        $this->resultPageMock->expects($this->once())
+            ->method('getConfig')
+            ->willReturn($this->pageConfigMock);
+        $this->pageConfigMock->expects($this->once())
+            ->method('getTitle')
+            ->willReturn($this->pageTitleMock);
+        $this->pageTitleMock->expects($this->once())
+            ->method('prepend')
+            ->with('Customers');
+        $this->resultPageMock->expects($this->atLeastOnce())
+            ->method('addBreadcrumb')
+            ->withConsecutive(
+                ['Customers', 'Customers'],
+                ['Manage Customers', 'Manage Customers']
+            );
+        $this->sessionMock->expects($this->once())
+            ->method('unsCustomerData');
+
+        $this->assertInstanceOf(
+            'Magento\Framework\View\Result\Page',
+            $this->indexController->execute()
         );
-        $this->layoutInterfaceMock->expects($this->at(0))
-            ->method('getBlock')
-            ->with('menu')
-            ->willReturn($this->menuBlockMock);
+    }
 
-        $this->layoutInterfaceMock->expects($this->at(1))
-            ->method('getBlock')
-            ->with('breadcrumbs')
-            ->willReturn($this->breadcrumbsBlockMock);
-        $this->layoutInterfaceMock->expects($this->at(2))
-            ->method('getBlock')
-            ->with('breadcrumbs')
-            ->willReturn($this->breadcrumbsBlockMock);
+    /**
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
+     */
+    public function testExecuteAjax()
+    {
+        $this->prepareExecute(true);
 
+        $this->resultForwardFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultForwardMock);
+        $this->resultForwardMock->expects($this->once())
+            ->method('forward')
+            ->with('grid')
+            ->willReturnSelf();
+
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Forward',
+            $this->indexController->execute()
+        );
+    }
+
+    /**
+     * @param bool $ajax
+     */
+    protected function prepareExecute($ajax = false)
+    {
         $this->requestMock->expects($this->once())
             ->method('getQuery')
             ->with('ajax')
-            ->willReturn(false);
-        $this->sessionMock->expects($this->once())
-            ->method('unsCustomerData');
-        $this->assertNull($this->controller->execute());
+            ->willReturn($ajax);
     }
 }

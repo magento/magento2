@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -12,13 +16,14 @@
  *  getForm() - html
  */
 ?>
-<div class="page-actions"><?php echo $this->getSaveButtonHtml() ?></div>
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
-    <?php echo $this->getBlockHtml('formkey')?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?php echo $block->getSaveButtonHtml() ?></div>
+<form action="<?php echo $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
+    <?php echo $block->getBlockHtml('formkey')?>
 
-    <script type="text/javascript">
-    function setCacheAction(id, button) {
-        $(id).value = button.id;
+    <script>
+    window.setCacheAction = function(id, button) {
+        document.getElementById(id).value = button.id;
+
         configForm.submit();
     }
     </script>
@@ -26,7 +31,7 @@
     <input type="hidden" id="catalog_action" name="catalog_action" value="" />
     <input type="hidden" id="jscss_action" name="jscss_action" value="" />
 
-    <?php echo $this->getChildHtml('form') ?>
+    <?php echo $block->getChildHtml('form') ?>
     <div class="entry-edit">
         <div class="entry-edit-head">
             <h4 class="icon-head head-edit-form fieldset-legend"><?php echo __('Catalog') ?></h4>
@@ -34,7 +39,7 @@
         <fieldset id="catalog">
             <table cellspacing="0" class="form-list">
                 <tbody>
-                    <?php foreach ($this->getCatalogData() as $_item): ?>
+                    <?php foreach ($block->getCatalogData() as $_item): ?>
                     <?php /* disable reindex buttons. functionality moved to index management*/?>
                     <?php if ($_item['buttons'][0]['name'] != 'clear_images_cache') {
     continue;
@@ -78,7 +83,7 @@
         </fieldset>
     </div>
 </form>
-<script type="text/javascript">
+<script>
     require(["jquery","mage/mage"],function($){
        $('#config-edit-form').mage('form').mage('validation');
     });

@@ -1,9 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\Backend\Block\Widget\Form\Renderer\Fieldset */ ?>
+<?php /** @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset */ ?>
 
 <div id="js-file-uploader" class="uploader">
 </div>
@@ -37,10 +38,11 @@
 
 <ul id="js-files-container" class="js-files-container ui-sortable" ></ul>
 
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "jquery/ui",
+    "Magento_Theme/js/sortable",
     "Magento_Theme/js/custom-js-list"
 ], function(jQuery){
 
@@ -55,7 +57,7 @@ jQuery(function($) {
     });
     $('body').trigger(
         'refreshJsList',
-        {jsList: <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getJsFiles()) ?>}
+        {jsList: <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getJsFiles()) ?>}
     );
 });
 

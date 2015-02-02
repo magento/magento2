@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model;
 
@@ -9,6 +10,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterface
 {
     /**
@@ -42,7 +46,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      * @param \Magento\Bundle\Model\Resource\BundleFactory $bundleFactory
      * @param \Magento\Bundle\Model\SelectionFactory $bundleSelection
      * @param \Magento\Bundle\Model\Resource\Option\CollectionFactory $optionCollection
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
@@ -50,7 +54,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         \Magento\Bundle\Model\SelectionFactory $bundleSelection,
         \Magento\Bundle\Model\Resource\BundleFactory $bundleFactory,
         \Magento\Bundle\Model\Resource\Option\CollectionFactory $optionCollection,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->productRepository = $productRepository;
         $this->linkBuilder = $linkBuilder;
@@ -95,6 +99,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addChild(
         \Magento\Catalog\Api\Data\ProductInterface $product,

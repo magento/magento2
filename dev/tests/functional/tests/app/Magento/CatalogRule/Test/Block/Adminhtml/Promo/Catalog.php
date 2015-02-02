@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo;
 
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Backend\Test\Block\Widget\Grid;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
 
 /**
  * Backend catalog price rule grid.
@@ -60,7 +61,7 @@ class Catalog extends Grid
      * Return row with given catalog price rule name.
      *
      * @param string $ruleName
-     * @return Element
+     * @return SimpleElement
      */
     public function getGridRow($ruleName)
     {

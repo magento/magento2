@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\AdminOrder;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -25,7 +29,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\Data\CustomerDataBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerBuilderMock;
 
-    /** @var \Magento\Sales\Model\Quote\Item\Updater|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Model\Quote\Item\Updater|\PHPUnit_Framework_MockObject_MockObject */
     protected $itemUpdater;
 
     /** @var \Magento\Customer\Model\Customer\Mapper|\PHPUnit_Framework_MockObject_MockObject */
@@ -76,6 +80,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectFactory;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
@@ -101,7 +108,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->itemUpdater = $this->getMock('Magento\Sales\Model\Quote\Item\Updater', [], [], '', false);
+        $this->itemUpdater = $this->getMock('Magento\Quote\Model\Quote\Item\Updater', [], [], '', false);
 
         $this->objectFactory = $this->getMockBuilder('\Magento\Framework\Object\Factory')
             ->disableOriginalConstructor()
@@ -236,7 +243,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $customerMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         $this->customerMapper->expects($this->any())->method('toFlatArray')
             ->will($this->returnValue(['email' => 'user@example.com', 'group_id' => 1]));
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->any())->method('getCustomer')->will($this->returnValue($customerMock));
         $quoteMock->expects($this->once())
             ->method('addData')
@@ -277,9 +284,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
 
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->once())
             ->method('getItemById')
             ->will($this->returnValue($itemMock));
@@ -305,12 +312,12 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $itemMock->expects($this->once())
             ->method('getQty')
             ->will($this->returnValue($qty));
 
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->once())
             ->method('updateItem')
             ->will($this->returnValue($itemMock));

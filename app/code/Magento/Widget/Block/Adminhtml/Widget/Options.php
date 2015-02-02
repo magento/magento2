@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -133,6 +134,8 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Framework\Object $parameter
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addField($parameter)
     {

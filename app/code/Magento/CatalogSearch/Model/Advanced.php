@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model;
 
@@ -10,15 +11,14 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Resource\Eav\Attribute;
 use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Resource\Advanced\Collection;
-use Magento\CatalogSearch\Model\Resource\EngineInterface;
-use Magento\CatalogSearch\Model\Resource\EngineProvider;
+use Magento\CatalogSearch\Model\Resource\ResourceProvider;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\Exception;
 use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Catalog advanced search model
@@ -41,6 +41,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\CatalogSearch\Model\Advanced setUpdatedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Advanced extends \Magento\Framework\Model\AbstractModel
 {
@@ -50,13 +51,6 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @var array
      */
     protected $_searchCriterias = [];
-
-    /**
-     * Current search engine
-     *
-     * @var EngineInterface
-     */
-    protected $_engine;
 
     /**
      * Found products collection
@@ -89,7 +83,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -108,6 +102,13 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     protected $_currencyFactory;
 
     /**
+     * Resources factory
+     *
+     * @var ResourceProvider
+     */
+    protected $_resourceProvider;
+
+    /**
      * Construct
      *
      * @param Context $context
@@ -115,11 +116,12 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param CollectionFactory $attributeCollectionFactory
      * @param Visibility $catalogProductVisibility
      * @param Config $catalogConfig
-     * @param EngineProvider $engineProvider
      * @param CurrencyFactory $currencyFactory
      * @param ProductFactory $productFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param ResourceProvider $resourceProvider
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -127,24 +129,24 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         CollectionFactory $attributeCollectionFactory,
         Visibility $catalogProductVisibility,
         Config $catalogConfig,
-        EngineProvider $engineProvider,
         CurrencyFactory $currencyFactory,
         ProductFactory $productFactory,
         StoreManagerInterface $storeManager,
+        ResourceProvider $resourceProvider,
         array $data = []
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_catalogConfig = $catalogConfig;
-        $this->_engine = $engineProvider->get();
         $this->_currencyFactory = $currencyFactory;
         $this->_productFactory = $productFactory;
         $this->_storeManager = $storeManager;
+        $this->_resourceProvider = $resourceProvider;
         parent::__construct(
             $context,
             $registry,
-            $this->_engine->getResource(),
-            $this->_engine->getResourceCollection(),
+            $this->_resourceProvider->getResource(),
+            $this->_resourceProvider->getResourceCollection(),
             $data
         );
     }
@@ -155,6 +157,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param   array $values
      * @return  $this
      * @throws Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addFilters($values)
     {
@@ -245,7 +249,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     public function getProductCollection()
     {
         if (is_null($this->_productCollection)) {
-            $collection = $this->_engine->getAdvancedResultCollection();
+            $collection = $this->_resourceProvider->getAdvancedResultCollection();
             $this->prepareProductCollection($collection);
             if (!$collection) {
                 return $collection;
@@ -283,6 +287,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param   EntityAttribute $attribute
      * @param   mixed $value
      * @return  $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addSearchCriteria($attribute, $value)
     {

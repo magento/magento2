@@ -1,22 +1,26 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <dl class="payment-method checkmemo">
-    <dt class="title"><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></dt>
-    <?php if ($this->getInfo()->getAdditionalData()): ?>
-        <?php if ($this->getPayableTo()): ?>
+    <dt class="title"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
+    <?php if ($block->getInfo()->getAdditionalData()): ?>
+        <?php if ($block->getPayableTo()): ?>
             <dd class="content">
                 <strong><?php echo __('Make Check payable to') ?></strong>
-                <?php echo $this->escapeHtml($this->getPayableTo()) ?>
+                <?php echo $block->escapeHtml($block->getPayableTo()) ?>
             </dd>
         <?php endif; ?>
-        <?php if ($this->getMailingAddress()): ?>
+        <?php if ($block->getMailingAddress()): ?>
             <dd class="content">
                 <strong><?php echo __('Send Check to') ?></strong>
                 <address class="checkmo mailing address">
-                    <?php echo nl2br($this->escapeHtml($this->getMailingAddress())) ?>
+                    <?php echo nl2br($block->escapeHtml($block->getMailingAddress())) ?>
                 </address>
             </dd>
         <?php endif; ?>

@@ -2,47 +2,77 @@
 /**
  * Gift Message resource setup
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model\Resource;
 
-class Setup extends \Magento\Sales\Model\Resource\Setup
+class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
      * @var \Magento\Catalog\Model\Resource\SetupFactory
      */
-    protected $_catalogSetupFactory;
+    protected $catalogSetupFactory;
+
+    /**
+     * @var \Magento\Quote\Model\Resource\SetupFactory
+     */
+    protected $quoteSetupFactory;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\SetupFactory
+     */
+    protected $salesSetupFactory;
 
     /**
      * @param \Magento\Eav\Model\Entity\Setup\Context $context
      * @param string $resourceName
-     * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Model\Resource\SetupFactory $catalogSetupFactory
+     * @param \Magento\Quote\Model\Resource\SetupFactory $quoteSetupFactory
+     * @param \Magento\Sales\Model\Resource\SetupFactory $salesSetupFactory
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Setup\Context $context,
         $resourceName,
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Model\Resource\SetupFactory $catalogSetupFactory,
+        \Magento\Quote\Model\Resource\SetupFactory $quoteSetupFactory,
+        \Magento\Sales\Model\Resource\SetupFactory $salesSetupFactory,
         $moduleName = 'Magento_GiftMessage',
         $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
-        $this->_catalogSetupFactory = $catalogSetupFactory;
+        $this->catalogSetupFactory = $catalogSetupFactory;
+        $this->quoteSetupFactory = $quoteSetupFactory;
+        $this->salesSetupFactory = $salesSetupFactory;
         parent::__construct(
             $context,
             $resourceName,
-            $cache,
-            $attrGroupCollectionFactory,
-            $config,
             $moduleName,
             $connectionName
         );
+    }
+
+    /**
+     * Create Quote Setup Factory for GiftMessage
+     *
+     * @param array $data
+     * @return \Magento\Quote\Model\Resource\Setup
+     */
+    public function createQuoteSetup(array $data = [])
+    {
+        return $this->quoteSetupFactory->create($data);
+    }
+
+    /**
+     * Create Sales Setup Factory for GiftMessage
+     *
+     * @param array $data
+     * @return \Magento\Sales\Model\Resource\Setup
+     */
+    public function createSalesSetup(array $data = [])
+    {
+        return $this->salesSetupFactory->create($data);
     }
 
     /**
@@ -51,8 +81,8 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
      * @param array $data
      * @return \Magento\Catalog\Model\Resource\Setup
      */
-    public function createGiftMessageSetup(array $data = [])
+    public function createCatalogSetup(array $data = [])
     {
-        return $this->_catalogSetupFactory->create($data);
+        return $this->catalogSetupFactory->create($data);
     }
 }

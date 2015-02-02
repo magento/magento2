@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php
@@ -28,9 +29,10 @@
 
 <div id="tree" style="width:100%; overflow:auto;"></div>
 
-<script type="text/javascript">
+<script>
 require([
     'jquery',
+    "extjs/ext-tree-checkbox",
     'Magento_DesignEditor/js/tools-files'
 ], function(jQuery){
 
@@ -39,7 +41,7 @@ Ext.onReady(function(){
     var tree = new Tree.TreePanel('tree', {
         animate:true,
         loader: new Tree.TreeLoader({
-            dataUrl:'<?php echo $this->getTreeLoaderUrl() ?>'
+            dataUrl:'<?php echo $block->getTreeLoaderUrl() ?>'
         }),
         enableDD:false,
         containerScroll: true
@@ -47,7 +49,7 @@ Ext.onReady(function(){
 
     // set the root node
     var root = new Tree.AsyncTreeNode({
-        text: '<?php echo $this->getRootNodeName() ?>',
+        text: '<?php echo $block->getRootNodeName() ?>',
         draggable:false,
         id:'root'
     });
@@ -67,7 +69,7 @@ Ext.onReady(function(){
 
     MediabrowserInstance.setTree(tree);
     tree.addListener('click', MediabrowserInstance.selectFolder.bind(MediabrowserInstance));
-    tree.expandPath('<?php echo $this->getTreeCurrentPath() ?>','', function(success, node) {
+    tree.expandPath('<?php echo $block->getTreeCurrentPath() ?>','', function(success, node) {
         MediabrowserInstance.selectFolder(node);
     });
 });

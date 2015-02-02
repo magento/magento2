@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items;
@@ -52,14 +53,14 @@ class MassAddTest extends \PHPUnit_Framework_TestCase
                 ->setMethods(['getId', '__sleep', '__wakeup'])->getMock();
         $store->expects($this->exactly(2))->method('getId')->will($this->returnValue(1));
 
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
 
         $this->controllerArguments['context']->getObjectManager()
             ->expects($this->at(0))->method('get')->with('Magento\GoogleShopping\Model\Flag')
             ->will($this->returnValue($this->flag));
         $this->controllerArguments['context']->getObjectManager()
-            ->expects($this->at(1))->method('get')->with('Magento\Store\Model\StoreManagerInterface')
+            ->expects($this->at(1))->method('get')->with('Magento\Framework\Store\StoreManagerInterface')
             ->will($this->returnValue($storeManager));
 
         $this->controller = $this->objectManagerHelper->getObject(

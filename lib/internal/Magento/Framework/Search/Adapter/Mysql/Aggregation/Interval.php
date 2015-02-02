@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation;
 
@@ -40,6 +41,7 @@ class Interval implements IntervalInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function load($limit, $offset = null, $lower = null, $upper = null)
     {
@@ -62,6 +64,7 @@ class Interval implements IntervalInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function loadPrevious($data, $index, $lower = null)
     {
@@ -83,6 +86,7 @@ class Interval implements IntervalInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function loadNext($data, $rightIndex, $upper = null)
     {

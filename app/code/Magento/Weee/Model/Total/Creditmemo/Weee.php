@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Weee\Model\Total\Creditmemo;
@@ -37,6 +38,10 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
      *
      * @param  Creditmemo $creditmemo
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function collect(Creditmemo $creditmemo)
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
 
@@ -137,7 +138,7 @@ class Dob extends AbstractWidget
             'class' => $this->getHtmlClass(),
             'value' => $this->getValue(),
             'date_format' => $this->getDateFormat(),
-            'image' => $this->getViewFileUrl('Magento_Core::calendar.gif'),
+            'image' => $this->getViewFileUrl('Magento_Core::calendar.png'),
         ]);
         return $this->dateElement->getHtml();
     }

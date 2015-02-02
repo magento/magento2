@@ -2,7 +2,8 @@
 /**
  * Test class for \Magento\Store\Model\Store\StoresConfig
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\Model;
@@ -38,7 +39,7 @@ class StoresConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storeOne = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->_storeTwo = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->_config = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\Store\Model\StoresConfig(

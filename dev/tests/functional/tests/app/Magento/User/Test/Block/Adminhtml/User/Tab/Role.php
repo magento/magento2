@@ -1,13 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\User\Test\Block\Adminhtml\User\Tab;
 
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\User\Test\Block\Adminhtml\User\Tab\Role\Grid;
-use Mtf\Client\Element;
 
 /**
  * Class Role
@@ -19,10 +19,10 @@ class Role extends Tab
      * Fill user options
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return void
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         $this->getRoleGrid()->searchAndSelect(['rolename' => $fields['role_id']['value']]);
     }

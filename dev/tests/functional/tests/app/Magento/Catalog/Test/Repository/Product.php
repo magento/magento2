@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Repository;
 
 use Magento\Catalog\Test\Fixture;
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class Product Repository
@@ -26,8 +27,8 @@ class Product extends AbstractRepository
         $type = str_replace('product', '', strtolower(substr(get_class($this), strrpos(get_class($this), '\\') + 1)));
         $this->_data[$type . '_required'] = $this->_data['default'];
         $this->_data[$type] = $this->_data['default'];
-        $this->_data[$type]['data']['category_name'] = '%category::getCategoryName%';
-        $this->_data[$type]['data']['category_id'] = '%category::getCategoryId%';
+        $this->_data[$type]['data']['category_name'] = '%category::getName%';
+        $this->_data[$type]['data']['category_id'] = '%category::getId%';
         $this->_data[$type . '_edit_required_fields'] = $this->resetRequiredFields($type);
         $this->_data['price_massaction'] = $this->_getMassActionPrice();
     }

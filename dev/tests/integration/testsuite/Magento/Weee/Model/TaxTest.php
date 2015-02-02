@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Weee\Model;
 
 use Magento\Customer\Api\Data\CustomerDataBuilder;
@@ -57,7 +61,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ['metadataService' => $customerMetadataService]
         );
         $expected = $this->_extensibleDataObjectConverter->toFlatArray(
-            $customerRepository->getById(1)
+            $customerRepository->getById(1), [], '\Magento\Customer\Api\Data\CustomerInterface'
         );
         $customerBuilder->populateWithArray($expected);
         $customerDataSet = $customerBuilder->create();
@@ -66,8 +70,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Customer\Model\Group $group */
         $group = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Group');
         $fixtureGroupId = $group->load($fixtureGroupCode, 'customer_group_code')->getId();
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->setCustomerGroupId($fixtureGroupId);
         $quote->setCustomerTaxClassId($fixtureTaxClassId);
         $quote->setCustomer($customerDataSet);

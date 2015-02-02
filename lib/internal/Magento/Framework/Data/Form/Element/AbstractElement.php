@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Form\Element;
 
@@ -13,6 +14,7 @@ use Magento\Framework\Escaper;
  * Data form abstract class
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractElement extends AbstractForm
 {
@@ -529,6 +531,7 @@ abstract class AbstractElement extends AbstractForm
      * @param string|int|array $values
      * @param bool $overwrite
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addElementValues($values, $overwrite = false)
     {

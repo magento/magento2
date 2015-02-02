@@ -1,18 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="review-order-form" data-mage-init='{"orderOverview": {}}' class="form multicheckout order-review">
-    <?php echo $this->getBlockHtml('formkey'); ?>
+<form action="<?php echo $block->getPostActionUrl() ?>" method="post" id="review-order-form" data-mage-init='{"orderOverview": {}, "validation":{}}' class="form multicheckout order-review">
+    <?php echo $block->getBlockHtml('formkey'); ?>
     <div class="block block-billing">
         <div class="block-title"><strong><?php echo __('Billing Information') ?></strong></div>
         <div class="block-content">
             <div class="box box-billing-address">
-                <?php $_address = $this->getBillingAddress() ?>
+                <?php $_address = $block->getBillingAddress() ?>
                 <strong class="box-title">
                     <span><?php echo __('Billing Address') ?></span>
-                    <a href="<?php echo $this->getEditBillingAddressUrl($_address) ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
+                    <a href="<?php echo $block->getEditBillingAddressUrl($_address) ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
                 </strong>
                 <div class="box-content">
                     <address>
@@ -23,12 +27,12 @@
             <div class="box box-billing-method">
                 <strong class="box-title">
                     <span><?php echo __('Payment Method') ?></span>
-                    <a href="<?php echo $this->getEditBillingUrl() ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
+                    <a href="<?php echo $block->getEditBillingUrl() ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
                 </strong>
                 <div class="box-content">
-                    <input type="hidden" name="payment[cc_number]" value="<?php echo $this->escapeHtml($this->getPayment()->getCcNumber())?>" />
-                    <input type="hidden" name="payment[cc_cid]" value="<?php echo $this->escapeHtml($this->getPayment()->getCcCid())?>" />
-                    <?php echo $this->getPaymentHtml() ?>
+                    <input type="hidden" name="payment[cc_number]" value="<?php echo $block->escapeHtml($block->getPayment()->getCcNumber())?>" />
+                    <input type="hidden" name="payment[cc_cid]" value="<?php echo $block->escapeHtml($block->getPayment()->getCcCid())?>" />
+                    <?php echo $block->getPaymentHtml() ?>
                 </div>
             </div>
         </div>
@@ -36,15 +40,15 @@
     <div class="block block-shipping">
         <div class="block-title"><strong><?php echo __('Shipping Information') ?></strong></div>
         <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
-        <?php foreach ($this->getShippingAddresses() as $_index => $_address): ?>
+        <?php foreach ($block->getShippingAddresses() as $_index => $_address): ?>
             <div class="block-content">
                 <div class="title">
-                    <strong><?php echo __('Address %1 <span>of %2</span>', ($_index+1), $this->getShippingAddressCount()) ?></strong>
+                    <strong><?php echo __('Address %1 <span>of %2</span>', ($_index+1), $block->getShippingAddressCount()) ?></strong>
                 </div>
                 <div class="box box-shipping-address">
                     <strong class="box-title">
                         <span><?php echo __('Shipping To') ?></span>
-                        <a href="<?php echo $this->getEditShippingAddressUrl($_address) ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
+                        <a href="<?php echo $block->getEditShippingAddressUrl($_address) ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
                     </strong>
                     <div class="box-content">
                         <address>
@@ -55,13 +59,13 @@
                 <div class="box box-shipping-method">
                     <strong class="box-title">
                         <span><?php echo __('Shipping Method') ?></span>
-                        <a href="<?php echo $this->getEditShippingUrl() ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
+                        <a href="<?php echo $block->getEditShippingUrl() ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
                     </strong>
-                    <?php if ($_rate = $this->getShippingAddressRate($_address)): ?>
+                    <?php if ($_rate = $block->getShippingAddressRate($_address)): ?>
                         <div class="box-content">
-                            <?php echo $this->escapeHtml($_rate->getCarrierTitle()) ?> (<?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>)
-                            <?php $_excl = $this->getShippingPriceExclTax($_address); ?>
-                            <?php $_incl = $this->getShippingPriceInclTax($_address); ?>
+                            <?php echo $block->escapeHtml($_rate->getCarrierTitle()) ?> (<?php echo $block->escapeHtml($_rate->getMethodTitle()) ?>)
+                            <?php $_excl = $block->getShippingPriceExclTax($_address); ?>
+                            <?php $_incl = $block->getShippingPriceInclTax($_address); ?>
 
                             <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
                             <span class="price-including-tax" data-label="<?php echo __('Incl. Tax'); ?>">
@@ -84,7 +88,7 @@
                                 <thead>
                                 <tr>
                                     <th class="col item" scope="col"><?php echo __('Item') ?>
-                                        <a href="<?php echo $this->getAddressesEditUrl() ?>" class="action edit"><span><?php echo __('Edit') ?></span></a>
+                                        <a href="<?php echo $block->getAddressesEditUrl() ?>" class="action edit"><span><?php echo __('Edit') ?></span></a>
                                     </th>
                                     <th class="col price" scope="col"><?php echo __('Price') ?></th>
                                     <th class="col qty" scope="col"><?php echo __('Qty') ?></th>
@@ -92,12 +96,12 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach ($this->getShippingAddressItems($_address) as $_item): ?>
-                                    <?php echo $this->getRowItemHtml($_item); ?>
+                                <?php foreach ($block->getShippingAddressItems($_address) as $_item): ?>
+                                    <?php echo $block->getRowItemHtml($_item); ?>
                                 <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
-                                    <?php echo $this->renderTotals($this->getShippingAddressTotals($_address)); ?>
+                                    <?php echo $block->renderTotals($block->getShippingAddressTotals($_address)); ?>
                                 </tfoot>
                             </table>
                         </div>
@@ -107,13 +111,13 @@
         <?php endforeach; ?>
     </div>
 
-    <?php if ($this->getQuote()->hasVirtualItems()): ?>
+    <?php if ($block->getQuote()->hasVirtualItems()): ?>
     <div class="block block-other">
         <div class="block-title"><strong><?php echo __('Other items in your order') ?></strong></div>
         <div class="block-content">
             <strong class="subtitle">
                 <span><?php echo __('Items') ?></span>
-                <a href="<?php echo $this->getVirtualProductEditUrl() ?>" class="action edit"><span><?php echo __('Edit Items') ?></span></a>
+                <a href="<?php echo $block->getVirtualProductEditUrl() ?>" class="action edit"><span><?php echo __('Edit Items') ?></span></a>
             </strong>
             <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
             <div class="order-review-wrapper table-wrapper">
@@ -128,12 +132,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($this->getVirtualItems() as $_item): ?>
-                            <?php echo $this->getRowItemHtml($_item); ?>
+                        <?php foreach ($block->getVirtualItems() as $_item): ?>
+                            <?php echo $block->getRowItemHtml($_item); ?>
                         <?php endforeach; ?>
                     </tbody>
                     <tfoot>
-                    <?php echo $this->renderTotals($this->getBillinAddressTotals()); ?>
+                    <?php echo $block->renderTotals($block->getBillinAddressTotals()); ?>
                     </tfoot>
                 </table>
             </div>
@@ -141,20 +145,20 @@
     </div>
     <?php endif; ?>
 
-    <?php echo $this->getChildHtml('items_after'); ?>
+    <?php echo $block->getChildHtml('items_after'); ?>
 
     <div id="checkout-review-submit" class="checkout-review">
-        <?php echo $this->getChildHtml('agreements') ?>
+        <?php echo $block->getChildHtml('agreements') ?>
         <div class="grand totals">
             <strong class="mark"><?php echo __('Grand Total:') ?></strong>
-            <strong class="amount"><?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()) ?></strong>
+            <strong class="amount"><?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()) ?></strong>
         </div>
         <div class="actions-toolbar" id="review-buttons-container">
             <div class="primary">
                 <button type="submit" class="action primary submit" id="review-button"><span><?php echo __('Place Order') ?></span></button>
             </div>
             <div class="secondary">
-                <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Billing Information') ?></span></a>
+                <a href="<?php echo $block->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Billing Information') ?></span></a>
             </div>
             <span id="review-please-wait" class="please-wait load indicator" style="display: none;" data-text="<?php echo __('Submitting order information...') ?>">
                 <span><?php echo __('Submitting order information...') ?></span>

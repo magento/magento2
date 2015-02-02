@@ -1,0 +1,65 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Wishlist\Test\TestCase;
+
+use Magento\Customer\Test\Fixture\CustomerInjectable;
+
+/**
+ * Test Flow:
+ *
+ * Preconditions:
+ * 1. Customer is registered
+ * 2. Product is created
+ *
+ * Steps:
+ * 1. Login as a customer
+ * 2. Navigate to catalog page
+ * 3. Add created product to Wishlist according to dataSet
+ * 4. Perform all assertions
+ *
+ * @group Wishlist_(CS)
+ * @ZephyrId MAGETWO-29045
+ */
+class AddProductToWishlistEntityTest extends AbstractWishlistTest
+{
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'CS';
+    /* end tags */
+
+    /**
+     * Prepare data for test
+     *
+     * @param CustomerInjectable $customer
+     * @return array
+     */
+    public function __prepare(CustomerInjectable $customer)
+    {
+        $customer->persist();
+
+        return ['customer' => $customer];
+    }
+
+    /**
+     * Run Add Product To Wishlist test
+     *
+     * @param CustomerInjectable $customer
+     * @param string $product
+     * @return array
+     */
+    public function test(CustomerInjectable $customer, $product)
+    {
+        $this->markTestIncomplete('Bug: MAGETWO-32813');
+        $product = $this->createProducts($product)[0];
+
+        // Steps:
+        $this->loginCustomer($customer);
+        $this->addToWishlist([$product], true);
+
+        return ['product' => $product];
+    }
+}

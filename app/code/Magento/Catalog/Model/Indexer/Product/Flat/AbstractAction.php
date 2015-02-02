@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
@@ -25,7 +26,7 @@ abstract class AbstractAction
     protected $_tableDropSuffix = '_drop_indexer';
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -70,7 +71,7 @@ abstract class AbstractAction
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param TableBuilder $tableBuilder
@@ -78,7 +79,7 @@ abstract class AbstractAction
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
         \Magento\Catalog\Model\Product\Type $productType,
         TableBuilder $tableBuilder,
@@ -117,6 +118,7 @@ abstract class AbstractAction
      * @param array $tablesList
      * @param int|string $storeId
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _cleanOnFailure(array $tablesList, $storeId)
     {
@@ -182,6 +184,7 @@ abstract class AbstractAction
      * @param int $storeId
      * @param int|array $productIds Update child product(s) only
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _updateRelationProducts($storeId, $productIds = null)
     {

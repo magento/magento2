@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
 
@@ -23,8 +24,8 @@ class Select extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Opti
      */
     public function setValidationContainer($elementId, $containerId)
     {
-        return '<script type="text/javascript">
-            $(\'' .
+        return '<script>
+            document.getElementById(\'' .
             $elementId .
             '\').advaiceContainer = \'' .
             $containerId .

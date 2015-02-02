@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-/**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- */
--->
-<theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../../lib/internal/Magento/Framework/Config/etc/theme.xsd">
-    <title>Theme G</title>
-</theme>

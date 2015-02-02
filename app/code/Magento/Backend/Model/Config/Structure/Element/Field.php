@@ -2,7 +2,8 @@
 /**
  * Represents a Field Element on the UI that can be configured via xml.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Config\Structure\Element;
 
@@ -48,7 +49,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
     protected $_blockFactory;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\BackendFactory $backendFactory
      * @param \Magento\Backend\Model\Config\SourceFactory $sourceFactory
      * @param \Magento\Backend\Model\Config\CommentFactory $commentFactory
@@ -56,7 +57,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
      * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\BackendFactory $backendFactory,
         \Magento\Backend\Model\Config\SourceFactory $sourceFactory,
         \Magento\Backend\Model\Config\CommentFactory $commentFactory,

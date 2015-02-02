@@ -1,30 +1,33 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\ProductAlert\Block\Email\Stock */
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\ProductAlert\Block\Email\Stock */
 ?>
-<?php if ($_products = $this->getProducts()): ?>
+<?php if ($_products = $block->getProducts()): ?>
 <p><?php echo __('You are receiving this notification because you subscribed to receive alerts when the following products are back in stock:') ?></p>
 <table>
 <?php foreach ($_products as $_product): ?>
     <tr>
         <td class="col photo">
-            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_product->getName()) ?>" class="product photo">
-                <img src="<?php echo $this->getThumbnailUrl($_product) ?>" width="<?php echo $this->getThumbnailSize()?>" height="<?php echo $this->getThumbnailSize()?>" alt="<?php echo $this->escapeHtml($_product->getName()) ?>" class="photo image" />
+            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $block->escapeHtml($_product->getName()) ?>" class="product photo">
+                <img src="<?php echo $block->getThumbnailUrl($_product) ?>" width="<?php echo $block->getThumbnailSize()?>" height="<?php echo $block->getThumbnailSize()?>" alt="<?php echo $block->escapeHtml($_product->getName()) ?>" class="photo image" />
             </a>
         </td>
         <td class="col item">
             <p>
                 <strong class="product name">
-                    <a href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->escapeHtml($_product->getName()) ?></a>
+                    <a href="<?php echo $_product->getProductUrl() ?>"><?php echo $block->escapeHtml($_product->getName()) ?></a>
                 </strong>
             </p>
-            <?php if ($shortDescription = $this->getFilteredContent($_product->getShortDescription())): ?>
+            <?php if ($shortDescription = $block->getFilteredContent($_product->getShortDescription())): ?>
             <p><small><?php echo $shortDescription ?></small></p>
             <?php endif; ?>
-            <p><?php echo $this->getProductPriceHtml(
+            <p><?php echo $block->getProductPriceHtml(
                     $_product,
                     \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                     \Magento\Framework\Pricing\Render::ZONE_EMAIL,
@@ -34,10 +37,10 @@
                 );
                 ?>
             </p>
-            <p><small><a href="<?php echo $this->getProductUnsubscribeUrl($_product->getId()) ?>"><?php echo __('Click here not to receive alerts for this product.') ?></a></small></p>
+            <p><small><a href="<?php echo $block->getProductUnsubscribeUrl($_product->getId()) ?>"><?php echo __('Click here not to receive alerts for this product.') ?></a></small></p>
         </td>
     </tr>
 <?php endforeach; ?>
 </table>
-<p><a href="<?php echo $this->getUnsubscribeUrl() ?>"><?php echo __('Unsubscribe from all stock alerts') ?></a></p>
+<p><a href="<?php echo $block->getUnsubscribeUrl() ?>"><?php echo __('Unsubscribe from all stock alerts') ?></a></p>
 <?php endif; ?>

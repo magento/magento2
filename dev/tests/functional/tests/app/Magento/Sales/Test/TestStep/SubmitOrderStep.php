@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\TestStep;
@@ -9,8 +10,8 @@ use Magento\Customer\Test\Fixture\AddressInjectable;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderView;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Submit Order step.
@@ -45,7 +46,7 @@ class SubmitOrderStep implements TestStepInterface
      * @param FixtureFactory $fixtureFactory
      * @param CustomerInjectable $customer
      * @param AddressInjectable $billingAddress
-     * @param \Mtf\Fixture\FixtureInterface[] $products
+     * @param \Magento\Mtf\Fixture\FixtureInterface[] $products
      */
     public function __construct(
         OrderCreateIndex $orderCreateIndex,

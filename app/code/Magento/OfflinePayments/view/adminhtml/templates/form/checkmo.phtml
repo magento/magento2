@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<fieldset class="fieldset payment method" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none">
-    <?php if ($this->getMethod()->getPayableTo()): ?>
-        <?php echo __('<label class="label"><span>Make Check payable to:</span></label> %1', $this->escapeHtml($this->getMethod()->getPayableTo())) ?>
+<fieldset class="fieldset payment method" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none">
+    <?php if ($block->getMethod()->getPayableTo()): ?>
+        <?php echo __('<label class="label"><span>Make Check payable to:</span></label> %1', $block->escapeHtml($block->getMethod()->getPayableTo())) ?>
     <?php endif; ?>
-    <?php if ($this->getMethod()->getMailingAddress()): ?>
+    <?php if ($block->getMethod()->getMailingAddress()): ?>
         <div class="field field-check">
             <label class="label"><span><?php echo __('Send Check to:') ?></span></label>
             <div class="control checkmo-mailing-address">
-                <?php echo nl2br($this->escapeHtml($this->getMethod()->getMailingAddress())) ?>
+                <?php echo nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
             </div>
         </div>
     <?php endif; ?>

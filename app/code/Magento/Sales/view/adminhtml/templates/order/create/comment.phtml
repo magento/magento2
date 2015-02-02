@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
  ?>
-<!--<h4 class="icon-head fieldset-legend <?php echo $this->getHeaderCssClass() ?>"><?php echo $this->getHeaderText() ?></h4>-->
+<!--<h4 class="icon-head fieldset-legend <?php echo $block->getHeaderCssClass() ?>"><?php echo $block->getHeaderText() ?></h4>-->
 <label for="order-comment"><?php echo __('Order Comments') ?></label><br />
-<textarea style="width:98%; height:8em;" id="order-comment" name="order[comment][customer_note]" rows="2" cols="15"><?php echo $this->getCommentNote() ?></textarea>
-<script type="text/javascript">
+<textarea style="width:98%; height:8em;" id="order-comment" name="order[comment][customer_note]" rows="2" cols="15"><?php echo $block->getCommentNote() ?></textarea>
+<script>
 	require(["Magento_Sales/order/create/form"], function(){
 		order.commentFieldsBind('order-comment')
 	});

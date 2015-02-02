@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
@@ -54,6 +55,7 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {

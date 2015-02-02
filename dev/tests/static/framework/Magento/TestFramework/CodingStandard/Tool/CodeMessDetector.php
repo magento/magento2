@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -8,21 +9,23 @@
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
-class CodeMessDetector implements \Magento\TestFramework\CodingStandard\ToolInterface
+use \Magento\TestFramework\CodingStandard\ToolInterface;
+
+class CodeMessDetector implements ToolInterface
 {
     /**
      * Ruleset directory
      *
      * @var string
      */
-    protected $_rulesetFile;
+    private $rulesetFile;
 
     /**
      * Report file
      *
      * @var string
      */
-    protected $_reportFile;
+    private $reportFile;
 
     /**
      * Constructor
@@ -32,8 +35,8 @@ class CodeMessDetector implements \Magento\TestFramework\CodingStandard\ToolInte
      */
     public function __construct($rulesetFile, $reportFile)
     {
-        $this->_reportFile = $reportFile;
-        $this->_rulesetFile = $rulesetFile;
+        $this->reportFile = $reportFile;
+        $this->rulesetFile = $rulesetFile;
     }
 
     /**
@@ -43,35 +46,31 @@ class CodeMessDetector implements \Magento\TestFramework\CodingStandard\ToolInte
      */
     public function canRun()
     {
-        return class_exists('PHP_PMD_TextUI_Command');
+        return class_exists('PHPMD\TextUI\Command');
     }
 
     /**
-     * Run tool for files specified
-     *
-     * @param array $whiteList Files/directories to be inspected
-     * @param array $blackList Files/directories to be excluded from the inspection
-     * @param array $extensions Array of alphanumeric strings, for example: 'php', 'xml', 'phtml', 'css'...
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function run(array $whiteList, array $blackList = [], array $extensions = [])
+    public function run(array $whiteList)
     {
+        if (empty($whiteList)) {
+            return \PHPMD\TextUI\Command::EXIT_SUCCESS;
+        }
+
         $commandLineArguments = [
             'run_file_mock', //emulate script name in console arguments
             implode(',', $whiteList),
             'xml', //report format
-            $this->_rulesetFile,
-            '--exclude',
-            implode(',', $blackList),
+            $this->rulesetFile,
             '--reportfile',
-            $this->_reportFile,
+            $this->reportFile,
         ];
 
-        $options = new \PHP_PMD_TextUI_CommandLineOptions($commandLineArguments);
+        $options = new \PHPMD\TextUI\CommandLineOptions($commandLineArguments);
 
-        $command = new \PHP_PMD_TextUI_Command();
+        $command = new \PHPMD\TextUI\Command();
 
-        return $command->run($options, new \PHP_PMD_RuleSetFactory());
+        return $command->run($options, new \PHPMD\RuleSetFactory());
     }
 }

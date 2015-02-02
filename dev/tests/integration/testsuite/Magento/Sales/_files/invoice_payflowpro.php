@@ -2,7 +2,8 @@
 /**
  * Not paid invoice fixture for online payment method.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 require 'order_paid_with_payflowpro.php';

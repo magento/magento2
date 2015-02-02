@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogInventory\Model\Resource;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Stock resource model
@@ -73,7 +74,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -180,7 +181,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             foreach ($configMap as $field => $const) {
                 $this->{$field} = (int) $this->_scopeConfig->getValue(
                     $const,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 );
             }
 

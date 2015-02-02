@@ -1,15 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
- * @var $this \Magento\Backend\Block\Widget\Button
+ * @var $block \Magento\Backend\Block\Widget\Button
  */
 ?>
-<?php echo $this->getBeforeHtml(); ?>
-<button <?php echo $this->getAttributesHtml(), $this->getUiId(); ?>>
-    <span><?php echo $this->getLabel(); ?></span>
+<?php echo $block->getBeforeHtml(); ?>
+<button <?php echo $block->getAttributesHtml(), $block->getUiId(); ?>>
+    <span><?php echo $block->getLabel(); ?></span>
 </button>
-<?php echo $this->getAfterHtml(); ?>
+<?php echo $block->getAfterHtml(); ?>

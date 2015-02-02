@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Widget\Grid;
 
@@ -84,7 +85,7 @@ class SubTotalsTest extends \PHPUnit_Framework_TestCase
     protected function _getTestCollection()
     {
         $collection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false)
+            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         $items = [
             new \Magento\Framework\Object(['sub_test1' => '1', 'sub_test2' => '2']),

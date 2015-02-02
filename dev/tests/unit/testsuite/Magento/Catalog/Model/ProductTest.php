@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -101,6 +105,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $categoryRepository;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Image\Cache|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imageCache;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Image\CacheFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imageCacheFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
@@ -192,7 +206,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $storeManager->expects($this->any())
@@ -203,6 +217,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->website));
         $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
         $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
+
+        $this->imageCache = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\Cache')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->imageCacheFactory = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\CacheFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -220,6 +242,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'stockItemBuilder' => $this->stockItemBuilderMock,
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'categoryRepository' => $this->categoryRepository,
+                'imageCacheFactory' => $this->imageCacheFactory,
                 'data' => ['id' => 1]
             ]
         );
@@ -423,10 +446,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetQty()
     {
-        $this->productTypeInstanceMock->expects($this->once())
+        $this->productTypeInstanceMock->expects($this->exactly(2))
             ->method('getPriceInfo')
             ->with($this->equalTo($this->model))
             ->will($this->returnValue($this->_priceInfoMock));
+
+        //initialize the priceInfo field
+        $this->model->getPriceInfo();
+        //Calling setQty will reset the priceInfo field
+        $this->assertEquals($this->model, $this->model->setQty(1));
+        //Call the setQty method with the same qty, getPriceInfo should not be called this time
         $this->assertEquals($this->model, $this->model->setQty(1));
         $this->assertEquals($this->model->getPriceInfo(), $this->_priceInfoMock);
     }
@@ -458,6 +487,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
+        $this->imageCache->expects($this->once())
+            ->method('generate')
+            ->with($this->model);
+        $this->imageCacheFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->imageCache);
+
         $this->model->setIsDuplicate(false);
         $this->configureSaveTest();
         $this->optionInstanceMock->expects($this->any())->method('setProduct')->will($this->returnSelf());
@@ -471,6 +507,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAndDuplicate()
     {
+        $this->imageCache->expects($this->once())
+            ->method('generate')
+            ->with($this->model);
+        $this->imageCacheFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->imageCache);
+
         $this->model->setIsDuplicate(true);
         $this->configureSaveTest();
         $this->model->beforeSave();

@@ -1,58 +1,62 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php
-/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $this */
+/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
 
-$productId = $this->getSaleableItem()->getId();
+$productId = $block->getSaleableItem()->getId();
 
 /** @var \Magento\Catalog\Pricing\Price\RegularPrice $priceModel */
-$priceModel = $this->getPriceType('regular_price');
+$priceModel = $block->getPriceType('regular_price');
 
 /** @var \Magento\Catalog\Pricing\Price\FinalPrice $finalPriceModel */
-$finalPriceModel = $this->getPriceType('final_price');
-$idSuffix = $this->getIdSuffix() ? $this->getIdSuffix() : '';
-$schema = ($this->getZone() == 'item_view') ? true : false;
+$finalPriceModel = $block->getPriceType('final_price');
+$idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
+$schema = ($block->getZone() == 'item_view') ? true : false;
 ?>
-<?php if ($this->hasSpecialPrice()): ?>
+<?php if ($block->hasSpecialPrice()): ?>
     <span class="special-price">
-        <?php echo $this->renderAmount($finalPriceModel->getAmount(), [
+        <?php echo $block->renderAmount($finalPriceModel->getAmount(), [
             'display_label'     => __('Special Price'),
-            'price_id'          => $this->getPriceId('product-price-' . $idSuffix),
+            'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
             'price_type'        => 'finalPrice',
             'include_container' => true,
             'schema' => $schema
         ]); ?>
     </span>
     <span class="old-price">
-        <?php echo $this->renderAmount($priceModel->getAmount(), [
+        <?php echo $block->renderAmount($priceModel->getAmount(), [
             'display_label'     => __('Regular Price'),
-            'price_id'          => $this->getPriceId('old-price-' . $idSuffix),
+            'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
             'price_type'        => 'oldPrice',
             'include_container' => true,
             'skip_adjustments'  => true
         ]); ?>
     </span>
 <?php else: ?>
-    <?php echo $this->renderAmount($finalPriceModel->getAmount(), [
-        'price_id'          => $this->getPriceId('product-price-' . $idSuffix),
+    <?php echo $block->renderAmount($finalPriceModel->getAmount(), [
+        'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
         'price_type'        => 'finalPrice',
         'include_container' => true,
         'schema' => $schema
     ]); ?>
 <?php endif; ?>
 
-<?php if ($this->showMinimalPrice()): ?>
-    <?php if ($this->getUseLinkForAsLowAs()):?>
-        <a href="<?php echo $this->getSaleableItem()->getProductUrl(); ?>" class="minimal-price-link">
-            <?php echo $this->renderAmountMinimal(); ?>
+<?php if ($block->showMinimalPrice()): ?>
+    <?php if ($block->getUseLinkForAsLowAs()):?>
+        <a href="<?php echo $block->getSaleableItem()->getProductUrl(); ?>" class="minimal-price-link">
+            <?php echo $block->renderAmountMinimal(); ?>
         </a>
     <?php else:?>
         <span class="minimal-price-link">
-            <?php echo $this->renderAmountMinimal(); ?>
+            <?php echo $block->renderAmountMinimal(); ?>
         </span>
     <?php endif?>
 <?php endif; ?>

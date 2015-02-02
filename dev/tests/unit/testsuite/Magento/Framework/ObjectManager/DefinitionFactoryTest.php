@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\ObjectManager;
@@ -91,12 +92,12 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'relations' => [
-                'DefinitionDir/relations.php',
+                'DefinitionDir/relations.ser',
                 'createRelations',
                 '\Magento\Framework\ObjectManager\Relations\Compiled',
             ],
             'plugins' => [
-                'DefinitionDir/plugins.php',
+                'DefinitionDir/plugins.ser',
                 'createPluginDefinition',
                 '\Magento\Framework\Interception\Definition\Compiled',
             ],
@@ -121,12 +122,12 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'relations' => [
-                'DefinitionDir/relations.php',
+                'DefinitionDir/relations.ser',
                 'createRelations',
                 '\Magento\Framework\ObjectManager\Relations\Runtime',
             ],
             'plugins' => [
-                'DefinitionDir/plugins.php',
+                'DefinitionDir/plugins.ser',
                 'createPluginDefinition',
                 '\Magento\Framework\Interception\Definition\Runtime',
             ],

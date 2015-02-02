@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\DesignEditor\Model\Theme;
 
@@ -17,7 +18,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\ThemeFactory
+     * @var \Magento\Theme\Model\ThemeFactory
      */
     protected $_themeFactory;
 
@@ -27,16 +28,16 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected $_copyService;
 
     /**
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\Theme\Model\Theme
      */
     protected $_theme;
 
     protected function setUp()
     {
-        $this->_themeFactory = $this->getMock('Magento\Core\Model\ThemeFactory', ['create'], [], '', false);
+        $this->_themeFactory = $this->getMock('Magento\Theme\Model\ThemeFactory', ['create'], [], '', false);
 
         $this->_theme = $this->getMock(
-            'Magento\Core\Model\Theme',
+            'Magento\Theme\Model\Theme',
             ['load', 'getId', 'getType', 'getDomainModel', 'isVirtual', '__wakeup'],
             [],
             '',
@@ -164,7 +165,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $this->_theme->expects($this->atLeastOnce())->method('isVirtual')->will($this->returnValue(true));
 
         $themeObj = $this->getMock(
-            'Magento\Core\Model\Theme\Domain\Virtual',
+            'Magento\Theme\Model\Theme\Domain\Virtual',
             ['getStagingTheme'],
             [],
             '',

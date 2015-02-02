@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super;
 
@@ -189,7 +190,6 @@ class Config extends Widget implements TabInterface
                                         'attribute' => [
                                             'is_global' => 1,
                                             'frontend_input' => 'select',
-                                            'is_configurable' => 1,
                                         ],
                                     ]
                                 ]

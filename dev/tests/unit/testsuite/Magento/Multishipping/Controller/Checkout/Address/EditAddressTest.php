@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Multishipping\Controller\Checkout\Address;
 
 use Magento\TestFramework\Helper\ObjectManager;
@@ -88,7 +92,7 @@ class EditAddressTest extends \PHPUnit_Framework_TestCase
         $this->pageMock->expects($this->any())->method('getConfig')->willReturn($this->configMock);
         $this->configMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
         $this->viewMock->expects($this->any())->method('getPage')->willReturn($this->pageMock);
-        $this->controller = $objectManager->getObject('\Magento\Multishipping\Controller\Checkout\Address\EditAddress',
+        $this->controller = $objectManager->getObject('Magento\Multishipping\Controller\Checkout\Address\EditAddress',
             ['context' => $contextMock]);
     }
 

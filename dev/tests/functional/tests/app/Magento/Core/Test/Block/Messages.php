@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Core\Test\Block;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Global messages block
@@ -67,7 +68,7 @@ class Messages extends Block
     public function getSuccessMessages()
     {
         $this->waitForElementVisible($this->successMessage);
-        $elements = $this->_rootElement->find($this->successMessage)->getElements();
+        $elements = $this->_rootElement->getElements($this->successMessage);
 
         $messages = [];
         foreach ($elements as $key => $element) {

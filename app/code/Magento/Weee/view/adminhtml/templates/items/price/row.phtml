@@ -1,64 +1,68 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-/** @var \Magento\Weee\Block\Adminhtml\Items\Price\Renderer $this */
+/** @var \Magento\Weee\Block\Adminhtml\Items\Price\Renderer $block */
 
 /** @var $_weeeHelper \Magento\Weee\Helper\Data */
 $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 ?>
 
-<?php if ($this->displayBothPrices() || $this->displayPriceExclTax()): ?>
+<?php if ($block->displayBothPrices() || $block->displayPriceExclTax()): ?>
     <div class="price-excl-tax">
-        <?php if ($this->displayBothPrices()): ?>
+        <?php if ($block->displayBothPrices()): ?>
             <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
         <?php endif; ?>
 
-        <?php echo $this->getRowPriceExclTaxHtml() ?>
+        <?php echo $block->getRowPriceExclTaxHtml() ?>
 
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
-            <?php if ($this->displayPriceWithWeeeDetails()): ?>
+            <?php if ($block->displayPriceWithWeeeDetails()): ?>
                 <small>
                     <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                        <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_row_amount'], $tax['row_amount']); ?></span>
+                        <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $block->displayPrices($tax['base_row_amount'], $tax['row_amount']); ?></span>
                     <?php endforeach; ?>
                 </small>
             <?php endif; ?>
 
-            <?php if ($this->displayFinalPrice()): ?>
+            <?php if ($block->displayFinalPrice()): ?>
                 <br />
                 <span class="nobr"><?php echo __('Total'); ?>:<br />
-                    <?php echo $this->getFinalRowPriceExclTaxHtml(); ?>
+                    <?php echo $block->getFinalRowPriceExclTaxHtml(); ?>
                 </span>
             <?php endif; ?>
         <?php endif; ?>
     </div>
 <?php endif; ?>
-<?php if ($this->displayBothPrices() || $this->displayPriceInclTax()): ?>
+<?php if ($block->displayBothPrices() || $block->displayPriceInclTax()): ?>
     <div class="price-incl-tax">
-        <?php if ($this->displayBothPrices()): ?>
+        <?php if ($block->displayBothPrices()): ?>
             <span class="label"><?php echo __('Incl. Tax'); ?>:</span>
         <?php endif; ?>
-        <?php echo $this->getRowPriceInclTaxHtml(); ?>
+        <?php echo $block->getRowPriceInclTaxHtml(); ?>
 
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
             <br />
-            <?php if ($this->displayPriceWithWeeeDetails()): ?>
+            <?php if ($block->displayPriceWithWeeeDetails()): ?>
                 <small>
                     <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                        <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->displayPrices($tax['base_row_amount_incl_tax'], $tax['row_amount_incl_tax']); ?></span>
+                        <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $block->displayPrices($tax['base_row_amount_incl_tax'], $tax['row_amount_incl_tax']); ?></span>
                     <?php endforeach; ?>
                 </small>
             <?php endif; ?>
 
-            <?php if ($this->displayFinalPrice()): ?>
+            <?php if ($block->displayFinalPrice()): ?>
                 <br />
                 <span class="nobr"><?php echo __('Total'); ?>:<br />
-                    <?php echo $this->getFinalRowPriceInclTaxHtml(); ?>
+                    <?php echo $block->getFinalRowPriceInclTaxHtml(); ?>
                 </span>
             <?php endif; ?>
         <?php endif; ?>

@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page mca="multishipping/checkout/success" module="Magento_Multishipping">
+    <blocks>
+        <successBlock>
+            <class>Magento\Multishipping\Test\Block\Checkout\Success</class>
+            <locator>.multicheckout.success</locator>
+            <strategy>css selector</strategy>
+        </successBlock>
+        <titleBlock>
+            <class>Magento\Theme\Test\Block\Html\Title</class>
+            <locator>.title</locator>
+            <strategy>css selector</strategy>
+        </titleBlock>
+    </blocks>
+</page>

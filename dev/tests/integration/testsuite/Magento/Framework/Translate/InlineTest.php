@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Translate;
 
@@ -42,7 +43,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         );
         /* Called getConfig as workaround for setConfig bug */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\Store\StoreManagerInterface'
         )->getStore(
             $this->_storeId
         )->getConfig(
@@ -53,7 +54,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             'dev/translate_inline/active',
             true,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->_storeId
         );
     }
@@ -65,7 +66,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             $this->_model->isAllowed(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    'Magento\Framework\Store\StoreManagerInterface'
                 )->getStore(
                     $this->_storeId
                 )
@@ -77,7 +78,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(
             $this->_model->isAllowed(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    'Magento\Framework\Store\StoreManagerInterface'
                 )->getStore(
                     $this->_storeId
                 )

@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /*
 store view name = $_order->getStore()->getName()
 web site name = $_order->getStore()->getWebsite()->getName()
 store name = $_order->getStore()->getGroup()->getName()
 */
 ?>
-<?php $_order = $this->getOrder() ?>
+<?php $_order = $block->getOrder() ?>
 <div>
 <?php echo __('Customer Name: %1', $_order->getCustomerFirstname() ? $_order->getCustomerName() : $_order->getBillingAddress()->getName()) ?><br />
 <?php echo __('Purchased From: %1', $_order->getStore()->getGroup()->getName()) ?><br />
@@ -25,12 +29,12 @@ store name = $_order->getStore()->getGroup()->getName()
     <tbody>
 <?php $i = 0; foreach ($_order->getAllItems() as $_item): $i++ ?>
         <tr <?php echo $i%2 ? 'bgcolor="#eeeded"' : '' ?>>
-            <td align="left" valign="top" style="padding:3px 9px"><strong><?php echo $this->escapeHtml($_item->getName()) ?></strong>
+            <td align="left" valign="top" style="padding:3px 9px"><strong><?php echo $block->escapeHtml($_item->getName()) ?></strong>
             <?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
             <br /><strong><?php echo __('Gift Message') ?></strong>
-            <br /><?php echo __('From:'); ?> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?>
-            <br /><?php echo __('To:'); ?> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?>
-            <br /><?php echo __('Message:'); ?><br /> <?php echo $this->escapeHtml($_giftMessage->getMessage()) ?>
+            <br /><?php echo __('From:'); ?> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
+            <br /><?php echo __('To:'); ?> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
+            <br /><?php echo __('Message:'); ?><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
             <?php endif; ?>
             </td>
             <td align="center" valign="top" style="padding:3px 9px"><?php echo $_item->getQtyOrdered()*1 ?></td>
@@ -44,9 +48,9 @@ store name = $_order->getStore()->getGroup()->getName()
         <tr>
             <td colspan="3" align="left" style="padding:3px 9px">
             <strong><?php echo __('Gift Message') ?></strong>
-            <br /><?php echo __('From:'); ?> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?>
-            <br /><?php echo __('To:'); ?> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?>
-            <br /><?php echo __('Message:'); ?><br /> <?php echo $this->escapeHtml($_giftMessage->getMessage()) ?>
+            <br /><?php echo __('From:'); ?> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
+            <br /><?php echo __('To:'); ?> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
+            <br /><?php echo __('Message:'); ?><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
             </td>
         </tr>
      <?php endif; ?>

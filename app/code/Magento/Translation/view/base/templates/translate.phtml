@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\Translation\Block\Js */ ?>
-<script type="text/javascript">
+<?php /** @var $block \Magento\Translation\Block\Js */ ?>
+<script>
 //<![CDATA[
     require(
-        ["jquery", "mage/translate"], function($){ $.mage.translate.add( <?php echo $this->getTranslatedJson() ?> ); }
+        ["jquery", "mage/translate"], function($){ $.mage.translate.add( <?php echo $block->getTranslatedJson() ?> ); }
     )
 // ]]>
 </script>

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
 
@@ -78,7 +79,7 @@ class Template extends AbstractBlock
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -251,7 +252,7 @@ class Template extends AbstractBlock
             $html = $templateEngine->render($this->templateContext, $fileName, $this->_viewVars);
         } else {
             $html = '';
-            $this->_logger->info("Invalid template file: '{$fileName}'");
+            $this->_logger->critical("Invalid template file: '{$fileName}'");
         }
 
         \Magento\Framework\Profiler::stop('TEMPLATE:' . $fileName);
@@ -321,7 +322,7 @@ class Template extends AbstractBlock
         if (null === $this->_allowSymlinks) {
             $this->_allowSymlinks = $this->_scopeConfig->isSetFlag(
                 self::XML_PATH_TEMPLATE_ALLOW_SYMLINK,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $this->_allowSymlinks;

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
 
@@ -30,6 +31,7 @@ namespace Magento\Newsletter\Model;
  * @method string getQueueFinishAt()
  * @method \Magento\Newsletter\Model\Queue setQueueFinishAt(string $value)
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Queue extends \Magento\Email\Model\AbstractTemplate
 {
@@ -113,8 +115,8 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Core\Model\App\Emulation $appEmulation
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Newsletter\Model\Template\Filter $templateFilter
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
@@ -123,13 +125,14 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
      * @param \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
-        \Magento\Core\Model\App\Emulation $appEmulation,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\App\Emulation $appEmulation,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Newsletter\Model\Template\Filter $templateFilter,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
@@ -195,6 +198,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      *
      * @param int $count
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function sendPerSubscriber($count = 20)
     {
@@ -319,6 +323,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      * Getter for save stores flag.
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getSaveStoresFlag()
     {

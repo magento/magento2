@@ -1,15 +1,18 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 define([
     "jquery",
+    "tinymce",
     "jquery/ui",
     "Magento_DesignEditor/js/dialog",
-    "js/theme",
+    "loadingPopup",
     "mage/translate",
     "prototype",
+    "extjs/ext-tree-checkbox",
     "mage/adminhtml/events"
-], function(jQuery){
+], function(jQuery, tinyMCE){
 
     window.MediabrowserUtility = {
         getMaxZIndex: function() {

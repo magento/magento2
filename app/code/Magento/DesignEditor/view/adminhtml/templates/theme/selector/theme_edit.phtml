@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'Magento_DesignEditor/js/theme-edit'
@@ -15,7 +19,7 @@ require([
             dialogSelector: '#dialog-message-confirm',
             title: '<?php echo __('Edit Theme') ?>',
             confirmMessage: '<?php echo __('When you edit a theme, we save it as a unique version in "My Customizations."') ?>',
-            launchUrl: '<?php echo $this->getUrl('*/*/launch') ?>'
+            launchUrl: '<?php echo $block->getUrl('*/*/launch') ?>'
         });
     });
 

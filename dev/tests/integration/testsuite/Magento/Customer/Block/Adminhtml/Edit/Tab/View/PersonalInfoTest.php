@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
@@ -30,7 +31,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Customer\Api\GroupRepositoryInterface */
     private $_groupRepository;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var \Magento\Framework\Store\StoreManagerInterface */
     private $_storeManager;
 
     /** @var \Magento\Framework\ObjectManagerInterface */
@@ -51,7 +52,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManager = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface');
         $this->_context = $this->_objectManager->get(
             'Magento\Backend\Block\Template\Context',
             ['storeManager' => $this->_storeManager]
@@ -65,7 +66,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $this->_dataObjectProcessor = $this->_objectManager->get('Magento\Framework\Reflection\DataObjectProcessor');
 
         $this->_groupRepository = $this->_objectManager->get('Magento\Customer\Api\GroupRepositoryInterface');
-        $this->dateTime = $this->_objectManager->get('\Magento\Framework\Stdlib\DateTime');
+        $this->dateTime = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime');
 
         $this->_block = $this->_objectManager->get(
             'Magento\Framework\View\LayoutInterface'
@@ -161,7 +162,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             ->getDefaultTimezonePath();
         $timezone = $this->_context->getScopeConfig()->getValue(
             $defaultTimeZonePath,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->_loadCustomer()->getStoreId()
         );
         $this->assertEquals($timezone, $this->_block->getStoreCreateDateTimezone());

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Observer\Backend;
 
@@ -28,7 +29,7 @@ class CatalogProductQuoteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_quoteMock = $this->getMock('Magento\Sales\Model\Resource\Quote', [], [], '', false);
+        $this->_quoteMock = $this->getMock('Magento\Quote\Model\Resource\Quote', [], [], '', false);
         $this->_observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
         $this->_eventMock = $this->getMock(
             'Magento\Framework\Event',

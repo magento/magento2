@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\Config\Reader;
 
@@ -68,7 +69,7 @@ class Website implements \Magento\Framework\App\Config\Scope\ReaderInterface
         $website = $this->_websiteFactory->create();
         $website->load($code);
         $collection = $this->_collectionFactory->create(
-            ['scope' => \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES, 'scopeId' => $website->getId()]
+            ['scope' => \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITES, 'scopeId' => $website->getId()]
         );
         $dbWebsiteConfig = [];
         foreach ($collection as $configValue) {

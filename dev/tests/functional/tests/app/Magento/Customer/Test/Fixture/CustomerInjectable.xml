@@ -1,221 +1,228 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Customer\Test\Fixture\CustomerInjectable">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
+         class="Magento\Customer\Test\Fixture\CustomerInjectable">
     <module>Magento_Customer</module>
     <type>eav</type>
     <entity_type>customer</entity_type>
     <collection>Magento\Customer\Model\Resource\Customer\Collection</collection>
     <identifier>email</identifier>
+    <repository_class>Magento\Customer\Test\Repository\CustomerInjectable</repository_class>
+    <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
+    <dataset name="default">
+        <field name="firstname" xsi:type="string">John</field>
+        <field name="lastname" xsi:type="string">Doe</field>
+        <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+        <field name="password" xsi:type="string">123123q</field>
+        <field name="password_confirmation" xsi:type="string">123123q</field>
+    </dataset>
     <fields>
-        <address>
+        <field name="address">
             <attribute_code>address</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Customer\Test\Fixture\CustomerInjectable\Address</source>
-        </address>
-        <confirmation>
+        </field>
+        <field name="confirmation">
             <attribute_code>confirmation</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </confirmation>
-        <created_at>
+        </field>
+        <field name="id">
+           <attribute_code>id</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>null</group>
+        </field>
+        <field name="created_at">
             <attribute_code>created_at</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
-        </created_at>
-        <id>
-            <attribute_code>id</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group>null</group>
-        </id>
-        <created_in>
+        </field>
+        <field name="created_in">
             <attribute_code>created_in</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>account_information</group>
-        </created_in>
-        <default_billing>
+        </field>
+        <field name="default_billing">
             <attribute_code>default_billing</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </default_billing>
-        <default_shipping>
+        </field>
+        <field name="default_shipping">
             <attribute_code>default_shipping</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
-        </default_shipping>
-        <disable_auto_group_change>
+        </field>
+        <field name="disable_auto_group_change">
             <attribute_code>disable_auto_group_change</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>boolean</input>
             <group>account_information</group>
-        </disable_auto_group_change>
-        <dob>
+        </field>
+        <field name="dob">
             <attribute_code>dob</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
             <group>account_information</group>
-        </dob>
-        <email>
+        </field>
+        <field name="email">
             <attribute_code>email</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="string">John.Doe%isolation%@example.com</default_value>
             <input>text</input>
             <group>account_information</group>
-        </email>
-        <firstname>
+        </field>
+        <field name="firstname">
             <attribute_code>firstname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="string">John</default_value>
             <input>text</input>
             <group>account_information</group>
-        </firstname>
-        <gender>
+        </field>
+        <field name="gender">
             <attribute_code>gender</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
             <group>account_information</group>
-        </gender>
-        <group_id>
+        </field>
+        <field name="group_id">
             <attribute_code>group_id</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
             <group>account_information</group>
             <source>Magento\Customer\Test\Fixture\CustomerInjectable\GroupId</source>
-        </group_id>
-        <lastname>
+        </field>
+        <field name="lastname">
             <attribute_code>lastname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="string">Doe</default_value>
             <input>text</input>
             <group>account_information</group>
-        </lastname>
-        <middlename>
+        </field>
+        <field name="middlename">
             <attribute_code>middlename</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>account_information</group>
-        </middlename>
-        <password_hash>
+        </field>
+        <field name="password_hash">
             <attribute_code>password_hash</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>hidden</input>
-        </password_hash>
-        <prefix>
+        </field>
+        <field name="prefix">
             <attribute_code>prefix</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>account_information</group>
-        </prefix>
-        <rp_token>
+        </field>
+        <field name="rp_token">
             <attribute_code>rp_token</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>hidden</input>
-        </rp_token>
-        <rp_token_created_at>
+        </field>
+        <field name="rp_token_created_at">
             <attribute_code>rp_token_created_at</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
-        </rp_token_created_at>
-        <store_id>
+        </field>
+        <field name="store_id">
             <attribute_code>store_id</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
             <group>account_information</group>
-        </store_id>
-        <suffix>
+        </field>
+        <field name="suffix">
             <attribute_code>suffix</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>account_information</group>
-        </suffix>
-        <taxvat>
+        </field>
+        <field name="taxvat">
             <attribute_code>taxvat</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>account_information</group>
-        </taxvat>
-        <amount_delta>
-            <attribute_code>amount_delta</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-            <group>store_credit</group>
-        </amount_delta>
-        <website_id>
+        </field>
+        <field name="website_id">
             <attribute_code>website_id</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
             <group>account_information</group>
-        </website_id>
-        <is_subscribed>
+        </field>
+        <field name="amount_delta">
+            <attribute_code>amount_delta</attribute_code>
+            <backend_type>static</backend_type>
+            <is_required>1</is_required>
+            <default_value xsi:type="null" />
+            <input>text</input>
+            <group>store_credit</group>
+        </field>
+        <field name="is_subscribed">
             <attribute_code>is_subscribed</attribute_code>
             <backend_type>virtual</backend_type>
-        </is_subscribed>
-        <password>
+        </field>
+        <field name="password">
             <attribute_code>password</attribute_code>
             <backend_type>virtual</backend_type>
-        </password>
-        <password_confirmation>
+            <group>null</group>
+            <default_value xsi:type="string">123123q</default_value>
+        </field>
+        <field name="password_confirmation">
             <attribute_code>password_confirmation</attribute_code>
             <backend_type>virtual</backend_type>
-        </password_confirmation>
-        <reward_points_delta>
-            <attribute_code>reward_points_delta</attribute_code>
-            <backend_type>virtual</backend_type>
-            <source>Magento\Customer\Test\Fixture\CustomerInjectable\RewardPoints</source>
-        </reward_points_delta>
-        <store_credit>
-            <attribute_code>store_credit</attribute_code>
-            <backend_type>virtual</backend_type>
-        </store_credit>
-        <current_password>
+            <group>null</group>
+            <default_value xsi:type="string">123123q</default_value>
+        </field>
+        <field name="current_password">
             <attribute_code>current_password</attribute_code>
             <backend_type>virtual</backend_type>
-        </current_password>
+            <group>null</group>
+        </field>
     </fields>
-    <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
 </fixture>

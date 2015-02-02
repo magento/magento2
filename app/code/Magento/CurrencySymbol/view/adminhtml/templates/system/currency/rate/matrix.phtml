@@ -1,32 +1,36 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
- * @var $this \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Matrix
+ * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Matrix
  */
 ?>
 <?php
-$_oldRates = $this->getOldRates();
-$_newRates = $this->getNewRates();
+$_oldRates = $block->getOldRates();
+$_newRates = $block->getNewRates();
 $_rates = ($_newRates) ? $_newRates : $_oldRates;
 ?>
-<form name="rateForm" id="rate-form" method="post" action="<?php echo $this->getRatesFormAction(); ?>">
-    <?php echo $this->getBlockHtml('formkey')?>
+<form name="rateForm" id="rate-form" method="post" action="<?php echo $block->getRatesFormAction(); ?>">
+    <?php echo $block->getBlockHtml('formkey')?>
     <div class="grid">
         <div class="hor-scroll">
             <table cellspacing="0">
                 <thead>
                     <tr class="headings">
                         <th>&nbsp;</th>
-                        <?php $_i = 0; foreach ($this->getAllowedCurrencies() as $_currencyCode): ?>
-                            <th class="<?php echo((++$_i == (sizeof($this->getAllowedCurrencies()))) ? 'last' : '') ?> a-right"><span><?php echo $_currencyCode ?></span></th>
+                        <?php $_i = 0; foreach ($block->getAllowedCurrencies() as $_currencyCode): ?>
+                            <th class="<?php echo((++$_i == (sizeof($block->getAllowedCurrencies()))) ? 'last' : '') ?> a-right"><span><?php echo $_currencyCode ?></span></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
-                <?php $_j = 0; foreach ($this->getDefaultCurrencies() as $_currencyCode): ?>
+                <?php $_j = 0; foreach ($block->getDefaultCurrencies() as $_currencyCode): ?>
                 <tr>
                     <?php if (isset($_rates[$_currencyCode]) && is_array($_rates[$_currencyCode])): ?>
                         <?php foreach ($_rates[$_currencyCode] as $_rate => $_value): ?>
@@ -54,7 +58,7 @@ $_rates = ($_newRates) ? $_newRates : $_oldRates;
         </div>
     </div>
 </form>
-<script type="text/javascript">
+<script>
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('#rate-form').mage('form').mage('validation');

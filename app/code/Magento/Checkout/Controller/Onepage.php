@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller;
 
@@ -9,6 +10,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Action\NotFoundException;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Onepage extends Action
 {
     /**
@@ -53,7 +57,7 @@ class Onepage extends Action
     protected $layoutFactory;
 
     /**
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -67,7 +71,8 @@ class Onepage extends Action
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -79,7 +84,7 @@ class Onepage extends Action
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Sales\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_translateInline = $translateInline;
@@ -102,7 +107,7 @@ class Onepage extends Action
         $this->_request = $request;
         $this->_preDispatchValidateCustomer();
 
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->_objectManager->get('Magento\Checkout\Model\Session')->getQuote();
         if ($quote->isMultipleShippingAddresses()) {
             $quote->removeAllAddresses();

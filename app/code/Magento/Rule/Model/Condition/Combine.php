@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Rule\Model\Condition;
 
@@ -199,6 +200,7 @@ class Combine extends AbstractCondition
      * @param array $arr
      * @param string $key
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function loadArray($arr, $key = 'conditions')
     {

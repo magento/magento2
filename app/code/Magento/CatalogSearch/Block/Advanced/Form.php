@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -81,7 +82,7 @@ class Form extends Template
      */
     public function getSearchableAttributes()
     {
-        $attributes = $this->getModel()->getAttributes();
+        $attributes = $this->_catalogSearchAdvanced->getAttributes();
         return $attributes;
     }
 
@@ -315,16 +316,6 @@ class Form extends Template
     }
 
     /**
-     * Retrieve advanced search model object
-     *
-     * @return Advanced
-     */
-    public function getModel()
-    {
-        return $this->_catalogSearchAdvanced;
-    }
-
-    /**
      * Retrieve search form action url
      *
      * @return string
@@ -355,7 +346,7 @@ class Form extends Template
         )->setValue(
             $value
         )->setImage(
-            $this->getViewFileUrl('Magento_Core::calendar.gif')
+            $this->getViewFileUrl('Magento_Core::calendar.png')
         )->setDateFormat(
             $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
         )->setClass(

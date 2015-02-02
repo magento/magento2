@@ -1,7 +1,7 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
@@ -12,12 +12,12 @@ class Transactions extends \Magento\Sales\Controller\Adminhtml\Order
     /**
      * Order transactions grid ajax action
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
         $this->_initOrder();
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
+        $resultLayout = $this->resultLayoutFactory->create();
+        return $resultLayout;
     }
 }

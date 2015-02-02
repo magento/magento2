@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
@@ -13,5 +14,18 @@
         <plugin name="invalidateEavIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Product\Eav\Plugin\Import" />
         <plugin name="invalidateProductCategoryIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Product\Category\Plugin\Import" />
         <plugin name="invalidateCategoryProductIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Category\Product\Plugin\Import" />
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Product\Validator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="сategory" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Category</item>
+                <item name="groupPrice" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\GroupPrice</item>
+                <item name="media" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Media</item>
+                <item name="superProductsSku" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\SuperProductsSku</item>
+                <item name="tierPrice" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\TierPrice</item>
+                <item name="website" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Website</item>
+                <item name="weight" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Weight</item>
+            </argument>
+        </arguments>
     </type>
 </config>

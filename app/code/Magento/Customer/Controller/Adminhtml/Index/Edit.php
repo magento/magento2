@@ -1,7 +1,7 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
@@ -13,7 +13,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customer edit action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -43,8 +43,9 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
                 }
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addException($e, __('An error occurred while editing the customer.'));
-                $this->_redirect('customer/*/index');
-                return;
+                $resultRedirect = $this->resultRedirectFactory->create();
+                $resultRedirect->setPath('customer/*/index');
+                return $resultRedirect;
             }
         }
         $customerData['customer_id'] = $customerId;
@@ -115,20 +116,15 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
 
         $this->_getSession()->setCustomerData($customerData);
 
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Customer::customer_manage');
-        $this->prepareDefaultCustomerTitle();
-
-        $this->_setActiveMenu('Magento_Customer::customer');
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Customer::customer_manage');
+        $this->prepareDefaultCustomerTitle($resultPage);
+        $resultPage->setActiveMenu('Magento_Customer::customer');
         if ($isExistingCustomer) {
-            $this->_view->getPage()->getConfig()->getTitle()->prepend($this->_viewHelper->getCustomerName($customer));
+            $resultPage->getConfig()->getTitle()->prepend($this->_viewHelper->getCustomerName($customer));
         } else {
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('New Customer'));
+            $resultPage->getConfig()->getTitle()->prepend(__('New Customer'));
         }
-        /**
-         * Set active menu item
-         */
-
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }

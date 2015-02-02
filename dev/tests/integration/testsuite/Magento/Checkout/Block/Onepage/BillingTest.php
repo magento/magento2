@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Onepage;
 
@@ -18,7 +19,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\AddressRepositoryInterface */
     protected $_addressRepository;
 
-    /** @var \Magento\Sales\Model\Quote\AddressFactory */
+    /** @var \Magento\Quote\Model\Quote\AddressFactory */
     protected $_quoteAddressFactory;
 
     /** @var  \Magento\Customer\Api\Data\CustomerDataBuilder */
@@ -43,20 +44,20 @@ class BillingTest extends \PHPUnit_Framework_TestCase
         $this->_customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
         $customer = $this->_customerRepository->getById(self::FIXTURE_CUSTOMER_ID);
 
-        $customerSession = $objectManager->get('\Magento\Customer\Model\Session');
+        $customerSession = $objectManager->get('Magento\Customer\Model\Session');
         $customerSession->setCustomerData($customer);
 
         $this->_addressRepository = $objectManager->get('Magento\Customer\Api\AddressRepositoryInterface');
         //fetch sample address
         $address = $this->_addressRepository->getById(self::FIXTURE_ADDRESS_ID);
 
-        /** @var \Magento\Sales\Model\Resource\Quote\Collection $quoteCollection */
-        $quoteCollection = $objectManager->get('Magento\Sales\Model\Resource\Quote\Collection');
-        /** @var $quote \Magento\Sales\Model\Quote */
+        /** @var \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection */
+        $quoteCollection = $objectManager->get('Magento\Quote\Model\Resource\Quote\Collection');
+        /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $quoteCollection->getLastItem();
         $quote->setCustomer($customer);
-        /** @var $quoteAddressFactory \Magento\Sales\Model\Quote\AddressFactory */
-        $this->_quoteAddressFactory = $objectManager->get('Magento\Sales\Model\Quote\AddressFactory');
+        /** @var $quoteAddressFactory \Magento\Quote\Model\Quote\AddressFactory */
+        $this->_quoteAddressFactory = $objectManager->get('Magento\Quote\Model\Quote\AddressFactory');
         $billingAddress = $this->_quoteAddressFactory->create()->importCustomerAddressData($address);
         $quote->setBillingAddress($billingAddress);
         $quote->save();
@@ -122,7 +123,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
      */
     protected function _updateQuoteCustomerName()
     {
-        /** @var $emptyAddress \Magento\Sales\Model\Quote\Address */
+        /** @var $emptyAddress \Magento\Quote\Model\Quote\Address */
         $emptyAddress = $this->_quoteAddressFactory->create();
         $emptyAddress->setFirstname(null);
         $emptyAddress->setLastname(null);

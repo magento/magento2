@@ -2,12 +2,17 @@
 /**
  * Base router
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\App\Router;
 
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Base implements \Magento\Framework\App\RouterInterface
 {
     /**
@@ -62,7 +67,7 @@ class Base implements \Magento\Framework\App\RouterInterface
     protected $_url;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -110,12 +115,14 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Store\Model\StoreManagerInterface|\Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\App\Router\ActionList $actionList,
@@ -124,7 +131,7 @@ class Base implements \Magento\Framework\App\RouterInterface
         \Magento\Framework\App\ResponseFactory $responseFactory,
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
@@ -253,6 +260,8 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param array $params
      * @return \Magento\Framework\App\Action\Action|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function matchAction(\Magento\Framework\App\RequestInterface $request, array $params)
     {
@@ -321,7 +330,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      */
     protected function _getDefaultPath()
     {
-        return $this->_scopeConfig->getValue('web/default/front', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue('web/default/front', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -344,6 +353,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $path
      * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function _checkShouldBeSecure(\Magento\Framework\App\RequestInterface $request, $path = '')
     {
@@ -394,13 +404,16 @@ class Base implements \Magento\Framework\App\RouterInterface
     protected function _shouldBeSecure($path)
     {
         return parse_url(
-            $this->_scopeConfig->getValue('web/unsecure/base_url', \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+            $this->_scopeConfig->getValue(
+                'web/unsecure/base_url',
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            ),
             PHP_URL_SCHEME
         ) === 'https' || $this->_scopeConfig->isSetFlag(
             \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) && parse_url(
-            $this->_scopeConfig->getValue('web/secure/base_url', \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+            $this->_scopeConfig->getValue('web/secure/base_url', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE),
             PHP_URL_SCHEME
         ) == 'https' && $this->_urlSecurityInfo->isSecure(
             $path

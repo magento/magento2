@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Core\Model\File\Validator;
 
 /**
@@ -95,7 +99,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      */
     public function getProtectedFileExtensions($store = null)
     {
-        return $this->_scopeConfig->getValue(self::XML_PATH_PROTECTED_FILE_EXTENSIONS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->_scopeConfig->getValue(self::XML_PATH_PROTECTED_FILE_EXTENSIONS, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**

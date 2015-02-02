@@ -1,26 +1,30 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * Template for \Magento\Backend\Block\Widget\Grid\ColumnSet
- * @var $this \Magento\Backend\Block\Widget\Grid\ColumnSet
+ * @var $block \Magento\Backend\Block\Widget\Grid\ColumnSet
  */
-$numColumns = sizeof($this->getColumns());
+$numColumns = sizeof($block->getColumns());
 ?>
-<?php if ($this->getCollection()): ?>
+<?php if ($block->getCollection()): ?>
     <?php
     /* This part is commented to remove all <col> tags from the code. */
-    /* foreach ($this->getColumns() as $_column): ?>
+    /* foreach ($block->getColumns() as $_column): ?>
         <col <?php echo $_column->getHtmlProperty() ?> />
     <?php endforeach; */ ?>
-    <?php if ($this->isHeaderVisible() || $this->isFilterVisible()): ?>
+    <?php if ($block->isHeaderVisible() || $block->isFilterVisible()): ?>
         <thead>
-            <?php if ($this->isHeaderVisible()): ?>
+            <?php if ($block->isHeaderVisible()): ?>
                 <tr class="headings">
-                <?php foreach ($this->getColumns() as $_column): ?>
+                <?php foreach ($block->getColumns() as $_column): ?>
                 <?php /* @var $_column \Magento\Backend\Block\Widget\Grid\Column */ ?>
                     <th data-column="<?php echo $_column->getId() ?>" <?php echo $_column->getHeaderHtmlProperty() ?>>
                             <span><?php echo $_column->getHeaderHtml() ?></span>
@@ -28,9 +32,9 @@ $numColumns = sizeof($this->getColumns());
                 <?php endforeach; ?>
                 </tr>
             <?php endif; ?>
-            <?php if ($this->isFilterVisible()): ?>
+            <?php if ($block->isFilterVisible()): ?>
                 <tr class="filter">
-                <?php $i = 0; foreach ($this->getColumns() as $_column): ?>
+                <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
                     <th data-column="<?php echo $_column->getId() ?>" <?php echo $_column->getHeaderHtmlProperty() ?>>
                         <?php echo $_column->getFilterHtml() ?>
                     </th>
@@ -41,36 +45,36 @@ $numColumns = sizeof($this->getColumns());
     <?php endif; ?>
 
     <tbody>
-        <?php if ($this->getCollection()->getSize() > 0 && !$this->getIsCollapsed()): ?>
-        <?php foreach ($this->getCollection() as $_index => $_item): ?>
-            <?php if ($this->hasMultipleRows($_item)) :?>
-                <?php $this->updateItemByFirstMultiRow($_item); ?>
-                <tr title="<?php echo $this->getRowUrl($_item) ?>" data-role="row"
-                    <?php if ($_class = $this->getRowClass($_item)):?> class="<?php echo $_class; ?>"<?php endif;?>
-                ><?php $i = 0; foreach ($this->getColumns() as $_column):
-                      if ($this->shouldRenderCell($_item, $_column)):
-                            $_rowspan = $this->getRowspan($_item, $_column);
+        <?php if ($block->getCollection()->getSize() > 0 && !$block->getIsCollapsed()): ?>
+        <?php foreach ($block->getCollection() as $_index => $_item): ?>
+            <?php if ($block->hasMultipleRows($_item)) :?>
+                <?php $block->updateItemByFirstMultiRow($_item); ?>
+                <tr title="<?php echo $block->getRowUrl($_item) ?>" data-role="row"
+                    <?php if ($_class = $block->getRowClass($_item)):?> class="<?php echo $_class; ?>"<?php endif;?>
+                ><?php $i = 0; foreach ($block->getColumns() as $_column):
+                      if ($block->shouldRenderCell($_item, $_column)):
+                            $_rowspan = $block->getRowspan($_item, $_column);
                           ?><td data-column="<?php echo $_column->getId() ?>"
                                 <?php echo($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>
                                 class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
                             >
                                 <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                             </td><?php
-                            if ($this->shouldRenderEmptyCell($_item, $_column)):?>
-                                <td colspan="<?php echo $this->getEmptyCellColspan($_item)?>" class="last">
-                                <?php echo $this->getEmptyCellLabel()?>
+                            if ($block->shouldRenderEmptyCell($_item, $_column)):?>
+                                <td colspan="<?php echo $block->getEmptyCellColspan($_item)?>" class="last">
+                                <?php echo $block->getEmptyCellLabel()?>
                                 </td><?php
                             endif;
                         endif;
                     endforeach;
                 ?></tr>
                 <?php $_isFirstRow = true; ?>
-                <?php foreach ($this->getMultipleRows($_item) as $_i):?>
+                <?php foreach ($block->getMultipleRows($_item) as $_i):?>
                     <?php if ($_isFirstRow) : ?>
                         <?php $_isFirstRow = false; continue; ?>
                     <?php endif; ?>
                     <tr data-role="row">
-                        <?php $i = 0; foreach ($this->getMultipleRowColumns($_i) as $_column):
+                        <?php $i = 0; foreach ($block->getMultipleRowColumns($_i) as $_column):
                             ?><td data-column="<?php echo $_column->getId() ?>"
                             class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns-1 ? 'last' : '' ?>"
                         >
@@ -80,36 +84,36 @@ $numColumns = sizeof($this->getColumns());
                     </tr>
                 <?php endforeach;?>
 
-                <?php if ($this->shouldRenderSubTotal($_item)): ?>
+                <?php if ($block->shouldRenderSubTotal($_item)): ?>
                     <tr class="subtotals">
-                        <?php $i = 0; foreach ($this->getMultipleRowColumns() as $_column): ?>
+                        <?php $i = 0; foreach ($block->getMultipleRowColumns() as $_column): ?>
                             <td data-column="<?php echo $_column->getId() ?>"
                                 class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
                             >
                                 <?php echo $_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel()
-                                    : $_column->getRowField($this->getSubTotals($_item));
+                                    : $_column->getRowField($block->getSubTotals($_item));
                                 ?>
                             </td>
                         <?php endforeach; ?>
                     </tr>
                 <?php endif; ?>
             <?php else: ?>
-                <tr data-role="row" title="<?php echo $this->getRowUrl($_item) ?>"<?php if ($_class = $this->getRowClass($_item)):?>
+                <tr data-role="row" title="<?php echo $block->getRowUrl($_item) ?>"<?php if ($_class = $block->getRowClass($_item)):?>
                     class="<?php echo $_class; ?>"<?php endif;?>
                 >
-                    <?php $i = 0; foreach ($this->getColumns() as $_column): ?>
-                        <?php if ($this->shouldRenderCell($_item, $_column)):?>
+                    <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
+                        <?php if ($block->shouldRenderCell($_item, $_column)):?>
                             <td data-column="<?php echo $_column->getId() ?>"
                                 class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
                             >
                                 <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                             </td>
-                            <?php if ($this->shouldRenderEmptyCell($_item, $_column)):?>
+                            <?php if ($block->shouldRenderEmptyCell($_item, $_column)):?>
                                 <td data-column="<?php echo $_column->getId() ?>"
-                                    colspan="<?php echo $this->getEmptyCellColspan($_item)?>"
-                                    class="col-no-records <?php echo $this->getEmptyTextClass() ?> last"
+                                    colspan="<?php echo $block->getEmptyCellColspan($_item)?>"
+                                    class="col-no-records <?php echo $block->getEmptyTextClass() ?> last"
                                 >
-                                    <?php echo $this->getEmptyCellLabel()?>
+                                    <?php echo $block->getEmptyCellLabel()?>
                                 </td>
                             <?php endif;?>
                         <?php endif;?>
@@ -117,24 +121,24 @@ $numColumns = sizeof($this->getColumns());
                 </tr>
             <?php endif; ?>
         <?php endforeach; ?>
-        <?php elseif ($this->getEmptyText()): ?>
+        <?php elseif ($block->getEmptyText()): ?>
             <tr data-role="row">
-                <td class="<?php echo $this->getEmptyTextClass() ?>"
+                <td class="<?php echo $block->getEmptyTextClass() ?>"
                     colspan="<?php echo $numColumns ?>"
-                ><?php echo $this->getEmptyText() ?></td>
+                ><?php echo $block->getEmptyText() ?></td>
             </tr>
         <?php endif; ?>
     </tbody>
 
-    <?php if ($this->shouldRenderTotal()): ?>
+    <?php if ($block->shouldRenderTotal()): ?>
     <tfoot>
         <tr class="totals" data-role="row">
-            <?php foreach ($this->getColumns() as $_column): ?>
+            <?php foreach ($block->getColumns() as $_column): ?>
                 <th data-column="<?php echo $_column->getId() ?>"
                     class="<?php echo $_column->getCssProperty() ?>"
                 >
                     <?php echo($_column->hasTotalsLabel()) ? $_column->getTotalsLabel()
-                        : $_column->getRowField($this->getTotals()) ?>
+                        : $_column->getRowField($block->getTotals()) ?>
                 </th>
             <?php endforeach; ?>
         </tr>

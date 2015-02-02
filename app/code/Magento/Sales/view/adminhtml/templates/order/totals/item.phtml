@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-?>
-<?php $_source  = $this->getSource() ?>
-<?php $this->setPriceDataObject($_source) ?>
 
-<?php if ((float) $_source->getDataUsingMethod($this->getSourceField())): ?>
+// @codingStandardsIgnoreFile
+
+?>
+<?php $_source  = $block->getSource() ?>
+<?php $block->setPriceDataObject($_source) ?>
+
+<?php if ((float) $_source->getDataUsingMethod($block->getSourceField())): ?>
     <tr>
-        <td class="label"><?php if ($this->getStrong()) : ?><strong><?php endif; ?><?php echo __($this->getLabel()) ?><?php if ($this->getStrong()) : ?></strong><?php endif; ?></td>
-        <td <?php echo $this->getHtmlClass() ? ('class="' . $this->getHtmlClass() . '"') : '';?>><?php if ($this->getStrong()) : ?><strong><?php endif; ?><?php echo $this->displayPriceAttribute($this->getSourceField()) ?><?php if ($this->getStrong()) : ?></strong><?php endif; ?></td>
+        <td class="label"><?php if ($block->getStrong()) : ?><strong><?php endif; ?><?php echo __($block->getLabel()) ?><?php if ($block->getStrong()) : ?></strong><?php endif; ?></td>
+        <td <?php echo $block->getHtmlClass() ? ('class="' . $block->getHtmlClass() . '"') : '';?>><?php if ($block->getStrong()) : ?><strong><?php endif; ?><?php echo $block->displayPriceAttribute($block->getSourceField()) ?><?php if ($block->getStrong()) : ?></strong><?php endif; ?></td>
     </tr>
 <?php endif; ?>

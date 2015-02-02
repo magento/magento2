@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Review\Test\TestCase;
 
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Moderate ProductReview Entity
@@ -32,6 +33,11 @@ use Mtf\TestCase\Injectable;
  */
 class ModerateProductReviewEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Backend review grid page
      *
@@ -62,11 +68,11 @@ class ModerateProductReviewEntityTest extends Injectable
     /**
      * Run moderate product review test
      *
-     * @param ReviewInjectable $reviewInitial
-     * @param ReviewInjectable $review
+     * @param Review $reviewInitial
+     * @param Review $review
      * @return array
      */
-    public function test(ReviewInjectable $reviewInitial, ReviewInjectable $review)
+    public function test(Review $reviewInitial, Review $review)
     {
         // Precondition
         $reviewInitial->persist();

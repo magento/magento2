@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Rss\Product;
 
@@ -59,7 +60,13 @@ class NotifyStockTest extends \PHPUnit_Framework_TestCase
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
 
         $this->stock = $this->getMock('Magento\CatalogInventory\Model\Resource\Stock', [], [], '', false);
-        $this->stockFactory = $this->getMock('Magento\CatalogInventory\Model\Resource\StockFactory', ['create']);
+        $this->stockFactory = $this->getMock(
+            'Magento\CatalogInventory\Model\Resource\StockFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->stockFactory->expects($this->any())->method('create')->will($this->returnValue($this->stock));
 
         $this->status = $this->getMock('Magento\Catalog\Model\Product\Attribute\Source\Status');

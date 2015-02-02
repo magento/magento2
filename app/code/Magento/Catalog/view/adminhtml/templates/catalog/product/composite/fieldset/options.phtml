@@ -1,19 +1,23 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php /* @var $this \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options */ ?>
-<?php $options = $this->decorateArray($this->getOptions()); ?>
+<?php /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options */ ?>
+<?php $options = $block->decorateArray($block->getOptions()); ?>
 <?php if (count($options)): ?>
 
-<?php echo $this->getChildHtml('options_js') ?>
+<?php echo $block->getChildHtml('options_js') ?>
 
-<fieldset id="product_composite_configure_fields_options" class="fieldset <?php echo $this->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
+<fieldset id="product_composite_configure_fields_options" class="fieldset <?php echo $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <legend class="legend"><span><?php echo __('Custom Options') ?></span></legend>
     <?php foreach ($options as $option): ?>
-        <?php echo $this->getOptionHtml($option); ?>
+        <?php echo $block->getOptionHtml($option); ?>
     <?php endforeach;?>
 </fieldset>
 

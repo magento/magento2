@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Api;
@@ -31,11 +32,17 @@ class ExtensibleDataObjectConverter
      *
      * @param ExtensibleDataInterface $dataObject
      * @param string[] $skipCustomAttributes
+     * @param string $dataObjectType
      * @return array
      */
-    public function toNestedArray(ExtensibleDataInterface $dataObject, $skipCustomAttributes = [])
-    {
-        $dataObjectType = get_class($dataObject);
+    public function toNestedArray(
+        ExtensibleDataInterface $dataObject,
+        $skipCustomAttributes = [],
+        $dataObjectType = null
+    ) {
+        if ($dataObjectType == null) {
+            $dataObjectType = get_class($dataObject);
+        }
         $dataObjectArray = $this->dataObjectProcessor->buildOutputDataArray($dataObject, $dataObjectType);
         //process custom attributes if present
         if (!empty($dataObjectArray[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY])) {
@@ -57,11 +64,15 @@ class ExtensibleDataObjectConverter
      *
      * @param ExtensibleDataInterface $dataObject
      * @param string[] $skipCustomAttributes
+     * @param string $dataObjectType
      * @return array
      */
-    public function toFlatArray(ExtensibleDataInterface $dataObject, $skipCustomAttributes = [])
-    {
-        $dataObjectArray = $this->toNestedArray($dataObject, $skipCustomAttributes);
+    public function toFlatArray(
+        ExtensibleDataInterface $dataObject,
+        $skipCustomAttributes = [],
+        $dataObjectType = null
+    ) {
+        $dataObjectArray = $this->toNestedArray($dataObject, $skipCustomAttributes, $dataObjectType);
         return ConvertArray::toFlatArray($dataObjectArray);
     }
 

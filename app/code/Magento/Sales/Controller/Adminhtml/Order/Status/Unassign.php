@@ -1,14 +1,38 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
+
+use Magento\Framework\Registry;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\RedirectFactory;
 
 class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**
-     * @return void
+     * @var RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context, $coreRegistry);
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -29,6 +53,8 @@ class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status
         } else {
             $this->messageManager->addError(__('We can\'t find this order status.'));
         }
-        $this->_redirect('sales/*/');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('sales/*/');
     }
 }

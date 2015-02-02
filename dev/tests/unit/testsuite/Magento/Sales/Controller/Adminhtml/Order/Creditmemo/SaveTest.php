@@ -1,9 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SaveTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -42,6 +49,26 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $memoLoaderMock;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultForwardFactoryMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultForwardMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactoryMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+
+    /**
      * Init model for future tests
      */
     protected function setUp()
@@ -60,6 +87,20 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ['setFormData'],
             $constructArguments
         );
+        $this->resultForwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->resultForwardMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false, false);
         $this->_objectManager->expects(
@@ -94,7 +135,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         );
         $this->_controller = $helper->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Save',
-            ['context' => $context, 'creditmemoLoader' => $this->memoLoaderMock]
+            [
+                'context' => $context,
+                'creditmemoLoader' => $this->memoLoaderMock,
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock
+            ]
         );
     }
 
@@ -130,13 +175,23 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($creditmemoMock)
         );
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('sales/*/new', ['_current' => true])
+            ->willReturnSelf();
 
         $this->_setSaveActionExpectationForMageCoreException(
             $data,
             'Cannot create online refund for Refund to Store Credit.'
         );
 
-        $this->_controller->execute();
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Redirect',
+            $this->_controller->execute()
+        );
     }
 
     /**
@@ -172,6 +227,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($creditmemoMock)
         );
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('sales/*/new', ['_current' => true])
+            ->willReturnSelf();
 
         $this->_setSaveActionExpectationForMageCoreException($data, 'Credit memo\'s total must be positive.');
 
@@ -188,7 +250,5 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($errorMessage));
         $this->_sessionMock->expects($this->once())->method('setFormData')->with($this->equalTo($data));
-
-        $this->_responseMock->expects($this->once())->method('setRedirect');
     }
 }

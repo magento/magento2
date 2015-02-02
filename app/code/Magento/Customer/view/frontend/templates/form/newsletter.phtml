@@ -1,24 +1,28 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php echo $this->getChildHtml('form_before')?>
-    <form class="form form-newsletter-manage" action="<?php echo $this->getAction() ?>" method="post" id="form-validate">
+<?php echo $block->getChildHtml('form_before')?>
+    <form class="form form-newsletter-manage" action="<?php echo $block->getAction() ?>" method="post" id="form-validate">
         <fieldset class="fieldset">
-            <?php echo $this->getBlockHtml('formkey')?>
+            <?php echo $block->getBlockHtml('formkey')?>
             <legend class="legend"><span><?php echo __('Subscription option') ?></span></legend><br>
             <div class="field choice">
-                <input type="checkbox" name="is_subscribed" id="subscription" value="1" title="<?php echo __('General Subscription') ?>"<?php if ($this->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox">
+                <input type="checkbox" name="is_subscribed" id="subscription" value="1" title="<?php echo __('General Subscription') ?>"<?php if ($block->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox">
                 <label for="subscription" class="label"><span><?php echo __('General Subscription') ?></span></label>
             </div>
             <?php /* Extensions placeholder */ ?>
-            <?php echo $this->getChildHtml('customer.form.newsletter.extra')?>
+            <?php echo $block->getChildHtml('customer.form.newsletter.extra')?>
         </fieldset>
         <div class="actions-toolbar">
             <div class="primary"><button type="submit" title="<?php echo __('Save') ?>" class="action save primary"><span><?php echo __('Save') ?></span></button></div>
-            <div class="secondary"><a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a></div>
+            <div class="secondary"><a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a></div>
         </div>
     </form>
 <?php /* Extensions placeholder */ ?>
-<?php echo $this->getChildHtml('customer.form.newsletter.extra2')?>
+<?php echo $block->getChildHtml('customer.form.newsletter.extra2')?>

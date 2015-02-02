@@ -1,19 +1,23 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="actions">
-    <?php  $_order = $this->getOrder() ?>
+    <?php  $_order = $block->getOrder() ?>
     <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order)) : ?>
-        <a class="action reorder" href="<?php echo $this->getReorderUrl($_order) ?>">
+        <a class="action reorder" href="<?php echo $block->getReorderUrl($_order) ?>">
             <span><?php echo __('Reorder') ?></span>
         </a>
     <?php endif ?>
     <a class="action print"
-       href="<?php echo $this->getPrintUrl($_order) ?>"
+       href="<?php echo $block->getPrintUrl($_order) ?>"
        onclick="this.target='_blank';">
         <span><?php echo __('Print Order') ?></span>
     </a>
-    <?php echo $this->getChildHtml(); ?>
+    <?php echo $block->getChildHtml(); ?>
 </div>

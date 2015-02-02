@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Helper;
 
@@ -76,7 +77,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_coreHelper = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
 
         $this->_store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->_store));
 
         $currencyFactory = $this->getMock('Magento\Directory\Model\CurrencyFactory', [], [], '', false);

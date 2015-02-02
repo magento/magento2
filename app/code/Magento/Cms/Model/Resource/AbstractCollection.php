@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Resource;
 
 use Magento\Framework\Data\AbstractSearchResult;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Framework\Data\SearchResultProcessorFactory;
 use Magento\Framework\Data\SearchResultProcessor;
 use Magento\Framework\DB\QueryInterface;
@@ -19,7 +20,7 @@ use Magento\Framework\Data\SearchResultIteratorFactory;
 class AbstractCollection extends AbstractSearchResult
 {
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -45,7 +46,7 @@ class AbstractCollection extends AbstractSearchResult
      * @param EntityFactoryInterface $entityFactory
      * @param ManagerInterface $eventManager
      * @param SearchResultIteratorFactory $resultIteratorFactory
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param SearchResultProcessorFactory $searchResultProcessorFactory
      */
     public function __construct(

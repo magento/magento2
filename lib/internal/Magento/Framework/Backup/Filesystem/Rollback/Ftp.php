@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Backup\Filesystem\Rollback;
 
@@ -157,6 +158,7 @@ class Ftp extends AbstractRollback
      * @param string $tmpDir
      * @return void
      * @throws \Magento\Framework\Exception
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _uploadBackupToFtp($tmpDir)
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Rss;
 
@@ -53,7 +54,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected $customerSession;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -104,7 +105,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->imageHelper = $this->getMock('Magento\Catalog\Helper\Image', [], [], '', false);
         $this->customerSession = $this->getMock('Magento\Customer\Model\Session', ['getId'], [], '', false);
         $this->customerSession->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $store = $this->getMockBuilder('\Magento\Store\Model\Store')
             ->setMethods(['getId', '__wakeup'])->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
@@ -193,7 +194,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testIsAllowed()
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
-            ->with('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('rss/catalog/category', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
         $this->assertEquals(true, $this->block->isAllowed());
     }
@@ -201,7 +202,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testGetFeeds()
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
-            ->with('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('rss/catalog/category', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
 
         $category = $this->getMockBuilder('\Magento\Catalog\Model\Category')

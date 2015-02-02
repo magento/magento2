@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Block\Cart;
 
 use Magento\Framework\View\Block\IdentityInterface;
@@ -69,7 +73,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
         if (is_null($count)) {
             $count = $this->_scopeConfig->getValue(
                 self::XML_PATH_CHECKOUT_SIDEBAR_COUNT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
             $this->setData('item_count', $count);
         }
@@ -96,7 +100,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
         $i = 0;
         $allItems = array_reverse($this->getItems());
         foreach ($allItems as $item) {
-            /* @var $item \Magento\Sales\Model\Quote\Item */
+            /* @var $item \Magento\Quote\Model\Quote\Item */
             if (!$item->getProduct()->isVisibleInSiteVisibility()) {
                 $productId = $item->getProduct()->getId();
                 $products = $this->_catalogUrl->getRewriteByProductStore([$productId => $item->getStoreId()]);
@@ -158,6 +162,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
      * Get one page checkout page url
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCheckoutUrl()
     {
@@ -168,12 +173,13 @@ class Sidebar extends AbstractCart implements IdentityInterface
      * Define if Mini Shopping Cart Pop-Up Menu enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsNeedToDisplaySideBar()
     {
         return (bool)$this->_scopeConfig->getValue(
             'checkout/sidebar/display',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -271,7 +277,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
     public function getIdentities()
     {
         $identities = [];
-        /** @var $item \Magento\Sales\Model\Quote\Item */
+        /** @var $item \Magento\Quote\Model\Quote\Item */
         foreach ($this->getItems() as $item) {
             $identities = array_merge($identities, $item->getProduct()->getIdentities());
         }

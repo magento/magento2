@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
@@ -8,6 +9,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
  * Entity/Attribute/Model - attribute selection source abstract
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractSource implements
     \Magento\Eav\Model\Entity\Attribute\Source\SourceInterface,
@@ -93,6 +95,7 @@ abstract class AbstractSource implements
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @param string $dir direction
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addValueSortToCollection($collection, $dir = \Magento\Framework\Data\Collection::SORT_ORDER_DESC)
     {
@@ -124,6 +127,7 @@ abstract class AbstractSource implements
      *
      * @param int $store
      * @return \Magento\Framework\DB\Select|null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFlatUpdateSelect($store)
     {

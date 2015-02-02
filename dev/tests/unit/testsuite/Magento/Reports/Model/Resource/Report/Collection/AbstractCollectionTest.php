@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Reports\Model\Resource\Report\Collection;
 
 class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
@@ -13,7 +17,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $entityFactory = $this->getMock('\Magento\Core\Model\EntityFactory', [], [], '', false);
+        $entityFactory = $this->getMock('\Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
         $logger = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
         $fetchStrategy = $this->getMock('\Magento\Framework\Data\Collection\Db\FetchStrategy\Query', [], [], '', false);
         $eventManager = $this->getMock('\Magento\Framework\Event\Manager', [], [], '', false);

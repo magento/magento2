@@ -1,22 +1,23 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\View\Result\Layout;
 
 class Grid extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**
      * Ajax grid action
      *
-     * @return void
+     * @return Layout
      */
     public function execute()
     {
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
+        return $this->resultLayoutFactory->create();
     }
 }

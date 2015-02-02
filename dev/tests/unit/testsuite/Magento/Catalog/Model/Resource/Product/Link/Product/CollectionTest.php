@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model\Resource\Product\Link\Product;
@@ -19,7 +20,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Core\Model\EntityFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $entityFactoryMock;
 
     /** @var \Magento\Logger|\PHPUnit_Framework_MockObject_MockObject */
@@ -46,7 +47,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $universalFactoryMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
 
     /** @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
@@ -75,7 +76,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
+        $this->entityFactoryMock = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
         $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->fetchStrategyMock = $this->getMock('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
         $this->managerInterfaceMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
@@ -89,7 +90,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
         $this->universalFactoryMock = $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false);
         $this->universalFactoryMock->expects($this->any())->method('create')->will($this->returnValue($entity));
-        $this->storeManagerMock = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMockForAbstractClass('Magento\Framework\Store\StoreManagerInterface');
         $this->storeManagerMock
             ->expects($this->any())
             ->method('getStore')

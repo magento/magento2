@@ -1,15 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?>
-<?php if ($this->getInfo()->getAdditionalData()): ?>
-    <?php if ($this->getPayableTo()): ?><br /><?php echo __('Make Check payable to: %1', $this->escapeHtml($this->getPayableTo())) ?><?php endif; ?>
-    <?php if ($this->getMailingAddress()): ?>
+<?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?>
+<?php if ($block->getInfo()->getAdditionalData()): ?>
+    <?php if ($block->getPayableTo()): ?><br /><?php echo __('Make Check payable to: %1', $block->escapeHtml($block->getPayableTo())) ?><?php endif; ?>
+    <?php if ($block->getMailingAddress()): ?>
         <label><?php echo __('Send Check to:') ?></label>
         <div class="checkmo-mailing-address">
-            <?php echo nl2br($this->escapeHtml($this->getMailingAddress())) ?>
+            <?php echo nl2br($block->escapeHtml($block->getMailingAddress())) ?>
         </div>
     <?php endif; ?>
 <?php endif; ?>

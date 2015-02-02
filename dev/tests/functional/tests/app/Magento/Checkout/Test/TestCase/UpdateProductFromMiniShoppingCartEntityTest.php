@@ -1,15 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\TestCase;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Flow:
@@ -31,6 +32,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Catalog product view page.
      *

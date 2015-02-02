@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Store\Model\Resource;
 
 /**
@@ -75,7 +79,7 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $model)
     {
         $where = [
-            'scope = ?' => \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
+            'scope = ?' => \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITES,
             'scope_id = ?' => $model->getWebsiteId(),
         ];
 

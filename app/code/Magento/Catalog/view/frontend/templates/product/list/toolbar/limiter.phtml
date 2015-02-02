@@ -1,15 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * Product list toolbar
  *
- * @var $this \Magento\Catalog\Block\Product\ProductList\Toolbar
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
  */
-use \Magento\Catalog\Model\Product\ProductList\Toolbar;
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
 ?>
 <div class="field limiter">
     <label class="label" for="limiter">
@@ -17,8 +21,8 @@ use \Magento\Catalog\Model\Product\ProductList\Toolbar;
     </label>
     <div class="control">
         <select id="limiter" data-role="limiter" class="limiter-options">
-            <?php foreach ($this->getAvailableLimit() as $_key => $_limit): ?>
-                <option value="<?php echo $_key ?>"<?php if ($this->isLimitCurrent($_key)): ?>
+            <?php foreach ($block->getAvailableLimit() as $_key => $_limit): ?>
+                <option value="<?php echo $_key ?>"<?php if ($block->isLimitCurrent($_key)): ?>
                     selected="selected"<?php endif ?>>
                     <?php echo $_limit ?>
                 </option>

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -19,9 +20,9 @@ $objectManger->get('Magento\Framework\App\AreaList')
 
 $objectManger->configure([
     'preferences' => [
-        'Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data',
+        'Magento\Theme\Model\Theme' => 'Magento\Theme\Model\Theme\Data',
     ],
 ]);
-/** @var $registration \Magento\Core\Model\Theme\Registration */
-$registration = $objectManger->create('Magento\Core\Model\Theme\Registration');
+/** @var $registration \Magento\Theme\Model\Theme\Registration */
+$registration = $objectManger->create('Magento\Theme\Model\Theme\Registration');
 $registration->register('*/*/theme.xml');

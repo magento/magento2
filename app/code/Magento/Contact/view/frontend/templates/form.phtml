@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <form class="form contact"
-      action="<?php echo $this->getFormAction(); ?>"
+      action="<?php echo $block->getFormAction(); ?>"
       id="contact-form"
       method="post"
       data-hasrequired="<?php echo __('* Required Fields') ?>"
@@ -15,13 +19,13 @@
         <div class="field name required">
             <label class="label" for="name"><span><?php echo __('Name') ?></span></label>
             <div class="control">
-                <input name="name" id="name" title="<?php echo __('Name') ?>" value="<?php echo $this->escapeHtml($this->helper('Magento\Contact\Helper\Data')->getUserName()) ?>" class="input-text" type="text" data-validate="{required:true}"/>
+                <input name="name" id="name" title="<?php echo __('Name') ?>" value="<?php echo $block->escapeHtml($this->helper('Magento\Contact\Helper\Data')->getUserName()) ?>" class="input-text" type="text" data-validate="{required:true}"/>
             </div>
         </div>
         <div class="field email required">
             <label class="label" for="email"><span><?php echo __('Email') ?></span></label>
             <div class="control">
-                <input name="email" id="email" title="<?php echo __('Email') ?>" value="<?php echo $this->escapeHtml($this->helper('Magento\Contact\Helper\Data')->getUserEmail()) ?>" class="input-text" type="email" data-validate="{required:true, 'validate-email':true}"/>
+                <input name="email" id="email" title="<?php echo __('Email') ?>" value="<?php echo $block->escapeHtml($this->helper('Magento\Contact\Helper\Data')->getUserEmail()) ?>" class="input-text" type="email" data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>
         <div class="field telephone">
@@ -36,7 +40,7 @@
                 <textarea name="comment" id="comment" title="<?php echo __('What’s on your mind?') ?>" class="input-text" cols="5" rows="3" data-validate="{required:true}"></textarea>
             </div>
         </div>
-        <?php echo $this->getChildHtml('form.additional.info'); ?>
+        <?php echo $block->getChildHtml('form.additional.info'); ?>
     </fieldset>
     <div class="actions-toolbar">
         <div class="primary">

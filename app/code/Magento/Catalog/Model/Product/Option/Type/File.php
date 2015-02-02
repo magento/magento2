@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Option\Type;
 
@@ -11,6 +12,7 @@ use Magento\Framework\Model\Exception;
  * Catalog product option file type
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
@@ -52,7 +54,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Item option factory
      *
-     * @var \Magento\Sales\Model\Quote\Item\OptionFactory
+     * @var \Magento\Quote\Model\Quote\Item\OptionFactory
      */
     protected $_itemOptionFactory;
 
@@ -69,7 +71,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory
+     * @param \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory
      * @param \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
@@ -81,7 +83,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory,
+        \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo $validatorInfo,
         \Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile $validatorFile,
@@ -178,6 +180,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return $this
      * @throws Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateUserValue($values)
     {

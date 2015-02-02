@@ -1,29 +1,35 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-/** @var \Magento\Wishlist\Block\Customer\Wishlist\Items $this */
-$columns = $this->getColumns();
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Items $block */
+$columns = $block->getColumns();
 ?>
 
 <div class="products-grid wishlist">
     <?php $iterator = 1; ?>
-    <?php if (count($this->getItems())): ?>
+    <?php if (count($block->getItems())): ?>
     <ol class="product-items">
-        <?php foreach ($this->getItems() as $item): ?>
+        <?php foreach ($block->getItems() as $item): ?>
         <?php echo($iterator++ == 1) ? '<li class="product-item" id="item_' . $item->getId() . '">' : '</li><li class="product-item" id="item_' . $item->getId() . '">' ?>
             <div class="product-item-info">
                 <?php foreach ($columns as $column): ?>
                     <?php $column->setItem($item); echo $column->toHtml($item);?>
                 <?php endforeach; ?>
             </div>
-        <?php echo($iterator == count($this->getItems())+1) ? '</li>' : '' ?>
+        <?php echo($iterator == count($block->getItems())+1) ? '</li>' : '' ?>
         <?php endforeach; ?>
     </ol>
     <?php else: ?>
-        <div class="message info empty"><span><?php echo __('This Wish List has no Items');?></span></div>
+        <div class="message info empty">
+            <span><?php echo __('This Wish List has no Items');?></span>
+        </div>
     <?php endif; ?>
 </div>
 

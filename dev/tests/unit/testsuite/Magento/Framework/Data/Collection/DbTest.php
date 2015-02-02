@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Data\Collection;
 
 class DbTest extends \PHPUnit_Framework_TestCase
@@ -17,7 +21,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
-     * @var \Magento\Core\Model\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityFactoryMock;
 
@@ -32,7 +36,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Data\Collection\Db\FetchStrategy\Query', ['fetchAll'], [], '', false
         );
         $this->entityFactoryMock = $this->getMock(
-            'Magento\Core\Model\EntityFactory', ['create'], [], '', false
+            'Magento\Framework\Data\Collection\EntityFactory', ['create'], [], '', false
         );
         $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->collection = new \Magento\Framework\Data\Collection\Db(

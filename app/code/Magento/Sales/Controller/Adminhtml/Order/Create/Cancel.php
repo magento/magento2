@@ -1,26 +1,29 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
-
 
 class Cancel extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
      * Cancel order create
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+
         if ($orderId = $this->_getSession()->getReordered()) {
             $this->_getSession()->clearStorage();
-            $this->_redirect('sales/order/view', ['order_id' => $orderId]);
+            $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
         } else {
             $this->_getSession()->clearStorage();
-            $this->_redirect('sales/*');
+            $resultRedirect->setPath('sales/*');
         }
+        return $resultRedirect;
     }
 }

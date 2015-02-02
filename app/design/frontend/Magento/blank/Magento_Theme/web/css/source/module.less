@@ -1,18 +1,19 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 @import "collapsible_navigation.less";
 
 @message-global-note-color: @text-color;
-@message-global-note-background: #ffee9c;
+@message-global-note-background: @color-yellow-light2;
 @message-global-note-link-color: @link-color;
 @message-global-note-link-color-hover: @link-color-hover;
 @message-global-note-link-color-active: @link-color-active;
-@message-global-note-border-color: #d6ca8e;
+@message-global-note-border-color: @color-yellow-light3;
 
 @message-global-caution-color: @color-white;
-@message-global-caution-background: #ff0101;
+@message-global-caution-background: @color-red9;
 @message-global-caution-link-color: @link-color;
 @message-global-caution-link-color-hover: @link-color-hover;
 @message-global-caution-link-color-active: @link-color-active;
@@ -29,13 +30,11 @@
 
 @h1-margin-bottom-desktop: @indent-xl-base;
 
-
-
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 body {
     .css(background-color, @page-bg-color);
@@ -83,7 +82,20 @@ body {
 }
 
 .action.skip {
-    &:extend(.abs-visually-hidden all);
+    &:not(:focus) {
+        &:extend(.abs-visually-hidden all);
+    }
+    &:focus {
+        position: absolute;
+        z-index: 15;
+        box-sizing: border-box;
+        width: 100%;
+        left: 0;
+        top: 0;
+        text-align: center;
+        .css(background, @color-gray94);
+        .css(padding, @indent-s-base);
+    }
 }
 
 //
@@ -137,10 +149,6 @@ body {
             &:extend(.abs-reset-list all);
         }
         .links {
-            display: inline-block;
-            vertical-align: top;
-            margin-bottom: 20px;
-            padding: 0 50px 0 0;
             > li {
                 margin: 0 0 8px;
             }
@@ -206,9 +214,6 @@ body {
 
 .widget {
     clear: both;
-    img {
-        max-width: 100%;
-    }
     .block-title {
         &:extend(.abs-block-title all);
     }
@@ -219,7 +224,7 @@ body {
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
 
     html,
     body {
@@ -231,7 +236,8 @@ body {
         .vendor-prefix-flex-direction(column);
         min-height: 100%; // stretch content area for sticky footer
         > .breadcrumbs,
-        > .top-container {
+        > .top-container,
+        > .widget {
             width: 100%;
             box-sizing: border-box;
         }
@@ -254,6 +260,11 @@ body {
                     &.welcome,
                     a {
                         line-height: 1.4;
+                    }
+                    &.welcome {
+                        a {
+                            .css(padding-left, @indent-xs-base);
+                        }
                     }
                 }
                 margin-left: auto;
@@ -305,6 +316,12 @@ body {
             .block {
                 float: right;
             }
+            .links {
+                display: inline-block;
+                vertical-align: top;
+                margin-bottom: 20px;
+                padding: 0 50px 0 0;
+            }
             .switcher.store {
                 display: inline-block;
                 padding-right: 50px;
@@ -321,8 +338,7 @@ body {
 //    Common
 //--------------------------------------
 
-.responsive-common() {
-
+& when (@media-common = true) {
 
 .no-display {
     &:extend(.abs-no-display all);

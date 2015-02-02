@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
@@ -8,8 +9,8 @@ namespace Magento\ConfigurableProduct\Test\Constraint;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertConfigurableProductInCart
@@ -20,14 +21,14 @@ class AssertConfigurableProductInCart extends AbstractConstraint
     /**
      * Assertion that the product is correctly displayed in cart
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $checkoutCart
      * @param ConfigurableProductInjectable $product
      * @return void
      */
     public function processAssert(
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogProductView $catalogProductView,
         CheckoutCart $checkoutCart,
         ConfigurableProductInjectable $product

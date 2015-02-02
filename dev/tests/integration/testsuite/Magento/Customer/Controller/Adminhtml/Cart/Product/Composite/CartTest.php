@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
 
@@ -10,7 +11,7 @@ namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
 class CartTest extends \Magento\Backend\Utility\Controller
 {
     /**
-     * @var \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory
+     * @var \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory
      */
     protected $quoteItemCollectionFactory;
 
@@ -18,7 +19,7 @@ class CartTest extends \Magento\Backend\Utility\Controller
     {
         parent::setUp();
         $this->quoteItemCollectionFactory = $this->_objectManager->get(
-            '\Magento\Sales\Model\Resource\Quote\Item\CollectionFactory'
+            'Magento\Quote\Model\Resource\Quote\Item\CollectionFactory'
         );
     }
 

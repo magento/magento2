@@ -1,34 +1,46 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Customer\Test\Fixture\CustomerGroup">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
+         class="Magento\Customer\Test\Fixture\CustomerGroupInjectable">
     <module>Magento_Customer</module>
     <type>flat</type>
     <entity_type>customer_group</entity_type>
     <collection>Magento\Customer\Model\Resource\Group\Collection</collection>
+    <repository_class>Magento\Customer\Test\Repository\CustomerGroupInjectable</repository_class>
+    <handler_interface>Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface</handler_interface>
+    <dataset name="default">
+        <field name="customer_group_code" xsi:type="string">customer_code_%isolation%</field>
+        <field name="tax_class_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">customer_tax_class</item>
+        </field>
+    </dataset>
     <fields>
-        <customer_group_code>
+        <field name="customer_group_code">
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>customer_code_%isolation%</default_value>
+            <default_value xsi:type="string">customer_code_%isolation%</default_value>
             <input>text</input>
-        </customer_group_code>
-        <tax_class_id>
+        </field>
+        <field name="tax_class_id">
             <attribute_code>tax_class</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>Retail Customer</default_value>
+            <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">customer_tax_class</item>
+            </default_value>
             <input>select</input>
-        </tax_class_id>
-        <customer_group_id>
+            <source>Magento\Customer\Test\Fixture\CustomerGroup\TaxClassIds</source>
+        </field>
+        <field name="customer_group_id">
             <attribute_code>customer_group_id</attribute_code>
             <backend_type>virtual</backend_type>
-        </customer_group_id>
+        </field>
     </fields>
-    <repository_class>Magento\Customer\Test\Repository\CustomerGroupInjectable</repository_class>
-    <handler_interface>Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface</handler_interface>
 </fixture>

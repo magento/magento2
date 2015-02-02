@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Search;
 
@@ -8,7 +9,7 @@ use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Layer\CollectionFilterInterface;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\DB\Select;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 class CollectionFilter implements CollectionFilterInterface
 {
@@ -18,7 +19,7 @@ class CollectionFilter implements CollectionFilterInterface
     protected $catalogConfig;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -29,7 +30,7 @@ class CollectionFilter implements CollectionFilterInterface
 
     /**
      * @param Config $catalogConfig
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Visibility $productVisibility
      */
     public function __construct(
@@ -48,6 +49,7 @@ class CollectionFilter implements CollectionFilterInterface
      * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
      * @param \Magento\Catalog\Model\Category $category
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function filter(
         $collection,

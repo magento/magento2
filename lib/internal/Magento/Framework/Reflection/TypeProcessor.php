@@ -1,11 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Exception\SerializationException;
 use Zend\Code\Reflection\ClassReflection;
+use Zend\Code\Reflection\ParameterReflection;
 
 /**
  * Type processor of config reader properties
@@ -157,7 +159,7 @@ class TypeProcessor
             }
             $reflection = new ClassReflection($class);
             $docBlock = $reflection->getDocBlock();
-            $this->_types[$typeName]['documentation'] = $docBlock ? $this->_getDescription($docBlock) : '';
+            $this->_types[$typeName]['documentation'] = $docBlock ? $this->getDescription($docBlock) : '';
             /** @var \Zend\Code\Reflection\MethodReflection $methodReflection */
             foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $methodReflection) {
                 if ($methodReflection->class === "Magento\Framework\Model\AbstractModel") {
@@ -200,7 +202,7 @@ class TypeProcessor
      * @param \Zend\Code\Reflection\DocBlockReflection $doc
      * @return string
      */
-    protected function _getDescription(\Zend\Code\Reflection\DocBlockReflection $doc)
+    public function getDescription(\Zend\Code\Reflection\DocBlockReflection $doc)
     {
         $shortDescription = $doc->getShortDescription();
         $longDescription = $doc->getLongDescription();
@@ -457,5 +459,54 @@ class TypeProcessor
             );
         }
         return $value;
+    }
+
+    /**
+     * Get the parameter type
+     *
+     * @param ParameterReflection $param
+     * @return string
+     */
+    public function getParamType(ParameterReflection $param)
+    {
+        $type = $param->getType();
+        if ($type == 'array') {
+            // try to determine class, if it's array of objects
+            $docBlock = $param->getDeclaringFunction()->getDocBlock();
+            $pattern = "/\@param\s+([\w\\\_]+\[\])\s+\\\${$param->getName()}\n/";
+            if (preg_match($pattern, $docBlock->getContents(), $matches)) {
+                return $matches[1];
+            }
+            return "{$type}[]";
+        }
+        return $type;
+    }
+
+    /**
+     * Find the getter method name for a property from the given class
+     *
+     * @param ClassReflection $class
+     * @param string $camelCaseProperty
+     * @return string processed method name
+     * @throws \Exception If $camelCaseProperty has no corresponding getter method
+     */
+    public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
+    {
+        $getterName = 'get' . $camelCaseProperty;
+        $boolGetterName = 'is' . $camelCaseProperty;
+        if ($class->hasMethod($getterName)) {
+            $methodName = $getterName;
+        } elseif ($class->hasMethod($boolGetterName)) {
+            $methodName = $boolGetterName;
+        } else {
+            throw new \Exception(
+                sprintf(
+                    'Property :"%s" does not exist in the provided class: "%s".',
+                    $camelCaseProperty,
+                    $class->getName()
+                )
+            );
+        }
+        return $methodName;
     }
 }

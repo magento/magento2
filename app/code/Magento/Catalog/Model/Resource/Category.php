@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -10,6 +11,9 @@
  */
 namespace Magento\Catalog\Model\Resource;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Category extends AbstractResource
 {
     /**
@@ -70,7 +74,7 @@ class Category extends AbstractResource
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Category\TreeFactory $categoryTreeFactory
@@ -86,7 +90,7 @@ class Category extends AbstractResource
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Category\TreeFactory $categoryTreeFactory,
@@ -219,6 +223,8 @@ class Category extends AbstractResource
      *
      * @param \Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _beforeSave(\Magento\Framework\Object $object)
     {
@@ -227,21 +233,27 @@ class Category extends AbstractResource
         if (!$object->getChildrenCount()) {
             $object->setChildrenCount(0);
         }
-        if ($object->getLevel() === null) {
-            $object->setLevel(1);
-        }
 
-        if (!$object->getId()) {
-            $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
+        if ($object->isObjectNew()) {
+            if (is_null($object->getPosition())) {
+                $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
+            }
             $path = explode('/', $object->getPath());
-            $level = count($path);
-            $object->setLevel($level);
-            if ($level) {
+            $level = count($path)  - ($object->getId() ? 1 : 0);
+            $toUpdateChild = array_diff($path, [$object->getId()]);
+
+            if (!$object->hasPosition()) {
+                $object->setPosition($this->_getMaxPosition(implode('/', $toUpdateChild)) + 1);
+            }
+            if (!$object->hasLevel()) {
+                $object->setLevel($level);
+            }
+            if (!$object->hasParentId() && $level) {
                 $object->setParentId($path[$level - 1]);
             }
-            $object->setPath($object->getPath() . '/');
-
-            $toUpdateChild = explode('/', $object->getPath());
+            if (!$object->getId()) {
+                $object->setPath($object->getPath() . '/');
+            }
 
             $this->_getWriteAdapter()->update(
                 $this->getEntityTable(),
@@ -325,6 +337,8 @@ class Category extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _saveCategoryProducts($category)
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Log\Model;
@@ -25,7 +26,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
     protected $sessionManagerInterface;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerInterface;
 
@@ -58,7 +59,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
     {
         $this->registry = $this->getMock('Magento\Framework\Registry');
         $this->sessionManagerInterface = $this->getMock('Magento\Framework\Session\SessionManagerInterface');
-        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerInterface = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->header = $this->getMock('Magento\Framework\HTTP\Header', [], [], '', false);
         $this->remoteAddress = $this->getMock('Magento\Framework\HTTP\PhpEnvironment\RemoteAddress', [], [], '', false);
         $this->serverAddress = $this->getMock('Magento\Framework\HTTP\PhpEnvironment\ServerAddress', [], [], '', false);

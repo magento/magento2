@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\Backend\Block\Template */ ?>
-<li class="item<?php echo ' ',$this->getClass(); ?><?php echo $this->getIsHidden() ? ' hidden' : '' ?><?php echo $this->getIsDisabled() ? ' disabled' : '' ?>">
-    <a href="<?php echo $this->getHref() ?>" data-toggle="<?php echo $this->getIsDisabled() ? 'tab-disabled' : 'tab' ?>" title="<?php echo $this->getTitle(); ?>">
-        <span><?php echo $this->getLabel(); ?></span>
+<?php /** @var $block \Magento\Backend\Block\Template */ ?>
+<li class="item<?php echo ' ',$block->getClass(); ?><?php echo $block->getIsHidden() ? ' hidden' : '' ?><?php echo $block->getIsDisabled() ? ' disabled' : '' ?>">
+    <a href="<?php echo $block->getHref() ?>" data-toggle="<?php echo $block->getIsDisabled() ? 'tab-disabled' : 'tab' ?>" title="<?php echo $block->getTitle(); ?>">
+        <span><?php echo $block->getLabel(); ?></span>
     </a>
 </li>

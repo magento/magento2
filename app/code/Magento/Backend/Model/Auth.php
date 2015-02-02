@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model;
 
@@ -39,7 +40,7 @@ class Auth
     protected $_coreConfig;
 
     /**
-     * @var \Magento\Core\Model\Factory
+     * @var \Magento\Framework\Data\Collection\ModelFactory
      */
     protected $_modelFactory;
 
@@ -49,7 +50,7 @@ class Auth
      * @param \Magento\Backend\Model\Auth\StorageInterface $authStorage
      * @param \Magento\Backend\Model\Auth\Credential\StorageInterface $credentialStorage
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param \Magento\Core\Model\Factory $modelFactory
+     * @param \Magento\Framework\Data\Collection\ModelFactory $modelFactory
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -57,7 +58,7 @@ class Auth
         \Magento\Backend\Model\Auth\StorageInterface $authStorage,
         \Magento\Backend\Model\Auth\Credential\StorageInterface $credentialStorage,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
-        \Magento\Core\Model\Factory $modelFactory
+        \Magento\Framework\Data\Collection\ModelFactory $modelFactory
     ) {
         $this->_eventManager = $eventManager;
         $this->_backendData = $backendData;

@@ -1,7 +1,7 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
@@ -12,7 +12,7 @@ class Wishlist extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Wishlist Action
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
@@ -27,11 +27,7 @@ class Wishlist extends \Magento\Customer\Controller\Adminhtml\Index
             }
         }
 
-        $this->_view->getLayout()->getUpdate()->addHandle(strtolower($this->_request->getFullActionName()));
-        $this->_view->loadLayoutUpdates();
-        $this->prepareDefaultCustomerTitle();
-        $this->_view->generateLayoutXml();
-        $this->_view->generateLayoutBlocks();
-        $this->_view->renderLayout();
+        $resultLayout = $this->resultLayoutFactory->create();
+        return $resultLayout;
     }
 }

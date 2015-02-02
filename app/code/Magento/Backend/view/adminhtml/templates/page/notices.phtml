@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * @see \Magento\Backend\Block\Page\Notices
  */
 ?>
-<?php if ($this->displayNoscriptNotice()): ?>
+<?php if ($block->displayNoscriptNotice()): ?>
     <noscript>
         <div class="message message-noscript">
             <div class="message-inner">
@@ -20,7 +24,7 @@
         </div>
     </noscript>
 <?php endif; ?>
-<?php if ($this->displayDemoNotice()): ?>
+<?php if ($block->displayDemoNotice()): ?>
     <div class="message message-demo-mode">
         <div class="message-inner">
             <div class="message-content">

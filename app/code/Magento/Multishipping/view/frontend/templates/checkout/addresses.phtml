@@ -1,16 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * Ship to multiple address template
  *
- * @var $this \Magento\Multishipping\Block\Checkout\Addresses
+ * @var $block \Magento\Multishipping\Block\Checkout\Addresses
  */
 ?>
-<form id="checkout_multishipping_form" data-mage-init='{"multiShipping":{}, "validation":{}}' action="<?php echo $this->getPostActionUrl() ?>" method="post" class="multicheckout address form">
+<form id="checkout_multishipping_form" data-mage-init='{"multiShipping":{}, "validation":{}}' action="<?php echo $block->getPostActionUrl() ?>" method="post" class="multicheckout address form">
     <div class="title">
         <strong><?php echo __('Please select a shipping address for applicable items.') ?></strong>
     </div>
@@ -28,21 +32,21 @@
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($this->getItems() as $_index => $_item): ?>
+            <?php foreach ($block->getItems() as $_index => $_item): ?>
                 <?php if ($_item->getQuoteItem()) : ?>
                     <tr>
-                        <td class="col product" data-th="<?php echo $this->escapeHtml(__('Product'));?>"><?php echo $this->getItemHtml($_item->getQuoteItem()) ?></td>
-                        <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty'));?>">
+                        <td class="col product" data-th="<?php echo $block->escapeHtml(__('Product'));?>"><?php echo $block->getItemHtml($_item->getQuoteItem()) ?></td>
+                        <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty'));?>">
                             <div class="field qty">
                                 <label for="ship-<?php echo $_index ?>-<?php echo $_item->getQuoteItemId() ?>-qty" class="label">
                                     <span><?php echo __('Qty') ?></span>
                                 </label>
                                 <div class="control">
-                                    <input type="number" id="ship-<?php echo $_index ?>-<?php echo $_item->getQuoteItemId() ?>-qty" name="ship[<?php echo $_index ?>][<?php echo $_item->getQuoteItemId() ?>][qty]" value="<?php echo $this->escapeHtml($_item->getQty()) ?>" size="2" class="input-text qty" data-validate="{number: true}"/>
+                                    <input type="number" id="ship-<?php echo $_index ?>-<?php echo $_item->getQuoteItemId() ?>-qty" name="ship[<?php echo $_index ?>][<?php echo $_item->getQuoteItemId() ?>][qty]" value="<?php echo $block->escapeHtml($_item->getQty()) ?>" size="2" class="input-text qty" data-validate="{number: true}"/>
                                 </div>
                             </div>
                         </td>
-                        <td class="col address" data-th="<?php echo $this->escapeHtml(__('Send To'));?>">
+                        <td class="col address" data-th="<?php echo $block->escapeHtml(__('Send To'));?>">
                             <?php if ($_item->getProduct()->getIsVirtual()): ?>
                                 <div class="applicable"><?php echo __('Shipping selection is not applicable.'); ?></div>
                             <?php else: ?>
@@ -51,13 +55,13 @@
                                         <span><?php echo __('Send To') ?></span>
                                     </label>
                                     <div class="control">
-                                        <?php echo $this->getAddressesHtmlSelect($_item, $_index); ?>
+                                        <?php echo $block->getAddressesHtmlSelect($_item, $_index); ?>
                                     </div>
                                 </div>
                             <?php endif; ?>
                         </td>
-                        <td class="col actions" data-th="<?php echo $this->escapeHtml(__('Actions'));?>">
-                            <a href="<?php echo $this->getItemDeleteUrl($_item) ?>" title="<?php echo __('Remove Item') ?>" class="action delete">
+                        <td class="col actions" data-th="<?php echo $block->escapeHtml(__('Actions'));?>">
+                            <a href="<?php echo $block->getItemDeleteUrl($_item) ?>" title="<?php echo __('Remove Item') ?>" class="action delete">
                                 <span><?php echo __('Remove item') ?></span>
                             </a>
                         </td>
@@ -69,12 +73,12 @@
     </div>
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit" title="<?php echo __('Continue to Shipping Information') ?>" class="action primary continue<?php if ($this->isContinueDisabled()):?> disabled<?php endif; ?>" data-role="can-continue" data-flag="1"<?php if ($this->isContinueDisabled()):?> disabled="disabled"<?php endif; ?>><span><?php echo __('Continue to Shipping Information') ?></span></button>
+            <button type="submit" title="<?php echo __('Continue to Shipping Information') ?>" class="action primary continue<?php if ($block->isContinueDisabled()):?> disabled<?php endif; ?>" data-role="can-continue" data-flag="1"<?php if ($block->isContinueDisabled()):?> disabled="disabled"<?php endif; ?>><span><?php echo __('Continue to Shipping Information') ?></span></button>
         </div>
         <div class="secondary">
             <button type="submit" class="action update" data-role="can-continue" data-flag="0"><span><?php echo __('Update Qty &amp; Addresses') ?></span></button>
             <button type="button" title="<?php echo __('Enter a New Address') ?>" class="action add" data-role="add-new-address"><span><?php echo __('Enter a New Address') ?></span></button>
-            <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Shopping Cart') ?></span></a>
+            <a href="<?php echo $block->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Shopping Cart') ?></span></a>
         </div>
     </div>
 </form>

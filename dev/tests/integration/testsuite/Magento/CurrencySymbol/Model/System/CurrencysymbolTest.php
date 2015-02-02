@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CurrencySymbol\Model\System;
@@ -30,7 +31,7 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
     {
         $this->currencySymbolModel = null;
         Bootstrap::getObjectManager()->get('Magento\Framework\App\Config\ReinitableConfigInterface')->reinit();
-        Bootstrap::getObjectManager()->create('Magento\Store\Model\StoreManagerInterface')->reinitStores();
+        Bootstrap::getObjectManager()->create('Magento\Framework\Store\StoreManagerInterface')->reinitStores();
     }
 
     public function testGetCurrencySymbolsData()

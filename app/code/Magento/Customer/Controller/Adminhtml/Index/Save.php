@@ -1,7 +1,7 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
@@ -169,7 +169,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Save customer action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -265,14 +265,22 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $returnToEdit = true;
             }
         }
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($returnToEdit) {
             if ($customerId) {
-                $this->_redirect('customer/*/edit', ['id' => $customerId, '_current' => true]);
+                $resultRedirect->setPath(
+                    'customer/*/edit',
+                    ['id' => $customerId, '_current' => true]
+                );
             } else {
-                $this->_redirect('customer/*/new', ['_current' => true]);
+                $resultRedirect->setPath(
+                    'customer/*/new',
+                    ['_current' => true]
+                );
             }
         } else {
-            $this->_redirect('customer/index');
+            $resultRedirect->setPath('customer/index');
         }
+        return $resultRedirect;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -90,13 +91,13 @@ class CopyService
      */
     protected function _copyDatabaseCustomization(ThemeInterface $source, ThemeInterface $target)
     {
-        /** @var $themeFile \Magento\Core\Model\Theme\File */
+        /** @var $themeFile \Magento\Theme\Model\Theme\File */
         foreach ($target->getCustomization()->getFiles() as $themeFile) {
             $themeFile->delete();
         }
-        /** @var $newFile \Magento\Core\Model\Theme\File */
+        /** @var $newFile \Magento\Theme\Model\Theme\File */
         foreach ($source->getCustomization()->getFiles() as $themeFile) {
-            /** @var $newThemeFile \Magento\Core\Model\Theme\File */
+            /** @var $newThemeFile \Magento\Theme\Model\Theme\File */
             $newThemeFile = $this->_fileFactory->create();
             $newThemeFile->setData(
                 [

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Block\Catalog\Product;
 
@@ -45,6 +46,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      * Enter description here...
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getLinksPurchasedSeparately()
     {
@@ -53,6 +55,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 
     /**
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getLinkSelectionRequired()
     {
@@ -128,7 +131,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         }
         return $this->_scopeConfig->getValue(
             \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -136,12 +139,13 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      * Return true if target of link new window
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsOpenInNewWindow()
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Downloadable\Model\Link::XML_PATH_TARGET_NEW_WINDOW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -150,6 +154,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @param Link $link
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsLinkChecked($link)
     {

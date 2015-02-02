@@ -2,7 +2,8 @@
 /**
  * Eav setup context object
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Setup;
 
@@ -24,6 +25,7 @@ class Context extends \Magento\Framework\Module\Setup\Context
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Filesystem $filesystem
      * @param PropertyMapperInterface $attributeMapper
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,

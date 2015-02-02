@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<script type="text/javascript">
+<script>
 require(['prototype'], function(){
 
 //<![CDATA[
@@ -15,7 +19,7 @@ var itemType = function() {
             {
                 var elements = [$("select_attribute_set"), $("select_target_country")].flatten();
                 $('save_button').disabled = true;
-                new Ajax.Updater("attributes_details", "<?php echo $this->getUrl('*/*/loadAttributes') ?>",
+                new Ajax.Updater("attributes_details", "<?php echo $block->getUrl('*/*/loadAttributes') ?>",
                     {
                         parameters:Form.serializeElements(elements),
                         evalScripts:true,
@@ -29,7 +33,7 @@ var itemType = function() {
             if ($("select_target_country").value != "" && itemType.confirmChanges())
             {
                 var elements = [$("select_attribute_set"),$("select_target_country")].flatten();
-                new Ajax.Updater("attribute_set_select", "<?php echo $this->getUrl('*/*/loadAttributeSets') ?>",
+                new Ajax.Updater("attribute_set_select", "<?php echo $block->getUrl('*/*/loadAttributeSets') ?>",
                     {
                         parameters:Form.serializeElements(elements),
                         evalScripts:true,

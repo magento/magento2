@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\ScheduledStructure;
 
@@ -169,7 +170,7 @@ class Helper
         $data = $scheduledStructure->getStructureElementData($key);
         // if we have reference container to not existed element
         if (!isset($row[self::SCHEDULED_STRUCTURE_INDEX_TYPE])) {
-            $this->logger->info("Broken reference: missing declaration of the element '{$key}'.");
+            $this->logger->critical("Broken reference: missing declaration of the element '{$key}'.");
             $scheduledStructure->unsetPathElement($key);
             $scheduledStructure->unsetStructureElement($key);
             return;
@@ -188,7 +189,7 @@ class Helper
                     $this->logger->critical($e);
                 }
             } else {
-                $this->logger->info(
+                $this->logger->critical(
                     "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
                     'because the latter doesn\'t exist'
                 );

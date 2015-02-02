@@ -1,45 +1,49 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /**
- * @var $this \Magento\Tax\Block\Checkout\Shipping
+ * @var $block \Magento\Tax\Block\Checkout\Shipping
  * @see \Magento\Tax\Block\Checkout\Shipping
  */
 ?>
-<?php if ($this->displayBoth()):?>
+<?php if ($block->displayBoth()):?>
 <tr class="totals shipping excl">
-    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
-        <?php echo $this->getExcludeTaxLabel() ?>
+    <th style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
+        <?php echo $block->getExcludeTaxLabel() ?>
     </th>
-    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml($this->getExcludeTaxLabel()); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getShippingExcludeTax()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getExcludeTaxLabel()); ?>">
+        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>
 <tr class="totals shipping incl">
-    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
-        <?php echo $this->getIncludeTaxLabel() ?>
+    <th style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
+        <?php echo $block->getIncludeTaxLabel() ?>
     </th>
-    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml($this->getIncludeTaxLabel()); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getShippingIncludeTax()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getIncludeTaxLabel()); ?>">
+        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
-<?php elseif ($this->displayIncludeTax()) : ?>
+<?php elseif ($block->displayIncludeTax()) : ?>
 <tr class="totals shipping incl">
-    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
-        <?php echo $this->getTotal()->getTitle() ?>
+    <th style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
+        <?php echo $block->getTotal()->getTitle() ?>
     </th>
-    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml($this->getTotal()->getTitle()); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getShippingIncludeTax()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
+        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
 <?php else:?>
 <tr class="totals shipping excl">
-    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
-        <?php echo $this->escapeHtml($this->getTotal()->getTitle()) ?>
+    <th style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
+        <?php echo $block->escapeHtml($block->getTotal()->getTitle()) ?>
     </th>
-    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml($this->getTotal()->getTitle()); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getShippingExcludeTax()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
+        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>
 <?php endif;?>

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Config\Backend\Address;
 
@@ -16,14 +17,14 @@ class Street extends \Magento\Framework\App\Config\Value
      */
     protected $_eavConfig;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var \Magento\Framework\Store\StoreManagerInterface */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -33,7 +34,7 @@ class Street extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -54,7 +55,7 @@ class Street extends \Magento\Framework\App\Config\Value
         $attribute = $this->_eavConfig->getAttribute('customer_address', 'street');
         $value = $this->getValue();
         switch ($this->getScope()) {
-            case \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES:
+            case \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITES:
                 $website = $this->_storeManager->getWebsite($this->getScopeCode());
                 $attribute->setWebsite($website);
                 $attribute->load($attribute->getId());
@@ -80,7 +81,7 @@ class Street extends \Magento\Framework\App\Config\Value
     {
         $result = parent::afterDelete();
 
-        if ($this->getScope() == \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES) {
+        if ($this->getScope() == \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITES) {
             $attribute = $this->_eavConfig->getAttribute('customer_address', 'street');
             $website = $this->_storeManager->getWebsite($this->getScopeCode());
             $attribute->setWebsite($website);

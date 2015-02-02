@@ -1,65 +1,69 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var  $this \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer */ ?>
-<?php $_item = $this->getItem() ?>
-<?php $_order = $this->getItem()->getOrderItem()->getOrder() ?>
+<?php /** @var  $block \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer */ ?>
+<?php $_item = $block->getItem() ?>
+<?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
 <tr id="order-item-row-<?php echo $_item->getId() ?>">
-    <td class="col name" data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>">
-        <strong class="product name product-item-name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
-        <?php if ($_options = $this->getItemOptions()): ?>
+    <td class="col name" data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>">
+        <strong class="product name product-item-name"><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+        <?php if ($_options = $block->getItemOptions()): ?>
         <dl class="item-options">
         <?php foreach ($_options as $_option) : ?>
-            <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
-            <?php if (!$this->getPrintStatus()): ?>
-                <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+            <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
+            <?php if (!$block->getPrintStatus()): ?>
+                <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                 <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
                     <?php echo $_formatedOptionValue['value'] ?>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
                     <div class="tooltip content">
                         <dl class="item options">
-                            <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                            <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
                             <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
                         </dl>
                     </div>
                     <?php endif; ?>
                 </dd>
             <?php else: ?>
-                <dd><?php echo $this->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
+                <dd><?php echo $block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
             <?php endif; ?>
         <?php endforeach; ?>
         </dl>
         <?php endif; ?>
 
         <?php /* downloadable */ ?>
-        <?php if ($links = $this->getLinks()): ?>
+        <?php if ($links = $block->getLinks()): ?>
             <dl class="item options">
-                <dt><?php echo $this->getLinksTitle() ?></dt>
+                <dt><?php echo $block->getLinksTitle() ?></dt>
                 <?php foreach ($links->getPurchasedItems() as $link): ?>
-                    <dd><?php echo $this->escapeHtml($link->getLinkTitle()); ?></dd>
+                    <dd><?php echo $block->escapeHtml($link->getLinkTitle()); ?></dd>
                 <?php endforeach; ?>
             </dl>
         <?php endif; ?>
         <?php /* EOF downloadable */ ?>
 
-        <?php $addInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
+        <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
         <?php if ($addInfoBlock) :?>
             <?php echo $addInfoBlock->setItem($_item->getOrderItem())->toHtml(); ?>
         <?php endif; ?>
-        <?php echo $this->escapeHtml($_item->getDescription()) ?>
+        <?php echo $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="col sku" data-th="<?php echo $this->escapeHtml(__('SKU')); ?>"><?php echo $this->prepareSku($this->getSku()) ?></td>
-    <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price')); ?>">
-        <?php echo $this->getItemPriceHtml(); ?>
+    <td class="col sku" data-th="<?php echo $block->escapeHtml(__('SKU')); ?>"><?php echo $block->prepareSku($block->getSku()) ?></td>
+    <td class="col price" data-th="<?php echo $block->escapeHtml(__('Price')); ?>">
+        <?php echo $block->getItemPriceHtml(); ?>
     </td>
-    <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty')); ?>"><?php echo $_item->getQty()*1 ?></td>
-    <td class="col subtotal" data-th="<?php echo $this->escapeHtml(__('Subtotal')); ?>">
-        <?php echo $this->getItemRowTotalHtml(); ?>
+    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>"><?php echo $_item->getQty()*1 ?></td>
+    <td class="col subtotal" data-th="<?php echo $block->escapeHtml(__('Subtotal')); ?>">
+        <?php echo $block->getItemRowTotalHtml(); ?>
     </td>
-    <td class="col discount" data-th="<?php echo $this->escapeHtml(__('Discount Amount')); ?>"><?php echo $_order->formatPrice(-$_item->getDiscountAmount()) ?></td>
-    <td class="col total" data-th="<?php echo $this->escapeHtml(__('Row Total')); ?>">
-        <?php echo $this->getItemRowTotalAfterDiscountHtml(); ?>
+    <td class="col discount" data-th="<?php echo $block->escapeHtml(__('Discount Amount')); ?>"><?php echo $_order->formatPrice(-$_item->getDiscountAmount()) ?></td>
+    <td class="col total" data-th="<?php echo $block->escapeHtml(__('Row Total')); ?>">
+        <?php echo $block->getItemRowTotalAfterDiscountHtml(); ?>
     </td>
 </tr>

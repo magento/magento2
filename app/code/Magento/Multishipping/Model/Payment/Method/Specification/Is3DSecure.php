@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Model\Payment\Method\Specification;
 
@@ -66,9 +67,9 @@ class Is3DSecure extends AbstractSpecification
     protected function is3DSecureEnabled($paymentMethod)
     {
         return $this->scopeConfig->isSetFlag(
-            sprintf(self::PATH_PAYMENT_3DSECURE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $paymentMethod)
+            sprintf(self::PATH_PAYMENT_3DSECURE, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $paymentMethod)
         ) || $this->scopeConfig->isSetFlag(
-            sprintf(self::PATH_PAYMENT_CENTINEL, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $paymentMethod)
+            sprintf(self::PATH_PAYMENT_CENTINEL, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $paymentMethod)
         );
     }
 }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB;
 
@@ -15,6 +16,9 @@ use Magento\Framework\DB\Tree\TreeException;
  * Magento Library
  */
 require_once 'Tree/TreeException.php';
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Tree
 {
     /**
@@ -76,6 +80,8 @@ class Tree
     /**
      * @param array $config
      * @throws TreeException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct($config = [])
     {
@@ -273,6 +279,7 @@ class Tree
      * @param string|int $nodeId
      * @param array $data
      * @return false|string
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function appendChild($nodeId, $data)
     {
@@ -440,6 +447,10 @@ class Tree
      * @param string|int $pId
      * @param string|int $aId
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function moveNode($eId, $pId, $aId = 0)
     {
@@ -770,6 +781,11 @@ class Tree
      * @param string|int $pId
      * @param string|int $aId
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function moveNodes($eId, $pId, $aId = 0)
     {
@@ -990,6 +1006,7 @@ class Tree
      * @param int $startLevel
      * @param int $endLevel
      * @return NodeSet
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function getChildren($nodeId, $startLevel = 0, $endLevel = 0)
     {

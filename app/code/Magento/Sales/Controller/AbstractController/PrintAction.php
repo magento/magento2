@@ -1,11 +1,13 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
 
 abstract class PrintAction extends \Magento\Framework\App\Action\Action
 {
@@ -15,26 +17,40 @@ abstract class PrintAction extends \Magento\Framework\App\Action\Action
     protected $orderLoader;
 
     /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
      * @param Context $context
      * @param OrderLoaderInterface $orderLoader
+     * @param PageFactory $resultPageFactory
      */
-    public function __construct(Context $context, OrderLoaderInterface $orderLoader)
-    {
+    public function __construct(
+        Context $context,
+        OrderLoaderInterface $orderLoader,
+        PageFactory $resultPageFactory
+    ) {
         $this->orderLoader = $orderLoader;
+        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 
     /**
      * Print Order Action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        if (!$this->orderLoader->load($this->_request, $this->_response)) {
-            return;
+        $result = $this->orderLoader->load($this->_request);
+        if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
+            return $result;
         }
-        $this->_view->loadLayout('print');
-        $this->_view->renderLayout();
+
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->addHandle('print');
+        return $resultPage;
     }
 }

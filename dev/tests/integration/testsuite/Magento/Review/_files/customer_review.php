@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(
@@ -25,13 +26,19 @@ $review
     ->setEntityPkValue($product->getId())
     ->setStatusId(\Magento\Review\Model\Review::STATUS_PENDING)
     ->setStoreId(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
-            ->getStore()->getId()
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\Store\StoreManagerInterface')
+            ->getStore()
+            ->getId()
     )
-    ->setStores([
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
-            ->getStore()->getId()
-    ])
+    ->setStores(
+        [
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get('Magento\Framework\Store\StoreManagerInterface')
+                ->getStore()
+                ->getId()
+        ]
+    )
     ->save();
 
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry')->register(

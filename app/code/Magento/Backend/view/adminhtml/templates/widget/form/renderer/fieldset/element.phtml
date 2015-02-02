@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-/* @var $this \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element */
-$element = $this->getElement();
+/* @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element */
+$element = $block->getElement();
 $note = $element->getNote() ? '<div class="note" id="' . $element->getId() . '-note">' . $element->getNote() . '</div>' : '';
 $elementBeforeLabel = $element->getExtType() == 'checkbox' || $element->getExtType() == 'radio';
 $addOn = $element->getBeforeElementHtml() || $element->getAfterElementHtml();
@@ -18,7 +22,7 @@ $fieldClass .= ($note) ? ' with-note' : '';
 $fieldClass .= (!$element->getLabelHtml()) ? ' no-label' : '';
 
 $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
-    . $this->getUiId('form-field', $element->getId());
+    . $block->getUiId('form-field', $element->getId());
 ?>
 
 <?php if (!$element->getNoDisplay()): ?>

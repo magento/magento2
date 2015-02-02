@@ -1,52 +1,55 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 
 <div id="product-review-container"></div>
-<?php echo $this->getChildHtml(); ?>
+<?php echo $block->getChildHtml(); ?>
 
-<script type="text/javascript">
-//<![CDATA[
-function processReviews(url,fromPages) {
-(function($) {
-    $.ajax({
-        url: url,
-        dataType: 'html'
-    }).done(function(data) {
-        $('#product-review-container').html(data);
-        $('.pages a').each(function(index, element) {
-            $(element).click(function(event) {
-                processReviews($(element).attr('href'), true);
+<script>
+    require([
+        'jquery'
+    ], function ($) {
+
+        function processReviews(url, fromPages) {
+            $.ajax({
+                url: url,
+                dataType: 'html'
+            }).done(function (data) {
+                $('#product-review-container').html(data);
+                $('.pages a').each(function (index, element) {
+                    $(element).click(function (event) {
+                        processReviews($(element).attr('href'), true);
+                        event.preventDefault();
+                    });
+                });
+            }).complete(function () {
+                if (fromPages == true) {
+                    $('html, body').animate({
+                        scrollTop: $('#reviews').offset().top - 50
+                    }, 300);
+                }
+            });
+        }
+
+        processReviews('<?php echo $block->getProductReviewUrl();?>');
+
+        $(function () {
+            $('.product-info-main .reviews-actions a').click(function (event) {
                 event.preventDefault();
+                var acnchor = $(this).attr('href').replace(/^.*?(#|$)/, '');
+                $(".product.data.items [data-role='content']").each(function(index){
+                    if (this.id == 'reviews') {
+                        $('.product.data.items').tabs('activate', index);
+                        $('html, body').animate({
+                            scrollTop: $('#' + acnchor).offset().top - 50
+                        }, 300);
+                    }
+                });
             });
         });
-    }).complete(function(){
-        if (fromPages == true) {
-            $('html, body').animate({
-                scrollTop: $('#reviews').offset().top - 50
-            }, 300);
-        }
+
     });
-})(jQuery);
-}
-processReviews('<?php echo $this->getProductReviewUrl();?>');
-
-jQuery(function() {
-    jQuery('.product-info-main .reviews-actions a').click(function(event) {
-        event.preventDefault();
-        var acnchor = jQuery(this).attr('href').replace(/^.*?(#|$)/,'');
-        jQuery(".product.data.items [data-role='content']").each(function(index){
-            if(this.id == "reviews") {
-                jQuery(".product.data.items").tabs('activate',index);
-                jQuery('html, body').animate({
-                    scrollTop: jQuery('#' + acnchor).offset().top - 50
-                }, 300);
-            }
-        })
-    })
-});
-
-//]]>
 </script>

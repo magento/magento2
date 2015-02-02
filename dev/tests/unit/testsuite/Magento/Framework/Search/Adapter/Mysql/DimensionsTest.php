@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Search\Adapter\Mysql;
@@ -62,7 +63,7 @@ class DimensionsTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->builder = $this->objectManager->getObject(
-            '\Magento\Framework\Search\Adapter\Mysql\Dimensions',
+            'Magento\Framework\Search\Adapter\Mysql\Dimensions',
             [
                 'conditionManager' => $this->conditionManager,
                 'scopeResolver' => $this->scopeResolver

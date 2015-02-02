@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message;
 
@@ -12,7 +13,7 @@ class Collection
     /**
      * All messages by type array
      *
-     * @var array
+     * @var MessageInterface[]
      */
     protected $messages = [];
 
@@ -113,7 +114,7 @@ class Collection
     /**
      * Retrieve messages collection items
      *
-     * @return array
+     * @return MessageInterface[]
      */
     public function getItems()
     {
@@ -129,7 +130,7 @@ class Collection
      * Retrieve all messages by type
      *
      * @param string $type
-     * @return array
+     * @return MessageInterface[]
      */
     public function getItemsByType($type)
     {
@@ -139,7 +140,7 @@ class Collection
     /**
      * Retrieve all error messages
      *
-     * @return array
+     * @return MessageInterface[]
      */
     public function getErrors()
     {

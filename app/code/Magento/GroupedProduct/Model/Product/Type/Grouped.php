@@ -2,7 +2,8 @@
 /**
  * Grouped product type implementation
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
 
@@ -60,7 +61,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -91,7 +92,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Msrp\Helper\Data $msrpData
@@ -110,7 +111,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
         \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
         \Magento\Msrp\Helper\Data $msrpData

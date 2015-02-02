@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Form;
 
@@ -8,6 +9,7 @@ namespace Magento\Backend\Block\Widget\Form;
  * Backend form container block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Container extends \Magento\Backend\Block\Widget\Container
 {
@@ -177,7 +179,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
     public function getFormInitScripts()
     {
         if (!empty($this->_formInitScripts) && is_array($this->_formInitScripts)) {
-            return '<script type="text/javascript">' . implode("\n", $this->_formInitScripts) . '</script>';
+            return '<script>' . implode("\n", $this->_formInitScripts) . '</script>';
         }
         return '';
     }
@@ -188,7 +190,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
     public function getFormScripts()
     {
         if (!empty($this->_formScripts) && is_array($this->_formScripts)) {
-            return '<script type="text/javascript">' . implode("\n", $this->_formScripts) . '</script>';
+            return '<script>' . implode("\n", $this->_formScripts) . '</script>';
         }
         return '';
     }

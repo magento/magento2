@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Pricing\Price;
 
@@ -46,7 +49,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
     protected $attributeMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Backend\Groupprice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $backendMock;
 
@@ -103,7 +106,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->backendMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Attribute\Backend\Groupprice',
+            'Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice',
             [],
             [],
             '',
@@ -172,14 +175,17 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * test get group price, customer group in session
+     *
+     * @param int $customerGroup
+     * @dataProvider dataProviderGroupPriceCustomerGroupInProduct
      */
-    public function testGroupPriceCustomerGroupInProduct()
+    public function testGroupPriceCustomerGroupInProduct($customerGroup)
     {
         $groupPrice = 80;
         $convertedPrice = 56.23;
         $this->productMock->expects($this->exactly(2))
             ->method('getCustomerGroupId')
-            ->will($this->returnValue(3));
+            ->will($this->returnValue($customerGroup));
         $this->productMock->expects($this->once())
             ->method('getResource')
             ->will($this->returnValue($this->productResourceMock));
@@ -203,7 +209,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(
                 [
                     [
-                        'cust_group' => 3,
+                        'cust_group' => $customerGroup,
                         'website_price' => $groupPrice,
                     ],
                 ]
@@ -216,8 +222,16 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($convertedPrice, $this->groupPrice->getValue());
     }
 
+    public function dataProviderGroupPriceCustomerGroupInProduct()
+    {
+        return [
+            [0],
+            [3],
+        ];
+    }
+
     /**
-     * test get group price, attribut is noy srt
+     * test get group price, attribute is not set
      */
     public function testGroupPriceAttributeIsNotSet()
     {

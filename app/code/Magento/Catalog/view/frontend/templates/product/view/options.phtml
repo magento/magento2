@@ -1,23 +1,27 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Catalog\Block\Product\View\Options */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Catalog\Block\Product\View\Options */
 ?>
 
-<?php $_options = $this->decorateArray($this->getOptions()) ?>
+<?php $_options = $block->decorateArray($block->getOptions()) ?>
 <?php if (count($_options)):?>
-<script type="text/javascript">
+<script>
 require([ 'jquery', 'Magento_Catalog/js/price-options' ], function($){
     $('#product_addtocart_form')
         .priceOptions({
-            'optionConfig':<?php echo $this->getJsonConfig()?>,
+            'optionConfig':<?php echo $block->getJsonConfig()?>,
             'controlContainer': '.field',
             'priceHolderSelector': '[data-role=priceBox]'
         });
 });
 </script>
     <?php foreach ($_options as $_option): ?>
-        <?php echo $this->getOptionHtml($_option) ?>
+        <?php echo $block->getOptionHtml($_option) ?>
     <?php endforeach; ?>
 <?php endif; ?>

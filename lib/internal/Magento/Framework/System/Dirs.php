@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\System;
 
@@ -9,6 +10,9 @@ class Dirs
     /**
      * @param string[]|string $dirname
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public static function rm($dirname)
     {
@@ -90,6 +94,7 @@ class Dirs
      * @param string $dest
      * @return void
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public static function copyFileStrict($source, $dest)
     {

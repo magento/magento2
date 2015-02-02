@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Composite */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Composite */ ?>
 <?php
 /** @var $element \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite */
-$element = $this->getElement();
+$element = $block->getElement();
 $containerId = $element->getFieldsetContainerId();
 $id = $element->getHtmlId();
 $isCollapsable = $element->getCollapsable();
@@ -16,7 +20,7 @@ $advancedAfter = $element->getAdvancedPosition() == 'after'; // To place advance
 ?>
 
     <?php if (!$element->getNoContainer()): ?>
-        <fieldset class="<?php echo join(' ', $this->getCssClasses()) ?>" id="<?php echo $id ?>">
+        <fieldset class="<?php echo join(' ', $block->getCssClasses()) ?>" id="<?php echo $id ?>">
         <?php if ($element->getLegend() && !$isWrapped): ?>
             <legend class="<?php echo $isField ? 'label' : 'legend'?>">
                 <span><?php echo $element->getLegend() ?></span>
@@ -25,7 +29,7 @@ $advancedAfter = $element->getAdvancedPosition() == 'after'; // To place advance
     <?php endif; ?>
 
     <?php if ($element->getComment() && !$isField): ?>
-        <div class="comment"><?php echo $this->escapeHtml($element->getComment()) ?></div>
+        <div class="comment"><?php echo $block->escapeHtml($element->getComment()) ?></div>
     <?php endif; ?>
 
     <?php echo($isField) ? '<div class="control">' : ''; ?>
@@ -40,17 +44,17 @@ $advancedAfter = $element->getAdvancedPosition() == 'after'; // To place advance
             <div class="fields-group-<?php echo $count?>">
         <?php endif; ?>
 
-        <?php echo $this->getHtml(); ?>
+        <?php echo $block->getHtml(); ?>
 
         <?php echo($isField && $count > 1) ? '</div>' : '' ?>
 
         <?php if ($element->getComment() && $isField): ?>
-            <div class="note"><?php echo $this->escapeHtml($element->getComment()) ?></div>
+            <div class="note"><?php echo $block->escapeHtml($element->getComment()) ?></div>
         <?php endif; ?>
 
         <?php if ($element->hasAdvanced() && !$isField): ?>
             <?php echo(!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : ''?>
-            <details class="details" id="details<?php echo $id ?>">
+            <details data-mage-init='{"details": {}}' class="details" id="details<?php echo $id ?>">
                 <summary class="details-summary" id="details-summary<?php echo $id ?>">
                     <span><?php echo $element->getAdvancedLabel() ?></span>
                 </summary>

@@ -1,24 +1,28 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php
-/** @var \Magento\Catalog\Pricing\Render\PriceBox $this */
+/** @var \Magento\Catalog\Pricing\Render\PriceBox $block */
 
 /** @var \Magento\Catalog\Pricing\Price\TierPrice $tierPriceModel */
-$tierPriceModel = $this->getPrice();
+$tierPriceModel = $block->getPrice();
 $tierPrices = $tierPriceModel->getTierPriceList();
-$msrpShowOnGesture = $this->getPriceType('msrp_price')->isShowPriceOnGesture();
-$product = $this->getSaleableItem();
+$msrpShowOnGesture = $block->getPriceType('msrp_price')->isShowPriceOnGesture();
+$product = $block->getSaleableItem();
 ?>
 <?php if (count($tierPrices)) : ?>
-    <ul class="<?php echo($this->hasListClass() ? $this->getListClass() : 'prices-tier items'); ?>">
+    <ul class="<?php echo($block->hasListClass() ? $block->getListClass() : 'prices-tier items'); ?>">
     <?php foreach ($tierPrices as $index => $price) : ?>
         <li class="item">
             <?php
-                $popupId = 'msrp-popup-' . $product->getId() . $this->getRandomString(20);
+                $popupId = 'msrp-popup-' . $product->getId() . $block->getRandomString(20);
                 if ($msrpShowOnGesture && $price['price']->getValue() < $product->getMsrp()):
                     $addToCartUrl = '';
                     if ($product->isSaleable()) {
@@ -28,7 +32,7 @@ $product = $this->getSaleableItem();
                     $tierPriceData = [
                         'addToCartUrl' => $addToCartUrl,
                         'name' => $product->getName(),
-                        'price' => $this->renderAmount(
+                        'price' => $block->renderAmount(
                             $price['price'],
                             [
                                 'price_id'          => $index,
@@ -36,8 +40,8 @@ $product = $this->getSaleableItem();
                                 'include_container' => true
                             ]
                         ),
-                        'msrp' => $this->renderAmount(
-                            $this->getPriceType('msrp_price')->getAmount(),
+                        'msrp' => $block->renderAmount(
+                            $block->getPriceType('msrp_price')->getAmount(),
                             [
                                 'price_id'          => $index,
                                 'id_suffix'         => '-' . $index,
@@ -45,19 +49,19 @@ $product = $this->getSaleableItem();
                             ]
                         ),
                     ];
-                    if ($this->getCanDisplayQty($product)) {
+                    if ($block->getCanDisplayQty($product)) {
                         $tierPriceData['qty'] = $price['price_qty'];
                     }
                 ?>
                 <?php echo __('Buy %1 for: ', $price['price_qty']); ?>
                 <a href="#" id="<?php echo($popupId);?>"
-                   data-tier-price="<?php echo $this->escapeHtml($this->jsonEncode($tierPriceData)); ?>">
+                   data-tier-price="<?php echo $block->escapeHtml($block->jsonEncode($tierPriceData)); ?>">
                     <?php echo __('Click for price'); ?></a>
                 <?php else:
                     echo __(
                         'Buy %1 for %2',
                         $price['price_qty'],
-                        $this->renderAmount(
+                        $block->renderAmount(
                             $price['price'],
                             [
                                 'price_id'          => $index,
@@ -68,7 +72,7 @@ $product = $this->getSaleableItem();
                         )
                     );
                 ?><?php echo __('each') ?>
-                <?php if ($this->getShowDetailedPrice() !== false): ?>
+                <?php if ($block->getShowDetailedPrice() !== false): ?>
                     <?php echo __('and') ?>&nbsp;<strong class="benefit"><?php echo __('save')?>
                         <span class="percent tier-<?php echo $index ?>"><?php echo $tierPriceModel->getSavePercent($price['price']) ?></span>%
                     </strong>
@@ -78,7 +82,7 @@ $product = $this->getSaleableItem();
     <?php endforeach; ?>
     </ul>
     <?php if ($msrpShowOnGesture):?>
-        <script type="text/javascript">
+        <script>
         require(["jquery", "mage/mage"], function($){
 
             $('.product-info-main').mage('tierPrice', {

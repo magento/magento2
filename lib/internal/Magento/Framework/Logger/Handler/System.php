@@ -1,15 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Logger\Handler;
 
 use Magento\Framework\Filesystem\DriverInterface;
-use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
-class System extends StreamHandler
+class System extends Base
 {
     /**
      * @var string
@@ -22,31 +22,39 @@ class System extends StreamHandler
     protected $loggerType = Logger::INFO;
 
     /**
-     * @var DriverInterface
+     * @var Exception
      */
-    protected $filesystem;
+    protected $exceptionHandler;
 
     /**
      * @param DriverInterface $filesystem
+     * @param Exception $exceptionHandler
+     * @param string $filePath
      */
-    public function __construct(DriverInterface $filesystem)
-    {
-        $this->filesystem = $filesystem;
-        parent::__construct(BP . $this->fileName, $this->loggerType);
+    public function __construct(
+        DriverInterface $filesystem,
+        Exception $exceptionHandler,
+        $filePath = null
+    ) {
+        $this->exceptionHandler = $exceptionHandler;
+        parent::__construct($filesystem, $filePath);
     }
 
     /**
-     * @{inerhitDoc}
+     * @{inheritDoc}
      *
      * @param $record array
      * @return void
      */
     public function write(array $record)
     {
-        $logDir = $this->filesystem->getParentDirectory($this->url);
-        if (!$this->filesystem->isDirectory($logDir)) {
-            $this->filesystem->createDirectory($logDir, 0777);
+        if (isset($record['context']['is_exception']) && $record['context']['is_exception']) {
+            unset($record['context']['is_exception']);
+            $this->exceptionHandler->handle($record);
+        } else {
+            unset($record['context']['is_exception']);
+            $record['formatted'] = $this->getFormatter()->format($record);
+            parent::write($record);
         }
-        parent::write($record);
     }
 }

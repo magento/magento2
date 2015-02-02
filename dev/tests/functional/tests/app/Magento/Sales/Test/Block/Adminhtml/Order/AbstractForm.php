@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class Form
@@ -80,7 +81,6 @@ abstract class AbstractForm extends Form
                 return $element->isVisible() == false ? true : null;
             }
         );
-        $this->reinitRootElement();
         $this->_rootElement->find($this->send)->click();
     }
 

@@ -1,16 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * New Customer block template
  *
- * @var $this \Magento\Customer\Block\Form\Login
+ * @var $block \Magento\Customer\Block\Form\Login
  */
 ?>
-<?php if ($this->getRegistration()->isAllowed()): ?>
+<?php if ($block->getRegistration()->isAllowed()): ?>
 <div class="block block-new-customer">
     <div class="block-title">
         <strong id="block-new-customer-heading" role="heading" aria-level="2"><?php echo __('New Customers') ?></strong>
@@ -19,7 +23,7 @@
         <p><?php echo __('By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.') ?></p>
         <div class="actions-toolbar">
             <div class="primary">
-                <a href="<?php echo $this->getCreateAccountUrl() ?>" class="action create primary"><span><?php echo __('Register') ?></span></a>
+                <a href="<?php echo $block->getCreateAccountUrl() ?>" class="action create primary"><span><?php echo __('Register') ?></span></a>
             </div>
         </div>
     </div>

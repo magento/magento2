@@ -1,24 +1,28 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php /* @var $this \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Bundle */ ?>
-<?php $options = $this->decorateArray($this->getOptions()); ?>
+<?php /* @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Bundle */ ?>
+<?php $options = $block->decorateArray($block->getOptions()); ?>
 <?php if (count($options)): ?>
-<fieldset id="catalog_product_composite_configure_fields_bundle" class="fieldset bundle<?php echo $this->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
+<fieldset id="catalog_product_composite_configure_fields_bundle" class="fieldset bundle<?php echo $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
     <legend class="legend"><span><?php echo __('Bundle Items') ?></span></legend><br />
     <div class="fields options">
         <?php foreach ($options as $option) : ?>
             <?php if ($option->getSelections()) : ?>
-                <?php echo $this->getOptionHtml($option); ?>
+                <?php echo $block->getOptionHtml($option); ?>
             <?php endif; ?>
         <?php endforeach; ?>
     </div>
 </fieldset>
 
-<script type="text/javascript">
+<script>
 require([
     "Magento_Catalog/catalog/product/composite/configure"
 ], function(){
@@ -68,7 +72,7 @@ require([
             }
         }
     };
-    ProductConfigure.bundleControl = new BundleControl(<?php echo $this->getJsonConfig() ?>);
+    ProductConfigure.bundleControl = new BundleControl(<?php echo $block->getJsonConfig() ?>);
 });
 </script>
 

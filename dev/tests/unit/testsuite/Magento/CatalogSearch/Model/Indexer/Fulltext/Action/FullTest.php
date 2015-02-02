@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
@@ -9,7 +10,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Search\Request\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $searchRequestConfig;
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
     /** @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full */
     protected $object;
@@ -44,7 +45,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')

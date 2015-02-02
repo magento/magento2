@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 
 use Magento\Bundle\Model\Product\Price;
@@ -271,6 +275,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param int $elementId
      * @param int $containerId
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setValidationContainer($elementId, $containerId)
     {

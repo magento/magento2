@@ -2,7 +2,8 @@
 /**
  * Test class for \Magento\Store\Model\StorageFactory
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
 
@@ -129,12 +130,12 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
         $this->helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->_appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->_httpContext = $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false);
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
 
-        $this->_model = $this->helper->getObject('\Magento\Store\Model\StorageFactory', [
+        $this->_model = $this->helper->getObject('Magento\Store\Model\StorageFactory', [
             'objectManager' => $this->_objectManagerMock,
             'eventManager' => $this->_eventManagerMock,
             'sidResolver' => $this->_sidResolverMock,
@@ -189,7 +190,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
             'isSetFlag'
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue(true)
         );
@@ -289,12 +290,12 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['', '', 21, 11, 'store1'],
-            ['11', \Magento\Store\Model\ScopeInterface::SCOPE_GROUP, 21, null, 'store1'],
-            ['12', \Magento\Store\Model\ScopeInterface::SCOPE_GROUP, 22, null, null],
-            ['11', \Magento\Store\Model\ScopeInterface::SCOPE_GROUP, null, null, null],
-            ['website1', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, 21, 11, 'store1'],
-            ['31', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, 22, null, null],
-            ['website1', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, null, 0, null],
+            ['11', \Magento\Framework\Store\ScopeInterface::SCOPE_GROUP, 21, null, 'store1'],
+            ['12', \Magento\Framework\Store\ScopeInterface::SCOPE_GROUP, 22, null, null],
+            ['11', \Magento\Framework\Store\ScopeInterface::SCOPE_GROUP, null, null, null],
+            ['website1', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE, 21, 11, 'store1'],
+            ['31', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE, 22, null, null],
+            ['website1', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE, null, 0, null],
         ];
     }
 
@@ -344,9 +345,9 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     public function getFromCookieDataProvider()
     {
         return [
-            ['website1', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE],
-            ['11', \Magento\Store\Model\ScopeInterface::SCOPE_GROUP],
-            ['store1', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            ['website1', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE],
+            ['11', \Magento\Framework\Store\ScopeInterface::SCOPE_GROUP],
+            ['store1', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE],
         ];
     }
 

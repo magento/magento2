@@ -1,17 +1,22 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Address;
 
 class Edit extends \Magento\Customer\Controller\Address
 {
     /**
-     * @return void
+     * Customer address edit action
+     *
+     * @return \Magento\Framework\Controller\Result\Forward
      */
     public function execute()
     {
-        $this->_forward('form');
+        /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+        $resultForward = $this->resultForwardFactory->create();
+        return $resultForward->forward('form');
     }
 }

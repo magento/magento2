@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Directory\Model\Resource\Country;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
@@ -33,7 +37,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $localeListsMock->expects($this->any())->method('getCountryTranslation')->will($this->returnArgument(0));
 
         $fetchStrategy = $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
-        $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
+        $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
         $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $countryFactory = $this->getMock(

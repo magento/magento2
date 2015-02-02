@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <fieldset class="fieldset" id="export_filter_container" style="display:none;">
@@ -8,15 +9,15 @@
         <span><?php echo __('Entity Attributes'); ?></span>
     </legend>
     <br />
-    <form id="export_filter_form" action="<?php echo $this->getUrl('*/*/export') ?>" method="post">
-        <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
+    <form id="export_filter_form" action="<?php echo $block->getUrl('*/*/export') ?>" method="post">
+        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>" />
         <div id="export_filter_grid_container"><!-- --></div>
     </form>
     <button class="action- scalable" type="button" onclick="getFile();"><span><?php
         echo __('Continue')
     ?></span></button>
 </fieldset>
-<script type="text/javascript">
+<script>
 require(['prototype'], function(){
 
 //<![CDATA[

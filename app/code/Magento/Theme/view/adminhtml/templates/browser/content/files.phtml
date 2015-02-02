@@ -1,20 +1,24 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php
-/** @var $this \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files */
+/** @var $block \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files */
 ?>
 
-<?php if ($this->getFilesCount() > 0): ?>
-    <?php foreach ($this->getFiles() as $file): ?>
+<?php if ($block->getFilesCount() > 0): ?>
+    <?php foreach ($block->getFiles() as $file): ?>
         <div class="filecnt file-font" id="<?php echo $file['id'] ?>">
             <p class="nm">
                 <?php echo $file['text'] ?>
                 <?php if (isset($file['thumbnailParams'])): ?>
-                    <img src="<?php echo $this->getUrl('*/*/previewImage', $file['thumbnailParams']) ?>">
+                    <img src="<?php echo $block->getUrl('*/*/previewImage', $file['thumbnailParams']) ?>">
                 <?php endif; ?>
             </p>
         </div>

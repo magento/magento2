@@ -1,22 +1,26 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div id="preview" class="cms-revision-preview">
     <div class="toolbar">
-        <?php if (!$this->isSingleStoreMode()) :?>
+        <?php if (!$block->isSingleStoreMode()) :?>
         <div class="store-switcher">
-            <?php echo $this->getChildHtml('store_switcher') ?>
+            <?php echo $block->getChildHtml('store_switcher') ?>
         </div>
         <?php endif;?>
     </div>
     <iframe name="preview_iframe" id="preview_iframe" frameborder="0" title="<?php echo __('Preview') ?>" width="100%"></iframe>
-    <?php echo $this->getChildHtml('preview_form'); ?>
+    <?php echo $block->getChildHtml('preview_form'); ?>
 </div>
 
-<script type="text/javascript">
-require(['jquery', 'js/theme', 'prototype'], function(jQuery){
+<script>
+require(['jquery', 'loadingPopup', 'prototype'], function(jQuery){
 
 //<![CDATA[
 var previewForm = $('preview_form');

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Dynamic;
 
@@ -11,7 +12,7 @@ use Magento\Catalog\Model\Resource\Layer\Filter\Price;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Search\Dynamic\Algorithm;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 class Manual implements AlgorithmInterface
 {
@@ -48,6 +49,7 @@ class Manual implements AlgorithmInterface
      * @param int[] $intervals
      * @param string $additionalRequestData
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getItemsData(array $intervals = [], $additionalRequestData = '')
     {

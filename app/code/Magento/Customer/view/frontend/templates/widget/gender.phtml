@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<div class="field gender<?php if ($this->isRequired()) echo ' required' ?>">
-    <label class="label" for="<?php echo $this->getFieldId('gender')?>"><span><?php echo __('Gender') ?></span></label>
+<div class="field gender<?php if ($block->isRequired()) echo ' required' ?>">
+    <label class="label" for="<?php echo $block->getFieldId('gender')?>"><span><?php echo __('Gender') ?></span></label>
     <div class="control">
-        <select id="<?php echo $this->getFieldId('gender')?>" name="<?php echo $this->getFieldName('gender')?>" title="<?php echo __('Gender') ?>"<?php if ($this->isRequired()):?> class="validate-select" data-validate="{required:true}"<?php endif; ?> <?php echo $this->getFieldParams() ?>>
-            <?php $options = $this->getGenderOptions(); ?>
-            <?php $value = $this->getGender();?>
+        <select id="<?php echo $block->getFieldId('gender')?>" name="<?php echo $block->getFieldName('gender')?>" title="<?php echo __('Gender') ?>"<?php if ($block->isRequired()):?> class="validate-select" data-validate="{required:true}"<?php endif; ?> <?php echo $block->getFieldParams() ?>>
+            <?php $options = $block->getGenderOptions(); ?>
+            <?php $value = $block->getGender();?>
             <?php foreach ($options as $option):?>
                 <option value="<?php echo $option->getValue() ?>"<?php if ($option->getValue() == $value) echo ' selected="selected"' ?>><?php echo $option->getLabel() ?></option>
             <?php endforeach;?>

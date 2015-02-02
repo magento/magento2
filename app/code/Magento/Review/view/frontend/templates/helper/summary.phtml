@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $url = $this->getReviewsUrl() . '#reviews'; ?>
-<?php $urlForm = $this->getReviewsUrl() . '#review-form'; ?>
-<?php if ($this->getReviewsCount()): ?>
-<?php $rating = $this->getRatingSummary(); ?>
+<?php $url = $block->getReviewsUrl() . '#reviews'; ?>
+<?php $urlForm = $block->getReviewsUrl() . '#review-form'; ?>
+<?php if ($block->getReviewsCount()): ?>
+<?php $rating = $block->getRatingSummary(); ?>
 <div class="product-reviews-summary<?php echo !$rating ? ' no-rating' : ''?>" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
     <?php if ($rating):?>
     <div class="rating-summary">
@@ -17,11 +21,11 @@
      </div>
     <?php endif;?>
     <div class="reviews-actions">
-        <a class="action view" href="<?php echo $url ?>"><span itemprop="reviewCount"><?php echo $this->getReviewsCount() ?></span>&nbsp;<span><?php echo($this->getReviewsCount() == 1) ? __('Review') : __('Reviews') ?></span></a>
+        <a class="action view" href="<?php echo $url ?>"><span itemprop="reviewCount"><?php echo $block->getReviewsCount() ?></span>&nbsp;<span><?php echo($block->getReviewsCount() == 1) ? __('Review') : __('Reviews') ?></span></a>
         <a class="action add" href="<?php echo $urlForm ?>"><?php echo __('Add Your Review') ?></a>
     </div>
 </div>
-<?php elseif ($this->getDisplayIfEmpty()): ?>
+<?php elseif ($block->getDisplayIfEmpty()): ?>
 <div class="product-reviews-summary empty">
     <div class="reviews-actions">
         <a class="action add" href="<?php echo $urlForm; ?>">

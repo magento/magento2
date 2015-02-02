@@ -1,15 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="footer-container">
     <div class="footer">
-        <?php echo $this->getChildHtml() ?>
+        <?php echo $block->getChildHtml() ?>
         <p class="bugs"><?php echo __('Help Us to Keep Magento Healthy') ?> - <a
             href="http://www.magentocommerce.com/bug-tracking"
             target="_blank"><strong><?php echo __('Report All Bugs') ?></strong></a> <?php echo __('(ver. %1)', \Magento\Framework\AppInterface::VERSION) ?>
         </p>
-        <address><?php echo $this->getCopyright() ?></address>
+        <address><?php echo $block->getCopyright() ?></address>
     </div>
 </div>

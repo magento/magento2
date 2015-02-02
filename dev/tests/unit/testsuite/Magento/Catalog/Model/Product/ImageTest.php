@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model\Product;
@@ -30,7 +31,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected $registry;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -179,7 +180,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->image->setBaseFile('/somefile.png');
         $this->assertEquals('catalog/product/somefile.png', $this->image->getBaseFile());
         $this->assertEquals(
-            'catalog/product/cache/1//9df78eab33525d08d6e5fb8d27136e95/somefile.png',
+            'catalog/product/cache/1//a4e40ebdc3e371adff845072e1c73f37/somefile.png',
             $this->image->getNewFile()
         );
     }
@@ -299,7 +300,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->testSetGetBaseFile();
         $url = $this->image->getUrl();
         $this->assertEquals(
-            'http://magento.com/media/catalog/product/cache/1//9df78eab33525d08d6e5fb8d27136e95/somefile.png',
+            'http://magento.com/media/catalog/product/cache/1//a4e40ebdc3e371adff845072e1c73f37/somefile.png',
             $url
         );
     }

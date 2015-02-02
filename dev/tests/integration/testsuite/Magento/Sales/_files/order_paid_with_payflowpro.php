@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 $addressData = include __DIR__ . '/address_data.php';
@@ -34,7 +35,7 @@ $order->setIncrementId(
     $shippingAddress
 )->setStoreId(
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+        'Magento\Framework\Store\StoreManagerInterface'
     )->getStore()->getId()
 )->setPayment(
     $payment

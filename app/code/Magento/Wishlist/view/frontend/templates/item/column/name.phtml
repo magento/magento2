@@ -1,14 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /* @var \Magento\Wishlist\Model\Item $item */
-$item = $this->getItem();
+$item = $block->getItem();
 $product = $item->getProduct();
 ?>
 <strong class="product-item-name">
-    <a href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>" class="product-item-link">
-        <?php echo $this->escapeHtml($product->getName()) ?>
+    <a href="<?php echo $block->getProductUrl($item) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>" class="product-item-link">
+        <?php echo $block->escapeHtml($product->getName()) ?>
     </a>
 </strong>

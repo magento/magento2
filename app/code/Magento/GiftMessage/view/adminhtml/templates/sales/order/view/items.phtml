@@ -1,22 +1,26 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php if ($this->canDisplayGiftmessage()): ?>
-<div id="gift-message-form-data-<?php echo $this->getItem()->getId(); ?>" class="no-display">
-    <form id="<?php echo $this->getFieldId('form') ?>" action="<?php echo $this->getSaveUrl() ?>">
-        <input type="hidden" id="<?php echo $this->getFieldId('type') ?>" name="<?php echo $this->getFieldName('type') ?>" value="order_item" />
-        <input type="hidden" id="<?php echo $this->getFieldId('sender') ?>" name="<?php echo $this->getFieldName('sender') ?>" value="<?php echo $this->getSender() ?>" />
-        <input type="hidden" id="<?php echo $this->getFieldId('recipient') ?>" name="<?php echo $this->getFieldName('recipient') ?>"  value="<?php echo $this->getRecipient() ?>" />
-        <input type="hidden" id="<?php echo $this->getFieldId('message') ?>" name="<?php echo $this->getFieldName('message') ?>"  value="<?php echo $this->getMessageText() ?>" />
+<?php if ($block->canDisplayGiftmessage()): ?>
+<div id="gift-message-form-data-<?php echo $block->getItem()->getId(); ?>" class="no-display">
+    <form id="<?php echo $block->getFieldId('form') ?>" action="<?php echo $block->getSaveUrl() ?>">
+        <input type="hidden" id="<?php echo $block->getFieldId('type') ?>" name="<?php echo $block->getFieldName('type') ?>" value="order_item" />
+        <input type="hidden" id="<?php echo $block->getFieldId('sender') ?>" name="<?php echo $block->getFieldName('sender') ?>" value="<?php echo $block->getSender() ?>" />
+        <input type="hidden" id="<?php echo $block->getFieldId('recipient') ?>" name="<?php echo $block->getFieldName('recipient') ?>"  value="<?php echo $block->getRecipient() ?>" />
+        <input type="hidden" id="<?php echo $block->getFieldId('message') ?>" name="<?php echo $block->getFieldName('message') ?>"  value="<?php echo $block->getMessageText() ?>" />
     </form>
 
-    <?php if ($this->getMessageText()): ?>
+    <?php if ($block->getMessageText()): ?>
     <div class="gift-options-tooltip-content">
         <div><strong><?php echo __('Gift Message')?></strong>: </div>
-        <div><?php echo $this->getMessageText() ?></div>
+        <div><?php echo $block->getMessageText() ?></div>
     </div>
     <?php endif; ?>
 </div>

@@ -1,21 +1,25 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php /* @var $this \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select */ ?>
-<?php $_option      = $this->getOption(); ?>
+<?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select */ ?>
+<?php $_option      = $block->getOption(); ?>
 <?php $_selections  = $_option->getSelections(); ?>
 <?php $_default     = $_option->getDefaultSelection(); ?>
-<?php list($_defaultQty, $_canChangeQty) = $this->getDefaultValues(); ?>
+<?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 <div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
     <label class="label" for="bundle-option-<?php echo $_option->getId() ?>">
-        <span><?php echo $this->escapeHtml($_option->getTitle()) ?></span>
+        <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
-        <?php if ($this->showSingle()): ?>
-            <?php echo $this->getSelectionTitlePrice($_selections[0]) ?>
+        <?php if ($block->showSingle()): ?>
+            <?php echo $block->getSelectionTitlePrice($_selections[0]) ?>
             <input type="hidden"
                    class="bundle-option-<?php echo $_option->getId() ?>  product bundle option"
                    name="bundle_option[<?php echo $_option->getId() ?>]"
@@ -28,9 +32,9 @@
                 <option value=""><?php echo __('Choose a selection...') ?></option>
                 <?php foreach ($_selections as $_selection): ?>
                     <option value="<?php echo $_selection->getSelectionId() ?>"
-                        <?php if ($this->isSelected($_selection)) echo ' selected="selected"' ?>
+                        <?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?>
                         <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>>
-                        <?php echo $this->getSelectionTitlePrice($_selection, false) ?>
+                        <?php echo $block->getSelectionTitlePrice($_selection, false) ?>
                     </option>
                 <?php endforeach; ?>
             </select>

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Button;
 
@@ -122,7 +123,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
         }
 
         $attributes = ['title' => $title, 'class' => join(' ', $classes), 'disabled' => $disabled];
-        $this->_getDataAttributes(['toggle' => 'dropdown'], $attributes);
+        $this->_getDataAttributes(['mage-init' => '{"dropdown": {}}', 'toggle' => 'dropdown'], $attributes);
 
         $html = $this->_getAttributesString($attributes);
         $html .= $this->getUiId('dropdown');

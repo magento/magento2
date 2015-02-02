@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\System;
 
@@ -39,7 +40,7 @@ class Store extends \Magento\Framework\Object
     private $_isAdminScopeAllowed = true;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -47,9 +48,9 @@ class Store extends \Magento\Framework\Object
      * Init model
      * Load Website, Group and Store collections
      *
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Framework\Store\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
         return $this->reload();
@@ -99,6 +100,8 @@ class Store extends \Magento\Framework\Object
      * @param bool $empty
      * @param bool $all
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getStoreValuesForForm($empty = false, $all = false)
     {
@@ -155,6 +158,8 @@ class Store extends \Magento\Framework\Object
      * @param array $groupIds
      * @param array $websiteIds
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getStoresStructure($isAll = false, $storeIds = [], $groupIds = [], $websiteIds = [])
     {
@@ -401,13 +406,13 @@ class Store extends \Magento\Framework\Object
             $this->_loadStoreCollection();
         } else {
             switch ($type) {
-                case \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE:
+                case \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE:
                     $this->_loadWebsiteCollection();
                     break;
-                case \Magento\Store\Model\ScopeInterface::SCOPE_GROUP:
+                case \Magento\Framework\Store\ScopeInterface::SCOPE_GROUP:
                     $this->_loadGroupCollection();
                     break;
-                case \Magento\Store\Model\ScopeInterface::SCOPE_STORE:
+                case \Magento\Framework\Store\ScopeInterface::SCOPE_STORE:
                     $this->_loadStoreCollection();
                     break;
                 default:

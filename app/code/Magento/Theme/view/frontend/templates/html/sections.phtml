@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 
@@ -9,22 +13,22 @@
 *  General template for displaying group of blocks devided into sections
 */
 
-$group = $this->getGroupName();
-$groupCss = $this->getGroupCss();
-$groupBehavior = $this->getGroupBehaviour() ? $this->getGroupBehaviour() : '{"tabs":{"openedState":"active"}}';
+$group = $block->getGroupName();
+$groupCss = $block->getGroupCss();
+$groupBehavior = $block->getGroupBehaviour() ? $block->getGroupBehaviour() : '{"tabs":{"openedState":"active"}}';
 ?>
-<?php if ($detailedInfoGroup = $this->getGroupChildNames($group, 'getChildHtml')):?>
+<?php if ($detailedInfoGroup = $block->getGroupChildNames($group, 'getChildHtml')):?>
     <div class="sections <?php echo $groupCss ?>">
-        <?php $layout = $this->getLayout(); ?>
+        <?php $layout = $block->getLayout(); ?>
         <div class="section-items <?php echo $groupCss ?>-items" data-mage-init='<?php echo $groupBehavior ?>'>
             <?php foreach ($detailedInfoGroup as $name):?>
                 <?php
                     $html = $layout->renderElement($name);
-                    if (!trim($html) && ($this->getUseForce() != true)) {
+                    if (!trim($html) && ($block->getUseForce() != true)) {
                         continue;
                     }
                     $alias = $layout->getElementAlias($name);
-                    $label = $this->getChildData($alias, 'title');
+                    $label = $block->getChildData($alias, 'title');
                 ?>
                 <div class="section-item-title <?php echo $groupCss ?>-item-title" data-role="collapsible">
                     <a class="<?php echo $groupCss ?>-item-switch" data-toggle="switch" href="#<?php echo $alias; ?>"><?php echo $label; ?></a>

@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\GoogleShopping\Model;
 
 /**
@@ -28,7 +32,7 @@ class Config extends \Magento\Framework\Object
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -39,13 +43,13 @@ class Config extends \Magento\Framework\Object
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         array $data = []
     ) {
@@ -65,7 +69,7 @@ class Config extends \Magento\Framework\Object
     public function getConfigData($key, $storeId = null)
     {
         if (!isset($this->_config[$key][$storeId])) {
-            $value = $this->_scopeConfig->getValue('google/googleshopping/' . $key, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
+            $value = $this->_scopeConfig->getValue('google/googleshopping/' . $key, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId);
             $this->_config[$key][$storeId] = $value;
         }
         return $this->_config[$key][$storeId];
@@ -243,6 +247,7 @@ class Config extends \Magento\Framework\Object
      * where: key - attribute name, value - group name
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getAttributeGroupsFlat()
     {
@@ -271,6 +276,7 @@ class Config extends \Magento\Framework\Object
      *
      * @param int $storeId
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsDebug($storeId)
     {
@@ -281,6 +287,7 @@ class Config extends \Magento\Framework\Object
      * Returns all required attributes
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getRequiredAttributes()
     {

@@ -1,17 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Catalog\Block\Product\View */
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Product\View */
 ?>
 
 <meta property="og:type" content="og:product" />
-<meta property="og:title" content="<?php echo $this->stripTags($this->getProduct()->getName()); ?>" />
-<meta property="og:image" content="<?php echo $this->stripTags($this->getBaseImageUrl($this->getProduct())); ?>" />
-<meta property="og:description" content="<?php echo $this->stripTags($this->getProduct()->getShortDescription()); ?>" />
-<meta property="og:url" content="<?php echo $this->stripTags($this->getProduct()->getProductUrl()); ?>" />
-<?php if ($priceAmount = $this->getProduct()->getFinalPrice()):?>
+<meta property="og:title" content="<?php echo $block->stripTags($block->getProduct()->getName()); ?>" />
+<meta property="og:image" content="<?php echo $block->stripTags($block->getBaseImageUrl($block->getProduct())); ?>" />
+<meta property="og:description" content="<?php echo $block->stripTags($block->getProduct()->getShortDescription()); ?>" />
+<meta property="og:url" content="<?php echo $block->stripTags($block->getProduct()->getProductUrl()); ?>" />
+<?php if ($priceAmount = $block->getProduct()->getFinalPrice()):?>
     <meta property="product:price:amount" content="<?php echo $priceAmount; ?>"/>
-    <?php echo $this->getChildHtml('meta.currency'); ?>
+    <?php echo $block->getChildHtml('meta.currency'); ?>
 <?php endif;?>

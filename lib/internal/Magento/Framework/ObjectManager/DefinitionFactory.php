@@ -2,9 +2,13 @@
 /**
  * Object manager definition factory
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  *
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\ObjectManager;
 
 use Magento\Framework\Api\Code\Generator\DataBuilder as DataBuilderGenerator;
@@ -133,7 +137,7 @@ class DefinitionFactory
      */
     public function createPluginDefinition()
     {
-        $path = $this->_definitionDir . '/plugins.php';
+        $path = $this->_definitionDir . '/plugins.ser';
         if ($this->_filesystemDriver->isReadable($path)) {
             return new \Magento\Framework\Interception\Definition\Compiled(
                 $this->_unpack($this->_filesystemDriver->fileGetContents($path))
@@ -150,7 +154,7 @@ class DefinitionFactory
      */
     public function createRelations()
     {
-        $path = $this->_definitionDir . '/' . 'relations.php';
+        $path = $this->_definitionDir . '/' . 'relations.ser';
         if ($this->_filesystemDriver->isReadable($path)) {
             return new \Magento\Framework\ObjectManager\Relations\Compiled(
                 $this->_unpack($this->_filesystemDriver->fileGetContents($path))

@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
-    <event name="sales_convert_quote_address_to_order">
-        <observer name="tax" instance="Magento\Tax\Model\Observer" method="salesEventConvertQuoteAddressToOrder" />
-    </event>
     <event name="sales_order_save_after">
         <observer name="tax" instance="Magento\Tax\Model\Observer" method="salesEventOrderAfterSave" />
     </event>

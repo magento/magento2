@@ -1,11 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Full
 {
     /**
@@ -93,7 +98,7 @@ class Full
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -148,12 +153,13 @@ class Full
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
      * @param PriceCurrencyInterface $priceCurrency
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
@@ -166,7 +172,7 @@ class Full
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -258,6 +264,8 @@ class Full
      * @param int $storeId Store View Id
      * @param int|array $productIds Product Entity Id
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function rebuildStoreIndex($storeId, $productIds = null)
     {
@@ -636,6 +644,8 @@ class Full
      * @param array $productData
      * @param int $storeId
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function prepareProductIndex($indexData, $productData, $storeId)
     {
@@ -755,12 +765,12 @@ class Full
         if (!isset($this->dates[$storeId])) {
             $timezone = $this->scopeConfig->getValue(
                 $this->localeDate->getDefaultTimezonePath(),
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
             $locale = $this->scopeConfig->getValue(
                 $this->localeResolver->getDefaultLocalePath(),
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
             $locale = new \Zend_Locale($locale);

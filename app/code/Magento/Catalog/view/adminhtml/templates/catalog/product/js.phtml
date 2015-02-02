@@ -1,11 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Js $this */
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Js $block */
 ?>
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "prototype",
@@ -27,8 +30,8 @@ function registerTaxRecalcs() {
     Event.observe($('tax_class_id'), 'change', recalculateTax);
 }
 
-var priceFormat = <?php echo $this->helper('Magento\Tax\Helper\Data')->getPriceFormat($this->getStore()); ?>;
-var taxRates = <?php echo $this->getAllRatesByProductClassJson(); ?>;
+var priceFormat = <?php echo $this->helper('Magento\Tax\Helper\Data')->getPriceFormat($block->getStore()); ?>;
+var taxRates = <?php echo $block->getAllRatesByProductClassJson(); ?>;
 
 function recalculateTax() {
     if (typeof dynamicTaxes == 'undefined') {
@@ -72,7 +75,7 @@ function bindActiveProductTab(event, ui) {
 jQuery(document).on('tabsactivate', bindActiveProductTab);
 
 // bind active tab
-<?php if ($tabsBlock = $this->getLayout()->getBlock('product_tabs')): ?>
+<?php if ($tabsBlock = $block->getLayout()->getBlock('product_tabs')): ?>
 jQuery(function () {
     if (jQuery('#<?php echo $tabsBlock->getId() ?>').length && jQuery('#<?php echo $tabsBlock->getId() ?>').is(':mage-tabs')) {
         var activeAnchor = jQuery('#<?php echo $tabsBlock->getId() ?>').tabs('activeAnchor');

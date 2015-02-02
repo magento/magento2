@@ -1,10 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/** @var $this \Magento\Framework\View\Element\Html\Links */
+/** @var $block \Magento\Framework\View\Element\Html\Links */
 ?>
-<?php /** @var $this \Magento\Customer\Block\Account\Navigation */ ?>
+<?php /** @var $block \Magento\Customer\Block\Account\Navigation */ ?>
 <div class="block account-nav">
     <div class="title">
         <strong><?php echo __('My Account'); ?></strong>
@@ -12,7 +13,7 @@
     <div class="content">
         <nav class="account-nav">
             <ul class="nav items">
-                <?php echo $this->getChildHtml();?>
+                <?php echo $block->getChildHtml();?>
             </ul>
         </nav>
     </div>

@@ -1,45 +1,49 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /**
- * @var $this \Magento\Tax\Block\Checkout\Shipping
+ * @var $block \Magento\Tax\Block\Checkout\Shipping
  * @see \Magento\Tax\Block\Checkout\Shipping
  */
 ?>
-<?php if ($this->displayBoth()):?>
+<?php if ($block->displayBoth()):?>
 <tr class="row-totals">
-    <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
-        <?php echo $this->getExcludeTaxLabel() ?>
+    <td style="<?php echo $block->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+        <?php echo $block->getExcludeTaxLabel() ?>
     </td>
-    <td style="<?php echo $this->getStyle() ?>" class="a-right">
-        <?php echo $this->formatPrice($this->getShippingExcludeTax()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="a-right">
+        <?php echo $block->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>
 <tr class="row-totals">
-    <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
-        <?php echo $this->getIncludeTaxLabel() ?>
+    <td style="<?php echo $block->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+        <?php echo $block->getIncludeTaxLabel() ?>
     </td>
-    <td style="<?php echo $this->getStyle() ?>" class="a-right">
-        <?php echo $this->formatPrice($this->getShippingIncludeTax()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="a-right">
+        <?php echo $block->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
-<?php elseif ($this->displayIncludeTax()) : ?>
+<?php elseif ($block->displayIncludeTax()) : ?>
 <tr>
-    <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
-        <?php echo $this->getTotal()->getTitle() ?>
+    <td style="<?php echo $block->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+        <?php echo $block->getTotal()->getTitle() ?>
     </td>
-    <td style="<?php echo $this->getStyle() ?>" class="a-right">
-        <?php echo $this->formatPrice($this->getShippingIncludeTax()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="a-right">
+        <?php echo $block->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
 <?php else:?>
 <tr class="row-totals">
-    <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
-        <?php echo $this->escapeHtml($this->getTotal()->getTitle()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+        <?php echo $block->escapeHtml($block->getTotal()->getTitle()) ?>
     </td>
-    <td style="<?php echo $this->getStyle() ?>" class="a-right">
-        <?php echo $this->formatPrice($this->getShippingExcludeTax()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="a-right">
+        <?php echo $block->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>
 <?php endif;?>

@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/** @var $this \Magento\Sales\Block\Adminhtml\Order\Totals\Tax */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Sales\Block\Adminhtml\Order\Totals\Tax */
 ?>
 <?php
 /** @var $_source \Magento\Sales\Model\Order\Invoice */
-$_source    = $this->getSource();
-$_order     = $this->getOrder();
-$_fullInfo  = $this->getFullTaxInfo();
+$_source    = $block->getSource();
+$_order     = $block->getOrder();
+$_fullInfo  = $block->getFullTaxInfo();
 ?>
 
-<?php if ($this->displayFullSummary()): ?>
+<?php if ($block->displayFullSummary()): ?>
     <?php $isTop = 1; ?>
     <?php if (isset($_fullInfo[0]['rates'])): ?>
         <?php foreach ($_fullInfo as $info): ?>
@@ -34,7 +38,7 @@ $_fullInfo  = $this->getFullTaxInfo();
                     <td class="label"><?php echo $rate['title']; ?><br /></td>
                 <?php endif; ?>
                 <?php if ($isFirst): ?>
-                    <td rowspan="<?php echo count($rates); ?>"><?php echo $this->displayAmount($amount, $baseAmount); ?></td>
+                    <td rowspan="<?php echo count($rates); ?>"><?php echo $block->displayAmount($amount, $baseAmount); ?></td>
                 <?php endif; ?>
             </tr>
             <?php
@@ -54,11 +58,11 @@ $_fullInfo  = $this->getFullTaxInfo();
 
             <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
                 <?php if (!is_null($info['percent'])): ?>
-                    <td class="label"><?php echo $this->escapeHtml($info['title']); ?> (<?php echo (float)$info['percent']; ?>%)<br /></td>
+                    <td class="label"><?php echo $block->escapeHtml($info['title']); ?> (<?php echo (float)$info['percent']; ?>%)<br /></td>
                 <?php else: ?>
-                    <td class="label"><?php echo $this->escapeHtml($info['title']); ?><br /></td>
+                    <td class="label"><?php echo $block->escapeHtml($info['title']); ?><br /></td>
                 <?php endif; ?>
-                    <td><?php echo $this->displayAmount($amount, $baseAmount); ?></td>
+                    <td><?php echo $block->displayAmount($amount, $baseAmount); ?></td>
             </tr>
             <?php
                 $isFirst = 0;
@@ -67,7 +71,7 @@ $_fullInfo  = $this->getFullTaxInfo();
         <?php endforeach; ?>
     <?php endif; ?>
 <?php endif;?>
-<?php if ($this->displayFullSummary() && $_fullInfo): ?>
+<?php if ($block->displayFullSummary() && $_fullInfo): ?>
 <tr class="summary-total" onclick="expandDetails(this, '.summary-details')">
 <?php else: ?>
 <tr>
@@ -82,6 +86,6 @@ $_fullInfo  = $this->getFullTaxInfo();
         </div>
     </td>
     <td>
-        <?php echo $this->displayAmount($_source->getTaxAmount(), $_source->getBaseTaxAmount()); ?>
+        <?php echo $block->displayAmount($_source->getTaxAmount(), $_source->getBaseTaxAmount()); ?>
     </td>
 </tr>

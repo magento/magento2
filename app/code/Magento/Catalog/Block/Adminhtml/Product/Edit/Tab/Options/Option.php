@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Customers defined options
@@ -268,6 +271,9 @@ class Option extends Widget
 
     /**
      * @return \Magento\Framework\Object[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getOptionValues()
     {
@@ -278,7 +284,7 @@ class Option extends Widget
             $values = [];
             $scope = (int)$this->_scopeConfig->getValue(
                 \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
             foreach ($optionsArr as $option) {
                 /* @var $option \Magento\Catalog\Model\Product\Option */

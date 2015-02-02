@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sendfriend\Controller\Product;
 
@@ -15,7 +16,6 @@ class Send extends \Magento\Sendfriend\Controller\Product
     public function execute()
     {
         $product = $this->_initProduct();
-        $model = $this->_initSendToFriendModel();
 
         if (!$product) {
             $this->_forward('noroute');
@@ -24,9 +24,9 @@ class Send extends \Magento\Sendfriend\Controller\Product
         /* @var $session \Magento\Catalog\Model\Session */
         $catalogSession = $this->_objectManager->get('Magento\Catalog\Model\Session');
 
-        if ($model->getMaxSendsToFriend() && $model->isExceedLimit()) {
+        if ($this->sendFriend->getMaxSendsToFriend() && $this->sendFriend->isExceedLimit()) {
             $this->messageManager->addNotice(
-                __('You can\'t send messages more than %1 times an hour.', $model->getMaxSendsToFriend())
+                __('You can\'t send messages more than %1 times an hour.', $this->sendFriend->getMaxSendsToFriend())
             );
         }
 

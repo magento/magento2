@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Adminhtml\Rating\Edit\Tab;
 
@@ -11,7 +12,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var \Magento\Store\Model\System\Store
      */
-    protected $_systemStore;
+    protected $systemStore;
 
     /**
      * @var string
@@ -23,14 +24,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var \Magento\Framework\Session\SessionManagerInterface
      */
-    protected $_session;
+    protected $session;
 
     /**
      * Option factory
      *
      * @var \Magento\Review\Model\Rating\OptionFactory
      */
-    protected $_optionFactory;
+    protected $optionFactory;
+
+    /**
+     * @var \Magento\Framework\Data\Form\Element\Fieldset
+     */
+    protected $fieldset;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -50,9 +56,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Store\Model\System\Store $systemStore,
         array $data = []
     ) {
-        $this->_optionFactory = $optionFactory;
-        $this->_session = $session;
-        $this->_systemStore = $systemStore;
+        $this->optionFactory = $optionFactory;
+        $this->session = $session;
+        $this->systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -60,16 +66,36 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare rating edit form
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Framework\Data\Form $form */
-        $form = $this->_formFactory->create();
-        $this->setForm($form);
+        $this->setForm($this->_formFactory->create());
+        $this->addRatingFieldset();
+        $this->addVisibilityFieldset();
+        if ($this->_coreRegistry->registry('rating_data')) {
+            $this->getForm()->getElement('position')->setValue(
+                $this->_coreRegistry->registry('rating_data')->getPosition()
+            );
+            $this->getForm()->getElement('is_active')->setIsChecked(
+                $this->_coreRegistry->registry('rating_data')->getIsActive()
+            );
+        }
 
-        $fieldset = $form->addFieldset('rating_form', ['legend' => __('Rating Title')]);
+        return parent::_prepareForm();
+    }
 
-        $fieldset->addField(
+    /**
+     * Add rating fieldset to form
+     *
+     * @return void
+     */
+    protected function addRatingFieldset()
+    {
+        $this->initFieldset('rating_form', ['legend' => __('Rating Title')]);
+        $this->getFieldset('rating_form')->addField(
             'rating_code',
             'text',
             [
@@ -80,36 +106,71 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        foreach ($this->_systemStore->getStoreCollection() as $store) {
-            $fieldset->addField(
+        foreach ($this->systemStore->getStoreCollection() as $store) {
+            $this->getFieldset('rating_form')->addField(
                 'rating_code_' . $store->getId(),
                 'text',
                 ['label' => $store->getName(), 'name' => 'rating_codes[' . $store->getId() . ']']
             );
         }
+        $this->setRatingData();
+    }
 
-        if ($this->_session->getRatingData()) {
-            $form->setValues($this->_session->getRatingData());
-            $data = $this->_session->getRatingData();
+    /**
+     * Set rating data to form
+     *
+     * @return void
+     */
+    protected function setRatingData()
+    {
+        if ($this->session->getRatingData()) {
+            $this->getForm()->setValues($this->session->getRatingData());
+            $data = $this->session->getRatingData();
             if (isset($data['rating_codes'])) {
-                $this->_setRatingCodes($data['rating_codes']);
+                $this->setRatingCodes($data['rating_codes']);
             }
-            $this->_session->setRatingData(null);
+            $this->session->setRatingData(null);
         } elseif ($this->_coreRegistry->registry('rating_data')) {
-            $form->setValues($this->_coreRegistry->registry('rating_data')->getData());
+            $this->getForm()->setValues($this->_coreRegistry->registry('rating_data')->getData());
             if ($this->_coreRegistry->registry('rating_data')->getRatingCodes()) {
-                $this->_setRatingCodes($this->_coreRegistry->registry('rating_data')->getRatingCodes());
+                $this->setRatingCodes($this->_coreRegistry->registry('rating_data')->getRatingCodes());
             }
         }
 
+        $this->setRatingOptions();
+    }
+
+    /**
+     * Set rating codes to form
+     *
+     * @param array $ratingCodes
+     * @return void
+     */
+    protected function setRatingCodes($ratingCodes)
+    {
+        foreach ($ratingCodes as $store => $value) {
+            $element = $this->getForm()->getElement('rating_code_' . $store);
+            if ($element) {
+                $element->setValue($value);
+            }
+        }
+    }
+
+    /**
+     * Set rating options to form
+     *
+     * @return void
+     */
+    protected function setRatingOptions()
+    {
         if ($this->_coreRegistry->registry('rating_data')) {
-            $collection = $this->_optionFactory->create()->getResourceCollection()->addRatingFilter(
+            $collection = $this->optionFactory->create()->getResourceCollection()->addRatingFilter(
                 $this->_coreRegistry->registry('rating_data')->getId()
             )->load();
 
             $i = 1;
             foreach ($collection->getItems() as $item) {
-                $fieldset->addField(
+                $this->getFieldset('rating_form')->addField(
                     'option_code_' . $item->getId(),
                     'hidden',
                     [
@@ -123,62 +184,80 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             }
         } else {
             for ($i = 1; $i <= 5; $i++) {
-                $fieldset->addField(
+                $this->getFieldset('rating_form')->addField(
                     'option_code_' . $i,
                     'hidden',
                     ['required' => true, 'name' => 'option_title[add_' . $i . ']', 'value' => $i]
                 );
             }
         }
+    }
 
-        $fieldset = $form->addFieldset('visibility_form', ['legend' => __('Rating Visibility')]);
+    /**
+     * Add visibility fieldset to form
+     *
+     * @return void
+     */
+    protected function addVisibilityFieldset()
+    {
+        $this->initFieldset('visibility_form', ['legend' => __('Rating Visibility')]);
         if (!$this->_storeManager->isSingleStoreMode()) {
-            $field = $fieldset->addField(
+            $field = $this->getFieldset('visibility_form')->addField(
                 'stores',
                 'multiselect',
                 [
                     'label' => __('Visible In'),
                     'name' => 'stores[]',
-                    'values' => $this->_systemStore->getStoreValuesForForm()
+                    'values' => $this->systemStore->getStoreValuesForForm()
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
                 'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
             );
             $field->setRenderer($renderer);
-
             if ($this->_coreRegistry->registry('rating_data')) {
-                $form->getElement('stores')->setValue($this->_coreRegistry->registry('rating_data')->getStores());
+                $this->getForm()->getElement('stores')->setValue(
+                    $this->_coreRegistry->registry('rating_data')->getStores()
+                );
             }
         }
-
-        $fieldset->addField(
+        $this->getFieldset('visibility_form')->addField(
             'is_active',
             'checkbox',
             ['label' => __('Is Active'), 'name' => 'is_active', 'value' => 1]
         );
-
-        $fieldset->addField('position', 'text', ['label' => __('Sort Order'), 'name' => 'position']);
-
-        if ($this->_coreRegistry->registry('rating_data')) {
-            $form->getElement('position')->setValue($this->_coreRegistry->registry('rating_data')->getPosition());
-            $form->getElement('is_active')->setIsChecked($this->_coreRegistry->registry('rating_data')->getIsActive());
-        }
-
-        return parent::_prepareForm();
+        $this->getFieldset('visibility_form')
+            ->addField('position', 'text', ['label' => __('Sort Order'), 'name' => 'position']);
     }
 
     /**
-     * @param array $ratingCodes
+     * Initialize form fieldset
+     *
+     * @param string $formId
+     * @param array $config
      * @return void
      */
-    protected function _setRatingCodes($ratingCodes)
+    protected function initFieldset($formId, array $config)
     {
-        foreach ($ratingCodes as $store => $value) {
-            $element = $this->getForm()->getElement('rating_code_' . $store);
-            if ($element) {
-                $element->setValue($value);
-            }
+        if (!isset($this->fieldset[$formId])) {
+            if (!$this->getForm()->getElement($formId)) {
+                $this->fieldset[$formId] = $this->getForm()->addFieldset($formId, $config);
+            } elseif ($this->getForm()->getElement($formId));
+        }
+    }
+
+    /**
+     * Get fieldset by form id
+     *
+     * @param string $formId
+     * @return \Magento\Framework\Data\Form\Element\Fieldset|null
+     */
+    protected function getFieldset($formId)
+    {
+        if (!empty($this->fieldset) && isset($this->fieldset[$formId])) {
+            return $this->fieldset[$formId];
+        } else {
+            return null;
         }
     }
 }

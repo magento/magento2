@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class GroupPriceOptions
@@ -18,7 +19,7 @@ use Mtf\Fixture\FixtureInterface;
 class GroupPriceOptions implements FixtureInterface
 {
     /**
-     * @var \Mtf\Fixture\FixtureFactory
+     * @var \Magento\Mtf\Fixture\FixtureFactory
      */
     protected $fixtureFactory;
 
@@ -68,6 +69,8 @@ class GroupPriceOptions implements FixtureInterface
     }
 
     /**
+     * Get preset array
+     *
      * @param string $name
      * @return mixed|null
      */

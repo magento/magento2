@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<div class="page-actions"><?php echo $this->getButtonsHtml() ?></div>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?php echo $block->getButtonsHtml() ?></div>
 <div class="fieldset-wrapper">
     <div class="fieldset-wrapper-title">
         <span class="title"><?php echo __('Transaction Data'); ?></span>
@@ -13,14 +17,14 @@
             <tbody>
             <tr>
                 <th><?php echo __('Transaction ID'); ?></th>
-                <td><?php echo $this->getTxnIdHtml() ?></td>
+                <td><?php echo $block->getTxnIdHtml() ?></td>
             </tr>
             <tr>
                 <th><?php echo __('Parent Transaction ID'); ?></th>
                 <td>
-                    <?php if ($this->getParentTxnIdHtml()): ?>
-                    <a href="<?php echo $this->getParentTxnIdUrlHtml() ?>">
-                        <?php echo $this->getParentTxnIdHtml(); ?>
+                    <?php if ($block->getParentTxnIdHtml()): ?>
+                    <a href="<?php echo $block->getParentTxnIdUrlHtml() ?>">
+                        <?php echo $block->getParentTxnIdHtml(); ?>
                     </a>
                     <?php else : ?>
                     <?php echo __('N/A'); ?>
@@ -30,22 +34,22 @@
             <tr>
                 <th><?php echo __('Order ID'); ?></th>
                 <td>
-                    <a href="<?php echo $this->getOrderIdUrlHtml(); ?>">
-                        <?php echo $this->getOrderIncrementIdHtml() ?>
+                    <a href="<?php echo $block->getOrderIdUrlHtml(); ?>">
+                        <?php echo $block->getOrderIncrementIdHtml() ?>
                     </a>
                 </td>
             </tr>
             <tr>
                 <th><?php echo __('Transaction Type'); ?></th>
-                <td><?php echo $this->getTxnTypeHtml() ?></td>
+                <td><?php echo $block->getTxnTypeHtml() ?></td>
             </tr>
             <tr>
                 <th><?php echo __('Is Closed'); ?></th>
-                <td><?php echo $this->getIsClosedHtml(); ?></td>
+                <td><?php echo $block->getIsClosedHtml(); ?></td>
             </tr>
             <tr>
                 <th><?php echo __('Created At'); ?></th>
-                <td><?php echo $this->getCreatedAtHtml(); ?></td>
+                <td><?php echo $block->getCreatedAtHtml(); ?></td>
             </tr>
             </tbody>
         </table>
@@ -57,7 +61,7 @@
         <span class="title""><?php echo __('Child Transactions'); ?></span>
     </div>
     <div class="log-details-grid">
-        <?php echo $this->getChildHtml('child_grid') ?>
+        <?php echo $block->getChildHtml('child_grid') ?>
     </div>
 </div>
 
@@ -66,6 +70,6 @@
         <span class="title"><?php echo __('Transaction Details'); ?></span>
     </div>
     <div class="log-details-grid">
-        <?php echo $this->getChildHtml('detail_grid') ?>
+        <?php echo $block->getChildHtml('detail_grid') ?>
     </div>
 </div>

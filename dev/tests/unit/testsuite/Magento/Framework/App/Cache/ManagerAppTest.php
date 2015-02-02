@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App\Cache;
@@ -31,13 +32,17 @@ class ManagerAppTest extends \PHPUnit_Framework_TestCase
 
     public function testLaunchStatus()
     {
+        $requestArgs = [
+            ManagerApp::KEY_STATUS => true
+        ];
+
         $this->response->expects($this->once())
             ->method('setBody')
             ->with(
                 $this->matches("Current status:%afoo: 1%abar: 1%abaz: 0")
             );
 
-        $model = new ManagerApp($this->cacheManager, $this->response, []);
+        $model = new ManagerApp($this->cacheManager, $this->response, $requestArgs);
         $model->launch();
     }
 
@@ -57,7 +62,7 @@ class ManagerAppTest extends \PHPUnit_Framework_TestCase
         $this->response->expects($this->once())
             ->method('setBody')
             ->with(
-                $this->matches("Changed cache status:%abaz: 0 -> 1%aCleaned cache types: baz%a")
+                $this->matches("Changed cache status:\n%abaz: 0 -> 1\nCleaned cache types:\nbaz")
             );
 
         $model = new ManagerApp($this->cacheManager, $this->response, $requestArgs);
@@ -79,7 +84,7 @@ class ManagerAppTest extends \PHPUnit_Framework_TestCase
         $this->response->expects($this->once())
             ->method('setBody')
             ->with(
-                $this->matches("Changed cache status:%abaz: 1 -> 0%a%a")
+                $this->matches("Changed cache status:\n%abaz: 1 -> 0\n")
             );
 
         $model = new ManagerApp($this->cacheManager, $this->response, $requestArgs);
@@ -102,7 +107,7 @@ class ManagerAppTest extends \PHPUnit_Framework_TestCase
         $this->response->expects($this->once())
             ->method('setBody')
             ->with(
-                $this->matches("Flushed cache types: foo, bar%a")
+                $this->matches("Flushed cache types:\nfoo\nbar")
             );
 
         $model = new ManagerApp($this->cacheManager, $this->response, $requestArgs);
@@ -125,7 +130,7 @@ class ManagerAppTest extends \PHPUnit_Framework_TestCase
         $this->response->expects($this->once())
             ->method('setBody')
             ->with(
-                $this->matches("Cleaned cache types: foo, bar%a")
+                $this->matches("Cleaned cache types:\nfoo\nbar")
             );
 
         $model = new ManagerApp($this->cacheManager, $this->response, $requestArgs);
@@ -151,7 +156,7 @@ class ManagerAppTest extends \PHPUnit_Framework_TestCase
         $this->response->expects($this->once())
             ->method('setBody')
             ->with(
-                $this->matches("Changed cache status:%afoo: 0 -> 1%aCleaned cache types: foo, bar%a")
+                $this->matches("Changed cache status:\n%afoo: 0 -> 1\nCleaned cache types:\nfoo\nbar")
             );
 
         $model = new ManagerApp($this->cacheManager, $this->response, $requestArgs);
@@ -178,7 +183,7 @@ class ManagerAppTest extends \PHPUnit_Framework_TestCase
         $this->response->expects($this->once())
             ->method('setBody')
             ->with(
-                $this->matches("Changed cache status:%abaz: 0 -> 1%aFlushed cache types: foo, baz%a")
+                $this->matches("Changed cache status:\n%abaz: 0 -> 1%aFlushed cache types:\nfoo\nbaz")
             );
 
         $model = new ManagerApp($this->cacheManager, $this->response, $requestArgs);

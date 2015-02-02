@@ -1,16 +1,25 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 require_once dirname(__FILE__) . '/' . 'bootstrap.php';
 
-$objectManager->create('Mtf\Util\Generate\TestCase')->launch();
-$objectManager->create('Mtf\Util\Generate\Page')->launch();
-$objectManager->create('Mtf\Util\Generate\Fixture')->launch();
-$objectManager->create('Mtf\Util\Generate\Constraint')->launch();
-$objectManager->create('Mtf\Util\Generate\Handler')->launch();
+// Generate page
+$objectManager->create('Magento\Mtf\Util\Generate\Page')->launch();
 
-$objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-$objectManager->create('Mtf\Util\Generate\Repository')->launch();
+// Generate fixtures
+$magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
+$magentoObjectManager = $magentoObjectManagerFactory->create($_SERVER);
+$fieldsProvider = $magentoObjectManager->create('\Magento\Mtf\Util\Generate\Fixture\FieldsProvider');
+$objectManager->create('Magento\Mtf\Util\Generate\Fixture', ['fieldsProvider' => $fieldsProvider])->launch();
 
-\Mtf\Util\Generate\GenerateResult::displayResults();
+// Generate repositories
+$magentoObjectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
+$collectionProvider = $magentoObjectManager->create('\Magento\Mtf\Util\Generate\Repository\CollectionProvider');
+$objectManager->create('Magento\Mtf\Util\Generate\Repository', ['collectionProvider' => $collectionProvider])->launch();
+
+// Generate factories for old end-to-end tests
+$magentoObjectManager->create('Magento\Mtf\Util\Generate\Factory')->launch();
+
+\Magento\Mtf\Util\Generate\GenerateResult::displayResults();

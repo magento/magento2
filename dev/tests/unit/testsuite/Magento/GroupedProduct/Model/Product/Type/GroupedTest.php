@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
 
@@ -283,15 +284,198 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testGetChildrenMsrpWhenNoChildrenWithMsrp()
     {
         $key = '_cache_instance_associated_products';
-        $cachedData = [];
 
         $this->product->expects($this->once())->method('hasData')->with($key)->will($this->returnValue(true));
         $this->product->expects($this->never())->method('setData');
         $this->product->expects($this->once())->method('getData')->with($key)->will($this->returnValue([]));
 
         $this->assertEquals(0, $this->_model->getChildrenMsrp($this->product));
+    }
+
+    public function testPrepareForCartAdvancedEmpty()
+    {
+        $buyRequest = new \Magento\Framework\Object();
+        $expectedMsg = "Please specify the quantity of product(s).";
+
+        $this->assertEquals(
+            $expectedMsg,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
+        );
+
+        $buyRequest->setSuperGroup([]);
+        $this->assertEquals(
+            $expectedMsg,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
+        );
+
+        $buyRequest->setSuperGroup(1);
+        $this->assertEquals(
+            $expectedMsg,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
+        );
+    }
+
+    public function testPrepareForCartAdvancedNoProductsStrictTrue()
+    {
+        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest->setSuperGroup([0 => 0]);
+        $expectedMsg = "Please specify the quantity of product(s).";
+
+        $cached = true;
+        $associatedProducts = [];
+        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
+        $this->product->expects($this->once())->method('getData')->will($this->returnValue($associatedProducts));
+
+        $this->assertEquals(
+            $expectedMsg,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
+        );
+    }
+
+    public function testPrepareForCartAdvancedNoProductsStrictFalse()
+    {
+        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest->setSuperGroup([0 => 0]);
+
+        $cached = true;
+        $associatedProducts = [];
+        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
+        $this->product->expects($this->once())->method('getData')->will($this->returnValue($associatedProducts));
+
+        $this->assertEquals(
+            [0 => $this->product],
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
+        );
+    }
+
+    public function testPrepareForCartAdvancedWithProductsStrictFalseStringResult()
+    {
+        $associatedProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $associatedId = 9384;
+        $associatedProduct->expects($this->once())->method('getId')->will($this->returnValue($associatedId));
+
+        $typeMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Type\AbstractType',
+            ['_prepareProduct', 'deleteTypeSpecificData'],
+            [],
+            '',
+            false
+        );
+        $associatedPrepareResult = "";
+        $typeMock->expects($this->once())->method('_prepareProduct')->willReturn($associatedPrepareResult);
+
+        $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
+
+        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest->setSuperGroup([$associatedId => 1]);
+
+        $cached = true;
+        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
+        $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
+
+        $this->assertEquals(
+            $associatedPrepareResult,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
+        );
+    }
+
+    public function testPrepareForCartAdvancedWithProductsStrictFalseEmptyArrayResult()
+    {
+        $expectedMsg = "We cannot process the item.";
+        $associatedProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $associatedId = 9384;
+        $associatedProduct->expects($this->once())->method('getId')->will($this->returnValue($associatedId));
+
+        $typeMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Type\AbstractType',
+            ['_prepareProduct', 'deleteTypeSpecificData'],
+            [],
+            '',
+            false
+        );
+        $associatedPrepareResult = [];
+        $typeMock->expects($this->once())->method('_prepareProduct')->willReturn($associatedPrepareResult);
+
+        $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
+
+        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest->setSuperGroup([$associatedId => 1]);
+
+        $cached = true;
+        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
+        $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
+
+        $this->assertEquals(
+            $expectedMsg,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
+        );
+    }
+
+    public function testPrepareForCartAdvancedWithProductsStrictFalse()
+    {
+        $associatedProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $associatedId = 9384;
+        $associatedProduct->expects($this->once())->method('getId')->will($this->returnValue($associatedId));
+
+        $typeMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Type\AbstractType',
+            ['_prepareProduct', 'deleteTypeSpecificData'],
+            [],
+            '',
+            false
+        );
+        $associatedPrepareResult = [$this->getMock('Magento\Catalog\Model\Product', [], [], 'resultProduct', false)];
+        $typeMock->expects($this->once())->method('_prepareProduct')->willReturn($associatedPrepareResult);
+
+        $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
+
+        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest->setSuperGroup([$associatedId => 1]);
+
+        $cached = true;
+        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
+        $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
+
+        $this->assertEquals(
+            [$this->product],
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
+        );
+    }
+
+    public function testPrepareForCartAdvancedWithProductsStrictTrue()
+    {
+        $associatedProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $associatedId = 9384;
+        $associatedProduct->expects($this->once())->method('getId')->will($this->returnValue($associatedId));
+
+        $typeMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Type\AbstractType',
+            ['_prepareProduct', 'deleteTypeSpecificData'],
+            [],
+            '',
+            false
+        );
+        $associatedPrepareResult = [$this->getMock('Magento\Catalog\Model\Product', [], [], 'resultProduct', false)];
+        $typeMock->expects($this->once())->method('_prepareProduct')->willReturn($associatedPrepareResult);
+
+        $associatedProduct->expects($this->once())->method('getTypeInstance')->willReturn($typeMock);
+
+        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest->setSuperGroup([$associatedId => 1]);
+
+        $cached = true;
+        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
+        $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
+
+        $this->assertEquals(
+            $associatedPrepareResult,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
+        );
     }
 }

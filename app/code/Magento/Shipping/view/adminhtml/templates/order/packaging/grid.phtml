@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="grid">
     <table cellspacing="0" class="data-table">
@@ -9,7 +13,7 @@
         <tr>
             <th class="col-product no-link"><?php echo __('Product Name') ?></th>
             <th class="col-weight no-link"><?php echo __('Weight') ?></th>
-            <th class="col-custom no-link" <?php echo $this->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
+            <th class="col-custom no-link" <?php echo $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
                 <?php echo __('Customs Value') ?>
             </th>
             <th class="col-select no-link">
@@ -21,8 +25,8 @@
         </thead>
 
         <tbody>
-        <?php foreach ($this->getCollection() as $item): ?>
-            <?php $_order = $this->getShipment()->getOrder() ?>
+        <?php foreach ($block->getCollection() as $item): ?>
+            <?php $_order = $block->getShipment()->getOrder() ?>
             <?php $_orderItem = $_order->getItemById($item->getOrderItemId()); ?>
             <?php if ($item->getIsVirtual()
                 || ($_orderItem->isShipSeparately() && !($_orderItem->getParentItemId() || $_orderItem->getParentItem()))
@@ -37,7 +41,7 @@
                 <?php echo $item->getWeight(); ?>
             </td>
             <?php
-            if ($this->displayCustomsValue()) {
+            if ($block->displayCustomsValue()) {
                 $customsValueDisplay = '';
                 $customsValueValidation = ' validate-zero-or-greater ';
             } else {
@@ -46,7 +50,7 @@
             }
             ?>
             <td <?php echo $customsValueDisplay ?>>
-                <input type="text" name="customs_value" class="input-text <?php echo $customsValueValidation ?>" value="<?php echo $this->formatPrice($item->getPrice()); ?>" size="10" onblur="packaging.recalcContainerWeightAndCustomsValue(this);">
+                <input type="text" name="customs_value" class="input-text <?php echo $customsValueValidation ?>" value="<?php echo $block->formatPrice($item->getPrice()); ?>" size="10" onblur="packaging.recalcContainerWeightAndCustomsValue(this);">
             </td>
             <td class="col-select">
                 <input type="checkbox" name="" value="<?php echo $item->getId() ? $item->getId() : $item->getOrderItemId(); ?>" class="checkbox">

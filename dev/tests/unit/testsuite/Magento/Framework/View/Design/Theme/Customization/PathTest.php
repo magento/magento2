@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -37,9 +38,9 @@ class PathTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_theme = $this->getMock('Magento\Core\Model\Theme', ['__wakeup'], [], '', false);
+        $this->_theme = $this->getMock('Magento\Theme\Model\Theme', ['__wakeup'], [], '', false);
         $this->_appState = $this->getMock('Magento\Framework\App\State', ['getAreaCode'], [], '', false);
-        $appStateProperty = new \ReflectionProperty('\Magento\Core\Model\Theme', '_appState');
+        $appStateProperty = new \ReflectionProperty('\Magento\Theme\Model\Theme', '_appState');
         $appStateProperty->setAccessible(true);
         $appStateProperty->setValue($this->_theme, $this->_appState);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);

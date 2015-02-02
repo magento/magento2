@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /* Create attribute */
@@ -22,7 +23,6 @@ $attribute->setData(
         'frontend_input' => 'multiselect',
         'is_unique' => 0,
         'is_required' => 0,
-        'is_configurable' => 0,
         'is_searchable' => 0,
         'is_visible_in_advanced_search' => 0,
         'is_comparable' => 0,

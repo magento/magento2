@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Onepage;
 
@@ -9,10 +10,11 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 use Magento\Directory\Model\Resource\Country\Collection;
 use Magento\Directory\Model\Resource\Region\Collection as RegionCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Sales\Model\Quote;
+use Magento\Quote\Model\Quote;
 
 /**
  * One page common functionality block
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 {
@@ -99,6 +101,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -136,7 +139,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      */
     public function getConfig($path)
     {
-        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -365,10 +368,10 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     /**
      * Return the html text for shipping price
      *
-     * @param \Magento\Sales\Model\Quote\Address\Rate $rate
+     * @param \Magento\Quote\Model\Quote\Address\Rate $rate
      * @return string
      */
-    public function getShippingPriceHtml(\Magento\Sales\Model\Quote\Address\Rate $rate)
+    public function getShippingPriceHtml(\Magento\Quote\Model\Quote\Address\Rate $rate)
     {
         /** @var \Magento\Checkout\Block\Shipping\Price $block */
         $block = $this->getLayout()->getBlock('checkout.shipping.price');

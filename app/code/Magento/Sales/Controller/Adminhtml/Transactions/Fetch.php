@@ -1,24 +1,28 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\Redirect;
 
 class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**
      * Fetch transaction details action
      *
-     * @return void
+     * @return Redirect
      */
     public function execute()
     {
         $txn = $this->_initTransaction();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         if (!$txn) {
-            return;
+            return $resultRedirect->setPath('sales/*/');
         }
         try {
             $txn->getOrderPaymentObject()->setOrder($txn->getOrder())->importTransactionInfo($txn);
@@ -30,6 +34,6 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
             $this->messageManager->addError(__('We can\'t update the transaction details.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
-        $this->_redirect('sales/transactions/view', ['_current' => true]);
+        return $resultRedirect->setPath('sales/transactions/view', ['_current' => true]);
     }
 }

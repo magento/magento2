@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Msrp\Block\Adminhtml\Product\Helper\Form;
 
@@ -16,7 +17,7 @@ class Type extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Msrp\Model\Config $config
@@ -26,7 +27,7 @@ class Type extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Msrp\Model\Config $config,

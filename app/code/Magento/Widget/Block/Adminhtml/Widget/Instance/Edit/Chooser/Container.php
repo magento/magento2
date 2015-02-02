@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
@@ -20,20 +21,20 @@ class Container extends \Magento\Framework\View\Element\Html\Select
     protected $_layoutProcessorFactory;
 
     /**
-     * @var \Magento\Core\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory
      */
     protected $_themesFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory
-     * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory
+     * @param \Magento\Theme\Model\Resource\Theme\CollectionFactory $themesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory,
-        \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory,
+        \Magento\Theme\Model\Resource\Theme\CollectionFactory $themesFactory,
         array $data = []
     ) {
         $this->_layoutProcessorFactory = $layoutProcessorFactory;
@@ -97,11 +98,11 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      * Retrieve theme instance by its identifier
      *
      * @param int $themeId
-     * @return \Magento\Core\Model\Theme|null
+     * @return \Magento\Theme\Model\Theme|null
      */
     protected function _getThemeInstance($themeId)
     {
-        /** @var \Magento\Core\Model\Resource\Theme\Collection $themeCollection */
+        /** @var \Magento\Theme\Model\Resource\Theme\Collection $themeCollection */
         $themeCollection = $this->_themesFactory->create();
         return $themeCollection->getItemById($themeId);
     }

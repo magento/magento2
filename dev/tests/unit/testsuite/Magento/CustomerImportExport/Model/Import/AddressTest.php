@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CustomerImportExport\Model\Import;
@@ -147,14 +148,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $customerStorage = $this->_createCustomerStorageMock();
         $customerEntity = $this->_createCustomerEntityMock();
         $addressCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false)
+            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         foreach ($this->_addresses as $address) {
             $addressCollection->addItem(new \Magento\Framework\Object($address));
         }
 
         $regionCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false)
+            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         foreach ($this->_regions as $region) {
             $regionCollection->addItem(new \Magento\Framework\Object($region));
@@ -185,7 +186,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createAttrCollectionMock()
     {
-        $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
+        $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
         $attributeCollection = $this->getMock(
             'Magento\Framework\Data\Collection',
             ['getEntityTypeCode'],
@@ -199,7 +200,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                     $this->getMock('Magento\Framework\Registry'),
                     $this->getMock('Magento\Core\Helper\Data', [], [], '', false, false),
                     $this->getMock('Magento\Eav\Model\Config', [], [], '', false, false),
-                    $this->getMock('Magento\Eav\Model\Entity\TypeFactory'),
+                    $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false),
                     $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false, false),
                     $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false, false),
                     $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false, false)

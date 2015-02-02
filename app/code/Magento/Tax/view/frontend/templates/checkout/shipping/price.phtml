@@ -1,23 +1,27 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-?>
-<?php /** @var $this \Magento\Tax\Block\Checkout\Shipping\Price */ ?>
 
-<?php $_excl = $this->getShippingPriceExclTax(); ?>
-<?php $_incl = $this->getShippingPriceInclTax(); ?>
-<?php if ($this->displayShippingPriceExclTax()): ?>
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\Tax\Block\Checkout\Shipping\Price */ ?>
+
+<?php $_excl = $block->getShippingPriceExclTax(); ?>
+<?php $_incl = $block->getShippingPriceInclTax(); ?>
+<?php if ($block->displayShippingPriceExclTax()): ?>
     <span class="price"><?php echo $_excl; ?></span>
 <?php else: ?>
-<?php if ($this->displayShippingBothPrices() && $_incl != $_excl): ?>
+<?php if ($block->displayShippingBothPrices() && $_incl != $_excl): ?>
     <span class="price-including-tax" data-label="<?php echo __('Incl. Tax'); ?>">
 <?php endif; ?>
     <span class="price"><?php echo $_incl; ?></span>
-<?php if ($this->displayShippingBothPrices() && $_incl != $_excl): ?>
+<?php if ($block->displayShippingBothPrices() && $_incl != $_excl): ?>
     </span>
 <?php endif; ?>
 <?php endif; ?>
-<?php if ($this->displayShippingBothPrices() && $_incl != $_excl): ?>
+<?php if ($block->displayShippingBothPrices() && $_incl != $_excl): ?>
     <span class="price-excluding-tax" data-label="<?php echo __('Excl. Tax'); ?>"><span class="price"><?php echo $_excl; ?></span></span>
 <?php endif; ?>

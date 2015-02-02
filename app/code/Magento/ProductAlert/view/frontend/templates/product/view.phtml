@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
-<?php /* @var $this \Magento\ProductAlert\Block\Product\View */?>
-<div class="product alert <?php echo $this->getHtmlClass() ?>">
-    <a href="#" data-post='<?php echo $this->getPostAction(); ?>'
-       title="<?php echo $this->escapeHtml(__($this->getSignupLabel())); ?>" class="action alert">
-        <?php echo $this->escapeHtml(__($this->getSignupLabel())); ?>
+<?php /* @var $block \Magento\ProductAlert\Block\Product\View */?>
+<div class="product alert <?php echo $block->getHtmlClass() ?>">
+    <a href="#" data-post='<?php echo $block->getPostAction(); ?>'
+       title="<?php echo $block->escapeHtml(__($block->getSignupLabel())); ?>" class="action alert">
+        <?php echo $block->escapeHtml(__($block->getSignupLabel())); ?>
     </a>
 </div>

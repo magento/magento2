@@ -1,40 +1,44 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Theme */?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Theme */?>
 <?php
-    $themeTitle = $this->escapeQuote($this->getTheme()->getThemeTitle());
+    $themeTitle = $block->escapeQuote($block->getTheme()->getThemeTitle());
 ?>
 
-<li class="theme" id="theme-id-<?php echo $this->getTheme()->getId() ?>" data-widget-options="<?php echo $this->escapeHtml($this->getOptionsJson()); ?>">
+<li class="theme" id="theme-id-<?php echo $block->getTheme()->getId() ?>" data-widget-options="<?php echo $block->escapeHtml($block->getOptionsJson()); ?>">
     <div class="theme-content">
-        <img class="theme-preview-image" src="<?php echo $this->getTheme()->getThemeImage()->getPreviewImageUrl() ?>" alt="<?php echo $themeTitle ?>"/>
-        <?php if (!$this->getTheme()->getAssignedStores()): ?>
+        <img class="theme-preview-image" src="<?php echo $block->getTheme()->getThemeImage()->getPreviewImageUrl() ?>" alt="<?php echo $themeTitle ?>"/>
+        <?php if (!$block->getTheme()->getAssignedStores()): ?>
             <article class="theme-data">
                 <h4 class="theme-title" title="<?php echo $themeTitle ?>"><?php echo $themeTitle ?></h4>
                 <div class="actions">
-                    <?php echo $this->getButtonsHtml() ?>
+                    <?php echo $block->getButtonsHtml() ?>
                 </div>
             </article>
         <?php endif; ?>
     </div>
-    <?php if ($this->getTheme()->getAssignedStores()): ?>
+    <?php if ($block->getTheme()->getAssignedStores()): ?>
         <div class="theme-assigned-data">
             <form action="" method="post" class="edit-theme-title-form">
                 <input type="text" value="<?php echo $themeTitle ?>" data-title-original="<?php echo $themeTitle ?>" required autofocus />
-                <?php echo $this->getQuickSaveButton()->toHtml() ?>
+                <?php echo $block->getQuickSaveButton()->toHtml() ?>
             </form>
             <h4 class="theme-title" title="<?php echo $themeTitle ?>"><?php echo $themeTitle ?></h4>
             <span class="edit-theme-title"><?php echo __('Edit Theme Name'); ?></span>
             <p class="theme-assigned-to-storeview">
                 <span><?php echo __('Assigned to: ')?></span>
-                <span><?php echo implode(', ', $this->getStoresTitles()) ?></span>
+                <span><?php echo implode(', ', $block->getStoresTitles()) ?></span>
             </p>
             <div class="actions">
-                <?php echo $this->getButtonsHtml() ?>
+                <?php echo $block->getButtonsHtml() ?>
             </div>
         </div>
     <?php endif; ?>

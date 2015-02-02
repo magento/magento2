@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -222,8 +223,8 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\Module\ModuleListInterface'),
             $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false, false),
             $this->getMock('Magento\Framework\Module\Resource', [], [], '', false),
-            $this->getMock('Magento\Core\Model\Resource\Theme\CollectionFactory', [], [], '', false),
-            $this->getMock('Magento\Core\Model\Theme\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Theme\Model\Resource\Theme\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Theme\Model\Theme\CollectionFactory', [], [], '', false),
             $this->getMock('Magento\Framework\Module\Setup\MigrationFactory', [], [], '', false),
             'core_setup',
             'app/etc/aliases_to_classes_map.json',

@@ -1,11 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Bundle\Block\Sales\Order\Items\Renderer */
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Bundle\Block\Sales\Order\Items\Renderer */
 ?>
-<?php $parentItem = $this->getItem() ?>
+<?php $parentItem = $block->getItem() ?>
 <?php $items = array_merge([$parentItem], $parentItem->getChildrenItems()); ?>
 <?php $_count = count($items) ?>
 <?php $_index = 0 ?>
@@ -14,14 +17,14 @@
 
 <?php foreach ($items as $_item): ?>
 
-    <?php if ($this->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
+    <?php if ($block->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
         <?php $_showlastRow = true ?>
     <?php else: ?>
         <?php $_showlastRow = false ?>
     <?php endif; ?>
 
     <?php if ($_item->getParentItem()): ?>
-        <?php $attributes = $this->getSelectionAttributes($_item) ?>
+        <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
             <tr class="options-label">
                 <td class="col label" colspan="5"><?php echo $attributes['option_label'] ?></td>
@@ -31,35 +34,35 @@
     <?php endif; ?>
 <tr id="order-item-row-<?php echo $_item->getId() ?>" class="<?php if ($_item->getParentItem()): ?>item-options-container<?php else: ?>item-parent<?php endif; ?>"<?php if ($_item->getParentItem()): ?> data-th="<?php echo $attributes['option_label'] ?>"<?php endif; ?>>
     <?php if (!$_item->getParentItem()): ?>
-        <td class="col name" data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>">
-            <strong class="product name product-item-name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
+        <td class="col name" data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>">
+            <strong class="product name product-item-name"><?php echo $block->escapeHtml($_item->getName()) ?></strong>
         </td>
     <?php else: ?>
-        <td class="col value" data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>"><?php echo $this->getValueHtml($_item)?></td>
+        <td class="col value" data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>"><?php echo $block->getValueHtml($_item)?></td>
     <?php endif; ?>
-    <td class="col sku" data-th="<?php echo $this->escapeHtml(__('SKU')); ?>"><?php echo $this->prepareSku($_item->getSku()) ?></td>
-    <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price')); ?>">
+    <td class="col sku" data-th="<?php echo $block->escapeHtml(__('SKU')); ?>"><?php echo $block->prepareSku($_item->getSku()) ?></td>
+    <td class="col price" data-th="<?php echo $block->escapeHtml(__('Price')); ?>">
         <?php if (!$_item->getParentItem()): ?>
-            <?php echo $this->getItemPriceHtml(); ?>
+            <?php echo $block->getItemPriceHtml(); ?>
         <?php else: ?>
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty')); ?>">
+    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
         <?php if (
-        ($_item->getParentItem() && $this->isChildCalculated()) ||
-        (!$_item->getParentItem() && !$this->isChildCalculated()) || ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $this->isShipmentSeparately())):?>
+        ($_item->getParentItem() && $block->isChildCalculated()) ||
+        (!$_item->getParentItem() && !$block->isChildCalculated()) || ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $block->isShipmentSeparately())):?>
             <ul class="items-qty">
         <?php endif; ?>
-        <?php if (($_item->getParentItem() && $this->isChildCalculated()) ||
-            (!$_item->getParentItem() && !$this->isChildCalculated())): ?>
+        <?php if (($_item->getParentItem() && $block->isChildCalculated()) ||
+            (!$_item->getParentItem() && !$block->isChildCalculated())): ?>
             <?php if ($_item->getQtyOrdered() > 0): ?>
                 <li class="item">
                     <span class="title"><?php echo __('Ordered'); ?></span>
                     <span class="content"><?php echo $_item->getQtyOrdered()*1 ?></span>
                 </li>
             <?php endif; ?>
-            <?php if ($_item->getQtyShipped() > 0 && !$this->isShipmentSeparately()): ?>
+            <?php if ($_item->getQtyShipped() > 0 && !$block->isShipmentSeparately()): ?>
                 <li class="item">
                     <span class="title"><?php echo __('Shipped'); ?></span>
                     <span class="content"><?php echo $_item->getQtyShipped()*1 ?></span>
@@ -77,7 +80,7 @@
                     <span class="content"><?php echo $_item->getQtyRefunded()*1 ?></span>
                 </li>
             <?php endif; ?>
-        <?php elseif ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $this->isShipmentSeparately()): ?>
+        <?php elseif ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $block->isShipmentSeparately()): ?>
             <li class="item">
                 <span class="title"><?php echo __('Shipped'); ?></span>
                 <span class="content"><?php echo $_item->getQtyShipped()*1 ?></span>
@@ -86,14 +89,14 @@
             &nbsp;
         <?php endif; ?>
         <?php if (
-        ($_item->getParentItem() && $this->isChildCalculated()) ||
-        (!$_item->getParentItem() && !$this->isChildCalculated()) || ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $this->isShipmentSeparately())):?>
+        ($_item->getParentItem() && $block->isChildCalculated()) ||
+        (!$_item->getParentItem() && !$block->isChildCalculated()) || ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $block->isShipmentSeparately())):?>
             </ul>
         <?php endif; ?>
     </td>
-    <td class="col subtotal" data-th="<?php echo $this->escapeHtml(__('Subtotal')); ?>">
+    <td class="col subtotal" data-th="<?php echo $block->escapeHtml(__('Subtotal')); ?>">
         <?php if (!$_item->getParentItem()): ?>
-            <?php echo $this->getItemRowTotalHtml(); ?>
+            <?php echo $block->getItemRowTotalHtml(); ?>
         <?php else: ?>
             &nbsp;
         <?php endif; ?>
@@ -101,33 +104,33 @@
 </tr>
 <?php endforeach; ?>
 
-<?php if ($_showlastRow && (($_options = $this->getItemOptions()) || $this->escapeHtml($_item->getDescription()))): ?>
+<?php if ($_showlastRow && (($_options = $block->getItemOptions()) || $block->escapeHtml($_item->getDescription()))): ?>
 <tr>
     <td class="col options" colspan="5">
-        <?php if ($_options = $this->getItemOptions()): ?>
+        <?php if ($_options = $block->getItemOptions()): ?>
             <dl class="item-options">
                 <?php foreach ($_options as $_option) : ?>
-                    <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
-                    <?php if (!$this->getPrintStatus()): ?>
-                        <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+                    <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
+                    <?php if (!$block->getPrintStatus()): ?>
+                        <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                         <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
                             <?php echo $_formatedOptionValue['value'] ?>
                             <?php if (isset($_formatedOptionValue['full_view'])): ?>
                                 <div class="tooltip content">
                                     <dl class="item options">
-                                        <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                                        <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
                                         <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
                                     </dl>
                                 </div>
                             <?php endif; ?>
                         </dd>
                     <?php else: ?>
-                        <dd><?php echo $this->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
+                        <dd><?php echo $block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </dl>
         <?php endif; ?>
-        <?php echo $this->escapeHtml($_item->getDescription()) ?>
+        <?php echo $block->escapeHtml($_item->getDescription()) ?>
     </td>
 </tr>
 <?php endif; ?>

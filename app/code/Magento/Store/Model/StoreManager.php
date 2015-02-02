@@ -1,10 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
 
-class StoreManager implements \Magento\Store\Model\StoreManagerInterface
+use Magento\Framework\Store\ScopeInterface;
+
+class StoreManager implements \Magento\Framework\Store\StoreManagerInterface
 {
     /**
      * Application run code
@@ -78,7 +81,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storage;
 
@@ -106,11 +109,11 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     /**
      * Get storage instance
      *
-     * @return \Magento\Store\Model\StoreManagerInterface
+     * @return \Magento\Framework\Store\StoreManagerInterface
      */
     protected function _getStorage()
     {
-        if (!$this->_storage instanceof \Magento\Store\Model\StoreManagerInterface) {
+        if (!$this->_storage instanceof \Magento\Framework\Store\StoreManagerInterface) {
             $arguments = [
                 'isSingleStoreAllowed' => $this->_isSingleStoreAllowed,
                 'currentStore' => $this->_currentStore,
@@ -275,7 +278,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 }

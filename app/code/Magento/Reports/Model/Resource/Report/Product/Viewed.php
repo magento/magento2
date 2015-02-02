@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Most viewed product report aggregate resource model
@@ -78,6 +81,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @param null|mixed $from
      * @param null|mixed $to
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function aggregate($from = null, $to = null)
     {

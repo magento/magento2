@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\File;
 
@@ -169,6 +170,7 @@ class Uploader
      *
      * @param  array $result
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _afterSave($result)
     {
@@ -183,6 +185,7 @@ class Uploader
      * @param string $newFileName
      * @return array
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save($destinationFolder, $newFileName = null)
     {
@@ -486,6 +489,7 @@ class Uploader
      * @param string|array $fileId
      * @return void
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _setUploadFileId($fileId)
     {

@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Model\Layer\Category;
 
@@ -18,7 +21,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
     protected $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManagerMock;
 
@@ -33,7 +36,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
             '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory', ['create'], [], '', false);
 
         $this->storeManagerMock = $this->getMock(
-            '\Magento\Store\Model\StoreManagerInterface', [], [], '', false
+            '\Magento\Framework\Store\StoreManagerInterface', [], [], '', false
         );
 
         $this->layerMock = $this->getMock(

@@ -1,13 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php
-    $_product = $this->getProduct();
+    $_product = $block->getProduct();
 ?>
-<?php if ($_product->isSaleable() && $this->hasOptions()): ?>
+<?php if ($_product->isSaleable() && $block->hasOptions()): ?>
 <div id="bundleSummary"
      class="block-bundle-summary"
      data-mage-init='{"sticky":{"container": ".product-add-form"}}'>
@@ -16,9 +20,9 @@
     </div>
     <div class="content">
         <div class="bundle-info">
-            <?php echo $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($_product, 'bundled_product_customization_page')->toHtml() ?>
+            <?php echo $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($_product, 'bundled_product_customization_page')->toHtml() ?>
             <div class="product-details">
-                <strong class="product name"><?php echo $this->escapeHtml($_product->getName()) ?></strong>
+                <strong class="product name"><?php echo $block->escapeHtml($_product->getName()) ?></strong>
                 <?php if ($_product->getIsSalable()): ?>
                     <p class="available stock" title="<?php echo __('Availability') ?>">
                         <span><?php echo __('In stock') ?></span>
@@ -28,7 +32,7 @@
                         <span><?php echo __('Out of stock') ?></span>
                     </p>
                 <?php endif; ?>
-                <?php echo $this->getChildHtml('', true);?>
+                <?php echo $block->getChildHtml('', true);?>
             </div>
         </div>
         <div class="bundle-summary">
@@ -59,7 +63,7 @@
             'slideBackSelector': '.action.customization.back',
             'bundleProductSelector': '#bundleProduct',
             'bundleOptionsContainer': '.product-add-form',
-            <?php if ($this->isStartCustomization()): ?>
+            <?php if ($block->isStartCustomization()): ?>
             'autostart': true
             <?php endif;?>
         });

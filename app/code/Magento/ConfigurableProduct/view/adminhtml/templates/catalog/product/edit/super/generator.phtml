@@ -1,26 +1,27 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/** @var $this \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config */
+/** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config */
 ?>
 <div data-role="product-variations-generator">
     <!-- Configurable Attributes list -->
     <div id="configurable-attributes-container" data-mage-init='{"variationsAttributes":{}}'>
-        <?php echo $this->getChildHtml('template'); ?>
+        <?php echo $block->getChildHtml('template'); ?>
         <?php
-        foreach ($this->getAttributes() as $attribute) {
-            echo $this->getChildBlock('attribute-renderer')->render([
+        foreach ($block->getAttributes() as $attribute) {
+            echo $block->getChildBlock('attribute-renderer')->render([
                 'attribute' => $attribute,
             ]);
         } ?>
     </div>
 
     <!-- "Generate Variations" button -->
-    <?php echo $this->getChildHtml('generate'); ?>
+    <?php echo $block->getChildHtml('generate'); ?>
 
     <!-- Variations -->
     <div id="product-variations-matrix" data-role="product-variations-matrix">
-        <?php echo $this->getChildHtml('matrix'); ?>
+        <?php echo $block->getChildHtml('matrix'); ?>
     </div>
 </div>

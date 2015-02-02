@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 // Copy images to tmp media path
@@ -27,7 +28,7 @@ $productOne->setId(
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    [$obectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()]
+    [$obectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getWebsiteId()]
 )->setSku(
     'simple_product_1'
 )->setName(
@@ -68,7 +69,7 @@ $productTwo->setId(
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    [$obectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()]
+    [$obectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getWebsiteId()]
 )->setSku(
     'simple_product_2'
 )->setName(

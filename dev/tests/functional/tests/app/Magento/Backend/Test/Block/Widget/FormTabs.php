@@ -1,19 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Block\Widget;
 
-use Mtf\Block\BlockFactory;
-use Mtf\Block\Mapper;
-use Mtf\Client\Driver\Selenium\Browser;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
-use Mtf\Util\Iterator\File;
-use Mtf\Util\XmlConverter;
+use Magento\Mtf\Block\BlockFactory;
+use Magento\Mtf\Block\Mapper;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Util\Iterator\File;
+use Magento\Mtf\Util\XmlConverter;
 
 /**
  * Class FormTabs
@@ -43,18 +44,18 @@ class FormTabs extends Form
 
     /**
      * @constructor
-     * @param Element $element
+     * @param SimpleElement $element
      * @param Mapper $mapper
      * @param BlockFactory $blockFactory
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param XmlConverter $xmlConverter
      * @param array $config
      */
     public function __construct(
-        Element $element,
+        SimpleElement $element,
         Mapper $mapper,
         BlockFactory $blockFactory,
-        Browser $browser,
+        BrowserInterface $browser,
         XmlConverter $xmlConverter,
         array $config = []
     ) {
@@ -101,10 +102,10 @@ class FormTabs extends Form
      * Fill form with tabs
      *
      * @param FixtureInterface $fixture
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return FormTabs
      */
-    public function fill(FixtureInterface $fixture, Element $element = null)
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         $tabs = $this->getFieldsByTabs($fixture);
         return $this->fillTabs($tabs, $element);
@@ -114,10 +115,10 @@ class FormTabs extends Form
      * Fill specified form with tabs
      *
      * @param array $tabs
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return FormTabs
      */
-    protected function fillTabs(array $tabs, Element $element = null)
+    protected function fillTabs(array $tabs, SimpleElement $element = null)
     {
         $context = ($element === null) ? $this->_rootElement : $element;
         foreach ($tabs as $tabName => $tabFields) {
@@ -178,13 +179,13 @@ class FormTabs extends Form
      * Get data of the tabs
      *
      * @param FixtureInterface|null $fixture
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getData(FixtureInterface $fixture = null, Element $element = null)
+    public function getData(FixtureInterface $fixture = null, SimpleElement $element = null)
     {
         $data = [];
 
@@ -252,7 +253,7 @@ class FormTabs extends Form
         foreach ($data as $field => $value) {
             $attributes = $fixture->getDataFieldConfig($field);
             $attributes['value'] = $value;
-            if (array_key_exists('group', $attributes) && $attributes['group'] !== null) {
+            if (array_key_exists('group', $attributes) && $attributes['group'] != 'null') {
                 $tabs[$attributes['group']][$field] = $attributes;
             } elseif (!array_key_exists('group', $attributes)) {
                 $this->unassignedFields[$field] = $attributes;

@@ -1,19 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-/** @var $this Magento\Checkout\Block\Cart\Item\Renderer */
+// @codingStandardsIgnoreFile
 
-$_item = $this->getItem();
+/** @var $block Magento\Checkout\Block\Cart\Item\Renderer */
+
+$_item = $block->getItem();
 ?>
 <tr>
-    <td class="col item" data-th="<?php echo $this->escapeHtml(__('Product Name'));?>"><strong class="product name product-item-name"><?php echo $this->escapeHtml($this->getProductName()) ?></strong>
-        <?php if ($_options = $this->getOptionList()):?>
+    <td class="col item" data-th="<?php echo $block->escapeHtml(__('Product Name'));?>"><strong class="product name product-item-name"><?php echo $block->escapeHtml($block->getProductName()) ?></strong>
+        <?php if ($_options = $block->getOptionList()):?>
         <dl class="item-options">
             <?php foreach ($_options as $_option) : ?>
-            <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
-            <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+            <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
+            <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
             <dd>
                 <?php if (isset($_formatedOptionValue['full_view'])): ?>
                     <?php echo $_formatedOptionValue['full_view'] ?>
@@ -24,32 +27,32 @@ $_item = $this->getItem();
             <?php endforeach; ?>
         </dl>
         <?php endif;?>
-        <?php if ($addtInfoBlock = $this->getProductAdditionalInformationBlock()):?>
+        <?php if ($addtInfoBlock = $block->getProductAdditionalInformationBlock()):?>
             <?php echo $addtInfoBlock->setItem($_item)->toHtml() ?>
         <?php endif;?>
     </td>
-    <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price'));?>">
+    <td class="col price" data-th="<?php echo $block->escapeHtml(__('Price'));?>">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-            <span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Incl. Tax'));?>">
-                <?php echo $this->getUnitPriceInclTaxHtml($_item); ?>
+            <span class="price-including-tax" data-label="<?php echo $block->escapeHtml(__('Incl. Tax'));?>">
+                <?php echo $block->getUnitPriceInclTaxHtml($_item); ?>
             </span>
         <?php endif; ?>
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-            <span class="price-excluding-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax'));?>">
-                <?php echo $this->getUnitPriceExclTaxHtml($_item); ?>
+            <span class="price-excluding-tax" data-label="<?php echo $block->escapeHtml(__('Excl. Tax'));?>">
+                <?php echo $block->getUnitPriceExclTaxHtml($_item); ?>
             </span>
         <?php endif; ?>
     </td>
-    <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty'));?>"><span class="qty"><?php echo $_item->getQty() ?></span></td>
-    <td class="col subtotal" data-th="<?php echo $this->escapeHtml(__('Subtotal'));?>">
+    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty'));?>"><span class="qty"><?php echo $_item->getQty() ?></span></td>
+    <td class="col subtotal" data-th="<?php echo $block->escapeHtml(__('Subtotal'));?>">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-            <span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Incl. Tax'));?>">
-                <?php echo $this->getRowTotalInclTaxHtml($_item); ?>
+            <span class="price-including-tax" data-label="<?php echo $block->escapeHtml(__('Incl. Tax'));?>">
+                <?php echo $block->getRowTotalInclTaxHtml($_item); ?>
             </span>
         <?php endif; ?>
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-            <span class="price-excluding-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax'));?>">
-                <?php echo $this->getRowTotalExclTaxHtml($_item); ?>
+            <span class="price-excluding-tax" data-label="<?php echo $block->escapeHtml(__('Excl. Tax'));?>">
+                <?php echo $block->getRowTotalExclTaxHtml($_item); ?>
             </span>
         <?php endif; ?>
     </td>

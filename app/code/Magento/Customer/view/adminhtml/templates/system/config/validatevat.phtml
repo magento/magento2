@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * @see \Magento\Customer\Block\Adminhtml\System\Config\Validatevat
  */
 ?>
-<script type="text/javascript">
+<script>
 require(['prototype'], function(){
 
 //<![CDATA[
@@ -16,11 +20,11 @@ require(['prototype'], function(){
         var validationMessage = $('validation_result');
 
         params = {
-            country: $('<?php echo $this->getMerchantCountryField(); ?>').value,
-            vat: $('<?php echo $this->getMerchantVatNumberField(); ?>').value
+            country: $('<?php echo $block->getMerchantCountryField(); ?>').value,
+            vat: $('<?php echo $block->getMerchantVatNumberField(); ?>').value
         };
 
-        new Ajax.Request('<?php echo $this->getAjaxUrl() ?>', {
+        new Ajax.Request('<?php echo $block->getAjaxUrl() ?>', {
             parameters: params,
             onSuccess: function(response) {
                 result = '<?php echo __('VAT Number is Invalid') ?>';
@@ -47,7 +51,7 @@ require(['prototype'], function(){
 </script>
 <div class="actions actions-validate-vat">
     <div id="validation_result" class="message-validation hidden"></div>
-    <button onclick="javascript:validateVat(); return false;" class="action-validate-vat" type="button" id="<?php echo $this->getHtmlId() ?>">
-        <span><?php echo $this->escapeHtml($this->getButtonLabel()) ?></span>
+    <button onclick="javascript:validateVat(); return false;" class="action-validate-vat" type="button" id="<?php echo $block->getHtmlId() ?>">
+        <span><?php echo $block->escapeHtml($block->getButtonLabel()) ?></span>
     </button>
 </div>

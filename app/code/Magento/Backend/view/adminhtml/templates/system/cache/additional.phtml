@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <div class="fieldset additional-cache-management">
@@ -8,16 +9,16 @@
         <span><?php echo __('Additional Cache Management') ?></span>
     </div>
     <div class="field">
-        <button onclick="setLocation('<?php echo $this->getCleanImagesUrl()?>')" type="button">
+        <button onclick="setLocation('<?php echo $block->getCleanImagesUrl()?>')" type="button">
             <?php echo __('Flush Catalog Images Cache') ?>
         </button>
         <label class="label"><?php echo __('Pregenerated product images files')?></label>
     </div>
     <div class="field">
-        <button onclick="setLocation('<?php echo $this->getCleanMediaUrl()?>')" type="button">
+        <button onclick="setLocation('<?php echo $block->getCleanMediaUrl()?>')" type="button">
             <?php echo __('Flush JavaScript/CSS Cache') ?>
         </button>
         <label class="label"><?php echo __('Themes JavaScript and CSS files combined to one file.')?></label>
     </div>
-    <?php echo $this->getChildHtml(); ?>
+    <?php echo $block->getChildHtml(); ?>
 </div>

@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Wishlist\Block\Rss\Link */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Wishlist\Block\Rss\Link */
 ?>
-<?php if ($this->isRssAllowed() && $this->getLink() && $this->helper('Magento\Wishlist\Helper\Data')->getWishlist()->getItemsCount()): ?>
-    <a href="<?php echo $this->getLink(); ?>" class="action rss wishlist">
+<?php if ($block->isRssAllowed() && $block->getLink() && $this->helper('Magento\Wishlist\Helper\Data')->getWishlist()->getItemsCount()): ?>
+    <a href="<?php echo $block->getLink(); ?>" class="action rss wishlist">
         <span><?php echo __('RSS Feed') ?></span>
     </a>
 <?php endif; ?>

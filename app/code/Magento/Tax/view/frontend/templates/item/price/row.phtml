@@ -1,24 +1,27 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Tax\Block\Item\Price\Renderer */
+// @codingStandardsIgnoreFile
 
-$_item = $this->getItem();
+/** @var $block \Magento\Tax\Block\Item\Price\Renderer */
+
+$_item = $block->getItem();
 ?>
-<?php if (($this->displayPriceInclTax() || $this->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
-    <span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Incl. Tax'));?>">
+<?php if (($block->displayPriceInclTax() || $block->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
+    <span class="price-including-tax" data-label="<?php echo $block->escapeHtml(__('Incl. Tax'));?>">
         <span class="cart-price">
-            <?php echo $this->formatPrice($_item->getRowTotalInclTax()) ?>
+            <?php echo $block->formatPrice($_item->getRowTotalInclTax()) ?>
         </span>
     </span>
 <?php endif; ?>
 
-<?php if (($this->displayPriceExclTax() || $this->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
-    <span class="price-excluding-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax'));?>">
+<?php if (($block->displayPriceExclTax() || $block->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
+    <span class="price-excluding-tax" data-label="<?php echo $block->escapeHtml(__('Excl. Tax'));?>">
         <span class="cart-price">
-            <?php echo $this->formatPrice($_item->getRowTotal()) ?>
+            <?php echo $block->formatPrice($_item->getRowTotal()) ?>
         </span>
     </span>
 <?php endif; ?>

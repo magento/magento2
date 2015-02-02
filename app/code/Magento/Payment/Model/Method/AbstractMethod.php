@@ -1,19 +1,30 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Payment\Model\Method;
 
 use Magento\Payment\Model\Checks\PaymentMethodChecksInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Quote\Api\Data\PaymentMethodInterface;
 
 /**
  * Payment method abstract model
  * @method AbstractMethod setStore()
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractMethod extends \Magento\Framework\Object implements MethodInterface, PaymentMethodChecksInterface
+abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    MethodInterface,
+    PaymentMethodChecksInterface,
+    PaymentMethodInterface
 {
     const ACTION_ORDER = 'order';
 
@@ -209,24 +220,40 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     protected $logger;
 
     /**
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($data);
-        $this->logger = $logger;
-        $this->_eventManager = $eventManager;
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeBuilder,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_paymentData = $paymentData;
         $this->_scopeConfig = $scopeConfig;
+        $this->_eventManager = $context->getEventDispatcher();
+        $this->logger = $context->getLogger();
     }
 
     /**
@@ -304,6 +331,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @param   \Magento\Framework\Object $payment
      * @return  bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canVoid(\Magento\Framework\Object $payment)
     {
@@ -357,6 +385,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * @param \Magento\Payment\Model\Info $payment
      * @param string $transactionId
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\Info $payment, $transactionId)
     {
@@ -418,6 +447,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @param string $currencyCode
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canUseForCurrency($currencyCode)
     {
@@ -506,6 +536,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function order(\Magento\Framework\Object $payment, $amount)
     {
@@ -523,6 +554,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function authorize(\Magento\Framework\Object $payment, $amount)
     {
@@ -540,6 +572,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function capture(\Magento\Framework\Object $payment, $amount)
     {
@@ -587,6 +620,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function refund(\Magento\Framework\Object $payment, $amount)
     {
@@ -614,6 +648,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * @param \Magento\Framework\Object $payment
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cancel(\Magento\Framework\Object $payment)
     {
@@ -640,6 +675,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @param \Magento\Payment\Model\Info $payment
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canReviewPayment(\Magento\Payment\Model\Info $payment)
     {
@@ -700,7 +736,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
             $storeId = $this->getStore();
         }
         $path = 'payment/' . $this->getCode() . '/' . $field;
-        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
+        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId);
     }
 
     /**
@@ -734,7 +770,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * TODO: payment method instance is not supposed to know about quote
      *
-     * @param \Magento\Sales\Model\Quote|null $quote
+     * @param \Magento\Quote\Model\Quote|null $quote
      * @return bool
      */
     public function isAvailable($quote = null)
@@ -760,6 +796,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * @param object $stateObject
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -786,7 +823,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->logger->debug($debugData);
+            $this->logger->debug(var_export($debugData, true));
         }
     }
 
@@ -794,6 +831,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * Define if debugging is enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDebugFlag()
     {

@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sitemap\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -21,6 +25,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @method \Magento\Sitemap\Model\Sitemap setSitemapTime(string $value)
  * @method int getStoreId()
  * @method \Magento\Sitemap\Model\Sitemap setStoreId(int $value)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Sitemap extends \Magento\Framework\Model\AbstractModel
 {
@@ -126,7 +132,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     protected $_dateModel;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -150,12 +156,13 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory
      * @param \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $modelDate
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -167,7 +174,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory,
         \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $modelDate,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,

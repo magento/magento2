@@ -1,15 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Downloadable product type
  *
- * @var $this \Magento\Downloadable\Block\Catalog\Product\View\Type
+ * @var $block \Magento\Downloadable\Block\Catalog\Product\View\Type
  */
 ?>
-<?php $_product = $this->getProduct() ?>
+<?php $_product = $block->getProduct() ?>
 
 <?php if ($_product->getIsSalable()): ?>
     <div class="stock available" title="<?php echo __('Availability') ?>">
@@ -20,4 +23,4 @@
         <span><?php echo __('Out of stock') ?></span>
     </div>
 <?php endif; ?>
-<?php echo $this->getChildHtml() ?>
+<?php echo $block->getChildHtml() ?>

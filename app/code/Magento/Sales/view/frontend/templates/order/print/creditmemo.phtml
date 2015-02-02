@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $_order = $this->getOrder() ?>
-<?php $_creditmemo = $this->getCreditmemo() ?>
+<?php $_order = $block->getOrder() ?>
+<?php $_creditmemo = $block->getCreditmemo() ?>
 <?php if ($_creditmemo): ?>
     <?php $_creditmemos = [$_creditmemo]; ?>
 <?php else: ?>
@@ -36,11 +40,11 @@
     continue;
 } ?>
             <tbody>
-                <?php echo $this->getItemHtml($_item) ?>
+                <?php echo $block->getItemHtml($_item) ?>
             </tbody>
             <?php endforeach; ?>
             <tfoot>
-                <?php echo $this->getTotalsHtml($_creditmemo);?>
+                <?php echo $block->getTotalsHtml($_creditmemo);?>
             </tfoot>
         </table>
     </div>
@@ -64,7 +68,7 @@
                     <strong><?php echo __('Shipping Method') ?></strong>
                 </div>
                 <div class="box-content">
-                    <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
+                    <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
                 </div>
             </div>
         <?php endif; ?>
@@ -82,7 +86,7 @@
                     <strong><?php echo __('Payment Method') ?></strong>
                 </div>
                 <div class="box-content">
-                    <?php echo $this->getPaymentInfoHtml() ?>
+                    <?php echo $block->getPaymentInfoHtml() ?>
                 </div>
             </div>
         </div>

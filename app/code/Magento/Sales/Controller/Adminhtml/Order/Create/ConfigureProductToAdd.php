@@ -1,17 +1,16 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
-
 
 class ConfigureProductToAdd extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
      * Ajax handler to response configuration fieldset of composite product in order
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
@@ -26,10 +25,8 @@ class ConfigureProductToAdd extends \Magento\Sales\Controller\Adminhtml\Order\Cr
         $configureResult->setCurrentCustomerId($sessionQuote->getCustomerId());
 
         // Render page
-        $this->_objectManager->get(
-            'Magento\Catalog\Helper\Product\Composite'
-        )->renderConfigureResult(
-            $configureResult
-        );
+        /** @var \Magento\Catalog\Helper\Product\Composite $helper */
+        $helper = $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite');
+        return $helper->renderConfigureResult($configureResult);
     }
 }

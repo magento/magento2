@@ -1,12 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-?>
-<script type="text/javascript">
-require(["jquery", "js/theme", "prototype"], function(jQuery){
 
-//<![CDATA[
+// @codingStandardsIgnoreFile
+
+?>
+<script>
+require(["jquery", "collapsable", "prototype"], function(jQuery){
+
 function toggleApplyVisibility(select) {
     if ($(select).value == 1) {
         $(select).next('select').removeClassName('no-display');
@@ -321,7 +324,6 @@ window.bindAttributeInputType = bindAttributeInputType;
 window.checkOptionsPanelVisibility = checkOptionsPanelVisibility;
 window.getFrontTab = getFrontTab;
 window.toggleApplyVisibility = toggleApplyVisibility;
-//]]>
 
 });
 </script>

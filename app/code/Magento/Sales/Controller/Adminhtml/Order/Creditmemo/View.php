@@ -1,7 +1,7 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
@@ -15,14 +15,30 @@ class View extends \Magento\Backend\App\Action
     protected $creditmemoLoader;
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
+        \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
 
@@ -37,7 +53,7 @@ class View extends \Magento\Backend\App\Action
     /**
      * Creditmemo information page
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
@@ -47,23 +63,22 @@ class View extends \Magento\Backend\App\Action
         $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
         $creditmemo = $this->creditmemoLoader->load();
         if ($creditmemo) {
-            $this->_view->loadLayout();
-            $this->_view->getLayout()->getBlock(
-                'sales_creditmemo_view'
-            )->updateBackButtonUrl(
-                $this->getRequest()->getParam('come_from')
-            );
-            $this->_setActiveMenu('Magento_Sales::sales_creditmemo');
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->getLayout()->getBlock('sales_creditmemo_view')
+                ->updateBackButtonUrl($this->getRequest()->getParam('come_from'));
+            $resultPage->setActiveMenu('Magento_Sales::sales_creditmemo');
             if ($creditmemo->getInvoice()) {
-                $this->_view->getPage()->getConfig()->getTitle()->prepend(
+                $resultPage->getConfig()->getTitle()->prepend(
                     __("View Memo for #%1", $creditmemo->getInvoice()->getIncrementId())
                 );
             } else {
-                $this->_view->getPage()->getConfig()->getTitle()->prepend(__("View Memo"));
+                $resultPage->getConfig()->getTitle()->prepend(__("View Memo"));
             }
-            $this->_view->renderLayout();
+            return $resultPage;
         } else {
-            $this->_forward('noroute');
+            $resultForward = $this->resultForwardFactory->create();
+            $resultForward->forward('noroute');
+            return $resultForward;
         }
     }
 }

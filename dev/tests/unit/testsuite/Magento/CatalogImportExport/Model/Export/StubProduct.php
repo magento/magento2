@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
@@ -23,6 +24,6 @@ class StubProduct extends \Magento\CatalogImportExport\Model\Export\Product
      */
     public function updateDataWithCategoryColumns(&$dataRow, &$rowCategories, $productId)
     {
-        return $this->_updateDataWithCategoryColumns($dataRow, $rowCategories, $productId);
+        return parent::updateDataWithCategoryColumns($dataRow, $rowCategories, $productId);
     }
 }

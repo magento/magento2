@@ -1,12 +1,33 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
+
 abstract class Index extends \Magento\Backend\App\Action
 {
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     */
+    public function __construct(
+        Context $context,
+        PageFactory $resultPageFactory
+    ) {
+        parent::__construct($context);
+        $this->resultPageFactory = $resultPageFactory;
+    }
+
     /**
      * @return bool
      */
@@ -16,34 +37,19 @@ abstract class Index extends \Magento\Backend\App\Action
     }
 
     /**
-     * Init layout, menu and breadcrumb
-     *
-     * @return $this
-     */
-    protected function _initAction()
-    {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu(
-            'Magento_Sales::sales_shipment'
-        )->_addBreadcrumb(
-            __('Sales'),
-            __('Sales')
-        )->_addBreadcrumb(
-            __('Shipments'),
-            __('Shipments')
-        );
-        return $this;
-    }
-
-    /**
      * Shipments grid
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $this->_initAction();
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Shipments'));
-        $this->_view->renderLayout();
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Sales::sales_shipment')
+            ->addBreadcrumb(__('Sales'), __('Sales'))
+            ->addBreadcrumb(__('Shipments'), __('Shipments'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Shipments'));
+
+        return $resultPage;
     }
 }

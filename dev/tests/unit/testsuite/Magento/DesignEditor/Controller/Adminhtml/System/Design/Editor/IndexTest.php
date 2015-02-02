@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -100,12 +101,12 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      * Return mocked theme collection factory model
      *
      * @param int $countCustomization
-     * @return \Magento\Core\Model\Resource\Theme\CollectionFactory
+     * @return \Magento\Theme\Model\Resource\Theme\CollectionFactory
      */
     protected function getThemeCollectionFactory($countCustomization)
     {
         $themeCollectionMock = $this->getMockBuilder(
-            'Magento\Core\Model\Resource\Theme\Collection'
+            'Magento\Theme\Model\Resource\Theme\Collection'
         )->disableOriginalConstructor()->setMethods(
             ['addTypeFilter', 'getSize']
         )->getMock();
@@ -122,9 +123,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         $themeCollectionMock->expects($this->once())->method('getSize')->will($this->returnValue($countCustomization));
 
-        /** @var \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory */
+        /** @var \Magento\Theme\Model\Resource\Theme\CollectionFactory $collectionFactory */
         $collectionFactory = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\CollectionFactory',
+            'Magento\Theme\Model\Resource\Theme\CollectionFactory',
             ['create'],
             [],
             '',
@@ -200,7 +201,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         return [
             [
-                'Magento\Core\Model\Resource\Theme\CollectionFactory',
+                'Magento\Theme\Model\Resource\Theme\CollectionFactory',
                 $this->getThemeCollectionFactory($countCustomization),
             ],
             ['Magento\Framework\TranslateInterface', $translate],

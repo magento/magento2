@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\Sales\Block\Order\Info */ ?>
-<?php $_order = $this->getOrder() ?>
+<?php /** @var $block \Magento\Sales\Block\Order\Info */ ?>
+<?php $_order = $block->getOrder() ?>
 <div class="block block-order-details-view">
     <div class="block-title">
         <strong><?php echo __('Order Information') ?></strong>
@@ -24,7 +28,7 @@
             </strong>
             <div class="box-content">
             <?php if ($_order->getShippingDescription()): ?>
-                <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
+                <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
             <?php else: ?>
                 <?php echo __('No shipping information available'); ?>
             <?php endif; ?>
@@ -45,7 +49,7 @@
                 <span><?php echo __('Payment Method') ?></span>
             </strong>
             <div class="box-content">
-                <?php echo $this->getPaymentInfoHtml() ?>
+                <?php echo $block->getPaymentInfoHtml() ?>
             </div>
         </div>
     </div>

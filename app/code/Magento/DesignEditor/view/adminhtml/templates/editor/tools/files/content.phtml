@@ -1,22 +1,23 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php
 /**
  * Tools Files content template
  *
- * @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content
+ * @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content
  */
 ?>
-<?php echo $this->getChildHtml('editor_files.js') ?>
+<?php echo $block->getChildHtml('editor_files.js') ?>
 
 <div class="content-header skip-header" id="content_header">
-    <h3 data-content-text="header"><?php echo $this->getHeaderText() ?></h3>
+    <h3 data-content-text="header"><?php echo $block->getHeaderText() ?></h3>
     <span class="uploaded no-display"><span></span>&nbsp;<?php echo __('Files Uploaded'); ?></span>
 </div>
 
-<div id="contents-newfolder" class="no-display"><?php echo $this->getChildHtml('editor_files.newfolder') ?></div>
+<div id="contents-newfolder" class="no-display"><?php echo $block->getChildHtml('editor_files.newfolder') ?></div>
 
-<div id="contents-uploader"><?php echo $this->getChildHtml('editor_files.uploader') ?></div>
+<div id="contents-uploader"><?php echo $block->getChildHtml('editor_files.uploader') ?></div>

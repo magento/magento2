@@ -2,7 +2,8 @@
 /**
  * Test SOAP controller class.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
 
@@ -84,8 +85,6 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $localeResolverMock->expects($this->any())->method('getLocale')->will($this->returnValue($localeMock));
 
-        $layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface');
-
         $this->_responseMock->expects($this->any())->method('clearHeaders')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setWSDL')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setEncoding')->will($this->returnSelf());
@@ -101,7 +100,6 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             $this->_soapServerMock,
             $this->_errorProcessorMock,
             $this->_appStateMock,
-            $layoutMock,
             $localeResolverMock,
             $pathProcessorMock,
             $areaListMock

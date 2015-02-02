@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Resource;
 
@@ -19,7 +20,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     {
         // create the mocks
         $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
 
         $taxData = $this->getMock('Magento\Tax\Helper\Data', ['getPostCodeSubStringLength'], [], '', false);
         $taxData

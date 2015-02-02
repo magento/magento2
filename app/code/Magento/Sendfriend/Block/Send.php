@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sendfriend\Block;
 
@@ -43,12 +44,18 @@ class Send extends \Magento\Framework\View\Element\Template
     protected $_customerViewHelper;
 
     /**
+     * @var \Magento\Sendfriend\Model\Sendfriend
+     */
+    protected $sendfriend;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param \Magento\Sendfriend\Model\Sendfriend $sendfriend
      * @param array $data
      */
     public function __construct(
@@ -58,11 +65,13 @@ class Send extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Helper\View $customerViewHelper,
         \Magento\Framework\App\Http\Context $httpContext,
+        \Magento\Sendfriend\Model\Sendfriend $sendfriend,
         array $data = []
     ) {
         $this->_customerSession = $customerSession;
         $this->_coreRegistry = $registry;
         $this->_sendfriendData = $sendfriendData;
+        $this->sendfriend = $sendfriend;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->httpContext = $httpContext;
@@ -193,17 +202,13 @@ class Send extends \Magento\Framework\View\Element\Template
      */
     public function getSendUrl()
     {
-        return $this->getUrl('*/*/sendmail', ['id' => $this->getProductId(), 'cat_id' => $this->getCategoryId()]);
-    }
-
-    /**
-     * Return send friend model
-     *
-     * @return \Magento\Sendfriend\Model\Sendfriend
-     */
-    protected function _getSendfriendModel()
-    {
-        return $this->_coreRegistry->registry('send_to_friend_model');
+        return $this->getUrl(
+            'sendfriend/product/sendmail',
+            [
+                'id' => $this->getProductId(),
+                'cat_id' => $this->getCategoryId(),
+            ]
+        );
     }
 
     /**
@@ -213,6 +218,6 @@ class Send extends \Magento\Framework\View\Element\Template
      */
     public function canSend()
     {
-        return !$this->_getSendfriendModel()->isExceedLimit();
+        return !$this->sendfriend->isExceedLimit();
     }
 }

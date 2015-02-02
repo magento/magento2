@@ -1,10 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
 /**
+ * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/CatalogSearch/_files/indexer_fulltext.php
  */
 class FulltextTest extends \PHPUnit_Framework_TestCase
@@ -56,6 +58,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     protected $productCherry;
 
+    /**
+     * @var \Magento\CatalogSearch\Model\Resource\ResourceProvider
+     */
+    protected $resourceProvider;
+
     protected function setUp()
     {
         /** @var \Magento\Indexer\Model\IndexerInterface indexer */
@@ -72,8 +79,8 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogSearch\Model\Resource\Fulltext'
         );
 
-        $this->fulltext = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\Fulltext'
+        $this->resourceProvider = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            '\Magento\CatalogSearch\Model\Resource\ResourceProvider'
         );
 
         $this->queryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -107,10 +114,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexAll
+     *
      */
     public function testReindexRowAfterEdit()
     {
+        $this->testReindexAll();
         $this->productApple->setData('name', 'Simple Product Cucumber');
         $this->productApple->save();
 
@@ -131,10 +139,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexRowAfterEdit
+     *
      */
     public function testReindexRowAfterMassAction()
     {
+        $this->testReindexRowAfterEdit();
         $productIds = [
             $this->productApple->getId(),
             $this->productBanana->getId(),
@@ -173,11 +182,12 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexRowAfterMassAction
      * @magentoAppArea adminhtml
      */
     public function testReindexRowAfterDelete()
     {
+        $this->testReindexRowAfterEdit();
+
         $this->productBanana->delete();
 
         $products = $this->search('Simple Product');
@@ -200,7 +210,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $query = $this->queryFactory->get();
         $query->unsetData()->setQueryText($text)->prepare();
         $products = [];
-        $collection = $this->engine->getResultCollection();
+        $collection = $this->resourceProvider->getResultCollection();
         $collection->addSearchFilter($text);
         foreach ($collection as $product) {
             $products[] = $product;

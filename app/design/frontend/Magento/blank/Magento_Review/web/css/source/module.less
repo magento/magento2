@@ -1,12 +1,13 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .rating-summary {
     .mixin-rating-summary();
@@ -113,7 +114,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .product-reviews-summary {
         .products.wrapper.list & {
             margin: 0;
@@ -125,7 +126,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .customer-review {
     .product-details {
@@ -200,7 +201,7 @@
 //--------------------------------------
 .review {
     &-toolbar {
-        border-top: 1px solid #c9c9c9;
+        border-top: 1px solid @color-gray79;
         margin: 0 0 @indent-base;
         text-align: center;
         &:first-child {
@@ -209,7 +210,7 @@
         .pages {
             display: block;
             text-align: center;
-            border-bottom: 1px solid #c9c9c9;
+            border-bottom: 1px solid @color-gray79;
             padding: @indent-base 0;
         }
         .limiter {
@@ -260,7 +261,7 @@
     }
     &-item {
         padding: @indent-base 0;
-        border-bottom: 1px solid #c9c9c9;
+        border-bottom: 1px solid @color-gray79;
         margin: 0;
         .clearer();
         &:last-child {
@@ -296,7 +297,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .review {
         &-form {
             max-width: 500px;

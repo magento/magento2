@@ -1,7 +1,7 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
@@ -10,29 +10,30 @@ class Index extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customers list action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
         if ($this->getRequest()->getQuery('ajax')) {
-            $this->_forward('grid');
-            return;
+            $resultForward = $this->resultForwardFactory->create();
+            $resultForward->forward('grid');
+            return $resultForward;
         }
-        $this->_view->loadLayout();
-
+        $resultPage = $this->resultPageFactory->create();
         /**
          * Set active menu item
          */
-        $this->_setActiveMenu('Magento_Customer::customer_manage');
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Customers'));
+        $resultPage->setActiveMenu('Magento_Customer::customer_manage');
+        $resultPage->getConfig()->getTitle()->prepend(__('Customers'));
 
         /**
          * Add breadcrumb item
          */
-        $this->_addBreadcrumb(__('Customers'), __('Customers'));
-        $this->_addBreadcrumb(__('Manage Customers'), __('Manage Customers'));
+        $resultPage->addBreadcrumb(__('Customers'), __('Customers'));
+        $resultPage->addBreadcrumb(__('Manage Customers'), __('Manage Customers'));
 
-        $this->_view->renderLayout();
         $this->_getSession()->unsCustomerData();
+
+        return $resultPage;
     }
 }

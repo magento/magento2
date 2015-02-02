@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Downloadable\Block\Sales\Order\Email\Items\Order;
 
 use Magento\Downloadable\Model\Link\Purchased\Item;
@@ -70,7 +74,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
         if ($this->_purchased->getLinkSectionTitle()) {
             return $this->_purchased->getLinkSectionTitle();
         }
-        return $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**

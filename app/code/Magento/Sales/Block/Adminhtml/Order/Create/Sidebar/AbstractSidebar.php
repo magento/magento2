@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
@@ -139,6 +140,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * Retrieve all items
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getItems()
     {
@@ -160,7 +162,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
                     $type = $item->getTypeId();
                 } elseif ($item instanceof \Magento\Sales\Model\Order\Item) {
                     $type = $item->getProductType();
-                } elseif ($item instanceof \Magento\Sales\Model\Quote\Item) {
+                } elseif ($item instanceof \Magento\Quote\Model\Quote\Item) {
                     $type = $item->getProductType();
                 } else {
                     $type = '';
@@ -217,6 +219,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      *
      * @param string|int|null $productType
      * @return false
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isConfigurationRequired($productType)
     {

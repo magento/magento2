@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Block;
 
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class FormPageActions
@@ -109,7 +110,7 @@ class FormPageActions extends PageActions
     public function delete()
     {
         $this->_rootElement->find($this->deleteButton)->click();
-        $this->_rootElement->acceptAlert();
+        $this->browser->acceptAlert();
     }
 
     /**
@@ -130,6 +131,7 @@ class FormPageActions extends PageActions
      */
     protected function waitBeforeClick()
     {
+        time_nanosleep(0, 600000000);
         usleep(500000);
     }
 }

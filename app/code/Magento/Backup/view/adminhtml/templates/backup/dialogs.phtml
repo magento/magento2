@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <!-- TODO: refactor form styles and js -->
-<div class="fade backup-dialog" id="rollback-warning" style="display: none;">
+<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="rollback-warning" style="display: none;">
     <div class="popup popup-notice">
         <div class="popup-inner">
             <header class="popup-header">
@@ -20,7 +24,7 @@
     </div>
 </div>
 
-<div class="fade backup-dialog" id="backup-warning" style="display: none;">
+<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="backup-warning" style="display: none;">
     <div class="popup popup-notice">
         <div class="popup-inner">
             <header class="popup-header">
@@ -39,7 +43,7 @@
     </div>
 </div>
 
-<div class="fade backup-dialog" id="backup-options" style="display: none;">
+<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="backup-options" style="display: none;">
     <div class="popup popup-notice">
         <div class="popup-inner">
             <header class="popup-header">
@@ -74,7 +78,7 @@
     </div>
  </div>
 
-<div class="fade backup-dialog" id="rollback-request-password" style="display: none;">
+<div data-mage-init='{"modalPopup": {}}' class="fade backup-dialog" id="rollback-request-password" style="display: none;">
     <div class="popup popup-notice">
         <div class="popup-inner">
             <header class="popup-header">
@@ -128,11 +132,11 @@
 </div>
 
 <?php
-    $rollbackUrl = $this->getUrl('*/*/rollback');
-    $backupUrl = $this->getUrl('*/*/create');
+    $rollbackUrl = $block->getUrl('*/*/rollback');
+    $backupUrl = $block->getUrl('*/*/create');
 ?>
 
-<script type="text/javascript">
+<script>
 require([
     "prototype",
     "mage/adminhtml/backup"
@@ -140,8 +144,8 @@ require([
 
 //<![CDATA[
     backup = new AdminBackup();
-    backup.rollbackUrl = '<?php echo $this->escapeJsQuote($rollbackUrl);?>';
-    backup.backupUrl = '<?php echo $this->escapeJsQuote($backupUrl);?>';
+    backup.rollbackUrl = '<?php echo $block->escapeJsQuote($rollbackUrl);?>';
+    backup.backupUrl = '<?php echo $block->escapeJsQuote($backupUrl);?>';
 //]]>
 
 });

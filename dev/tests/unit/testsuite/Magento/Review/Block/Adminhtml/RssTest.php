@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Review\Block\Adminhtml;
@@ -20,7 +21,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerInterface;
 
@@ -36,7 +37,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerInterface = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->rss = $this->getMock('Magento\Review\Model\Rss', ['__wakeUp', 'getProductCollection'], [], '', false);
         $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
         $this->objectManagerHelper = new ObjectManagerHelper($this);

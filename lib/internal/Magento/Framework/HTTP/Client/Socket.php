@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -10,6 +11,12 @@
  */
 namespace Magento\Framework\HTTP\Client;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
 class Socket implements \Magento\Framework\HTTP\ClientInterface
 {
     /**
@@ -406,6 +413,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Process response
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function processResponse()
     {
@@ -516,6 +524,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param array $arr
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setOptions($arr)
     {
@@ -528,6 +537,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name
      * @param string $value
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setOption($name, $value)
     {

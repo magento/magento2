@@ -2,13 +2,17 @@
 /**
  * Test for \Magento\Checkout\Controller\Onepage\Index
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Controller\Onepage;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -97,7 +101,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->basicMock('\Magento\Framework\ObjectManagerInterface');
         $this->dataMock = $this->basicMock('Magento\Checkout\Helper\Data');
-        $this->quoteMock = $this->basicMock('\Magento\Sales\Model\Quote');
+        $this->quoteMock = $this->basicMock('\Magento\Quote\Model\Quote');
         $this->contextMock = $this->basicMock('\Magento\Framework\App\Action\Context');
         $this->sessionMock = $this->basicMock('\Magento\Customer\Model\Session');
         $this->onepageMock = $this->basicMock('\Magento\Checkout\Model\Type\Onepage');
@@ -144,7 +148,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         // SUT
         $this->model = $this->objectManager->getObject(
-            '\Magento\Checkout\Controller\Onepage\Index',
+            'Magento\Checkout\Controller\Onepage\Index',
             [
                 'context' => $this->contextMock,
                 'customerSession' => $this->sessionMock,

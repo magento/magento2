@@ -1,38 +1,41 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Product view template
  *
- * @var $this \Magento\Catalog\Block\Product\View
+ * @var $block \Magento\Catalog\Block\Product\View
  */
 ?>
 <?php $_helper = $this->helper('Magento\Catalog\Helper\Output'); ?>
-<?php $_product = $this->getProduct(); ?>
+<?php $_product = $block->getProduct(); ?>
 
 <div class="product-add-form">
-    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post"
+    <form action="<?php echo $block->getSubmitUrl($_product) ?>" method="post"
           id="product_addtocart_form"<?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
         <input type="hidden" name="related_product" id="related-products-field" value="" />
-        <?php echo $this->getChildHtml('form_top'); ?>
-        <?php if (!$this->hasOptions()):?>
-            <?php echo $this->getChildHtml('product_info_form_content'); ?>
+        <?php echo $block->getChildHtml('form_top'); ?>
+        <?php if (!$block->hasOptions()):?>
+            <?php echo $block->getChildHtml('product_info_form_content'); ?>
         <?php else:?>
-            <?php if ($_product->isSaleable() && $this->getOptionsContainer() == 'container1'):?>
-                <?php echo $this->getChildChildHtml('options_container') ?>
+            <?php if ($_product->isSaleable() && $block->getOptionsContainer() == 'container1'):?>
+                <?php echo $block->getChildChildHtml('options_container') ?>
             <?php endif;?>
         <?php endif; ?>
 
-        <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getOptionsContainer() == 'container2'):?>
-            <?php echo $this->getChildChildHtml('options_container') ?>
+        <?php if ($_product->isSaleable() && $block->hasOptions() && $block->getOptionsContainer() == 'container2'):?>
+            <?php echo $block->getChildChildHtml('options_container') ?>
         <?php endif;?>
-        <?php echo $this->getChildHtml('form_bottom'); ?>
+        <?php echo $block->getChildHtml('form_bottom'); ?>
     </form>
 </div>
-<script type="text/javascript">
+<script>
     require([
         'jquery',
         'Magento_Catalog/js/price-box'
@@ -43,6 +46,6 @@
             return !$(elem).find('.price-from').length;
         });
 
-        priceBoxes.priceBox({'priceConfig': <?php echo $this->getJsonConfig() ?>});
+        priceBoxes.priceBox({'priceConfig': <?php echo $block->getJsonConfig() ?>});
     });
 </script>

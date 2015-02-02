@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-/** @var \Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Group $this */
-$_element = $this->getElement();
+/** @var \Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Group $block */
+$_element = $block->getElement();
 $_note = $_element->getNote();
 $_class = $_element->getFieldsetHtmlClass();?>
 
@@ -17,11 +21,11 @@ $_class = $_element->getFieldsetHtmlClass();?>
             <?php echo $_element->getLabelHtml(); ?>
             <div class="control">
                 <?php echo $_element->getElementHtml(); ?>
-                <?php if ($this->getDisableAutoGroupChangeAttribute()): ?>
+                <?php if ($block->getDisableAutoGroupChangeAttribute()): ?>
                 <div class="nested">
                     <div class="field choice">
-                        <input id="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementId()); ?>" name="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementName()); ?>" type="checkbox" <?php if ($this->getDisableAutoGroupChangeCheckboxState() == 'checked') :?> checked="checked"<?php endif; ?> value="1" class="addbefore" />
-                        <label for="<?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxElementId()); ?>"><span><?php echo $this->escapeHtml($this->getDisableAutoGroupChangeCheckboxLabel()); ?></span></label>
+                        <input id="<?php echo $block->escapeHtml($block->getDisableAutoGroupChangeCheckboxElementId()); ?>" name="<?php echo $block->escapeHtml($block->getDisableAutoGroupChangeCheckboxElementName()); ?>" type="checkbox" <?php if ($block->getDisableAutoGroupChangeCheckboxState() == 'checked') :?> checked="checked"<?php endif; ?> value="1" class="addbefore" />
+                        <label for="<?php echo $block->escapeHtml($block->getDisableAutoGroupChangeCheckboxElementId()); ?>"><span><?php echo $block->escapeHtml($block->getDisableAutoGroupChangeCheckboxLabel()); ?></span></label>
                         <?php if ($_note): ?>
                              <p class="note <?php echo $_class ? " {$_class}-note" : ''; ?>" id="note_<?php echo $_element->getId(); ?>"><?php echo $_note; ?></p>
                         <?php endif ?>
