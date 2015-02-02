@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search */
+/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search */
 ?>
 <div id="product-attribute-search-container" class="suggest-expandable attribute-selector">
     <div class="action-dropdown">
@@ -15,13 +15,13 @@
         </button>
         <div class="dropdown-menu">
             <input data-role="product-attribute-search"
-                   data-group="<?php echo $this->escapeHtml($this->getGroupCode()); ?>"
+                   data-group="<?php echo $block->escapeHtml($block->getGroupCode()); ?>"
                    class="search" type="text"
                    placeholder="start typing to search attribute"/>
         </div>
     </div>
 
-<script data-template-for="product-attribute-search-<?php echo $this->getGroupId(); ?>" type="text/x-jquery-tmpl">
+<script data-template-for="product-attribute-search-<?php echo $block->getGroupId(); ?>" type="text/x-jquery-tmpl">
     <ul data-mage-init='{"menu":[]}'>
         {{if items.length}}
         {{each items}}
@@ -29,12 +29,12 @@
         {{/each}}
         {{else}}<span class="mage-suggest-no-records">${noRecordsText}</span>{{/if}}
     </ul>
-    <div class="actions"><?php echo $this->getAttributeCreate()?></div>
+    <div class="actions"><?php echo $block->getAttributeCreate()?></div>
 </script>
 
 <script>
     require(["jquery","mage/mage","mage/backend/suggest"], function($) {
-        var $suggest = $('[data-role="product-attribute-search"][data-group="<?php echo $this->escapeHtml($this->getGroupCode()); ?>"]');
+        var $suggest = $('[data-role="product-attribute-search"][data-group="<?php echo $block->escapeHtml($block->getGroupCode()); ?>"]');
 
         $suggest.on('suggestclose', function(e) {
             $suggest.closest('.dropdown-menu').siblings('[data-toggle=dropdown]').trigger('close.dropdown');
@@ -50,13 +50,13 @@
                 data: {'template_id': data.id}
             });
         });
-        $suggest.mage('suggest',<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getSelectorOptions())?>)
+        $suggest.mage('suggest',<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
             .on('suggestselect', function (e, ui) {
                 $(this).val('');
                 var templateId = $('#attribute_set_id').val();
                 if (ui.item.id) {
                     $.ajax({
-                        url: '<?php echo $this->getAddAttributeUrl()?>',
+                        url: '<?php echo $block->getAddAttributeUrl()?>',
                         type: 'POST',
                         dataType: 'json',
                         data: {attribute_id: ui.item.id, template_id: templateId, group: $(this).data('group')},
