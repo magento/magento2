@@ -92,7 +92,7 @@ class PhraseCollectorTest extends \PHPUnit_Framework_TestCase
                 $isMatchingClassReturnValues
             ));
 
-        $this->phraseCollector->parse($file);
+        $this->phraseCollector->parse($file, true);
         $this->assertEquals($result, $this->phraseCollector->getPhrases());
     }
 

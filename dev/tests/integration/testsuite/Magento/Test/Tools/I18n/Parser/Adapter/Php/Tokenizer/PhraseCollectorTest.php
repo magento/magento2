@@ -7,6 +7,7 @@ namespace Magento\Test\Tools\I18n\Parser\Adapter\Php\Tokenizer;
 
 use Magento\Framework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
 
 /**
  * @covers \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector
@@ -37,7 +38,7 @@ class PhraseCollectorTest extends \PHPUnit_Framework_TestCase
     public function testParse()
     {
         $file = __DIR__.'/_files/objectsCode.php.txt';
-        $this->phraseCollector->parse($file);
+        $this->phraseCollector->parse($file, true);
         $expectation = [
             [
                 'phrase' => '\'Testing\'',

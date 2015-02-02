@@ -7,6 +7,7 @@ namespace Magento\Test\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate;
 
 use Magento\Framework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector;
 
 /**
  * @covers \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector

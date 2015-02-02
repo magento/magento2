@@ -55,24 +55,26 @@ class PhraseCollector
      * Parse given files for phrase
      *
      * @param string $file
+     * @param bool $searchObjects
      * @return void
      */
-    public function parse($file)
+    public function parse($file, $searchObjects = false)
     {
         $this->_phrases = [];
         $this->_file = $file;
         $this->_tokenizer->parse($file);
         while (!$this->_tokenizer->isEndOfLoop()) {
-            $this->_extractPhrases();
+            $this->_extractPhrases($searchObjects);
         }
     }
 
     /**
      * Extract phrases from given tokens. e.g.: __('phrase', ...)
      *
+     * @param bool $searchObjects
      * @return void
      */
-    protected function _extractPhrases()
+    protected function _extractPhrases($searchObjects)
     {
         if ($firstToken = $this->_tokenizer->getNextRealToken()) {
             if ($firstToken->isEqualFunction('__')) {
@@ -84,7 +86,7 @@ class PhraseCollector
                         $this->_addPhrase($phrase, count($arguments), $this->_file, $firstToken->getLine());
                     }
                 }
-            } elseif ($firstToken->isNew() && $this->_tokenizer->isMatchingClass('Phrase')) {
+            } elseif ($searchObjects && $firstToken->isNew() && $this->_tokenizer->isMatchingClass('Phrase')) {
                 $arguments = $this->_tokenizer->getFunctionArgumentsTokens();
                 $phrase = $this->_collectPhrase(array_shift($arguments));
                 if (null !== $phrase) {
