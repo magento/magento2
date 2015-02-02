@@ -72,8 +72,8 @@ class ModuleCheck extends AbstractActionController
         } else {
             $updateType = 'disable';
         }
-        $message = "Unable to $updateType modules because of the following constraints:\n"
-            . implode("\n", $constraints);
+        $message = " Unable to $updateType modules because of the following constraints:\n"
+            . implode("<br />", $constraints);
         return $message;
     }
 }

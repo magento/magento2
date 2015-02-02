@@ -5,7 +5,7 @@
 
 'use strict';
 angular.module('customize-your-store', ['ngStorage'])
-    .controller('customizeYourStoreController', ['$scope', '$localStorage' , '$state', '$http', function ($scope, $localStorage, $state, $http) {
+    .controller('customizeYourStoreController', ['$scope', '$localStorage' , '$state', '$http', '$sce', function ($scope, $localStorage, $state, $http, $sce) {
         $scope.store = {
             timezone: 'America/Los_Angeles',
             currency: 'USD',
@@ -20,6 +20,8 @@ angular.module('customize-your-store', ['ngStorage'])
             }
         };
 
+        $scope.loading = false;
+
         if ($localStorage.store) {
             $scope.store = $localStorage.store;
         }
@@ -29,11 +31,16 @@ angular.module('customize-your-store', ['ngStorage'])
                 $state.loadModules();
             }
             $localStorage.store = $scope.store;
+            $scope.loading = true;
             $http.post('index.php/module-check', $scope.store)
                 .success(function (data) {
                     $scope.checkModuleConstraints.result = data;
                     if (!(($scope.checkModuleConstraints.result !== undefined) && (!$scope.checkModuleConstraints.result.success))) {
+                        $scope.loading = false;
                         $scope.nextState();
+                    } else {
+                        $scope.checkModuleConstraints.result.error = $sce.trustAsHtml($scope.checkModuleConstraints.result.error);
+                        $scope.loading = false;
                     }
                 });
         };
