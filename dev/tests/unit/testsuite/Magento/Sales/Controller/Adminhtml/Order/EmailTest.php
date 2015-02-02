@@ -27,6 +27,11 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     protected $context;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirect;
+
+    /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
@@ -76,6 +81,13 @@ class EmailTest extends \PHPUnit_Framework_TestCase
                 'getActionFlag',
                 'getHelper'
             ],
+            [],
+            '',
+            false
+        );
+        $resultRedirectFactory = $this->getMock(
+            'Magento\Backend\Model\View\Result\RedirectFactory',
+            ['create'],
             [],
             '',
             false
@@ -132,10 +144,14 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())
             ->method('getHelper')
             ->will($this->returnValue($this->helper));
+        $this->resultRedirect = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
+        $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);
+
         $this->orderEmail = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Email',
             [
                 'context' => $this->context,
+                'resultRedirectFactory' => $resultRedirectFactory,
                 'request' => $this->request,
                 'response' => $this->response
             ]
@@ -175,11 +191,15 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->with('You sent the order email.');
-        $path = 'sales/order/view';
-        $arguments = ['order_id' => $orderId];
-        $this->prepareRedirect($path, $arguments, 0);
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('sales/order/view', ['order_id' => $orderId])
+            ->willReturnSelf();
 
-        $this->orderEmail->execute();
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Redirect',
+            $this->orderEmail->execute()
+        );
         $this->assertEquals($this->response, $this->orderEmail->getResponse());
     }
 
@@ -208,34 +228,14 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('set')
             ->with('', 'no-dispatch', true)
             ->will($this->returnValue(true));
-        $path = 'sales/*/';
-        $this->prepareRedirect($path, [], 0);
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('sales/*/')
+            ->willReturnSelf();
 
-        $this->assertNull($this->orderEmail->execute());
-    }
-
-    /**
-     * @param string $path
-     * @param array $arguments
-     * @param int $index
-     */
-    protected function prepareRedirect($path, $arguments, $index)
-    {
-        $this->actionFlag->expects($this->any())
-            ->method('get')
-            ->with('', 'check_url_settings')
-            ->will($this->returnValue(true));
-        $this->session->expects($this->any())
-            ->method('setIsUrlNotice')
-            ->with(true);
-
-        $url = $path . '/' . (!empty($arguments) ? $arguments['order_id'] : '');
-        $this->helper->expects($this->at($index))
-            ->method('getUrl')
-            ->with($path, $arguments)
-            ->will($this->returnValue($url));
-        $this->response->expects($this->at($index))
-            ->method('setRedirect')
-            ->with($url);
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Redirect',
+            $this->orderEmail->execute()
+        );
     }
 }

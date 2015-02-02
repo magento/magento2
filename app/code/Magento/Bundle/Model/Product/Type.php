@@ -90,7 +90,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_catalogProduct = null;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -158,7 +158,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Config $config
      * @param \Magento\Bundle\Model\Resource\Selection $bundleSelection
      * @param \Magento\Bundle\Model\OptionFactory $bundleOption
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
@@ -184,7 +184,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Catalog\Model\Config $config,
         \Magento\Bundle\Model\Resource\Selection $bundleSelection,
         \Magento\Bundle\Model\OptionFactory $bundleOption,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockStateInterface $stockState
@@ -223,13 +223,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function getRelationInfo()
     {
         $info = new \Magento\Framework\Object();
-        $info->setTable(
-            'catalog_product_bundle_selection'
-        )->setParentFieldName(
-            'parent_product_id'
-        )->setChildFieldName(
-            'product_id'
-        );
+        $info->setTable('catalog_product_bundle_selection')
+            ->setParentFieldName('parent_product_id')
+            ->setChildFieldName('product_id');
+
         return $info;
     }
 
@@ -315,6 +312,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     }
                 }
             }
+
             return $weight;
         }
     }
@@ -337,8 +335,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $virtualCount++;
                 }
             }
-            return  $virtualCount == count($selections);
+
+            return $virtualCount == count($selections);
         }
+
         return false;
     }
 
@@ -374,9 +374,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $options = $product->getBundleOptionsData();
                 if ($options) {
                     foreach ($options as $option) {
-                        if (empty($option['delete']) || 1 != (int) $option['delete']) {
+                        if (empty($option['delete']) || 1 != (int)$option['delete']) {
                             $product->setTypeHasOptions(true);
-                            if (1 == (int) $option['required']) {
+                            if (1 == (int)$option['required']) {
                                 $product->setTypeHasRequiredOptions(true);
                                 break;
                             }
@@ -414,7 +414,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     ->setParentId($product->getId())
                     ->setStoreId($product->getStoreId());
 
-                $optionModel->isDeleted((bool) $option['delete']);
+                $optionModel->isDeleted((bool)$option['delete']);
                 $optionModel->save();
                 $options[$key]['option_id'] = $optionModel->getOptionId();
             }
@@ -437,10 +437,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                         $selectionModel = $this->_bundleModelSelection->create()
                             ->setData($selection)
                             ->setOptionId($options[$index]['option_id'])
-                            ->setWebsiteId($this->_storeManager->getStore($product->getStoreId())->getWebsiteId())
+                            ->setWebsiteId(
+                                $this->_storeManager->getStore($product->getStoreId())
+                                    ->getWebsiteId()
+                            )
                             ->setParentProductId($product->getId());
 
-                        $selectionModel->isDeleted((bool) $selection['delete']);
+                        $selectionModel->isDeleted((bool)$selection['delete']);
                         $selectionModel->save();
 
                         $selection['selection_id'] = $selectionModel->getSelectionId();
@@ -472,7 +475,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getOptions($product)
     {
-        return $this->getOptionsCollection($product)->getItems();
+        return $this->getOptionsCollection($product)
+            ->getItems();
     }
 
     /**
@@ -483,7 +487,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getOptionsIds($product)
     {
-        return $this->getOptionsCollection($product)->getAllIds();
+        return $this->getOptionsCollection($product)
+            ->getAllIds();
     }
 
     /**
@@ -496,7 +501,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         if (!$product->hasData($this->_keyOptionsCollection)) {
             /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection */
-            $optionsCollection = $this->_bundleOption->create()->getResourceCollection();
+            $optionsCollection = $this->_bundleOption->create()
+                ->getResourceCollection();
             $optionsCollection->setProductIdFilter($product->getId());
             $this->setStoreFilter($product->getStoreId(), $product);
             $optionsCollection->setPositionOrder();
@@ -508,6 +514,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $optionsCollection->joinValues($storeId);
             $product->setData($this->_keyOptionsCollection, $optionsCollection);
         }
+
         return $product->getData($this->_keyOptionsCollection);
     }
 
@@ -526,7 +533,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $storeId = $product->getStoreId();
             $selectionsCollection = $this->_bundleCollection->create()
                 ->addAttributeToSelect($this->_config->getProductAttributes())
-                ->addAttributeToSelect('tax_class_id')   //used for calculation item taxes in Bundle with Dynamic Price
+                ->addAttributeToSelect('tax_class_id')//used for calculation item taxes in Bundle with Dynamic Price
                 ->setFlag('require_stock_items', true)
                 ->setFlag('product_children', true)
                 ->setPositionOrder()
@@ -536,12 +543,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->setOptionIdsFilter($optionIds);
 
             if (!$this->_catalogData->isPriceGlobal() && $storeId) {
-                $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
+                $websiteId = $this->_storeManager->getStore($storeId)
+                    ->getWebsiteId();
                 $selectionsCollection->joinPrices($websiteId);
             }
 
             $product->setData($key, $selectionsCollection);
         }
+
         return $product->getData($key);
     }
 
@@ -551,9 +560,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Example: the catalog inventory validation of decimal qty can change qty to int,
      * so need to change quote item qty option value too.
      *
-     * @param   array           $options
-     * @param   \Magento\Framework\Object   $option
-     * @param   mixed           $value
+     * @param   array $options
+     * @param   \Magento\Framework\Object $option
+     * @param   mixed $value
      * @param   \Magento\Catalog\Model\Product $product
      * @return $this
      */
@@ -588,6 +597,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param mixed $qty
      * @param \Magento\Catalog\Model\Product $product
      * @return int
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareQuoteItemQty($qty, $product)
     {
@@ -636,7 +646,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         foreach ($selectionCollection as $selection) {
             /* @var $selection \Magento\Catalog\Model\Product */
             if ($selection->isSalable()) {
-                $selectionEnoughQty = $this->_stockRegistry->getStockItem($selection->getId())->getManageStock()
+                $selectionEnoughQty = $this->_stockRegistry->getStockItem($selection->getId())
+                    ->getManageStock()
                     ? $selection->getSelectionQty() <= $this->_stockState->getStockQty($selection->getId())
                     : $selection->isInStock();
 
@@ -648,6 +659,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
         $isSalable = array_sum($requiredOptionIds) == count($requiredOptionIds) && $salableSelectionCount;
         $product->setData('all_items_salable', $isSalable);
+
         return $isSalable;
     }
 
@@ -667,171 +679,174 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         $result = parent::_prepareProduct($buyRequest, $product, $processMode);
 
-        if (is_string($result)) {
-            return $result;
-        }
-
-        $selections = [];
-        $isStrictProcessMode = $this->_isStrictProcessMode($processMode);
-
-        $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
-        $_appendAllSelections = (bool) $product->getSkipCheckRequiredOption() || $skipSaleableCheck;
-
-        $options = $buyRequest->getBundleOption();
-        if (is_array($options)) {
-            $options = array_filter($options, 'intval');
-            $qtys = $buyRequest->getBundleOptionQty();
-            foreach ($options as $_optionId => $_selections) {
-                if (empty($_selections)) {
-                    unset($options[$_optionId]);
-                }
-            }
-            $optionIds = array_keys($options);
-
-            if (empty($optionIds) && $isStrictProcessMode) {
-                return __('Please specify product option(s).');
+        try {
+            if (is_string($result)) {
+                throw new \Magento\Framework\Model\Exception($result);
             }
 
-            $product->getTypeInstance()->setStoreFilter($product->getStoreId(), $product);
-            $optionsCollection = $this->getOptionsCollection($product);
-            if (!$product->getSkipCheckRequiredOption() && $isStrictProcessMode) {
-                foreach ($optionsCollection->getItems() as $option) {
-                    if ($option->getRequired() && !isset($options[$option->getId()])) {
-                        return __('Please select all required options.');
-                    }
-                }
-            }
-            $selectionIds = [];
+            $selections = [];
+            $isStrictProcessMode = $this->_isStrictProcessMode($processMode);
 
-            foreach ($options as $selectionId) {
-                if (!is_array($selectionId)) {
-                    if ($selectionId != '') {
-                        $selectionIds[] = (int) $selectionId;
-                    }
-                } else {
-                    foreach ($selectionId as $id) {
-                        if ($id != '') {
-                            $selectionIds[] = (int) $id;
-                        }
-                    }
-                }
-            }
-            // If product has not been configured yet then $selections array should be empty
-            if (!empty($selectionIds)) {
-                $selections = $this->getSelectionsByIds($selectionIds, $product);
+            $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
+            $_appendAllSelections = (bool)$product->getSkipCheckRequiredOption() || $skipSaleableCheck;
 
-                // Check if added selections are still on sale
-                foreach ($selections->getItems() as $selection) {
-                    if (!$selection->isSalable() && !$skipSaleableCheck) {
-                        $_option = $optionsCollection->getItemById($selection->getOptionId());
-                        if (is_array($options[$_option->getId()]) && count($options[$_option->getId()]) > 1) {
-                            $moreSelections = true;
-                        } else {
-                            $moreSelections = false;
-                        }
-                        if ($_option->getRequired() && (!$_option->isMultiSelection() ||
-                            $_option->isMultiSelection() && !$moreSelections)
-                        ) {
-                            return __('The required options you selected are not available.');
-                        }
-                    }
+            $options = $buyRequest->getBundleOption();
+            if (is_array($options)) {
+                $options = $this->recursiveIntval($options);
+                $optionIds = array_keys($options);
+
+                if (empty($optionIds) && $isStrictProcessMode) {
+                    throw new \Magento\Framework\Model\Exception(__('Please specify product option(s).'));
                 }
 
-                $optionsCollection->appendSelections($selections, false, $_appendAllSelections);
+                $product->getTypeInstance()
+                    ->setStoreFilter($product->getStoreId(), $product);
+                $optionsCollection = $this->getOptionsCollection($product);
+                $this->checkIsAllRequiredOptions(
+                    $product,
+                    $isStrictProcessMode,
+                    $optionsCollection,
+                    $options
+                );
 
-                $selections = $selections->getItems();
-            } else {
-                $selections = [];
-            }
-        } else {
-            $product->setOptionsValidationFail(true);
-            $product->getTypeInstance()->setStoreFilter($product->getStoreId(), $product);
+                $selectionIds = $this->multiToFlatArray($options);
+                // If product has not been configured yet then $selections array should be empty
+                if (!empty($selectionIds)) {
+                    $selections = $this->getSelectionsByIds($selectionIds, $product);
 
-            $optionCollection = $product->getTypeInstance()->getOptionsCollection($product);
-            $optionIds = $product->getTypeInstance()->getOptionsIds($product);
-            $selectionCollection = $product->getTypeInstance()->getSelectionsCollection($optionIds, $product);
-            $options = $optionCollection->appendSelections($selectionCollection, false, $_appendAllSelections);
+                    // Check if added selections are still on sale
+                    $this->checkSelectionsIsSale(
+                        $selections,
+                        $skipSaleableCheck,
+                        $optionsCollection,
+                        $options
+                    );
 
-            foreach ($options as $option) {
-                if ($option->getRequired() && count($option->getSelections()) == 1) {
-                    $selections = array_merge($selections, $option->getSelections());
+                    $optionsCollection->appendSelections($selections, false, $_appendAllSelections);
+
+                    $selections = $selections->getItems();
                 } else {
                     $selections = [];
-                    break;
                 }
+            } else {
+                $product->setOptionsValidationFail(true);
+                $product->getTypeInstance()
+                    ->setStoreFilter($product->getStoreId(), $product);
+
+                $optionCollection = $product->getTypeInstance()
+                    ->getOptionsCollection($product);
+                $optionIds = $product->getTypeInstance()
+                    ->getOptionsIds($product);
+                $selectionCollection = $product->getTypeInstance()
+                    ->getSelectionsCollection($optionIds, $product);
+                $options = $optionCollection->appendSelections($selectionCollection, false, $_appendAllSelections);
+
+                $selections = $this->mergeSelectionsWithOptions($options, $selections);
             }
-        }
-        if (count($selections) > 0 || !$isStrictProcessMode) {
-            $uniqueKey = [$product->getId()];
-            $selectionIds = [];
+            if (count($selections) > 0 || !$isStrictProcessMode) {
+                $uniqueKey = [$product->getId()];
+                $selectionIds = [];
+                $qtys = $buyRequest->getBundleOptionQty();
 
-            // Shuffle selection array by option position
-            usort($selections, [$this, 'shakeSelections']);
+                // Shuffle selection array by option position
+                usort($selections, [$this, 'shakeSelections']);
 
-            foreach ($selections as $selection) {
-                if ($selection->getSelectionCanChangeQty() && isset($qtys[$selection->getOptionId()])) {
-                    $qty = (float) $qtys[$selection->getOptionId()] > 0 ? $qtys[$selection->getOptionId()] : 1;
-                } else {
-                    $qty = (float) $selection->getSelectionQty() ? $selection->getSelectionQty() : 1;
-                }
-                $qty = (float) $qty;
+                foreach ($selections as $selection) {
+                    $selectionOptionId = $selection->getOptionId();
+                    $qty = $this->getQty($selection, $qtys, $selectionOptionId);
 
-                $product->addCustomOption('selection_qty_' . $selection->getSelectionId(), $qty, $selection);
-                $selection->addCustomOption('selection_id', $selection->getSelectionId());
+                    $selectionId = $selection->getSelectionId();
+                    $product->addCustomOption('selection_qty_' . $selectionId, $qty, $selection);
+                    $selection->addCustomOption('selection_id', $selectionId);
 
-                $beforeQty = 0;
-                $customOption = $product->getCustomOption('product_qty_' . $selection->getId());
-                if ($customOption && $customOption->getProduct()->getId() == $selection->getId()) {
-                    $beforeQty = (float) $customOption->getValue();
-                }
-                $product->addCustomOption('product_qty_' . $selection->getId(), $qty + $beforeQty, $selection);
+                    $beforeQty = $this->getBeforeQty($product, $selection);
+                    $product->addCustomOption('product_qty_' . $selection->getId(), $qty + $beforeQty, $selection);
 
-                /*
-                 * Create extra attributes that will be converted to product options in order item
-                 * for selection (not for all bundle)
-                 */
-                $price = $product->getPriceModel()->getSelectionFinalTotalPrice($product, $selection, 0, $qty);
-                $attributes = [
-                    'price' => $this->priceCurrency->convert($price),
-                    'qty' => $qty,
-                    'option_label' => $selection->getOption()->getTitle(),
-                    'option_id' => $selection->getOption()->getId(),
-                ];
+                    /*
+                     * Create extra attributes that will be converted to product options in order item
+                     * for selection (not for all bundle)
+                     */
+                    $price = $product->getPriceModel()
+                        ->getSelectionFinalTotalPrice($product, $selection, 0, $qty);
+                    $attributes = [
+                        'price' => $this->priceCurrency->convert($price),
+                        'qty' => $qty,
+                        'option_label' => $selection->getOption()
+                            ->getTitle(),
+                        'option_id' => $selection->getOption()
+                            ->getId(),
+                    ];
 
-                $_result = $selection->getTypeInstance()->prepareForCart($buyRequest, $selection);
-                if (is_string($_result) && !is_array($_result)) {
-                    return $_result;
-                }
+                    $_result = $selection->getTypeInstance()
+                        ->prepareForCart($buyRequest, $selection);
+                    $this->checkIsResult($_result);
 
-                if (!isset($_result[0])) {
-                    return __('We cannot add this item to your shopping cart.');
-                }
+                    $result[] = $_result[0]->setParentProductId($product->getId())
+                        ->addCustomOption('bundle_option_ids', serialize(array_map('intval', $optionIds)))
+                        ->addCustomOption('bundle_selection_attributes', serialize($attributes));
 
-                $result[] = $_result[0]->setParentProductId($product->getId())
-                    ->addCustomOption('bundle_option_ids', serialize(array_map('intval', $optionIds)))
-                    ->addCustomOption('bundle_selection_attributes', serialize($attributes));
+                    if ($isStrictProcessMode) {
+                        $_result[0]->setCartQty($qty);
+                    }
 
-                if ($isStrictProcessMode) {
-                    $_result[0]->setCartQty($qty);
+                    $resultSelectionId = $_result[0]->getSelectionId();
+                    $selectionIds[] = $resultSelectionId;
+                    $uniqueKey[] = $resultSelectionId;
+                    $uniqueKey[] = $qty;
                 }
 
-                $selectionIds[] = $_result[0]->getSelectionId();
-                $uniqueKey[] = $_result[0]->getSelectionId();
-                $uniqueKey[] = $qty;
+                // "unique" key for bundle selection and add it to selections and bundle for selections
+                $uniqueKey = implode('_', $uniqueKey);
+                foreach ($result as $item) {
+                    $item->addCustomOption('bundle_identity', $uniqueKey);
+                }
+                $product->addCustomOption('bundle_option_ids', serialize(array_map('intval', $optionIds)));
+                $product->addCustomOption('bundle_selection_ids', serialize($selectionIds));
+
+                return $result;
             }
-
-            // "unique" key for bundle selection and add it to selections and bundle for selections
-            $uniqueKey = implode('_', $uniqueKey);
-            foreach ($result as $item) {
-                $item->addCustomOption('bundle_identity', $uniqueKey);
-            }
-            $product->addCustomOption('bundle_option_ids', serialize(array_map('intval', $optionIds)));
-            $product->addCustomOption('bundle_selection_ids', serialize($selectionIds));
-
-            return $result;
+        } catch (\Magento\Framework\Model\Exception $e) {
+            return $e->getMessage();
         }
 
         return $this->getSpecifyOptionMessage();
+    }
+
+    /**
+     * @param array $array
+     * @return int[]|int[][]
+     */
+    private function recursiveIntval(array $array)
+    {
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $array[$key] = $this->recursiveIntval($value);
+            } elseif (is_numeric($value) && (int)$value != 0) {
+                $array[$key] = (int)$value;
+            } else {
+                unset($array[$key]);
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * @param array $array
+     * @return int[]
+     */
+    private function multiToFlatArray(array $array)
+    {
+        $flatArray = [];
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $flatArray = array_merge($flatArray, $this->multiToFlatArray($value));
+            } else {
+                $flatArray[$key] = $value;
+            }
+        }
+
+        return $flatArray;
     }
 
     /**
@@ -858,7 +873,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $usedSelections = $product->getData($this->_keyUsedSelections);
         $usedSelectionsIds = $product->getData($this->_keyUsedSelectionsIds);
 
-        if (!$usedSelections || serialize($usedSelectionsIds) != serialize($selectionIds)) {
+        if (!$usedSelections || $usedSelectionsIds !== $selectionIds) {
             $storeId = $product->getStoreId();
             $usedSelections = $this->_bundleCollection
                 ->create()
@@ -872,12 +887,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->setSelectionIdsFilter($selectionIds);
 
             if (!$this->_catalogData->isPriceGlobal() && $storeId) {
-                $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
+                $websiteId = $this->_storeManager->getStore($storeId)
+                    ->getWebsiteId();
                 $usedSelections->joinPrices($websiteId);
             }
             $product->setData($this->_keyUsedSelections, $usedSelections);
             $product->setData($this->_keyUsedSelectionsIds, $selectionIds);
         }
+
         return $usedSelections;
     }
 
@@ -901,11 +918,15 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->getResourceCollection()
                 ->setProductIdFilter($product->getId())
                 ->setPositionOrder()
-                ->joinValues($this->_storeManager->getStore()->getId())
+                ->joinValues(
+                    $this->_storeManager->getStore()
+                        ->getId()
+                )
                 ->setIdFilter($optionIds);
             $product->setData($this->_keyUsedOptions, $usedOptions);
             $product->setData($this->_keyUsedOptionsIds, $optionIds);
         }
+
         return $usedOptions;
     }
 
@@ -932,12 +953,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 if ($selection->isSalable()) {
                     $selectionQty = $product->getCustomOption('selection_qty_' . $selection->getSelectionId());
                     if ($selectionQty) {
-                        $price = $product->getPriceModel()->getSelectionFinalTotalPrice(
-                            $product,
-                            $selection,
-                            0,
-                            $selectionQty->getValue()
-                        );
+                        $price = $product->getPriceModel()
+                            ->getSelectionFinalTotalPrice(
+                                $product,
+                                $selection,
+                                0,
+                                $selectionQty->getValue()
+                            );
 
                         $option = $options->getItemById($selection->getOptionId());
                         if (!isset($bundleOptions[$option->getId()])) {
@@ -985,13 +1007,15 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function shakeSelections($firstItem, $secondItem)
     {
         $aPosition = [
-            $firstItem->getOption()->getPosition(),
+            $firstItem->getOption()
+                ->getPosition(),
             $firstItem->getOptionId(),
             $firstItem->getPosition(),
             $firstItem->getSelectionId(),
         ];
         $bPosition = [
-            $secondItem->getOption()->getPosition(),
+            $secondItem->getOption()
+                ->getPosition(),
             $secondItem->getOptionId(),
             $secondItem->getPosition(),
             $secondItem->getSelectionId(),
@@ -1012,7 +1036,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function hasOptions($product)
     {
         $this->setStoreFilter($product->getStoreId(), $product);
-        $optionIds = $this->getOptionsCollection($product)->getAllIds();
+        $optionIds = $this->getOptionsCollection($product)
+            ->getAllIds();
         $collection = $this->getSelectionsCollection($optionIds, $product);
 
         if (count($collection) > 0 || $product->getOptions()) {
@@ -1028,6 +1053,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return boolean true
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getForceChildItemQtyChanges($product)
     {
@@ -1045,10 +1071,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         $searchData = parent::getSearchableData($product);
 
-        $optionSearchData = $this->_bundleOption->create()->getSearchableData(
-            $product->getId(),
-            $product->getStoreId()
-        );
+        $optionSearchData = $this->_bundleOption->create()
+            ->getSearchableData(
+                $product->getId(),
+                $product->getStoreId()
+            );
         if ($optionSearchData) {
             $searchData = array_merge($searchData, $optionSearchData);
         }
@@ -1083,11 +1110,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             /* @var $selection \Magento\Bundle\Model\Selection */
             $selection = $productSelections->getItemById($selectionId);
             if (!$selection || !$selection->isSalable() && !$skipSaleableCheck) {
-                throw new \Magento\Framework\Model\Exception(__('The required options you selected are not available.'));
+                throw new \Magento\Framework\Model\Exception(
+                    __('The required options you selected are not available.')
+                );
             }
         }
 
-        $product->getTypeInstance()->setStoreFilter($product->getStoreId(), $product);
+        $product->getTypeInstance()
+            ->setStoreFilter($product->getStoreId(), $product);
         $optionsCollection = $this->getOptionsCollection($product);
         foreach ($optionsCollection->getItems() as $option) {
             if ($option->getRequired() && empty($bundleOption[$option->getId()])) {
@@ -1124,6 +1154,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (!$hasRequiredOptions) {
             $groups = [$allProducts];
         }
+
         return $groups;
     }
 
@@ -1133,6 +1164,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param  \Magento\Catalog\Model\Product $product
      * @param  \Magento\Framework\Object $buyRequest
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processBuyRequest($product, $buyRequest)
     {
@@ -1165,6 +1197,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
@@ -1188,6 +1221,128 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
             }
         }
+
         return $identities;
+    }
+
+    /**
+     * @param \Magento\Framework\Object $selection
+     * @param int[] $qtys
+     * @param int $selectionOptionId
+     * @return float
+     */
+    protected function getQty($selection, $qtys, $selectionOptionId)
+    {
+        if ($selection->getSelectionCanChangeQty() && isset($qtys[$selectionOptionId])) {
+            $qty = (float)$qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
+        } else {
+            $qty = (float)$selection->getSelectionQty() ? $selection->getSelectionQty() : 1;
+        }
+        $qty = (float)$qty;
+
+        return $qty;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Framework\Object $selection
+     * @return float|int
+     */
+    protected function getBeforeQty($product, $selection)
+    {
+        $beforeQty = 0;
+        $customOption = $product->getCustomOption('product_qty_' . $selection->getId());
+        if ($customOption && $customOption->getProduct()->getId() == $selection->getId()) {
+            $beforeQty = (float)$customOption->getValue();
+            return $beforeQty;
+        }
+
+        return $beforeQty;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @param bool $isStrictProcessMode
+     * @param \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection
+     * @param int[] $options
+     * @return void
+     * @throws \Magento\Framework\Model\Exception
+     */
+    protected function checkIsAllRequiredOptions($product, $isStrictProcessMode, $optionsCollection, $options)
+    {
+        if (!$product->getSkipCheckRequiredOption() && $isStrictProcessMode) {
+            foreach ($optionsCollection->getItems() as $option) {
+                if ($option->getRequired() && !isset($options[$option->getId()])) {
+                    throw new \Magento\Framework\Model\Exception(__('Please select all required options.'));
+                }
+            }
+        }
+    }
+
+    /**
+     * @param \Magento\Bundle\Model\Resource\Selection\Collection $selections
+     * @param bool $skipSaleableCheck
+     * @param \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection
+     * @param int[] $options
+     * @return void
+     * @throws \Magento\Framework\Model\Exception
+     */
+    protected function checkSelectionsIsSale($selections, $skipSaleableCheck, $optionsCollection, $options)
+    {
+        foreach ($selections->getItems() as $selection) {
+            if (!$selection->isSalable() && !$skipSaleableCheck) {
+                $_option = $optionsCollection->getItemById($selection->getOptionId());
+                $optionId = $_option->getId();
+                if (is_array($options[$optionId]) && count($options[$optionId]) > 1) {
+                    $moreSelections = true;
+                } else {
+                    $moreSelections = false;
+                }
+                $isMultiSelection = $_option->isMultiSelection();
+                if ($_option->getRequired() && (!$isMultiSelection || !$moreSelections)
+                ) {
+                    throw new \Magento\Framework\Model\Exception(
+                        __('The required options you selected are not available.')
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $_result
+     * @return void
+     * @throws \Magento\Framework\Model\Exception
+     */
+    protected function checkIsResult($_result)
+    {
+        if (is_string($_result)) {
+            throw new \Magento\Framework\Model\Exception($_result);
+        }
+
+        if (!isset($_result[0])) {
+            throw new \Magento\Framework\Model\Exception(
+                __('We cannot add this item to your shopping cart.')
+            );
+        }
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product\Option[] $options
+     * @param \Magento\Framework\Object[] $selections
+     * @return \Magento\Framework\Object[]
+     */
+    protected function mergeSelectionsWithOptions($options, $selections)
+    {
+        foreach ($options as $option) {
+            if ($option->getRequired() && count($option->getSelections()) == 1) {
+                $selections = array_merge($selections, $option->getSelections());
+            } else {
+                $selections = [];
+                break;
+            }
+        }
+
+        return $selections;
     }
 }

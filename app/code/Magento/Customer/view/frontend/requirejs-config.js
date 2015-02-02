@@ -10,8 +10,5 @@ var config = {
             address:            'Magento_Customer/address',
             setPassword:        'Magento_Customer/set-password'
         }
-    },
-    deps: [
-        'mage/validation/dob-rule'
-    ]
+    }
 };

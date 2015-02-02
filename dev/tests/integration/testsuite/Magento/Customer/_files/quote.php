@@ -39,7 +39,7 @@ $quoteItem = $quote->setCustomerId(
     1
 )->setStoreId(
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+        'Magento\Framework\Store\StoreManagerInterface'
     )->getStore()->getId()
 )->setReservedOrderId(
     'test01'

@@ -20,6 +20,7 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\GiftMessage\Service\V1\ReadServiceInterface" type="Magento\GiftMessage\Service\V1\ReadService"/>
-    <preference for="Magento\GiftMessage\Service\V1\WriteServiceInterface" type="Magento\GiftMessage\Service\V1\WriteService"/>
+    <preference for="Magento\GiftMessage\Api\CartRepositoryInterface" type="Magento\GiftMessage\Model\CartRepository"/>
+    <preference for="Magento\GiftMessage\Api\ItemRepositoryInterface" type="Magento\GiftMessage\Model\ItemRepository"/>
+    <preference for="Magento\GiftMessage\Api\Data\MessageInterface" type="Magento\GiftMessage\Model\Message"/>
 </config>

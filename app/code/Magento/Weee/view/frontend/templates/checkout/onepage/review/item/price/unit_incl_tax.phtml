@@ -14,7 +14,7 @@ $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
 ?>
 <?php $_incl = $_item->getPriceInclTax(); ?>
 <?php if ($this->displayPriceWithWeeeDetails()): ?>
-    <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#unit-item-tax-details<?php echo $_item->getId(); ?>"}'>
+    <span class="cart-tax-total" data-mage-init='{"taxtToggle": {"itemTaxId" : "#unit-item-tax-details<?php echo $_item->getId(); ?>"}}'>
 <?php else: ?>
     <span class="cart-price">
 <?php endif; ?>
@@ -32,7 +32,7 @@ $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
     </span>
 
     <?php if ($this->displayFinalPrice()): ?>
-        <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#unit-item-tax-details<?php echo $_item->getId(); ?>"}'>
+        <span class="cart-tax-total" data-mage-init='{"taxtToggle": {"itemTaxId" : "#unit-item-tax-details<?php echo $_item->getId(); ?>"}}'>
             <span class="weee" data-label="<?php echo __('Total incl. tax'); ?>">
                 <?php echo $this->formatPrice($this->getFinalUnitDisplayPriceInclTax()); ?>
             </span>

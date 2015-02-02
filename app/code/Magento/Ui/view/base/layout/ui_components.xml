@@ -132,6 +132,7 @@
         <arguments>
             <argument name="js_config" xsi:type="array">
                 <item name="extends" xsi:type="string">input</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/date</item>
                 <item name="config" xsi:type="array">
                     <item name="input_type" xsi:type="string">date</item>
                 </item>

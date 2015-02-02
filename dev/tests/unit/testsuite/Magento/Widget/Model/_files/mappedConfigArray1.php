@@ -8,7 +8,7 @@ return [
     'name' => 'CMS Page Link',
     'description' => 'Link to a CMS Page',
     'is_email_compatible' => '1',
-    'placeholder_image' => 'Magento_Cms::images/widget_page_link.gif',
+    'placeholder_image' => 'Magento_Cms::images/widget_page_link.png',
     'parameters' => [
         'page_id' => [
             '@' => ['type' => 'complex'],

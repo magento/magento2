@@ -38,9 +38,9 @@ class PathTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_theme = $this->getMock('Magento\Core\Model\Theme', ['__wakeup'], [], '', false);
+        $this->_theme = $this->getMock('Magento\Theme\Model\Theme', ['__wakeup'], [], '', false);
         $this->_appState = $this->getMock('Magento\Framework\App\State', ['getAreaCode'], [], '', false);
-        $appStateProperty = new \ReflectionProperty('\Magento\Core\Model\Theme', '_appState');
+        $appStateProperty = new \ReflectionProperty('\Magento\Theme\Model\Theme', '_appState');
         $appStateProperty->setAccessible(true);
         $appStateProperty->setValue($this->_theme, $this->_appState);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);

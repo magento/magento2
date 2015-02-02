@@ -47,7 +47,7 @@ class Multishipping extends \Magento\Framework\Object
     protected $_session;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -146,7 +146,7 @@ class Multishipping extends \Magento\Framework\Object
      * @param \Magento\Quote\Model\Quote\Address\ToOrderAddress $quoteAddressToOrderAddress
      * @param \Magento\Quote\Model\Quote\Payment\ToOrderPayment $quotePaymentToOrderPayment
      * @param \Magento\Quote\Model\Quote\Item\ToOrderItem $quoteItemToOrderItem
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification
      * @param \Magento\Multishipping\Helper\Data $helper
      * @param OrderSender $orderSender
@@ -170,7 +170,7 @@ class Multishipping extends \Magento\Framework\Object
         \Magento\Quote\Model\Quote\Address\ToOrderAddress $quoteAddressToOrderAddress,
         \Magento\Quote\Model\Quote\Payment\ToOrderPayment $quotePaymentToOrderPayment,
         \Magento\Quote\Model\Quote\Item\ToOrderItem $quoteItemToOrderItem,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification,
         \Magento\Multishipping\Helper\Data $helper,
         OrderSender $orderSender,
@@ -616,10 +616,10 @@ class Multishipping extends \Magento\Framework\Object
         if ($address->getAddressType() == 'billing') {
             $order->setIsVirtual(1);
         } else {
-            $order->setShippingAddress($this->quoteAddressToOrderAddress->addressToOrderAddress($address));
+            $order->setShippingAddress($this->quoteAddressToOrderAddress->convert($address));
         }
 
-        $order->setPayment($this->quotePaymentToOrderPayment->paymentToOrderPayment($quote->getPayment()));
+        $order->setPayment($this->quotePaymentToOrderPayment->convert($quote->getPayment()));
         if ($this->priceCurrency->round($address->getGrandTotal()) == 0) {
             $order->getPayment()->setMethod('free');
         }
@@ -634,7 +634,7 @@ class Multishipping extends \Magento\Framework\Object
             )->setProductOptions(
                 $_quoteItem->getProduct()->getTypeInstance()->getOrderOptions($_quoteItem->getProduct())
             );
-            $orderItem = $this->quoteItemToOrderItem->itemToOrderItem($item);
+            $orderItem = $this->quoteItemToOrderItem->convert($_quoteItem);
             if ($item->getParentItem()) {
                 $orderItem->setParentItem($order->getItemByQuoteItemId($item->getParentItem()->getId()));
             }
@@ -766,10 +766,10 @@ class Multishipping extends \Magento\Framework\Object
     {
         return !($this->_scopeConfig->isSetFlag(
             'sales/minimum_order/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) && $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) && !$this->getQuote()->validateMinimumAmount());
     }
 
@@ -782,12 +782,12 @@ class Multishipping extends \Magento\Framework\Object
     {
         $descr = $this->_scopeConfig->getValue(
             'sales/minimum_order/multi_address_description',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if (empty($descr)) {
             $descr = $this->_scopeConfig->getValue(
                 'sales/minimum_order/description',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $descr;
@@ -800,12 +800,12 @@ class Multishipping extends \Magento\Framework\Object
     {
         $error = $this->_scopeConfig->getValue(
             'sales/minimum_order/multi_address_error_message',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if (empty($error)) {
             $error = $this->_scopeConfig->getValue(
                 'sales/minimum_order/error_message',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $error;
