@@ -34,6 +34,18 @@ class DataBuilderFactory
      */
     public function getDataBuilder($className)
     {
+        $builderClassName = $this->getBuilderClassName($className);
+        return $this->createObject($builderClassName);
+    }
+
+    /**
+     * Returns builder class name
+     *
+     * @param $className
+     * @return string
+     */
+    protected function getBuilderClassName($className)
+    {
         $interfaceSuffix = 'Interface';
         if (substr($className, -strlen($interfaceSuffix)) === $interfaceSuffix) {
             /** If class name ends with Interface, replace it with Data suffix */
@@ -42,6 +54,19 @@ class DataBuilderFactory
             $builderClassName = $className;
         }
         $builderClassName .= 'Builder';
+
+        $builderClassName = ltrim($builderClassName, '\\');
+        return $builderClassName;
+    }
+
+    /**
+     * Creates builder object
+     *
+     * @param $builderClassName
+     * @return \Magento\Framework\Api\BuilderInterface Builder Instance
+     */
+    protected function createObject($builderClassName)
+    {
         return $this->objectManager->create($builderClassName);
     }
 }

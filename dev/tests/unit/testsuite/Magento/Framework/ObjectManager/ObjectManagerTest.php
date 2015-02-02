@@ -396,11 +396,6 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIgnoresFirstSlash()
     {
-        $this->assertSame($this->_object->get('Magento\Test\Di\Child'), $this->_object->get('\Magento\Test\Di\Child'));
-    }
-
-    public function testCreateIgnoresFirstSlash()
-    {
-        $this->assertInstanceOf('Magento\Test\Di\Child', $this->_object->create('\Magento\Test\Di\Child'));
+        $this->assertSame($this->_object->get('Magento\Test\Di\Child'), $this->_object->get('Magento\Test\Di\Child'));
     }
 }
