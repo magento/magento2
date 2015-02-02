@@ -7,13 +7,13 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /** @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\File */ ?>
+<?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\File */ ?>
 <script id="custom-option-file-type-template" type="text/x-jquery-tmpl">
     <div id="product_option_${option_id}_type_${group}" class="fieldset">
         <table class="data-table" cellspacing="0">
             <thead>
             <tr>
-                <?php if ($this->getCanReadPrice() !== false) : ?>
+                <?php if ($block->getCanReadPrice() !== false) : ?>
                 <th><?php echo __('Price'); ?></th>
                 <th><?php echo __('Price Type'); ?></th>
                 <?php endif; ?>
@@ -23,15 +23,15 @@
             </tr>
             </thead>
             <tr>
-                <?php if ($this->getCanReadPrice() !== false) : ?>
+                <?php if ($block->getCanReadPrice() !== false) : ?>
                 <td class="opt-price">
                     <input name="product[options][${option_id}][price]" data-store-label="${price}"
                            class="input-text validate-zero-or-greater" type="text" value="${price}"
-                        <?php if ($this->getCanEditPrice() === false) : ?>
+                        <?php if ($block->getCanEditPrice() === false) : ?>
                            disabled="disabled"
                         <?php endif; ?>>
                 </td>
-                <td class="opt-price-type"><?php echo $this->getPriceTypeSelectHtml() ?>{{html checkboxScopePrice}}</td>
+                <td class="opt-price-type"><?php echo $block->getPriceTypeSelectHtml() ?>{{html checkboxScopePrice}}</td>
                 <?php else : ?>
                 <input name="product[options][${option_id}][price]" type="hidden">
                 <input id="product_option_${option_id}_price_type" name="product[options][${option_id}][price_type]" type="hidden">
