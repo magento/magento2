@@ -70,8 +70,13 @@ class AssertCustomerForm extends AbstractConstraint
 
         $pageCustomerIndex->open();
         $pageCustomerIndex->getCustomerGridBlock()->searchAndOpen($filter);
+
+        /** @var \Magento\Mtf\System\Event\EventManagerInterface $eventManager */
+        $eventManager = $this->objectManager->get('Magento\Mtf\System\Event\EventManagerInterface');
+        $eventManager->dispatchEvent(['exception'], [var_export($data, true)]);
+
         $dataForm = $pageCustomerIndexEdit->getCustomerForm()->getDataCustomer($customer, $address);
-        $dataDiff = $this->verify($data, $dataForm);;
+        $dataDiff = $this->verify($data, $dataForm);
         \PHPUnit_Framework_Assert::assertTrue(
             empty($dataDiff),
             'Customer data on edit page(backend) not equals to passed from fixture.'
@@ -95,17 +100,22 @@ class AssertCustomerForm extends AbstractConstraint
             if (in_array($name, $this->customerSkippedFields)) {
                 continue;
             }
-            if (!isset($dataForm['customer'][$name])) {
-                $msg = print_r($dataFixture, true) . print_r($dataForm, true);;
-                throw new \Exception('Testmsg ' . $msg . ' Testmsg');
+            if (isset($dataForm['customer'][$name])) {
+                $result[] = "\ncustomer {$name}: \"{$dataForm['customer'][$name]}\" instead of \"{$value}\"";
+            } else {
+                $result[] = "\ncustomer {$name}: Field is absent. Expected value \"{$value}\"";
             }
-            $result[] = "\ncustomer {$name}: \"{$dataForm['customer'][$name]}\" instead of \"{$value}\"";
         }
         foreach ($dataFixture['addresses'] as $key => $address) {
             $addressDiff = array_diff($address, $dataForm['addresses'][$key]);
             foreach ($addressDiff as $name => $value) {
-                $result[] = "\naddress #{$key} {$name}: \"{$dataForm['addresses'][$key][$name]}"
-                . "\" instead of \"{$value}\"";
+                if (isset($dataForm['addresses'][$key][$name])) {
+                    $result[] = "\naddress #{$key} {$name}: \"{$dataForm['addresses'][$key][$name]}"
+                        . "\" instead of \"{$value}\"";
+                } else {
+                    $result[] = "\naddress #{$key} {$name}: Field absent. Expected value \"{$value}\"";
+                }
+
             }
         }
 
