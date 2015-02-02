@@ -27,8 +27,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     protected $contextMock;
 
-    /** \PHPUnit_Framework_MockObject_MockObject|Magento\Framework\App\Response\Http */
-    protected  $headerManager;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Response\Http
+     */
+    protected $headerManager;
 
     protected function setUp()
     {

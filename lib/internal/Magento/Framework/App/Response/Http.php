@@ -356,7 +356,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
     /**
      * Register an exception with the response
      *
-     * @param $e
+     * @param \Exception $e
      * @return $this
      */
     public function setException($e)
@@ -509,7 +509,7 @@ class Http extends \Zend\Http\PhpEnvironment\Response implements HttpInterface
      */
     public function __sleep()
     {
-        return ['content', 'isRedirect', 'exceptions', 'statusCode', 'context'];
+        return ['content', 'isRedirect', 'exceptions', 'statusCode', 'context', 'headerManager'];
     }
 
     /**
