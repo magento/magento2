@@ -147,9 +147,9 @@ $table = $installer->getConnection()->newTable(
     ['unsigned' => true, 'nullable' => false, 'default' => '0'],
     'Sort order'
 )->addForeignKey(
-    $installer->getFkName('widget_instance', 'theme_id', 'core_theme', 'theme_id'),
+    $installer->getFkName('widget_instance', 'theme_id', 'theme', 'theme_id'),
     'theme_id',
-    $installer->getTable('core_theme'),
+    $installer->getTable('theme'),
     'theme_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE

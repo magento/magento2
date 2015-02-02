@@ -21,7 +21,7 @@ class Countryofmanufacture extends \Magento\Eav\Model\Entity\Attribute\Source\Ab
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -36,12 +36,12 @@ class Countryofmanufacture extends \Magento\Eav\Model\Entity\Attribute\Source\Ab
      * Construct
      *
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      */
     public function __construct(
         \Magento\Directory\Model\CountryFactory $countryFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Cache\Type\Config $configCacheType
     ) {
         $this->_countryFactory = $countryFactory;

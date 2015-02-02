@@ -12,7 +12,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 class LinkTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -33,7 +33,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->urlFinder = $this->getMock('Magento\UrlRewrite\Model\UrlFinderInterface');
 
         $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);

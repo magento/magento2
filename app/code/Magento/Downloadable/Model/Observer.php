@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Model;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Downloadable Products Observer
@@ -158,7 +158,7 @@ class Observer
                     ->_scopeConfig
                     ->getValue(
                         \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
-                        ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     );
                 $linkPurchased->setLinkSectionTitle($linkSectionTitle)->save();
                 foreach ($linkIds as $linkId) {
@@ -258,7 +258,7 @@ class Observer
         $downloadableItemsStatuses = [];
         $orderItemStatusToEnable = $this->_scopeConfig->getValue(
             \Magento\Downloadable\Model\Link\Purchased\Item::XML_PATH_ORDER_ITEM_STATUS,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $order->getStoreId()
         );
 
@@ -351,7 +351,7 @@ class Observer
 
         if (!$this->_scopeConfig->isSetFlag(
             self::XML_PATH_DISABLE_GUEST_CHECKOUT,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         )) {
             return $this;

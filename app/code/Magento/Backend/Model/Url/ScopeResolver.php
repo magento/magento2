@@ -5,6 +5,6 @@
  */
 namespace Magento\Backend\Model\Url;
 
-class ScopeResolver extends \Magento\Core\Model\Url\ScopeResolver
+class ScopeResolver extends \Magento\Framework\Url\ScopeResolver
 {
 }
