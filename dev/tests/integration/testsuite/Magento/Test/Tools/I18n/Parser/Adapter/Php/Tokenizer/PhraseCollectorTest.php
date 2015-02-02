@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer;
+namespace Magento\Test\Tools\I18n\Parser\Adapter\Php\Tokenizer;
 
 use Magento\Framework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
