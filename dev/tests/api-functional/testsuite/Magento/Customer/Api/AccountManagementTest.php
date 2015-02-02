@@ -621,6 +621,7 @@ class AccountManagementTest extends WebapiAbstract
         $addresses = $customerData->getAddresses();
         $addresses[0]->setCustomAttribute($fixtureAddressAttributeCode, $address1CustomAttributeValue);
         $addresses[1]->setCustomAttribute($fixtureAddressAttributeCode, $address2CustomAttributeValue);
+        $customerData->setAddresses($addresses);
         $customerData->setCustomAttribute($fixtureCustomerAttributeCode, $customerCustomAttributeValue);
         $serviceInfo = [
             'rest' => [

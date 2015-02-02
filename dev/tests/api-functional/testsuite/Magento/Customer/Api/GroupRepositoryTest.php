@@ -33,11 +33,6 @@ class GroupRepositoryTest extends WebapiAbstract
     private $groupRepository;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
-     */
-    private $dataObjectHelper;
-
-    /**
      * @var \Magento\Customer\Api\Data\groupInterfaceFactory
      */
     private $customerGroupFactory;
@@ -50,8 +45,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $objectManager = Bootstrap::getObjectManager();
         $this->groupRegistry = $objectManager->get('Magento\Customer\Model\GroupRegistry');
         $this->groupRepository = $objectManager->get('Magento\Customer\Model\Resource\GroupRepository');
-        $this->dataObjectHelper = $objectManager->create('Magento\Framework\Api\DataObjectHelper');
-        $this->customerGroupFactory = $objectManager->create('Magento\Customer\Api\Data\groupInterfaceFactory');
+        $this->customerGroupFactory = $objectManager->create('Magento\Customer\Api\Data\GroupInterfaceFactory');
     }
 
     /**
@@ -182,11 +176,9 @@ class GroupRepositoryTest extends WebapiAbstract
         $duplicateGroupCode = 'Duplicate Group Code REST';
 
         $group = $this->customerGroupFactory->create();
-        $this->dataObjectHelper->populateWithArray($group, [
-            CustomerGroup::ID => null,
-            CustomerGroup::CODE => $duplicateGroupCode,
-            CustomerGroup::TAX_CLASS_ID => 3,
-        ]);
+        $group->setId(null);
+        $group->setCode($duplicateGroupCode);
+        $group->setTaxClassId(3);
         $this->createGroup($group);
 
         $serviceInfo = [
@@ -396,11 +388,9 @@ class GroupRepositoryTest extends WebapiAbstract
     {
         $this->_markTestAsRestOnly();
         $group = $this->customerGroupFactory->create();
-        $this->dataObjectHelper->populateWithArray($group, [
-            CustomerGroup::ID => null,
-            CustomerGroup::CODE => 'New Group REST',
-            CustomerGroup::TAX_CLASS_ID => 3,
-        ]);
+        $group->setId(null);
+        $group->setCode('New Group REST');
+        $group->setTaxClassId(3);
         $groupId = $this->createGroup($group);
 
         $serviceInfo = [
@@ -509,11 +499,9 @@ class GroupRepositoryTest extends WebapiAbstract
         $group = $this->customerGroupFactory->create();
         $duplicateGroupCode = 'Duplicate Group Code SOAP';
 
-        $this->dataObjectHelper->populateWithArray($group, [
-            CustomerGroup::ID => null,
-            CustomerGroup::CODE => $duplicateGroupCode,
-            CustomerGroup::TAX_CLASS_ID => 3,
-        ]);
+        $group->setId(null);
+        $group->setCode($duplicateGroupCode);
+        $group->setTaxClassId(3);
         $this->createGroup($group);
 
         $serviceInfo = [
@@ -661,11 +649,9 @@ class GroupRepositoryTest extends WebapiAbstract
     {
         $this->_markTestAsSoapOnly();
         $group = $this->customerGroupFactory->create();
-        $this->dataObjectHelper->populateWithArray($group, [
-            CustomerGroup::ID => null,
-            CustomerGroup::CODE => 'New Group SOAP',
-            CustomerGroup::TAX_CLASS_ID => 3,
-        ]);
+        $group->setId(null);
+        $group->setCode('New Group SOAP');
+        $group->setTaxClassId(3);
         $groupId = $this->createGroup($group);
 
         $serviceInfo = [
@@ -735,11 +721,9 @@ class GroupRepositoryTest extends WebapiAbstract
     public function testDeleteGroupExists()
     {
         $group = $this->customerGroupFactory->create();
-        $this->dataObjectHelper->populateWithArray($group, [
-            CustomerGroup::ID => null,
-            CustomerGroup::CODE => 'Delete Group',
-            CustomerGroup::TAX_CLASS_ID => 3,
-        ]);
+        $group->setId(null);
+        $group->setCode('Delete Group');
+        $group->setTaxClassId(3);
         $groupId = $this->createGroup($group);
 
         $serviceInfo = [
