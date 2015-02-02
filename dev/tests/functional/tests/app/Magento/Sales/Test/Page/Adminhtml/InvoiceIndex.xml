@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="InvoiceIndex" area="Adminhtml" mca="sales/invoice" module="Magento_Sales">
     <block name="invoicesGrid" class="Magento\Sales\Test\Block\Adminhtml\Invoice\Grid" locator="#sales_invoice_grid" strategy="css selector"/>
     <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>

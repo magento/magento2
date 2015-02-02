@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="TaxRateIndex" area="Adminhtml" mca="tax/rate/index" module="Magento_Tax">
     <block name="gridPageActions" class="Magento\Tax\Test\Block\Adminhtml\Rate\GridPageActions" locator=".page-main-actions" strategy="css selector"/>
     <block name="taxRateGrid" class="Magento\Tax\Test\Block\Adminhtml\Rate\Grid" locator="#tax_rate_grid" strategy="css selector"/>

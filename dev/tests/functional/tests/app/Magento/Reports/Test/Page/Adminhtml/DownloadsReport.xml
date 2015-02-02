@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="DownloadsReport" area="Adminhtml" mca="reports/report_product/downloads" module="Magento_Reports">
     <block name="gridBlock" class="Magento\Reports\Test\Block\Adminhtml\Product\Downloads\Grid" locator="#downloadsGrid" strategy="css selector"/>
   </page>

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="CatalogSearchEdit" area="Adminhtml" mca="search/term/edit" module="Magento_CatalogSearch">
     <block name="form" class="Magento\CatalogSearch\Test\Block\Adminhtml\Edit\SearchTermForm" locator="#edit_form" strategy="css selector"/>
     <block name="formPageActions" class="Magento\Backend\Test\Block\FormPageActions" locator=".page-main-actions" strategy="css selector"/>

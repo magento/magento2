@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="AdvancedSearch" mca="catalogsearch/advanced" module="Magento_CatalogSearch">
     <block name="form" class="Magento\CatalogSearch\Test\Block\Advanced\Form" locator=".form.search.advanced" strategy="css selector"/>
     <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".widget" strategy="css selector"/>

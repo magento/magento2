@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="CheckoutOnepageSuccess" mca="checkout/onepage/success">
     <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator="[data-ui-id='page-title']" strategy="css selector"/>
   </page>

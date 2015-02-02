@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="CatalogRuleNew" area="Adminhtml" mca="catalog_rule/promo_catalog/new" module="Magento_CatalogRule">
     <block name="formPageActions" class="Magento\CatalogRule\Test\Block\Adminhtml\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
     <block name="editForm" class="Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\PromoForm" locator="[id='page:main-container']" strategy="css selector"/>

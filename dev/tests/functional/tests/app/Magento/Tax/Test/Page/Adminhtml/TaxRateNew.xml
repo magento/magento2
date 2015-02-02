@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="TaxRateNew" area="Adminhtml" mca="tax/rate/add" module="Magento_Tax">
     <block name="formPageActions" class="Magento\Tax\Test\Block\Adminhtml\Rate\Edit\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
     <block name="taxRateForm" class="Magento\Tax\Test\Block\Adminhtml\Rate\Edit\Form" locator="#rate-form" strategy="css selector"/>

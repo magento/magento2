@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="SalesTaxReport" area="Adminhtml" mca="reports/report_sales/tax" module="Magento_Reports">
     <block name="filterBlock" class="Magento\Reports\Test\Block\Adminhtml\Sales\TaxRule\Filter" locator="#filter_form" strategy="css selector"/>
     <block name="actionBlock" class="Magento\Reports\Test\Block\Adminhtml\Sales\TaxRule\Action" locator=".page-main-actions" strategy="css selector"/>

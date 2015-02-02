@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="UrlRewriteIndex" area="Adminhtml" mca="admin/url_rewrite/index" module="Magento_UrlRewrite">
     <block name="pageActionsBlock" class="Magento\Backend\Test\Block\GridPageActions" locator=".page-main-actions" strategy="css selector"/>
     <block name="urlRedirectGrid" class="Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category\Grid" locator="#urlrewriteGrid" strategy="css selector"/>

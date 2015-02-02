@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="TemplateEdit" area="Adminhtml" mca="newsletter/template/edit" module="Magento_Newsletter">
     <block name="formPageActions" class="Magento\Newsletter\Test\Block\Adminhtml\Template\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
     <block name="editForm" class="Magento\Backend\Test\Block\Widget\Form" locator="[id='page:main-container']" strategy="css selector"/>

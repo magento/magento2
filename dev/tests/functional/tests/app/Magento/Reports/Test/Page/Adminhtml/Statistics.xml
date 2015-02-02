@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="Statistics" area="Adminhtml" mca="reports/report_statistics" module="Magento_Reports">
         <block name="gridBlock" class="Magento\Reports\Test\Block\Adminhtml\Refresh\Statistics\Grid" locator="#gridRefreshStatistics" strategy="css selector"/>
     </page>

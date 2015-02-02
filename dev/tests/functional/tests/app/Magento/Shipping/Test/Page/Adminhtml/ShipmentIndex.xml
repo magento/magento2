@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="ShipmentIndex" area="Adminhtml" mca="sales/shipment" module="Magento_Shipping">
     <block name="shipmentsGrid" class="Magento\Shipping\Test\Block\Adminhtml\Shipment\Grid" locator="[data-grid-id='sales_shipment_grid']" strategy="css selector"/>
     <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>

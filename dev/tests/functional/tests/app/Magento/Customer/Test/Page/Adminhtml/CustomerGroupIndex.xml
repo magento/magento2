@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="CustomerGroupIndex" area="Adminhtml" mca="customer/group/index" module="Magento_Customer">
     <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
     <block name="gridPageActions" class="Magento\Backend\Test\Block\GridPageActions" locator=".page-main-actions" strategy="css selector"/>

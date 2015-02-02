@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="OrderShipmentNew" area="Adminhtml" mca="admin/order_shipment/new" module="Magento_Shipping">
     <block name="shipItemsBlock" class="Magento\Shipping\Test\Block\Adminhtml\Create\Items" locator="#ship_items_container" strategy="css selector"/>
     <block name="formBlock" class="Magento\Shipping\Test\Block\Adminhtml\Form" locator="#edit_form" strategy="css selector"/>

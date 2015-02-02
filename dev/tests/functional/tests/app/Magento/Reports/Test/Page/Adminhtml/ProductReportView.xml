@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="ProductReportView" area="Adminhtml" mca="reports/report_product/viewed/" module="Magento_Reports">
     <block name="actionsBlock" class="Magento\Reports\Test\Block\Adminhtml\Viewed\Action" locator=".page-main-actions" strategy="css selector"/>
     <block name="gridBlock" class="Magento\Reports\Test\Block\Adminhtml\Review\Products\Viewed\ProductGrid" locator=".grid" strategy="css selector"/>

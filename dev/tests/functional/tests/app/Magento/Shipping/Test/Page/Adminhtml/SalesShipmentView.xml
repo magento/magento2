@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="SalesShipmentView" area="Adminhtml" mca="sales/shipment/view" module="Magento_Shipping">
     <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title" strategy="css selector"/>
     <block name="itemsBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Shipment\View\Items" locator=".grid" strategy="css selector"/>

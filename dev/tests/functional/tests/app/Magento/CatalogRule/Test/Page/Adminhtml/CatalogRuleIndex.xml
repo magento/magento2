@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="CatalogRuleIndex" area="Adminhtml" mca="catalog_rule/promo_catalog/index" module="Magento_CatalogRule">
     <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
     <block name="gridPageActions" class="Magento\CatalogRule\Test\Block\Adminhtml\Promo\GridPageActions" locator=".page-main-actions" strategy="css selector"/>

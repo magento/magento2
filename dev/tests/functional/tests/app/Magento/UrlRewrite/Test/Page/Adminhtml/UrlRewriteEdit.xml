@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="UrlRewriteEdit" area="Adminhtml" mca="admin/url_rewrite/edit" module="Magento_UrlRewrite">
     <block name="treeBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category\Tree" locator="[id='page:main-container']" strategy="css selector"/>
     <block name="formBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\UrlRewriteForm" locator="[id='page:main-container']" strategy="css selector"/>

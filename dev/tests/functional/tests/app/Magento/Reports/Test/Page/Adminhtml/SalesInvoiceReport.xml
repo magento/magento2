@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/pages.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="SalesInvoiceReport" area="Adminhtml" mca="reports/report_sales/invoiced" module="Magento_Reports">
     <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
     <block name="filterForm" class="Magento\Sales\Test\Block\Adminhtml\Report\Filter\Form" locator="#filter_form" strategy="css selector"/>
