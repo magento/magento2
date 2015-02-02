@@ -16,7 +16,7 @@ class DefaultNoRoute extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
+        $this->getResponse()->setStatusHeader(404, '1.1', 'Not Found');
         $this->getResponse()->setHeader('Status', '404 File not found');
 
         $this->_view->loadLayout();
