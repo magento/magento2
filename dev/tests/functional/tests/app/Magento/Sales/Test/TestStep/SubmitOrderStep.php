@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\TestStep;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Address;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderView;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -44,16 +44,16 @@ class SubmitOrderStep implements TestStepInterface
      * @param OrderCreateIndex $orderCreateIndex
      * @param OrderView $orderView
      * @param FixtureFactory $fixtureFactory
-     * @param CustomerInjectable $customer
-     * @param AddressInjectable $billingAddress
+     * @param Customer $customer
+     * @param Address $billingAddress
      * @param \Magento\Mtf\Fixture\FixtureInterface[] $products
      */
     public function __construct(
         OrderCreateIndex $orderCreateIndex,
         OrderView $orderView,
         FixtureFactory $fixtureFactory,
-        CustomerInjectable $customer,
-        AddressInjectable $billingAddress,
+        Customer $customer,
+        Address $billingAddress,
         array $products
     ) {
         $this->orderCreateIndex = $orderCreateIndex;

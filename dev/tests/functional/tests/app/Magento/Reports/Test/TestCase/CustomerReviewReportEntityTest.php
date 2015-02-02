@@ -10,7 +10,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Reports\Test\Page\Adminhtml\ProductReportReview;
@@ -96,7 +96,7 @@ class CustomerReviewReportEntityTest extends Injectable
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $customer = $fixtureFactory->createByCode('customerInjectable', ['dataSet' => 'johndoe_unique']);
+        $customer = $fixtureFactory->createByCode('customer', ['dataSet' => 'johndoe_unique']);
         $customer->persist();
 
         return ['customer' => $customer];
@@ -133,7 +133,7 @@ class CustomerReviewReportEntityTest extends Injectable
      * Test Creation for CustomerReviewReportEntity
      *
      * @param Review $review
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param $customerLogin
      * @param CatalogProductSimple $product
      * @param BrowserInterface $browser
@@ -143,7 +143,7 @@ class CustomerReviewReportEntityTest extends Injectable
      */
     public function test(
         Review $review,
-        CustomerInjectable $customer,
+        Customer $customer,
         CatalogProductSimple $product,
         BrowserInterface $browser,
         $customerLogin

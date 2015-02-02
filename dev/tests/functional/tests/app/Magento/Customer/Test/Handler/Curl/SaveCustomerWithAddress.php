@@ -92,7 +92,7 @@ class SaveCustomerWithAddress extends Curl
     public function persist(FixtureInterface $fixture = null)
     {
         /** @var \Magento\Customer\Test\Fixture\Customer $fixture */
-        $address = $fixture->getDefaultBillingAddress();
+        $address = $fixture->getDefaultBilling();
         $fields = $this->prepareData($address->getData('fields'));
         $url = $_ENV['app_frontend_url'] . $this->saveUrl;
         $curl = $this->saveCustomer($fixture);

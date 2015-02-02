@@ -60,7 +60,7 @@ class UpdateTaxRuleEntityTest extends Injectable
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $customer = $fixtureFactory->createByCode('customerInjectable', ['dataSet' => 'johndoe_retailer']);
+        $customer = $fixtureFactory->createByCode('customer', ['dataSet' => 'johndoe_retailer']);
         $customer->persist();
 
         return ['customer' => $customer];

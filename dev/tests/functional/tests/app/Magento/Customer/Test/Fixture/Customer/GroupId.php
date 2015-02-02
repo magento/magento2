@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Test\Fixture\CustomerInjectable;
+namespace Magento\Customer\Test\Fixture\Customer;
 
 use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
 use Magento\Mtf\Fixture\FixtureFactory;

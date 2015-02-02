@@ -7,14 +7,14 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
-         class="Magento\Customer\Test\Fixture\CustomerInjectable">
+         class="Magento\Customer\Test\Fixture\Customer">
     <module>Magento_Customer</module>
     <type>eav</type>
     <entity_type>customer</entity_type>
     <collection>Magento\Customer\Model\Resource\Customer\Collection</collection>
     <identifier>email</identifier>
-    <repository_class>Magento\Customer\Test\Repository\CustomerInjectable</repository_class>
-    <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
+    <repository_class>Magento\Customer\Test\Repository\Customer</repository_class>
+    <handler_interface>Magento\Customer\Test\Handler\Customer\CustomerInterface</handler_interface>
     <dataset name="default">
         <field name="firstname" xsi:type="string">John</field>
         <field name="lastname" xsi:type="string">Doe</field>
@@ -26,7 +26,8 @@
         <field name="address">
             <attribute_code>address</attribute_code>
             <backend_type>virtual</backend_type>
-            <source>Magento\Customer\Test\Fixture\CustomerInjectable\Address</source>
+            <source>Magento\Customer\Test\Fixture\Customer\Address</source>
+            <group>addresses</group>
         </field>
         <field name="confirmation">
             <attribute_code>confirmation</attribute_code>
@@ -116,7 +117,7 @@
             <default_value xsi:type="null" />
             <input>select</input>
             <group>account_information</group>
-            <source>Magento\Customer\Test\Fixture\CustomerInjectable\GroupId</source>
+            <source>Magento\Customer\Test\Fixture\Customer\GroupId</source>
         </field>
         <field name="lastname">
             <attribute_code>lastname</attribute_code>

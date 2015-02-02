@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\TestStep;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 
@@ -25,16 +25,16 @@ class FillBillingAddressStep implements TestStepInterface
     /**
      * Address.
      *
-     * @var AddressInjectable
+     * @var Address
      */
     protected $billingAddress;
 
     /**
      * @constructor
      * @param OrderCreateIndex $orderCreateIndex
-     * @param AddressInjectable $billingAddress
+     * @param Address $billingAddress
      */
-    public function __construct(OrderCreateIndex $orderCreateIndex, AddressInjectable $billingAddress)
+    public function __construct(OrderCreateIndex $orderCreateIndex, Address $billingAddress)
     {
         $this->orderCreateIndex = $orderCreateIndex;
         $this->billingAddress = $billingAddress;
@@ -43,7 +43,7 @@ class FillBillingAddressStep implements TestStepInterface
     /**
      * Fill Sales Data.
      *
-     * @return AddressInjectable
+     * @return Address
      */
     public function run()
     {

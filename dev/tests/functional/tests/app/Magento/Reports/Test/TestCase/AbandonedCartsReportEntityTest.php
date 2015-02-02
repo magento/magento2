@@ -9,7 +9,7 @@ namespace Magento\Reports\Test\TestCase;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Client\BrowserInterface;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
@@ -81,10 +81,10 @@ class AbandonedCartsReportEntityTest extends Injectable
      * Create product and add it to cart.
      *
      * @param string $products
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
-    public function test($products, CustomerInjectable $customer)
+    public function test($products, Customer $customer)
     {
         $this->markTestIncomplete('Bug: MAGETWO-31737');
         // Precondition

@@ -7,7 +7,7 @@
 namespace Magento\Wishlist\Test\TestCase;
 
 use Magento\Checkout\Test\Fixture\Cart;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Test Flow:
@@ -36,12 +36,12 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
     /**
      * Run suggest searching result test
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param string $products
      * @param int $qty
      * @return array
      */
-    public function test(CustomerInjectable $customer, $products, $qty)
+    public function test(Customer $customer, $products, $qty)
     {
         // Preconditions
         $customer->persist();

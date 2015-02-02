@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Test Flow:
@@ -37,10 +37,10 @@ class ConfigureProductInCustomerWishlistOnFrontendTest extends AbstractWishlistT
     /**
      * Prepare data
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
-    public function __prepare(CustomerInjectable $customer)
+    public function __prepare(Customer $customer)
     {
         $customer->persist();
 
@@ -50,11 +50,11 @@ class ConfigureProductInCustomerWishlistOnFrontendTest extends AbstractWishlistT
     /**
      * Configure customer wish list on frontend
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param string $product
      * @return array
      */
-    public function test(CustomerInjectable $customer, $product)
+    public function test(Customer $customer, $product)
     {
         $this->markTestIncomplete('Bug: MAGETWO-32815');
         // Preconditions
