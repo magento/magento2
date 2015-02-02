@@ -76,13 +76,13 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
         /** Init SUP. */
         $this->_responseRest = new \Magento\Webapi\Controller\Rest\Response(
-            $rendererFactoryMock,
-            $this->_errorProcessorMock,
-            $this->_appStateMock,
             $cookieManager,
             $cookieMetadataFactory,
             $context,
-            $headerManager
+            $headerManager,
+            $rendererFactoryMock,
+            $this->_errorProcessorMock,
+            $this->_appStateMock
         );
         $this->_responseRest->headersSentThrowsException = false;
     }

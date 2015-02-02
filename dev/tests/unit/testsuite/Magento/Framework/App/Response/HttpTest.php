@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\App\Response;
 
-use Magento\Framework\Stdlib\Cookie\CookieMetadata;
-
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -29,6 +27,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     protected $contextMock;
 
+    /** \PHPUnit_Framework_MockObject_MockObject|Magento\Framework\App\Response\Http */
+    protected  $headerManager;
+
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -38,14 +39,14 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')->disableOriginalConstructor()
             ->getMock();
-        $headerManager = new \Magento\Framework\App\Response\Headers();
+        $this->headerManager = new \Magento\Framework\App\Response\Headers();
         $this->model = $objectManager->getObject(
             'Magento\Framework\App\Response\Http',
             [
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
                 'context' => $this->contextMock,
-                'headerManager' => $headerManager
+                'headerManager' => $this->headerManager
             ]
         );
         $this->model->headersSentThrowsException = false;
@@ -350,10 +351,14 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Framework\Stdlib\CookieManagerInterface')
             ->will($this->returnValue($this->cookieManagerMock));
-        $objectManagerMock->expects($this->once())
+        $objectManagerMock->expects($this->at(1))
             ->method('get')
             ->with('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory')
             ->will($this->returnValue($this->cookieMetadataFactoryMock));
+        $objectManagerMock->expects($this->at(2))
+            ->method('get')
+            ->with('Magento\Framework\App\Response\Headers')
+            ->will($this->returnValue($this->headerManager));
 
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
         $this->model->__wakeup();
