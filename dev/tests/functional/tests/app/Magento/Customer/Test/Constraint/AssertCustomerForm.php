@@ -91,6 +91,7 @@ class AssertCustomerForm extends AbstractConstraint
         $result = [];
 
         $customerDiff = array_diff_assoc($dataFixture['customer'], $dataForm['customer']);
+        var_dump($dataFixture, $dataForm);
         foreach ($customerDiff as $name => $value) {
             if (in_array($name, $this->customerSkippedFields)) {
                 continue;
