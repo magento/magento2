@@ -71,14 +71,20 @@ class ConflictChecker
     private function checkIfConflict($moduleA, $moduleB)
     {
         $versionParser = new VersionParser();
-        if (isset($this->packageInfo->getConflict($moduleB)[$moduleA]) && $this->packageInfo->getVersion($moduleA)) {
+        if (isset($this->packageInfo->getConflict($moduleB)[$moduleA]) &&
+            $this->packageInfo->getConflict($moduleB)[$moduleA] &&
+            $this->packageInfo->getVersion($moduleA)
+        ) {
             $constraintA = $versionParser->parseConstraints($this->packageInfo->getConflict($moduleB)[$moduleA]);
             $constraintB = $versionParser->parseConstraints($this->packageInfo->getVersion($moduleA));
             if ($constraintA->matches($constraintB)) {
                 return true;
             }
         }
-        if (isset($this->packageInfo->getConflict($moduleA)[$moduleB]) && $this->packageInfo->getVersion($moduleB)) {
+        if (isset($this->packageInfo->getConflict($moduleA)[$moduleB]) &&
+            $this->packageInfo->getConflict($moduleA)[$moduleB] &&
+            $this->packageInfo->getVersion($moduleB)
+        ) {
             $constraintA = $versionParser->parseConstraints($this->packageInfo->getConflict($moduleA)[$moduleB]);
             $constraintB = $versionParser->parseConstraints($this->packageInfo->getVersion($moduleB));
             if ($constraintA->matches($constraintB)) {
