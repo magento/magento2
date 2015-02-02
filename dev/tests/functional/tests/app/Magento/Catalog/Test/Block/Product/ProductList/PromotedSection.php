@@ -6,15 +6,39 @@
 
 namespace Magento\Catalog\Test\Block\Product\ProductList;
 
-use Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem;
+use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Related products section on the page.
+ * Base promoted products block.
  */
-class Related extends PromotedSection
+class PromotedSection extends Block
 {
+    /**
+     * Product item block.
+     *
+     * @var string
+     */
+    protected $productItem = 'li.product-item';
+
+    /**
+     * Product item block by product name.
+     *
+     * @var string
+     */
+    protected $productItemByName = './/*[contains(@class,"product-item-link") and @title="%s"]/ancestor::li';
+
+    /**
+     * Check whether block is visible.
+     *
+     * @return bool
+     */
+    public function isVisible()
+    {
+        return $this->_rootElement->isVisible();
+    }
+
     /**
      * Return product item block.
      *
@@ -26,7 +50,7 @@ class Related extends PromotedSection
         $locator = sprintf($this->productItemByName, $product->getName());
 
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem',
+            'Magento\Catalog\Test\Block\Product\ProductList\ProductItem',
             ['element' => $this->_rootElement->find($locator, Locator::SELECTOR_XPATH)]
         );
     }
@@ -43,7 +67,7 @@ class Related extends PromotedSection
 
         foreach ($elements as $element) {
             $result[] = $this->blockFactory->create(
-                'Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem',
+                'Magento\Catalog\Test\Block\Product\ProductList\ProductItem',
                 ['element' => $element]
             );
         }

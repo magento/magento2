@@ -13,41 +13,46 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class AssertNoUpSellsProductsSection
- * Assert that product is not displayed in up-sell section
+ * Assert that product is not displayed in up-sell section.
  */
-class AssertNoUpSellsProductsSection extends AbstractConstraint
+class AssertProductAbsentUpSells extends AbstractConstraint
 {
     /* tags */
     const SEVERITY = 'middle';
     /* end tags */
 
     /**
-     * Assert that product is not displayed in up-sell section
+     * Assert that product is not displayed in up-sell section.
      *
      * @param BrowserInterface $browser
      * @param CatalogProductSimple $product
-     * @param InjectableFixture[] $relatedProducts
      * @param CatalogProductView $catalogProductView
+     * @param InjectableFixture[]|null $promotedProducts
      * @return void
      */
     public function processAssert(
         BrowserInterface $browser,
         CatalogProductSimple $product,
-        array $relatedProducts,
-        CatalogProductView $catalogProductView
+        CatalogProductView $catalogProductView,
+        array $promotedProducts = null
     ) {
+        if (!$promotedProducts) {
+            $promotedProducts = $product->hasData('up_sell_products')
+                ? $product->getDataFieldConfig('up_sell_products')['source']->getProducts()
+                : [];
+        }
+
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        foreach ($relatedProducts as $relatedProduct) {
+        foreach ($promotedProducts as $promotedProduct) {
             \PHPUnit_Framework_Assert::assertFalse(
-                $catalogProductView->getUpsellBlock()->isUpsellProductVisible($relatedProduct->getName()),
-                'Product \'' . $relatedProduct->getName() . '\' is exist in up-sells products.'
+                $catalogProductView->getUpsellBlock()->getProductItem($promotedProduct)->isVisible(),
+                'Product \'' . $promotedProduct->getName() . '\' is exist in up-sells products.'
             );
         }
     }
 
     /**
-     * Text success product is not displayed in up-sell section
+     * Text success product is not displayed in up-sell section.
      *
      * @return string
      */

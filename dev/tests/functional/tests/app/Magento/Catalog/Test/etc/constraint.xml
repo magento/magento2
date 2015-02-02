@@ -213,7 +213,7 @@
     <assertProductAttributeIsGlobal module="Magento_Catalog">
         <severity>low</severity>
     </assertProductAttributeIsGlobal>
-    <assertCrossSellsProductsSection module="Magento_Catalog">
+    <assertProductCrossSells module="Magento_Catalog">
         <severity>middle</severity>
         <require>
             <product1 class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
@@ -223,14 +223,14 @@
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
             <checkoutCart class="Magento\Checkout\Test\Page\CheckoutCart" />
         </require>
-    </assertCrossSellsProductsSection>
+    </assertProductCrossSells>
     <assertProductAttributeSuccessDeleteMessage module="Magento_Catalog">
         <severity>high</severity>
     </assertProductAttributeSuccessDeleteMessage>
-    <assertNoCrossSellsProductsSection module="Magento_Catalog">
+    <assertProductAbsentCrossSells module="Magento_Catalog">
         <severity>middle</severity>
-    </assertNoCrossSellsProductsSection>
-    <assertRelatedProductsSection module="Magento_Catalog">
+    </assertProductAbsentCrossSells>
+    <assertProductRelatedProducts module="Magento_Catalog">
         <severity>middle</severity>
         <require>
             <product1 class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
@@ -239,14 +239,14 @@
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
         </require>
-    </assertRelatedProductsSection>
+    </assertProductRelatedProducts>
     <assertProductAttributeAbsenceInGrid module="Magento_Catalog">
         <severity>high</severity>
     </assertProductAttributeAbsenceInGrid>
-    <assertNoRelatedProductsSection module="Magento_Catalog">
+    <assertProductAbsentRelatedProducts module="Magento_Catalog">
         <severity>middle</severity>
-    </assertNoRelatedProductsSection>
-    <assertUpSellsProductsSection module="Magento_Catalog">
+    </assertProductAbsentRelatedProducts>
+    <assertProductUpSells module="Magento_Catalog">
         <severity>middle</severity>
         <require>
             <product1 class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
@@ -255,13 +255,13 @@
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
         </require>
-    </assertUpSellsProductsSection>
+    </assertProductUpSells>
     <assertProductAttributeAbsenceInSearchOnProductForm module="Magento_Catalog">
         <severity>high</severity>
     </assertProductAttributeAbsenceInSearchOnProductForm>
-    <assertNoUpSellsProductsSection module="Magento_Catalog">
+    <assertProductAbsentUpSells module="Magento_Catalog">
         <severity>middle</severity>
-    </assertNoUpSellsProductsSection>
+    </assertProductAbsentUpSells>
     <assertCategorySaveMessage module="Magento_Catalog">
         <severity>low</severity>
     </assertCategorySaveMessage>

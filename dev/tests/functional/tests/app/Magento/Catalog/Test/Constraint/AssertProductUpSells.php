@@ -13,46 +13,51 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class AssertRelatedProductsSection
- * Assert that product is displayed in related products section
+ * Assert that product is displayed in up-sell section.
  */
-class AssertRelatedProductsSection extends AbstractConstraint
+class AssertProductUpSells extends AbstractConstraint
 {
     /* tags */
     const SEVERITY = 'middle';
     /* end tags */
 
     /**
-     * Assert that product is displayed in related products section
+     * Assert that product is displayed in up-sell section.
      *
      * @param BrowserInterface $browser
-     * @param CatalogProductSimple $product
-     * @param InjectableFixture[] $relatedProducts
      * @param CatalogProductView $catalogProductView
+     * @param CatalogProductSimple $product
+     * @param InjectableFixture[]|null $promotedProducts
      * @return void
      */
     public function processAssert(
         BrowserInterface $browser,
+        CatalogProductView $catalogProductView,
         CatalogProductSimple $product,
-        array $relatedProducts,
-        CatalogProductView $catalogProductView
+        array $promotedProducts = null
     ) {
+        if (!$promotedProducts) {
+            $promotedProducts = $product->hasData('up_sell_products')
+                ? $product->getDataFieldConfig('up_sell_products')['source']->getProducts()
+                : [];
+        }
+
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        foreach ($relatedProducts as $relatedProduct) {
+        foreach ($promotedProducts as $promotedProduct) {
             \PHPUnit_Framework_Assert::assertTrue(
-                $catalogProductView->getRelatedProductBlock()->isRelatedProductVisible($relatedProduct->getName()),
-                'Product \'' . $relatedProduct->getName() . '\' is absent in related products.'
+                $catalogProductView->getUpsellBlock()->getProductItem($promotedProduct)->isVisible(),
+                'Product \'' . $promotedProduct->getName() . '\' is absent in up-sells products.'
             );
         }
     }
 
     /**
-     * Text success product is displayed in related products section
+     * Text success product is displayed in up-sell section.
      *
      * @return string
      */
     public function toString()
     {
-        return 'Product is displayed in related products section.';
+        return 'Product is displayed in up-sell section.';
     }
 }
