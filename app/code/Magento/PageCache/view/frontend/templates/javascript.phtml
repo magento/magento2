@@ -4,18 +4,15 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var \Magento\PageCache\Block\Javascript $this */ ?>
+<?php /** @var \Magento\PageCache\Block\Javascript $block */ ?>
 <script>
 require([
-	"jquery",
-	"mage/mage"
-], function(jQuery){
+    'jquery',
+    'pageCache',
+    'domReady!'
+], function($){
+    'use strict';
 
-    //<![CDATA[
-    jQuery(function () {
-        jQuery('body').mage('pageCache', <?php echo $this->getScriptOptions(); ?>);
-    });
-    //]]>
-
+    $('body').pageCache(<?php echo $block->getScriptOptions(); ?>);
 });
 </script>

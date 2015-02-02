@@ -55,14 +55,14 @@ abstract class AbstractIntegrity extends \PHPUnit_Framework_TestCase
     /**
      * Returns flat array of themes currently located in system
      *
-     * @return \Magento\Core\Model\Theme[]
+     * @return \Magento\Theme\Model\Theme[]
      */
     protected function _getDesignThemes()
     {
         $themeItems = [];
-        /** @var $themeCollection \Magento\Core\Model\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Theme\Collection'
+            'Magento\Theme\Model\Resource\Theme\Collection'
         );
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         foreach ($themeCollection as $theme) {

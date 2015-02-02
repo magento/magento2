@@ -2,7 +2,7 @@
 namespace Magento\Framework\Code\GeneratorTest;
 
 /**
- * Factory class for Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
+ * Factory class for @see \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.

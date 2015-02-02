@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 class Improved implements AlgorithmInterface
 {

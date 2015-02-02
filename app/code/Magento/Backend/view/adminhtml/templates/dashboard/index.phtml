@@ -8,17 +8,19 @@
 
 ?>
 
-<?php if (is_array($this->getChildBlock('diagrams')->getTabsIds())) : ?>
+<?php if (is_array($block->getChildBlock('diagrams')->getTabsIds())) : ?>
 <script>
-function changeDiagramsPeriod(periodObj) {
+require(['prototype'], function(){
+
+window.changeDiagramsPeriod = function(periodObj) {
     periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
-<?php foreach ($this->getChildBlock('diagrams')->getTabsIds() as $tabId): ?>
+<?php foreach ($block->getChildBlock('diagrams')->getTabsIds() as $tabId): ?>
     ajaxBlockParam = 'block/tab_<?php echo $tabId ?>/';
-    ajaxBlockUrl = '<?php echo $this->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => '', 'period' => '']) ?>' + ajaxBlockParam + periodParam;
+    ajaxBlockUrl = '<?php echo $block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => '', 'period' => '']) ?>' + ajaxBlockParam + periodParam;
     new Ajax.Request(ajaxBlockUrl, {
         parameters: {isAjax: 'true', form_key: FORM_KEY},
         onSuccess: function(transport) {
-            tabContentElementId = '<?php echo $this->getChildBlock('diagrams')->getId() ?>_<?php echo $tabId ?>_content';
+            tabContentElementId = '<?php echo $block->getChildBlock('diagrams')->getId() ?>_<?php echo $tabId ?>_content';
             try {
                 if (transport.responseText.isJSON()) {
                     var response = transport.responseText.evalJSON()
@@ -38,7 +40,7 @@ function changeDiagramsPeriod(periodObj) {
         }
     });
 <?php endforeach; ?>
-    ajaxBlockUrl = '<?php echo $this->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => 'totals', 'period' => '']) ?>' + periodParam;
+    ajaxBlockUrl = '<?php echo $block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => 'totals', 'period' => '']) ?>' + periodParam;
     new Ajax.Request(ajaxBlockUrl, {
         parameters: {isAjax: 'true', form_key: FORM_KEY},
         onSuccess: function(transport) {
@@ -63,47 +65,44 @@ function changeDiagramsPeriod(periodObj) {
     });
 }
 
-function toggleCal(id) {
-    $('dashboard_'+id+'_cal_div').toggle();
-    $('dashboard_'+id+'_range_div').toggle();
-}
+});
 </script>
 <?php endif; ?>
  <div class="dashboard-container">
      <div class="dashboard-inner">
          <div class="dashboard-main">
             <div class="dashboard-diagram-container">
-                <?php echo $this->getChildHtml('diagrams') ?>
-                <?php if (is_array($this->getChildBlock('diagrams')->getTabsIds())) : ?>
+                <?php echo $block->getChildHtml('diagrams') ?>
+                <?php if (is_array($block->getChildBlock('diagrams')->getTabsIds())) : ?>
                     <div id="diagram_tab_content" class="dashboard-diagram-tab-content"></div>
                 <?php endif; ?>
             </div>
-            <?php echo $this->getChildHtml('totals') ?>
+            <?php echo $block->getChildHtml('totals') ?>
              <div class="dashboard-store-stats">
-                 <?php echo $this->getChildHtml('grids') ?>
+                 <?php echo $block->getChildHtml('grids') ?>
                  <div id="grid_tab_content" class="dashboard-store-stats-content"></div>
                  <?php echo $this->getChildHtml('refresh_statistics') ?>
              </div>
          </div>
          <div class="dashboard-secondary">
-            <?php echo $this->getChildHtml('sales') ?>
+            <?php echo $block->getChildHtml('sales') ?>
             <div class="dashboard-item">
                 <header class="dashboard-item-header">
                     <h3 class="title"><?php echo __('Last 5 Orders') ?></h3>
                 </header>
-                <?php echo $this->getChildHtml('lastOrders'); ?>
+                <?php echo $block->getChildHtml('lastOrders'); ?>
             </div>
             <div class="dashboard-item">
                 <header class="dashboard-item-header">
                     <h3 class="title"><?php echo __('Last 5 Search Terms') ?></h3>
                 </header>
-                <?php echo $this->getChildHtml('lastSearches'); ?>
+                <?php echo $block->getChildHtml('lastSearches'); ?>
             </div>
             <div class="dashboard-item">
                 <header class="dashboard-item-header">
                     <h3 class="title"><?php echo __('Top 5 Search Terms') ?></h3>
                 </header>
-                <?php echo $this->getChildHtml('topSearches'); ?>
+                <?php echo $block->getChildHtml('topSearches'); ?>
             </div>
          </div>
      </div>

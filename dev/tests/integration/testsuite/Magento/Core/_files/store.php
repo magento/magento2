@@ -8,10 +8,10 @@ $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Ma
 $storeCode = 'fixturestore';
 if (!$store->load($storeCode)->getId()) {
     $websiteId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+        'Magento\Framework\Store\StoreManagerInterface'
     )->getWebsite()->getId();
     $groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+        'Magento\Framework\Store\StoreManagerInterface'
     )->getWebsite()->getDefaultGroupId();
     $store->setCode(
         $storeCode
@@ -30,6 +30,6 @@ if (!$store->load($storeCode)->getId()) {
 
     /* Refresh stores memory cache */
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+        'Magento\Framework\Store\StoreManagerInterface'
     )->reinitStores();
 }

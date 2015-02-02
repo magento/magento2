@@ -17,15 +17,23 @@ abstract class Pdfinvoices extends \Magento\Backend\App\Action
     protected $_fileFactory;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
+        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
@@ -43,14 +51,10 @@ abstract class Pdfinvoices extends \Magento\Backend\App\Action
     {
         $invoicesIds = $this->getRequest()->getPost('invoice_ids');
         if (!empty($invoicesIds)) {
-            $invoices = $this->_objectManager->create(
-                'Magento\Sales\Model\Resource\Order\Invoice\Collection'
-            )->addAttributeToSelect(
-                '*'
-            )->addAttributeToFilter(
-                'entity_id',
-                ['in' => $invoicesIds]
-            )->load();
+            $invoices = $this->_objectManager->create('Magento\Sales\Model\Resource\Order\Invoice\Collection')
+                ->addAttributeToSelect('*')
+                ->addAttributeToFilter('entity_id', ['in' => $invoicesIds])
+                ->load();
             if (!isset($pdf)) {
                 $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Invoice')->getPdf($invoices);
             } else {
@@ -66,6 +70,6 @@ abstract class Pdfinvoices extends \Magento\Backend\App\Action
                 'application/pdf'
             );
         }
-        $this->_redirect('sales/*/');
+        return $this->resultRedirectFactory->create()->setPath('sales/*/');
     }
 }

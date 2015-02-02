@@ -7,6 +7,6 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php if ($this->getOrderHasDownloadable()): ?>
-    <?php echo __('Go to <a href="%1">My Downloadable Products</a>', $this->getDownloadableProductsUrl()) ?>
+<?php if ($block->getOrderHasDownloadable()): ?>
+    <?php echo __('Go to <a href="%1">My Downloadable Products</a>', $block->getDownloadableProductsUrl()) ?>
 <?php endif; ?>
