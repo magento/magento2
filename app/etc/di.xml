@@ -556,4 +556,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="CSSmin">
+        <arguments>
+            <argument name="raise_php_limits" xsi:type="boolean">false</argument>
+        </arguments>
+    </type>
 </config>
