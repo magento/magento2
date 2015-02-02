@@ -47,9 +47,7 @@ class ArgumentsReader
                     } elseif (true == is_int($value)) {
                         $default = $value;
                     } else {
-                        $default = is_null(
-                            $parameter->getDefaultValue()
-                        ) ? null : $parameter->getDefaultValue();
+                        $default = $parameter->getDefaultValue();
                     }
                 } elseif ($parameter->allowsNull()) {
                     $default = null;

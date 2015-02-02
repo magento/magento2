@@ -48,7 +48,7 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
                 'position' => 3,
                 'type' => null,
                 'isOptional' => true,
-                'default' => "Const Value",
+                'default' => 'Const Value',
             ],
             'optionalNumValue' => [
                 'name' => 'optionalNumValue',
@@ -62,7 +62,7 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
                 'position' => 5,
                 'type' => null,
                 'isOptional' => true,
-                'default' => "optional string",
+                'default' => 'optional string',
             ],
             'optionalArrayValue' => [
                 'name' => 'optionalArrayValue',
@@ -115,7 +115,7 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
                 'position' => 3,
                 'type' => null,
                 'isOptional' => true,
-                'default' => "Const Value",
+                'default' => 'Const Value',
             ],
             'optionalNumValue' => [
                 'name' => 'optionalNumValue',
@@ -129,7 +129,7 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
                 'position' => 5,
                 'type' => null,
                 'isOptional' => true,
-                'default' => "optional string",
+                'default' => 'optional string',
             ],
             'optionalArrayValue' => [
                 'name' => 'optionalArrayValue',
