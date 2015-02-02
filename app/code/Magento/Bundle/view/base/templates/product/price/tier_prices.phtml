@@ -9,14 +9,14 @@
 ?>
 
 <?php
-/** @var \Magento\Framework\Pricing\Render\PriceBox $this */
+/** @var \Magento\Framework\Pricing\Render\PriceBox $block */
 
 /** @var \Magento\Bundle\Pricing\Price\TierPrice $tierPriceModel */
-$tierPriceModel = $this->getPrice();
+$tierPriceModel = $block->getPrice();
 $tierPrices = $tierPriceModel->getTierPriceList();
 ?>
 <?php if (count($tierPrices)) : ?>
-    <ul class="<?php echo($this->hasListClass() ? $this->getListClass() : 'prices tier items'); ?>">
+    <ul class="<?php echo($block->hasListClass() ? $block->getListClass() : 'prices tier items'); ?>">
         <?php foreach ($tierPrices as $index => $price) : ?>
             <li class="item">
                 <?php echo __(

@@ -2903,6 +2903,7 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
     ['Magento\Core\Model\Validator\Factory', 'Magento\Framework\Validator\Factory'],
+    ['Magento\Sendfriend\Model\Observer'],
     [
         'Magento\Core\Model\TemplateEngine\Plugin\DebugHints',
         'Magento\Developer\Model\TemplateEngine\Plugin\DebugHints'

@@ -127,7 +127,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
         $this->validate($customer);
-        $customerData = $this->extensibleDataObjectConverter->toFlatArray(
+        $customerData = $this->extensibleDataObjectConverter->toNestedArray(
             $this->customerBuilder->populate($customer)->setAddresses([])->create(),
             [],
             '\Magento\Customer\Api\Data\CustomerInterface'

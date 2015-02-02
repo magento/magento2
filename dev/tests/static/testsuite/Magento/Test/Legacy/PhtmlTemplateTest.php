@@ -9,6 +9,27 @@ namespace Magento\Test\Legacy;
 
 class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
 {
+    public function testBlockVariableInsteadOfThis()
+    {
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker(
+        /**
+         * Test usage of methods and variables in template throught $this
+         *
+         * @param string $file
+         */
+            function ($file) {
+                $this->assertNotRegExp(
+                    '/this->(?!helper)\S*/iS',
+                    file_get_contents($file),
+                    'Access to members and methods of Block class throught $this is ' .
+                    'obsolete in phtml templates. Use only $block instead of $this.'
+                );
+            },
+            \Magento\Framework\Test\Utility\Files::init()->getPhtmlFiles()
+        );
+    }
+
     public function testObsoleteBlockMethods()
     {
         $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
@@ -26,7 +47,7 @@ class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
              */
             function ($file) {
                 $this->assertNotRegexp(
-                    '/this->_[^_]+\S*\(/iS',
+                    '/block->_[^_]+\S*\(/iS',
                     file_get_contents($file),
                     'Access to protected and private members of Block class is ' .
                     'obsolete in phtml templates. Use only public members.'

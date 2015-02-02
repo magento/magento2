@@ -110,6 +110,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $_catalogProduct;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Image\Cache|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imageCache;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Image\CacheFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imageCacheFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
@@ -221,6 +231,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->imageCache = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\Cache')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->imageCacheFactory = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\CacheFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
@@ -238,6 +256,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'categoryRepository' => $this->categoryRepository,
                 'catalogProduct' => $this->_catalogProduct,
+                'imageCacheFactory' => $this->imageCacheFactory,
                 'data' => ['id' => 1]
             ]
         );
@@ -508,6 +527,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
+        $this->imageCache->expects($this->once())
+            ->method('generate')
+            ->with($this->model);
+        $this->imageCacheFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->imageCache);
+
         $this->model->setIsDuplicate(false);
         $this->configureSaveTest();
         $this->optionInstanceMock->expects($this->any())->method('setProduct')->will($this->returnSelf());
@@ -521,6 +547,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAndDuplicate()
     {
+        $this->imageCache->expects($this->once())
+            ->method('generate')
+            ->with($this->model);
+        $this->imageCacheFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->imageCache);
+
         $this->model->setIsDuplicate(true);
         $this->configureSaveTest();
         $this->model->beforeSave();
