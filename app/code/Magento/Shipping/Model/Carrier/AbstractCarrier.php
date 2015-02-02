@@ -584,7 +584,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->_logger->debug($debugData);
+            $this->_logger->debug(var_export($debugData, true));
         }
     }
 
