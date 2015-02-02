@@ -184,7 +184,7 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
                 '_v_' => 'value_configured',
             ],
             'value_array_configured' => [
-                '_v_' => [
+                '_vac_' => [
                     'array_value' => 'value',
                     'array_configured_instance' => [
                         '_i_' => 'Type\Dependency\Shared\Configured',

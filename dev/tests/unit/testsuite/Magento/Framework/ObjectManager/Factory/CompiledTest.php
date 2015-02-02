@@ -201,7 +201,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                 '_v_' => 'value',
             ],
             'value_array' => [
-                '_v_' => [
+                '_vac_' => [
                     'array_value' => 'value',
                     'array_configured_instance' => [
                         '_i_' => 'Dependency\Shared\StdClass',

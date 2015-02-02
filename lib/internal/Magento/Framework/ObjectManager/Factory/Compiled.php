@@ -34,9 +34,9 @@ class Compiled extends AbstractFactory
                 $argument = $this->objectManager->create($argument['_ins_']);
             } elseif (isset($argument['_v_'])) {
                 $argument = $argument['_v_'];
-                if ($argument === (array)$argument) {
-                    $this->parseArray($argument);
-                }
+            } elseif (isset($argument['_vac_'])) {
+                $argument = $argument['_vac_'];
+                $this->parseArray($argument);
             } elseif (isset($argument['_vn_'])) {
                 $argument = null;
             } elseif (isset($argument['_a_'])) {

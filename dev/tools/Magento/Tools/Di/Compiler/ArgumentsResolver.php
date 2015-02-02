@@ -226,10 +226,40 @@ class ArgumentsResolver
 
         $argument = $this->valueArgumentPattern;
         if (is_array($value)) {
-            $value = $this->getConfiguredArrayAttribute($value);
+            if ($this->isConfiguredArray($value)) {
+                $value = $this->getConfiguredArrayAttribute($value);
+                $argument = ['_vac_' => $value];
+                return $argument;
+            }
         }
+
         $argument['_v_'] = $value;
         return $argument;
+    }
+
+    /**
+     * Whether array is configurable
+     *
+     * @param array $value
+     * @return bool
+     */
+    private function isConfiguredArray($value)
+    {
+        foreach ($value as $configuredValue) {
+            if (!is_array($configuredValue)) {
+                continue;
+            }
+
+            if (array_key_exists('instance', $configuredValue) || array_key_exists('argument', $configuredValue)) {
+                return true;
+            }
+
+            if ($this->isConfiguredArray($configuredValue)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
