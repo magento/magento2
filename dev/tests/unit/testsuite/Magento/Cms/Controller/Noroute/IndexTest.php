@@ -92,7 +92,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setHeader'
         )->with(
-            'HTTP/1.1', '404 Not Found'
+            'HTTP/1.1',
+            '404 Not Found'
         )->will(
             $this->returnSelf()
         );
@@ -101,7 +102,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setHeader'
         )->with(
-            'Status', '404 File not found'
+            'Status',
+            '404 File not found'
         )->will(
             $this->returnSelf()
         );
