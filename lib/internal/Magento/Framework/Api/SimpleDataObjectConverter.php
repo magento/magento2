@@ -84,20 +84,25 @@ class SimpleDataObjectConverter
      * @param bool $removeItemNode Remove Item node from arrays if true
      * @return array
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convertStdObjectToArray($input, $removeItemNode = false)
     {
         if (!is_object($input) && !is_array($input)) {
             throw new \InvalidArgumentException("Input argument must be an array or object");
         }
-        if ($removeItemNode && isset($input->item)) {
+        // @codingStandardsIgnoreStart
+        if ($removeItemNode && (isset($input->item) || isset($input->Map))) {
+            $node = isset($input->item) ? $input->item : $input->Map;
             /**
              * In case when only one Data object value is passed, it will not be wrapped into a subarray
-             * within item node. If several Data object values are passed, they will be wrapped into
-             * an indexed array within item node.
+             * within any additional node. If several Data object values are passed, they will be wrapped into
+             * an indexed array within item or Map node.
              */
-            $input = is_object($input->item) ? [$input->item] : $input->item;
+            $input = is_object($node) ? [$node] : $node;
         }
+        // @codingStandardsIgnoreEnd
         $result = [];
         foreach ((array)$input as $key => $value) {
             if (is_object($value) || is_array($value)) {

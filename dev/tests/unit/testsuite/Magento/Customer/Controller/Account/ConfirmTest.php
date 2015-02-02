@@ -10,7 +10,7 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Url;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
