@@ -116,16 +116,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $filterBuilderMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressDataBuilder | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $addressBuilderMock;
-
-    /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $customerBuilderMock;
-
-    /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $extensibleDataObjectConverterMock;
@@ -269,16 +259,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->addressBuilderMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressDataBuilder')
-            ->disableOriginalConstructor()
-            ->setMethods(['mergeDataObjectWithArray', 'create'])
-            ->getMock();
-
-        $this->customerBuilderMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerDataBuilder')
-            ->disableOriginalConstructor()
-            ->setMethods(['populate', 'setAddresses', 'create'])
-            ->getMock();
-
         $this->quote = (new ObjectManager($this))
             ->getObject(
                 'Magento\Quote\Model\Quote',
@@ -293,8 +273,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                     'addressRepository' => $this->addressRepositoryMock,
                     'criteriaBuilder' => $this->criteriaBuilderMock,
                     'filterBuilder' => $this->filterBuilderMock,
-                    'addressBuilder' => $this->addressBuilderMock,
-                    'customerBuilder' => $this->customerBuilderMock,
                     'quoteItemCollectionFactory' => $this->quoteItemCollectionFactoryMock,
                     'quotePaymentCollectionFactory' => $this->quotePaymentCollectionFactoryMock,
                     'quotePaymentFactory' => $this->paymentFactoryMock,
