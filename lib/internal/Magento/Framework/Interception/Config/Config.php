@@ -124,9 +124,9 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
             }
         }
         foreach ($config as $typeName => $typeConfig) {
-            $this->hasPlugins(ltrim($typeName, '\\'));
+            $this->hasPlugins($typeName);
         }
-        foreach ($classDefinitions as $class) {
+        foreach ($classDefinitions as $key => $class) {
             $this->hasPlugins($class);
         }
         $this->_cache->save(serialize($this->_intercepted), $this->_cacheId);
@@ -140,6 +140,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      */
     protected function _inheritInterception($type)
     {
+        $type = ltrim($type, '\\');
         if (!isset($this->_intercepted[$type])) {
             $realType = $this->_omConfig->getOriginalInstanceType($type);
             if ($type !== $realType) {
