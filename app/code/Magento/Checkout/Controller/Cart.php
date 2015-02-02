@@ -65,6 +65,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
     /**
      * Set back redirect url to response
      *
+     * @param null|string $backUrl
      * @return $this
      */
     protected function _goBack($backUrl = null)

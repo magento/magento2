@@ -333,7 +333,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             'action' => $url,
             'data' => [
                 'product' => $product->getEntityId(),
-                \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->_postDataHelper->getEncodedUrl($url),
+                \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED =>
+                    $this->_postDataHelper->getEncodedUrl($url),
             ]
         ];
     }

@@ -133,7 +133,6 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
         $url = 'http://localhost.com/dev/';
         $id = 1;
         $uenc = strtr(base64_encode($url), '+/=', '-_,');
-        $data = ['product' => $id, \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $uenc];
         $expectedPostData = [
             'action' => $url,
             'data' => ['product' => $id, 'uenc' => $uenc],
