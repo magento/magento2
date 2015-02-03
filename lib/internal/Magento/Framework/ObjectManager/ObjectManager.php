@@ -53,6 +53,8 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
      */
     public function create($type, array $arguments = [])
     {
+        /** @TODO get rid of ltrim() usage and place it to client code */
+        $type = ltrim($type, '\\');
         return $this->_factory->create($this->_config->getPreference($type), $arguments);
     }
 
