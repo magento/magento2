@@ -27,8 +27,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         $response = new \Magento\TestFramework\Response(
             $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface'),
             $this->getMock('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory', [], [], '', false),
-            $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false),
-            new \Magento\Framework\App\Response\Headers()
+            $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false)
         );
 
         $this->_objectManager = $this->getMock(
