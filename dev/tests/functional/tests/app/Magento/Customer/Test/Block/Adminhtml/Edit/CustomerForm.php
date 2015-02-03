@@ -94,6 +94,7 @@ class CustomerForm extends FormTabs
     public function updateCustomer(FixtureInterface $customer, $address = null)
     {
         $this->waitForm();
+        $this->waitFields();
 
         $isHasData = ($customer instanceof InjectableFixture) ? $customer->hasData() : true;
         if ($isHasData) {
@@ -117,6 +118,7 @@ class CustomerForm extends FormTabs
     public function getDataCustomer(FixtureInterface $customer, $address = null)
     {
         $this->waitForm();
+        $this->waitFields();
 
         $data = ['customer' => $customer->hasData() ? parent::getData($customer) : parent::getData()];
         if (null !== $address) {
@@ -137,7 +139,6 @@ class CustomerForm extends FormTabs
     {
         $this->waitForElementNotVisible($this->spinner);
         $this->waitForElementVisible($this->activeFormTab);
-        sleep(20);
     }
 
     /**
