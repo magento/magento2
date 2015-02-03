@@ -50,7 +50,10 @@ class SimpleClassTesting
         \StdClass $nonSharedDependency,
         \StdClass $sharedDependency,
         $value = 'value',
-        array $valueArray = ['default_value1', 'default_value2'],
+        array $valueArray = [
+            'default_value1',
+            'default_value2'
+        ],
         $globalValue = '',
         $nullValue = null
     ) {
