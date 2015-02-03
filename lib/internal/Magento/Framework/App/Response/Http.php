@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
-class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
+class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response implements HttpInterface
 {
     /**
      * Cookie to store page vary string
@@ -59,28 +59,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     {
         $this->sendVary();
         parent::sendResponse();
-    }
-
-    /**
-     * @param int|string $httpCode
-     * @param null|int|string $version
-     * @param null|string $phrase
-     * @return \Magento\Framework\App\Response\Http
-     */
-    public function setStatusHeader($httpCode, $version = null, $phrase = null)
-    {
-        if (!is_numeric($httpCode) || (100 > $httpCode) || (599 < $httpCode)) {
-            throw new \InvalidArgumentException('Invalid HTTP response code');
-        }
-
-        $version = is_null($version) ? $this->detectVersion() : $version;
-        $phrase = is_null($phrase) ? $this->getReasonPhrase() : $phrase;
-
-        $this->setVersion($version);
-        $this->setStatusCode($httpCode);
-        $this->setReasonPhrase($phrase);
-
-        return $this;
     }
 
     /**

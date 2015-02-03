@@ -7,30 +7,13 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
-class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Framework\App\Response\HttpInterface
+class Response extends \Zend\Http\PhpEnvironment\Response
 {
-    /**
-     * @var int
-     */
-    protected $httpResponseCode;
-
     /**
      * Flag; is this response a redirect?
      * @var boolean
      */
     protected $isRedirect = false;
-
-    /**
-     * Exception stack
-     * @var \Exception
-     */
-    protected $exceptions = [];
-
-    /**
-     * Whether or not to render exceptions; off by default
-     * @var boolean
-     */
-    protected $renderExceptions = false;
 
     /**
      * Get header value by name.
@@ -58,20 +41,12 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      */
     public function sendResponse()
     {
-        if ($this->isException() && $this->renderExceptions()) {
-            $exceptions = '';
-            foreach ($this->getException() as $e) {
-                $exceptions .= $e->__toString() . "\n";
-            }
-            echo $exceptions;
-            return null;
-        }
         $this->send();
     }
 
     /**
      * @param string $value
-     * @return \Magento\Framework\HTTP\PhpEnvironment\Response
+     * @return $this
      */
     public function appendBody($value)
     {
@@ -82,7 +57,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * @param string $value
-     * @return \Magento\Framework\HTTP\PhpEnvironment\Response
+     * @return $this
      */
     public function setBody($value)
     {
@@ -92,7 +67,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * Clear body
-     * @return \Magento\Framework\HTTP\PhpEnvironment\Response
+     * @return $this
      */
     public function clearBody()
     {
@@ -109,7 +84,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      * @param string $name
      * @param string $value
      * @param boolean $replace
-     * @return \Magento\Framework\App\Response\Http
+     * @return $this
      */
     public function setHeader($name, $value, $replace = false)
     {
@@ -127,7 +102,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      * Remove header by name from header stack
      *
      * @param string $name
-     * @return \Magento\Framework\HTTP\PhpEnvironment\Response
+     * @return $this
      */
     public function clearHeader($name)
     {
@@ -145,7 +120,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * Remove all headers
-     * @return \Magento\Framework\HTTP\PhpEnvironment\Response
+     * @return $this
      */
     public function clearHeaders()
     {
@@ -163,14 +138,12 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      *
      * @param string $url
      * @param int $code
-     * @return \Magento\Framework\App\Response\Http
+     * @return $this
      */
     public function setRedirect($url, $code = 302)
     {
         $this->setHeader('Location', $url, true)
             ->setHttpResponseCode($code);
-
-        $this->sendHeaders();
 
         return $this;
     }
@@ -179,7 +152,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      * Set HTTP response code to use with headers
      *
      * @param int $code
-     * @return \Magento\Framework\App\Response\Http
+     * @return $this
      */
     public function setHttpResponseCode($code)
     {
@@ -190,6 +163,24 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
         $this->isRedirect = (300 <= $code && 307 >= $code) ? true : false;
 
         $this->setStatusCode($code);
+        return $this;
+    }
+
+    /**
+     * @param int|string $httpCode
+     * @param null|int|string $version
+     * @param null|string $phrase
+     * @return $this
+     */
+    public function setStatusHeader($httpCode, $version = null, $phrase = null)
+    {
+        $version = is_null($version) ? $this->detectVersion() : $version;
+        $phrase = is_null($phrase) ? $this->getReasonPhrase() : $phrase;
+
+        $this->setVersion($version);
+        $this->setHttpResponseCode($httpCode);
+        $this->setReasonPhrase($phrase);
+
         return $this;
     }
 
@@ -211,175 +202,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     public function isRedirect()
     {
         return $this->isRedirect;
-    }
-
-    /**
-     * Whether or not to render exceptions (off by default)
-     *
-     * If called with no arguments or a null argument, returns the value of the
-     * flag; otherwise, sets it and returns the current value.
-     *
-     * @param boolean $flag Optional
-     * @return boolean
-     */
-    public function renderExceptions($flag = null)
-    {
-        if (null !== $flag) {
-            $this->renderExceptions = $flag ? true : false;
-        }
-
-        return $this->renderExceptions;
-    }
-
-    /**
-     * Register an exception with the response
-     *
-     * @param \Exception $e
-     * @return $this
-     */
-    public function setException($e)
-    {
-        $this->exceptions[] = $e;
-        return $this;
-    }
-
-    /**
-     * Has an exception been registered with the response?
-     *
-     * @return boolean
-     */
-    public function isException()
-    {
-        return !empty($this->exceptions);
-    }
-
-    /**
-     * Retrieve the exception stack
-     *
-     * @return array
-     */
-    public function getException()
-    {
-        return $this->exceptions;
-    }
-
-    /**
-     * Does the response object contain an exception of a given type?
-     *
-     * @param  string $type
-     * @return boolean
-     */
-    public function hasExceptionOfType($type)
-    {
-        foreach ($this->exceptions as $e) {
-            if ($e instanceof $type) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Does the response object contain an exception with a given message?
-     *
-     * @param  string $message
-     * @return boolean
-     */
-    public function hasExceptionOfMessage($message)
-    {
-        foreach ($this->exceptions as $e) {
-            if ($message == $e->getMessage()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Does the response object contain an exception with a given code?
-     *
-     * @param  int $code
-     * @return boolean
-     */
-    public function hasExceptionOfCode($code)
-    {
-        $code = (int)$code;
-        foreach ($this->exceptions as $e) {
-            if ($code == $e->getCode()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Retrieve all exceptions of a given type
-     *
-     * @param  string $type
-     * @return false|array
-     */
-    public function getExceptionByType($type)
-    {
-        $exceptions = [];
-        foreach ($this->exceptions as $e) {
-            if ($e instanceof $type) {
-                $exceptions[] = $e;
-            }
-        }
-
-        if (empty($exceptions)) {
-            $exceptions = false;
-        }
-
-        return $exceptions;
-    }
-
-    /**
-     * Retrieve all exceptions of a given message
-     *
-     * @param  string $message
-     * @return false|array
-     */
-    public function getExceptionByMessage($message)
-    {
-        $exceptions = [];
-        foreach ($this->exceptions as $e) {
-            if ($message == $e->getMessage()) {
-                $exceptions[] = $e;
-            }
-        }
-
-        if (empty($exceptions)) {
-            $exceptions = false;
-        }
-
-        return $exceptions;
-    }
-
-    /**
-     * Retrieve all exceptions of a given code
-     *
-     * @param mixed $code
-     * @return false|array
-     */
-    public function getExceptionByCode($code)
-    {
-        $code = (int)$code;
-        $exceptions = [];
-        foreach ($this->exceptions as $e) {
-            if ($code == $e->getCode()) {
-                $exceptions[] = $e;
-            }
-        }
-
-        if (empty($exceptions)) {
-            $exceptions = false;
-        }
-
-        return $exceptions;
     }
 
     /**

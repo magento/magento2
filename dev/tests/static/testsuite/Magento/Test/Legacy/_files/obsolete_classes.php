@@ -2907,5 +2907,5 @@ return [
         'Magento\Developer\Model\TemplateEngine\Plugin\DebugHints'
     ],
     ['Zend_Controller_Response_Abstract'],
-    ['Zend_Controller_Response_Http', 'Zend\Http\PhpEnvironment\Response'],
+    ['Zend_Controller_Response_Http', 'Magento\Framework\App\Response\Http'],
 ];
