@@ -36,14 +36,18 @@ class Interceptions implements \Magento\Tools\Di\Code\Reader\InstancesNamesListI
 
     /**
      * @param \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner
-     * @param \Magento\Framework\Code\Reader\ClassReader   $classReader
-     * @param \Magento\Framework\Code\Validator            $validator
-     * @param Log                                          $log
+     * @param \Magento\Framework\Code\Reader\ClassReader $classReader
+     * @param \Magento\Framework\Code\Validator $validator
+     * @param \Magento\Framework\Code\Validator\ConstructorIntegrity $constructorIntegrityValidator
+     * @param \Magento\Framework\Code\Validator\ContextAggregation $contextAggregationValidator
+     * @param Log $log
      */
     public function __construct(
         \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner,
         \Magento\Framework\Code\Reader\ClassReader $classReader,
         \Magento\Framework\Code\Validator $validator,
+        \Magento\Framework\Code\Validator\ConstructorIntegrity $constructorIntegrityValidator,
+        \Magento\Framework\Code\Validator\ContextAggregation $contextAggregationValidator,
         Log $log
     ) {
         $this->classReader = $classReader;
@@ -51,8 +55,8 @@ class Interceptions implements \Magento\Tools\Di\Code\Reader\InstancesNamesListI
         $this->validator = $validator;
         $this->log = $log;
 
-        $this->validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
-        $this->validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
+        $this->validator->add($constructorIntegrityValidator);
+        $this->validator->add($contextAggregationValidator);
     }
 
     /**

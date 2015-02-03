@@ -27,9 +27,6 @@ class AreaTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
-    /**
-     *
-     */
     protected function setUp()
     {
         $this->classesScannerMock = $this->getMockBuilder('\Magento\Tools\Di\Code\Reader\ClassesScanner')
@@ -48,14 +45,11 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     *
-     */
     public function testGetList()
     {
         $path = '/tmp/test';
 
-        $classes = [ 'NameSpace1\ClassName1', 'NameSpace1\ClassName2'];
+        $classes = ['NameSpace1\ClassName1', 'NameSpace1\ClassName2'];
 
         $this->classesScannerMock->expects($this->once())
             ->method('getList')
@@ -76,8 +70,8 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->getList($path);
 
         $expected = [
-            $classes[0] =>  $constructors[0][1],
-            $classes[1] =>  $constructors[1][1]
+            $classes[0] => $constructors[0][1],
+            $classes[1] => $constructors[1][1]
         ];
 
         $this->assertEquals($result, $expected);

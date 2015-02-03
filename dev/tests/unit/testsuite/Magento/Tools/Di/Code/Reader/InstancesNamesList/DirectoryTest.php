@@ -39,9 +39,6 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
      */
     private $logMock;
 
-    /**
-     *
-     */
     protected function setUp()
     {
         $this->logMock = $this->getMockBuilder('Magento\Tools\Di\Compiler\Log\Log')
@@ -77,7 +74,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
     {
         $path = '/tmp/test';
 
-        $classes = [ 'NameSpace1\ClassName1', 'NameSpace1\ClassName2'];
+        $classes = ['NameSpace1\ClassName1', 'NameSpace1\ClassName2'];
 
         $this->classesScanner->expects($this->once())
             ->method('getList')
@@ -105,16 +102,13 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->getRelations();
 
         $expected = [
-            $classes[0] =>  $parents[0][1],
-            $classes[1] =>  $parents[1][1]
+            $classes[0] => $parents[0][1],
+            $classes[1] => $parents[1][1]
         ];
 
         $this->assertEquals($result, $expected);
     }
 
-    /**
-     *
-     */
     public function testGetListNoValidation()
     {
         $path = '/var/generation';
@@ -147,8 +141,8 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->getRelations();
 
         $expected = [
-            $classes[0] =>  $parents[0][1],
-            $classes[1] =>  $parents[1][1]
+            $classes[0] => $parents[0][1],
+            $classes[1] => $parents[1][1]
         ];
 
         $this->assertEquals($result, $expected);

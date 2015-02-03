@@ -39,9 +39,6 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
      */
     private $logMock;
 
-    /**
-     *
-     */
     protected function setUp()
     {
         $this->logMock = $this->getMockBuilder('Magento\Tools\Di\Compiler\Log\Log')
@@ -61,20 +58,19 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
 
         $this->validatorMock = $this->getMockBuilder('\Magento\Framework\Code\Validator')
             ->disableOriginalConstructor()
-            ->setMethods(['validate'])
+            ->setMethods(['validate', 'add'])
             ->getMock();
 
         $this->model = new \Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions(
             $this->classesScanner,
             $this->classReaderMock,
             $this->validatorMock,
+            new \Magento\Framework\Code\Validator\ConstructorIntegrity(),
+            new \Magento\Framework\Code\Validator\ContextAggregation(),
             $this->logMock
         );
     }
 
-    /**
-     *
-     */
     public function testGetList()
     {
         $path = '/tmp/test';
@@ -99,9 +95,6 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $classes);
     }
 
-    /**
-     *
-     */
     public function testGetListNoValidation()
     {
         $path = '/var/generation';

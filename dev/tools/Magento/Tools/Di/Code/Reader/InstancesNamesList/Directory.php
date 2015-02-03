@@ -45,11 +45,11 @@ class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInter
     private $classesScanner;
 
     /**
-     * @param \Magento\Tools\Di\Compiler\Log\Log           $log           Logging object
-     * @param \Magento\Framework\Code\Reader\ClassReader   $classReader
+     * @param \Magento\Tools\Di\Compiler\Log\Log $log Logging object
+     * @param \Magento\Framework\Code\Reader\ClassReader $classReader
      * @param \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner
-     * @param \Magento\Framework\Code\Validator            $validator
-     * @param string                                       $generationDir directory where generated files is
+     * @param \Magento\Framework\Code\Validator $validator
+     * @param string $generationDir directory where generated files is
      */
     public function __construct(
         \Magento\Tools\Di\Compiler\Log\Log $log,
@@ -77,7 +77,7 @@ class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInter
      */
     public function errorHandler($errorNumber, $msg)
     {
-        $this->log->add(Log::COMPILATION_ERROR, $this->current, '#'. $errorNumber .' '. $msg);
+        $this->log->add(Log::COMPILATION_ERROR, $this->current, '#' . $errorNumber . ' ' . $msg);
     }
 
     /**

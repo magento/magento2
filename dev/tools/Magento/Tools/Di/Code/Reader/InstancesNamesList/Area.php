@@ -23,7 +23,7 @@ class Area implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInterface
     private $classesScanner;
 
     /**
-     * @param \Magento\Tools\Di\Code\Reader\ClassesScanner       $classesScanner
+     * @param \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner
      * @param \Magento\Tools\Di\Code\Reader\ClassReaderDecorator $classReaderDecorator
      */
     public function __construct(
@@ -40,7 +40,6 @@ class Area implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInterface
      * @param string $path path to dir with files
      *
      * @return array
-     *
      * @throws \Magento\Framework\Filesystem\FilesystemException
      */
     public function getList($path)
@@ -49,6 +48,7 @@ class Area implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInterface
         foreach ($this->classesScanner->getList($path) as $className) {
             $classes[$className] = $this->classReaderDecorator->getConstructor($className);
         }
+
         return $classes;
     }
 }
