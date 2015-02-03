@@ -209,6 +209,6 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      */
     public function __sleep()
     {
-        return ['content', 'isRedirect', 'exceptions', 'statusCode'];
+        return ['content', 'isRedirect', 'statusCode'];
     }
 }

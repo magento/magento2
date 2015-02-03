@@ -186,7 +186,7 @@ class Request
      * Create response string for problem during request and set HTTP error code
      *
      * @param \Exception $exception
-     * @param \Zend_Controller_Response_Http $response OPTIONAL If NULL - will use internal getter
+     * @param \Magento\Framework\HTTP\PhpEnvironment\Response $response OPTIONAL If NULL - will use internal getter
      * @return array
      */
     public function prepareErrorResponse(\Exception $exception, \Magento\Framework\HTTP\PhpEnvironment\Response $response = null)

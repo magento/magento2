@@ -11,7 +11,7 @@ namespace Magento\Framework\File\Transfer\Adapter;
 class Http
 {
     /**
-     * @var \Zend_Controller_Response_Http
+     * @var \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     private $response;
 

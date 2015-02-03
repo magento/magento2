@@ -146,7 +146,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function __sleep()
     {
-        return ['content', 'isRedirect', 'exceptions', 'statusCode', 'context'];
+        return ['content', 'isRedirect', 'statusCode', 'context'];
     }
 
     /**
