@@ -1794,6 +1794,7 @@ return [
     ['Magento\Core\Model\Page\Asset\MergeableInterface', 'Magento\Framework\View\Asset\MergeableInterface'],
     ['Magento\Core\Model\Page\Asset\Merged', 'Magento\Framework\View\Asset\Merged'],
     ['Magento\Core\Model\Page\Asset\Minified', 'Magento\Framework\View\Asset\Minified'],
+    ['Magento\Framework\View\Asset\Minified', 'Magento\Framework\View\Asset\Minified\MutablePathAsset'],
     ['Magento\Core\Model\Page\Asset\MinifyService', 'Magento\Framework\View\Asset\MinifyService'],
     ['Magento\Core\Model\Page\Asset\PublicFile', 'Magento\Framework\View\Asset\PublicFile'],
     ['Magento\Core\Model\Page\Asset\Remote', 'Magento\Framework\View\Asset\Remote'],

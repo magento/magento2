@@ -155,4 +155,11 @@
             <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\TemplateEngineFactory">
+        <arguments>
+            <argument name="engines" xsi:type="array">
+                <item name="phtml" xsi:type="string">Magento\Framework\View\TemplateEngine\Php</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

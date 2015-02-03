@@ -3,75 +3,20 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Asset;
+namespace Magento\Framework\View\Asset\Minified;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverPool;
-
-class MinifiedTest extends \PHPUnit_Framework_TestCase
+class MutablePathAssetTest extends AbstractAssetTestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_asset;
-
-    /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_logger;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_staticViewDir;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_rootDir;
-
-    /**
-     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_baseUrl;
-
-    /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_filesystem;
-
-    /**
-     * @var \Magento\Framework\Code\Minifier\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_adapter;
-
-    /**
-     * @var \Magento\Framework\View\Asset\Minified
+     * @var MutablePathAsset
      */
     protected $_model;
 
     protected function setUp()
     {
-        $this->_asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
-        $this->_logger = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
-        $this->_baseUrl = $this->getMock('\Magento\Framework\Url', [], [], '', false);
-        $this->_staticViewDir = $this->getMockForAbstractClass(
-            '\Magento\Framework\Filesystem\Directory\WriteInterface'
-        );
-        $this->_rootDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
-        $this->_filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-        $this->_filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->will($this->returnValueMap([
-                [DirectoryList::STATIC_VIEW, DriverPool::FILE, $this->_staticViewDir],
-                [DirectoryList::ROOT, DriverPool::FILE, $this->_rootDir],
-            ]));
-        $this->_filesystem->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->_staticViewDir));
-        $this->_adapter = $this->getMockForAbstractClass('Magento\Framework\Code\Minifier\AdapterInterface');
-        $this->_model = new Minified(
+        parent::setUp();
+
+        $this->_model = new MutablePathAsset(
             $this->_asset,
             $this->_logger,
             $this->_filesystem,
@@ -100,7 +45,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
      */
     private function prepareRequestedAsMinifiedMock()
     {
-        $this->_asset->expects($this->exactly(2))->method('getPath')->will($this->returnValue('test/library.min.js'));
+        $this->_asset->expects($this->exactly(2))->method('getPath')->will($this->returnValue('test/admin.min.js'));
         $this->_asset->expects($this->once())->method('getSourceFile')->will($this->returnValue('source_file'));
         $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
         $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
@@ -115,7 +60,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
         return [
             ['getUrl', 'url'],
             ['getSourceFile', 'source_file'],
-            ['getPath', 'test/library.min.js'],
+            ['getPath', 'test/admin.min.js'],
             ['getFilePath', 'file_path'],
             ['getContext', 'context'],
         ];
@@ -150,7 +95,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
         $this->_adapter->expects($this->never())->method('minify');
         $this->_staticViewDir->expects($this->exactly(2))
             ->method('readFile')
-            ->with('test/library.min.js')
+            ->with('test/admin.min.js')
             ->will($this->returnValue('content'));
         $this->assertEquals('content', $this->_model->getContent());
         $this->assertEquals('content', $this->_model->getContent());
@@ -158,23 +103,23 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
 
     public function testHasPreminifiedFile()
     {
-        $this->_asset->expects($this->exactly(2))->method('getPath')->will($this->returnValue('test/library.js'));
+        $this->_asset->expects($this->exactly(2))->method('getPath')->will($this->returnValue('test/admin.js'));
         $this->_asset->expects($this->atLeastOnce())
             ->method('getSourceFile')
-            ->will($this->returnValue('/foo/bar/test/library.js'));
+            ->will($this->returnValue('/foo/bar/test/admin.js'));
         $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
         $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
         $this->_asset->expects($this->once())->method('getUrl')->will($this->returnValue('url'));
         $this->_rootDir->expects($this->once())
             ->method('getRelativePath')
-            ->with('/foo/bar/test/library.min.js')
-            ->will($this->returnValue('test/library.min.js'));
+            ->with('/foo/bar/test/admin.min.js')
+            ->will($this->returnValue('test/admin.min.js'));
         $this->_rootDir->expects($this->once())
             ->method('isExist')
-            ->with('test/library.min.js')
+            ->with('test/admin.min.js')
             ->will($this->returnValue(true));
         $this->_adapter->expects($this->never())->method('minify');
-        $this->assertEquals('test/library.min.js', $this->_model->getPath());
+        $this->assertEquals('test/admin.min.js', $this->_model->getPath());
     }
 
     public function testMinify()
@@ -183,27 +128,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
         $this->_asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
         $this->_adapter->expects($this->once())->method('minify')->with('content')->will($this->returnValue('mini'));
         $this->_staticViewDir->expects($this->once())->method('writeFile')->with($this->anything(), 'mini');
-        $this->assertStringMatchesFormat('%s_library.min.js', $this->_model->getFilePath());
-    }
-
-    private function prepareAttemptToMinifyMock($fileExists, $rootDirExpectations = true)
-    {
-        $this->_asset->expects($this->atLeastOnce())->method('getPath')->will($this->returnValue('test/library.js'));
-        $this->_asset->expects($this->atLeastOnce())
-            ->method('getSourceFile')
-            ->will($this->returnValue('/foo/bar/test/library.js'));
-        if ($rootDirExpectations) {
-            $this->_rootDir->expects($this->once())
-                ->method('getRelativePath')
-                ->with('/foo/bar/test/library.min.js')
-                ->will($this->returnValue('test/library.min.js'));
-            $this->_rootDir->expects($this->once())
-                ->method('isExist')
-                ->with('test/library.min.js')
-                ->will($this->returnValue(false));
-        }
-        $this->_baseUrl->expects($this->once())->method('getBaseUrl')->will($this->returnValue('http://example.com/'));
-        $this->_staticViewDir->expects($this->once())->method('isExist')->will($this->returnValue($fileExists));
+        $this->assertStringMatchesFormat('%s_admin.min.js', $this->_model->getFilePath());
     }
 
     public function testMinificationFailed()
@@ -217,7 +142,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
         $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
         $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
         $this->_asset->expects($this->once())->method('getUrl')->will($this->returnValue('url'));
-        $this->assertEquals('test/library.js', $this->_model->getPath());
+        $this->assertEquals('test/admin.js', $this->_model->getPath());
     }
 
     public function testShouldNotMinifyCozExists()
@@ -225,7 +150,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
         $this->prepareAttemptToMinifyMock(true);
         // IS_EXISTS is assumed by default, so nothing to mock here
         $this->_adapter->expects($this->never())->method('minify');
-        $this->assertStringMatchesFormat('%s_library.min.js', $this->_model->getFilePath());
+        $this->assertStringMatchesFormat('%s_admin.min.js', $this->_model->getFilePath());
     }
 
     /**
@@ -237,27 +162,27 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
     public function testMinifyMtime($mtimeOrig, $mtimeMinified, $isMinifyExpected)
     {
         $this->prepareAttemptToMinifyMock(true, false);
-        $model = new Minified(
+        $model = new MutablePathAsset(
             $this->_asset,
             $this->_logger,
             $this->_filesystem,
             $this->_baseUrl,
             $this->_adapter,
-            Minified::MTIME
+            AbstractAsset::MTIME
         );
         $this->_rootDir->expects($this->any())
             ->method('getRelativePath')
             ->will($this->returnValueMap([
-                ['/foo/bar/test/library.min.js', 'test/library.min.js'],
-                ['/foo/bar/test/library.js', 'test/library.js'],
+                ['/foo/bar/test/admin.min.js', 'test/admin.min.js'],
+                ['/foo/bar/test/admin.js', 'test/admin.js'],
             ]));
         $this->_rootDir->expects($this->once())
             ->method('isExist')
-            ->with('test/library.min.js')
+            ->with('test/admin.min.js')
             ->will($this->returnValue(false));
         $this->_rootDir->expects($this->once())
             ->method('stat')
-            ->with('test/library.js')
+            ->with('test/admin.js')
             ->will($this->returnValue(['mtime' => $mtimeOrig]));
         $this->_staticViewDir->expects($this->once())
             ->method('stat')
@@ -273,7 +198,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->_adapter->expects($this->never())->method('minify');
         }
-        $this->assertStringMatchesFormat('%s_library.min.js', $model->getFilePath());
+        $this->assertStringMatchesFormat('%s_admin.min.js', $model->getFilePath());
     }
 
     /**
