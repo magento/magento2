@@ -22,7 +22,7 @@ use Magento\Mtf\Fixture\InjectableFixture;
  * 3. Verify checkout cart.
  *
  * @ZephyrId MAGETWO-12392
- * @group Cross-sells_(MX)
+ * @group Related_Products_(MX)
  */
 class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
 {
@@ -31,6 +31,13 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
+
+    /**
+     * Products to verify.
+     *
+     * @var array
+     */
+    protected $productsToVerify;
 
     /**
      * Selectable data of products.
@@ -52,8 +59,8 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
      * @param string $products
      * @param string $selectable
      * @param string $promotedProducts
-     * @param string $steps
-     * @param string $assert
+     * @param string $navigateProductsOrder
+     * @param string $productsToVerify
      * @param CheckoutCart $checkoutCart
      * @return void
      */
@@ -61,8 +68,8 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
         $products,
         $selectable,
         $promotedProducts,
-        $steps,
-        $assert,
+        $navigateProductsOrder,
+        $productsToVerify,
         CheckoutCart $checkoutCart
     ) {
         // Preconditions
@@ -70,50 +77,31 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
         $this->assignPromotedProducts($promotedProducts, 'related_products');
         $this->parseSelectable($selectable);
 
-        // Steps
+        // Initialization
         $this->checkoutCart = $checkoutCart;
-        $steps = $this->parseSteps($steps);
-        $assert = $this->parseAssert($assert);
-        $initialProductName = array_shift($steps);
+        $this->productsToVerify = $this->parseProductsToVerify($productsToVerify);
+        $navigateProductsOrder = $this->parseNavigateProductsOrder($navigateProductsOrder);
+        $initialProductName = array_shift($navigateProductsOrder);
         $initialProduct = $this->products[$initialProductName];
-        $initialAssert = $assert[$initialProductName];
-        $lastProductName = end($steps);
+        $lastProductName = end($navigateProductsOrder);
         $lastProduct = $this->products[$lastProductName];
-        $lastAssert = $assert[$lastProductName];
-        $checkoutProducts = [];
 
+        // Steps
         // Clear shopping cart
         $this->checkoutCart->open();
         $this->checkoutCart->getCartBlock()->clearShoppingCart();
 
         // Navigate through related products
         $this->browser->open($_ENV['app_frontend_url'] . $initialProduct->getUrlKey() . '.html');
-        $this->assertRelatedSection($initialAssert);
-        foreach ($steps as $productName) {
-            $product = $this->products[$productName];
-            $productAssert = $assert[$productName];
-
-            $this->catalogProductView->getRelatedProductBlock()->getProductItem($product)->open();
-            if (empty($productAssert)) {
-                $this->assertAbsentRelatedSellSection();
-            } else {
-                $this->assertRelatedSection($productAssert);
-            }
+        $this->assertRelatedSection($initialProductName);
+        foreach ($navigateProductsOrder as $productShortName) {
+            $this->navigate($productShortName);
         }
 
         // Add last product with related product to cart and verify
-        foreach ($lastAssert as $relatedProductName) {
-            $relatedProduct = $this->products[$relatedProductName];
-            $isSelect = $this->selectable[$relatedProductName];
-
-            if ('yes' == $isSelect) {
-                $checkoutProducts[] = $relatedProduct;
-                $this->catalogProductView->getRelatedProductBlock()->getProductItem($relatedProduct)->select();
-            }
-        }
+        $checkoutProducts = $this->selectRelatedProducts($lastProductName);
         $checkoutProducts[] = $lastProduct;
         $this->catalogProductView->getViewBlock()->addToCart($lastProduct);
-
         $this->assertCheckoutCart($checkoutProducts);
     }
 
@@ -134,7 +122,66 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
     }
 
     /**
-     * Assert that absent related products section.
+     * Return related products to verify for specified product.
+     *
+     * @param string $product
+     * @return InjectableFixture[]
+     */
+    protected function getProductsToVerify($product)
+    {
+        $shortNames = $this->productsToVerify[$product];
+        $products = [];
+
+        foreach ($shortNames as $shortName) {
+            $products[$shortName] = $this->products[$shortName];
+        }
+
+        return $products;
+    }
+
+    /**
+     * Open product in related products section and verify her promoted products.
+     *
+     * @param string $productShortName
+     * @return void
+     */
+    protected function navigate($productShortName)
+    {
+        $product = $this->products[$productShortName];
+        $this->catalogProductView->getRelatedProductBlock()->getProductItem($product)->open();
+
+        if (empty($this->productsToVerify[$productShortName])) {
+            $this->assertAbsentRelatedSellSection();
+        } else {
+            $this->assertRelatedSection($productShortName);
+        }
+    }
+
+    /**
+     * Select related products for specified product.
+     *
+     * @param string $product
+     * @return InjectableFixture[]
+     */
+    protected function selectRelatedProducts($product)
+    {
+        $selected = [];
+
+        foreach ($this->productsToVerify[$product] as $productShortName) {
+            $productToVerify = $this->products[$productShortName];
+            $isSelect = $this->selectable[$productShortName];
+
+            if ('yes' == $isSelect) {
+                $this->catalogProductView->getRelatedProductBlock()->getProductItem($productToVerify)->select();
+                $selected[] = $productToVerify;
+            }
+        }
+
+        return $selected;
+    }
+
+    /**
+     * Assert that related products section is absent.
      *
      * @return void
      */
@@ -147,19 +194,20 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
     }
 
     /**
-     * Assert that correctly display related products section.
+     * Assert that related products section is displayed correctly.
      *
-     * @param array $promotedProductNames
+     * @param string $product
      * @return void
      */
-    protected function assertRelatedSection(array $promotedProductNames)
+    protected function assertRelatedSection($product)
     {
+        $productsToVerify = $this->getProductsToVerify($product);
         $fixtureData = [];
         $pageData = [];
 
-        foreach ($promotedProductNames as $promotedProductName) {
-            $productName = $this->products[$promotedProductName]->getName();
-            $fixtureData[$productName] = $this->selectable[$promotedProductName];
+        foreach ($productsToVerify as $shortName => $product) {
+            $productName = $product->getName();
+            $fixtureData[$productName] = $this->selectable[$shortName];
         }
         foreach ($this->catalogProductView->getRelatedProductBlock()->getProducts() as $productItem) {
             $pageProductName = $productItem->getProductName();
@@ -168,7 +216,11 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
 
         asort($fixtureData);
         asort($pageData);
-        \PHPUnit_Framework_Assert::assertEquals($pageData, $fixtureData, 'Wrong display related section.');
+        \PHPUnit_Framework_Assert::assertEquals(
+            $pageData,
+            $fixtureData,
+            'Wrong products are displayed in related section.'
+        );
     }
 
     /**

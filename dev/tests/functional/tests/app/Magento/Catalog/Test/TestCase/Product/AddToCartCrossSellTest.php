@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Magento\Catalog\Test\Constraint\AssertProductCrossSellSection;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Fixture\InjectableFixture;
@@ -48,56 +47,52 @@ class AddToCartCrossSellTest extends AbstractProductPromotedProductsTest
     protected $checkoutCart;
 
     /**
-     * Assert that correctly display cross-sell section.
-     *
-     * @var AssertProductCrossSellSection
-     */
-    protected $assertProductCrossSellSection;
-
-    /**
      * Run test add to cart cross-sell products.
      *
      * @param string $products
      * @param string $promotedProducts
-     * @param string $steps
-     * @param string $assert
+     * @param string $navigateProductsOrder
+     * @param string $productsToVerify
      * @param CmsIndex $cmsIndex
      * @param CheckoutCart $checkoutCart
-     * @param AssertProductCrossSellSection $assertProductCrossSellSection
      * @return void
      */
     public function test(
         $products,
         $promotedProducts,
-        $steps,
-        $assert,
+        $navigateProductsOrder,
+        $productsToVerify,
         CmsIndex $cmsIndex,
-        CheckoutCart $checkoutCart,
-        AssertProductCrossSellSection $assertProductCrossSellSection
+        CheckoutCart $checkoutCart
     ) {
         // Preconditions
         $this->createProducts($products);
         $this->assignPromotedProducts($promotedProducts, 'cross_sell_products');
 
-        // Steps
+        // Initialization
         $this->cmsIndex = $cmsIndex;
         $this->checkoutCart = $checkoutCart;
-        $this->assertProductCrossSellSection = $assertProductCrossSellSection;
-        $steps = $this->parseSteps($steps);
-        $assert = $this->parseAssert($assert);
-        $initialProductName = array_shift($steps);
+        $navigateProductsOrder = $this->parseNavigateProductsOrder($navigateProductsOrder);
+        $productsToVerify = $this->parseProductsToVerify($productsToVerify);
+        $initialProductName = array_shift($navigateProductsOrder);
         $initialProduct = $this->products[$initialProductName];
-        $initialAssert = $assert[$initialProductName];
+        $initialProductToVerify = $productsToVerify[$initialProductName];
 
+        // Steps
         $this->checkoutCart->open();
         $this->checkoutCart->getCartBlock()->clearShoppingCart();
 
         $this->browser->open($_ENV['app_frontend_url'] . $initialProduct->getUrlKey() . '.html');
         $this->catalogProductView->getViewBlock()->addToCart($initialProduct);
-        $this->assertCrossSellSection($initialAssert);
-        foreach ($steps as $productName) {
+        $this->assertCrossSellSection($initialProductToVerify);
+        foreach ($navigateProductsOrder as $productName) {
             $this->addToCart($this->products[$productName]);
-            $this->assertCrossSellSection($assert[$productName]);
+
+            if (empty($productsToVerify[$productName])) {
+                $this->assertAbsentCrossSellSection();
+            } else {
+                $this->assertCrossSellSection($productsToVerify[$productName]);
+            }
         }
     }
 
@@ -109,35 +104,51 @@ class AddToCartCrossSellTest extends AbstractProductPromotedProductsTest
      */
     protected function addToCart(InjectableFixture $product)
     {
-        $this->checkoutCart->open();
-
-        $productItem = $this->checkoutCart->getCrosssellBlock()->getProductItem($product);
-        \PHPUnit_Framework_Assert::assertTrue(
-            $productItem->isVisible(),
-            "Product {$product->getName()} is absent in cross-sell block."
-        );
-
-        $productItem->clickAddToCart();
+        $this->checkoutCart->getCrosssellBlock()->getProductItem($product)->clickAddToCart();
         if ($this->cmsIndex->getTitleBlock()->getTitle() == $product->getName()) {
             $this->catalogProductView->getViewBlock()->addToCart($product);
         }
+
         $this->checkoutCart->getMessagesBlock()->waitSuccessMessage();
     }
 
     /**
-     * Assert that correctly display cross-sell section.
+     * Assert that cross-sell products section is absent.
+     *
+     * @return void
+     */
+    protected function assertAbsentCrossSellSection()
+    {
+        \PHPUnit_Framework_Assert::assertFalse(
+            $this->checkoutCart->getCrosssellBlock()->isVisible(),
+            "Cross-sell block is present."
+        );
+    }
+
+    /**
+     * Assert that cross-sell products section is displayed correctly.
      *
      * @param array $promotedProductNames
      * @return void
      */
     protected function assertCrossSellSection(array $promotedProductNames)
     {
-        $promotedProducts = [];
+        $productNames = [];
+        $pageProductNames = [];
 
         foreach ($promotedProductNames as $promotedProductName) {
-            $promotedProducts[] = $this->products[$promotedProductName];
+            $productNames[] = $this->products[$promotedProductName]->getName();
+        }
+        foreach ($this->checkoutCart->getCrosssellBlock()->getProducts() as $productItem) {
+            $pageProductNames[] = $productItem->getProductName();
         }
 
-        $this->assertProductCrossSellSection->processAssert($this->checkoutCart, $promotedProducts);
+        sort($productNames);
+        sort($pageProductNames);
+        \PHPUnit_Framework_Assert::assertEquals(
+            $productNames,
+            $pageProductNames,
+            'Wrong products are displayed in cross-sell section.'
+        );
     }
 }

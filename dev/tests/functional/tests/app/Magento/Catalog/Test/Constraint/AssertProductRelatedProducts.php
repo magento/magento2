@@ -22,7 +22,7 @@ class AssertProductRelatedProducts extends AbstractConstraint
     /* end tags */
 
     /**
-     * Assert that product is displayed in related products section.
+     * Assert that products are displayed in related products section.
      *
      * @param BrowserInterface $browser
      * @param CatalogProductSimple $product

@@ -169,26 +169,26 @@ abstract class AbstractProductPromotedProductsTest extends Injectable
     }
 
     /**
-     * Convert list steps to array.
+     * Convert list of navigate products to array.
      *
-     * @param string $steps
+     * @param string $navigateProductsOrder
      * @return array
      */
-    protected function parseSteps($steps)
+    protected function parseNavigateProductsOrder($navigateProductsOrder)
     {
-        return array_map('trim', explode(',', $steps));
+        return array_map('trim', explode(',', $navigateProductsOrder));
     }
 
     /**
-     * Convert assert data to array.
+     * Convert products to verify data to array.
      *
-     * @param string $assert
+     * @param string $productsToVerify
      * @return array
      */
-    protected function parseAssert($assert)
+    protected function parseProductsToVerify($productsToVerify)
     {
         $result = [];
-        $list = array_map('trim', explode(';', $assert));
+        $list = array_map('trim', explode(';', $productsToVerify));
 
         foreach ($list as $item) {
             list($step, $products) = array_map('trim', explode(':', $item));

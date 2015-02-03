@@ -18,8 +18,8 @@ use Magento\Mtf\Fixture\InjectableFixture;
  * Steps:
  * 1. Navigate through up-sell products.
  *
- * @ZephirId MAGETWO-1239
- * @group Cross-sells_(MX)
+ * @ZephirId MAGETWO-12391
+ * @group Up-sells_(MX)
  */
 class NavigateUpSellProductsTest extends AbstractProductPromotedProductsTest
 {
@@ -29,38 +29,38 @@ class NavigateUpSellProductsTest extends AbstractProductPromotedProductsTest
     const DOMAIN = 'MX';
     /* end tags */
 
-
     /**
      * Run test navigate up-sell products.
      *
      * @param string $products
      * @param string $promotedProducts
-     * @param string $steps
-     * @param string $assert
+     * @param string $navigateProductsOrder
+     * @param string $productsToVerify
      * @return void
      */
     public function test(
         $products,
         $promotedProducts,
-        $steps,
-        $assert
+        $navigateProductsOrder,
+        $productsToVerify
     ) {
         // Preconditions
         $this->createProducts($products);
         $this->assignPromotedProducts($promotedProducts, 'up_sell_products');
 
-        // Steps
-        $steps = $this->parseSteps($steps);
-        $assert = $this->parseAssert($assert);
-        $initialProductName = array_shift($steps);
+        // Initialization
+        $navigateProductsOrder = $this->parseNavigateProductsOrder($navigateProductsOrder);
+        $productsToVerify = $this->parseProductsToVerify($productsToVerify);
+        $initialProductName = array_shift($navigateProductsOrder);
         $initialProduct = $this->products[$initialProductName];
-        $initialAssert = $assert[$initialProductName];
+        $initialProductsToVerify = $productsToVerify[$initialProductName];
 
+        // Steps
         $this->browser->open($_ENV['app_frontend_url'] . $initialProduct->getUrlKey() . '.html');
-        $this->assertUpSellSection($initialAssert);
-        foreach ($steps as $productName) {
+        $this->assertUpSellSection($initialProductsToVerify);
+        foreach ($navigateProductsOrder as $productName) {
             $product = $this->products[$productName];
-            $productAssert = $assert[$productName];
+            $productAssert = $productsToVerify[$productName];
 
             $this->catalogProductView->getUpsellBlock()->getProductItem($product)->open();
             if (empty($productAssert)) {
@@ -72,7 +72,7 @@ class NavigateUpSellProductsTest extends AbstractProductPromotedProductsTest
     }
 
     /**
-     * Assert that absent up-sell section.
+     * Assert that up-sell products section is absent.
      *
      * @return void
      */
@@ -85,7 +85,7 @@ class NavigateUpSellProductsTest extends AbstractProductPromotedProductsTest
     }
 
     /**
-     * Assert that correctly display up-sell section.
+     * Assert that up-sell products section is displayed correctly.
      *
      * @param array $promotedProductNames
      * @return void
@@ -104,6 +104,10 @@ class NavigateUpSellProductsTest extends AbstractProductPromotedProductsTest
 
         sort($productNames);
         sort($pageProductNames);
-        \PHPUnit_Framework_Assert::assertEquals($productNames, $pageProductNames, 'Wrong display up-sell section.');
+        \PHPUnit_Framework_Assert::assertEquals(
+            $productNames,
+            $pageProductNames,
+            'Wrong products are displayed in up-sell section.'
+        );
     }
 }

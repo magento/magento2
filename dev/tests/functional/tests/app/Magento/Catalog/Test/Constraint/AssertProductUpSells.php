@@ -22,7 +22,7 @@ class AssertProductUpSells extends AbstractConstraint
     /* end tags */
 
     /**
-     * Assert that product is displayed in up-sell section.
+     * Assert that products are displayed in up-sell section.
      *
      * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
