@@ -94,7 +94,7 @@ class ConflictChecker
             if ($constraintA->matches($constraintB)) {
                 $messages[] = "$moduleA conflicts with current $moduleB version " .
                     $this->packageInfo->getVersion($moduleA) .
-                    ' (version should not be ' . $this->packageInfo->getConflict($moduleA)[$moduleB] . ')';;
+                    ' (version should not be ' . $this->packageInfo->getConflict($moduleA)[$moduleB] . ')';
             }
         }
         return $messages;
