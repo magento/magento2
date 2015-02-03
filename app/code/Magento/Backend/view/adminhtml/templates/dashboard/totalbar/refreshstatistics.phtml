@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 ?>
-<form action="<?php echo $this->getUrl('*/*/refreshStatistics'); ?>" method="post">
-    <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
+<form action="<?php echo $block->getUrl('*/*/refreshStatistics'); ?>" method="post">
+    <input name="form_key" type="hidden" value="<?php echo $block->getFormKey(); ?>" />
     <button type="submit" style="float:right; margin: 15px"  title="Refresh data">
         <?php echo __('Refresh data') ?>
     </button>
