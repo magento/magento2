@@ -3,16 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Tax\Block\Adminhtml\Rate\Form */
+/* @var $block \Magento\Tax\Block\Adminhtml\Rate\Form */
 ?>
-<div id="<?php echo $this->getNameInLayout() ?>" style="display:none">
-    <?php echo $this->getFormHtml();?>
-    <?php echo $this->getChildHtml('form_after');?>
+<div id="<?php echo $block->getNameInLayout() ?>" style="display:none">
+    <?php echo $block->getFormHtml();?>
+    <?php echo $block->getChildHtml('form_after');?>
 </div>
 
 <script>
 
 
-    var taxRateCollection = <?php echo json_encode($this->getRateCollection());?>;
+    var taxRateCollection = <?php echo json_encode($block->getRateCollection());?>;
 
 </script>

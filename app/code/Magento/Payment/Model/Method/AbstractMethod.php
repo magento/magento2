@@ -736,7 +736,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
             $storeId = $this->getStore();
         }
         $path = 'payment/' . $this->getCode() . '/' . $field;
-        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
+        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId);
     }
 
     /**
@@ -823,7 +823,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->logger->debug($debugData);
+            $this->logger->debug(var_export($debugData, true));
         }
     }
 

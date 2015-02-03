@@ -37,7 +37,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Mail\TransportInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_transportMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Store\StoreManagerInterface|PHPUnit_Framework_MockObject_MockObject */
     protected $_storeManagerMock;
 
     /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
@@ -115,7 +115,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             []
         )->getMock();
         $this->_storeManagerMock = $this->getMockBuilder(
-            '\Magento\Store\Model\StoreManagerInterface'
+            '\Magento\Framework\Store\StoreManagerInterface'
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
