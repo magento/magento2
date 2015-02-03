@@ -256,7 +256,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testSetUseCookiesInOptions()
     {
         $this->_model->setUseCookies(true);
-        $this->assertTrue((bool)$this->_model->getUseCookies());
+        $this->assertTrue($this->_model->getUseCookies());
     }
 
     public function testUseOnlyCookiesDefaultsToIniSettings()

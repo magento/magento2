@@ -35,13 +35,14 @@ class IniGetSetTest extends \PHPUnit_Framework_TestCase
         'eaccelerator.enable',
         'mime_magic.magicfile',
         'display_errors',
+        'default_socket_timeout',
     ];
 
     public function testAllowedGetSetDirectives()
     {
         $deniedDirectives = [];
-        foreach ($this->_getFiles() as $file) {
-            $fileDirectives = $this->_parseDirectives($file);
+        foreach ($this->getFiles() as $file) {
+            $fileDirectives = $this->parseDirectives($file);
             if ($fileDirectives) {
                 $fileDeniedDirectives = array_diff($fileDirectives, $this->allowedDirectives);
                 if ($fileDeniedDirectives) {
@@ -57,7 +58,7 @@ class IniGetSetTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    protected function _getFiles()
+    protected function getFiles()
     {
         return \array_merge(
             Files::init()->getPhpFiles(true, true, true, false),
@@ -70,10 +71,10 @@ class IniGetSetTest extends \PHPUnit_Framework_TestCase
      * @param string $file
      * @return null|array
      */
-    protected function _parseDirectives($file)
+    protected function parseDirectives($file)
     {
         $content = file_get_contents($file);
-        $pattern = '/.*ini_[g|s]et\(\s*[\'|"]([\w\._]+?)[\'|"][\s\w,\'"]*\).*/';
+        $pattern = '/ini_[g|s]et\(\s*[\'|"]([\w\._]+?)[\'|"][\s\w,\'"]*\)/';
         preg_match_all($pattern, $content, $matches);
 
         return $matches ? $matches[1] : null;
@@ -88,7 +89,7 @@ class IniGetSetTest extends \PHPUnit_Framework_TestCase
         $rootPath = Files::init()->getPathToSource();
         $message = 'HHVM-incompatible ini_get/ini_set options were found:';
         foreach ($deniedDirectives as $file => $fileDeniedDirectives) {
-            $message .= "\n" . str_replace($rootPath, '', $file) . ': [' . \implode(', ', $fileDeniedDirectives) . ']';
+            $message .= "\n" . str_replace($rootPath, '', $file) . ': [' . implode(', ', $fileDeniedDirectives) . ']';
         }
         return $message;
     }
