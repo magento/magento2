@@ -163,10 +163,10 @@ class ArgumentsResolver
     /**
      * Returns configured instance argument
      *
-     * @param $config
+     * @param array $config
      * @return array|mixed
      */
-    private function getConfiguredInstanceArgument($config)
+    private function getConfiguredInstanceArgument(array $config)
     {
         $argument = $this->getInstanceArgument($config['instance']);
         if (isset($config['shared'])) {

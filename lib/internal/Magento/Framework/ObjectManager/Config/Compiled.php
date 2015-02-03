@@ -48,6 +48,8 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      * @param RelationsInterface $relations
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setRelations(RelationsInterface $relations)
     {
@@ -59,6 +61,8 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      * @param ConfigCacheInterface $cache
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCache(ConfigCacheInterface $cache)
     {

@@ -126,7 +126,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         foreach ($config as $typeName => $typeConfig) {
             $this->hasPlugins($typeName);
         }
-        foreach ($classDefinitions as $key => $class) {
+        foreach ($classDefinitions as $class) {
             $this->hasPlugins($class);
         }
         $this->_cache->save(serialize($this->_intercepted), $this->_cacheId);

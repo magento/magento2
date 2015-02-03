@@ -189,6 +189,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * Trims starting backslash from plugin instance name
      *
      * @param array $plugins
+     * @return void
      */
     private function trimInstanceStartingBackslash(&$plugins)
     {

@@ -41,7 +41,7 @@ class DataBuilderFactory
     /**
      * Returns builder class name
      *
-     * @param $className
+     * @param string $className
      * @return string
      */
     protected function getBuilderClassName($className)
@@ -62,7 +62,7 @@ class DataBuilderFactory
     /**
      * Creates builder object
      *
-     * @param $builderClassName
+     * @param string $builderClassName
      * @return \Magento\Framework\Api\BuilderInterface Builder Instance
      */
     protected function createObject($builderClassName)

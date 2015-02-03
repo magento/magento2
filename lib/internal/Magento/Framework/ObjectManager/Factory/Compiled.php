@@ -65,6 +65,8 @@ class Compiled extends AbstractFactory
      * @param array $array
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function parseArray(&$array)
     {
