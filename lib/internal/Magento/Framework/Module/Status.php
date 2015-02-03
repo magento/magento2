@@ -87,16 +87,26 @@ class Status
      *
      * @param bool $isEnabled
      * @param string[] $modules
+     * @param bool $ignoreCurModuleStatus
      * @return string[]
      */
-    public function checkConstraints($isEnabled, $modules)
+    public function checkConstraints($isEnabled, $modules, $ignoreCurModuleStatus = false)
     {
         $errorMessages = [];
         if ($isEnabled) {
-            $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenEnableModules($modules);
-            $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules($modules);
+            $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenEnableModules(
+                $modules,
+                $ignoreCurModuleStatus
+            );
+            $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules(
+                $modules,
+                $ignoreCurModuleStatus
+            );
         } else {
-            $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenDisableModules($modules);
+            $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenDisableModules(
+                $modules,
+                $ignoreCurModuleStatus
+            );
             $errorModulesConflict = [];
         }
 

@@ -30,7 +30,7 @@ class ModuleCheck extends AbstractActionController
     }
 
     /**
-     * Result of checking DB credentials
+     * Result of checking constrains for enabling/disabling modules
      *
      * @return JsonModel
      */
@@ -38,20 +38,12 @@ class ModuleCheck extends AbstractActionController
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $enabledModules = isset($params['selectedModules']) ? $params['selectedModules'] : [];
-        $allModules = isset($params['allModules']) ? $params['allModules'] : [];
         $status = $this->objectManager->create('Magento\Framework\Module\Status');
 
-        // checking enabling constraints
-        $constraints = $status->checkConstraints(true, $enabledModules);
+        // checking constraints
+        $constraints = $status->checkConstraints(true, $enabledModules, true);
         if ($constraints) {
             $message = $this->handleConstraints(true, $constraints);
-            return new JsonModel(['success' => false, 'error' => $message]);
-        }
-
-        // checking disabling constraints
-        $constraints = $status->checkConstraints(false, array_diff($allModules, $enabledModules));
-        if ($constraints) {
-            $message = $this->handleConstraints(false, $constraints);
             return new JsonModel(['success' => false, 'error' => $message]);
         }
 

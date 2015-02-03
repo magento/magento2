@@ -37,7 +37,7 @@ class ModuleCheckTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $this->objectManager->expects($this->once())->method('create')->will($this->returnValue($this->status));
-        $this->status->expects($this->exactly(2))->method('checkConstraints')->willReturn([]);
+        $this->status->expects($this->once())->method('checkConstraints')->willReturn([]);
         $jsonModel = $this->controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $jsonModel);
         $variables = $jsonModel->getVariables();

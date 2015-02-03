@@ -51,12 +51,17 @@ class DependencyChecker
      * Checks dependencies when disabling modules
      *
      * @param string[] $moduleNames
+     * @param bool $ignoreCurModuleStatus
      * @return array
      */
-    public function checkDependenciesWhenDisableModules($moduleNames)
+    public function checkDependenciesWhenDisableModules($moduleNames, $ignoreCurModuleStatus = false)
     {
-        // assume disable succeeds: currently enabled modules - to-be-disabled modules
-        $enabledModules = array_diff($this->list->getNames(), $moduleNames);
+        if ($ignoreCurModuleStatus) {
+            $enabledModules = $moduleNames;
+        } else {
+            // assume disable succeeds: currently enabled modules - to-be-disabled modules
+            $enabledModules = array_diff($this->list->getNames(), $moduleNames);
+        }
         return $this->checkDependencyGraph(false, $moduleNames, $enabledModules);
     }
 
@@ -64,12 +69,17 @@ class DependencyChecker
      * Checks dependencies when enabling modules
      *
      * @param string[] $moduleNames
+     * @param bool $ignoreCurModuleStatus
      * @return array
      */
-    public function checkDependenciesWhenEnableModules($moduleNames)
+    public function checkDependenciesWhenEnableModules($moduleNames, $ignoreCurModuleStatus = false)
     {
-        // assume enable succeeds: union of currently enabled modules and to-be-enabled modules
-        $enabledModules = array_unique(array_merge($this->list->getNames(), $moduleNames));
+        if ($ignoreCurModuleStatus) {
+            $enabledModules = $moduleNames;
+        } else {
+            // assume enable succeeds: union of currently enabled modules and to-be-enabled modules
+            $enabledModules = array_unique(array_merge($this->list->getNames(), $moduleNames));
+        }
         return $this->checkDependencyGraph(true, $moduleNames, $enabledModules);
     }
 

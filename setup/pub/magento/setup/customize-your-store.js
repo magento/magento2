@@ -35,7 +35,7 @@ angular.module('customize-your-store', ['ngStorage'])
             $http.post('index.php/module-check', $scope.store)
                 .success(function (data) {
                     $scope.checkModuleConstraints.result = data;
-                    if (!(($scope.checkModuleConstraints.result !== undefined) && (!$scope.checkModuleConstraints.result.success))) {
+                    if (($scope.checkModuleConstraints.result !== undefined) && ($scope.checkModuleConstraints.result.success)) {
                         $scope.loading = false;
                         $scope.nextState();
                     } else {
