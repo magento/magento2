@@ -9,21 +9,21 @@ namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
     /**
-     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param array $reportTypes
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
-        array $reportTypes
+        array $reportTypes,
+        \Psr\Log\LoggerInterface $logger
     ) {
-        $this->logger = $logger;
         parent::__construct($context, $dateFilter, $resultRedirectFactory, $reportTypes);
+        $this->logger = $logger;
     }
 
     /**
