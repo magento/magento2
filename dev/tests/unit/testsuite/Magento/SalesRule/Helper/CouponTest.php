@@ -35,24 +35,22 @@ class CouponTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
-        $this->context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->couponParameters = [
             'separator' => $this->separator,
             'charset' => [
                 'format' => 'abc',
             ],
         ];
-
-        $this->helper = $objectManager->getObject(
-            'Magento\SalesRule\Helper\Coupon',
-            [
-                'context' => $this->context,
-                'scopeConfig' => $this->scopeConfig,
-                'couponParameters' => $this->couponParameters
-            ]
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $className = 'Magento\SalesRule\Helper\Coupon';
+        $arguments = $objectManager->getConstructArguments(
+            $className,
+            ['couponParameters' => $this->couponParameters]
         );
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
+        $this->scopeConfig = $context->getScopeConfig();
+        $this->helper = $objectManager->getObject('Magento\SalesRule\Helper\Coupon', $arguments);
     }
 
     public function testGetFormatsList()

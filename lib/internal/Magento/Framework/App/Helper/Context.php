@@ -201,6 +201,9 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         return $this->urlDecoder;
     }
 
+    /**
+     * @return \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     public function getScopeConfig()
     {
         return $this->scopeConfig;

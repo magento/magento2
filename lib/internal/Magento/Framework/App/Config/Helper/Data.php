@@ -22,25 +22,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**#@- */
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     */
-    public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    ) {
-        parent::__construct($context);
-        $this->_scopeConfig = $scopeConfig;
-    }
-
-    /**
      * @param null $storeId
      * @return bool
      */
@@ -48,7 +29,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $allow = true;
 
-        $allowedIps = $this->_scopeConfig->getValue(
+        $allowedIps = $this->scopeConfig->getValue(
             self::XML_PATH_DEV_ALLOW_IPS,
             \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId

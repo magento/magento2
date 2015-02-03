@@ -29,7 +29,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     protected $_jsonEncoder;
 
     /**
-     * Core data
+     * Directory helper
      *
      * @var \Magento\Directory\Helper\Data
      */
@@ -96,7 +96,6 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @internal param \Magento\Framework\Api\ExtensibleDataObjectConverter $convertor
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -260,7 +259,9 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
             }
         }
         if (is_null($this->_form->getElement('country_id')->getValue())) {
-            $this->_form->getElement('country_id')->setValue($this->directoryHelper->getDefaultCountry($this->getStore()));
+            $this->_form->getElement('country_id')->setValue(
+                $this->directoryHelper->getDefaultCountry($this->getStore())
+            );
         }
 
         // Set custom renderer for VAT field if needed
