@@ -8,7 +8,7 @@ define([
 ], function ($) {
     'use strict';
 
-    $.widget('mage.fileOption', {
+    $.widget('mage.priceOptionFile', {
         options: {
             fileName: '',
             fileNamed: '',
@@ -65,5 +65,5 @@ define([
         }
     });
 
-    return $.mage.fileOption;
+    return $.mage.priceOptionFile;
 });
