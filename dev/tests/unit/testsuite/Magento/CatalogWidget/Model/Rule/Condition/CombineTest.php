@@ -45,9 +45,9 @@ class CombineTest extends \PHPUnit_Framework_TestCase
     public function testGetNewChildSelectOptions()
     {
         $expectedOptions = [
-            ['value' => '', 'label' => 'Please choose a condition to add.'],
-            ['value' => 'Magento\CatalogWidget\Model\Rule\Condition\Combine', 'label' => 'Conditions Combination'],
-            ['label' => 'Product Attribute', 'value' => [
+            ['value' => '', 'label' => __('Please choose a condition to add.')],
+            ['value' => 'Magento\CatalogWidget\Model\Rule\Condition\Combine', 'label' => __('Conditions Combination')],
+            ['label' => __('Product Attribute'), 'value' => [
                 ['value' => 'Magento\CatalogWidget\Model\Rule\Condition\Product|sku', 'label' => 'SKU'],
                 ['value' => 'Magento\CatalogWidget\Model\Rule\Condition\Product|category', 'label' => 'Category'],
             ]],
@@ -67,12 +67,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
 
         $this->conditionFactory->expects($this->atLeastOnce())->method('create')->willReturn($productCondition);
 
-        $actualOptions = $this->condition->getNewChildSelectOptions();
-        foreach ($actualOptions as $key => $option) {
-            $actualOptions[$key]['label'] = (string)$option['label'];
-        }
-
-        $this->assertSame($expectedOptions, $actualOptions);
+        $this->assertEquals($expectedOptions, $this->condition->getNewChildSelectOptions());
     }
 
     public function testCollectValidatedAttributes()

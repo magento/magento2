@@ -321,22 +321,17 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'customer_account' => [
                 'name' => 'customer_account',
-                'label' => 'Customer My Account (All Pages)',
+                'label' => __('Customer My Account (All Pages)'),
                 'design_abstraction' => 'custom',
             ],
             'page_empty' => [
                 'name' => 'page_empty',
-                'label' => 'All Empty Layout Pages',
+                'label' => __('All Empty Layout Pages'),
                 'design_abstraction' => 'page_layout',
             ],
         ];
 
-        $actualAbstractions = $this->_model->getAllDesignAbstractions();
-        foreach ($actualAbstractions as $key => $abstraction) {
-            $actualAbstractions[$key]['label'] = (string)$abstraction['label'];
-        }
-
-        $this->assertSame($expected, $actualAbstractions);
+        $this->assertEquals($expected, $this->_model->getAllDesignAbstractions());
     }
 
     public function testIsPageLayoutDesignAbstractions()
