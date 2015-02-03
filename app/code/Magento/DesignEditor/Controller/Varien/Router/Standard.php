@@ -5,7 +5,6 @@
  *
  */
 namespace Magento\DesignEditor\Controller\Varien\Router;
-use Magento\Framework\App\Router\Base;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

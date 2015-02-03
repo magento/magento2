@@ -2208,6 +2208,7 @@ return [
         'Magento\Store\App\FrontController\Plugin\RequestPreprocessor'
     ],
     ['Magento\Core\App\Response\Redirect', 'Magento\Store\App\Response\Redirect'],
+    ['Magento\Core\App\Router\Base', 'Magento\Framework\App\Router\Base'],
     ['Magento\Core\Block\Store\Switcher', 'Magento\Store\Block\Store\Switcher'],
     ['Magento\Core\Block\Switcher', 'Magento\Store\Block\Switcher'],
     ['Magento\Core\Helper\Cookie', 'Magento\Store\Helper\Cookie'],
