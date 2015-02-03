@@ -2,38 +2,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/*global describe*/
-/*global beforeEach*/
-/*global afterEach*/
-/*global it*/
-/*global expect*/
-/*global jasmine*/
-/*global spyOn*/
 define([
     'jquery',
     'Magento_PageCache/js/page-cache'
 ], function ($) {
     'use strict';
-
-    if (!Function.prototype.bind) {
-        /**
-         * @param   {Object} bind
-         * @returns {Function}
-         */
-        Function.prototype.bind = function (bind) {
-            var self = this;
-
-            /**
-             * @returns {Function}
-             */
-            return function () {
-                var args = Array.prototype.slice.call(arguments);
-
-                return self.apply(bind || null, args);
-            };
-        };
-    }
 
     describe('Testing html-comments-parser $.fn.comments behavior', function () {
         var element,
@@ -169,7 +142,7 @@ define([
             expect($.fn.formKey).toBeDefined();
         });
 
-        it('widget set value to input[form_key]', function () {
+        it('widget gets value of input[form_key]', function () {
             spyOn($.mage.cookies, 'get').and.returnValue('FAKE_COOKIE');
 
             wdContainer.formKey({
@@ -180,7 +153,7 @@ define([
             expect(inputContainer.val()).toBe('FAKE_COOKIE');
         });
 
-        it('widget set value to input[form_key]', function () {
+        it('widget sets value to input[form_key] in case it empty', function () {
             spyOn($.mage.cookies, 'set');
             spyOn($.mage.cookies, 'get');
 
@@ -193,7 +166,7 @@ define([
             expect(inputContainer.val()).toEqual(jasmine.any(String));
         });
 
-        it('widget exist on load on body', function (done) {
+        it('widget exists on load on body', function (done) {
             $(function () {
                 expect($('body').data('mageFormKey')).toBeDefined();
                 done();
@@ -231,7 +204,7 @@ define([
             expect($.fn.comments).not.toHaveBeenCalled();
         });
 
-        it('_searchPlaceholders called only when HTML_COMMENTS', function () {
+        it('_searchPlaceholders is called only when HTML_COMMENTS', function () {
             var nodes;
             spyOn($.mage.cookies, 'get').and.returnValue('FAKE_VERSION_COOKIE');
             spyOn($.mage.pageCache.prototype, '_searchPlaceholders');
@@ -248,7 +221,7 @@ define([
             expect($.mage.pageCache.prototype._searchPlaceholders).toHaveBeenCalledWith(nodes);
         });
 
-        it('_searchPlaceholders return Array of blocks', function () {
+        it('_searchPlaceholders returns Array of blocks', function () {
             var nodes,
                 searches;
             spyOn($.mage.cookies, 'get').and.returnValue('FAKE_VERSION_COOKIE');
@@ -258,8 +231,8 @@ define([
                 .pageCache();
 
             nodes = wdContainer.comments();
-            searches = wdContainer.data('pageCache')._searchPlaceholders(nodes);
-            expect(wdContainer.data('pageCache')._searchPlaceholders()).toEqual([]);
+            searches = wdContainer.data('magePageCache')._searchPlaceholders(nodes);
+            expect(wdContainer.data('magePageCache')._searchPlaceholders()).toEqual([]);
             expect(searches[0]).toEqual(jasmine.objectContaining({
                 name: 'FAKE_BLOCK'
             }));
@@ -267,24 +240,7 @@ define([
             expect(searches[0].closeElement.nodeType).toBeDefined();
         });
 
-        it('_searchPlaceholders called only when HTML_COMMENTS', function () {
-            var nodes;
-            spyOn($.mage.cookies, 'get').and.returnValue('FAKE_VERSION_COOKIE');
-            spyOn($.mage.pageCache.prototype, '_searchPlaceholders');
-
-            wdContainer
-                .html('<!-- BLOCK FAKE_BLOCK -->FAKE_TEXT<!-- /BLOCK FAKE_BLOCK -->')
-                .pageCache();
-
-            nodes = wdContainer.comments();
-            expect(nodes.length).toEqual(2);
-
-            expect($.mage.cookies.get).toHaveBeenCalled();
-            expect($.mage.pageCache.prototype._searchPlaceholders).toHaveBeenCalled();
-            expect($.mage.pageCache.prototype._searchPlaceholders).toHaveBeenCalledWith(nodes);
-        });
-
-        it('_replacePlaceholder append HTML after sibling node', function () {
+        it('_replacePlaceholder appends HTML after sibling node', function () {
             var replacer,
                 searcher,
                 placeholders,
@@ -307,7 +263,7 @@ define([
             expect(wdContainer.html()).toEqual('<span></span><span>FAKE_HTML</span>');
         });
 
-        it('_replacePlaceholder prepend HTML if no sibling', function () {
+        it('_replacePlaceholder prepends HTML if no sibling', function () {
             var replacer,
                 searcher,
                 placeholders,
@@ -328,13 +284,6 @@ define([
             replacer(placeholders[0], '<span>FAKE_HTML</span>');
 
             expect(wdContainer.html()).toEqual('<span>FAKE_HTML</span>');
-        });
-
-        it('widget exist on load on body', function (done) {
-            $(function () {
-                expect($('body').data('magePageCache')).toBeDefined();
-                done();
-            });
         });
     });
 });

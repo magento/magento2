@@ -3,14 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Asset;
+
+namespace Magento\Framework\View\Asset\Minified;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Asset\MergeableInterface;
+use Magento\Framework\View\Asset\LocalInterface;
 
 /**
  * Minified page asset
  */
-class Minified implements MergeableInterface
+abstract class AbstractAsset implements MergeableInterface
 {
     /**#@+
      * Strategies for verifying whether the files need to be minified
@@ -244,7 +247,7 @@ class Minified implements MergeableInterface
      */
     protected function isFileMinified($fileName)
     {
-        return (bool)preg_match('#.min.\w+$#', $fileName);
+        return (bool)preg_match('#\.min\.\w+$#', $fileName);
     }
 
     /**
@@ -299,31 +302,11 @@ class Minified implements MergeableInterface
     }
 
     /**
-     * Generate minified file and fill the properties to reference that file
-     *
-     * @return void
-     */
-    protected function fillPropertiesByMinifyingAsset()
-    {
-        $path = $this->originalAsset->getPath();
-        $this->context = new \Magento\Framework\View\Asset\File\Context(
-            $this->baseUrl->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_STATIC]),
-            DirectoryList::STATIC_VIEW,
-            self::CACHE_VIEW_REL . '/minified'
-        );
-        $this->filePath = md5($path) . '_' . $this->composeMinifiedName(basename($path));
-        $this->path = $this->context->getPath() . '/' . $this->filePath;
-        $this->minify();
-        $this->file = $this->staticViewDir->getAbsolutePath($this->path);
-        $this->url = $this->context->getBaseUrl() . $this->path;
-    }
-
-    /**
      * Perform actual minification
      *
      * @return void
      */
-    private function minify()
+    protected function minify()
     {
         $isExists = $this->staticViewDir->isExist($this->path);
         if (!$isExists) {
@@ -341,4 +324,11 @@ class Minified implements MergeableInterface
             $this->staticViewDir->writeFile($this->path, $content);
         }
     }
+
+    /**
+     * Generate minified file and fill the properties to reference that file
+     *
+     * @return void
+     */
+    abstract protected function fillPropertiesByMinifyingAsset();
 }
