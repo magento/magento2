@@ -80,9 +80,9 @@ class ConflictChecker
             $constraintA = $versionParser->parseConstraints($this->packageInfo->getConflict($moduleB)[$moduleA]);
             $constraintB = $versionParser->parseConstraints($this->packageInfo->getVersion($moduleA));
             if ($constraintA->matches($constraintB)) {
-                $messages[] = "$moduleB conflicts with $moduleA version " .
-                    $this->packageInfo->getConflict($moduleB)[$moduleA] .
-                    ' (current ' . $this->packageInfo->getVersion($moduleA) . ')';
+                $messages[] = "$moduleB conflicts with current $moduleA version " .
+                    $this->packageInfo->getVersion($moduleA) .
+                    ' (version should not be ' . $this->packageInfo->getConflict($moduleB)[$moduleA] . ')';
             }
         }
         if (isset($this->packageInfo->getConflict($moduleA)[$moduleB]) &&
@@ -92,9 +92,9 @@ class ConflictChecker
             $constraintA = $versionParser->parseConstraints($this->packageInfo->getConflict($moduleA)[$moduleB]);
             $constraintB = $versionParser->parseConstraints($this->packageInfo->getVersion($moduleB));
             if ($constraintA->matches($constraintB)) {
-                $messages[] = "$moduleA conflicts with $moduleB version " .
-                    $this->packageInfo->getConflict($moduleA)[$moduleB] .
-                    ' (current ' . $this->packageInfo->getVersion($moduleA) . ')';;
+                $messages[] = "$moduleA conflicts with current $moduleB version " .
+                    $this->packageInfo->getVersion($moduleA) .
+                    ' (version should not be ' . $this->packageInfo->getConflict($moduleA)[$moduleB] . ')';;
             }
         }
         return $messages;
