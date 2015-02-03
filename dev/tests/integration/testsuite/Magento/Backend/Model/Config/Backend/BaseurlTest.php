@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
+use Magento\Framework\Store\StoreManagerInterface;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -40,7 +42,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
         return [
             ['any/path', 'http://example.com/'],
             ['any/path', 'http://example.com/uri/'],
-            [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $basePlaceholder],
+            [StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL, $basePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecurePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecureSuffix],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL, ''],
@@ -49,7 +51,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, ''],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecurePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecureSuffix],
-            [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, $basePlaceholder],
+            [StoreManagerInterface::XML_PATH_SECURE_BASE_URL, $basePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $securePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $secureSuffix],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, ''],
@@ -58,7 +60,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, ''],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $securePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $secureSuffix],
-            [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, $unsecurePlaceholder],
+            [StoreManagerInterface::XML_PATH_SECURE_BASE_URL, $unsecurePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $unsecurePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $unsecureSuffix],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, ''],
@@ -104,19 +106,19 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
             ['', 'example.com'],
             ['', 'http://example.com'],
             ['', 'http://example.com/uri'],
-            [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, ''],
-            [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $baseSuffix],
-            [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $unsecureSuffix],
-            [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $unsecurePlaceholder],
+            [StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL, ''],
+            [StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL, $baseSuffix],
+            [StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL, $unsecureSuffix],
+            [StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL, $unsecurePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, ''],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $baseSuffix],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecureWrongSuffix],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL, $unsecureWrongSuffix],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL, $unsecureWrongSuffix],
-            [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, ''],
-            [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, $baseSuffix],
-            [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, $secureSuffix],
-            [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, $securePlaceholder],
+            [StoreManagerInterface::XML_PATH_SECURE_BASE_URL, ''],
+            [StoreManagerInterface::XML_PATH_SECURE_BASE_URL, $baseSuffix],
+            [StoreManagerInterface::XML_PATH_SECURE_BASE_URL, $secureSuffix],
+            [StoreManagerInterface::XML_PATH_SECURE_BASE_URL, $securePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, ''],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $baseSuffix],
             [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL, $secureWrongSuffix],

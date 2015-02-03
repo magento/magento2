@@ -9,6 +9,15 @@ namespace Magento\Framework\Store;
 interface StoreManagerInterface
 {
     /**
+     * Configuration paths
+     */
+    const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
+
+    const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
+
+    const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
+
+    /**
      * Allow or disallow single store mode
      *
      * @param bool $value

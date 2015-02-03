@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Url;
 
+use Magento\Framework\Store\StoreManagerInterface;
+
 class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
 {
     /**
@@ -49,7 +51,7 @@ class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
     public function isSecure($url)
     {
         if (!$this->_scopeConfig->getValue(
-            \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
+            StoreManagerInterface::XML_PATH_SECURE_IN_FRONTEND,
             \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {

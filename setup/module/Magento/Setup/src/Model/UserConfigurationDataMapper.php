@@ -9,6 +9,7 @@ namespace Magento\Setup\Model;
 use Magento\Backend\Model\Url;
 use Magento\Core\Helper\Data;
 use Magento\Directory\Model\Currency;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Setup\Module\Setup;
 use Magento\Store\Model\Store;
 
@@ -40,9 +41,9 @@ class UserConfigurationDataMapper
      */
     private static $pathDataMap = [
         Store::XML_PATH_USE_REWRITES => self::KEY_USE_SEF_URL,
-        Store::XML_PATH_UNSECURE_BASE_URL => self::KEY_BASE_URL,
-        Store::XML_PATH_SECURE_IN_FRONTEND => self::KEY_IS_SECURE,
-        Store::XML_PATH_SECURE_BASE_URL => self::KEY_BASE_URL_SECURE,
+        StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL => self::KEY_BASE_URL,
+        StoreManagerInterface::XML_PATH_SECURE_IN_FRONTEND => self::KEY_IS_SECURE,
+        StoreManagerInterface::XML_PATH_SECURE_BASE_URL => self::KEY_BASE_URL_SECURE,
         Store::XML_PATH_SECURE_IN_ADMINHTML => self::KEY_IS_SECURE_ADMIN,
         Data::XML_PATH_DEFAULT_LOCALE => self::KEY_LANGUAGE,
         Data::XML_PATH_DEFAULT_TIMEZONE => self::KEY_TIMEZONE,

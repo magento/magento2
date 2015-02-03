@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
+use Magento\Framework\Store\StoreManagerInterface;
+
 class Baseurl extends \Magento\Framework\App\Config\Value
 {
     /**
@@ -66,7 +68,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     {
         $placeholders = ['{{unsecure_base_url}}'];
         switch ($this->getPath()) {
-            case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL:
+            case StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL:
                 $this->_assertValuesOrUrl(['{{base_url}}'], $value);
                 break;
             case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL:
@@ -92,7 +94,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     {
         $placeholders = ['{{unsecure_base_url}}', '{{secure_base_url}}'];
         switch ($this->getPath()) {
-            case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL:
+            case StoreManagerInterface::XML_PATH_SECURE_BASE_URL:
                 $this->_assertValuesOrUrl(['{{base_url}}', '{{unsecure_base_url}}'], $value);
                 break;
             case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL:
@@ -204,9 +206,9 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     {
         if ($this->isValueChanged()) {
             switch ($this->getPath()) {
-                case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL:
+                case StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL:
                 case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL:
-                case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL:
+                case StoreManagerInterface::XML_PATH_SECURE_BASE_URL:
                 case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL:
                     $this->_mergeService->cleanMergedJsCss();
                     break;

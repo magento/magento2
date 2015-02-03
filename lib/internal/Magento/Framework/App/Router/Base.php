@@ -8,6 +8,8 @@
 namespace Magento\Framework\App\Router;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Store\ScopeInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -330,7 +332,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      */
     protected function _getDefaultPath()
     {
-        return $this->_scopeConfig->getValue('web/default/front', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue('web/default/front', ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -405,18 +407,20 @@ class Base implements \Magento\Framework\App\RouterInterface
     {
         return parse_url(
             $this->_scopeConfig->getValue(
-                'web/unsecure/base_url',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL,
+                ScopeInterface::SCOPE_STORE
             ),
             PHP_URL_SCHEME
-        ) === 'https' || $this->_scopeConfig->isSetFlag(
-            \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+        ) === 'https'
+        || $this->_scopeConfig->isSetFlag(
+            StoreManagerInterface::XML_PATH_SECURE_IN_FRONTEND,
+            ScopeInterface::SCOPE_STORE
         ) && parse_url(
-            $this->_scopeConfig->getValue('web/secure/base_url', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE),
+            $this->_scopeConfig->getValue(
+                StoreManagerInterface::XML_PATH_SECURE_BASE_URL,
+                ScopeInterface::SCOPE_STORE
+            ),
             PHP_URL_SCHEME
-        ) == 'https' && $this->_urlSecurityInfo->isSecure(
-            $path
-        );
+        ) == 'https' && $this->_urlSecurityInfo->isSecure($path);
     }
 }
