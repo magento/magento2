@@ -223,12 +223,8 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
                 }
             }
         }
-        if ($customer->dataHasChangedFor('default_billing')) {
-            $this->saveAttribute($customer, 'default_billing');
-        }
-        if ($customer->dataHasChangedFor('default_shipping')) {
-            $this->saveAttribute($customer, 'default_shipping');
-        }
+        $this->saveAttribute($customer, 'default_billing');
+        $this->saveAttribute($customer, 'default_shipping');
 
         return $this;
     }
@@ -384,7 +380,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     {
         if ($this->_scopeConfig->getValue(
             \Magento\Customer\Model\Customer::XML_PATH_GENERATE_HUMAN_FRIENDLY_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             parent::setNewIncrementId($object);

@@ -2,7 +2,7 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.42.0-beta5",
+    "version": "0.42.0-beta6",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -31,7 +31,8 @@
         "zendframework/zend-http": "2.3.1",
         "magento/zendframework1": "1.12.9-patch1",
         "composer/composer": "1.0.0-alpha8",
-        "monolog/monolog": "1.11.0"
+        "monolog/monolog": "1.11.0",
+        "tubalmartin/cssmin": "2.4.8-p4"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.0",
@@ -79,6 +80,7 @@
         "magento/module-customer": "self.version",
         "magento/module-customer-import-export": "self.version",
         "magento/module-design-editor": "self.version",
+        "magento/module-developer": "self.version",
         "magento/module-dhl": "self.version",
         "magento/module-directory": "self.version",
         "magento/module-downloadable": "self.version",
@@ -166,7 +168,7 @@
             "linkorb/jsmin-php": "lib/internal/JSMin",
             "phpseclib/phpseclib": "lib/internal/phpseclib",
             "components/jquery": [
-                "lib/web/jquery/jquery.js",
+                "lib/web/jquery.js",
                 "lib/web/jquery/jquery.min.js",
                 "lib/web/jquery/jquery-migrate.js",
                 "lib/web/jquery/jquery-migrate.min.js"
@@ -177,8 +179,7 @@
                 "lib/web/jquery/jquery-ui.min.js"
             ],
             "twbs/bootstrap": [
-                "lib/web/jquery/jquery.tabs.js",
-                "lib/web/jquery/jquery.popups.js"
+                "lib/web/jquery/jquery.tabs.js"
             ],
             "tinymce/tinymce": "lib/web/tiny_mce"
         }

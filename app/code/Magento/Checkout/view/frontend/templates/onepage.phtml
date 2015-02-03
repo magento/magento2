@@ -7,44 +7,54 @@
 // @codingStandardsIgnoreFile
 
 /** @var \Magento\Checkout\Block\Onepage\Payment $_paymentBlock */
-$_paymentBlock = $this->getLayout()->getBlock('checkout.onepage.payment');
+$_paymentBlock = $block->getLayout()->getBlock('checkout.onepage.payment');
 ?>
 
 <div class="opc-wrapper">
     <ol class="opc" id="checkoutSteps">
-    <?php $i = 0; foreach ($this->getSteps() as $_stepId => $_stepInfo): ?>
-    <?php if (!$this->getChildBlock($_stepId) || !$this->getChildBlock($_stepId)->isShow()): continue; endif; $i++ ?>
+    <?php $i = 0; foreach ($block->getSteps() as $_stepId => $_stepInfo): ?>
+    <?php if (!$block->getChildBlock($_stepId) || !$block->getChildBlock($_stepId)->isShow()): continue; endif; $i++ ?>
         <li id="opc-<?php echo $_stepId ?>" class="section<?php echo !empty($_stepInfo['allow']) ? ' allow' : '' ?><?php echo !empty($_stepInfo['complete']) ? ' saved' : '' ?>">
             <div class="step-title" data-role="title">
                 <span class="number"><?php echo $i ?></span>
                 <h2><?php echo $_stepInfo['label'] ?></h2>
             </div>
             <div id="checkout-step-<?php echo $_stepId ?>" class="step-content" data-role="content">
-                <?php echo $this->getChildHtml($_stepId) ?>
+                <?php echo $block->getChildHtml($_stepId) ?>
             </div>
         </li>
     <?php endforeach ?>
     </ol>
     <script>
 require([
-    "jquery",
-    "mage/mage"
-], function($){
+    "underscore",
+    "accordion",
+    "opcOrderReview",
+], function(_, accordion, opcOrderReview){
     'use strict';
 
-    $(document).ready(function() {
-        $('#checkoutSteps').mage('accordion',{
-            'collapsibleElement' : ' > li',
-            'openedState' : 'active'
-        }).mage('opcOrderReview', $.extend({
-            'checkoutAgreements': '#checkout-agreements',
-            'checkoutProgressContainer': '#checkout-progress-wrapper',
-            'methodDescription': '.items'
-            },
-            <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>
-        ));
-    });
+    /**
+     * @todo refactor opcCheckoutMethod
+     *
+     * Initializiation of this components can't be moved to a data-mage-init attribute
+     * due to dependencies between instances of opcCheckoutMethod and mage.accordion.
+     * Thus initializiation has to be synchronyous.
+     */
+    var elem = document.getElementById('checkoutSteps'),
+        opcConfig;
 
+    opcConfig = _.extend({
+        'checkoutAgreements': '#checkout-agreements',
+        'checkoutProgressContainer': '#checkout-progress-wrapper',
+        'methodDescription': '.items'
+    },<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>);
+
+    accordion({
+        'collapsibleElement': ' > li',
+        'openedState': 'active'
+    }, elem);
+
+    opcOrderReview(opcConfig, elem);
 });
 </script>
 </div>

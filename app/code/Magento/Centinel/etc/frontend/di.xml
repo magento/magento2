@@ -16,7 +16,7 @@
             <argument name="storage" xsi:type="object">Magento\Centinel\Model\Session\Storage</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Core\Model\Url\SecurityInfo">
+    <type name="Magento\Framework\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
                 <item name="centinel" xsi:type="string">/centinel/</item>

@@ -23,7 +23,15 @@
 }
 
 //  Rem font size
-.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) {
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, rem)) {
+    font-size: @sizeValue;
+}
+
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, em)) {
+    font-size: @sizeValue;
+}
+
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, px)) {
     .to-rem(@sizeValue);
     font-size: @valueRem;
 }
@@ -55,11 +63,11 @@
 }
 
 .text-hide() {
+    background-color: transparent;
+    border: 0;
     font: ~"0/0" a;
     color: transparent;
     text-shadow: none;
-    background-color: transparent;
-    border: 0;
 }
 
 //  Optional hyphenation
@@ -67,7 +75,7 @@
     word-wrap: break-word;
     -webkit-hyphens: @mode;
        -moz-hyphens: @mode;
-        -ms-hyphens: @mode; // IE10+
+        -ms-hyphens: @mode; //  IE10+
             hyphens: @mode;
 }
 
@@ -156,7 +164,8 @@
 
 //
 //  Base typography
-//--------------------------------------
+//  ---------------------------------------------
+
 .typography-base() {
     html {
         .css(font-size, @font-size-root);
@@ -179,7 +188,7 @@
         }
     }
 
-    // Abbreviations and acronyms
+    //  Abbreviations and acronyms
     abbr[title] {
         cursor: help;
         .css(border-bottom, 1px dotted @abbr-border-color);
@@ -233,7 +242,8 @@
 
 //
 //  Headings
-//--------------------------------------
+//  ---------------------------------------------
+
 .typography-headings() {
     h1 {
         .heading(h1);
@@ -273,7 +283,8 @@
 
 //
 //  Links
-// --------------------------------------------------
+//  ---------------------------------------------
+
 .typography-links() {
     a,
     .alink {
@@ -283,7 +294,8 @@
 
 //
 //  Unordered and Ordered lists
-// --------------------------------------------------
+//  ---------------------------------------------
+
 .typography-lists() {
     ul,
     ol {
@@ -330,7 +342,8 @@
 
 //
 //  Code (inline and block)
-// --------------------------------------------------
+//  ---------------------------------------------
+
 .typography-code() {
     code,
     kbd,
@@ -339,7 +352,7 @@
         .css(font-family, @font-family-monospace);
     }
 
-    // Inline code
+    //  Inline code
     code {
         .css(background, @code-bg);
         .css(color, @code-color);
@@ -348,7 +361,7 @@
         white-space: nowrap;
     }
 
-    // User input typically entered via keyboard
+    //  User input typically entered via keyboard
     kbd {
         .css(background, @kbd-bg);
         .css(color, @kbd-color);
@@ -356,7 +369,7 @@
         .css(padding, @code-padding);
     }
 
-    // Blocks of code
+    //  Blocks of code
     pre {
         .css(background, @pre-bg);
         .css(border, @pre-border-width solid @pre-border-color);
@@ -381,7 +394,8 @@
 
 //
 //  Blockquotes
-// --------------------------------------------------
+//  ---------------------------------------------
+
 .typography-blockquote() {
     blockquote {
         .css(border-left, @blockquote-border-width solid @blockquote-border-color);
@@ -417,7 +431,7 @@
         }
     }
 
-    // Quotes
+    //  Quotes
     blockquote:before,
     blockquote:after {
         content: "";
@@ -432,7 +446,7 @@
         content: none;
     }
 
-    // Undo browser default styling
+    //  Undo browser default styling
     cite {
         .css(font-style, @cite-font-style);
     }

@@ -18,14 +18,14 @@
                 <backend_type>virtual</backend_type>
             </id>
         </fields>
-        <data_set>
+        <dataset>
             <sku />
             <name />
             <short_description />
             <description />
             <tax_class_id />
             <quantity_and_stock_status />
-        </data_set>
+        </dataset>
         <data_config>
             <create_url_params>
                 <type>grouped</type>

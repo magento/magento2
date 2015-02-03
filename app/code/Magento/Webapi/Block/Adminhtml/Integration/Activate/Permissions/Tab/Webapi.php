@@ -12,9 +12,6 @@ use Magento\Webapi\Helper\Data as WebapiHelper;
 
 /**
  * API permissions tab for integration activation dialog.
- *
- * TODO: Fix warnings suppression
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface

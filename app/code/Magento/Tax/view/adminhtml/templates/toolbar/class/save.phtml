@@ -7,10 +7,10 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<div class="page-actions">
-    <?php echo $this->getBackButtonHtml() ?>
-    <?php echo $this->getResetButtonHtml() ?>
-    <?php echo $this->getSaveButtonHtml() ?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions">
+    <?php echo $block->getBackButtonHtml() ?>
+    <?php echo $block->getResetButtonHtml() ?>
+    <?php echo $block->getSaveButtonHtml() ?>
 </div>
 <?php if ($form): ?>
 <?php echo $form->toHtml(); ?>
