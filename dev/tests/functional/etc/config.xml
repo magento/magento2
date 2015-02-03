@@ -9,8 +9,8 @@
     <application>
         <reopenBrowser>testCase</reopenBrowser>
         <backendLogin>admin</backendLogin>
-        <backendPassword>123123q</backendPassword>
-        <appBackendUrl>http://magento.dev/backend/</appBackendUrl>
+        <backendPassword>222222w</backendPassword>
+        <appBackendUrl>http://magento.dev/admin/</appBackendUrl>
         <backendLoginUrl>admin</backendLoginUrl>
     </application>
     <install>

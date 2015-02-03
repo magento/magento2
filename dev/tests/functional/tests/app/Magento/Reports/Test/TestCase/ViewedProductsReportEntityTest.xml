@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
     <testCase name="ViewedProductsReportEntityTest">
         <variation name="ViewedProductsReportEntityTestVariation1">
             <data name="description">view products on front and verify they all reflected in Year report</data>

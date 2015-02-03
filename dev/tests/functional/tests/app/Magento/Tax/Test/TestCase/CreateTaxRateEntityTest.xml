@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
     <testCase name="CreateTaxRateEntityTest">
         <variation name="CreateTaxRateEntityTestVariation1">
             <data name="taxRate/data/code">TaxIdentifier%isolation%</data>

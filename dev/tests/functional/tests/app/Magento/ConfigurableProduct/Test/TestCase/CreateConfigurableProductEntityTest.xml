@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
     <testCase name="CreateConfigurableProductEntityTest">
         <variation name="CreateConfigurableProductEntityTestVariation1">
             <data name="product/data/configurable_attributes_data/preset">two_new_options</data>

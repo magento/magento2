@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/variations.xsd">
     <testCase name="DeleteProductAttributeEntityTest">
         <variation name="DeleteProductAttributeEntityTestVariation1">
             <data name="attribute/dataSet">attribute_type_text_field</data>
