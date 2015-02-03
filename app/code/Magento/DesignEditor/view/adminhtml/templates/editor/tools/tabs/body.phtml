@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs\Body */ ?>
-<div class="tab-panel<?php echo $this->getIsActive() ? ' active' : '' ?>" id="<?php echo $this->getTabId() ?>">
-    <?php echo $this->getContent() ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs\Body */ ?>
+<div class="tab-panel<?php echo $block->getIsActive() ? ' active' : '' ?>" id="<?php echo $block->getTabId() ?>">
+    <?php echo $block->getContent() ?>
 </div>
