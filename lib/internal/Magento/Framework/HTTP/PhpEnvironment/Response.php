@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
-class Response extends \Zend\Http\PhpEnvironment\Response
+class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Framework\App\Response\HttpInterface
 {
     /**
      * Flag; is this response a redirect?

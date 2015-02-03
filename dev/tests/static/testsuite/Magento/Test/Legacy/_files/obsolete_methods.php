@@ -2042,13 +2042,4 @@ return [
     ['getAdvancedResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getEntityTypeId', 'Magento\Customer\Model\Customer'],
     ['setIsConfigurable', 'Magento\Catalog\Api\Data\ProductAttributeDataBuilder'],
-    ['canSendHeaders', 'Zend_Controller_Response_Abstract'],
-    ['getRawHeaders', 'Zend_Controller_Response_Abstract'],
-    ['clearRawHeaders', 'Zend_Controller_Response_Abstract'],
-    ['clearRawHeader', 'Zend_Controller_Response_Abstract'],
-    ['clearAllHeaders', 'Zend_Controller_Response_Abstract'],
-    ['append', 'Zend_Controller_Response_Abstract'],
-    ['prepend', 'Zend_Controller_Response_Abstract'],
-    ['insert', 'Zend_Controller_Response_Abstract'],
-    ['outputBody', 'Zend_Controller_Response_Abstract'],
 ];

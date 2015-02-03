@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
-class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response implements HttpInterface
+class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 {
     /**
      * Cookie to store page vary string

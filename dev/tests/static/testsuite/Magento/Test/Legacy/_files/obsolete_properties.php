@@ -367,5 +367,4 @@ return [
     ['_lables', 'Magento\SalesRule\Model\Rule'],
     ['_catalogData', 'Magento\Catalog\Block\Product\AbstractProduct'],
     ['_env', 'Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection'],
-    ['headersSentThrowsException', 'Zend_Controller_Response_Abstract']
 ];
