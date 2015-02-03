@@ -20,22 +20,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $managerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $resourceMock = $this->getMock('Magento\Framework\Flag\Resource', [], [], '', false);
-
-        $resourceMock
-            ->expects($this->any())
-            ->method('getReadConnection')
-            ->will($this->returnValue($connectionMock));
-
+        $resourceMock->expects($this->any())->method('getReadConnection')->will($this->returnValue($connectionMock));
         $selectMock = $this->getMock(
             'Zend_Db_Select',
             ['getPart', 'setPart', 'from', 'columns'],
             [$connectionMock]
         );
-
-        $connectionMock
-            ->expects($this->any())
-            ->method('select')
-            ->will($this->returnValue($selectMock));
+        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
 
         $this->model = new \Magento\Indexer\Model\Resource\Indexer\State\Collection(
             $entityFactoryMock,
@@ -45,6 +36,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $connectionMock,
             $resourceMock
         );
+
         $this->assertInstanceOf(
             'Magento\Indexer\Model\Resource\Indexer\State\Collection',
             $this->model

@@ -465,7 +465,6 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $actionMock = $this->getMock(
             'Magento\Indexer\Model\ActionInterface',
             ['executeFull', 'executeList', 'executeRow'],
@@ -478,8 +477,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             $this->once()
         )->method(
             'get'
-        )
-        ->will(
+        )->will(
             $this->returnValue($actionMock)
         );
 
@@ -500,7 +498,6 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $actionMock = $this->getMock(
             'Magento\Indexer\Model\ActionInterface',
             ['executeFull', 'executeList', 'executeRow'],
@@ -513,8 +510,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             $this->once()
         )->method(
             'get'
-        )
-        ->will(
+        )->will(
             $this->returnValue($actionMock)
         );
 

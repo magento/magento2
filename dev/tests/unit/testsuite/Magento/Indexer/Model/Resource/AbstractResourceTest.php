@@ -131,7 +131,6 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
         $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
-
         $this->model->syncData();
     }
 

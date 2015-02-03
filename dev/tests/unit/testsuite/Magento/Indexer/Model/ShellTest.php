@@ -41,7 +41,6 @@ class ShellTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->indexerFactoryMock = $this->getMock(
             'Magento\Indexer\Model\IndexerFactory',
             ['create', 'load', 'reindexAll', 'getTitle'],
@@ -49,7 +48,6 @@ class ShellTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->indexersFactoryMock = $this->getMock(
             'Magento\Indexer\Model\Indexer\CollectionFactory',
             ['create', 'getItems'],
@@ -86,15 +84,6 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     public function testRun($args, $status = null)
     {
-        $indexerMock = $this->getMock(
-            '\Magento\Indexer\Model\Indexer',
-            ['getStatus', 'isScheduled', 'reindexAll', 'turnViewOff', 'turnViewOn'],
-            [],
-            '',
-            false
-        );
-
-        $this->model->setRawArgs(['testme.php', '--', $args]);
         $withItems = [
             'info',
             'status',
@@ -104,6 +93,16 @@ class ShellTest extends \PHPUnit_Framework_TestCase
             'reindex',
             'reindexall'
         ];
+        $this->model->setRawArgs(['testme.php', '--', $args]);
+        
+        $indexerMock = $this->getMock(
+            '\Magento\Indexer\Model\Indexer',
+            ['getStatus', 'isScheduled', 'reindexAll', 'turnViewOff', 'turnViewOn'],
+            [],
+            '',
+            false
+        );
+
         if (in_array($args, $withItems)) {
             if ($args == 'status') {
                 $indexerMock->expects($this->any())->method('getStatus')->will(
@@ -121,6 +120,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue($indexerMock)
             );
         }
+
         ob_start();
         $this->assertInstanceOf('\Magento\Indexer\Model\Shell', $this->model->run());
         ob_end_clean();
@@ -168,25 +168,21 @@ class ShellTest extends \PHPUnit_Framework_TestCase
                 $this->throwException(new \Exception())
             );
         }
-
         if ($args == '--mode-realtime') {
             $indexerMock->expects($this->any())->method('turnViewOff')->will(
                 $this->throwException(new \Exception())
             );
         }
-
         if ($args == 'reindexall') {
             $indexerMock->expects($this->any())->method('reindexAll')->will(
                 $this->throwException(new \Magento\Framework\Model\Exception())
             );
         }
-
         if ($args == '--mode-schedule') {
             $indexerMock->expects($this->any())->method('turnViewOn')->will(
                 $this->throwException(new \Magento\Framework\Model\Exception())
             );
         }
-
         if ($args == '--reindex=price') {
             $this->indexerFactoryMock->expects($this->once())->method('create')->will($this->returnSelf());
             $this->indexerFactoryMock->expects($this->any())->method('load')->will(
