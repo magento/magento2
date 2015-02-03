@@ -64,12 +64,15 @@ class UserConfigurationDataMapper
         }
 
         // Base URL is secure, add secure entries
-        if (isset($installParamData[self::KEY_BASE_URL_SECURE]))
+        if (isset($installParamData[self::KEY_BASE_URL_SECURE])) {
             $this->pathDataMap = array_merge(
                 $this->pathDataMap,
-                [Store::XML_PATH_SECURE_IN_FRONTEND => self::KEY_IS_SECURE,
-                 Store::XML_PATH_SECURE_IN_ADMINHTML => self::KEY_IS_SECURE_ADMIN]
+                [
+                    Store::XML_PATH_SECURE_IN_FRONTEND  => self::KEY_IS_SECURE,
+                    Store::XML_PATH_SECURE_IN_ADMINHTML => self::KEY_IS_SECURE_ADMIN
+                ]
             );
+        }
 
         foreach ($this->pathDataMap as $path => $key) {
             $configData = $this->addParamToConfigData($configData, $installParamData, $key, $path);
