@@ -25,7 +25,7 @@ class ProductMetadataTest extends \PHPUnit_Framework_TestCase
         $productVersion = $this->productMetadata->getVersion();
         $this->assertNotEmpty($productVersion, 'Empty product version');
         preg_match('/^([0-9\.]+)/', $productVersion, $matches);
-        $this->assertArrayHasKey(1,$matches, 'Invalid product version');
+        $this->assertArrayHasKey(1, $matches, 'Invalid product version');
         $this->assertNotEmpty($matches, 'Empty product version');
     }
 
