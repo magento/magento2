@@ -252,9 +252,7 @@ define([
         /*jshint validthis: true */
         $.extend(true, this.options, options);
 
-        if ('disabled' in options) {
-            this._setOption('disabled', options.disabled);
-        }
+        this._super(options);
 
         return this;
     }
