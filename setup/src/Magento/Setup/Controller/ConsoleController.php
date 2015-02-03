@@ -498,7 +498,7 @@ class ConsoleController extends AbstractActionController
                 }
             } else {
                 $message .= 'Alert: Your store may not operate properly because of '
-                    . "dependencies  and conflicts of this module(s).\n";
+                    . "dependencies and conflicts of this module(s).\n";
             }
             $status->setIsEnabled($isEnable, $modulesToChange);
             $updateAfterEnableMessage = '';
