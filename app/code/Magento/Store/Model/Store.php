@@ -537,7 +537,9 @@ class Store extends AbstractModel implements
             $secure = is_null($secure) ? $this->isCurrentlySecure() : (bool)$secure;
             switch ($type) {
                 case \Magento\Framework\UrlInterface::URL_TYPE_WEB:
-                    $path = $secure ? StoreManagerInterface::XML_PATH_SECURE_BASE_URL : StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL;
+                    $path = $secure
+                        ? StoreManagerInterface::XML_PATH_SECURE_BASE_URL
+                        : StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL;
                     $url = $this->_getConfig($path);
                     break;
 
