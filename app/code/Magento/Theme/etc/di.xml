@@ -67,4 +67,19 @@
     <type name="Magento\Framework\Url\ScopeInterface">
         <plugin name="urlSignature" type="Magento\Theme\Model\Url\Plugin\Signature"/>
     </type>
+    <type name="Magento\Theme\Model\Theme\Collection" shared="false" />
+    <type name="Magento\Theme\Model\View\Design">
+        <arguments>
+            <argument name="themes" xsi:type="array">
+                <item name="frontend" xsi:type="string">Magento/blank</item>
+                <item name="adminhtml" xsi:type="string">Magento/backend</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Area">
+        <arguments>
+            <argument name="translator" xsi:type="object">Magento\Framework\Translate</argument>
+            <argument name="design" xsi:type="object">Magento\Theme\Model\Design\Proxy</argument>
+        </arguments>
+    </type>
 </config>

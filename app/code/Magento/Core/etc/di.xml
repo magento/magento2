@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\View\Asset\ConfigInterface" type="Magento\Core\Model\Asset\Config" />
     <preference for="Magento\Framework\App\Config\Resource\ConfigInterface" type="Magento\Core\Model\Resource\Config" />
-    <type name="Magento\Theme\Model\Theme\Collection" shared="false" />
     <type name="Magento\Core\Model\Layout\Merge">
         <arguments>
             <argument name="fileSource" xsi:type="object">Magento\Framework\View\Layout\File\Collector\Aggregated\Proxy</argument>
@@ -42,14 +41,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Theme\Model\View\Design">
-        <arguments>
-            <argument name="themes" xsi:type="array">
-                <item name="frontend" xsi:type="string">Magento/blank</item>
-                <item name="adminhtml" xsi:type="string">Magento/backend</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\DB\Helper">
         <arguments>
             <argument name="modulePrefix" xsi:type="string">core</argument>
@@ -71,12 +62,6 @@
     <type name="Magento\Core\Helper\File\Storage\Database">
         <arguments>
             <argument name="fileStorage" xsi:type="object">Magento\Core\Model\File\Storage\File\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\App\Area">
-        <arguments>
-            <argument name="translator" xsi:type="object">Magento\Framework\Translate</argument>
-            <argument name="design" xsi:type="object">Magento\Theme\Model\Design\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Action\Action">
