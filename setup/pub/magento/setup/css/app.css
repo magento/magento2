@@ -162,6 +162,13 @@ a.collapsed-options {
     font-weight: normal;
 }
 
+.disabledClass {
+    padding: 5px 5px 5px 5px;
+    background-color:#c0c0c0;
+    width:480px;
+    font-weight: normal;
+}
+
 .multiSelect{
     padding : 10px;
     border-radius: 4px;

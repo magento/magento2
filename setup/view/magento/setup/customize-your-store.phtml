@@ -62,7 +62,6 @@
             </select>
         </div>
     </div>
-
     <div class="form-group">
         <label class="col-md-3 control-label">Store Default Language&nbsp;<span class="required">*</span></label>
         <div class="col-md-4">
@@ -78,7 +77,14 @@
             </select>
         </div>
     </div>
-
+    <div ng-show="corruptConfig !== undefined"
+         class="error-container animate-show text-danger glyphicon glyphicon-remove-sign" ng-bind-html="corruptConfig">
+    </div>
+    <div ng-show="corruptConfig !== undefined" class="error-container">
+        <input type="checkbox"
+               ng-model="store.force"
+               ng-click="toggleForce()">&nbsp; Allow force enable/disable of modules
+    </div>
     <div class="collapsed-options">
         <a href="#" class="collapsed-options" ng-click="updateOnExpand(store.advanced)">Advanced Modules Configurations</a>
         <span class="caret"></span>
@@ -90,8 +96,8 @@
                ng-click="toggleAllModules()">&nbsp;Select All
         </div>
         <div class="form-group multiSelect">
-            <label class="col-md-7 uncheckedClass" ng-repeat="module in store.allModules"  ng-class="{'checkedClass': store.selectedModules.indexOf(module) > -1}">
-                <input class="moduleCheckbox" type="checkbox" ng-click="toggleModule(module)" ng-checked="store.selectedModules.indexOf(module) > -1" name="{{module}}"> {{module}}<br/>
+            <label class="col-md-7 uncheckedClass" ng-repeat="module in store.allModules"  ng-class="{'disabledClass': (store.disabledModules.indexOf(module) > -1) && (store.selectedModules.indexOf(module) > -1), 'checkedClass':  (store.selectedModules.indexOf(module) > -1)}">
+                <input class="moduleCheckbox" type="checkbox" ng-click="toggleModule(module)" ng-disabled="store.disabledModules.indexOf(module) > -1"  ng-checked="store.selectedModules.indexOf(module) > -1" name="{{module}}"> {{module}}<br/>
             </label>
         </div>
         <div class="form-group">

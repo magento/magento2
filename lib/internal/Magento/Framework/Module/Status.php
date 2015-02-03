@@ -14,14 +14,6 @@ use Magento\Framework\App\State\Cleanup;
  */
 class Status
 {
-    /**#@+
-     * Supported modes while checking constraints
-     */
-    const MODE_ENABLED = 'assume_modules_enabled';
-    const MODE_DISABLED = 'assume_modules_disabled';
-    const MODE_CONFIG = 'use_deployment_config_info';
-    /**#@- */
-
     /**
      * Module list loader
      *
@@ -95,25 +87,22 @@ class Status
      *
      * @param bool $isEnabled
      * @param string[] $modules
-     * @param string $mode
+     * @param string[] $allModules
+     * @param bool $prettyMessage
+     *  
      * @return string[]
      */
-    public function checkConstraints($isEnabled, $modules, $mode = self::MODE_CONFIG)
+    public function checkConstraints($isEnabled, $modules, $allModules = null, $prettyMessage = false)
     {
         $errorMessages = [];
         if ($isEnabled) {
             $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenEnableModules(
-                $modules,
-                $mode
+                $modules, $allModules
             );
-            $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules(
-                $modules,
-                $mode
-            );
+            $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules($modules, $allModules);
         } else {
             $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenDisableModules(
-                $modules,
-                $mode
+                $modules, $allModules
             );
             $errorModulesConflict = [];
         }
@@ -121,10 +110,14 @@ class Status
         foreach ($errorModulesDependency as $moduleName => $missingDependencies) {
             if (!empty($missingDependencies)) {
                 $errorMessages[] = $isEnabled ?
-                    "Cannot enable $moduleName, depending on disabled modules:" :
-                    "Cannot disable $moduleName, modules depending on it:";
+                    ($prettyMessage ? "Cannot enable $moduleName" :
+                        "Cannot enable $moduleName, depending on disabled modules:") :
+                    ($prettyMessage ? "Cannot disable $moduleName" :
+                        "Cannot disable $moduleName, modules depending on it:");
                 foreach ($missingDependencies as $errorModule => $path) {
-                    $errorMessages [] = "$errorModule: " . implode('->', $path);
+                    if (!$prettyMessage) {
+                        $errorMessages [] = "$errorModule: " . implode('->', $path);
+                    }
                 }
             }
         }

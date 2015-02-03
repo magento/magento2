@@ -10,6 +10,7 @@ namespace Magento\Setup\Model;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Module\ModuleList\DeploymentConfig as ModuleDeployment;
+use \Magento\Framework\Module\DependencyChecker;
 
 class ModuleStatus
 {
@@ -28,42 +29,117 @@ class ModuleStatus
     protected $deploymentConfig;
 
     /**
+     * Dependency Checker
+     *
+     * @var DependencyChecker
+     */
+    private $dependencyChecker;
+
+    /**
      * Constructor
      *
      * @param ModuleLoader $moduleLoader
      * @param DeploymentConfig $deploymentConfig
+     * @param ObjectManagerFactory $objectManagerFactory
      */
-    public function __construct(ModuleLoader $moduleLoader, DeploymentConfig $deploymentConfig)
-    {
+    public function __construct(ModuleLoader $moduleLoader, DeploymentConfig $deploymentConfig,
+        ObjectManagerFactory $objectManagerFactory
+    ) {
         $this->allModules = $moduleLoader->load();
+        foreach ($this->allModules as $module => $value) {
+            $this->allModules[$module]['selected'] = true;
+            $this->allModules[$module]['disabled'] = true;
+        }
         $this->deploymentConfig = $deploymentConfig;
+        $this->dependencyChecker = $objectManagerFactory->create()->get('Magento\Framework\Module\DependencyChecker');
     }
 
     /**
      * Returns list of Modules to be displayed
      *
+     * @param [] $selectedModules
      * @return array
      */
-    public function getAllModules()
+    public function getAllModules($selectedModules = null)
     {
-        $allModules = $this->allModules;
-        if (isset($allModules)) {
-            foreach ($allModules as $module => $value) {
-                $allModules[$module]['selected'] = true;
-            }
-
-            $existingModules = $this->deploymentConfig->getSegment(ModuleDeployment::CONFIG_KEY);
-            if (isset($existingModules)) {
-                foreach ($existingModules as $module => $value) {
-                    if(!$value) {
-                        $allModules[$module]['selected'] = false;
+        if (isset($this->allModules)) {
+            if (isset($selectedModules)) {
+                $diff = array_diff(array_keys($this->allModules), $selectedModules);
+                foreach ($diff as $module) {
+                    $this->allModules[$module]['selected'] = false;
+                }
+            } else {
+                $existingModules = $this->deploymentConfig->getSegment(ModuleDeployment::CONFIG_KEY);
+                if (isset($existingModules)) {
+                    foreach ($existingModules as $module => $value) {
+                        if (!$value) {
+                            $this->allModules[$module]['selected'] = false;
+                        }
                     }
                 }
             }
-
-            ksort($allModules);
-            return $allModules;
+            $disableModules = $this->getListOfDisableModules();
+            if (isset($disableModules)) {
+                foreach ($disableModules as $module) {
+                    $this->allModules[$module]['disabled'] = false;
+                }
+            }
+            //check if module is not checked and disabled - possible when config is incorrectly modified.
+            foreach ($this->allModules as $module) {
+                if (!$module['selected'] && $module['disabled']) {
+                    $this->allModules[$module['name']]['disabled'] = false;
+                }
+            }
+            return $this->allModules;
         }
         return [];
+    }
+
+    /**
+     * Returns list of modules that can be disabled
+     *
+     * @return array
+     */
+    private function getListOfDisableModules()
+    {
+        $canBeDisabled =[];
+        $enabledModules = $this->getListOfEnabledModules();
+        foreach ($this->allModules as $module) {
+            $errorMessages = $this->dependencyChecker->checkDependenciesWhenDisableModules(
+                [$module['name']],
+                $enabledModules
+            );
+            if (sizeof($errorMessages[$module['name']]) === 0) {
+                $canBeDisabled [] = $module['name'];
+            }
+        }
+        return $canBeDisabled;
+    }
+
+    /**
+     * Returns list of enabled modules
+     *
+     * @return array
+     */
+    private function getListOfEnabledModules()
+    {
+        $enabledModules = [];
+        foreach ($this->allModules as $module) {
+            if ($module['selected']) {
+                $enabledModules [] =  $module['name'];
+            }
+        }
+        return $enabledModules;
+    }
+
+    /**
+     * @param bool $status
+     * @param String $moduleName
+     *
+     * @return void
+     */
+    public function setIsEnabled($status, $moduleName)
+    {
+        $this->allModules[$moduleName]['selected'] = $status;
     }
 }

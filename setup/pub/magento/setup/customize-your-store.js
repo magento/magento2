@@ -15,6 +15,9 @@ angular.module('customize-your-store', ['ngStorage'])
             selectAll: true,
             allModules: [],
             selectedModules : [],
+            disabledModules: [],
+            corruptConfig: '',
+            force: false,
             advanced: {
                 expanded: false
             }
@@ -32,7 +35,7 @@ angular.module('customize-your-store', ['ngStorage'])
             }
             $localStorage.store = $scope.store;
             $scope.loading = true;
-            $http.post('index.php/module-check', $scope.store)
+            $http.post('index.php/modules/all-modules-valid', $scope.store)
                 .success(function (data) {
                     $scope.checkModuleConstraints.result = data;
                     if (($scope.checkModuleConstraints.result !== undefined) && ($scope.checkModuleConstraints.result.success)) {
@@ -48,6 +51,9 @@ angular.module('customize-your-store', ['ngStorage'])
         if (!$scope.store.loadedAllModules) {
             $http.get('index.php/modules').success(function (data) {
                 $state.loadedModules = data;
+                if (data.error) {
+                    $scope.corruptConfig = $sce.trustAsHtml(data.error);
+                }
             });
         }
 
@@ -58,6 +64,9 @@ angular.module('customize-your-store', ['ngStorage'])
                     $scope.store.allModules.push(allModules[eachModule].name);
                     if(allModules[eachModule].selected) {
                         $scope.store.selectedModules.push(allModules[eachModule].name);
+                    }
+                    if(allModules[eachModule].disabled) {
+                        $scope.store.disabledModules.push(allModules[eachModule].name);
                     }
                 }
                 $scope.store.loadedAllModules = true;
@@ -70,6 +79,10 @@ angular.module('customize-your-store', ['ngStorage'])
             obj.expanded = !obj.expanded;
         };
 
+        $scope.toggleForce = function() {
+            $scope.force = !$scope.force;
+        };
+
         $scope.toggleModule = function(module) {
             var idx = $scope.store.selectedModules.indexOf(module);
             if (idx > -1) {
@@ -78,19 +91,50 @@ angular.module('customize-your-store', ['ngStorage'])
                 $scope.store.selectedModules.push(module);
             }
             $scope.checkIfAllAreSelected();
-            $scope.validateModules();
+            $scope.validateModules(module);
         };
 
-        $scope.validateModules = function(){
+        $scope.validateModules = function(module){
+            if ($scope.force) return;
             // validate enabling disabling here.
+            var idx = $scope.store.selectedModules.indexOf(module);
+            var moduleStatus = (idx > -1) ? true : false;
+            var h = {'allModules' : $scope.store.allModules, 'selectedModules' : $scope.store.selectedModules, 'module' : module, 'status' : moduleStatus};
+
+            $http.post('index.php/modules/validate', h )
+                .success(function (data) {
+                    $scope.checkModuleConstraints.result = data;
+                    if ((($scope.checkModuleConstraints.result.error !== undefined) && (!$scope.checkModuleConstraints.result.success))) {
+                        $scope.checkModuleConstraints.result.error = $sce.trustAsHtml($scope.checkModuleConstraints.result.error);
+                        if (moduleStatus) {
+                            $scope.store.selectedModules.splice(idx, 1);
+                        } else {
+                            $scope.store.selectedModules.push(module);
+                        }
+                    } else {
+                        $state.loadedModules = data;
+                        $scope.store.loadedAllModules = false;
+                        $scope.store.allModules =[];
+                        $scope.store.selectedModules =[];
+                        $scope.store.disabledModules =[];
+                        $state.loadModules();
+                    }
+                });
+
         }
 
         $scope.toggleAllModules = function() {
             $scope.store.selectAll = !$scope.store.selectAll;
-            $scope.store.selectedModules = [];
             if ($scope.store.selectAll) {
                 for(var i = 0; i < $scope.store.allModules.length; i++) {
                     $scope.store.selectedModules[i] = $scope.store.allModules[i];
+                }
+            } else {
+                for(var i = 0; i < $scope.store.allModules.length; i++) {
+                    var idx = $scope.store.selectedModules.indexOf($scope.store.allModules[i]);
+                    if ($scope.store.disabledModules.indexOf($scope.store.allModules[i]) < 0) {
+                        $scope.store.selectedModules.splice(idx, 1);
+                    }
                 }
             }
         };
