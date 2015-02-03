@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App;
 
+use \Magento\TestFramework\Helper\ObjectManager;
+
 class ProductMetadataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -14,7 +16,8 @@ class ProductMetadataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMetadata = new ProductMetadata();
+        $objectManager = new ObjectManager($this);
+        $this->productMetadata = $objectManager->getObject('Magento\Framework\App\ProductMetadata');
     }
 
     public function testGetVersion()
