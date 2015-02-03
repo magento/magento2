@@ -7,11 +7,11 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /** @var $this \Magento\Sales\Block\Adminhtml\Order\View\Info */ ?>
-<?php $_order = $this->getOrder() ?>
+<?php /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Info */ ?>
+<?php $_order = $block->getOrder() ?>
 <?php
-$orderAdminDate = $this->formatDate($_order->getCreatedAtDate(), 'medium', true);
-$orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', true);
+$orderAdminDate = $block->formatDate($_order->getCreatedAtDate(), 'medium', true);
+$orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), 'medium', true);
 ?>
 
 <?php /* the opening and closing divs of these two clearfixes are in app\code\core\Mage\Adminhtml\view\adminhtml\sales\order\invoice\create\form.phtml */?>
@@ -28,10 +28,10 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
             endif; ?>
             <div class="fieldset-wrapper-title">
                 <span class="title">
-                    <?php if ($this->getNoUseOrderLink()): ?>
+                    <?php if ($block->getNoUseOrderLink()): ?>
                     <?php echo __('Order # %1', $_order->getRealOrderId()) ?> (<span><?php echo $_email ?></span>)
                     <?php else: ?>
-                    <a href="<?php echo $this->getViewUrl($_order->getId()) ?>"><?php echo __('Order # %1', $_order->getRealOrderId()) ?></a>
+                    <a href="<?php echo $block->getViewUrl($_order->getId()) ?>"><?php echo __('Order # %1', $_order->getRealOrderId()) ?></a>
                     <span>(<?php echo $_email ?>)</span>
                     <?php endif; ?>
                 </span>
@@ -51,16 +51,16 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
                     <th><?php echo __('Order Status') ?></th>
                     <td><span id="order_status"><?php echo $_order->getStatusLabel() ?></span></td>
                 </tr>
-                <?php if ($this->isSingleStoreMode() == false):?>
+                <?php if ($block->isSingleStoreMode() == false):?>
                 <tr>
                     <th><?php echo __('Purchased From') ?></th>
-                    <td><?php echo $this->getOrderStoreName() ?></td>
+                    <td><?php echo $block->getOrderStoreName() ?></td>
                 </tr>
                 <?php endif; ?>
                 <?php if ($_order->getRelationChildId()): ?>
                 <tr>
                     <th><?php echo __('Link to the New Order') ?></th>
-                    <td><a href="<?php echo $this->getViewUrl($_order->getRelationChildId()) ?>">
+                    <td><a href="<?php echo $block->getViewUrl($_order->getRelationChildId()) ?>">
                         <?php echo $_order->getRelationChildRealId() ?>
                     </a></td>
                 </tr>
@@ -68,15 +68,15 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
                 <?php if ($_order->getRelationParentId()): ?>
                 <tr>
                     <th><?php echo __('Link to the Previous Order') ?></th>
-                    <td><a href="<?php echo $this->getViewUrl($_order->getRelationParentId()) ?>">
+                    <td><a href="<?php echo $block->getViewUrl($_order->getRelationParentId()) ?>">
                         <?php echo $_order->getRelationParentRealId() ?>
                     </a></td>
                 </tr>
                 <?php endif; ?>
-                <?php if ($_order->getRemoteIp() && $this->shouldDisplayCustomerIp()): ?>
+                <?php if ($_order->getRemoteIp() && $block->shouldDisplayCustomerIp()): ?>
                 <tr>
                     <th><?php echo __('Placed from IP') ?></th>
-                    <td><?php echo $_order->getRemoteIp(); echo($_order->getXForwardedFor()) ? ' (' . $this->escapeHtml($_order->getXForwardedFor()) . ')' : ''; ?></td>
+                    <td><?php echo $_order->getRemoteIp(); echo($_order->getXForwardedFor()) ? ' (' . $block->escapeHtml($_order->getXForwardedFor()) . ')' : ''; ?></td>
                 </tr>
                 <?php endif; ?>
                 <?php if ($_order->getGlobalCurrencyCode() != $_order->getBaseCurrencyCode()): ?>
@@ -99,17 +99,17 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         <?php /* Account Information */?>
         <div class="fieldset-wrapper">
             <div class="fieldset-wrapper-title">
-                <div class="actions"><?php echo $this->getAccountEditLink()?></div>
+                <div class="actions"><?php echo $block->getAccountEditLink()?></div>
                 <span class="title"><?php echo __('Account Information') ?></span>
             </div>
             <table cellspacing="0" class="data-table">
                 <tr>
                     <th><?php echo __('Customer Name') ?></th>
                     <td>
-                    <?php if ($_customerUrl = $this->getCustomerViewUrl()) : ?>
-                        <a href="<?php echo $_customerUrl ?>" target="_blank"><strong><?php echo $this->escapeHtml($_order->getCustomerName()) ?></strong></a>
+                    <?php if ($_customerUrl = $block->getCustomerViewUrl()) : ?>
+                        <a href="<?php echo $_customerUrl ?>" target="_blank"><strong><?php echo $block->escapeHtml($_order->getCustomerName()) ?></strong></a>
                     <?php else: ?>
-                        <?php echo $this->escapeHtml($_order->getCustomerName()) ?>
+                        <?php echo $block->escapeHtml($_order->getCustomerName()) ?>
                     <?php endif; ?>
                     </td>
                 </tr>
@@ -117,13 +117,13 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
                     <th><?php echo __('Email') ?></th>
                     <td><a href="mailto:<?php echo $_order->getCustomerEmail() ?>"><?php echo $_order->getCustomerEmail() ?></a></td>
                 </tr>
-                <?php if ($_groupName = $this->getCustomerGroupName()) : ?>
+                <?php if ($_groupName = $block->getCustomerGroupName()) : ?>
                 <tr>
                     <th><?php echo __('Customer Group') ?></th>
                     <td><?php echo $_groupName ?></td>
                 </tr>
                 <?php endif; ?>
-                <?php foreach ($this->getCustomerAccountData() as $data):?>
+                <?php foreach ($block->getCustomerAccountData() as $data):?>
                 <tr>
                     <th><?php echo $data['label'] ?></th>
                     <td><?php echo $data['value'] ?></td>
@@ -141,19 +141,19 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         <?php /* Billing Address */?>
         <div class="fieldset-wrapper">
             <div class="fieldset-wrapper-title">
-                <div class="actions"><?php echo $this->getAddressEditLink($_order->getBillingAddress()); ?></div>
+                <div class="actions"><?php echo $block->getAddressEditLink($_order->getBillingAddress()); ?></div>
                 <span class="title"><?php echo __('Billing Address') ?></span>
             </div>
             <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
         </div>
     </div>
 
-    <?php if (!$this->getOrder()->getIsVirtual()): ?>
+    <?php if (!$block->getOrder()->getIsVirtual()): ?>
     <div class="order-shipping-address">
         <?php /* Shipping Address */ ?>
         <div class="fieldset-wrapper">
             <div class="fieldset-wrapper-title">
-                <div class="actions"><?php echo $this->getAddressEditLink($_order->getShippingAddress()); ?></div>
+                <div class="actions"><?php echo $block->getAddressEditLink($_order->getShippingAddress()); ?></div>
                 <span class="title"><?php echo __('Shipping Address') ?></span>
             </div>
             <address><?php echo $_order->getShippingAddress()->format('html') ?></address>

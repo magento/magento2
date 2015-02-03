@@ -28,7 +28,6 @@
                 <label>Create New Account Options</label>
                 <field id="auto_group_assign" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Automatic Assignment to Customer Group</label>
-                    <comment>To show VAT number on frontend, set Show VAT Number on Frontend option to Yes.</comment>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="tax_calculation_address_type" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -84,6 +83,7 @@
                 </field>
                 <field id="vat_frontend_visibility" translate="label" type="select" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show VAT Number on Frontend</label>
+                    <comment>To show VAT number on frontend, set Show VAT Number on Frontend option to Yes.</comment>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="email_domain" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
