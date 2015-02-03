@@ -1,20 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Test\Block\Dashboard;
 
-use Magento\Mtf\Client\Locator;
-use Magento\Backend\Test\Block\Widget\FormTabs;
-
-class StoreStats extends FormTabs
+class StoreStats extends \Magento\Backend\Test\Block\Widget\FormTabs
 {
     /**
      * Refresh data button
      *
      * @var string
      */
-    protected $refreshData = '//button[@title="Refresh data"]';
+    protected $refreshData = 'button';
 
     /**
      * Click Refresh Data button
@@ -23,6 +22,6 @@ class StoreStats extends FormTabs
      */
     public function refreshData()
     {
-        $this->_rootElement->find($this->refreshData, Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find($this->refreshData)->click();
     }
 }

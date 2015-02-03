@@ -1,40 +1,41 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Block\Dashboard\Tab\Products;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Grid;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Ordered products grid on bestsellers tab on Dashboard
  */
 class Ordered extends Grid
 {
-    // @codingStandardsIgnoreStart
-    /**
-     * Ordered products row in bestsellers grid
-     *
-     * @var string
-     */
-    protected $orderedProductsRow = '//table[@id="productsOrderedGrid_table"]/tbody/tr[td[contains(., "%s")] and td[contains(., "%d")] and td[contains(., "%d")]]';
-    // @codingStandardsIgnoreEnd
-
     /**
      * Check if ordered product is in grid
      *
-     * @param array $filter
+     * @param CatalogProductSimple $product
      * @return bool
      */
-    public function isProductVisible($filter)
+    public function isProductVisible(CatalogProductSimple $product)
     {
-        if ($this->_rootElement->find(sprintf($this->orderedProductsRow, $filter['name'], $filter['price'],
-            $filter['qty']), Locator::SELECTOR_XPATH)->isVisible()
-        ) {
-            return true;
+        $location = '//table[@id="productsOrderedGrid_table"]/tbody/tr[';
+        $rowTemplate = 'td[contains(., "%s")]';
+        $filter = [
+            $product->getName(),
+            $product->getPrice(),
+            $product->getCheckoutData()['qty'],
+        ];
+        $rows = [];
+        foreach ($filter as $value) {
+            $rows[] = sprintf($rowTemplate, $value);
         }
-        return false;
+        $location = $location . implode(' and ', $rows) . ']';
+
+        return $this->_rootElement->find($location, Locator::SELECTOR_XPATH)->isVisible() ? true : false;
     }
 }
