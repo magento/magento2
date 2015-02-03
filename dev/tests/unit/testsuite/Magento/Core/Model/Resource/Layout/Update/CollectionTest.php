@@ -18,7 +18,7 @@ class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCas
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
         return new \Magento\Core\Model\Resource\Layout\Update\Collection(
-            $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false),
+            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false),
             $this->getMock('Psr\Log\LoggerInterface'),
             $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface'),
             $eventManager,

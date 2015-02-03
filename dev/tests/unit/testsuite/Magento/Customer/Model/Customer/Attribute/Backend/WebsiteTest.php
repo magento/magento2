@@ -14,15 +14,15 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     protected $testable;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
     public function setUp()
     {
-        $storeManager = $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->getMock();
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        /** @var \Magento\Framework\Store\StoreManagerInterface $storeManager */
         $this->testable = new Website($storeManager);
     }
 

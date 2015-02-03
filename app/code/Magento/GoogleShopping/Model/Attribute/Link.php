@@ -69,7 +69,7 @@ class Link extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         if ($url) {
             $isStoreInUrl = $this->_scopeConfig->isSetFlag(
                 \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
             if (!$isStoreInUrl) {
                 $urlInfo = parse_url($url);

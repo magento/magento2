@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Theme\Model\Resource\Setup */
 $installer = $this;
 
 $installer->startSetup();

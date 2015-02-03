@@ -152,13 +152,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $moduleManager;
 
     /**
-     * Catalog image
-     *
-     * @var \Magento\Catalog\Helper\Image
-     */
-    protected $_catalogImage = null;
-
-    /**
      * @var \Magento\Framework\Data\CollectionFactory
      */
     protected $_collectionFactory;
@@ -241,11 +234,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $categoryRepository;
 
     /**
+     * @var Product\Image\CacheFactory
+     */
+    protected $imageCacheFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataService
      * @param AttributeDataBuilder $customAttributeBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Product\Url $url
      * @param Product\Link $productLink
      * @param Product\Configuration\Item\OptionFactory $itemOptionFactory
@@ -255,7 +253,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Attribute\Source\Status $catalogProductStatus
      * @param Product\Media\Config $catalogProductMediaConfig
      * @param Product\Type $catalogProductType
-     * @param \Magento\Catalog\Helper\Image $catalogImage
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param Resource\Product $resource
@@ -267,6 +264,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param Product\Image\CacheFactory $imageCacheFactory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -276,7 +274,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataService,
         AttributeDataBuilder $customAttributeBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         Product\Url $url,
         Product\Link $productLink,
         \Magento\Catalog\Model\Product\Configuration\Item\OptionFactory $itemOptionFactory,
@@ -286,7 +284,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
         Product\Type $catalogProductType,
-        \Magento\Catalog\Helper\Image $catalogImage,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Helper\Product $catalogProduct,
         Resource\Product $resource,
@@ -298,6 +295,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         CategoryRepositoryInterface $categoryRepository,
+        Product\Image\CacheFactory $imageCacheFactory,
         array $data = []
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -307,7 +305,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_catalogProductStatus = $catalogProductStatus;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
         $this->_catalogProductType = $catalogProductType;
-        $this->_catalogImage = $catalogImage;
         $this->moduleManager = $moduleManager;
         $this->_catalogProduct = $catalogProduct;
         $this->_collectionFactory = $collectionFactory;
@@ -319,6 +316,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
         $this->categoryRepository = $categoryRepository;
+        $this->imageCacheFactory = $imageCacheFactory;
         parent::__construct(
             $context,
             $registry,
@@ -772,6 +770,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
         $this->_getResource()->addCommitCallback([$this, 'reindex']);
         $this->reloadPriceInfo();
+
+        // Resize images for catalog product and save results to image cache
+        /** @var Product\Image\Cache $imageCache */
+        $imageCache = $this->imageCacheFactory->create();
+        $imageCache->generate($this);
+
         return $result;
     }
 
@@ -831,10 +835,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function reindex()
     {
-        $this->_productFlatIndexerProcessor->reindexRow($this->getEntityId());
-        $categoryIndexer = $this->indexerRegistry->get(Indexer\Product\Category::INDEXER_ID);
-        if (!$categoryIndexer->isScheduled()) {
-            $categoryIndexer->reindexRow($this->getId());
+        if ($this->_catalogProduct->isDataForProductCategoryIndexerWasChanged($this) || $this->isDeleted()) {
+            $this->_productFlatIndexerProcessor->reindexRow($this->getEntityId());
+            $categoryIndexer = $this->indexerRegistry->get(Indexer\Product\Category::INDEXER_ID);
+            if (!$categoryIndexer->isScheduled()) {
+                $categoryIndexer->reindexRow($this->getId());
+            }
         }
     }
 
@@ -1791,16 +1797,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getDefaultAttributeSetId()
     {
         return $this->getResource()->getEntityType()->getDefaultAttributeSetId();
-    }
-
-    /**
-     * Return Catalog Product Image helper instance
-     *
-     * @return \Magento\Catalog\Helper\Image
-     */
-    protected function _getImageHelper()
-    {
-        return $this->_catalogImage;
     }
 
     /**

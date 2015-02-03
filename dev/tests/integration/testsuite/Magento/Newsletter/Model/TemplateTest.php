@@ -38,7 +38,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 'Magento\Framework\App\Config\MutableScopeConfigInterface'
             )->setValue(
-                \Magento\Core\Model\View\Design::XML_PATH_THEME_ID,
+                \Magento\Theme\Model\View\Design::XML_PATH_THEME_ID,
                 $design,
                 'store',
                 $store
