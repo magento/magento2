@@ -6,12 +6,12 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var \Magento\Customer\Block\Account\Dashboard\Address $this */
+/** @var \Magento\Customer\Block\Account\Dashboard\Address $block */
 ?>
 <div class="block block-dashboard-addresses">
     <div class="block-title">
         <strong><?php echo __('Address Book') ?></strong>
-        <a class="action edit" href="<?php echo $this->getAddressBookUrl() ?>"><span><?php echo __('Manage Addresses') ?></span></a>
+        <a class="action edit" href="<?php echo $block->getAddressBookUrl() ?>"><span><?php echo __('Manage Addresses') ?></span></a>
     </div>
     <div class="block-content">
         <div class="box box-billing-address">
@@ -20,11 +20,11 @@
             </strong>
             <div class="box-content">
                 <address>
-                    <?php echo $this->getPrimaryBillingAddressHtml() ?>
+                    <?php echo $block->getPrimaryBillingAddressHtml() ?>
                 </address>
             </div>
             <div class="box-actions">
-                <a class="action edit" href="<?php echo $this->getPrimaryBillingAddressEditUrl() ?>" data-ui-id="default-billing-edit-link"><span><?php echo __('Edit Address') ?></span></a>
+                <a class="action edit" href="<?php echo $block->getPrimaryBillingAddressEditUrl() ?>" data-ui-id="default-billing-edit-link"><span><?php echo __('Edit Address') ?></span></a>
             </div>
         </div>
         <div class="box box-shipping-address">
@@ -33,11 +33,11 @@
             </strong>
             <div class="box-content">
                 <address>
-                    <?php echo $this->getPrimaryShippingAddressHtml() ?>
+                    <?php echo $block->getPrimaryShippingAddressHtml() ?>
                 </address>
             </div>
             <div class="box-actions">
-                <a class="action edit" href="<?php echo $this->getPrimaryShippingAddressEditUrl() ?>" data-ui-id="default-shipping-edit-link"><span><?php echo __('Edit Address') ?></span></a>
+                <a class="action edit" href="<?php echo $block->getPrimaryShippingAddressEditUrl() ?>" data-ui-id="default-shipping-edit-link"><span><?php echo __('Edit Address') ?></span></a>
             </div>
         </div>
     </div>

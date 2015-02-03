@@ -9,10 +9,10 @@
 ?>
 <?php
 /**
- * @var $this \Magento\Theme\Block\Html\Notices
+ * @var $block \Magento\Theme\Block\Html\Notices
  */
 ?>
-<?php if ($this->displayNoscriptNotice()): ?>
+<?php if ($block->displayNoscriptNotice()): ?>
     <noscript>
         <div class="message global noscript">
             <div class="content">
@@ -24,7 +24,7 @@
         </div>
     </noscript>
 <?php endif; ?>
-<?php if ($this->displayNoLocalStorageNotice()): ?>
+<?php if ($block->displayNoLocalStorageNotice()): ?>
     <div class="notice global site local_storage" style="display: none;">
         <div class="content">
             <p>
@@ -51,7 +51,7 @@ require(['jquery'], function(jQuery){
 });
 </script>
 <?php endif; ?>
-<?php if ($this->displayDemoNotice()): ?>
+<?php if ($block->displayDemoNotice()): ?>
     <div class="message global demo">
         <div class="content">
             <p><?php echo __('This is demo store. All orders will not be transferred.') ?></p>
