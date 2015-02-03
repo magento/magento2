@@ -9,13 +9,11 @@
  */
 namespace Magento\Catalog\Controller;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
 {
-    protected function setUp()
-    {
-        $this->markTestIncomplete('MAGETWO-31059');
-    }
-
     public function assert404NotFound()
     {
         parent::assert404NotFound();

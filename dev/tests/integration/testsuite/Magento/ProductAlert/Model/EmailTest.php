@@ -6,6 +6,9 @@
 
 namespace Magento\ProductAlert\Model;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class EmailTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -30,7 +33,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->markTestIncomplete('MAGETWO-31059');
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->customerAccountManagement = $this->_objectManager->create(
             'Magento\Customer\Api\AccountManagementInterface'
