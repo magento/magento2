@@ -18,7 +18,7 @@ class Eav
     public static function setIncrementIdPrefix($entityType, $prefix)
     {
         $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\Store\StoreManagerInterface'
         )->getWebsite();
         $storeId = $website->getDefaultStore()->getId();
         $entityTypeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

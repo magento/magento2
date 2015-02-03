@@ -9,13 +9,13 @@
 /**
  * Grouped product data template
  *
- * @var $this \Magento\Catalog\Block\Product\View\BaseImage
- * @var $this \Magento\GroupedProduct\Block\Product\View\Type\Grouped
+ * @var $block \Magento\Catalog\Block\Product\View\BaseImage
+ * @var $block \Magento\GroupedProduct\Block\Product\View\Type\Grouped
  */
 ?>
-<?php $this->setPreconfiguredValue(); ?>
-<?php $_product = $this->getProduct(); ?>
-<?php $_associatedProducts = $this->getAssociatedProducts(); ?>
+<?php $block->setPreconfiguredValue(); ?>
+<?php $_product = $block->getProduct(); ?>
+<?php $_associatedProducts = $block->getAssociatedProducts(); ?>
 <?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
 
 <div class="table-wrapper grouped">
@@ -34,16 +34,16 @@
         <?php foreach ($_associatedProducts as $_item): ?>
         <tbody>
             <tr>
-                <td data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>" class="col item">
-                    <strong class="product-item-name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
-                    <?php if ($this->getCanShowProductPrice($_product)): ?>
-                        <?php if ($this->getCanShowProductPrice($_item)): ?>
-                            <?php echo $this->getProductPrice($_item) ?>
+                <td data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>" class="col item">
+                    <strong class="product-item-name"><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+                    <?php if ($block->getCanShowProductPrice($_product)): ?>
+                        <?php if ($block->getCanShowProductPrice($_item)): ?>
+                            <?php echo $block->getProductPrice($_item) ?>
                         <?php endif; ?>
                      <?php endif; ?>
                 </td>
                 <?php if ($_product->isSaleable()): ?>
-                <td data-th="<?php echo $this->escapeHtml(__('Qty')); ?>" class="col qty">
+                <td data-th="<?php echo $block->escapeHtml(__('Qty')); ?>" class="col qty">
                 <?php if ($_item->isSaleable()) : ?>
                     <div class="control qty">
                         <input type="number" name="super_group[<?php echo $_item->getId() ?>]"
@@ -62,15 +62,15 @@
                 </td>
                 <?php endif; ?>
             </tr>
-            <?php if ($this->getCanShowProductPrice($_product)
-                && $this->getCanShowProductPrice($_item)
-                && trim($this->getProductPriceHtml(
+            <?php if ($block->getCanShowProductPrice($_product)
+                && $block->getCanShowProductPrice($_item)
+                && trim($block->getProductPriceHtml(
                     $_item,
                     \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
                 ))): ?>
                 <tr class="row-tier-price">
                     <td colspan="2">
-                        <?php echo $this->getProductPriceHtml(
+                        <?php echo $block->getProductPriceHtml(
                             $_item,
                             \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
                         ) ?>

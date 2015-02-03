@@ -29,7 +29,7 @@ class AttributePrice extends AbstractPrice implements AttributePriceInterface
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -44,7 +44,7 @@ class AttributePrice extends AbstractPrice implements AttributePriceInterface
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param PriceModifierInterface $modifier
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         Product $saleableItem,
@@ -52,7 +52,7 @@ class AttributePrice extends AbstractPrice implements AttributePriceInterface
         CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         PriceModifierInterface $modifier,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->priceModifier = $modifier;

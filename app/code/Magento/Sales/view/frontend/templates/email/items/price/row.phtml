@@ -8,9 +8,9 @@
 
 ?>
 <?php
-/** @var \Magento\Sales\Block\Order\Email\Items\DefaultItems $this */
+/** @var \Magento\Sales\Block\Order\Email\Items\DefaultItems $block */
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 
 /** @var \Magento\Sales\Model\Order $_order */
 $_order = $_item->getOrder();

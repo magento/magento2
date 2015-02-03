@@ -16,7 +16,7 @@ class ProductUrlPathGenerator
      */
     protected $productUrlSuffix = [];
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var \Magento\Framework\Store\StoreManagerInterface */
     protected $storeManager;
 
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
@@ -26,12 +26,12 @@ class ProductUrlPathGenerator
     protected $categoryUrlPathGenerator;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
     ) {
@@ -111,7 +111,7 @@ class ProductUrlPathGenerator
         if (!isset($this->productUrlSuffix[$storeId])) {
             $this->productUrlSuffix[$storeId] = $this->scopeConfig->getValue(
                 self::XML_PATH_PRODUCT_URL_SUFFIX,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }
