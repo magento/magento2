@@ -25,7 +25,7 @@ class Index extends \Magento\Checkout\Controller\Cart
 
             if (!$this->cart->getQuote()->validateMinimumAmount()) {
                 $currencyCode = $this->_objectManager->get(
-                    'Magento\Framework\Store\StoreManagerInterface'
+                    'Magento\Store\Model\StoreManagerInterface'
                 )->getStore()->getCurrentCurrencyCode();
                 $minimumAmount = $this->_objectManager->get(
                     'Magento\Framework\Locale\CurrencyInterface'
@@ -34,16 +34,16 @@ class Index extends \Magento\Checkout\Controller\Cart
                 )->toCurrency(
                     $this->_scopeConfig->getValue(
                         'sales/minimum_order/amount',
-                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     )
                 );
 
                 $warning = $this->_scopeConfig->getValue(
                     'sales/minimum_order/description',
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 ) ? $this->_scopeConfig->getValue(
                     'sales/minimum_order/description',
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 ) : __(
                     'Minimum order amount is %1',
                     $minimumAmount
