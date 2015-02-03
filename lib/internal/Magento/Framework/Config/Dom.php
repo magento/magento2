@@ -87,7 +87,9 @@ class Dom
         $this->_typeAttributeName = $typeAttributeName;
         $this->_errorFormat = $errorFormat;
         $this->_dom = $this->_initDom($xml);
-        $this->_rootNamespace = $this->_dom->lookupNamespaceUri($this->_dom->namespaceURI);
+	if ($this->_dom) {
+	    $this->_rootNamespace = $this->_dom->lookupNamespaceUri($this->_dom->namespaceURI);
+	}
     }
 
     /**
@@ -158,7 +160,7 @@ class Dom
                     }
                 }
             }
-        } else {
+	} elseif ($this->_dom) {
             /* Add node as is to the document under the same parent element */
             $parentMatchedNode = $this->_getMatchedNode($parentPath);
             $newNode = $this->_dom->importNode($node, true);
@@ -225,6 +227,9 @@ class Dom
      */
     protected function _getMatchedNode($nodePath)
     {
+	if (!$this->_dom) {
+	    return null;
+	}
         $xPath = new \DOMXPath($this->_dom);
         if ($this->_rootNamespace) {
             $xPath->registerNamespace(self::ROOT_NAMESPACE_PREFIX, $this->_rootNamespace);
@@ -239,11 +244,10 @@ class Dom
         return $node;
     }
 
-
     /**
      * DOM document getter
      *
-     * @return \DOMDocument
+     * @return \DOMDocument|null
      */
     public function getDom()
     {
@@ -254,14 +258,16 @@ class Dom
      * Create DOM document based on $xml parameter
      *
      * @param string $xml
-     * @return \DOMDocument
+     * @return \DOMDocument|null
      * @throws \Magento\Framework\Config\Dom\ValidationException
      */
     protected function _initDom($xml)
     {
 	$parser = new Parser('\Magento\Framework\Config\Dom\ValidationException', $this->_errorFormat);
         if ($this->_schemaFile) {
-	    return $parser->loadXMLandValidate($xml, $this->_schemaFile)->getDom();
+	    return $parser->loadXMLandValidate($xml, $this->_schemaFile) === true
+		? $parser->getDom()
+		: null;
         }
 	return $parser->loadXML($xml)->getDom();
     }

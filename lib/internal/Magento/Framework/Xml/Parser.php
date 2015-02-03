@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Xml;
 
+use \Magento\Framework\Config\Dom\ValidationException;
+
 class Parser
 {
     /**
@@ -166,14 +168,14 @@ class Parser
     /**
      * @param string $file
      * @param string $schemaFileName
-     * @return $this
+     * @return bool
      * @throws \Exception
      */
     public function loadAndValidate($file, $schemaFileName)
     {
 	$this->load($file);
-	self::validateDomDocument($this->getDom(), $schemaFileName, $this->_errorFormat, $this->_exceptionName);
-        return $this;
+	$e = self::validateDomDocument($this->getDom(), $schemaFileName, $this->_errorFormat, $this->_exceptionName);
+	return empty($e);
     }
 
     /**
@@ -191,14 +193,18 @@ class Parser
     /**
      * @param string $string
      * @param string $schemaFileName
-     * @return $this
+     * @return bool
      * @throws \Exception
+     * @throws ValidationException
      */
     public function loadXMLandValidate($string, $schemaFileName)
     {
 	$this->loadXML($string);
-	self::validateDomDocument($this->getDom(), $schemaFileName, $this->_errorFormat, $this->_exceptionName);
-        return $this;
+	$e = self::validateDomDocument($this->getDom(), $schemaFileName, $this->_errorFormat, $this->_exceptionName);
+	if(empty($e) === true){
+	    return true;
+	}
+	throw new ValidationException(implode(PHP_EOL,$e));
     }
 
     /**
@@ -266,10 +272,9 @@ class Parser
     ) {
 	libxml_clear_errors();
 	libxml_use_internal_errors(true);
-
+	$errors = [];
 	try {
 	    $result = $dom->schemaValidate($schemaFileName);
-	    $errors = [];
 	    if (!$result) {
 		$validationErrors = libxml_get_errors();
 		if (count($validationErrors) > 0) {
@@ -293,6 +298,7 @@ class Parser
 	    throw new $exceptionName(implode(PHP_EOL, $error));
 	}
 	libxml_use_internal_errors(false);
+
 	return $errors;
     }
 }
