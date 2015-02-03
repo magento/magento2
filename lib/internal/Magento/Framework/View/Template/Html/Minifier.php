@@ -22,7 +22,7 @@ class Minifier implements MinifierInterface
     public function __construct(
         Filesystem $filesystem
     ) {
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::APP);
+        $this->appDirectory = $filesystem->getDirectoryRead(DirectoryList::APP);
         $this->htmlDirectory = $filesystem->getDirectoryWrite(DirectoryList::TEMPLATE_MINIFICATION_DIR);
     }
 
@@ -34,7 +34,7 @@ class Minifier implements MinifierInterface
      */
     public function getMinified($file)
     {
-        if (!$this->htmlDirectory->isExist($this->rootDirectory->getRelativePath($file))) {
+        if (!$this->htmlDirectory->isExist($this->appDirectory->getRelativePath($file))) {
             $this->minify($file);
         }
         return $this->getPathToMinified($file);
@@ -49,7 +49,7 @@ class Minifier implements MinifierInterface
     public function getPathToMinified($file)
     {
         return $this->htmlDirectory->getAbsolutePath(
-            $this->rootDirectory->getRelativePath($file)
+            $this->appDirectory->getRelativePath($file)
         );
     }
 
@@ -60,7 +60,7 @@ class Minifier implements MinifierInterface
      */
     public function minify($file)
     {
-        $file = $this->rootDirectory->getRelativePath($file);
+        $file = $this->appDirectory->getRelativePath($file);
         $content = preg_replace(
             '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)(?:<(?>textarea|pre|script)\b|\z))#',
             ' ',
@@ -70,7 +70,7 @@ class Minifier implements MinifierInterface
                 preg_replace(
                     '#//[^\n\r]*(\s\?\>)#',
                     '$1',
-                    $this->rootDirectory->readFile($file)
+                    $this->appDirectory->readFile($file)
                 )
             )
         );
