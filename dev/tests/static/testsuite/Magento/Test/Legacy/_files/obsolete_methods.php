@@ -2043,5 +2043,9 @@ return [
     ['getAdvancedResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getEntityTypeId', 'Magento\Customer\Model\Customer'],
     ['setIsConfigurable', 'Magento\Catalog\Api\Data\ProductAttributeDataBuilder'],
+    ['_getSendfriendModel', 'Magento\Sendfriend\Block\Send'],
+    ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
+    ['register', 'Magento\Sendfriend\Model\Sendfriend'],
+    ['_getImageHelper', 'Magento\Catalog\Model\Product'],
     ['isPhpFile', '\Magento\Tools\Di\Code\Reader\ClassesScanner'],
 ];

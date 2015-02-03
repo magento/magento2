@@ -8,15 +8,15 @@
 
 ?>
 <?php
-/** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons\Edit */
+/** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons\Edit */
 ?>
 
-<div id="vde_edit_options" class="vde_toolbar_cell" <?php echo $this->getUiId()?>>
+<div id="vde_edit_options" class="vde_toolbar_cell" <?php echo $block->getUiId()?>>
     <div class="vde_toolbar_cell_title"><?php echo __('Edit'); ?></div>
     <div class="vde_toolbar_cell_content">
-        <?php foreach ($this->getOptions() as $key => $option): ?>
-        <div <?php echo $this->getOptionAttributesHtml($key, $option); ?>>
-            <?php echo $this->escapeHtml($option['label']); ?>
+        <?php foreach ($block->getOptions() as $key => $option): ?>
+        <div <?php echo $block->getOptionAttributesHtml($key, $option); ?>>
+            <?php echo $block->escapeHtml($option['label']); ?>
         </div>
         <?php endforeach ?>
     </div>

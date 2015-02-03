@@ -37,15 +37,15 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetAssets($appMode, $expectedStrategy)
     {
         $assetOne = $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface');
-        $assetOne->expects($this->once())
+        $assetOne->expects($this->any())
             ->method('getContentType')
             ->will($this->returnValue('js'));
-        $resultOne = $this->getMock('Magento\Framework\View\Asset\Minified', [], [], '', false);
+        $resultOne = $this->getMock('Magento\Framework\View\Asset\Minified\MutablePathAsset', [], [], '', false);
         $assetTwo = $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface');
-        $assetTwo->expects($this->once())
+        $assetTwo->expects($this->any())
             ->method('getContentType')
             ->will($this->returnValue('js'));
-        $resultTwo = $this->getMock('Magento\Framework\View\Asset\Minified', [], [], '', false);
+        $resultTwo = $this->getMock('Magento\Framework\View\Asset\Minified\MutablePathAsset', [], [], '', false);
         $this->_config->expects($this->once())
             ->method('isAssetMinification')
             ->with('js')
@@ -64,12 +64,12 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap(
                 [
                     [
-                        'Magento\Framework\View\Asset\Minified',
+                        'Magento\Framework\View\Asset\Minified\MutablePathAsset',
                         ['asset' => $assetOne, 'strategy' => $expectedStrategy, 'adapter' => $minifier],
                         $resultOne,
                     ],
                     [
-                        'Magento\Framework\View\Asset\Minified',
+                        'Magento\Framework\View\Asset\Minified\MutablePathAsset',
                         ['asset' => $assetTwo, 'strategy' => $expectedStrategy, 'adapter' => $minifier],
                         $resultTwo
                     ],
@@ -91,15 +91,15 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
         return [
             'production' => [
                 \Magento\Framework\App\State::MODE_PRODUCTION,
-                Minified::FILE_EXISTS,
+                Minified\AbstractAsset::FILE_EXISTS,
             ],
             'default'    => [
                 \Magento\Framework\App\State::MODE_DEFAULT,
-                Minified::MTIME,
+                Minified\AbstractAsset::MTIME,
             ],
             'developer'  => [
                 \Magento\Framework\App\State::MODE_DEVELOPER,
-                Minified::MTIME,
+                Minified\AbstractAsset::MTIME,
             ],
         ];
     }
@@ -130,7 +130,7 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetAssetsNoAdapterDefined()
     {
         $asset = $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface');
-        $asset->expects($this->once())
+        $asset->expects($this->any())
             ->method('getContentType')
             ->will($this->returnValue('js'));
 
@@ -152,7 +152,7 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
             'Invalid adapter: \'stdClass\'. Expected: \Magento\Framework\Code\Minifier\AdapterInterface'
         );
         $asset = $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface');
-        $asset->expects($this->once())
+        $asset->expects($this->any())
             ->method('getContentType')
             ->will($this->returnValue('js'));
         $this->_config->expects($this->once())
