@@ -51,8 +51,8 @@ class SimpleClassTesting
         \StdClass $sharedDependency,
         $value = 'value',
         array $valueArray = [
-            'default_value1',
-            'default_value2'
+        'default_value1',
+        'default_value2'
         ],
         $globalValue = '',
         $nullValue = null
