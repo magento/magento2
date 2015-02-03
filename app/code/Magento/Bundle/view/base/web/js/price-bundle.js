@@ -21,71 +21,147 @@ define([
 
     $.widget('mage.priceBundle', {
         options: globalOptions,
-        _init: initPriceBundle,
-        _create: createPriceBundle,
-        updateProductSummary: updateProductSummary,
-        _setOptions: setOptions
+
+        /**
+         * @private
+         */
+        _init: function initPriceBundle() {
+            var form    = this.element,
+                options = $(this.options.productBundleSelector, form);
+
+            options.trigger('change');
+        },
+
+        /**
+         * @private
+         */
+        _create: function createPriceBundle() {
+            var form      = this.element,
+                options   = $(this.options.productBundleSelector, form),
+                priceBox  = $(this.options.priceBoxSelector, form),
+                qty       = $(this.options.qtyFieldSelector, form);
+
+            this._applyQtyFix();
+
+            options.on('change', this._onBundleOptionChanged.bind(this));
+            qty.on('change', this._onQtyFieldChanged.bind(this));
+            priceBox.priceBox('setDefault', this.options.optionConfig.prices);
+        },
+
+        /**
+         * Handle change on bundle option inputs
+         * @param {jQuery.Event} event
+         * @private
+         */
+        _onBundleOptionChanged: function onBundleOptionChanged(event) {
+            var changes,
+                bundleOption = $(event.target),
+                priceBox = $(this.options.priceBoxSelector, this.element),
+                handler = this.options.optionHandlers[bundleOption.data('role')];
+
+            bundleOption.data('optionContainer', bundleOption.closest(this.options.controlContainer));
+            bundleOption.data('qtyField', bundleOption.data('optionContainer').find(this.options.qtyFieldSelector));
+
+            if (handler && handler instanceof Function) {
+                changes = handler(bundleOption, this.options.optionConfig, this);
+            } else {
+                changes = defaultGetOptionValue(bundleOption, this.options.optionConfig);
+            }
+
+            if (changes) {
+                priceBox.trigger('updatePrice', changes);
+            }
+            this.updateProductSummary();
+        },
+
+        /**
+         * Handle change on qty inputs near bundle option
+         * @param {jQuery.Event} event
+         * @private
+         */
+        _onQtyFieldChanged: function onQtyFieldChanged(event) {
+            var field = $(event.target),
+                optionInstance,
+                optionConfig;
+
+            if (field.data('optionId') && field.data('optionValueId')) {
+                optionInstance = field.data('option');
+                optionConfig   = this.options.optionConfig
+                    .options[field.data('optionId')]
+                    .selections[field.data('optionValueId')];
+                optionConfig.qty = field.val();
+
+                optionInstance.trigger('change');
+            }
+        },
+
+        /**
+         * Helper to fix backend behavior:
+         *  - if default qty large than 1 then backend multiply price in config
+         *
+         * @private
+         */
+        _applyQtyFix: function applyQtyFix() {
+            var config = this.options.optionConfig;
+            _.each(config.options, function (option) {
+                _.each(option.selections, function (item) {
+                    if (item.priceType === '0') {
+                        if (item.qty && item.qty !== 1) {
+                            _.each(item.prices, function (price) {
+                                price.amount = price.amount / item.qty;
+                            });
+                        }
+                    }
+                });
+            });
+        },
+
+        /**
+         * Custom behavior on getting options:
+         * now widget able to deep merge accepted configuration with instance options.
+         * @param  {Object}  options
+         * @return {$.Widget}
+         */
+        _setOptions: function setOptions(options) {
+            $.extend(true, this.options, options);
+
+            this._super(options);
+
+            return this;
+        },
+
+        /**
+         * Handler to update productSummary box
+         */
+        updateProductSummary: function updateProductSummary() {
+            this.element.trigger('updateProductSummary', {
+                config: this.options.optionConfig
+            });
+        }
     });
 
     return $.mage.priceBundle;
 
-    function initPriceBundle() {
-        /*jshint validthis: true */
-        var form    = this.element,
-            options = $(this.options.productBundleSelector, form);
-
-        options.trigger('change');
-    }
-
-    function createPriceBundle() {
-        /*jshint validthis: true */
-        var form      = this.element,
-            options   = $(this.options.productBundleSelector, form),
-            priceBox  = $(this.options.priceBoxSelector, form),
-            qtyFields = $(this.options.qtyFieldSelector, form);
-
-        applyQtyFix.call(this);
-
-        options.on('change', onBundleOptionChanged.bind(this));
-        qtyFields.on('change', onQtyFieldChanged.bind(this));
-        priceBox.priceBox('setDefault', this.options.optionConfig.prices);
-    }
-
-    function onBundleOptionChanged(event) {
-        /*jshint validthis: true */
-        var changes,
-            bundleOption = $(event.target),
-            priceBox = $(this.options.priceBoxSelector, this.element),
-            handler = this.options.optionHandlers[bundleOption.data('role')];
-
-        bundleOption.data('optionContainer', bundleOption.closest(this.options.controlContainer));
-        bundleOption.data('qtyField', bundleOption.data('optionContainer').find(this.options.qtyFieldSelector));
-
-        if (handler && handler instanceof Function) {
-            changes = handler(bundleOption, this.options.optionConfig, this);
-        } else {
-            changes = defaultGetOptionValue(bundleOption, this.options.optionConfig);
-        }
-
-        if (changes) {
-            priceBox.trigger('updatePrice', changes);
-        }
-        this.updateProductSummary();
-    }
-
+    /**
+     * Converts option value to priceBox object
+     *
+     * @param   {jQuery} element
+     * @param   {Object} config
+     * @returns {Object|null} - priceBox object with additional prices
+     */
     function defaultGetOptionValue(element, config) {
         var changes = {},
-            optionValue = element.val() || null,
-            optionId = utils.findOptionId(element[0]),
-            optionName = element.prop('name'),
-            optionType = element.prop('type'),
-            optionConfig = config.options[optionId].selections,
             optionHash,
-            optionQty = 0,
             tempChanges,
             qtyField,
+            optionId      = utils.findOptionId(element[0]),
+            optionValue   = element.val() || null,
+            optionName    = element.prop('name'),
+            optionType    = element.prop('type'),
+            optionConfig  = config.options[optionId].selections,
+            optionQty     = 0,
             canQtyCustomize = false,
-            selectedIds = config.selected;
+            selectedIds   = config.selected;
 
         switch (optionType) {
             case 'radio':
@@ -117,6 +193,7 @@ define([
 
             case 'select-multiple':
                 optionValue = _.compact(optionValue);
+
                 _.each(optionConfig, function (row, optionValueCode) {
                     optionHash = 'bundle-option-' + optionName + '##' + optionValueCode;
                     optionQty = row.qty || 0;
@@ -138,6 +215,7 @@ define([
                 changes[optionHash] = element.is(':checked') ? tempChanges : {};
 
                 selectedIds[optionId] = selectedIds[optionId] || [];
+
                 if (!_.contains(selectedIds[optionId], optionValue) && element.is(':checked')) {
                     selectedIds[optionId].push(optionValue);
                 } else if (!element.is(':checked')) {
@@ -161,22 +239,14 @@ define([
         return changes;
     }
 
-    function onQtyFieldChanged(event) {
-        /*jshint validthis: true */
-        var field = $(event.target),
-            optionInstance,
-            optionConfig;
-        if (field.data('optionId') && field.data('optionValueId')) {
-            optionInstance = field.data('option');
-            optionConfig   = this.options.optionConfig
-                .options[field.data('optionId')]
-                .selections[field.data('optionValueId')];
-            optionConfig.qty = field.val();
-
-            optionInstance.trigger('change');
-        }
-    }
-
+    /**
+     * Helper to toggle qty field
+     * @param {jQuery} element
+     * @param {String|Number} value
+     * @param {String|Number} optionId
+     * @param {String|Number} optionValueId
+     * @param {Boolean} canEdit
+     */
     function toggleQtyField(element, value, optionId, optionValueId, canEdit) {
         element
             .val(value)
@@ -191,6 +261,13 @@ define([
         }
     }
 
+    /**
+     * Helper to multiply on qty
+     *
+     * @param   {Object} prices
+     * @param   {Number} qty
+     * @returns {Object}
+     */
     function applyQty(prices, qty) {
         _.each(prices, function (everyPrice) {
             everyPrice.amount *= qty;
@@ -202,58 +279,35 @@ define([
         return prices;
     }
 
+    /**
+     * Helper to limit price with tier price
+     *
+     * @param {Object} oneItemPrice
+     * @param {Number} qty
+     * @param {Object} optionConfig
+     * @returns {Object}
+     */
     function applyTierPrice(oneItemPrice, qty, optionConfig) {
         var tiers = optionConfig.tierPrice,
-            magicKey = _.keys(oneItemPrice)[0];
+            magicKey = _.keys(oneItemPrice)[0],
+            lowest = false;
 
-        _.each(tiers, function (tier) {
+        _.each(tiers, function (tier, index) {
+            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             if (tier.price_qty > qty) {
                 return;
             }
+            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
             if (tier.prices[magicKey].amount < oneItemPrice[magicKey].amount) {
-                oneItemPrice = utils.deepClone(tier.prices);
+                lowest = index;
             }
         });
 
+        if (lowest !== false) {
+            oneItemPrice = utils.deepClone(tiers[lowest].prices);
+        }
+
         return oneItemPrice;
-    }
-
-    function applyQtyFix() {
-        /*jshint validthis: true */
-        var config = this.options.optionConfig;
-        _.each(config.options, function (option) {
-            _.each(option.selections, function (item) {
-                if (item.priceType === '0') {
-                    if (item.qty && item.qty !== 1) {
-                        _.each(item.prices, function (price) {
-                            price.amount = price.amount / item.qty;
-                        });
-                    }
-                }
-            });
-        });
-    }
-
-    function updateProductSummary() {
-        /*jshint validthis: true */
-        this.element.trigger('updateProductSummary', {
-            config: this.options.optionConfig
-        });
-    }
-
-    /**
-     * Custom behavior on getting options:
-     * now widget able to deep merge accepted configuration with instance options.
-     * @param  {Object}  options
-     * @return {$.Widget}
-     */
-    function setOptions(options) {
-        /*jshint validthis: true */
-        $.extend(true, this.options, options);
-
-        this._super(options);
-
-        return this;
     }
 });
