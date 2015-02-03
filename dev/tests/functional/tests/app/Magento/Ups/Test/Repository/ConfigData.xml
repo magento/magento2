@@ -45,5 +45,9 @@
             <field path="carriers/ups/showmethod" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
             <field path="carriers/ups/debug" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>
+
+        <dataset name="ups_rollback">
+            <field path="carriers/ups/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
     </storage>
 </repository>

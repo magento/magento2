@@ -32,5 +32,37 @@
                 <item label="US Dollar" xsi:type="string">USD</item>
             </field>
         </dataset>
+
+        <dataset name="config_base_currency_ch">
+            <field path="currency/options/allow" scope="currency" scope_id="1" xsi:type="array">
+                <item label="Swiss Franc" xsi:type="string">CHF</item>
+            </field>
+            <field path="currency/options/base" scope="currency" label="Swiss Franc" scope_id="1" xsi:type="string">CHF</field>
+            <field path="currency/options/default" scope="currency" label="Swiss Franc" scope_id="1" xsi:type="string">CHF</field>
+        </dataset>
+
+        <dataset name="config_base_currency_ch_rollback">
+            <field path="currency/options/allow" scope="currency" scope_id="1" xsi:type="array">
+                <item label="US Dollar" xsi:type="string">USD</item>
+            </field>
+            <field path="currency/options/base" scope="currency" label="US Dollar" scope_id="1" xsi:type="string">USD</field>
+            <field path="currency/options/default" scope="currency" label="US Dollar" scope_id="1" xsi:type="string">USD</field>
+        </dataset>
+
+        <dataset name="config_base_currency_gb">
+            <field path="currency/options/allow" scope="currency" scope_id="1" xsi:type="array">
+                <item label="British Pound Sterling" xsi:type="string">GBP</item>
+            </field>
+            <field path="currency/options/base" scope="currency" label="British Pound Sterling" scope_id="1" xsi:type="string">GBP</field>
+            <field path="currency/options/default" scope="currency" label="British Pound Sterling" scope_id="1" xsi:type="string">GBP</field>
+        </dataset>
+
+        <dataset name="config_base_currency_gb_rollback">
+            <field path="currency/options/allow" scope="currency" scope_id="1" xsi:type="array">
+                <item label="US Dollar" xsi:type="string">USD</item>
+            </field>
+            <field path="currency/options/base" scope="currency" label="US Dollar" scope_id="1" xsi:type="string">USD</field>
+            <field path="currency/options/default" scope="currency" label="US Dollar" scope_id="1" xsi:type="string">USD</field>
+        </dataset>
     </storage>
 </repository>

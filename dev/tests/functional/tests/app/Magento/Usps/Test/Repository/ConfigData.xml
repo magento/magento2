@@ -18,5 +18,9 @@
             <field path="carriers/usps/userid" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_USPS_USERID</field>
             <field path="carriers/usps/password" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_USPS_PASSWORD</field>
         </dataset>
+
+        <dataset name="usps_rollback">
+            <field path="carriers/usps/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
     </storage>
 </repository>

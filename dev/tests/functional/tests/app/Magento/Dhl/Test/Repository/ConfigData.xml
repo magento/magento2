@@ -14,11 +14,29 @@
         <dataset name="dhl_eu">
             <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/dhl/gateway_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://xmlpitest-ea.dhl.com/XMLShippingServlet</field>
-            <field path="carriers/dhl/id" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_DHL_ID</field>
-            <field path="carriers/dhl/password" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_DHL_PASSWORD</field>
-            <field path="carriers/dhl/account" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_DHL_ACCOUNT</field>
+            <field path="carriers/dhl/id" scope="carriers" scope_id="1" label="" xsi:type="string">%carriers_dhl_id_eu%</field>
+            <field path="carriers/dhl/password" scope="carriers" scope_id="1" label="" xsi:type="string">%carriers_dhl_password_eu%</field>
+            <field path="carriers/dhl/account" scope="carriers" scope_id="1" label="" xsi:type="string">%carriers_dhl_account_eu%</field>
             <field path="carriers/dhl/showmethod" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/dhl/debug" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="dhl_eu_rollback">
+            <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="dhl_us">
+            <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="carriers/dhl/gateway_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://xmlpi-ea.dhl.com/XMLShippingServlet</field>
+            <field path="carriers/dhl/id" scope="carriers" scope_id="1" label="" xsi:type="string">%carriers_dhl_id_us%</field>
+            <field path="carriers/dhl/password" scope="carriers" scope_id="1" label="" xsi:type="string">%carriers_dhl_password_us%</field>
+            <field path="carriers/dhl/account" scope="carriers" scope_id="1" label="" xsi:type="string">%carriers_dhl_account_us%</field>
+            <field path="carriers/dhl/showmethod" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="carriers/dhl/debug" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="dhl_us_rollback">
+            <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
         </dataset>
     </storage>
 </repository>

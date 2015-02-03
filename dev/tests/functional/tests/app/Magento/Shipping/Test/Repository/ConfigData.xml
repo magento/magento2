@@ -23,5 +23,13 @@
             <field path="shipping/origin/city" scope="shipping" scope_id="1" label="" xsi:type="string">Los Angeles</field>
             <field path="shipping/origin/street_line1" scope="shipping" scope_id="1" label="" xsi:type="string">1419 Westwood Blvd</field>
         </dataset>
+
+        <dataset name="shipping_origin_CH">
+            <field path="shipping/origin/country_id" scope="carriers" scope_id="1" label="United Kingdom" xsi:type="string">CH</field>
+            <field path="shipping/origin/region_id" scope="shipping" scope_id="1" label="Bern" xsi:type="string">107</field>
+            <field path="shipping/origin/postcode" scope="shipping" scope_id="1" label="" xsi:type="string">3005</field>
+            <field path="shipping/origin/city" scope="shipping" scope_id="1" label="" xsi:type="string">Bern</field>
+            <field path="shipping/origin/street_line1" scope="shipping" scope_id="1" label="" xsi:type="string">Weinbergstrasse 4</field>
+        </dataset>
     </storage>
 </repository>
