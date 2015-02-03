@@ -28,7 +28,7 @@ define([
             minSearchLength: 2,
             responseFieldElements: 'ul li',
             selectClass: 'selected',
-            template: '<li class="<%= row_class %>" title="<%= title %>"><%= title %><span class="amount"><%= num_of_results %></span></li>',
+            template: '<li class="<%= data.row_class %>" id="qs-option-<%= data.index %>" role="option"><span class="qs-option-name"><%= data.title %></span><span aria-hidden="true" class="amount"><%= data.num_of_results %></span></li>',
             submitBtn: 'button[type="submit"]',
             searchLabel: '[data-role=minisearch-label]'
         },
@@ -56,6 +56,7 @@ define([
                         this.searchLabel.removeClass('active');
                     }
                     this.autoComplete.hide();
+                    this._updateAriaHasPopup(false);
                 }, this), 250);
             }, this));
 
@@ -67,7 +68,10 @@ define([
             this.element.on('keydown', this._onKeyDown);
             this.element.on('input propertychange', this._onPropertyChange);
 
-            this.searchForm.on('submit', this._onSubmit);
+            this.searchForm.on('submit', $.proxy(function() {
+                this._onSubmit();
+                this._updateAriaHasPopup(false);
+            }, this));
         },
         /**
          * @private
@@ -83,6 +87,18 @@ define([
          */
         _getLastElement: function () {
             return this.responseList.indexList ? this.responseList.indexList.last() : false;
+        },
+
+        /**
+         * @private
+         * @param {Boolean} show Set attribute aria-haspopup to "true/false" for element.
+         */
+        _updateAriaHasPopup: function(show) {
+            if (show) {
+                this.element.attr('aria-haspopup', 'true');
+            } else {
+                this.element.attr('aria-haspopup', 'false');
+            }
         },
 
         /**
@@ -112,7 +128,7 @@ define([
             }
 
             if (this.responseList.selected) {
-                this.element.val(this.responseList.selected.attr('title'));
+                this.element.val(this.responseList.selected.find('.qs-option-name').text());
             }
         },
 
@@ -127,51 +143,50 @@ define([
             var keyCode = e.keyCode || e.which;
 
             switch (keyCode) {
-            case $.ui.keyCode.HOME:
-                this._getFirstVisibleElement().addClass(this.options.selectClass);
-                this.responseList.selected = this._getFirstVisibleElement();
-                break;
-
-            case $.ui.keyCode.END:
-                this._getLastElement().addClass(this.options.selectClass);
-                this.responseList.selected = this._getLastElement();
-                break;
-
-            case $.ui.keyCode.ESCAPE:
-                this._resetResponseList(true);
-                this.autoComplete.hide();
-                break;
-
-            case $.ui.keyCode.ENTER:
-                this.searchForm.trigger('submit');
-                break;
-
-            case $.ui.keyCode.DOWN:
-
-                if (this.responseList.indexList) {
-                    if (!this.responseList.selected) {
-                        this._getFirstVisibleElement().addClass(this.options.selectClass);
-                        this.responseList.selected = this._getFirstVisibleElement();
-                    } else if (!this._getLastElement().hasClass(this.options.selectClass)) {
-                        this.responseList.selected = this.responseList.selected.removeClass(this.options.selectClass).next().addClass(this.options.selectClass);
-                    } else {
-                        this.responseList.selected.removeClass(this.options.selectClass);
-                        this._getFirstVisibleElement().addClass(this.options.selectClass);
-                        this.responseList.selected = this._getFirstVisibleElement();
+                case $.ui.keyCode.HOME:
+                    this._getFirstVisibleElement().addClass(this.options.selectClass);
+                    this.responseList.selected = this._getFirstVisibleElement();
+                    break;
+                case $.ui.keyCode.END:
+                    this._getLastElement().addClass(this.options.selectClass);
+                    this.responseList.selected = this._getLastElement();
+                    break;
+                case $.ui.keyCode.ESCAPE:
+                    this._resetResponseList(true);
+                    this.autoComplete.hide();
+                    break;
+                case $.ui.keyCode.ENTER:
+                    this.searchForm.trigger('submit');
+                    break;
+                case $.ui.keyCode.DOWN:
+                    if (this.responseList.indexList) {
+                        if (!this.responseList.selected) {
+                            this._getFirstVisibleElement().addClass(this.options.selectClass);
+                            this.responseList.selected = this._getFirstVisibleElement();
+                        }
+                        else if (!this._getLastElement().hasClass(this.options.selectClass)) {
+                            this.responseList.selected = this.responseList.selected.removeClass(this.options.selectClass).next().addClass(this.options.selectClass);
+                        } else {
+                            this.responseList.selected.removeClass(this.options.selectClass);
+                            this._getFirstVisibleElement().addClass(this.options.selectClass);
+                            this.responseList.selected = this._getFirstVisibleElement();
+                        }
+                        this.element.val(this.responseList.selected.find('.qs-option-name').text());
+                        this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
                     }
-                }
-                break;
+                    break;
+                case $.ui.keyCode.UP:
+                    if (this.responseList.indexList !== null) {
+                        if (!this._getFirstVisibleElement().hasClass(this.options.selectClass)) {
+                            this.responseList.selected = this.responseList.selected.removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
 
-            case $.ui.keyCode.UP:
-
-                if (this.responseList.indexList !== null) {
-                    if (!this._getFirstVisibleElement().hasClass(this.options.selectClass)) {
-                        this.responseList.selected = this.responseList.selected.removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
-
-                    } else {
-                        this.responseList.selected.removeClass(this.options.selectClass);
-                        this._getLastElement().addClass(this.options.selectClass);
-                        this.responseList.selected = this._getLastElement();
+                        } else {
+                            this.responseList.selected.removeClass(this.options.selectClass);
+                            this._getLastElement().addClass(this.options.selectClass);
+                            this.responseList.selected = this._getLastElement();
+                        }
+                        this.element.val(this.responseList.selected.find('.qs-option-name').text());
+                        this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
                     }
                 }
                 break;
@@ -199,17 +214,18 @@ define([
                 },
                 source = this.options.template,
                 template = mageTemplate(source),
-                dropdown = $('<ul></ul>'),
+                dropdown = $('<ul role="listbox"></ul>'),
                 value = this.element.val();
 
             this.submitBtn.disabled = isEmpty(value);
 
             if (value.length >= parseInt(this.options.minSearchLength, 10)) {
-                $.get(this.options.url, {
-                    q: value
-                }, $.proxy(function (data) {
-                    $.each(data, function (index, element) {
-                        var html = template(element);
+                $.get(this.options.url, {q: value}, $.proxy(function (data) {
+                    $.each(data, function(index, element) {
+                        element.index = index;
+                        var html = template({
+                            data: element
+                        });
                         dropdown.append(html);
                     });
                     this.responseList.indexList = this.autoComplete.html(dropdown)
@@ -218,6 +234,13 @@ define([
                         .find(this.options.responseFieldElements + ':visible');
 
                     this._resetResponseList(false);
+                    this.element.removeAttr('aria-activedescendant');
+
+                    if (this.responseList.indexList.length) {
+                        this._updateAriaHasPopup(true);
+                    } else {
+                        this._updateAriaHasPopup(false);
+                    }
 
                     this.responseList.indexList
                         .on('click', function (e) {
@@ -228,6 +251,7 @@ define([
                             this.responseList.indexList.removeClass(this.options.selectClass);
                             $(e.target).addClass(this.options.selectClass);
                             this.responseList.selected = $(e.target);
+                            this.element.attr('aria-activedescendant', $(e.target).attr('id'));
                         }.bind(this))
                         .on('mouseout', function (e) {
                             if (!this._getLastElement() && this._getLastElement().hasClass(this.options.selectClass)) {
@@ -239,6 +263,8 @@ define([
             } else {
                 this._resetResponseList(true);
                 this.autoComplete.hide();
+                this._updateAriaHasPopup(false);
+                this.element.removeAttr('aria-activedescendant');
             }
         }
     });

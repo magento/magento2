@@ -6,7 +6,7 @@
 namespace Magento\CheckoutAgreements\Model;
 
 use Magento\Checkout\Model\Agreements\AgreementsProviderInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Provide Agreements stored in db
@@ -22,17 +22,17 @@ class AgreementsProvider implements AgreementsProviderInterface
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     protected $scopeConfig;
 
-    /** @var  \Magento\Store\Model\StoreManagerInterface */
+    /** @var  \Magento\Framework\Store\StoreManagerInterface */
     protected $storeManager;
 
     /**
      * @param Resource\Agreement\CollectionFactory $agreementCollectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->agreementCollectionFactory = $agreementCollectionFactory;

@@ -25,7 +25,7 @@
                 <fixture>Magento\Bundle\Test\Fixture\Bundle\BundleSelections</fixture>
             </bundle_selections>
         </fields>
-        <data_set>
+        <dataset>
             <sku />
             <name />
             <short_description />
@@ -36,7 +36,7 @@
             <price_type />
             <shipment_type />
             <bundle_selections />
-        </data_set>
+        </dataset>
         <data_config>
             <create_url_params>
                 <type>bundle</type>

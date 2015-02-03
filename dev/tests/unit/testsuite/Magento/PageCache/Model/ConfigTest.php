@@ -66,25 +66,25 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_BACKEND_HOST,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                         null,
                         'example.com',
                     ],
                     [
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_BACKEND_PORT,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                         null,
                         '8080'
                     ],
                     [
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_ACCESS_LIST,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                         null,
-                        '127.0.0.1, 192.168.0.1'
+                        '127.0.0.1, 192.168.0.1,127.0.0.2'
                     ],
                     [
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                         null,
                         serialize([['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']])
                     ],
@@ -104,7 +104,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVcl()
     {
-        $test = $this->_model->getVclFile();
+        $test = $this->_model->getVclFile(Config::VARNISH_3_CONFIGURATION_PATH);
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
     }
 

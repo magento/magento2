@@ -89,7 +89,7 @@ class OrderStatus implements DataProviderInterface
      */
     public function isAllowed()
     {
-        if ($this->config->getValue('rss/order/status', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+        if ($this->config->getValue('rss/order/status', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)) {
             return true;
         }
         return false;
