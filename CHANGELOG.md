@@ -1,3 +1,53 @@
+0.42.0-beta6
+=============
+* Various improvements:
+    * Implemented caching for WebAPI configuration 
+    * Improved tests coverage of the CurrencySymbol module 
+    * Table catalogsearch_fulltext is setting up with ENGINE=InnoDB 
+    * Improved unit test coverage of the Catalog related functionality 
+    * Optimized JS dependencies 
+    * Refactored controller actions in the Sales module 
+    * Refactored controller actions in the Customer module 
+    * Removed the assertion for the exact number of attributes in API-functional tests for customer metadata. 
+    * Refactored API code for the CheckoutAgreements module 
+    * Refactored API code for the GiftMessage module 
+    * Refactored API for the Checkout module 
+* Fixed bugs:
+    * Fixed an where issue were WebAPI generated the wrong WSDL 
+    * Fixed an issue where Catalog, Checkout, Customer API ACLs did not support AJAX use case(s) 
+    * Fixed an issue where SOAP tests failed after upgrading to ZF 1.12.9 
+    * Fixed an issue where the 'There is no data for export' message was displayed permanently after invalid search 
+    * Fixed an issue where there was no ability to set category position during creation it 
+    * Fixed a CSS issue where certain images were absent on banners () 
+    * Fixed an issue where the 'Date Of Birth' value was i reset to current date on the customer form)
+    * Fixed an issue where the behavior of the "Terms and Conditions" validation on multiple address checkout was different from the one for the onepage checkout 
+    * Fixed an issue where it was impossible to checkout with multiple addresses
+    * Fixed an issue where the 'This is a required field ' message was not displayed for "Terms and Conditions" if the latter  was not selected
+* GitHub Requests:
+    * [#963](https://github.com/magento/magento2/pull/963) -- Default Accept header
+    * [#995](https://github.com/magento/magento2/pull/995) -- Prevent a warning in activated developer mode when 'plugins' is no array
+    * [#866](https://github.com/magento/magento2/issues/866) -- Configurable product attribute scope
+    * [#965](https://github.com/magento/magento2/pull/965) -- extra tests for current interception behavior
+* Service Contracts:
+    * The Downloadable module basic implementation 
+* Framework improvements:
+    * Refactored and covered with tests the classes with high CRAP value (>50) 
+    * Moved Theme Management changes, Design changes, Design\Backend modules, and Observer components from the Core module to the Theme module
+    * Moved Debug Hints models from the Core module to the newly added Developer module
+    * Moved URL components, Factory, and EntityFactory from the Core module to the Magento Framework
+* UI improvements:
+    * Compressed and resized images
+    * Added new base styles for the Admin re-design
+    * Added the WAI-ARIA attributes are to the Search Autocomplete on the storefront
+    * Added visual style for the 'skip to content' attribute on the storefront 
+    * Fixed the style of persistent login messages on the storefront for all themes 
+    * Fixed the style of scrolling for Categories with long names in the Admin 
+    * Fixed the "css/print.css" file path on the storefront pages for all themes 
+* Tests improvements:
+    * Converted all fixtures/repositories for functional tests to .xml files 
+    * Improved interaction between webdriver and the new Magento JS forms
+    * Increased unit and integration tests coverage 
+
 0.42.0-beta5
 =============
 * UI improvements:
