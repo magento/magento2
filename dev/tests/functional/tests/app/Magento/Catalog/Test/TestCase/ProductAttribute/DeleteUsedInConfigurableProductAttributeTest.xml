@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="DeleteUsedInConfigurableProductAttributeTest">
     <variation name="DeleteUsedInConfigurableProductAttributeTestVariation1" firstConstraint="assertUsedSuperAttributeImpossibleDeleteMessages" method="test">
-      <data name="product/dataSet">one_variation</data>
+      <data name="product/dataSet" xsi:type="string">one_variation</data>
       <constraint name="assertUsedSuperAttributeImpossibleDeleteMessages" next="assertProductAttributeInGrid"/>
       <constraint name="assertProductAttributeInGrid" next="assertConfigurableProductForm" prev="assertUsedSuperAttributeImpossibleDeleteMessages"/>
       <constraint name="assertConfigurableProductForm" prev="assertProductAttributeInGrid"/>

@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="DeleteSitemapEntityTest">
     <variation name="DeleteSitemapEntityTestVariation1" firstConstraint="assertSitemapSuccessDeleteMessage" method="test">
-      <data name="sitemap/dataSet">default</data>
+      <data name="sitemap/dataSet" xsi:type="string">default</data>
       <constraint name="assertSitemapSuccessDeleteMessage" next="assertSitemapNotInGrid"/>
       <constraint name="assertSitemapNotInGrid" prev="assertSitemapSuccessDeleteMessage"/>
     </variation>

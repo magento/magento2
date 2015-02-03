@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="DeleteProductRatingEntityTest">
     <variation name="DeleteProductRatingEntityTestVariation1" firstConstraint="assertProductRatingSuccessDeleteMessage" method="test">
-      <data name="productRating/dataSet">default</data>
+      <data name="productRating/dataSet" xsi:type="string">default</data>
       <constraint name="assertProductRatingSuccessDeleteMessage" next="assertProductRatingNotInGrid"/>
       <constraint name="assertProductRatingNotInGrid" next="assertProductRatingNotInProductPage" prev="assertProductRatingSuccessDeleteMessage"/>
       <constraint name="assertProductRatingNotInProductPage" prev="assertProductRatingNotInGrid"/>
