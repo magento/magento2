@@ -235,4 +235,137 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
             $addressDataObject->getCustomAttribute($customAttributeCode)->getAttributeCode()
         );
     }
+
+    /**
+     * @param array $data1
+     * @param array $data2
+     * @dataProvider dataProviderForTestMergeDataObjects
+     */
+    public function testMergeDataObjects($data1, $data2)
+    {
+        /** @var \Magento\Customer\Model\Data\Address $addressDataObject */
+        $firstAddressDataObject = $this->objectManager->getObject(
+            'Magento\Customer\Model\Data\Address',
+            [
+                'dataObjectHelper' => $this->dataObjectHelper,
+            ]
+        );
+
+        /** @var \Magento\Customer\Model\Data\Region $regionDataObject */
+        $firstRegionDataObject = $this->objectManager->getObject(
+            'Magento\Customer\Model\Data\Region',
+            [
+                'dataObjectHelper' => $this->dataObjectHelper,
+            ]
+        );
+
+        $firstRegionDataObject->setRegionId($data1['region']['region_id']);
+        $firstRegionDataObject->setRegion($data1['region']['region']);
+        if(isset($data1['id']))
+            $firstAddressDataObject->setId($data1['id']);
+        if(isset($data1['country_id']))
+            $firstAddressDataObject->setCountryId($data1['country_id']);
+        $firstAddressDataObject->setStreet($data1['street']);
+        $firstAddressDataObject->setIsDefaultShipping($data1['default_shipping']);
+        $firstAddressDataObject->setRegion($firstRegionDataObject);
+
+        $secondAddressDataObject = $this->objectManager->getObject(
+            'Magento\Customer\Model\Data\Address',
+            [
+                'dataObjectHelper' => $this->dataObjectHelper,
+            ]
+        );
+
+        /** @var \Magento\Customer\Model\Data\Region $regionDataObject */
+        $secondRegionDataObject = $this->objectManager->getObject(
+            'Magento\Customer\Model\Data\Region',
+            [
+                'dataObjectHelper' => $this->dataObjectHelper,
+            ]
+        );
+
+        $secondRegionDataObject->setRegionId($data2['region']['region_id']);
+        $secondRegionDataObject->setRegion($data2['region']['region']);
+        if(isset($data2['id']))
+            $secondAddressDataObject->setId($data2['id']);
+        if(isset($data2['country_id']))
+            $secondAddressDataObject->setCountryId($data2['country_id']);
+        $secondAddressDataObject->setStreet($data2['street']);
+        $secondAddressDataObject->setIsDefaultShipping($data2['default_shipping']);
+        $secondAddressDataObject->setRegion($secondRegionDataObject);
+        
+        $this->objectProcessorMock->expects($this->once())
+            ->method('buildOutputDataArray')
+            ->with($secondAddressDataObject, get_class($firstAddressDataObject))
+            ->willReturn($data2);
+        $this->objectProcessorMock->expects($this->at(1))
+            ->method('getMethodReturnType')
+            ->with('Magento\Customer\Model\Data\Address', 'getStreet')
+            ->willReturn('string[]');
+        $this->objectProcessorMock->expects($this->at(2))
+            ->method('getMethodReturnType')
+            ->with('Magento\Customer\Model\Data\Address', 'getRegion')
+            ->willReturn('\Magento\Customer\Api\Data\RegionInterface');
+        $this->objectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with('\Magento\Customer\Api\Data\RegionInterface', [])
+            ->willReturn($secondRegionDataObject);
+
+        $this->dataObjectHelper->mergeDataObjects(get_class($firstAddressDataObject), $firstAddressDataObject,
+            $secondAddressDataObject);
+
+        $this->assertSame($firstAddressDataObject->getId(), $secondAddressDataObject->getId());
+        $this->assertSame($firstAddressDataObject->getCountryId(), $secondAddressDataObject->getCountryId());
+        $this->assertSame($firstAddressDataObject->getStreet(), $secondAddressDataObject->getStreet());
+        $this->assertSame($firstAddressDataObject->isDefaultShipping(), $secondAddressDataObject->isDefaultShipping());
+        $this->assertSame($firstAddressDataObject->getRegion(), $secondAddressDataObject->getRegion());
+    }
+
+    public function dataProviderForTestMergeDataObjects()
+    {
+        return [
+            [
+                [
+                    'id' => '1',
+                    'country_id' => '1',
+                    'street' => ["7701 W Parmer Lane", "Second Line"],
+                    'default_shipping' => true,
+                    'region' => [
+                        'region_id' => '1',
+                        'region' => 'TX',
+                    ]
+                ],
+                [
+                    'id' => '2',
+                    'country_id' => '2',
+                    'street' => ["7702 W Parmer Lane", "Second Line"],
+                    'default_shipping' => false,
+                    'region' => [
+                        'region_id' => '2',
+                        'region' => 'TX',
+                    ]
+                ]
+            ],
+            [
+                [
+                    'street' => ["7701 W Parmer Lane", "Second Line"],
+                    'default_shipping' => true,
+                    'region' => [
+                        'region_id' => '1',
+                        'region' => 'TX',
+                    ]
+                ],
+                [
+                    'id' => '2',
+                    'country_id' => '2',
+                    'street' => ["7702 W Parmer Lane", "Second Line"],
+                    'default_shipping' => false,
+                    'region' => [
+                        'region_id' => '2',
+                        'region' => 'TX',
+                    ]
+                ]
+            ]
+        ];
+    }
 }
