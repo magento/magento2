@@ -12,7 +12,7 @@ define([
 
     var globalOptions = {
         optionConfig: null,
-        productBundleSelector: '.product.bundle.option',
+        productBundleSelector: 'input.bundle.option, select.bundle.option, textarea.bundle.option',
         qtyFieldSelector: 'input.qty',
         priceBoxSelector: '.price-box',
         optionHandlers: {},
@@ -158,11 +158,15 @@ define([
     function onQtyFieldChanged(event) {
         /*jshint validthis: true */
         var field = $(event.target);
-        var optionInstance = field.data('option');
-        var optionConfig = this.options.optionConfig.options[field.data('optionId')].selections[field.data('optionValueId')];
-        optionConfig.qty = field.val();
+        if(field.data('optionId') && field.data('optionValueId')){
+            var optionInstance = field.data('option');
+            var optionConfig = this.options.optionConfig
+                .options[field.data('optionId')]
+                .selections[field.data('optionValueId')];
+            optionConfig.qty = field.val();
 
-        optionInstance.trigger('change');
+            optionInstance.trigger('change');
+        }
     }
 
     function toggleQtyField(element, value, optionId, optionValueId, canEdit) {
