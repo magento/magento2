@@ -71,30 +71,33 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * @param string $value
-     * @return void
+     * @return \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function appendBody($value)
     {
         $body = $this->getContent();
         $this->setContent($body . $value);
+        return $this;
     }
 
     /**
      * @param string $value
-     * @return void
+     * @return \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function setBody($value)
     {
         $this->setContent($value);
+        return $this;
     }
 
     /**
      * Clear body
-     * @return void
+     * @return \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function clearBody()
     {
         $this->setContent('');
+        return $this;
     }
 
     /**
@@ -124,7 +127,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      * Remove header by name from header stack
      *
      * @param string $name
-     * @return void
+     * @return \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function clearHeader($name)
     {
@@ -136,16 +139,20 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
                 }
             }
         }
+
+        return $this;
     }
 
     /**
      * Remove all headers
-     * @return void
+     * @return \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function clearHeaders()
     {
         $headers = $this->getHeaders();
         $headers->clearHeaders();
+
+        return $this;
     }
 
     /**
