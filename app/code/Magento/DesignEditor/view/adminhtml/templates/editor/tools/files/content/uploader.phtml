@@ -18,7 +18,7 @@
               </span>
               <span class="file-icon">
                   <span class="file-info-cancel">
-                      <button class="action-delete" data-delete-file="${id}">
+                      <button type="button" class="action-delete" data-delete-file="${id}">
                           <span><?php echo __('Remove'); ?></span>
                       </button>
                   </span>
@@ -39,13 +39,13 @@
 </div>
 <div class="form-buttons">
     <span class="fileinput-button">
-            <button class="action-default primary" data-action="browse" type="submit">
+            <button type="button" class="action-default primary" data-action="browse" type="submit">
                 <?php echo __('Browse Files'); ?>
             </button>
             <input data-action="fileinput" type="file" name="<?php echo $block->getConfig()->getFileField() ?>"
                    data-url="<?php echo $block->getConfig()->getUrl() ?>" multiple>
     </span>
-    <button class="no-display action-default primary" data-action="upload">
+    <button type="button" class="no-display action-default primary" data-action="upload">
         <?php echo __('Upload Files'); ?>
     </button>
 </div>
