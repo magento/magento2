@@ -7,8 +7,6 @@
  */
 namespace Magento\Framework;
 
-use Magento\Framework\Filesystem\File\ReadInterface;
-
 class Filesystem
 {
     /**

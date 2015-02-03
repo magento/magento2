@@ -373,7 +373,8 @@ class Template extends AbstractBlock
 
         $themesDir = $this->_filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
         $appDir = $this->_filesystem->getDirectoryRead(DirectoryList::APP)->getAbsolutePath();
-        $compiledDir = Minifier::getDirectory();
+        $compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TEMPLATE_MINIFICATION_DIR)
+            ->getAbsolutePath();
         return ($this->isPathInDirectory(
             $fileName,
             $compiledDir
