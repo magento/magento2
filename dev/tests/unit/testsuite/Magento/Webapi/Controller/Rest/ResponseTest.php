@@ -35,49 +35,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->_appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
 
-        $cookieMetadataFactory = $this->getMock(
-            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory',
-            ['createCookieMetadata', 'setPath'],
-            [],
-            '',
-            false
-        );
-        $cookieManager = $this->getMock(
-            'Magento\Framework\Stdlib\Cookie\PhpCookieManager',
-            ['deleteCookie'],
-            [],
-            '',
-            false
-        );
-        $context = $this->getMock(
-            'Magento\Framework\App\Http\Context',
-            ['getData']
-        );
-
-        if (in_array($this->getName(), ['testSendResponseWithException', 'testSendResponseSuccessHandling'])) {
-            $cookieMetadataFactory
-                ->expects($this->once())
-                ->method('createCookieMetadata')
-                ->will($this->returnSelf());
-            $cookieMetadataFactory
-                ->expects($this->once())
-                ->method('setPath')
-                ->will($this->returnValue(null));
-            $context
-                ->expects($this->once())
-                ->method('getData')
-                ->will($this->returnValue(null));
-            $cookieManager
-                ->expects($this->once())
-                ->method('deleteCookie')
-                ->will($this->returnValue(null));
-        }
-
         /** Init SUP. */
         $this->_responseRest = new \Magento\Webapi\Controller\Rest\Response(
-            $cookieManager,
-            $cookieMetadataFactory,
-            $context,
             $rendererFactoryMock,
             $this->_errorProcessorMock,
             $this->_appStateMock

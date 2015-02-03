@@ -45,25 +45,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->model->headersSentThrowsException = false;
-        $this->model->setHeader('name', 'value');
+        $this->model->setHeader('Name', 'Value');
     }
 
     protected function tearDown()
     {
         unset($this->model);
-    }
-
-    public function testGetHeaderWhenHeaderNameIsEqualsName()
-    {
-        $expected = ['name' => 'Name', 'value' => 'value', 'replace' => false];
-        $header = $this->model->getHeader('Name');
-        $this->assertEquals($expected['name'], $header->getFieldName());
-        $this->assertEquals($expected['value'], $header->getFieldValue());
-    }
-
-    public function testGetHeaderWhenHeaderNameIsNotEqualsName()
-    {
-        $this->assertFalse($this->model->getHeader('Test'));
     }
 
     public function testSendVary()
@@ -198,122 +185,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->model->representJson('json_string');
         $this->assertEquals('application/json', $this->model->getHeader('Content-Type')->getFieldValue());
         $this->assertEquals('json_string', $this->model->getBody('default'));
-    }
-
-    /**
-     * Test for getHeader method
-     *
-     * @dataProvider headersDataProvider
-     * @covers       \Magento\Framework\App\Response\Http::getHeader
-     * @param string $header
-     */
-    public function testGetHeaderExists($header)
-    {
-        $this->model->setHeader($header['name'], $header['value'], $header['replace']);
-        $this->assertEquals($header['name'], $this->model->getHeader($header['name'])->getFieldName());
-        $this->assertEquals($header['value'], $this->model->getHeader($header['name'])->getFieldValue());
-    }
-
-    /**
-     * Data provider for testGetHeader
-     *
-     * @return array
-     */
-    public function headersDataProvider()
-    {
-        return [
-            [['name' => 'X-Frame-Options', 'value' => 'SAMEORIGIN', 'replace' => true]],
-            [['name' => 'Test2', 'value' => 'Test2', 'replace' => false]]
-        ];
-    }
-
-    /**
-     * Test for getHeader method. Validation for attempt to get not existing header
-     *
-     * @covers \Magento\Framework\App\Response\Http::getHeader
-     */
-    public function testGetHeaderNotExists()
-    {
-        $this->model->setHeader('Name', 'value', true);
-        $this->assertFalse($this->model->getHeader('Wrong name'));
-    }
-
-    /**
-     * Test for setHeader method.
-     *
-     * @covers \Magento\Framework\App\Response\Http::setHeader
-     */
-    public function testSetHeader()
-    {
-        $this->model->setHeader('test-name', 'testValue');
-        $header = $this->model->getHeader('testName');
-        $this->assertEquals('Test-Name', $header->getFieldName());
-        $this->assertEquals('testValue', $header->getFieldValue());
-    }
-
-    /**
-     * Test for clearHeader method.
-     *
-     * @covers \Magento\Framework\App\Response\Http::clearHeader
-     */
-    public function testClearHeader()
-    {
-        $this->model->setHeader('test-name', 'testValue');
-        $this->model->clearHeader('test-name');
-        $this->assertFalse($this->model->getHeader('test-name'));
-    }
-
-    /**
-     * Test for setRedirect method.
-     *
-     * @covers \Magento\Framework\App\Response\Http::setRedirect
-     */
-    public function testSetRedirect()
-    {
-        /** @var \Magento\Framework\App\Response\Http $response */
-        $response = $this->getMock(
-            'Magento\Framework\App\Response\Http',
-            ['setHeader', 'setHttpResponseCode', 'sendHeaders'],
-            [],
-            '',
-            false
-        );
-        $response
-            ->expects($this->once())
-            ->method('setHeader')
-            ->with('Location', 'testUrl', true)
-            ->will($this->returnSelf());
-        $response
-            ->expects($this->once())
-            ->method('setHttpResponseCode')
-            ->with(302)
-            ->will($this->returnSelf());
-        $response
-            ->expects($this->once())
-            ->method('sendHeaders')
-            ->will($this->returnSelf());
-
-        $response->setRedirect('testUrl');
-    }
-
-    /**
-     * Test for setHttpResponseCode method.
-     *
-     * @covers \Magento\Framework\App\Response\Http::setHttpResponseCode
-     */
-    public function testSetHttpResponseCode()
-    {
-        $this->setExpectedException('InvalidArgumentException');
-        $this->model->setHttpResponseCode(2);
-    }
-    /**
-     * Test for setHttpResponseCode method.
-     *
-     * @covers \Magento\Framework\App\Response\Http::setHttpResponseCode
-     */
-    public function testSetHttpResponseCodeWithoutException()
-    {
-        $this->model->setHttpResponseCode(200);
     }
 
     /**

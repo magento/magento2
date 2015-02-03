@@ -89,7 +89,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $this->_responseMock
             ->expects($this->any())
             ->method('getHeaders')
-            ->will($this->returnValue(new \Magento\Framework\App\Response\Headers()));
+            ->will($this->returnValue(new \Zend\Http\Headers()));
 
         $this->_soapServerMock->expects($this->any())->method('setWSDL')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setEncoding')->will($this->returnSelf());

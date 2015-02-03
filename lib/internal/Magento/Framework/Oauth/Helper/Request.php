@@ -189,7 +189,7 @@ class Request
      * @param \Zend_Controller_Response_Http $response OPTIONAL If NULL - will use internal getter
      * @return array
      */
-    public function prepareErrorResponse(\Exception $exception, \Magento\Framework\App\Response\Http $response = null)
+    public function prepareErrorResponse(\Exception $exception, \Magento\Framework\HTTP\PhpEnvironment\Response $response = null)
     {
         $errorMsg = $exception->getMessage();
 

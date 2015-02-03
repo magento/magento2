@@ -64,7 +64,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
                 $exceptions .= $e->__toString() . "\n";
             }
             echo $exceptions;
-            return;
+            return null;
         }
         $this->send();
     }
@@ -176,7 +176,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      */
     public function setHttpResponseCode($code)
     {
-        if (!is_int($code) || (100 > $code) || (599 < $code)) {
+        if (!is_numeric($code) || (100 > $code) || (599 < $code)) {
             throw new \InvalidArgumentException('Invalid HTTP response code');
         }
 

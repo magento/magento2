@@ -69,6 +69,10 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function setStatusHeader($httpCode, $version = null, $phrase = null)
     {
+        if (!is_numeric($httpCode) || (100 > $httpCode) || (599 < $httpCode)) {
+            throw new \InvalidArgumentException('Invalid HTTP response code');
+        }
+
         $version = is_null($version) ? $this->detectVersion() : $version;
         $phrase = is_null($phrase) ? $this->getReasonPhrase() : $phrase;
 

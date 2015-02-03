@@ -203,7 +203,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
 
         if ($request->isDispatched() && $request->getActionName() !== 'denied' && !$this->_isAllowed()) {
             $this->_response->setStatusHeader(403, '1.1', 'Forbidden');
-            $this->_response->setHttpResponseCode(403);
             if (!$this->_auth->isLoggedIn()) {
                 return $this->_redirect('*/auth/login');
             }
