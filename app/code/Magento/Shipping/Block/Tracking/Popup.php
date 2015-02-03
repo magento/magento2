@@ -95,7 +95,7 @@ class Popup extends \Magento\Framework\View\Element\Template
     {
         return (bool)$this->_scopeConfig->getValue(
             'contacts/contacts/enabled',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -106,7 +106,7 @@ class Popup extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'trans_email/ident_support/email',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 

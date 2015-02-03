@@ -49,7 +49,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             'carriers',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue($carriers)
         );
@@ -84,7 +84,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             sprintf('carriers/%s/%s', $carrierCode, $configPath),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue($configValue)
         );

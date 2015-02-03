@@ -38,6 +38,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         array $data = []
     ) {
+        $this->_isScopePrivate = true;
         $this->_wishlistHelper = $wishlistHelper;
         parent::__construct($context, $data);
     }
