@@ -53,6 +53,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 [\Magento\Framework\App\Filesystem\DirectoryList::THEMES, $themesDirMock],
                 [\Magento\Framework\App\Filesystem\DirectoryList::APP, $appDirMock],
                 [\Magento\Framework\App\Filesystem\DirectoryList::ROOT, $this->rootDirMock],
+                [\Magento\Framework\App\Filesystem\DirectoryList::TEMPLATE_MINIFICATION_DIR, $this->rootDirMock],
             ]));
 
         $this->_templateEngine = $this->getMock(
