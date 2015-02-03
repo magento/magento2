@@ -38,12 +38,10 @@ class UserConfigurationDataMapper
      *
      * @var array
      */
-    private static $pathDataMap = [
+    private $pathDataMap = [
         Store::XML_PATH_USE_REWRITES => self::KEY_USE_SEF_URL,
         Store::XML_PATH_UNSECURE_BASE_URL => self::KEY_BASE_URL,
-        Store::XML_PATH_SECURE_IN_FRONTEND => self::KEY_IS_SECURE,
         Store::XML_PATH_SECURE_BASE_URL => self::KEY_BASE_URL_SECURE,
-        Store::XML_PATH_SECURE_IN_ADMINHTML => self::KEY_IS_SECURE_ADMIN,
         Data::XML_PATH_DEFAULT_LOCALE => self::KEY_LANGUAGE,
         Data::XML_PATH_DEFAULT_TIMEZONE => self::KEY_TIMEZONE,
         Currency::XML_PATH_CURRENCY_BASE => self::KEY_CURRENCY,
@@ -55,30 +53,59 @@ class UserConfigurationDataMapper
     /**
      * Gets All Configuration Data
      *
-     * @param array $data
+     * @param array $installParamData
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getConfigData($data)
+    public function getConfigData($installParamData)
     {
         $configData = [];
-        if (!((isset($data[self::KEY_IS_SECURE]) && $data[self::KEY_IS_SECURE])
-            || (isset($data[self::KEY_IS_SECURE_ADMIN]) && $data[self::KEY_IS_SECURE_ADMIN]))
-            && isset($data[self::KEY_BASE_URL_SECURE])) {
-            unset($data[self::KEY_BASE_URL_SECURE]);
+        if (!$this->isSecureUrlNeeded($installParamData)
+            && isset($installParamData[self::KEY_BASE_URL_SECURE])) {
+            unset($installParamData[self::KEY_BASE_URL_SECURE]);
         }
-        foreach (self::$pathDataMap as $path => $key) {
-            if (isset($data[$key])) {
-                if ((($key === self::KEY_IS_SECURE) || ($key === self::KEY_IS_SECURE_ADMIN))
-                    && (!isset($data[self::KEY_BASE_URL_SECURE]))) {
-                    continue;
-                }
-                if (($key === self::KEY_BASE_URL) || ($key === self::KEY_BASE_URL_SECURE)) {
-                    $data[$key] = rtrim($data[$key], '/') . '/';
-                }
-                $configData[$path] = $data[$key];
+
+        // Base URL is secure, add secure entries
+        if (isset($installParamData[self::KEY_BASE_URL_SECURE]))
+            $this->pathDataMap = array_merge(
+                $this->pathDataMap,
+                [Store::XML_PATH_SECURE_IN_FRONTEND => self::KEY_IS_SECURE,
+                 Store::XML_PATH_SECURE_IN_ADMINHTML => self::KEY_IS_SECURE_ADMIN]
+            );
+
+        foreach ($this->pathDataMap as $path => $key) {
+            $configData = $this->addParamToConfigData($configData, $installParamData, $key, $path);
+        }
+        return $configData;
+    }
+
+    /**
+     * Determine if secure URL is needed (use_secure or use_secure_admin flag is set.)
+     *
+     * @param array $installParamData
+     * @return bool
+     */
+    private function isSecureUrlNeeded($installParamData)
+    {
+        return ((isset($installParamData[self::KEY_IS_SECURE]) && $installParamData[self::KEY_IS_SECURE])
+            || (isset($installParamData[self::KEY_IS_SECURE_ADMIN]) && $installParamData[self::KEY_IS_SECURE_ADMIN]));
+    }
+
+    /**
+     * Adds an install parameter value to the configData structure
+     *
+     * @param $configData
+     * @param $installParamData
+     * @param $key
+     * @param $path
+     * @return array
+     */
+    private function addParamToConfigData($configData, $installParamData, $key, $path)
+    {
+        if (isset($installParamData[$key])) {
+            if (($key === self::KEY_BASE_URL) || ($key === self::KEY_BASE_URL_SECURE)) {
+                $installParamData[$key] = rtrim($installParamData[$key], '/') . '/';
             }
+            $configData[$path] = $installParamData[$key];
         }
         return $configData;
     }
