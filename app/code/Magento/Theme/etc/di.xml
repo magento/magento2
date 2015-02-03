@@ -6,6 +6,13 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\View\Design\Theme\FileInterface" type="Magento\Theme\Model\Theme\File" />
+    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Theme\Model\Theme\ThemeProvider" />
+    <preference for="Magento\Framework\View\Design\Theme\FileProviderInterface" type="Magento\Theme\Model\Theme\FileProvider" />
+    <preference for="Magento\Framework\View\Design\Theme\Customization\ConfigInterface" type="Magento\Theme\Model\Theme\Customization\Config" />
+    <preference for="Magento\Framework\App\DesignInterface" type="Magento\Theme\Model\Design" />
+    <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
+    <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Theme\Model\Theme\Collection" />
     <type name="Magento\Theme\Model\Config">
         <arguments>
             <argument name="configCache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
