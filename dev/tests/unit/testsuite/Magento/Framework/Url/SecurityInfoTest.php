@@ -19,14 +19,7 @@ class SecurityInfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_model = new \Magento\Framework\Url\SecurityInfo($this->_scopeConfigMock, ['/account', '/cart']);
-    }
-
-    public function testIsSecureReturnsFalseIfDisabledInConfig()
-    {
-        $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(false));
-        $this->assertFalse($this->_model->isSecure('http://example.com/account'));
+        $this->_model = new \Magento\Framework\Url\SecurityInfo(['/account', '/cart']);
     }
 
     /**
@@ -36,7 +29,6 @@ class SecurityInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSecureChecksIfUrlIsInSecureList($url, $expected)
     {
-        $this->_scopeConfigMock->expects($this->once())->method('getValue')->will($this->returnValue(true));
         $this->assertEquals($expected, $this->_model->isSecure($url));
     }
 

@@ -10,7 +10,7 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeManagerMock;
+    protected $scopeResolverMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -20,10 +20,10 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
+        $this->scopeResolverMock = $this->getMockBuilder('Magento\Framework\App\ScopeResolverInterface')->getMock();
         $this->_object = $objectManager->getObject(
             'Magento\Framework\Url\ScopeResolver',
-            ['storeManager' => $this->_storeManagerMock]
+            ['scopeResolver' => $this->scopeResolverMock]
         );
     }
 
@@ -33,11 +33,11 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetScope($scopeId)
     {
-        $scopeMock = $this->getMockBuilder('\Magento\Framework\Url\ScopeInterface')->getMock();
-        $this->_storeManagerMock->expects(
+        $scopeMock = $this->getMockBuilder('Magento\Framework\Url\ScopeInterface')->getMock();
+        $this->scopeResolverMock->expects(
             $this->at(0)
         )->method(
-            'getStore'
+            'getScope'
         )->with(
             $scopeId
         )->will(
@@ -65,7 +65,7 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testGetScopes()
     {
-        $this->_storeManagerMock->expects($this->once())->method('getStores');
+        $this->scopeResolverMock->expects($this->once())->method('getScopes');
         $this->_object->getScopes();
     }
 }

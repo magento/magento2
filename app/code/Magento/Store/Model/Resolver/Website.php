@@ -34,4 +34,14 @@ class Website implements \Magento\Framework\App\ScopeResolverInterface
 
         return $scope;
     }
+
+    /**
+     * Retrieve a list of available websites
+     *
+     * @return \Magento\Store\Model\Website[]
+     */
+    public function getScopes()
+    {
+        return $this->_storeManager->getWebsites();
+    }
 }
