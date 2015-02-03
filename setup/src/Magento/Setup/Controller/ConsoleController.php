@@ -497,7 +497,7 @@ class ConsoleController extends AbstractActionController
                     throw new \Magento\Setup\Exception($message);
                 }
             } else {
-                $message .= "Alert: Your store may not operate properly because of dependencies to this module(s).\n";
+                $message .= "Alert: Your store may not operate properly because of dependencies of this module(s).\n";
             }
             $status->setIsEnabled($isEnable, $modulesToChange);
             $updateAfterEnableMessage = '';
