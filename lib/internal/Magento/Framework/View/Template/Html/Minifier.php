@@ -61,7 +61,7 @@ class Minifier implements MinifierInterface
     public function minify($file)
     {
         $file = $this->appDirectory->getRelativePath($file);
-        $content = preg_replace(
+        $content = preg_replace('#\> \<#', '><', preg_replace(
             '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)(?:<(?>textarea|pre|script)\b|\z))#',
             ' ',
             preg_replace(
@@ -72,7 +72,7 @@ class Minifier implements MinifierInterface
                     '$1',
                     $this->appDirectory->readFile($file)
                 )
-            )
+            ))
         );
 
         if (!$this->htmlDirectory->isExist()) {
