@@ -11,7 +11,7 @@ define([
     
     $.widget('mage.addToWishlist', {
         options: {
-            bundleInfo: '[id^=bundle-option-]',
+            bundleInfo: '[id^=bundle-option-]:checked',
             configurableInfo: '.super-attribute-select',
             groupedInfo: '#super-product-table input',
             downloadableInfo: '#downloadable-links-list input',
