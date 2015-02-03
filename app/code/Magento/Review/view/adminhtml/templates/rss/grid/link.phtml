@@ -6,8 +6,8 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $this \Magento\Review\Block\Adminhtml\Grid\Rss\Link */
+/** @var $block \Magento\Review\Block\Adminhtml\Grid\Rss\Link */
 ?>
-<?php if ($this->isRssAllowed() && $this->getLink()): ?>
-<a href="<?php echo $this->getLink() ?>" class="link-feed"><?php echo $this->getLabel() ?></a>
+<?php if ($block->isRssAllowed() && $block->getLink()): ?>
+<a href="<?php echo $block->getLink() ?>" class="link-feed"><?php echo $block->getLabel() ?></a>
 <?php endif; ?>

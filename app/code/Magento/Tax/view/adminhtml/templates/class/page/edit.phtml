@@ -5,16 +5,16 @@
  */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
-    <?php echo $this->getBackButtonHtml(); ?>
-    <?php echo $this->getResetButtonHtml(); ?>
-    <?php echo $this->getDeleteButtonHtml(); ?>
-    <?php echo $this->getSaveButtonHtml(); ?>
+    <?php echo $block->getBackButtonHtml(); ?>
+    <?php echo $block->getResetButtonHtml(); ?>
+    <?php echo $block->getDeleteButtonHtml(); ?>
+    <?php echo $block->getSaveButtonHtml(); ?>
 </div>
-<?php echo $this->getRenameFormHtml(); ?>
+<?php echo $block->getRenameFormHtml(); ?>
 <script>
 require(['jquery', "mage/mage"], function(jQuery){
 
-    jQuery('#<?php echo $this->getRenameFormId() ?>').mage('form').mage('validation');
+    jQuery('#<?php echo $block->getRenameFormId() ?>').mage('form').mage('validation');
 
 });
 </script>

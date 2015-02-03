@@ -4,13 +4,12 @@
 
 // For performance use one level down: 'name/{,*/}*.js'
 // If you want to recursively match all subfolders, use: 'name/**/*.js'
-
-'use strict';
-
 module.exports = function (grunt) {
+    'use strict';
 
     //  Required plugins
     //  _____________________________________________
+    var specRunner = require('./dev/tests/js/framework/spec_runner')(grunt);
 
     require('./dev/tools/grunt/tasks/mage-minify')(grunt);
 
@@ -18,7 +17,9 @@ module.exports = function (grunt) {
     require('time-grunt')(grunt);
 
     //  Load grunt tasks automatically
-    require('load-grunt-tasks')(grunt);
+    require('load-grunt-tasks')(grunt, {
+        pattern: ['grunt-*', '!grunt-template-jasmine-requirejs']
+    });
 
     var svgo = require('imagemin-svgo');
 
@@ -42,7 +43,8 @@ module.exports = function (grunt) {
         uglify: {
             legacy: 'lib/web/legacy-build.min.js'
         },
-        doc: 'lib/web/css/docs'
+        doc: 'lib/web/css/docs',
+        spec: 'dev/tests/js/spec'
     };
 
     //  Define Themes
@@ -459,8 +461,45 @@ module.exports = function (grunt) {
                     '<%= path.doc %>': '<%= path.doc %>/source'
                 }
             }
-        }
+        },
 
+        specRunner: {
+            options: {
+                shareDir: 'base'
+            },
+            backend: {
+                options: {
+                    port: 8000,
+                    areaDir: 'adminhtml',
+                    theme: 'backend'
+                }
+            },
+            frontend: {
+                options: {
+                    port: 3000,
+                    areaDir: 'frontend',
+                    theme: 'blank'
+                }
+            },
+            lib: {
+                options: {
+                    port: 8080
+                }
+            }
+        },
+
+        jasmine: {
+            'options': {
+                template: require('grunt-template-jasmine-requirejs'),
+                ignoreEmpty: true
+            },
+            'lib-unit':               specRunner.configure('unit', 'lib', 8080),
+            'lib-integration':        specRunner.configure('integration', 'lib', 8080),
+            'backend-unit':           specRunner.configure('unit', 'adminhtml', 8000),
+            'backend-integration':    specRunner.configure('integration', 'adminhtml', 8000),
+            'frontend-unit':          specRunner.configure('unit', 'frontend', 3000),
+            'frontend-integration':   specRunner.configure('integration', 'frontend', 3000)
+        }
     });
 
     //  Assembling tasks
@@ -514,4 +553,24 @@ module.exports = function (grunt) {
         }
     });
 
+    //  Tests
+    //  ---------------------------------------------
+    
+    grunt.registerTask('spec', [
+        'specRunner:lib',
+        'specRunner:backend',
+        'specRunner:frontend'
+    ]);
+
+    grunt.registerTask('unit', [
+        'jasmine:lib-unit',
+        'jasmine:backend-unit',
+        'jasmine:frontend-unit'
+    ]);
+
+    grunt.registerTask('integration', [
+        'jasmine:lib-integration',
+        'jasmine:backend-integration',
+        'jasmine:frontend-integration'
+    ]);
 };

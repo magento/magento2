@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 /**
- * @var $this \Magento\Backend\Block\Page\System\Config\Robots\Reset
+ * @var $block \Magento\Backend\Block\Page\System\Config\Robots\Reset
  * @var $coreHelper \Magento\Core\Helper\Data
  */
 $coreHelper = $this->helper('Magento\Core\Helper\Data');
@@ -19,10 +19,10 @@ $coreHelper = $this->helper('Magento\Core\Helper\Data');
     ], function () {
         window.resetRobotsToDefault = function(){
             $('design_search_engine_robots_custom_instructions').value = <?php
-                echo $coreHelper->jsonEncode($this->getRobotsDefaultCustomInstructions())
+                echo $coreHelper->jsonEncode($block->getRobotsDefaultCustomInstructions())
             ?>;
         }
     });
 </script>
 
-<?php echo $this->getButtonHtml() ?>
+<?php echo $block->getButtonHtml() ?>
