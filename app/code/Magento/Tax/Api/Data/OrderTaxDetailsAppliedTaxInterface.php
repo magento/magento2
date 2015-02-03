@@ -31,11 +31,27 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
     public function getCode();
 
     /**
+     * Set code
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setCode($code);
+
+    /**
      * Get Title
      *
      * @return string|null
      */
     public function getTitle();
+
+    /**
+     * Set Title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title);
 
     /**
      * Get Tax Percent
@@ -45,6 +61,14 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
     public function getPercent();
 
     /**
+     * Set Tax Percent
+     *
+     * @param float $percent
+     * @return $this
+     */
+    public function setPercent($percent);
+
+    /**
      * Get tax amount
      *
      * @return float
@@ -52,9 +76,25 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
     public function getAmount();
 
     /**
+     * Set tax amount
+     *
+     * @param $amount
+     * @return $this
+     */
+    public function setAmount($amount);
+
+    /**
      * Get tax amount in base currency
      *
      * @return float
      */
     public function getBaseAmount();
+
+    /**
+     * Set tax amount in base currency
+     *
+     * @param float $baseAmount
+     * @return $this
+     */
+    public function setBaseAmount($baseAmount);
 }

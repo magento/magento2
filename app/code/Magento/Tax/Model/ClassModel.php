@@ -8,13 +8,13 @@ namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Tax\Api\Data\TaxClassInterface;
 
 /**
  * Tax class model
  *
  * @method \Magento\Tax\Model\Resource\TaxClass _getResource()
  * @method \Magento\Tax\Model\Resource\TaxClass getResource()
- * @method \Magento\Tax\Model\ClassModel setClassType(string $value)
  */
 class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\TaxClassInterface
@@ -140,6 +140,38 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     public function getClassType()
     {
         return $this->getData('class_type');
+    }
+    /**
+     * Set tax class ID.
+     *
+     * @param int $classId
+     * @return $this
+     */
+    public function setClassId($classId)
+    {
+        return $this->setData('class_id', $classId);
+    }
+
+    /**
+     * Set tax class name.
+     *
+     * @param string $className
+     * @return $this
+     */
+    public function setClassName($className)
+    {
+        return $this->setData('class_name', $className);
+    }
+
+    /**
+     * Set tax class type.
+     *
+     * @param string $classType
+     * @return $this
+     */
+    public function setClassType($classType)
+    {
+        return $this->setData('class_type', $classType);
     }
     //@codeCoverageIgnoreEnd
 }

@@ -28,4 +28,26 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
     {
         return $this->getData(TaxClassKeyInterface::KEY_VALUE);
     }
+
+    /**
+     * Set type of tax class key
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setType($type)
+    {
+        return $this->setData(TaxClassKeyInterface::KEY_TYPE);
+    }
+
+    /**
+     * Set value of tax class key
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        return $this->setData(TaxClassKeyInterface::KEY_VALUE);
+    }
 }
