@@ -4,17 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Backend\Block\Media\Uploader */
+/** @var $block \Magento\Backend\Block\Media\Uploader */
 ?>
 
-<div id="<?php echo $this->getHtmlId() ?>" class="uploader">
+<div id="<?php echo $block->getHtmlId() ?>" class="uploader">
     <div class="fileinput-button form-buttons button">
         <span><?php echo __('Browse Files...') ?></span>
-        <input id="fileupload" type="file" name="<?php echo $this->getConfig()->getFileField() ?>"
-            data-url="<?php echo $this->getConfig()->getUrl() ?>" multiple="multiple" />
+        <input id="fileupload" type="file" name="<?php echo $block->getConfig()->getFileField() ?>"
+            data-url="<?php echo $block->getConfig()->getUrl() ?>" multiple="multiple" />
     </div>
     <div class="clear"></div>
-    <div class="no-display" id="<?php echo $this->getHtmlId() ?>-template">
+    <div class="no-display" id="<?php echo $block->getHtmlId() ?>-template">
         <div id="{{id}}" class="file-row">
             <span class="file-info">{{name}} ({{size}})</span>
             <div class="progressbar-container">
@@ -38,17 +38,17 @@ require([
             dropZone: '[data-tab-panel=image-management]',
             sequentialUploads: true,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-            maxFileSize: <?php echo $this->getFileSizeService()->getMaxFileSize() ?>,
+            maxFileSize: <?php echo $block->getFileSizeService()->getMaxFileSize() ?>,
             add: function(e, data) {
                 $.each(data.files, function (index, file) {
                     data.fileId = Math.random().toString(33).substr(2, 18);
-                    var progressTmpl = $('#<?php echo $this->getHtmlId(); ?>-template').children(':first').clone();
+                    var progressTmpl = $('#<?php echo $block->getHtmlId(); ?>-template').children(':first').clone();
                     progressTmpl.attr('id', data.fileId);
                     var fileInfoHtml = progressTmpl.html().replace('{{size}}', byteConvert(file.size))
                         .replace('{{name}}', file.name);
                     progressTmpl.html(fileInfoHtml) ;
 
-                    progressTmpl.appendTo('#<?php echo $this->getHtmlId() ?>');
+                    progressTmpl.appendTo('#<?php echo $block->getHtmlId() ?>');
 
                 });
                 $(this).fileupload('process', data).done(function () {
@@ -57,7 +57,7 @@ require([
             },
             done: function(e, data) {
                 if (data.result && !data.result.error) {
-                    $('#<?php echo $this->getParentBlock()->getHtmlId() ?>').trigger('addItem', data.result);
+                    $('#<?php echo $block->getParentBlock()->getHtmlId() ?>').trigger('addItem', data.result);
                 } else {
                     $('#' + data.fileId)
                         .delay(2000)

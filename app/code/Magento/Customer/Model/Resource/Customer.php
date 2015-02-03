@@ -223,12 +223,8 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
                 }
             }
         }
-        if ($customer->dataHasChangedFor('default_billing')) {
-            $this->saveAttribute($customer, 'default_billing');
-        }
-        if ($customer->dataHasChangedFor('default_shipping')) {
-            $this->saveAttribute($customer, 'default_shipping');
-        }
+        $this->saveAttribute($customer, 'default_billing');
+        $this->saveAttribute($customer, 'default_shipping');
 
         return $this;
     }
