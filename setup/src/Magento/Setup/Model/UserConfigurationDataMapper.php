@@ -59,8 +59,7 @@ class UserConfigurationDataMapper
     public function getConfigData($installParamData)
     {
         $configData = [];
-        if (!$this->isSecureUrlNeeded($installParamData)
-            && isset($installParamData[self::KEY_BASE_URL_SECURE])) {
+        if (!$this->isSecureUrlNeeded($installParamData) && isset($installParamData[self::KEY_BASE_URL_SECURE])) {
             unset($installParamData[self::KEY_BASE_URL_SECURE]);
         }
 
@@ -93,10 +92,10 @@ class UserConfigurationDataMapper
     /**
      * Adds an install parameter value to the configData structure
      *
-     * @param $configData
-     * @param $installParamData
-     * @param $key
-     * @param $path
+     * @param array $configData
+     * @param array $installParamData
+     * @param string $key
+     * @param string $path
      * @return array
      */
     private function addParamToConfigData($configData, $installParamData, $key, $path)
