@@ -61,7 +61,7 @@ class Index extends \Magento\Checkout\Controller\Cart
             $this->cart->save();
 
             if (!$this->cart->getQuote()->validateMinimumAmount()) {
-                $currencyCode = $this->_objectManager->get('Magento\Framework\Store\ScopeInterface::SCOPE_STORE')
+                $currencyCode = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')
                     ->getStore()
                     ->getCurrentCurrencyCode();
                 $minimumAmount = $this->_objectManager->get('Magento\Framework\Locale\CurrencyInterface')
