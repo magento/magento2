@@ -22,36 +22,26 @@ class CookieTest extends \PHPUnit_Framework_TestCase
      */
     protected $_context;
 
-    protected function setUp()
-    {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $className = 'Magento\Store\Helper\Cookie';
-        $arguments = $objectManagerHelper->getConstructArguments($className);
-        $this->_context = $arguments['context'];
-        $this->_request = $this->_context->getRequest();
-        $scopeConfig = $this->_context->getScopeConfig();
-        $scopeConfig->expects(
-            $this->any()
-        )->method(
-            'getValue'
-        )->will(
-            $this->returnCallback([$this, 'getConfigMethodStub'])
-        );
-        $this->_object = $objectManagerHelper->getObject($className, $arguments);
-    }
-
     public function testIsUserNotAllowSaveCookie()
     {
-        $this->_getCookieStub([1 => 1]);
+        $this->_initMock()->_getCookieStub([1 => 1]);
         $this->assertFalse($this->_object->isUserNotAllowSaveCookie());
-        $this->_request->expects($this->any())->method('getCookie')->will($this->returnValue(json_encode([])));
-        $context =
-            $this->getMock('Magento\Framework\App\Helper\Context', ['getRequest'], [], '', false, false);
+        $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getCookie'], [], '', false, false);
+        $request->expects($this->any())->method('getCookie')->will($this->returnValue(json_encode([])));
+        $scopeConfig = $this->_getConfigStub();
+        $context = $this->getMock(
+            'Magento\Framework\App\Helper\Context',
+            ['getRequest', 'getScopeConfig'],
+            [],
+            '',
+            false,
+            false
+        );
         $context->expects($this->once())->method('getRequest')->will($this->returnValue($request));
+        $context->expects($this->once())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
         $this->_object = new \Magento\Store\Helper\Cookie(
             $context,
             $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false, false),
-            $this->_getConfigStub(),
             ['current_store' => $this->_getStoreStub(), 'website' => $this->_getWebsiteStub()]
         );
         $this->assertTrue($this->_object->isUserNotAllowSaveCookie());
@@ -67,9 +57,6 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
         $this->_request =
             $this->getMock('\Magento\Framework\App\Request\Http', ['getCookie'], [], '', false, false);
-        $this->_context =
-            $this->getMock('Magento\Framework\App\Helper\Context', ['getRequest'], [], '', false, false);
-        $this->_context->expects($this->once())->method('getRequest')->will($this->returnValue($this->_request));
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $storeStub = $this->_getStoreStub();
         $scopeConfig->expects(
@@ -81,10 +68,20 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->equalTo('web/cookie/cookie_restriction_lifetime')
         );
+        $this->_context = $this->getMock(
+            'Magento\Framework\App\Helper\Context',
+            ['getRequest', 'getScopeConfig'],
+            [],
+            '',
+            false,
+            false
+        );
+        $this->_context->expects($this->once())->method('getRequest')->will($this->returnValue($this->_request));
+        $this->_context->expects($this->once())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
+
         $this->_object = new \Magento\Store\Helper\Cookie(
             $this->_context,
             $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false, false),
-            $scopeConfig,
             ['current_store' => $storeStub, 'website' => $this->_getWebsiteStub()]
         );
         $this->assertEquals($this->_object->getCookieRestrictionLifetime(), 60 * 60 * 24 * 365);
@@ -92,10 +89,22 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     protected function _initMock()
     {
+        $scopeConfig = $this->_getConfigStub();
+        $this->_request =
+            $this->getMock('\Magento\Framework\App\Request\Http', ['getCookie'], [], '', false, false);
+        $this->_context = $this->getMock(
+            'Magento\Framework\App\Helper\Context',
+            ['getRequest', 'getScopeConfig'],
+            [],
+            '',
+            false,
+            false
+        );
+        $this->_context->expects($this->once())->method('getRequest')->will($this->returnValue($this->_request));
+        $this->_context->expects($this->once())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
         $this->_object = new \Magento\Store\Helper\Cookie(
             $this->_context,
             $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false, false),
-            $this->_getConfigStub(),
             ['current_store' => $this->_getStoreStub(), 'website' => $this->_getWebsiteStub()]
         );
         return $this;

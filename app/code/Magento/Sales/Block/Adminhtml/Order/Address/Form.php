@@ -35,6 +35,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
      * @param \Magento\Customer\Model\Options $options
@@ -54,6 +55,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
         \Magento\Customer\Model\Options $options,
@@ -74,6 +76,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
             $priceCurrency,
             $formFactory,
             $dataObjectProcessor,
+            $directoryHelper,
             $jsonEncoder,
             $customerFormFactory,
             $options,

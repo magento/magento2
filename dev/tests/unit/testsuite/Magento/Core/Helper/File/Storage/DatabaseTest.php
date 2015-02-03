@@ -31,12 +31,18 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->dbStorageFactoryMock = $this->getMockBuilder('Magento\Core\Model\File\Storage\DatabaseFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $className = 'Magento\Core\Helper\File\Storage\Database';
-        $arguments = $this->objectManager->getConstructArguments($className);
+        $arguments = $this->objectManager->getConstructArguments(
+            $className,
+            ['dbStorageFactory' => $this->dbStorageFactoryMock]
+        );
         /** @var \Magento\Framework\App\Helper\Context $context */
         $context = $arguments['context'];
-        $this->dbStorageFactoryMock = $arguments['dbStorageFactory'];
         $mediaDirMock = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
         $mediaDirMock->expects($this->any())
             ->method('getAbsolutePath')
