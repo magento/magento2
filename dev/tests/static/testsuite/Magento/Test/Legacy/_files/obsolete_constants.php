@@ -690,4 +690,5 @@ return [
         'Magento\Framework\App\Http',
         'Magento\Framework\App\SetupInfo::DEFAULT_PATH'
     ],
+    ['CONFIG_PATH_WSDL_CACHE_ENABLED', 'Magento\Webapi\Model\Soap\Server'],
 ];
