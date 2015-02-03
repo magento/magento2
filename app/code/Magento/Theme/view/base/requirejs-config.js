@@ -42,7 +42,7 @@ var config = {
         "text": "requirejs/text",
         "domReady": "requirejs/domReady",
         "ko": "ko/ko",
-        "tinymce": "tiny_mce/tiny_mce"
+        "tinymce": "tiny_mce/tiny_mce_src"
     },
     "deps": [
         "jquery/jquery-migrate"
