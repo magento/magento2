@@ -49,7 +49,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \Magento\Core\Model\Theme|\PHPUnit_Framework_MockObject_MockObject $theme
+     * @param \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject $theme
      * @param string $expected
      * @param array $expectedOptions
      * @dataProvider initDataProvider
@@ -168,7 +168,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int $type
      * @param null|bool $isAssigned
-     * @return \Magento\Core\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getThemeMock($type, $isAssigned = null)
     {
@@ -177,7 +177,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         if ($type == \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL) {
             $theme = $this->_getVirtualThemeMock($type, $isAssigned);
         } else {
-            $theme = $this->getMock('Magento\Core\Model\Theme', ['__sleep', '__wakeup'], [], '', false);
+            $theme = $this->getMock('Magento\Theme\Model\Theme', ['__sleep', '__wakeup'], [], '', false);
         }
 
         $theme->setType($type);
@@ -189,14 +189,14 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int $type
      * @param bool $isAssigned
-     * @return \Magento\Core\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getVirtualThemeMock($type, $isAssigned)
     {
         // 1. Get domain model
-        /** @var $domainModel \Magento\Core\Model\Theme\Domain\Virtual|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $domainModel \Magento\Theme\Model\Theme\Domain\Virtual|\PHPUnit_Framework_MockObject_MockObject */
         $domainModel = $this->getMock(
-            'Magento\Core\Model\Theme\Domain\Virtual',
+            'Magento\Theme\Model\Theme\Domain\Virtual',
             ['isAssigned'],
             [],
             '',
@@ -205,9 +205,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $domainModel->expects($this->any())->method('isAssigned')->will($this->returnValue($isAssigned));
 
         // 2. Get Theme mock
-        /** @var $theme \Magento\Core\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
         $theme = $this->getMock(
-            'Magento\Core\Model\Theme',
+            'Magento\Theme\Model\Theme',
             ['getDomainModel', '__sleep', '__wakeup'],
             [],
             '',

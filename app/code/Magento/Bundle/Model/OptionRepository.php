@@ -60,7 +60,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param Product\Type $type
      * @param \Magento\Bundle\Api\Data\OptionDataBuilder $optionBuilder
      * @param Resource\Option $optionResource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement
      * @param Product\OptionList $productOptionList
      * @param Product\LinksList $linkList
@@ -70,7 +70,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Bundle\Model\Product\Type $type,
         \Magento\Bundle\Api\Data\OptionDataBuilder $optionBuilder,
         \Magento\Bundle\Model\Resource\Option $optionResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement,
         \Magento\Bundle\Model\Product\OptionList $productOptionList,
         \Magento\Bundle\Model\Product\LinksList $linkList

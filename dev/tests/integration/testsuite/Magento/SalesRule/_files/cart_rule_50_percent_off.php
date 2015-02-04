@@ -25,7 +25,7 @@ $salesRule->setData(
         'stop_rules_processing' => 1,
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\Store\StoreManagerInterface'
             )->getWebsite()->getId()
         ]
     ]

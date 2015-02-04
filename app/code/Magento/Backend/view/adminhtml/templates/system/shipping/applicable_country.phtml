@@ -5,7 +5,10 @@
  */
 ?>
 <script>
-//<![CDATA[
+require([
+    'prototype'
+], function () {
+
 var CountryModel = Class.create();
 CountryModel.prototype = {
     initialize : function()
@@ -108,5 +111,5 @@ CountryModel.prototype = {
 
 }
 countryApply = new CountryModel();
-//]]>
+});
 </script>

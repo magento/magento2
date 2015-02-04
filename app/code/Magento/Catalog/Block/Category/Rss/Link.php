@@ -45,7 +45,10 @@ class Link extends \Magento\Framework\View\Element\Template
      */
     public function isRssAllowed()
     {
-        return $this->_scopeConfig->getValue('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            'rss/catalog/category',
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

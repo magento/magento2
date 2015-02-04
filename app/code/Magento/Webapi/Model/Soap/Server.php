@@ -44,7 +44,7 @@ class Server
     protected $_request;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -70,7 +70,7 @@ class Server
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Webapi\Controller\Soap\Request $request
      * @param \Magento\Framework\DomDocument\Factory $domDocumentFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -81,7 +81,7 @@ class Server
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Webapi\Controller\Soap\Request $request,
         \Magento\Framework\DomDocument\Factory $domDocumentFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -104,7 +104,7 @@ class Server
         /** Enable or disable SOAP extension WSDL cache depending on Magento configuration. */
         $wsdlCacheEnabled = $this->_scopeConfig->isSetFlag(
             self::CONFIG_PATH_WSDL_CACHE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if ($wsdlCacheEnabled) {
             ini_set('soap.wsdl_cache_enabled', '1');
@@ -136,7 +136,7 @@ class Server
     {
         $charset = $this->_scopeConfig->getValue(
             self::CONFIG_PATH_SOAP_CHARSET,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         return $charset ? $charset : self::SOAP_DEFAULT_ENCODING;
     }

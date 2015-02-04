@@ -107,7 +107,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Get current theme
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      */
     protected function _getCurrentTheme()
     {
