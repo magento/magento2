@@ -61,4 +61,3 @@ class ObsoleteResponseTest extends \PHPUnit_Framework_TestCase
         return \Magento\Framework\Test\Utility\Files::composeDataSets($result);
     }
 }
-
