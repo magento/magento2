@@ -40,7 +40,7 @@ class RouteParamsResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testAroundSetRouteParamsScopeInParams()
     {
@@ -77,7 +77,7 @@ class RouteParamsResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testAroundSetRouteParamsScopeUseStoreInUrl()
     {
@@ -114,7 +114,7 @@ class RouteParamsResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testAroundSetRouteParamsSingleStore()
     {
@@ -151,7 +151,7 @@ class RouteParamsResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testAroundSetRouteParamsNoScopeInParams()
     {

@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Url;
 
+use Magento\Framework\Url\RouteParamsResolverInterface;
+
 /**
  * Route params resolver.
  *
@@ -17,8 +19,7 @@ namespace Magento\Framework\Url;
  * @method $this setSecure(bool $isForced)
  * @method bool getSecure()
  */
-class RouteParamsResolver extends \Magento\Framework\Object
-    implements \Magento\Framework\Url\RouteParamsResolverInterface
+class RouteParamsResolver extends \Magento\Framework\Object implements RouteParamsResolverInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
