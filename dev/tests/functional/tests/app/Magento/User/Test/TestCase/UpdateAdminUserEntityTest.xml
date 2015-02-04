@@ -17,6 +17,7 @@
             <data name="user/data/password_confirmation">123123qa</data>
             <data name="user/data/is_active">-</data>
             <data name="user/data/role_id/dataSet">-</data>
+            <data name="loginAsDefaultAdmin">0</data>
             <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserSuccessLogin</data>
             <data name="user/data/current_password">123123q</data>
         </variation>
@@ -30,6 +31,7 @@
             <data name="user/data/password_confirmation">-</data>
             <data name="user/data/is_active">-</data>
             <data name="user/data/role_id/dataSet">role_sales</data>
+            <data name="loginAsDefaultAdmin">0</data>
             <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserSuccessLogin, assertUserRoleSalesRestrictedAccess</data>
             <data name="user/data/current_password">123123q</data>
         </variation>

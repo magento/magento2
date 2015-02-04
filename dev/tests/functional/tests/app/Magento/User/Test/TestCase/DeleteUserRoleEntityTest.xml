@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
     <testCase name="DeleteUserRoleEntityTest">
         <variation name="DeleteUserRoleEntityTestVariation1">
+            <data name="isDefaultUser">0</data>
             <data name="constraint">assertImpossibleDeleteYourOwnRole, assertRoleInGrid</data>
         </variation>
         <variation name="DeleteUserRoleEntityTestVariation2">
