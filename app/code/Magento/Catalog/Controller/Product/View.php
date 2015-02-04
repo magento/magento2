@@ -93,7 +93,6 @@ class View extends \Magento\Catalog\Controller\Product
                 $notice = $product->getTypeInstance()->getSpecifyOptionMessage();
                 $this->messageManager->addNotice($notice);
             }
-            $resultRedirect = $this->resultRedirectFactory->create();
             if ($this->getRequest()->isAjax()) {
                 $this->getResponse()->representJson(
                     $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode([
@@ -102,6 +101,7 @@ class View extends \Magento\Catalog\Controller\Product
                 );
                 return;
             }
+            $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setRefererOrBaseUrl();
             return $resultRedirect;
         }
