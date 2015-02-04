@@ -42,9 +42,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     protected $quote;
 
     /**
-     * @var  \Magento\Framework\App\Action\Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $contextMock;
+    protected $eventManager;
 
     protected function setUp()
     {
@@ -53,6 +53,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
         $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->checkoutSession = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
         $this->checkoutSession->expects($this->once())
@@ -69,18 +70,24 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Customer\Model\Session')
             ->willReturn($this->customerSession);
 
-        $contextData = [
-            'objectManager' => $objectManagerMock,
-            'response' => $this->response,
-            'request' => $this->request,
-        ];
-
-        $this->contextMock = $objectManager->makeContextMock($contextData);
+        $context = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
+        $context->expects($this->once())
+            ->method('getObjectManager')
+            ->willReturn($objectManagerMock);
+        $context->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($this->request);
+        $context->expects($this->once())
+            ->method('getResponse')
+            ->willReturn($this->response);
+        $context->expects($this->once())
+            ->method('getEventManager')
+            ->willReturn($this->eventManager);
 
         $this->controller = $objectManager->getObject(
             'Magento\Checkout\Controller\Onepage',
             [
-                'context' => $this->contextMock,
+                'context' => $context
             ]
         );
     }

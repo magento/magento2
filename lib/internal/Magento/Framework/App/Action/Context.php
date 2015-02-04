@@ -53,11 +53,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\View\DesignLoader
-     */
-    private $designLoader;
-
-    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -67,7 +62,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\App\ViewInterface $view
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\View\DesignLoader $designLoader
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -80,8 +74,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Framework\App\Response\RedirectInterface $redirect,
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\App\ViewInterface $view,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\View\DesignLoader $designLoader
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->_request = $request;
         $this->_response = $response;
@@ -92,7 +85,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->_actionFlag = $actionFlag;
         $this->_view = $view;
         $this->messageManager = $messageManager;
-        $this->designLoader = $designLoader;
     }
 
     /**
@@ -165,13 +157,5 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     public function getMessageManager()
     {
         return $this->messageManager;
-    }
-
-    /**
-     * @return \Magento\Framework\View\DesignLoader
-     */
-    public function getDesignLoader()
-    {
-        return $this->designLoader;
     }
 }

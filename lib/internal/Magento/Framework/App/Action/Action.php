@@ -61,11 +61,6 @@ class Action extends AbstractAction
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\View\DesignLoader
-     */
-    protected $designLoader;
-
-    /**
      * @param Context $context
      */
     public function __construct(Context $context)
@@ -78,7 +73,6 @@ class Action extends AbstractAction
         $this->_redirect = $context->getRedirect();
         $this->_view = $context->getView();
         $this->messageManager = $context->getMessageManager();
-        $this->designLoader = $context->getDesignLoader();
     }
 
     /**
@@ -90,7 +84,6 @@ class Action extends AbstractAction
      */
     public function dispatch(RequestInterface $request)
     {
-        $this->designLoader->load();
         $this->_request = $request;
         $profilerKey = 'CONTROLLER_ACTION:' . $request->getFullActionName();
         $eventParameters = ['controller_action' => $this, 'request' => $request];

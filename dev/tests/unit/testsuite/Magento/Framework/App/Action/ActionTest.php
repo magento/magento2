@@ -112,6 +112,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
         $this->viewMock->expects($this->any())->method('getPage')->will($this->returnValue($this->pageConfigMock));
         $this->pageConfigMock->expects($this->any())->method('getConfig')->will($this->returnValue(1));
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->action = $this->objectManagerHelper->getObject(
             'Magento\Framework\App\Action\ActionFake',
@@ -187,11 +188,6 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($this->_responseMock, $this->action->dispatch($this->_requestMock));
-    }
-
-    public function testGetActionFlag()
-    {
-        $this->assertSame($this->_actionFlagMock, $this->action->getActionFlag());
     }
 }
 
