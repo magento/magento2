@@ -47,7 +47,6 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                 return {
                     productInfoUrl : null,
                     formHidden : true,
-
                     gridRowClick : function(data, click) {
                         if(Event.findElement(click,\'TR\').title){
                             review.productInfoUrl = Event.findElement(click,\'TR\').title;
@@ -56,7 +55,6 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                             review.formHidden = false;
                         }
                     },
-
                     loadProductData : function() {
                         jQuery.ajax({
                             type: "POST",
@@ -69,14 +67,12 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                             error: review.reqFailure
                         });
                     },
-
                     showForm : function() {
                         toggleParentVis("add_review_form");
                         toggleVis("productGrid");
                         toggleVis("save_button");
                         toggleVis("reset_button");
                     },
-
                     updateRating: function() {
                         elements = [$("select_stores"), $("rating_detail").getElementsBySelector("input[type=\'radio\']")].flatten();
                         $(\'save_button\').disabled = true;
@@ -111,7 +107,6 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                     }
                 }
             }();
-
             Event.observe(window, \'load\', function(){
                  if ($("select_stores")) {
                      Event.observe($("select_stores"), \'change\', review.updateRating);
