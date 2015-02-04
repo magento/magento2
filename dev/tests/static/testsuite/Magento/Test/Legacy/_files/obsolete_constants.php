@@ -64,6 +64,7 @@ return [
     ['DEFAULT_TIMEZONE', 'Magento\Framework\Locale', 'Magento_Core_Model_LocaleInterface::DEFAULT_TIMEZONE'],
     ['DEFAULT_STORE_ID', 'Magento\Catalog\Model\AbstractModel', 'Magento\Store\Model\Store::DEFAULT_STORE_ID'],
     ['DEFAULT_VALUE_TABLE_PREFIX'],
+    ['DIVIDE_EPSILON', 'Magento\Core\Helper\Data'],
     ['ENTITY_PRODUCT', 'Magento\Review\Model\Review'],
     ['EXCEPTION_CODE_IS_GROUPED_PRODUCT'],
     ['FALLBACK_MAP_DIR', 'Magento\Core\Model\Design\PackageInterface'],
@@ -162,6 +163,7 @@ return [
     ['XML_PATH_CACHE_BETA_TYPES'],
     ['XML_PATH_CHECK_EXTENSIONS', 'Magento\Install\Model\Config'],
     ['XML_PATH_CONNECTION_TYPE', 'Magento\Framework\App\Resource\Config'],
+    ['XML_PATH_CONNECTION_TYPE', 'Magento\Core\Helper\Data'],
     ['XML_PATH_COUNTRY_DEFAULT', 'Magento\Paypal\Model\System\Config\Backend\MerchantCountry'],
     [
         'XML_PATH_DEBUG_TEMPLATE_HINTS',
@@ -175,11 +177,17 @@ return [
     ],
     ['XML_PATH_DEFAULT_COUNTRY', 'Magento\Framework\Locale'],
     ['XML_PATH_DEFAULT_COUNTRY', 'Magento\Core\Helper\Data', 'Magento\Directory\Helper\Data::XML_PATH_DEFAULT_COUNTRY'],
-    ['XML_PATH_DEFAULT_LOCALE', 'Magento\Framework\Locale', 'Magento_Core_Model_LocaleInterface::XML_PATH_DEFAULT_LOCALE'],
+    ['XML_PATH_DEFAULT_LOCALE', 'Magento\Framework\Locale', 'Magento\Directory\Helper\Data::XML_PATH_DEFAULT_LOCALE'],
+    ['XML_PATH_DEFAULT_LOCALE', 'Magento\Core\Helper\Data', 'Magento\Directory\Helper\Data::XML_PATH_DEFAULT_LOCALE'],
     [
         'XML_PATH_DEFAULT_TIMEZONE',
         'Magento\Framework\Locale',
-        'Magento_Core_Model_LocaleInterface::XML_PATH_DEFAULT_TIMEZONE'
+        'Magento\Directory\Helper\Data::XML_PATH_DEFAULT_TIMEZONE'
+    ],
+    [
+        'XML_PATH_DEFAULT_TIMEZONE',
+        'Magento\Core\Helper\Data',
+        'Magento\Directory\Helper\Data::XML_PATH_DEFAULT_TIMEZONE'
     ],
     [
         'XML_PATH_DEV_ALLOW_IPS',
@@ -671,8 +679,10 @@ return [
     ['REFERER_QUERY_PARAM_NAME', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Url::REFERER_QUERY_PARAM_NAME'],
     ['XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Customer::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD'],
     ['XML_PATH_SUPPORT_EMAIL', 'Magento\Customer\Helper\Data'],
-    ['CONTEXT_GROUP', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Context::CONTEXT_GROUP'],
     ['CONTEXT_AUTH', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Context::CONTEXT_AUTH'],
+    ['CONTEXT_CURRENCY', 'Magento\Customer\Helper\Data', 'Magento\Framework\App\Http::CONTEXT_CURRENCY'],
+    ['CONTEXT_GROUP', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Context::CONTEXT_GROUP'],
+    ['CONTEXT_STORE', 'Magento\Customer\Helper\Data', 'Magento\Framework\App\Http::CONTEXT_STORE'],
     ['DEBUG_CONNECT', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_CONNECT'],
     ['DEBUG_TRANSACTION', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_TRANSACTION'],
     ['DEBUG_QUERY', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_QUERY'],

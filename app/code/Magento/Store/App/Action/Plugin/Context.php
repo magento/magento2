@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Store\App\Action\Plugin;
+
 use Magento\Framework\App\Http\Context as HttpContext;
 
 /**

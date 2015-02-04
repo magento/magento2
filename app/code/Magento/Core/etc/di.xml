@@ -577,7 +577,7 @@
     </type>
     <type name="Magento\Framework\Stdlib\DateTime\Timezone">
         <arguments>
-            <argument name="defaultTimezonePath" xsi:type="const">Magento\Core\Helper\Data::XML_PATH_DEFAULT_TIMEZONE</argument>
+            <argument name="defaultTimezonePath" xsi:type="const">Magento\Directory\Helper\Data::XML_PATH_DEFAULT_TIMEZONE</argument>
             <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
@@ -589,7 +589,7 @@
     <type name="Magento\Framework\Locale\Resolver">
         <plugin name="initLocale" type="Magento\Framework\Translate\Locale\Resolver\Plugin" sortOrder="10"/>
         <arguments>
-            <argument name="defaultLocalePath" xsi:type="const">Magento\Core\Helper\Data::XML_PATH_DEFAULT_LOCALE</argument>
+            <argument name="defaultLocalePath" xsi:type="const">Magento\Directory\Helper\Data::XML_PATH_DEFAULT_LOCALE</argument>
             <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
