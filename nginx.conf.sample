@@ -3,19 +3,21 @@
 # set $MAGE_MODE default; # or production or developer
 #
 # Example configuration:
-# upstream fastcgi_backend {
+upstream fastcgi_backend {
 #    # use tcp connection
 #    # server  127.0.0.1:9000;
 #    # or socket
-#    server   unix:/var/run/php5-fpm.sock;
-# }
-# server {
-#    listen 80;
-#    server_name mage.dev;
-#    set $MAGE_ROOT /var/www/magento2;
-#    set $MAGE_MODE develop;
+    server   unix:/var/run/php5-fpm.sock;
+}
+
+ server {
+    listen 80;
+    server_name m2.magento.loc;
+    set $MAGE_ROOT /var/www/magento2;
+    set $MAGE_MODE developer;
 #    include /vagrant/magento2/nginx.conf.sample;
-# }
+    error_log /var/log/nginx/magento-debug.log debug;
+
 
 root $MAGE_ROOT;
 
@@ -48,55 +50,96 @@ location / {
 
 
     location /static/ {
+
         if ($MAGE_MODE = "production") {
             expires max;
         }
+
+        location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
+               add_header Cache-Control "public";
+               expires +1y;
+
+            if (!-f $request_filename) {
+                rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+            }
+        }
+
+        location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
+            add_header Cache-Control "no-store";
+                expires    off;
+
+            if (!-f $request_filename) {
+                   rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+            }
+
+        }
+
         if (!-f $request_filename) {
             rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
         }
     }
 
     location /media/ {
-        if (!-f $request_filename) {
-            rewrite / /get.php;
+
+        location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
+            add_header Cache-Control "public";
+            expires +1y;
+
+            if (!-f $request_filename) {
+                rewrite / /get.php;
+            }
         }
-    }
 
-    location /media/customer/ {
-        deny all;
-    }
+        location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
+            add_header Cache-Control "no-store";
+            expires    off;
 
-    location /media/downloadable/ {
-        deny all;
-    }
+            if (!-f $request_filename) {
+                    rewrite / /get.php;
+                 }
+            }
 
-    location ~ /media/theme_customization/.*\.xml$ {
-        deny all;
-    }
+            if (!-f $request_filename) {
+                rewrite / /get.php;
+            }
+        }
 
-    location /errors/ {
-        try_files $uri =404;
-    }
+        location /media/customer/ {
+            deny all;
+        }
 
-    location ~ ^/errors/.*\.(xml|phtml)$ {
-        deny all;
-    }
+        location /media/downloadable/ {
+            deny all;
+        }
 
-    location ~ cron\.php {
-        deny all;
-    }
+        location ~ /media/theme_customization/.*\.xml$ {
+            deny all;
+        }
 
-    location ~ (index|get|static|report|404|503)\.php$ {
-        fastcgi_pass   fastcgi_backend;
+        location /errors/ {
+            try_files $uri =404;
+        }
 
-        fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
-        fastcgi_param  PHP_VALUE "memory_limit=256M \n max_execution_time=600";
-        fastcgi_read_timeout 600s;
-        fastcgi_connect_timeout 600s;
-        fastcgi_param  MAGE_MODE $MAGE_MODE;
+        location ~ ^/errors/.*\.(xml|phtml)$ {
+            deny all;
+        }
 
-        fastcgi_index  index.php;
-        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-        include        fastcgi_params;
+        location ~ cron\.php {
+            deny all;
+        }
+
+        location ~ (index|get|static|report|404|503)\.php$ {
+            fastcgi_pass   fastcgi_backend;
+
+            fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
+            fastcgi_param  PHP_VALUE "memory_limit=256M \n max_execution_time=600";
+            fastcgi_read_timeout 600s;
+            fastcgi_connect_timeout 600s;
+            fastcgi_param  MAGE_MODE $MAGE_MODE;
+
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            include        fastcgi_params;
+        }
     }
 }
