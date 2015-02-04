@@ -211,6 +211,10 @@
                     <label>Merge CSS Files</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Minify CSS Files</label>
+                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="image" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Image Processing Settings</label>

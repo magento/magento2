@@ -835,10 +835,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function reindex()
     {
-        $this->_productFlatIndexerProcessor->reindexRow($this->getEntityId());
-        $categoryIndexer = $this->indexerRegistry->get(Indexer\Product\Category::INDEXER_ID);
-        if (!$categoryIndexer->isScheduled()) {
-            $categoryIndexer->reindexRow($this->getId());
+        if ($this->_catalogProduct->isDataForProductCategoryIndexerWasChanged($this) || $this->isDeleted()) {
+            $this->_productFlatIndexerProcessor->reindexRow($this->getEntityId());
+            $categoryIndexer = $this->indexerRegistry->get(Indexer\Product\Category::INDEXER_ID);
+            if (!$categoryIndexer->isScheduled()) {
+                $categoryIndexer->reindexRow($this->getId());
+            }
         }
     }
 
