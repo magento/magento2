@@ -174,11 +174,17 @@ return [
         'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS'
     ],
     ['XML_PATH_DEFAULT_COUNTRY', 'Magento\Framework\Locale'],
+    ['XML_PATH_DEFAULT_COUNTRY', 'Magento\Core\Helper\Data', 'Magento\Directory\Helper\Data::XML_PATH_DEFAULT_COUNTRY'],
     ['XML_PATH_DEFAULT_LOCALE', 'Magento\Framework\Locale', 'Magento_Core_Model_LocaleInterface::XML_PATH_DEFAULT_LOCALE'],
     [
         'XML_PATH_DEFAULT_TIMEZONE',
         'Magento\Framework\Locale',
         'Magento_Core_Model_LocaleInterface::XML_PATH_DEFAULT_TIMEZONE'
+    ],
+    [
+        'XML_PATH_DEV_ALLOW_IPS',
+        'Magento\Core\Helper\Data',
+        'Magento\Framework\App\Config\Helper\Data::XML_PATH_DEV_ALLOW_IPS'
     ],
     ['XML_PATH_INSTALL_DATE', 'Mage_Core_Model_App', 'Mage_Core_Model_Config_Primary::XML_PATH_INSTALL_DATE'],
     ['XML_PATH_LOCALE_INHERITANCE', 'Mage_Core_Model_Translate'],
