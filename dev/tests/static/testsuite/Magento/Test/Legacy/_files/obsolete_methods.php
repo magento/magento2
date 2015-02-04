@@ -432,6 +432,7 @@ return [
     ['getDebug', 'Magento\Ogone\Model\Api'],
     ['getDebug', 'Magento\Paypal\Model\Api\AbstractApi'],
     ['getDefaultBasePath', 'Magento\Store\Model\Store'],
+    ['getDefaultCountry', 'Magento\Core\Helper\Data', 'Magento\Directory\Helper\Data::getDefaultCountry'],
     ['getDeleteUrl', 'Magento\Backend\Block\Catalog\Product\Edit'],
     ['getDirectOutput', 'Magento\Framework\View\Element\Template'],
     ['getDirectOutput', 'Magento\Framework\View\Layout'],
