@@ -29,18 +29,11 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     private $taxCalculationService;
 
     /**
-     * Tax Details Builder
+     * Tax Details Factory
      *
-     * @var \Magento\Tax\Api\Data\QuoteDetailsDataBuilder
+     * @var \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory
      */
-    private $quoteDetailsBuilder;
-
-    /**
-     * Tax Details Item Builder
-     *
-     * @var \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder
-     */
-    private $quoteDetailsItemBuilder;
+    private $quoteDetailsFactory;
 
     /**
      * Array of default tax classes ids
@@ -76,13 +69,16 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
      */
     private $taxRuleFixtureFactory;
 
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    private $dataObjectHelper;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->quoteDetailsBuilder = $this->objectManager
-            ->create('Magento\Tax\Api\Data\QuoteDetailsDataBuilder');
-        $this->quoteDetailsItemBuilder = $this->objectManager
-            ->create('Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder');
+        $this->quoteDetailsFactory = $this->objectManager->create('Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory');
+        $this->dataObjectHelper = $this->objectManager->create('Magento\Framework\Api\DataObjectHelper');
         $this->taxCalculationService = $this->objectManager->get('Magento\Tax\Api\TaxCalculationInterface');
         $this->taxRuleFixtureFactory = new TaxRuleFixtureFactory();
 
@@ -101,7 +97,8 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     public function testCalculateTaxUnitBased($quoteDetailsData, $expected)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
-        $quoteDetails = $this->quoteDetailsBuilder->populateWithArray($quoteDetailsData)->create();
+        $quoteDetails = $this->quoteDetailsFactory->create();
+        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails, 1);
         $this->assertEquals($expected, $this->convertObjectToArray($taxDetails));
@@ -462,8 +459,8 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     public function testCalculateTaxTotalBased($quoteDetailsData, $expectedTaxDetails, $storeId = null)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
-
-        $quoteDetails = $this->quoteDetailsBuilder->populateWithArray($quoteDetailsData)->create();
+        $quoteDetails = $this->quoteDetailsFactory->create();
+        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails, $storeId);
 
@@ -920,8 +917,8 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     public function testCalculateTaxRowBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
-
-        $quoteDetails = $this->quoteDetailsBuilder->populateWithArray($quoteDetailsData)->create();
+        $quoteDetails = $this->quoteDetailsFactory->create();
+        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
@@ -1668,8 +1665,8 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     public function testMultiRulesRowBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
-
-        $quoteDetails = $this->quoteDetailsBuilder->populateWithArray($quoteDetailsData)->create();
+        $quoteDetails = $this->quoteDetailsFactory->create();
+        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
@@ -1701,8 +1698,8 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     public function testMultiRulesTotalBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
-
-        $quoteDetails = $this->quoteDetailsBuilder->populateWithArray($quoteDetailsData)->create();
+        $quoteDetails = $this->quoteDetailsFactory->create();
+        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
@@ -1744,8 +1741,8 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     public function testMultiRulesUnitBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
-
-        $quoteDetails = $this->quoteDetailsBuilder->populateWithArray($quoteDetailsData)->create();
+        $quoteDetails = $this->quoteDetailsFactory->create();
+        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
