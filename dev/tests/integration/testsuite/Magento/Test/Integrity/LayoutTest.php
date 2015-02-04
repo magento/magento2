@@ -138,7 +138,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             function (\Magento\Framework\View\File $layout) {
                 $content = simplexml_load_file($layout->getFilename());
                 $this->assertEmpty(
-                    $content->xpath(\Magento\Core\Model\Layout\Merge::XPATH_HANDLE_DECLARATION),
+                    $content->xpath(\Magento\Widget\Model\Layout\Merge::XPATH_HANDLE_DECLARATION),
                     "Theme layout update '" . $layout->getFilename() . "' contains page type declaration(s)"
                 );
             },

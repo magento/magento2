@@ -58,7 +58,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->_configScopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
-        $this->_layoutProcessor = $this->getMock('Magento\Core\Model\Layout\Merge', [], [], '', false);
+        $this->_layoutProcessor = $this->getMock('Magento\Widget\Model\Layout\Merge', [], [], '', false);
         $this->_layoutMock->expects($this->any())->method('getUpdate')
             ->will($this->returnValue($this->_layoutProcessor));
         $this->_actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
