@@ -26,9 +26,6 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerInterfaceMock;
 
-    /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
-    protected $stateMock;
-
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registryMock;
 
@@ -54,7 +51,6 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     {
         $this->appContextHelperMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->storeManagerInterfaceMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
-        $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->registryMock = $this->getMock('Magento\Framework\Registry');
         $this->sessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
@@ -75,7 +71,6 @@ class GuestTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $this->appContextHelperMock,
                 'storeManager' => $this->storeManagerInterfaceMock,
-                'appState' => $this->stateMock,
                 'coreRegistry' => $this->registryMock,
                 'customerSession' => $this->sessionMock,
                 'cookieManager' => $this->cookieManagerMock,

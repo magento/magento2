@@ -49,17 +49,12 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->helper = new \Magento\Sales\Helper\Reorder(
             $contextMock,
-            $storeManagerMock,
             $this->customerSessionMock
         );
 
