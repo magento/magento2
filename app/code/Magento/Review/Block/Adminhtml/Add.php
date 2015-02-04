@@ -34,9 +34,11 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('reset', 'id', 'reset_button');
 
         $this->_formScripts[] = '
-            toggleParentVis("add_review_form");
-            toggleVis("save_button");
-            toggleVis("reset_button");
+            require(["prototype"], function(){
+                toggleParentVis("add_review_form");
+                toggleVis("save_button");
+                toggleVis("reset_button");
+            });
         ';
 
         $this->_formInitScripts[] = '
