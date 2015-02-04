@@ -136,25 +136,25 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected $cacheSuffix;
 
     /**
-     * Status for new added handle
+     * All processed handles used in this update
      *
-     * @var int
+     * @var array
      */
-    protected $handleAdded = 1;
+    protected $allHandles = [];
 
     /**
      * Status for handle being processed
      *
      * @var int
      */
-    protected $handleProcessing = 2;
+    protected $handleProcessing = 1;
 
     /**
      * Status for processed handle
      *
      * @var int
      */
-    protected $handleProcessed = 3;
+    protected $handleProcessed = 2;
 
     /**
      * Init merge model
@@ -242,10 +242,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     {
         if (is_array($handleName)) {
             foreach ($handleName as $name) {
-                $this->_handles[$name] = $this->handleAdded;
+                $this->_handles[$name] = 1;
             }
         } else {
-            $this->_handles[$handleName] = $this->handleAdded;
+            $this->_handles[$handleName] = 1;
         }
         return $this;
     }
@@ -426,7 +426,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
         $this->addHandle($handles);
 
-        $cacheId = $this->_getCacheId(md5(implode('|', $this->getHandles())));
+        $cacheId = $this->getCacheId();
         $cacheIdPageLayout = $cacheId . '_' . self::PAGE_LAYOUT_CACHE_SUFFIX;
         $result = $this->_loadCache($cacheId);
         if ($result) {
@@ -501,12 +501,12 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     protected function _merge($handle)
     {
-        if (!isset($this->_handles[$handle]) || $this->_handles[$handle] == $this->handleAdded) {
-            $this->_handles[$handle] = $this->handleProcessing;
+        if (!isset($this->allHandles[$handle])) {
+            $this->allHandles[$handle] = $this->handleProcessing;
             $this->_fetchPackageLayoutUpdates($handle);
             $this->_fetchDbLayoutUpdates($handle);
-            $this->_handles[$handle] = $this->handleProcessed;
-        } elseif ($this->_handles[$handle] == $this->handleProcessing
+            $this->allHandles[$handle] = $this->handleProcessed;
+        } elseif ($this->allHandles[$handle] == $this->handleProcessing
             && $this->_appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER
         ) {
             $this->_logger->info('Cyclic dependency in merged layout for handle: ' . $handle);
@@ -623,7 +623,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         if ($this->_layoutUpdatesCache) {
             return $this->_layoutUpdatesCache;
         }
-        $cacheId = $this->_getCacheId($this->cacheSuffix);
+        $cacheId = $this->generateCacheId($this->cacheSuffix);
         $result = $this->_loadCache($cacheId);
         if ($result) {
             $result = $this->_loadXmlString($result);
@@ -636,12 +636,12 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     }
 
     /**
-     * Retrieve cache identifier taking into account current area/package/theme/store
+     * Generate cache identifier taking into account current area/package/theme/store
      *
      * @param string $suffix
      * @return string
      */
-    protected function _getCacheId($suffix = '')
+    protected function generateCacheId($suffix = '')
     {
         return "LAYOUT_{$this->_theme->getArea()}_STORE{$this->_store->getId()}_{$this->_theme->getId()}{$suffix}";
     }
@@ -826,5 +826,15 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             return false;
         }
         return $abstraction['design_abstraction'] === self::DESIGN_ABSTRACTION_PAGE_LAYOUT;
+    }
+
+    /**
+     * Return cache ID based current area/package/theme/store and handles
+     *
+     * @return string
+     */
+    public function getCacheId()
+    {
+        return $this->generateCacheId(md5(implode('|', $this->getHandles())));
     }
 }

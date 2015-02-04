@@ -381,6 +381,7 @@
     <type name="Magento\Framework\View\Layout">
         <arguments>
             <argument name="readerPool" xsi:type="object" shared="false">commonRenderPool</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
     <virtualType name="genericLayoutRenderPool" type="Magento\Framework\View\Layout\ReaderPool">

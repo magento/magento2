@@ -136,8 +136,11 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     protected $builder;
 
     /**
-     * Constructor
-     *
+     * @var \Magento\Framework\Cache\FrontendInterface
+     */
+    protected $cache;
+
+    /**
      * @param Layout\ProcessorFactory $processorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Layout\Data\Structure $structure
@@ -147,6 +150,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param Page\Config\Structure $pageConfigStructure
      * @param Layout\ReaderPool $readerPool
      * @param Layout\GeneratorPool $generatorPool
+     * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param bool $cacheable
      */
     public function __construct(
@@ -159,6 +163,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         Page\Config\Structure $pageConfigStructure,
         Layout\ReaderPool $readerPool,
         Layout\GeneratorPool $generatorPool,
+        \Magento\Framework\Cache\FrontendInterface $cache,
         $cacheable = true
     ) {
         $this->_elementClass = 'Magento\Framework\View\Layout\Element';
@@ -175,6 +180,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $this->readerPool = $readerPool;
         $this->generatorPool = $generatorPool;
         $this->cacheable = $cacheable;
+        $this->cache = $cache;
 
         $this->readerContext = new Layout\Reader\Context($this->scheduledStructure, $this->pageConfigStructure);
         $this->generatorContext = new Layout\Generator\Context($this->structure, $this);
@@ -283,11 +289,24 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     public function generateElements()
     {
         \Magento\Framework\Profiler::start(__CLASS__ . '::' . __METHOD__);
-        \Magento\Framework\Profiler::start('build_structure');
-        $this->readerPool->interpret($this->readerContext, $this->getNode());
-        \Magento\Framework\Profiler::stop('build_structure');
-
         \Magento\Framework\Profiler::start('generate_elements');
+        $cacheId = 'structure_' . $this->getUpdate()->getCacheId();
+        $result = $this->cache->load($cacheId);
+        if ($result) {
+            $structures = unserialize($result);
+            $this->readerContext->setScheduledStructure($structures[0]);
+            $this->readerContext->setPageConfigStructure($structures[1]);
+        } else {
+            \Magento\Framework\Profiler::start('build_structure');
+            $this->readerPool->interpret($this->readerContext, $this->getNode());
+            \Magento\Framework\Profiler::stop('build_structure');
+            $structures = [
+                $this->readerContext->getScheduledStructure(),
+                $this->readerContext->getPageConfigStructure(),
+            ];
+            $this->cache->save(serialize($structures), $cacheId, $this->getUpdate()->getHandles());
+        }
+
         $this->generatorPool->process($this->readerContext, $this->generatorContext);
         \Magento\Framework\Profiler::stop('generate_elements');
         $this->addToOutputRootContainers();

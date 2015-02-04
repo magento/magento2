@@ -43,10 +43,28 @@ class Context
     }
 
     /**
+     * @param \Magento\Framework\View\Layout\ScheduledStructure $scheduledStructure
+     * @return void
+     */
+    public function setScheduledStructure($scheduledStructure)
+    {
+        $this->scheduledStructure = $scheduledStructure;
+    }
+
+    /**
      * @return \Magento\Framework\View\Page\Config\Structure
      */
     public function getPageConfigStructure()
     {
         return $this->pageConfigStructure;
+    }
+
+    /**
+     * @param \Magento\Framework\View\Page\Config\Structure $pageConfigStructure
+     * @return void
+     */
+    public function setPageConfigStructure($pageConfigStructure)
+    {
+        $this->pageConfigStructure = $pageConfigStructure;
     }
 }
