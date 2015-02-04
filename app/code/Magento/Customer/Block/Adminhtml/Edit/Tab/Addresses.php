@@ -441,7 +441,7 @@ class Addresses extends GenericMetadata
             $result[$website['value']] = $this->_storeManager->getWebsite(
                 $website['value']
             )->getConfig(
-                \Magento\Core\Helper\Data::XML_PATH_DEFAULT_COUNTRY
+                \Magento\Directory\Helper\Data::XML_PATH_DEFAULT_COUNTRY
             );
         }
 
