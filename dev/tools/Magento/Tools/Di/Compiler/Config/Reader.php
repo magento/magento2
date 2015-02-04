@@ -82,16 +82,8 @@ class Reader
         
         $this->fillThirdPartyInterfaces($areaConfig, $definitionsCollection);
         $config['arguments'] = $this->getConfigForScope($definitionsCollection, $areaConfig);
-        foreach ($config['arguments'] as $key => $value) {
-            if ($value !== null) {
-                $config['arguments'][$key] = serialize($value);
-            }
-        }
 
         foreach ($definitionsCollection->getInstancesNamesList() as $instanceName) {
-            if (!$areaConfig->isShared($instanceName)) {
-                $config['nonShared'][$instanceName] = true;
-            }
             $preference = $areaConfig->getPreference($instanceName);
             if ($instanceName !== $preference) {
                 $config['preferences'][$instanceName] = $preference;

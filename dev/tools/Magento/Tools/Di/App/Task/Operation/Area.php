@@ -75,9 +75,17 @@ class Area implements OperationInterface
 
         $areaCodes = array_merge([App\Area::AREA_GLOBAL], $this->areaList->getCodes());
         foreach ($areaCodes as $areaCode) {
+            $config = $this->configReader->generateCachePerScope($definitionsCollection, $areaCode);
+
+            foreach ($config['arguments'] as $key => $value) {
+                if ($value !== null) {
+                    $config['arguments'][$key] = serialize($value);
+                }
+            }
+
             $this->configWriter->write(
                 $areaCode,
-                $this->configReader->generateCachePerScope($definitionsCollection, $areaCode)
+                $config
             );
         }
     }

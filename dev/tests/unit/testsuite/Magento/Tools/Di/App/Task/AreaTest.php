@@ -64,14 +64,23 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     public function testDoOperationGlobalArea()
     {
         $path = 'path/to/codebase/';
+        $arguments = ['class' => []];
         $generatedConfig = [
-            'arguments' => [],
-            'nonShared' => [],
+            'arguments' => $arguments,
             'preferences' => [],
             'instanceTypes' => []
         ];
-        $definitions = new DefinitionsCollection();
-        $definitions->addDefinition('class', []);
+        $expectedConfig = [
+            'arguments' => array_map(
+                function ($arguments) {
+                    return serialize($arguments);
+                },
+                $arguments
+            ),
+            'preferences' => [],
+            'instanceTypes' => []
+        ];
+
         $areaOperation = new Area(
             $this->areaListMock,
             $this->areaInstancesNamesList,
@@ -86,7 +95,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->areaInstancesNamesList->expects($this->once())
             ->method('getList')
             ->with($path)
-            ->willReturn(['class' => []]);
+            ->willReturn($arguments);
         $this->configReaderMock->expects($this->once())
             ->method('generateCachePerScope')
             ->with(
@@ -98,7 +107,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
             ->method('write')
             ->with(
                 App\Area::AREA_GLOBAL,
-                $generatedConfig
+                $expectedConfig
             );
 
         $areaOperation->doOperation();
