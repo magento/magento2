@@ -39,15 +39,15 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'Magento\Tools\I18n\Dictionary\Writer\Csv',
-                'filename.invalid_type',
+                TESTS_TEMP_DIR . '/filename.invalid_type',
             ],
             [
                 'Magento\Tools\I18n\Dictionary\Writer\Csv',
-                'filename'
+                TESTS_TEMP_DIR . '/filename'
             ],
             [
                 'Magento\Tools\I18n\Dictionary\Writer\Csv',
-                'filename.csv'
+                TESTS_TEMP_DIR . '/filename.csv'
             ],
             [
                 'Magento\Tools\I18n\Dictionary\Writer\Csv\Stdo',
