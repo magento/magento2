@@ -58,7 +58,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     protected $eventManager;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -76,7 +76,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata
      * @param \Magento\Customer\Api\Data\CustomerSearchResultsDataBuilder $searchResultsDataBuilder
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -89,7 +89,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata,
         \Magento\Customer\Api\Data\CustomerSearchResultsDataBuilder $searchResultsDataBuilder,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
     ) {
         $this->customerFactory = $customerFactory;
@@ -113,7 +113,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->validate($customer);
         $origAddresses = $customer->getAddresses();
         $customer->setAddresses([]);
-        $customerData = $this->extensibleDataObjectConverter->toFlatArray(
+        $customerData = $this->extensibleDataObjectConverter->toNestedArray(
             $customer,
             [],
             '\Magento\Customer\Api\Data\CustomerInterface'

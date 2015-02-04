@@ -76,7 +76,7 @@ class Status extends \Magento\Backend\Block\Template
     {
         return $this->_scopeConfig->getValue(
             $this->_localeDate->getDefaultTimezonePath(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getCustomer()->getStoreId()
         );
     }

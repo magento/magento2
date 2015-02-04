@@ -68,7 +68,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * Store model manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -117,7 +117,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * @param MetadataServiceInterface $metadataService
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryInterface $stockRegistry
      * @param StockItemRepositoryInterface $stockItemRepository
@@ -132,7 +132,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
         MetadataServiceInterface $metadataService,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         StockConfigurationInterface $stockConfiguration,
         StockRegistryInterface $stockRegistry,
         StockItemRepositoryInterface $stockItemRepository,

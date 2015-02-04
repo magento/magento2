@@ -1932,7 +1932,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         if (empty($email)) {
             $host = $this->_scopeConfig->getValue(
                 self::XML_PATH_DEFAULT_EMAIL_DOMAIN,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
             $account = time();
             $email = $account . '@' . $host;

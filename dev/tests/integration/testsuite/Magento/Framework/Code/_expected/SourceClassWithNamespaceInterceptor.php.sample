@@ -64,6 +64,9 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
         $this->pluginList = $this->pluginLocator->get('Magento\Framework\Interception\PluginListInterface');
         $this->chain = $this->pluginLocator->get('Magento\Framework\Interception\ChainInterface');
         $this->subjectType = get_parent_class($this);
+        if (method_exists(get_parent_class($this), '__wakeup')) {
+            parent::__wakeup();
+        }
     }
 
     protected function ___callPlugins($method, array $arguments, array $pluginInfo)

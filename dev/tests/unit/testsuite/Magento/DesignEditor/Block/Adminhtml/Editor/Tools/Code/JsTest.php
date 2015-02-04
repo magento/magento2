@@ -23,7 +23,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
     protected $_themeContext;
 
     /**
-     * @var \Magento\Core\Model\Theme|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_theme;
 
@@ -42,7 +42,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
         $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
         $this->_themeContext = $this->getMock('Magento\DesignEditor\Model\Theme\Context', [], [], '', false);
         $this->_theme = $this->getMock(
-            'Magento\Core\Model\Theme',
+            'Magento\Theme\Model\Theme',
             ['getId', 'getCustomization', '__wakeup'],
             [],
             '',

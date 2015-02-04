@@ -64,7 +64,7 @@ class CreditmemoCommentIdentityTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(
                 $this->equalTo(CreditmemoCommentIdentity::XML_PATH_EMAIL_ENABLED),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+                $this->equalTo(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
             ->will($this->returnValue(true));
@@ -79,7 +79,7 @@ class CreditmemoCommentIdentityTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 $this->equalTo(CreditmemoCommentIdentity::XML_PATH_EMAIL_COPY_TO),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+                $this->equalTo(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
             ->will($this->returnValue('test_value,test_value2'));
@@ -94,7 +94,7 @@ class CreditmemoCommentIdentityTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 $this->equalTo(CreditmemoCommentIdentity::XML_PATH_EMAIL_COPY_TO),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+                $this->equalTo(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
             ->will($this->returnValue(null));
@@ -109,7 +109,7 @@ class CreditmemoCommentIdentityTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 $this->equalTo(CreditmemoCommentIdentity::XML_PATH_EMAIL_COPY_METHOD),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+                $this->equalTo(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
             ->will($this->returnValue('copy_method'));
@@ -125,7 +125,7 @@ class CreditmemoCommentIdentityTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 $this->equalTo(CreditmemoCommentIdentity::XML_PATH_EMAIL_GUEST_TEMPLATE),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+                $this->equalTo(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
             ->will($this->returnValue('template_id'));
@@ -141,7 +141,7 @@ class CreditmemoCommentIdentityTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 $this->equalTo(CreditmemoCommentIdentity::XML_PATH_EMAIL_TEMPLATE),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+                $this->equalTo(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
             ->will($this->returnValue('template_id'));
@@ -188,7 +188,7 @@ class CreditmemoCommentIdentityTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 $this->equalTo(CreditmemoCommentIdentity::XML_PATH_EMAIL_IDENTITY),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+                $this->equalTo(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
             ->will($this->returnValue($emailIdentity));

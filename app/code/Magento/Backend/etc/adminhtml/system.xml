@@ -105,13 +105,13 @@
                 <field id="theme_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Design Theme</label>
                     <source_model>Magento\Framework\View\Design\Theme\Label::getLabelsCollectionForSystemConfiguration</source_model>
-                    <backend_model>Magento\Core\Model\Design\Backend\Theme</backend_model>
+                    <backend_model>Magento\Theme\Model\Design\Backend\Theme</backend_model>
                     <comment><![CDATA[If no value is specified, the system default will be used. The system default may be modified by third party extensions.]]></comment>
                 </field>
                 <field id="ua_regexp" translate="label comment tooltip" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>User-Agent Exceptions</label>
                     <frontend_model>Magento\Backend\Block\System\Config\Form\Field\Regexceptions</frontend_model>
-                    <backend_model>Magento\Core\Model\Design\Backend\Exceptions</backend_model>
+                    <backend_model>Magento\Theme\Model\Design\Backend\Exceptions</backend_model>
                     <comment>
                         <![CDATA[Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered. Examples:<br /><span style="font-family:monospace">Firefox<br />/^mozilla/i</span>]]>
                     </comment>
@@ -209,6 +209,10 @@
                 <label>CSS Settings</label>
                 <field id="merge_css_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Merge CSS Files</label>
+                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Minify CSS Files</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
