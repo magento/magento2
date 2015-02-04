@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Order;
-use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface;
 
 /**
  * @method \Magento\Tax\Model\Resource\Sales\Order\Tax _getResource()
@@ -110,7 +109,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Set tax amount
      *
-     * @param $amount
+     * @param float $amount
      * @return $this
      */
     public function setAmount($amount)

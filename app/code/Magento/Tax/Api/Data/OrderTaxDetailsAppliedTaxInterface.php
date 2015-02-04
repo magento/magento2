@@ -78,7 +78,7 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
     /**
      * Set tax amount
      *
-     * @param $amount
+     * @param float $amount
      * @return $this
      */
     public function setAmount($amount);

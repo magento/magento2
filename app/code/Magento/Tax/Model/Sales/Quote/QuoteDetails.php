@@ -92,7 +92,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
     public function setCustomerTaxClassKey($customerTaxClassKey)
     {
         return $this->setData(QuoteDetailsInterface::KEY_CUSTOMER_TAX_CLASS_KEY, $customerTaxClassKey);
-   }
+    }
 
     /**
      * Set customer id
