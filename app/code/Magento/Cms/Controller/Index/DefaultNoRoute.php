@@ -1,8 +1,5 @@
 <?php
 /**
- * Default no route page action
- * Used if no route page don't configure or available
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */

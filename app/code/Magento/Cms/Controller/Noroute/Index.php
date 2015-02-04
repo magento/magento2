@@ -9,17 +9,17 @@ namespace Magento\Cms\Controller\Noroute;
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @var \Magento\Framework\Controller\Result\ForwardFactory
      */
     protected $resultForwardFactory;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
     ) {
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);

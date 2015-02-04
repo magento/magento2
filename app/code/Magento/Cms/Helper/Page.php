@@ -161,7 +161,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $this->setLayoutType($inRange, $resultPage);
-        $resultPage->initLayout();
         $resultPage->addHandle('cms_page_view');
         $resultPage->addPageLayoutHandles(['id' => $this->_page->getIdentifier()]);
 

@@ -37,15 +37,9 @@ class Block extends \Magento\Backend\App\Action
      */
     protected function initPage($resultPage)
     {
-        $resultPage->setActiveMenu(
-            'Magento_Cms::cms_block'
-        )->addBreadcrumb(
-            __('CMS'),
-            __('CMS')
-        )->addBreadcrumb(
-            __('Static Blocks'),
-            __('Static Blocks')
-        );
+        $resultPage->setActiveMenu('Magento_Cms::cms_block')
+            ->addBreadcrumb(__('CMS'), __('CMS'))
+            ->addBreadcrumb(__('Static Blocks'), __('Static Blocks'));
         return $resultPage;
     }
 
