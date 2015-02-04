@@ -26,12 +26,13 @@
             </arguments>
         </listener>
         <listener class="Magento\Mtf\System\Event\StateListener" />
+        <listener class="Magento\Mtf\System\JUnit"/>
     </listeners>
 
     <php>
-        <env name="app_frontend_url" value="http://magento.dev/" />
-        <env name="app_backend_url" value="http://magento.dev/admin/" />
-        <env name="testsuite_rule" value="bat_ce" />
+        <env name="app_frontend_url" value="http://localhost/index.php/" />
+        <env name="app_backend_url" value="http://localhost/index.php/backend/" />
+        <env name="testsuite_rule" value="basic" />
         <env name="testsuite_rule_path" value="Magento/Mtf/TestSuite/InjectableTests" />
         <env name="log_directory" value="var/log" />
         <env name="events_preset" value="base" />
