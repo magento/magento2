@@ -8,7 +8,8 @@ define([
     "jquery",
     "jquery/ui",
     "jquery/template",
-    "js/theme",
+    "useDefault",
+    "collapsable",
     "mage/translate",
     "mage/backend/validation"
 ], function($){

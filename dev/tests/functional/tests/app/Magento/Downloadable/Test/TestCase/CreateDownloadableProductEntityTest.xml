@@ -11,7 +11,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">100</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">1</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -36,7 +36,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">1</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -61,7 +61,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">33</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -86,7 +86,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">55</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -111,7 +111,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">100</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">50</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -136,7 +136,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">9999</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -186,7 +186,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">57</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -211,7 +211,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">65</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">11</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -236,7 +236,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">65</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">11</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -261,7 +261,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">100</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -286,7 +286,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">10</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -311,7 +311,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">365</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">23</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/is_virtual">Yes</data>
@@ -336,7 +336,7 @@
             <data name="product/data/name">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value">250</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">65</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/is_virtual">Yes</data>

@@ -17,7 +17,6 @@
             <data name="attribute/data/default_value_text">&lt;b&gt;&lt;i&gt;default_value_text%isolation%&lt;/i&gt;&lt;/b&gt;</data>
             <data name="attribute/data/default_value_textarea">-</data>
             <data name="attribute/data/is_unique">Yes</data>
-            <data name="attribute/data/is_configurable">-</data>
             <data name="attribute/data/manage_frontend_label">-</data>
             <data name="attribute/data/is_searchable">Yes</data>
             <data name="attribute/data/is_visible_in_advanced_search">Yes</data>
@@ -41,7 +40,6 @@
             <data name="attribute/data/default_value_text">-</data>
             <data name="attribute/data/default_value_textarea">-</data>
             <data name="attribute/data/is_unique">-</data>
-            <data name="attribute/data/is_configurable">Yes</data>
             <data name="attribute/data/manage_frontend_label">-</data>
             <data name="attribute/data/is_searchable">-</data>
             <data name="attribute/data/is_visible_in_advanced_search">-</data>
@@ -65,7 +63,6 @@
             <data name="attribute/data/default_value_text">default_value_text%isolation%</data>
             <data name="attribute/data/default_value_textarea">-</data>
             <data name="attribute/data/is_unique">-</data>
-            <data name="attribute/data/is_configurable">-</data>
             <data name="attribute/data/manage_frontend_label">-</data>
             <data name="attribute/data/is_searchable">-</data>
             <data name="attribute/data/is_visible_in_advanced_search">-</data>
@@ -89,7 +86,6 @@
             <data name="attribute/data/default_value_text">default_value_text%isolation%</data>
             <data name="attribute/data/default_value_textarea">-</data>
             <data name="attribute/data/is_unique">Yes</data>
-            <data name="attribute/data/is_configurable">-</data>
             <data name="attribute/data/manage_frontend_label">-</data>
             <data name="attribute/data/is_searchable">-</data>
             <data name="attribute/data/is_visible_in_advanced_search">-</data>

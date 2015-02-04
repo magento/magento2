@@ -16,7 +16,6 @@
             <data name="productsData">bundleProduct::bundle_fixed_product</data>
             <data name="cart/data/grand_total">756</data>
             <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
-            <data name="issue">Bug: MAGETWO-28350</data>
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation3">
             <data name="productsData">catalogProductSimple::with_two_custom_option</data>
@@ -24,7 +23,7 @@
             <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation4">
-            <data name="productsData">catalogProductVirtual::50_dollar_product</data>
+            <data name="productsData">catalogProductVirtual::product_50_dollar</data>
             <data name="cart/data/grand_total">50</data>
             <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
         </variation>
@@ -37,7 +36,6 @@
             <data name="productsData">downloadableProductInjectable::with_two_separately_links</data>
             <data name="cart/data/grand_total">46</data>
             <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
-            <data name="issue">Bug: MAGETWO-24195</data>
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation7">
             <data name="productsData">groupedProductInjectable::three_simple_products</data>
@@ -45,10 +43,9 @@
             <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation8">
-            <data name="productsData">catalogProductSimple::with_two_custom_option, catalogProductVirtual::50_dollar_product, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
+            <data name="productsData">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
             <data name="cart/data/grand_total">3272</data>
             <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
-            <data name="issue">Bug: MAGETWO-28350</data>
         </variation>
     </testCase>
 </config>

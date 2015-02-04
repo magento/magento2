@@ -40,13 +40,13 @@ class AlertsTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             [
                 'catalog/productalert/allow_price',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 null,
                 $priceAllow,
             ],
             [
                 'catalog/productalert/allow_stock',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 null,
                 $stockAllow
             ],

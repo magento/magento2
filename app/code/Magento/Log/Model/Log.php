@@ -73,7 +73,7 @@ class Log extends \Magento\Framework\Model\AbstractModel
     {
         return $this->_scopeConfig->getValue(
             self::XML_LOG_CLEAN_DAYS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) * 60 * 60 * 24;
     }
 
@@ -97,7 +97,7 @@ class Log extends \Magento\Framework\Model\AbstractModel
     {
         $configValue = $this->_scopeConfig->getValue(
             'customer/online_customers/online_minutes_interval',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }

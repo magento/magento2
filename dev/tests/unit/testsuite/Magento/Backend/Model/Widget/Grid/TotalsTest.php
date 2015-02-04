@@ -73,7 +73,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     {
         // prepare collection
         $collection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false)
+            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         $items = [
             new \Magento\Framework\Object(['test1' => '1', 'test2' => '2']),
@@ -96,7 +96,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
 
         // prepare collection
         $collection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false)
+            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         $items = [
             new \Magento\Framework\Object(
@@ -118,7 +118,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
         foreach ($items as $item) {
             // prepare sub-collection
             $subCollection = new \Magento\Framework\Data\Collection(
-                $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false)
+                $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
             );
             $subCollection->addItem(new \Magento\Framework\Object(['test4' => '1', 'test5' => '2']));
             $subCollection->addItem(new \Magento\Framework\Object(['test4' => '2', 'test5' => '2']));

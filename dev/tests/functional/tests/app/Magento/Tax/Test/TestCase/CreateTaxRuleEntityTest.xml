@@ -8,9 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
     <testCase name="CreateTaxRuleEntityTest">
         <variation name="CreateTaxRuleEntityTestVariation1">
-            <data name="description">Creating tax rule with default values</data>
             <data name="taxRule/data/code">TaxIdentifier%isolation%</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_0">US-CA-*-Rate 1</data>
+            <data name="taxRule/data/tax_rate/dataSet/rate_0">US-CA-Rate_1</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_1">-</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_2">-</data>
             <data name="taxRule/data/tax_customer_class/dataSet/class_0">-</data>
@@ -22,10 +21,9 @@
             <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm</data>
         </variation>
         <variation name="CreateTaxRuleEntityTestVariation2">
-            <data name="description">Creating tax rule with new tax classes</data>
             <data name="taxRule/data/code">TaxIdentifier%isolation%</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_0">US-CA-*-Rate 1</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_1">US-NY-*-Rate 1</data>
+            <data name="taxRule/data/tax_rate/dataSet/rate_0">US-CA-Rate_1</data>
+            <data name="taxRule/data/tax_rate/dataSet/rate_1">US-NY-Rate_1</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_2">-</data>
             <data name="taxRule/data/tax_customer_class/dataSet/class_0">customer_tax_class</data>
             <data name="taxRule/data/tax_customer_class/dataSet/class_1">-</data>
@@ -36,12 +34,11 @@
             <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm</data>
         </variation>
         <variation name="CreateTaxRuleEntityTestVariation3">
-            <data name="description">Creating tax rule with new tax classes and tax rate</data>
             <data name="taxRule/data/code">TaxIdentifier%isolation%</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_0">default</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_1">US-NY-*-Rate 1</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_2">US-CA-*-Rate 1</data>
-            <data name="taxRule/data/tax_customer_class/dataSet/class_0">Retail Customer</data>
+            <data name="taxRule/data/tax_rate/dataSet/rate_1">US-NY-Rate_1</data>
+            <data name="taxRule/data/tax_rate/dataSet/rate_2">US-CA-Rate_1</data>
+            <data name="taxRule/data/tax_customer_class/dataSet/class_0">retail_customer</data>
             <data name="taxRule/data/tax_customer_class/dataSet/class_1">customer_tax_class</data>
             <data name="taxRule/data/tax_product_class/dataSet/class_0">Taxable Goods</data>
             <data name="taxRule/data/tax_product_class/dataSet/class_1">-</data>
@@ -50,31 +47,17 @@
             <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm</data>
         </variation>
         <variation name="CreateTaxRuleEntityTestVariation4">
-            <data name="description">Creating tax rule with new tax rate that has zip range</data>
             <data name="taxRule/data/code">TaxIdentifier%isolation%</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_0">withZipRange</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_1">US-CA-*-Rate 1</data>
+            <data name="taxRule/data/tax_rate/dataSet/rate_1">US-CA-Rate_1</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_2">-</data>
-            <data name="taxRule/data/tax_customer_class/dataSet/class_0">Retail Customer</data>
+            <data name="taxRule/data/tax_customer_class/dataSet/class_0">retail_customer</data>
             <data name="taxRule/data/tax_customer_class/dataSet/class_1">customer_tax_class</data>
             <data name="taxRule/data/tax_product_class/dataSet/class_0">Taxable Goods</data>
             <data name="taxRule/data/tax_product_class/dataSet/class_1">product_tax_class</data>
             <data name="taxRule/data/priority">1</data>
             <data name="taxRule/data/position">-</data>
             <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm</data>
-        </variation>
-        <variation name="CreateTaxRuleEntityTestVariation5">
-            <data name="description">MAGETWO-12438: Create Tax Rule with New and Existing Tax Rate, Customer Tax Class, Product Tax Class</data>
-            <data name="taxRule/data/code">TaxIdentifier%isolation%</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_0">US-CA-*-Rate 1</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_1">us_ny_rate_8_1</data>
-            <data name="taxRule/data/tax_rate/dataSet/rate_2">-</data>
-            <data name="taxRule/data/tax_customer_class/dataSet/class_0">Retail Customer</data>
-            <data name="taxRule/data/tax_customer_class/dataSet/class_1">customer_tax_class</data>
-            <data name="taxRule/data/tax_product_class/dataSet/class_0">Taxable Goods</data>
-            <data name="taxRule/data/tax_product_class/dataSet/class_1">product_tax_class</data>
-            <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid</data>
-            <data name="tag">bamboo_plan:end_to_end,test_type:acceptance_test</data>
         </variation>
     </testCase>
 </config>

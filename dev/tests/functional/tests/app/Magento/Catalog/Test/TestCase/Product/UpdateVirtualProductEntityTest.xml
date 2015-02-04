@@ -21,13 +21,14 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog</data>
+            <data name="product/data/url_key">virtual-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductVisibleInCategory, assertProductInCategory, assertProductTierPriceOnProductPage, assertProductSearchableBySku</data>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation2">
             <data name="product/data/name">virtual_product_%isolation%</data>
             <data name="product/data/sku">virtual_sku_%isolation%</data>
             <data name="product/data/price/value">120.00</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">999</data>
             <data name="product/data/is_virtual">Yes</data>
             <data name="product/data/category_ids/presets">-</data>
@@ -37,6 +38,7 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog, Search</data>
+            <data name="product/data/url_key">virtual-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductVisibleInCategory, assertProductInCategory, assertProductPage, assertProductSpecialPriceOnProductPage, assertProductSearchableBySku</data>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation3">
@@ -53,13 +55,14 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog, Search</data>
+            <data name="product/data/url_key">virtual-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductVisibleInCategory, assertProductPage, assertProductOutOfStock, assertProductTierPriceOnProductPage, assertProductSearchableBySku</data>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation4">
             <data name="product/data/name">virtual_product_%isolation%</data>
             <data name="product/data/sku">virtual_sku_%isolation%</data>
             <data name="product/data/price/value">99.99</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">-</data>
             <data name="product/data/is_virtual">Yes</data>
             <data name="product/data/category_ids/presets">-</data>
@@ -69,6 +72,7 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Search</data>
+            <data name="product/data/url_key">virtual-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductOutOfStock, assertProductSearchableBySku</data>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation5">
@@ -85,13 +89,14 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog</data>
+            <data name="product/data/url_key">virtual-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductOutOfStock, assertProductSearchableBySku</data>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation6">
             <data name="product/data/name">virtual_product_%isolation%</data>
             <data name="product/data/sku">virtual_sku_%isolation%</data>
             <data name="product/data/price/value">145.00</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">999</data>
             <data name="product/data/is_virtual">Yes</data>
             <data name="product/data/category_ids/presets">default_subcategory</data>
@@ -101,6 +106,7 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog, Search</data>
+            <data name="product/data/url_key">virtual-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductVisibleInCategory, assertProductGroupedPriceOnProductPage, assertProductTierPriceOnProductPage, assertProductSearchableBySku</data>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation7">
@@ -117,13 +123,14 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog, Search</data>
+            <data name="product/data/url_key">virtual-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductOutOfStock, assertProductSearchableBySku</data>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation8">
             <data name="product/data/name">virtual_product_%isolation%</data>
             <data name="product/data/sku">virtual_sku_%isolation%</data>
             <data name="product/data/price/value">5.00</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">-</data>
             <data name="product/data/is_virtual">Yes</data>
             <data name="product/data/category_ids/presets">-</data>
@@ -133,6 +140,7 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Search</data>
+            <data name="product/data/url_key">virtual-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductOutOfStock,  assertProductSearchableBySku</data>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation9">
@@ -149,13 +157,14 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/custom_options/preset">options-suite</data>
             <data name="product/data/visibility">Search</data>
+            <data name="product/data/url_key">virtual-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductSpecialPriceOnProductPage, assertProductCustomOptionsOnProductPage, assertProductSearchableBySku</data>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation10">
             <data name="product/data/name">VirtualProduct %isolation%</data>
             <data name="product/data/sku">virtual_sku_%isolation%</data>
             <data name="product/data/price/value">99.99</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty">-</data>
             <data name="product/data/is_virtual">Yes</data>
             <data name="product/data/category_ids/presets">-</data>
@@ -165,6 +174,7 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog, Search</data>
+            <data name="product/data/url_key">virtual-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductOutOfStock, assertProductSearchableBySku</data>
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation11">
@@ -180,7 +190,8 @@
             <data name="product/data/tier_price/preset">MAGETWO-23002</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/custom_options/preset">-</data>
-            <data name="product/data/visibility">Catalog</data>
+            <data name="product/data/visibility">virtual-product-%isolation%</data>
+            <data name="product/data/url_key">Catalog</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductVisibleInCategory, assertProductSpecialPriceOnProductPage, assertProductPage, assertProductGroupedPriceOnProductPage, assertProductTierPriceOnProductPage, assertProductInCategory, assertProductSearchableBySku</data>
         </variation>
     </testCase>

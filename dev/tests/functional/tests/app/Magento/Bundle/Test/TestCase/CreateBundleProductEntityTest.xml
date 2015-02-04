@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
     <testCase name="CreateBundleProductEntityTest">
         <variation name="CreateBundleProductEntityTestVariation1">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">BundleProduct %isolation%</data>
             <data name="product/data/sku_type">-</data>
             <data name="product/data/sku">bundle_sku_%isolation%</data>
@@ -31,7 +32,7 @@
             <data name="product/data/stock_data/manage_stock">No</data>
             <data name="product/data/shipment_type">-</data>
             <data name="product/data/bundle_selections/preset">default_dynamic</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
             <data name="product/data/checkout_data/preset">default</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -41,6 +42,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertBundleItemsOnProductPage</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation2">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">BundleProduct %isolation%</data>
             <data name="product/data/sku_type">Fixed</data>
             <data name="product/data/sku">bundle_sku_%isolation%</data>
@@ -64,7 +66,7 @@
             <data name="product/data/stock_data/manage_stock">-</data>
             <data name="product/data/shipment_type">Separately</data>
             <data name="product/data/bundle_selections/preset">default_dynamic</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
             <data name="product/data/checkout_data/preset">default</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -74,6 +76,7 @@
             <data name="constraint">assertProductSaveMessage,  assertProductNotSearchableBySku</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation3">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">BundleProduct %isolation%</data>
             <data name="product/data/sku_type">Dynamic</data>
             <data name="product/data/sku">bundle_sku_%isolation%</data>
@@ -97,7 +100,7 @@
             <data name="product/data/stock_data/manage_stock">-</data>
             <data name="product/data/shipment_type">Together</data>
             <data name="product/data/bundle_selections/preset">all_types_dynamic</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
             <data name="product/data/checkout_data/preset">all_types_bundle_options</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -107,6 +110,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertBundleProductForm, assertProductSearchableBySku, assertBundleProductPage, assertProductInStock, assertBundleItemsOnProductPage, assertProductVisibleInCategory, assertBundlePriceView, assertBundlePriceType</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation4">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">BundleProduct %isolation%</data>
             <data name="product/data/sku_type">Fixed</data>
             <data name="product/data/sku">bundle_sku_%isolation%</data>
@@ -130,7 +134,7 @@
             <data name="product/data/stock_data/manage_stock">-</data>
             <data name="product/data/shipment_type">-</data>
             <data name="product/data/bundle_selections/preset">default_fixed</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
             <data name="product/data/checkout_data/preset">default</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -140,6 +144,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertBundleProductForm, assertProductSearchableBySku, assertBundleProductPage, assertBundleItemsOnProductPage</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation5">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">BundleProduct %isolation%</data>
             <data name="product/data/sku_type">Fixed</data>
             <data name="product/data/sku">bundle_sku_%isolation%</data>
@@ -147,7 +152,7 @@
             <data name="product/data/price_type">Fixed</data>
             <data name="product/data/price/value">100</data>
             <data name="product/data/price/preset">fixed-24</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/weight_type">Fixed</data>
             <data name="product/data/weight">10</data>
@@ -163,7 +168,7 @@
             <data name="product/data/stock_data/manage_stock">-</data>
             <data name="product/data/shipment_type">Separately</data>
             <data name="product/data/bundle_selections/preset">all_types_fixed</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
             <data name="product/data/checkout_data/preset">all_types_bundle_fixed_and_custom_options</data>
             <data name="product/data/custom_options/preset">all_types</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -173,6 +178,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertBundleProductForm, assertProductVisibleInCategory, assertBundleProductPage, assertProductInStock, assertGroupedPriceOnBundleProductPage, assertBundleItemsOnProductPage, assertBundlePriceView, assertBundlePriceType</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation6">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">BundleProduct %isolation%</data>
             <data name="product/data/sku_type">Fixed</data>
             <data name="product/data/sku">bundle_sku_%isolation%</data>
@@ -180,7 +186,7 @@
             <data name="product/data/price_type">Fixed</data>
             <data name="product/data/price/value">10</data>
             <data name="product/data/price/preset">fixed-1</data>
-            <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
             <data name="product/data/weight_type">Fixed</data>
             <data name="product/data/weight">10</data>
@@ -196,7 +202,7 @@
             <data name="product/data/stock_data/manage_stock">Yes</data>
             <data name="product/data/shipment_type">Together</data>
             <data name="product/data/bundle_selections/preset">with_not_required_options</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
             <data name="product/data/checkout_data/preset">with_not_required_options</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -206,6 +212,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertBundleProductForm,  assertBundleProductPage, assertProductOutOfStock, assertBundlePriceView</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation7">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">BundleProduct %isolation%</data>
             <data name="product/data/sku_type">Dynamic</data>
             <data name="product/data/sku">bundle_sku_%isolation%</data>
@@ -229,7 +236,7 @@
             <data name="product/data/stock_data/manage_stock">No</data>
             <data name="product/data/shipment_type">Together</data>
             <data name="product/data/bundle_selections/preset">default_dynamic</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
             <data name="product/data/checkout_data/preset">default</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -239,6 +246,7 @@
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertBundleProductForm, assertProductSearchableBySku, assertBundleProductPage, assertBundleItemsOnProductPage, assertTierPriceOnBundleProductPage</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation8">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">Bundle Dynamic %isolation%</data>
             <data name="product/data/sku_type">Dynamic</data>
             <data name="product/data/sku">sku_bundle_dynamic_%isolation%</data>
@@ -262,7 +270,7 @@
             <data name="product/data/stock_data/manage_stock">-</data>
             <data name="product/data/shipment_type">-</data>
             <data name="product/data/bundle_selections/preset">default_dynamic</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
             <data name="product/data/checkout_data/preset">default</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -272,6 +280,7 @@
             <data name="constraint">assertProductSaveMessage, assertBundleInCategory</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation9">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">Bundle Dynamic %isolation%</data>
             <data name="product/data/sku_type">Dynamic</data>
             <data name="product/data/sku">sku_bundle_dynamic_%isolation%</data>
@@ -295,7 +304,7 @@
             <data name="product/data/stock_data/manage_stock">-</data>
             <data name="product/data/shipment_type">-</data>
             <data name="product/data/bundle_selections/preset">default_dynamic</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
             <data name="product/data/checkout_data/preset">default</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -305,6 +314,7 @@
             <data name="constraint">assertProductSaveMessage, assertBundleInCategory, assertBundlePriceView, assertBundlePriceType</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation10">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">Bundle Dynamic %isolation%</data>
             <data name="product/data/sku_type">Dynamic</data>
             <data name="product/data/sku">sku_bundle_dynamic_%isolation%</data>
@@ -328,7 +338,7 @@
             <data name="product/data/stock_data/manage_stock">-</data>
             <data name="product/data/shipment_type">-</data>
             <data name="product/data/bundle_selections/preset">default_dynamic</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
             <data name="product/data/checkout_data/preset">default</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -338,6 +348,7 @@
             <data name="constraint">assertProductSaveMessage, assertBundleInCategory, assertBundlePriceView, assertBundlePriceType</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation11">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">Bundle Fixed %isolation%</data>
             <data name="product/data/sku_type">Fixed</data>
             <data name="product/data/sku">sku_bundle_fixed_%isolation%</data>
@@ -361,7 +372,7 @@
             <data name="product/data/stock_data/manage_stock">-</data>
             <data name="product/data/shipment_type">-</data>
             <data name="product/data/bundle_selections/preset">second</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
             <data name="product/data/checkout_data/preset">with_custom_options_1</data>
             <data name="product/data/custom_options/preset">drop_down_with_one_option_fixed_price</data>
             <data name="product/data/custom_options/import_products">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
@@ -371,6 +382,7 @@
             <data name="constraint">assertProductSaveMessage, assertBundleInCategory, assertBundlePriceView, assertBundlePriceType, assertProductCustomOptionsOnBundleProductPage</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation12">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">Bundle Fixed %isolation%</data>
             <data name="product/data/sku_type">Fixed</data>
             <data name="product/data/sku">sku_bundle_fixed_%isolation%</data>
@@ -394,7 +406,7 @@
             <data name="product/data/stock_data/manage_stock">-</data>
             <data name="product/data/shipment_type">-</data>
             <data name="product/data/bundle_selections/preset">second</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
             <data name="product/data/checkout_data/preset">with_custom_options_2</data>
             <data name="product/data/custom_options/preset">drop_down_with_one_option_percent_price</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -404,6 +416,7 @@
             <data name="constraint">assertProductSaveMessage, assertBundleInCategory, assertBundlePriceView, assertBundlePriceType</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation13">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">Bundle Dynamic %isolation%</data>
             <data name="product/data/sku_type">Dynamic</data>
             <data name="product/data/sku">sku_bundle_dynamic_%isolation%</data>
@@ -427,7 +440,7 @@
             <data name="product/data/stock_data/manage_stock">-</data>
             <data name="product/data/shipment_type">-</data>
             <data name="product/data/bundle_selections/preset">default_dynamic</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
             <data name="product/data/checkout_data/preset">default</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/custom_options/import_products">-</data>
@@ -437,6 +450,7 @@
             <data name="constraint">assertProductSaveMessage</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation14">
+            <data name="product/data/url_key">bundle-product-%isolation%</data>
             <data name="product/data/name">Bundle Fixed %isolation%</data>
             <data name="product/data/sku_type">Fixed</data>
             <data name="product/data/sku">sku_bundle_fixed_%isolation%</data>
@@ -460,7 +474,7 @@
             <data name="product/data/stock_data/manage_stock">-</data>
             <data name="product/data/shipment_type">-</data>
             <data name="product/data/bundle_selections/preset">second</data>
-            <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+            <data name="product/data/bundle_selections/products">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
             <data name="product/data/checkout_data/preset">default</data>
             <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/custom_options/import_products">-</data>

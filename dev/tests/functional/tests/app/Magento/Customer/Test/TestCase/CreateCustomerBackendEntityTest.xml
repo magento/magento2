@@ -50,6 +50,7 @@
             <data name="address/data/postcode">-</data>
             <data name="address/data/telephone">-</data>
             <data name="constraint">assertCustomerSuccessSaveMessage, assertCustomerInGrid, assertCustomerForm</data>
+            <data name="issue">Bug: MAGETWO-31689</data>
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation3">
             <data name="customer/data/website_id">Main Website</data>

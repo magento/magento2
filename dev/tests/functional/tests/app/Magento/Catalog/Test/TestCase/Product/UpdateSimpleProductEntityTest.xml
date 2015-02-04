@@ -18,6 +18,7 @@
             <data name="product/data/weight">120.0000</data>
             <data name="product/data/visibility">Catalog, Search</data>
             <data name="product/data/status">-</data>
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductForm, assertProductInStock, assertProductVisibleInCategory, assertProductPage</data>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation2">
@@ -31,6 +32,7 @@
             <data name="product/data/weight">129.0000</data>
             <data name="product/data/visibility">Not Visible Individually</data>
             <data name="product/data/status">-</data>
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductForm, assertProductIsNotDisplayingOnFrontend</data>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation3">
@@ -44,6 +46,7 @@
             <data name="product/data/weight">25.0000</data>
             <data name="product/data/visibility">Catalog</data>
             <data name="product/data/status">-</data>
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInStock, assertProductForm, assertProductSearchableBySku, assertProductVisibleInCategory, assertProductPage</data>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation4">
@@ -57,6 +60,7 @@
             <data name="product/data/weight">89.0000</data>
             <data name="product/data/visibility">Search</data>
             <data name="product/data/status">-</data>
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductInStock, assertProductForm, assertProductVisibleInCategory, assertProductPage, assertProductSearchableBySku, assertProductPage</data>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation5">
@@ -70,6 +74,7 @@
             <data name="product/data/weight">125.0000</data>
             <data name="product/data/visibility">-</data>
             <data name="product/data/status">-</data>
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductForm, assertProductOutOfStock, assertProductPage, assertProductVisibleInCategory, assertProductSearchableBySku</data>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation6">
@@ -83,6 +88,7 @@
             <data name="product/data/weight">333.0000</data>
             <data name="product/data/visibility">-</data>
             <data name="product/data/status">Product offline</data>
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductForm, assertProductIsNotDisplayingOnFrontend</data>
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation7">
@@ -96,6 +102,7 @@
             <data name="product/data/weight">333.0000</data>
             <data name="product/data/visibility">-</data>
             <data name="product/data/status">-</data>
+            <data name="product/data/url_key">simple-product-%isolation%</data>
             <data name="constraint">assertProductSaveMessage, assertProductForm, assertUrlRewriteUpdatedProductInGrid, assertProductVisibleInCategory</data>
         </variation>
     </testCase>

@@ -6,35 +6,35 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var \Magento\Catalog\Block\Adminhtml\Category\Edit\Form $this */
-$parentId = $this->getParentCategoryId();
-$categoryId = $this->getCategoryId();
+/** @var \Magento\Catalog\Block\Adminhtml\Category\Edit\Form $block */
+$parentId = $block->getParentCategoryId();
+$categoryId = $block->getCategoryId();
 ?>
 <div class="category-edit-title">
-    <h3 class="title"><?php echo $this->escapeHtml($this->getHeader()) . ($this->getCategoryId() ? ' (' . __('ID: %1', $this->getCategoryId()) . ')' : '') ?></h3>
+    <h3 class="title"><?php echo $block->escapeHtml($block->getHeader()) . ($block->getCategoryId() ? ' (' . __('ID: %1', $block->getCategoryId()) . ')' : '') ?></h3>
 </div>
-<div class="page-actions">
-    <?php echo $this->getResetButtonHtml() ?>
-    <?php if ($this->getCategoryId()): ?>
-        <?php echo $this->getDeleteButtonHtml() ?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions">
+    <?php echo $block->getResetButtonHtml() ?>
+    <?php if ($block->getCategoryId()): ?>
+        <?php echo $block->getDeleteButtonHtml() ?>
     <?php endif; ?>
-    <?php echo $this->getAdditionalButtonsHtml(); ?>
-    <?php echo $this->getSaveButtonHtml() ?>
+    <?php echo $block->getAdditionalButtonsHtml(); ?>
+    <?php echo $block->getSaveButtonHtml() ?>
 </div>
-<?php if ($this->hasStoreRootCategory()): ?>
-    <?php echo $this->getTabsHtml() ?>
+<?php if ($block->hasStoreRootCategory()): ?>
+    <?php echo $block->getTabsHtml() ?>
 <?php else: ?>
 <div class="message info">
-    <div><?php echo __('Set root category for this store in the <a href="%1">configuration</a>.', $this->getStoreConfigurationUrl()) ?></div>
+    <div><?php echo __('Set root category for this store in the <a href="%1">configuration</a>.', $block->getStoreConfigurationUrl()) ?></div>
 </div>
 <?php endif; ?>
 <iframe name="iframeSave" style="display:none; width:100%;"
-        src="<?php echo $this->getViewFileUrl('blank.html') ?>"></iframe>
-<form id="category_edit_form" action="<?php echo $this->getSaveUrl() ?>" method="post"
+        src="<?php echo $block->getViewFileUrl('blank.html') ?>"></iframe>
+<form id="category_edit_form" action="<?php echo $block->getSaveUrl() ?>" method="post"
       enctype="multipart/form-data">
     <div class="no-display">
         <input type="hidden" name="isIframe" value="1"/>
-        <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>"/>
+        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>"/>
         <input type="hidden" name="category_products" id="in_category_products" value=""/>
         <input type="hidden" name="active_tab_id" id="active_tab_id" value=""/>
         <?php if ($parentId !== 0): ?>
@@ -120,7 +120,7 @@ require(['jquery', 'jquery/ui', "mage/mage", "mage/translate"], function($){
         mageDialog.needToShow();
     });
     $('#category_edit_form')
-        .mage('categoryForm', {refreshUrl: '<?php echo $this->getRefreshPathUrl() ?>'})
+        .mage('categoryForm', {refreshUrl: '<?php echo $block->getRefreshPathUrl() ?>'})
         .mage('validation', {submitHandler: function(form){
             if (mageDialog.isNeedShow()) {
                 mageDialog.onOk(function() {
@@ -134,12 +134,12 @@ require(['jquery', 'jquery/ui', "mage/mage", "mage/translate"], function($){
         }});
 });
 
-<?php if (($block = $this->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject = $block->getJsObjectName())): ?>
+<?php if (($blockGrid = $block->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject = $blockGrid->getJsObjectName())): ?>
 require([
     "mage/adminhtml/grid"
 ], function(){
 
-    var categoryProducts = $H(<?php echo $this->getProductsJson() ?>);
+    var categoryProducts = $H(<?php echo $block->getProductsJson() ?>);
     $('in_category_products').value = Object.toJSON(categoryProducts);
 
     function registerCategoryProduct(grid, element, checked){
@@ -199,9 +199,9 @@ require([
         }
 });
 <?php endif; ?>
-<?php if ($this->isAjax() && ($block = $this->getLayout()->getBlock('tabs')) && ($_tabsJsObject = $block->getJsObjectName())): ?>
+<?php if ($block->isAjax() && ($tabsBlock = $block->getLayout()->getBlock('tabs')) && ($_tabsJsObject = $tabsBlock->getJsObjectName())): ?>
     // Temporary solution, will be replaced after refactoring of manage category functionality
-    <?php $tabsBlock = $this->getLayout()->getBlock('tabs'); ?>
+    <?php $tabsBlock = $block->getLayout()->getBlock('tabs'); ?>
     require(["jquery","mage/backend/tabs"],function($){
         var activeAnchor = $('#<?php echo $tabsBlock->getId() ?>').tabs('activeAnchor');
         if (activeAnchor.length) {

@@ -1,3 +1,105 @@
+0.42.0-beta6
+=============
+* Various improvements:
+    * Implemented caching for WebAPI configuration 
+    * Improved tests coverage of the CurrencySymbol module 
+    * Table catalogsearch_fulltext is setting up with ENGINE=InnoDB 
+    * Improved unit test coverage of the Catalog related functionality 
+    * Optimized JS dependencies 
+    * Refactored controller actions in the Sales module 
+    * Refactored controller actions in the Customer module 
+    * Removed the assertion for the exact number of attributes in API-functional tests for customer metadata. 
+    * Refactored API code for the CheckoutAgreements module 
+    * Refactored API code for the GiftMessage module 
+    * Refactored API for the Checkout module 
+* Fixed bugs:
+    * Fixed an where issue were WebAPI generated the wrong WSDL 
+    * Fixed an issue where Catalog, Checkout, Customer API ACLs did not support AJAX use case(s) 
+    * Fixed an issue where SOAP tests failed after upgrading to ZF 1.12.9 
+    * Fixed an issue where the 'There is no data for export' message was displayed permanently after invalid search 
+    * Fixed an issue where there was no ability to set category position during creation it 
+    * Fixed a CSS issue where certain images were absent on banners () 
+    * Fixed an issue where the 'Date Of Birth' value was i reset to current date on the customer form)
+    * Fixed an issue where the behavior of the "Terms and Conditions" validation on multiple address checkout was different from the one for the onepage checkout 
+    * Fixed an issue where it was impossible to checkout with multiple addresses
+    * Fixed an issue where the 'This is a required field ' message was not displayed for "Terms and Conditions" if the latter  was not selected
+* GitHub Requests:
+    * [#963](https://github.com/magento/magento2/pull/963) -- Default Accept header
+    * [#995](https://github.com/magento/magento2/pull/995) -- Prevent a warning in activated developer mode when 'plugins' is no array
+    * [#866](https://github.com/magento/magento2/issues/866) -- Configurable product attribute scope
+    * [#965](https://github.com/magento/magento2/pull/965) -- extra tests for current interception behavior
+* Service Contracts:
+    * The Downloadable module basic implementation 
+* Framework improvements:
+    * Refactored and covered with tests the classes with high CRAP value (>50) 
+    * Moved Theme Management changes, Design changes, Design\Backend modules, and Observer components from the Core module to the Theme module
+    * Moved Debug Hints models from the Core module to the newly added Developer module
+    * Moved URL components, Factory, and EntityFactory from the Core module to the Magento Framework
+* UI improvements:
+    * Compressed and resized images
+    * Added new base styles for the Admin re-design
+    * Added the WAI-ARIA attributes are to the Search Autocomplete on the storefront
+    * Added visual style for the 'skip to content' attribute on the storefront 
+    * Fixed the style of persistent login messages on the storefront for all themes 
+    * Fixed the style of scrolling for Categories with long names in the Admin 
+    * Fixed the "css/print.css" file path on the storefront pages for all themes 
+* Tests improvements:
+    * Converted all fixtures/repositories for functional tests to .xml files 
+    * Improved interaction between webdriver and the new Magento JS forms
+    * Increased unit and integration tests coverage 
+
+0.42.0-beta5
+=============
+* UI improvements:
+    * Updated the design of Enable Cookies CMS page
+    * Implemented UI improvements for Widgets
+    * Fixed the "Help Us to Keep Magento Healthy Report All Bugs (ver. #)" link Magento Admin
+    * Various UI improvements
+* Various improvements:
+    * Implemented Sales Quote as a standalone Magento module
+    * Performed custom EAV entities code and DB tables cleanup
+    * Eliminating remnants of the Core module:
+        * Moved Application Emulation from the Magento_Core module to the Magento_Store module
+        * Moved Validator Factory from the Magento_Core module to the Magento Framework
+    * Added static integrity test for composer.json files
+    * Added PHPMD and PHPCS annotations to the codebase
+* Tests improvements:
+    * Added MVP tag to the functional tests
+    * Created acceptance functional test suite
+    * Replaced end-to-end tests for url rewrite creation, CMS page creation, category creation, review creation, customer frontend creation, and tax rule creation with injectable tests
+    * Automated test cases for downloadable products with taxes
+* Fixed bugs:
+    * Fixed an issue where the Discounts and Coupons RSS Feed had incorrect title
+    * Fixed an issue where a wrong special price expiration date was displayed in RSS
+    * Fixed an issue in the Import functionality where imported files disappeared after the Check Data operation
+    * Fixed an issue where the Unsubscribe link in the Newsletter was broken
+    * Fixed an issue where stock status changed incorrectly after import
+    * Fixed an issue where selected filters and exclude did not work during Export
+    * Fixed an issue where tax details order was different on order/invoice/refund create and view pages (
+    * Fixed a typo in the getCalculationAlgorithm public function
+    * Fixed an issue where the incorrect value of Subtotal Including Tax was displayed in invoices
+    * Fixed an issue where tax details were not displayed on a new order
+    * Improved pricing performance using caching
+    * Fixed an issue where CsvImportHandler tests still referring to links from Tax module instead of TaxImportExport module
+    * Fixed an issue where an exception was thrown instead of 404 if altering the url for a product with required configuration on the storefront
+    * Fixed an issue where the title of successfully placed order page (was empty
+    * Fixed an issue where certain fields were not disabled by default on the website scope in System configuration as expected
+    * Fixed an issue where third party interfaces were not supported by single-tenant compiler
+    * Eliminated the 'protocol' parameter from the ReadInterface and WriteInterface
+* GitHub requests:
+    * [#979](https://github.com/magento/magento2/pull/979) -- Adding OSL license file name
+    * [#978](https://github.com/magento/magento2/pull/978) -- Added ignore rule for media assets in wysiwyg directory
+    * [#877](https://github.com/magento/magento2/pull/877) -- Made Topmenu HTML Editable
+    * [#906](https://github.com/magento/magento2/pull/906) -- Add tests for View\Layout\Reader\Block and slight refactoring
+    * [#682](https://github.com/magento/magento2/issues/682) -- \Magento\Framework\Pricing\PriceCurrencyInterface depends on Magento application code
+    * [#581](https://github.com/magento/magento2/issues/581) -- About ByPercent.php under different currencies
+    * [#964](https://github.com/magento/magento2/pull/964) -- Improving documentation for jMeter performance tests
+    * [#871](https://github.com/magento/magento2/issues/871) -- Replace Symfony2/Yaml in composer
+    * [#990](https://github.com/magento/magento2/pull/990) -- add @see annotation before class to make it recognizable by IDE
+    * [#988](https://github.com/magento/magento2/pull/988) -- Prevent Varnish from creating cache variations of static files
+* Framework improvements:
+    * Improved unit and integration tests coverage
+
 0.42.0-beta4
 =============
 * Various improvements:

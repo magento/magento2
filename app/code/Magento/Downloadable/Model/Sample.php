@@ -5,31 +5,26 @@
  */
 namespace Magento\Downloadable\Model;
 
+use Magento\Downloadable\Api\Data\SampleInterface;
+
 /**
  * Downloadable sample model
  *
  * @method \Magento\Downloadable\Model\Resource\Sample _getResource()
  * @method \Magento\Downloadable\Model\Resource\Sample getResource()
  * @method int getProductId()
- * @method \Magento\Downloadable\Model\Sample setProductId(int $value)
- * @method string getSampleUrl()
- * @method \Magento\Downloadable\Model\Sample setSampleUrl(string $value)
- * @method string getSampleFile()
- * @method \Magento\Downloadable\Model\Sample setSampleFile(string $value)
- * @method string getSampleType()
- * @method \Magento\Downloadable\Model\Sample setSampleType(string $value)
- * @method int getSortOrder()
- * @method \Magento\Downloadable\Model\Sample setSortOrder(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Sample extends \Magento\Framework\Model\AbstractModel
+class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, SampleInterface
 {
     const XML_PATH_SAMPLES_TITLE = 'catalog/downloadable/samples_title';
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -37,11 +32,21 @@ class Sample extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeBuilder,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -110,5 +115,50 @@ class Sample extends \Magento\Framework\Model\AbstractModel
     public function getSearchableData($productId, $storeId)
     {
         return $this->_getResource()->getSearchableData($productId, $storeId);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTitle()
+    {
+        return $this->getData('title');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSortOrder()
+    {
+        return $this->getData('sort_order');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleType()
+    {
+        return $this->getData('sample_type');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleFile()
+    {
+        return $this->getData('sample_file');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleUrl()
+    {
+        return $this->getData('sample_url');
     }
 }
