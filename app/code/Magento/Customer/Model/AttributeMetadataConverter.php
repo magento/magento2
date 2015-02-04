@@ -7,6 +7,7 @@ namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\Data\OptionInterfaceFactory;
 use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
+use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
 
 /**
  * Converter for AttributeMetadata
@@ -24,9 +25,9 @@ class AttributeMetadataConverter
     private $validationRuleFactory;
 
     /**
-     * @var AttributeMetadataDataBuilder
+     * @var AttributeMetadataInterfaceFactory
      */
-    private $_attributeMetadataBuilder;
+    private $attributeMetadataFactory;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
@@ -37,18 +38,18 @@ class AttributeMetadataConverter
      *
      * @param OptionInterfaceFactory $optionFactory
      * @param ValidationRuleInterfaceFactory $validationRuleFactory
-     * @param AttributeMetadataDataBuilder $attributeMetadataBuilder
+     * @param AttributeMetadataInterfaceFactory $attributeMetadataFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         OptionInterfaceFactory $optionFactory,
         ValidationRuleInterfaceFactory $validationRuleFactory,
-        AttributeMetadataDataBuilder $attributeMetadataBuilder,
+        AttributeMetadataInterfaceFactory $attributeMetadataFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->optionFactory = $optionFactory;
         $this->validationRuleFactory = $validationRuleFactory;
-        $this->_attributeMetadataBuilder = $attributeMetadataBuilder;
+        $this->attributeMetadataFactory = $attributeMetadataFactory;
         $this->dataObjectHelper = $dataObjectHelper;
     }
 
@@ -87,24 +88,23 @@ class AttributeMetadataConverter
             $validationRules[] = $validationRule;
         }
 
-        $this->_attributeMetadataBuilder->setAttributeCode($attribute->getAttributeCode())
+
+        return $this->attributeMetadataFactory->create()->setAttributeCode($attribute->getAttributeCode())
             ->setFrontendInput($attribute->getFrontendInput())
             ->setInputFilter((string)$attribute->getInputFilter())
             ->setStoreLabel($attribute->getStoreLabel())
             ->setValidationRules($validationRules)
-            ->setVisible((boolean)$attribute->getIsVisible())
-            ->setRequired((boolean)$attribute->getIsRequired())
+            ->setIsVisible((boolean)$attribute->getIsVisible())
+            ->setIsRequired((boolean)$attribute->getIsRequired())
             ->setMultilineCount((int)$attribute->getMultilineCount())
             ->setDataModel((string)$attribute->getDataModel())
             ->setOptions($options)
             ->setFrontendClass($attribute->getFrontend()->getClass())
             ->setFrontendLabel($attribute->getFrontendLabel())
             ->setNote((string)$attribute->getNote())
-            ->setSystem((boolean)$attribute->getIsSystem())
-            ->setUserDefined((boolean)$attribute->getIsUserDefined())
+            ->setIsSystem((boolean)$attribute->getIsSystem())
+            ->setIsUserDefined((boolean)$attribute->getIsUserDefined())
             ->setBackendType($attribute->getBackendType())
             ->setSortOrder((int)$attribute->getSortOrder());
-
-        return $this->_attributeMetadataBuilder->create();
     }
 }

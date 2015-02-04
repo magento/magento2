@@ -7,7 +7,6 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Model\AttributeMetadataDataBuilder;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
@@ -67,9 +66,6 @@ class Addresses extends GenericMetadata
     /** @var CustomerInterfaceFactory */
     protected $customerDataFactory;
 
-    /** @var  AttributeMetadataDataBuilder */
-    protected $_attributeMetadataBuilder;
-
     /**
      * @var AddressMapper
      */
@@ -96,7 +92,6 @@ class Addresses extends GenericMetadata
      * @param AddressMetadataInterface $addressMetadataService
      * @param AddressInterfaceFactory $addressDataFactory
      * @param CustomerInterfaceFactory $customerInterfaceFactory
-     * @param AttributeMetadataDataBuilder $attributeMetadataBuilder
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param AddressMapper $addressMapper
      * @param CustomerMapper $customerMapper
@@ -121,7 +116,6 @@ class Addresses extends GenericMetadata
         AddressMetadataInterface $addressMetadataService,
         AddressInterfaceFactory $addressDataFactory,
         CustomerInterfaceFactory $customerInterfaceFactory,
-        AttributeMetadataDataBuilder $attributeMetadataBuilder,
         \Magento\Directory\Helper\Data $directoryHelper,
         AddressMapper $addressMapper,
         DataObjectHelper $dataObjectHelper,
@@ -138,7 +132,6 @@ class Addresses extends GenericMetadata
         $this->_addressMetadataService = $addressMetadataService;
         $this->addressDataFactory = $addressDataFactory;
         $this->customerDataFactory = $customerInterfaceFactory;
-        $this->_attributeMetadataBuilder = $attributeMetadataBuilder;
         $this->_directoryHelper = $directoryHelper;
         $this->addressMapper = $addressMapper;
         $this->dataObjectHelper = $dataObjectHelper;
@@ -261,21 +254,12 @@ class Addresses extends GenericMetadata
         $attributes = $addressForm->getAttributes();
         if (isset($attributes['street'])) {
             if ($attributes['street']->getMultilineCount() <= 0) {
-                $attributes['street'] = $this->_attributeMetadataBuilder->populate(
-                    $attributes['street']
-                )->setMultilineCount(
-                    self::DEFAULT_STREET_LINES_COUNT
-                )->create();
+                $attributes['street']->setMultilineCount(self::DEFAULT_STREET_LINES_COUNT);
             }
         }
         foreach ($attributes as $key => $attribute) {
-            $attributes[$key] = $this->_attributeMetadataBuilder->populate(
-                $attribute
-            )->setFrontendLabel(
-                __($attribute->getFrontendLabel())
-            )->setVisible(
-                false
-            )->create();
+            $attributes[$key]->setFrontendLabel(__($attribute->getFrontendLabel()))
+                ->setIsVisible(false);
         }
         $this->_setFieldset($attributes, $fieldset);
 

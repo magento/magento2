@@ -56,7 +56,8 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setCity('CityM')
             ->setFirstname('John')
             ->setLastname('Smith')
-            ->setCompany('CompanyName');
+            ->setCompany('CompanyName')
+            ->setCustomAttributes([]);
         $address2 = $this->_addressFactory->create()
             ->setId('2')
             ->setCountryId('US')
@@ -67,7 +68,8 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setCity('CityX')
             ->setTelephone('3234676')
             ->setFirstname('John')
-            ->setLastname('Smith');
+            ->setLastname('Smith')
+            ->setCustomAttributes([]);
 
         $this->_expectedAddresses = [$address, $address2];
     }
@@ -111,7 +113,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAddressesIdSetButNotAlreadyExisting()
     {
-        $proposedAddress = $this->_createSecondAddressBuilder()->setId(4200);
+        $proposedAddress = $this->_createSecondAddress()->setId(4200);
         $this->repository->save($proposedAddress);
     }
 
@@ -145,7 +147,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveNewAddress()
     {
-        $proposedAddress = $this->_createSecondAddressBuilder()->setCustomerId(1);
+        $proposedAddress = $this->_createSecondAddress()->setCustomerId(1);
 
         $returnedAddress = $this->repository->save($proposedAddress);
         $this->assertNotNull($returnedAddress->getId());
@@ -209,7 +211,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveAddressesCustomerIdNotExist()
     {
-        $proposedAddress = $this->_createSecondAddressBuilder()->setCustomerId(4200);
+        $proposedAddress = $this->_createSecondAddress()->setCustomerId(4200);
         try {
             $this->repository->save($proposedAddress);
             $this->fail('Expected exception not thrown');
@@ -220,7 +222,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveAddressesCustomerIdInvalid()
     {
-        $proposedAddress = $this->_createSecondAddressBuilder()->setCustomerId('this_is_not_a_valid_id');
+        $proposedAddress = $this->_createSecondAddress()->setCustomerId('this_is_not_a_valid_id');
         try {
             $this->repository->save($proposedAddress);
             $this->fail('Expected exception not thrown');
@@ -403,7 +405,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      *
      * @return \Magento\Customer\Api\Data\AddressInterface
      */
-    private function _createSecondAddressBuilder()
+    private function _createSecondAddress()
     {
         $address = $this->_addressFactory->create();
         $this->dataObjectHelper->mergeDataObjects(
