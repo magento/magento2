@@ -261,10 +261,10 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 
         $firstRegionDataObject->setRegionId($data1['region']['region_id']);
         $firstRegionDataObject->setRegion($data1['region']['region']);
-        if(isset($data1['id'])) {
+        if (isset($data1['id'])) {
             $firstAddressDataObject->setId($data1['id']);
         }
-        if(isset($data1['country_id'])) {
+        if (isset($data1['country_id'])) {
             $firstAddressDataObject->setCountryId($data1['country_id']);
         }
         $firstAddressDataObject->setStreet($data1['street']);
@@ -288,10 +288,10 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 
         $secondRegionDataObject->setRegionId($data2['region']['region_id']);
         $secondRegionDataObject->setRegion($data2['region']['region']);
-        if(isset($data2['id'])) {
+        if (isset($data2['id'])) {
             $secondAddressDataObject->setId($data2['id']);
         }
-        if(isset($data2['country_id'])) {
+        if (isset($data2['country_id'])) {
             $secondAddressDataObject->setCountryId($data2['country_id']);
         }
         $secondAddressDataObject->setStreet($data2['street']);
