@@ -58,8 +58,8 @@ class PathTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Customization\Path::__construct
-     * @covers \Magento\Framework\View\Design\Theme\Customization\Path::getCustomizationPath
+     * covers \Magento\Framework\View\Design\Theme\Customization\Path::__construct
+     * covers \Magento\Framework\View\Design\Theme\Customization\Path::getCustomizationPath
      */
     public function testGetCustomizationPath()
     {
@@ -69,7 +69,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Customization\Path::getThemeFilesPath
+     * covers \Magento\Framework\View\Design\Theme\Customization\Path::getThemeFilesPath
      */
     public function testGetThemeFilesPath()
     {
@@ -80,7 +80,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Customization\Path::getCustomViewConfigPath
+     * covers \Magento\Framework\View\Design\Theme\Customization\Path::getCustomViewConfigPath
      */
     public function testGetCustomViewConfigPath()
     {

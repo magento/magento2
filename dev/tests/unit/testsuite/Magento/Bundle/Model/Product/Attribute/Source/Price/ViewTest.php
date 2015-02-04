@@ -68,7 +68,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Bundle\Model\Product\Attribute\Source\Price\View::getOptionText
+     * covers \Magento\Bundle\Model\Product\Attribute\Source\Price\View::getOptionText
      */
     public function testGetOptionTextForExistLabel()
     {
@@ -78,7 +78,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Bundle\Model\Product\Attribute\Source\Price\View::getOptionText
+     * covers \Magento\Bundle\Model\Product\Attribute\Source\Price\View::getOptionText
      */
     public function testGetOptionTextForNotExistLabel()
     {

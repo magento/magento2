@@ -105,10 +105,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     /**
      * Test base initialization of tier price
      *
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::__construct
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getValue
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getStoredTierPrices
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::canApplyTierPrice
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::__construct
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::getValue
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::getStoredTierPrices
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::canApplyTierPrice
      * @dataProvider providerForBaseInitialization
      */
     public function testBaseInitialization($tierPrices, $expectedValue)
@@ -203,8 +203,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     /**
      * Test getter stored tier prices from eav model
      *
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::__construct
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getStoredTierPrices
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::__construct
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::getStoredTierPrices
      */
     public function testGetterStoredTierPrices()
     {
@@ -247,13 +247,13 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::__construct
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getTierPriceList
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getStoredTierPrices
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::applyAdjustment
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getTierPriceCount
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::filterTierPrices
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getBasePrice
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::__construct
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::getTierPriceList
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::getStoredTierPrices
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::applyAdjustment
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::getTierPriceCount
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::filterTierPrices
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::getBasePrice
      * @dataProvider providerForGetterTierPriceList
      */
     public function testGetterTierPriceList($tierPrices, $basePrice, $expectedResult)
@@ -353,9 +353,9 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::__construct
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getSavePercent
-     * @covers \Magento\Catalog\Pricing\Price\TierPrice::getBasePrice
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::__construct
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::getSavePercent
+     * covers \Magento\Catalog\Pricing\Price\TierPrice::getBasePrice
      * @dataProvider dataProviderGetSavePercent
      */
     public function testGetSavePercent($basePrice, $tierPrice, $savedPercent)

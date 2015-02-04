@@ -69,8 +69,8 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::__construct
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::create
+     * covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::__construct
+     * covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::create
      */
     public function testCreate()
     {
@@ -83,7 +83,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::getFullPath
+     * covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::getFullPath
      */
     public function testGetFullPath()
     {
@@ -108,10 +108,10 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::prepareFile
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareFileName
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareFilePath
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareSortOrder
+     * covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::prepareFile
+     * covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareFileName
+     * covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareFilePath
+     * covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_prepareSortOrder
      * @dataProvider getTestContent
      */
     public function testPrepareFile($type, $fileContent, $expectedContent, $existedFiles)
@@ -204,8 +204,8 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::save
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_saveFileContent
+     * covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::save
+     * covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_saveFileContent
      */
     public function testSave()
     {
@@ -248,8 +248,8 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::delete
-     * @covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_deleteFileContent
+     * covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::delete
+     * covers \Magento\Framework\View\Design\Theme\Customization\AbstractFile::_deleteFileContent
      */
     public function testDelete()
     {

@@ -51,7 +51,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\System\Config\Form\Field\Image::_getUrl
+     * covers \Magento\Backend\Block\System\Config\Form\Field\Image::_getUrl
      */
     public function testGetElementHtmlWithValue()
     {

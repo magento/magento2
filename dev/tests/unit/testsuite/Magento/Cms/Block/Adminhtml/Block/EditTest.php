@@ -6,7 +6,7 @@
 namespace Magento\Cms\Block\Adminhtml\Block;
 
 /**
- * @covers \Magento\Cms\Block\Adminhtml\Block\Edit
+ * covers \Magento\Cms\Block\Adminhtml\Block\Edit
  */
 class EditTest extends \PHPUnit_Framework_TestCase
 {
@@ -59,7 +59,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Block\Adminhtml\Block\Edit::getHeaderText
+     * covers \Magento\Cms\Block\Adminhtml\Block\Edit::getHeaderText
      * @param integer|null $modelBlockId
      *
      * @dataProvider getHeaderTextDataProvider

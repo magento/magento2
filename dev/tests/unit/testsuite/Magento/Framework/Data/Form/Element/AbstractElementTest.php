@@ -49,7 +49,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::addElement()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::addElement()
      */
     public function testAddElement()
     {
@@ -86,7 +86,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtmlId()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtmlId()
      */
     public function testGetHtmlId()
     {
@@ -110,7 +110,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getName()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getName()
      */
     public function testGetNameWithoutSuffix()
     {
@@ -132,7 +132,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getName()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getName()
      */
     public function testGetNameWithSuffix()
     {
@@ -158,7 +158,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::removeField()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::removeField()
      */
     public function testRemoveField()
     {
@@ -187,7 +187,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtmlAttributes()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtmlAttributes()
      */
     public function testGetHtmlAttributes()
     {
@@ -208,7 +208,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::addClass()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::addClass()
      */
     public function testAddClass()
     {
@@ -221,7 +221,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::removeClass()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::removeClass()
      */
     public function testRemoveClass()
     {
@@ -238,7 +238,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getEscapedValue()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getEscapedValue()
      */
     public function testGetEscapedValueWithoutFilter()
     {
@@ -249,7 +249,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getEscapedValue()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getEscapedValue()
      */
     public function testGetEscapedValueWithFilter()
     {
@@ -271,7 +271,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
      * @param array $initialData
      * @param string $expectedValue
      * @dataProvider getElementHtmlDataProvider
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getElementHtml()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getElementHtml()
      */
     public function testGetElementHtml(array $initialData, $expectedValue)
     {
@@ -287,7 +287,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
      * @param array $initialData
      * @param string $expectedValue
      * @dataProvider getLabelHtmlDataProvider
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getLabelHtml()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getLabelHtml()
      */
     public function testGetLabelHtml(array $initialData, $expectedValue)
     {
@@ -303,7 +303,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
      * @param array $initialData
      * @param string $expectedValue
      * @dataProvider testGetDefaultHtmlDataProvider
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getDefaultHtml()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getDefaultHtml()
      */
     public function testGetDefaultHtml(array $initialData, $expectedValue)
     {
@@ -315,7 +315,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtml()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtml()
      */
     public function testGetHtmlWithoutRenderer()
     {
@@ -331,7 +331,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtml()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtml()
      */
     public function testGetHtmlWithRenderer()
     {
@@ -356,7 +356,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
      * @param array $initialData
      * @param string $expectedValue
      * @dataProvider serializeDataProvider
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::serialize()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::serialize()
      */
     public function testSerialize(array $initialData, $expectedValue)
     {
@@ -370,7 +370,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtmlContainerId()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtmlContainerId()
      */
     public function testGetHtmlContainerIdWithoutId()
     {
@@ -381,7 +381,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtmlContainerId()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtmlContainerId()
      */
     public function testGetHtmlContainerIdWithContainerId()
     {
@@ -394,7 +394,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtmlContainerId()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::getHtmlContainerId()
      */
     public function testGetHtmlContainerIdWithFieldContainerIdPrefix()
     {
@@ -416,7 +416,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
      * @param array $initialData
      * @param string $expectedValue
      * @dataProvider addElementValuesDataProvider
-     * @covers \Magento\Framework\Data\Form\Element\AbstractElement::addElementValues()
+     * covers \Magento\Framework\Data\Form\Element\AbstractElement::addElementValues()
      */
     public function testAddElementValues(array $initialData, $expectedValue)
     {

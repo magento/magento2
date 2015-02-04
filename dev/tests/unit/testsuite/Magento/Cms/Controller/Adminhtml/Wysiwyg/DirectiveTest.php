@@ -6,7 +6,7 @@
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
 
 /**
- * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive
+ * covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive
  */
 class DirectiveTest extends \PHPUnit_Framework_TestCase
 {
@@ -138,7 +138,7 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
+     * covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
     public function testExecute()
     {
@@ -168,7 +168,7 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
+     * covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
     public function testExecuteException()
     {

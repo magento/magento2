@@ -109,7 +109,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency::render
+     * covers \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency::render
      */
     public function testRenderWithDefaultCurrency()
     {

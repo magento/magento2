@@ -50,7 +50,7 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Entity\Attribute\Source\Boolean::addValueSortToCollection
+     * covers \Magento\Eav\Model\Entity\Attribute\Source\Boolean::addValueSortToCollection
      *
      * @dataProvider addValueSortToCollectionDataProvider
      * @param string $direction

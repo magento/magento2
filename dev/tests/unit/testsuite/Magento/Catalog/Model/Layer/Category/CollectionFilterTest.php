@@ -33,8 +33,8 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Model\Layer\Category\CollectionFilter::filter
-     * @covers \Magento\Catalog\Model\Layer\Category\CollectionFilter::__construct
+     * covers \Magento\Catalog\Model\Layer\Category\CollectionFilter::filter
+     * covers \Magento\Catalog\Model\Layer\Category\CollectionFilter::__construct
      */
     public function testFilter()
     {

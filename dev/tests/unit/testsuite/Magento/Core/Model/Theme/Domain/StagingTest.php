@@ -12,7 +12,7 @@ namespace Magento\Core\Model\Theme\Domain;
 class StagingTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Core\Model\Theme\Domain\Staging::updateFromStagingTheme
+     * covers \Magento\Core\Model\Theme\Domain\Staging::updateFromStagingTheme
      */
     public function testUpdateFromStagingTheme()
     {

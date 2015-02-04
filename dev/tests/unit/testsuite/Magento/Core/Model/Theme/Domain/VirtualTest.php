@@ -14,7 +14,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
     /**
      * Test get existing staging theme
      *
-     * @covers \Magento\Core\Model\Theme\Domain\Virtual::getStagingTheme
+     * covers \Magento\Core\Model\Theme\Domain\Virtual::getStagingTheme
      */
     public function testGetStagingThemeExisting()
     {
@@ -52,7 +52,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
     /**
      * Test creating staging theme
      *
-     * @covers \Magento\Core\Model\Theme\Domain\Virtual::getStagingTheme
+     * covers \Magento\Core\Model\Theme\Domain\Virtual::getStagingTheme
      */
     public function testGetStagingThemeNew()
     {
@@ -128,7 +128,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for is assigned method
      *
-     * @covers \Magento\Core\Model\Theme\Domain\Virtual::isAssigned
+     * covers \Magento\Core\Model\Theme\Domain\Virtual::isAssigned
      */
     public function testIsAssigned()
     {

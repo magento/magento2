@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Result;
 
 /**
  * Class LayoutTest
- * @covers \Magento\Framework\View\Result\Layout
+ * covers \Magento\Framework\View\Result\Layout
  */
 class LayoutTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,7 +57,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Result\Layout::getLayout()
+     * covers \Magento\Framework\View\Result\Layout::getLayout()
      */
     public function testGetLayout()
     {

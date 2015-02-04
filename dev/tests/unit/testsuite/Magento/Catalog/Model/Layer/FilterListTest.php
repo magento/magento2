@@ -60,9 +60,9 @@ class FilterListTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedClass
      * @dataProvider getFiltersDataProvider
      *
-     * @covers \Magento\Catalog\Model\Layer\FilterList::getFilters
-     * @covers \Magento\Catalog\Model\Layer\FilterList::createAttributeFilter
-     * @covers \Magento\Catalog\Model\Layer\FilterList::__construct
+     * covers \Magento\Catalog\Model\Layer\FilterList::getFilters
+     * covers \Magento\Catalog\Model\Layer\FilterList::createAttributeFilter
+     * covers \Magento\Catalog\Model\Layer\FilterList::__construct
      */
     public function testGetFilters($method, $value, $expectedClass)
     {

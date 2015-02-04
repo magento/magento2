@@ -40,7 +40,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\File::outputValue
+     * covers \Magento\Eav\Model\Attribute\Data\File::outputValue
      *
      * @param string $format
      * @param mixed $value
@@ -91,8 +91,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\File::validateValue
-     * @covers \Magento\Eav\Model\Attribute\Data\File::_validateByRules
+     * covers \Magento\Eav\Model\Attribute\Data\File::validateValue
+     * covers \Magento\Eav\Model\Attribute\Data\File::_validateByRules
      *
      * @param mixed $value
      * @param mixed $originalValue

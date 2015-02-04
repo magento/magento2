@@ -95,7 +95,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Config::assignToStore
+     * covers \Magento\Theme\Model\Config::assignToStore
      */
     public function testAssignToStoreInSingleStoreMode()
     {
@@ -146,7 +146,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Config::assignToStore
+     * covers \Magento\Theme\Model\Config::assignToStore
      */
     public function testAssignToStoreNonSingleStoreMode()
     {

@@ -250,7 +250,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\CopyService::_copyLayoutCustomization
+     * covers \Magento\Theme\Model\CopyService::_copyLayoutCustomization
      */
     public function testCopyLayoutUpdates()
     {
@@ -333,7 +333,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\CopyService::_copyDatabaseCustomization
+     * covers \Magento\Theme\Model\CopyService::_copyDatabaseCustomization
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCopyDatabaseCustomization()
@@ -456,7 +456,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\CopyService::_copyFilesystemCustomization
+     * covers \Magento\Theme\Model\CopyService::_copyFilesystemCustomization
      */
     public function testCopyFilesystemCustomization()
     {

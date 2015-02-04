@@ -32,7 +32,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      * Attention: this test depends on mock of "is_uploaded_file" function in ./FileTest.php,
      * so validates method successfully in batch run of directory tests, separately will fail.
      *
-     * @covers \Magento\Eav\Model\Attribute\Data\Image::_validateByRules
+     * covers \Magento\Eav\Model\Attribute\Data\Image::_validateByRules
      *
      * @param mixed $value
      * @param mixed $originalValue

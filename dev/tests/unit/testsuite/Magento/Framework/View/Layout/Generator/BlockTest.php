@@ -6,13 +6,13 @@
 namespace Magento\Framework\View\Layout\Generator;
 
 /**
- * @covers Magento\Framework\View\Layout\Generator\Block
+ * covers Magento\Framework\View\Layout\Generator\Block
  */
 class BlockTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers Magento\Framework\View\Layout\Generator\Block::process()
-     * @covers Magento\Framework\View\Layout\Generator\Block::createBlock()
+     * covers Magento\Framework\View\Layout\Generator\Block::process()
+     * covers Magento\Framework\View\Layout\Generator\Block::createBlock()
      * @param string $testGroup
      * @param string $testTemplate
      * @param string $testTtl

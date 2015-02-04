@@ -12,7 +12,7 @@ namespace Magento\Framework\View\Layout\Reader;
 /**
  * Class BlockTest
  *
- * @covers Magento\Framework\View\Layout\Reader\Block
+ * covers Magento\Framework\View\Layout\Reader\Block
  */
 class BlockTest extends \PHPUnit_Framework_TestCase
 {
@@ -96,7 +96,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $isSetFlagCount
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $scheduleStructureCount
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getScopeCount
-     * @covers Magento\Framework\View\Layout\Reader\Block::interpret()
+     * covers Magento\Framework\View\Layout\Reader\Block::interpret()
      * @dataProvider processDataProvider
      */
     public function testProcessBlock(
@@ -139,7 +139,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\Framework\View\Layout\Reader\Block::interpret()
+     * covers Magento\Framework\View\Layout\Reader\Block::interpret()
      */
     public function testProcessReference()
     {

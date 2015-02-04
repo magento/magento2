@@ -54,7 +54,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Helper\Adminhtml\Data::_getWebsiteCode
+     * covers \Magento\Captcha\Helper\Adminhtml\Data::_getWebsiteCode
      */
     public function testGetWebsiteId()
     {

@@ -70,7 +70,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Core\Model\Theme::getThemeImage
+     * covers \Magento\Core\Model\Theme::getThemeImage
      */
     public function testThemeImageGetter()
     {
@@ -82,7 +82,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      * @dataProvider isVirtualDataProvider
      * @param int $type
      * @param string $isVirtual
-     * @covers \Magento\Core\Model\Theme::isVirtual
+     * covers \Magento\Core\Model\Theme::isVirtual
      */
     public function testIsVirtual($type, $isVirtual)
     {
@@ -108,7 +108,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      * @dataProvider isPhysicalDataProvider
      * @param int $type
      * @param string $isPhysical
-     * @covers \Magento\Core\Model\Theme::isPhysical
+     * covers \Magento\Core\Model\Theme::isPhysical
      */
     public function testIsPhysical($type, $isPhysical)
     {
@@ -134,7 +134,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      * @dataProvider isVisibleDataProvider
      * @param int $type
      * @param string $isVisible
-     * @covers \Magento\Core\Model\Theme::isVisible
+     * covers \Magento\Core\Model\Theme::isVisible
      */
     public function testIsVisible($type, $isVisible)
     {
@@ -162,7 +162,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      * @dataProvider isDeletableDataProvider
      * @param string $themeType
      * @param bool $isDeletable
-     * @covers \Magento\Core\Model\Theme::isDeletable
+     * covers \Magento\Core\Model\Theme::isDeletable
      */
     public function testIsDeletable($themeType, $isDeletable)
     {

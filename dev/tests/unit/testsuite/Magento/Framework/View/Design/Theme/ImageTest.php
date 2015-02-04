@@ -166,7 +166,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Image::__construct
+     * covers \Magento\Framework\View\Design\Theme\Image::__construct
      */
     public function testConstructor()
     {
@@ -174,7 +174,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Image::createPreviewImage
+     * covers \Magento\Framework\View\Design\Theme\Image::createPreviewImage
      */
     public function testCreatePreviewImage()
     {
@@ -193,7 +193,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Image::createPreviewImageCopy
+     * covers \Magento\Framework\View\Design\Theme\Image::createPreviewImageCopy
      */
     public function testCreatePreviewImageCopy()
     {
@@ -240,7 +240,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Image::removePreviewImage
+     * covers \Magento\Framework\View\Design\Theme\Image::removePreviewImage
      */
     public function testRemovePreviewImage()
     {
@@ -252,7 +252,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Image::removePreviewImage
+     * covers \Magento\Framework\View\Design\Theme\Image::removePreviewImage
      */
     public function testRemoveEmptyPreviewImage()
     {
@@ -264,7 +264,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Image::uploadPreviewImage
+     * covers \Magento\Framework\View\Design\Theme\Image::uploadPreviewImage
      */
     public function testUploadPreviewImage()
     {
@@ -292,7 +292,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Image::getPreviewImageUrl
+     * covers \Magento\Framework\View\Design\Theme\Image::getPreviewImageUrl
      */
     public function testGetPreviewImageUrl()
     {
@@ -307,7 +307,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Design\Theme\Image::getPreviewImageUrl
+     * covers \Magento\Framework\View\Design\Theme\Image::getPreviewImageUrl
      */
     public function testGetDefaultPreviewImageUrl()
     {

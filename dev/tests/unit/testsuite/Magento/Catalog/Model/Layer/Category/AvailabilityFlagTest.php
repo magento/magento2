@@ -50,8 +50,8 @@ class AvailabilityFlagTest extends \PHPUnit_Framework_TestCase
      * @param bool $expectedResult
      *
      * @dataProvider isEnabledDataProvider
-     * @covers \Magento\Catalog\Model\Layer\Category\AvailabilityFlag::isEnabled
-     * @covers \Magento\Catalog\Model\Layer\Category\AvailabilityFlag::canShowOptions
+     * covers \Magento\Catalog\Model\Layer\Category\AvailabilityFlag::isEnabled
+     * covers \Magento\Catalog\Model\Layer\Category\AvailabilityFlag::canShowOptions
      */
     public function testIsEnabled($itemsCount, $filters, $expectedResult)
     {

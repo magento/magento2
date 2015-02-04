@@ -49,7 +49,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::getSensitiveCookieMetadata
+     * covers ::getSensitiveCookieMetadata
      */
     public function testGetSensitiveCookieMetadataEmpty()
     {
@@ -65,7 +65,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::getPublicCookieMetadata
+     * covers ::getPublicCookieMetadata
      */
     public function testGetPublicCookieMetadataEmpty()
     {
@@ -75,7 +75,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::getCookieMetadata
+     * covers ::getCookieMetadata
      */
     public function testGetCookieMetadataEmpty()
     {
@@ -85,7 +85,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::createSensitiveMetadata ::getPublicCookieMetadata
+     * covers ::createSensitiveMetadata ::getPublicCookieMetadata
      */
     public function testGetSensitiveCookieMetadataDefaults()
     {
@@ -115,7 +115,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::createSensitiveMetadata ::getPublicCookieMetadata ::getCookieMetadata
+     * covers ::createSensitiveMetadata ::getPublicCookieMetadata ::getCookieMetadata
      */
     public function testGetPublicCookieMetadataDefaults()
     {
@@ -147,7 +147,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::createSensitiveMetadata ::getPublicCookieMetadata ::getCookieMetadata
+     * covers ::createSensitiveMetadata ::getPublicCookieMetadata ::getCookieMetadata
      */
     public function testGetCookieMetadataDefaults()
     {
@@ -168,7 +168,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::createSensitiveMetadata ::getPublicCookieMetadata ::getCookieMetadata
+     * covers ::createSensitiveMetadata ::getPublicCookieMetadata ::getCookieMetadata
      */
     public function testGetSensitiveCookieMetadataOverrides()
     {
@@ -204,7 +204,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::createSensitiveMetadata ::getPublicCookieMetadata ::getCookieMetadata
+     * covers ::createSensitiveMetadata ::getPublicCookieMetadata ::getCookieMetadata
      */
     public function testGetPublicCookieMetadataOverrides()
     {
@@ -235,7 +235,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::createSensitiveMetadata ::getPublicCookieMetadata ::getCookieMetadata
+     * covers ::createSensitiveMetadata ::getPublicCookieMetadata ::getCookieMetadata
      */
     public function testGetCookieMetadataOverrides()
     {

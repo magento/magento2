@@ -115,7 +115,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\Core\Model\Theme\Image\Path::getPreviewImageDefaultUrl
+     * covers Magento\Core\Model\Theme\Image\Path::getPreviewImageDefaultUrl
      */
     public function testDefaultPreviewImageUrlGetter()
     {
@@ -125,7 +125,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Core\Model\Theme\Image\Path::getImagePreviewDirectory
+     * covers \Magento\Core\Model\Theme\Image\Path::getImagePreviewDirectory
      */
     public function testImagePreviewDirectoryGetter()
     {
@@ -140,7 +140,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Core\Model\Theme\Image\Path::getTemporaryDirectory
+     * covers \Magento\Core\Model\Theme\Image\Path::getTemporaryDirectory
      */
     public function testTemporaryDirectoryGetter()
     {

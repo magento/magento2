@@ -126,7 +126,7 @@ class CssTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css::getDownloadUrl
+     * covers \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css::getDownloadUrl
      */
     public function testGetterDownloadUrl()
     {

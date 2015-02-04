@@ -31,7 +31,7 @@ class BackendModelPoolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
+     * covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
      */
     public function testGetModelWithCorrectInterface()
     {
@@ -52,7 +52,7 @@ class BackendModelPoolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
+     * covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
      * @expectedException \InvalidArgumentException
      */
     public function testGetModelWithWrongInterface()
@@ -73,7 +73,7 @@ class BackendModelPoolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
+     * covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
      */
     public function testGetMemoryCache()
     {

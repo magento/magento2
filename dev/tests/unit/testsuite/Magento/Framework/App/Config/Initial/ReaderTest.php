@@ -66,7 +66,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\App\Config\Initial\Reader::read
+     * covers \Magento\Framework\App\Config\Initial\Reader::read
      */
     public function testReadNoFiles()
     {
@@ -85,7 +85,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\App\Config\Initial\Reader::read
+     * covers \Magento\Framework\App\Config\Initial\Reader::read
      */
     public function testReadValidConfig()
     {

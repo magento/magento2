@@ -218,7 +218,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid::getItems
+     * covers \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid::getItems
      */
     public function testGetItems()
     {
