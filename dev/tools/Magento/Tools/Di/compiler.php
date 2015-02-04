@@ -205,7 +205,7 @@ try {
     $pluginDefinitionList = new \Magento\Framework\Interception\Definition\Runtime();
     foreach ($pluginList as $type => $entityList) {
         foreach ($entityList as $entity) {
-            $pluginDefinitions[$entity] = $pluginDefinitionList->getMethodList($entity);
+            $pluginDefinitions[ltrim($entity, '\\')] = $pluginDefinitionList->getMethodList($entity);
         }
     }
 
