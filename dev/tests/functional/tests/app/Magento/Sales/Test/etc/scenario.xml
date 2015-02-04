@@ -46,14 +46,12 @@
                         <next>createProducts</next>
                     </step>
                     <step name="createProducts" module="Magento_Catalog">
+                        <next>createTaxRule</next>
+                    </step>
+                    <step name="createTaxRule" module="Magento_Tax">
                         <next>createCustomer</next>
                     </step>
                     <step name="createCustomer" module="Magento_Customer">
-                        <arguments>
-                            <items name="customer">
-                                <item name="dataSet">johndoe_with_addresses</item>
-                            </items>
-                        </arguments>
                         <next>openSalesOrders</next>
                     </step>
                     <step name="openSalesOrders" module="Magento_Sales">

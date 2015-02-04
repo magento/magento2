@@ -7,10 +7,9 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create;
 
 use Magento\Backend\Test\Block\Widget\Grid;
-use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Customer\Test\Fixture\CustomerInjectable as CustomerFixture;
 
 /**
- * Class Customer
  * Customer selection grid
  */
 class Customer extends Grid
@@ -43,15 +42,15 @@ class Customer extends Grid
     /**
      * Select customer if it is present in fixture or click create new customer button
      *
-     * @param FixtureInterface|null $fixture
+     * @param CustomerFixture $customer
      * @return void
      */
-    public function selectCustomer($fixture)
+    public function selectCustomer(CustomerFixture $customer)
     {
-        if ($fixture === null) {
-            $this->_rootElement->find($this->createNewCustomer)->click();
+        if ($customer->hasData('id')) {
+            $this->searchAndOpen(['email' => $customer->getEmail()]);
         } else {
-            $this->searchAndOpen(['email' => $fixture->getEmail()]);
+            $this->_rootElement->find($this->createNewCustomer)->click();
         }
         $this->getTemplateBlock()->waitLoader();
     }
