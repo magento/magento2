@@ -15,6 +15,9 @@
                         <next>createProducts</next>
                     </step>
                     <step name="createProducts" module="Magento_Catalog">
+                        <next>createTaxRule</next>
+                    </step>
+                    <step name="createTaxRule" module="Magento_Tax">
                         <next>addProductsToTheCart</next>
                     </step>
                     <step name="addProductsToTheCart" module="Magento_Checkout">

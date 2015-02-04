@@ -202,6 +202,13 @@ class CheckoutData implements FixtureInterface
                     'price' => 9,
                     'subtotal' => 9,
                 ],
+            ],
+            'order_10_dollar_product' => [
+                'qty' => 1,
+                'cartItem' => [
+                    'price' => 10,
+                    'subtotal' => 10,
+                ],
             ]
         ];
         return isset($presets[$name]) ? $presets[$name] : [];

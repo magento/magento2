@@ -64,7 +64,7 @@
                 <item name="dataSet" xsi:type="string">default</item>
             </field>
             <field name="checkout_data" xsi:type="array">
-                <item name="preset" xsi:type="string">with_one_option</item>
+                <item name="preset" xsi:type="string">with_special_price</item>
             </field>
         </dataset>
 

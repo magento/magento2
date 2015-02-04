@@ -17,7 +17,6 @@ use Magento\Checkout\Test\Constraint\AssertShippingInShoppingCart;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Class EstimateShippingAndTaxStep
  * Estimate Shipping and Tax
  */
 class EstimateShippingAndTaxStep implements TestStepInterface
@@ -72,14 +71,14 @@ class EstimateShippingAndTaxStep implements TestStepInterface
     protected $cart;
 
     /**
-     * fixture factory
+     * Fixture factory
      *
      * @var FixtureFactory
      */
     protected $fixtureFactory;
 
     /**
-     * Shipping
+     * Shipping method title and shipping service name
      *
      * @var array
      */
@@ -130,7 +129,7 @@ class EstimateShippingAndTaxStep implements TestStepInterface
     }
 
     /**
-     * Add products to the cart
+     * Estimate shipping and tax and process assertions for totals.
      *
      * @return void
      */

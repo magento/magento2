@@ -166,6 +166,22 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 ],
                 'qty' => 1,
                 'cartItem' => [
+                    'price' => 11,
+                    'qty' => 1,
+                    'subtotal' => 11,
+                ],
+            ],
+            'with_special_price' => [
+                'options' => [
+                    'configurable_options' => [
+                        [
+                            'title' => 'attribute_key_0',
+                            'value' => 'option_key_0',
+                        ],
+                    ],
+                ],
+                'qty' => 1,
+                'cartItem' => [
                     'price' => 10,
                     'qty' => 1,
                     'subtotal' => 10,

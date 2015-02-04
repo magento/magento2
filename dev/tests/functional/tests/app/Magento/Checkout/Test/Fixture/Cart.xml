@@ -146,6 +146,20 @@
             <default_value xsi:type="string">0.0000</default_value>
             <input />
         </field>
+        <field name="tax_amount">
+            <attribute_code>tax_amount</attribute_code>
+            <backend_type>decimal</backend_type>
+            <is_required />
+            <default_value xsi:type="string">0.0000</default_value>
+            <input />
+        </field>
+        <field name="shipping_amount">
+            <attribute_code>shipping_amount</attribute_code>
+            <backend_type>decimal</backend_type>
+            <is_required />
+            <default_value xsi:type="string">0.0000</default_value>
+            <input />
+        </field>
         <field name="checkout_method">
             <attribute_code>checkout_method</attribute_code>
             <backend_type>varchar</backend_type>

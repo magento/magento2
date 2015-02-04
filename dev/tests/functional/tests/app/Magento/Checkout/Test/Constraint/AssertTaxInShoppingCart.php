@@ -11,7 +11,6 @@ use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertTaxInShoppingCart
  * Assert that tax amount is equal to expected
  */
 class AssertTaxInShoppingCart extends AbstractConstraint
@@ -21,7 +20,7 @@ class AssertTaxInShoppingCart extends AbstractConstraint
     /* end tags */
 
     /**
-     * Assert that tax amount is equal to expected
+     * Assert that tax amount is equal to expected.
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
@@ -41,7 +40,7 @@ class AssertTaxInShoppingCart extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

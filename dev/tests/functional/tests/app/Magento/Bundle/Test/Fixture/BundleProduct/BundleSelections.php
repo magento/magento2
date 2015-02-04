@@ -189,6 +189,43 @@ class BundleSelections implements FixtureInterface
                     ],
                 ],
             ],
+            'fixed_100_dollar' => [
+                'bundle_options' => [
+                    [
+                        'title' => 'Drop-down Option',
+                        'type' => 'Drop-down',
+                        'required' => 'Yes',
+                        'assigned_products' => [
+                            [
+                                'search_data' => [
+                                    'name' => '%product_name%',
+                                ],
+                                'data' => [
+                                    'selection_price_value' => 10.00,
+                                    'selection_price_type' => 'Fixed',
+                                    'selection_qty' => 1,
+                                ],
+                            ],
+                            [
+                                'search_data' => [
+                                    'name' => '%product_name%',
+                                ],
+                                'data' => [
+                                    'selection_price_value' => 560.00,
+                                    'selection_price_type' => 'Fixed',
+                                    'selection_qty' => 1,
+                                ]
+                            ],
+                        ],
+                    ],
+                ],
+                'products' => [
+                    [
+                        'catalogProductSimple::product_10_dollar',
+                        'catalogProductSimple::default',
+                    ],
+                ],
+            ],
             'second' => [
                 'bundle_options' => [
                     [
