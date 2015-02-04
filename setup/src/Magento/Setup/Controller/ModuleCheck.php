@@ -6,6 +6,7 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Setup\Model\ObjectManagerFactory;
+use Magento\Framework\Module\Status;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
@@ -30,7 +31,7 @@ class ModuleCheck extends AbstractActionController
     }
 
     /**
-     * Result of checking constrains for enabling/disabling modules
+     * Result of checking constraints for enabling/disabling modules
      *
      * @return JsonModel
      */
@@ -38,34 +39,18 @@ class ModuleCheck extends AbstractActionController
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $enabledModules = isset($params['selectedModules']) ? $params['selectedModules'] : [];
+        $allModules = isset($params['allModules']) ? $params['allModules'] : [];
+        if (empty($enabledModules)) {
+            return new JsonModel(['success' => false, 'error' => 'You cannot disable all modules.']);
+        }
         $status = $this->objectManager->create('Magento\Framework\Module\Status');
-
         // checking constraints
-        $constraints = $status->checkConstraints(true, $enabledModules, true);
+        $constraints = $status->checkConstraints(false, array_diff($allModules, $enabledModules), Status::MODE_ENABLED);
         if ($constraints) {
-            $message = $this->handleConstraints(true, $constraints);
+            $message = " Unable to disable modules because of the following constraints:\n"
+                . implode("<br />", $constraints);
             return new JsonModel(['success' => false, 'error' => $message]);
         }
-
         return new JsonModel(['success' => true]);
-    }
-
-    /**
-     * Handles constraints
-     *
-     * @param bool $isEnable
-     * @param string $constraints
-     * @return string
-     */
-    private function handleConstraints($isEnable, $constraints)
-    {
-        if ($isEnable) {
-            $updateType = 'enable';
-        } else {
-            $updateType = 'disable';
-        }
-        $message = " Unable to $updateType modules because of the following constraints:\n"
-            . implode("<br />", $constraints);
-        return $message;
     }
 }

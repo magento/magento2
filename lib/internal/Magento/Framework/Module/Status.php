@@ -14,6 +14,14 @@ use Magento\Framework\App\State\Cleanup;
  */
 class Status
 {
+    /**#@+
+     * Supported modes while checking constraints
+     */
+    const MODE_ENABLED = 'assume_modules_enabled';
+    const MODE_DISABLED = 'assume_modules_disabled';
+    const MODE_CONFIG = 'use_deployment_config_info';
+    /**#@- */
+
     /**
      * Module list loader
      *
@@ -87,25 +95,25 @@ class Status
      *
      * @param bool $isEnabled
      * @param string[] $modules
-     * @param bool $ignoreCurModuleStatus
+     * @param string $mode
      * @return string[]
      */
-    public function checkConstraints($isEnabled, $modules, $ignoreCurModuleStatus = false)
+    public function checkConstraints($isEnabled, $modules, $mode = self::MODE_CONFIG)
     {
         $errorMessages = [];
         if ($isEnabled) {
             $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenEnableModules(
                 $modules,
-                $ignoreCurModuleStatus
+                $mode
             );
             $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules(
                 $modules,
-                $ignoreCurModuleStatus
+                $mode
             );
         } else {
             $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenDisableModules(
                 $modules,
-                $ignoreCurModuleStatus
+                $mode
             );
             $errorModulesConflict = [];
         }

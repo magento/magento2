@@ -51,13 +51,15 @@ class DependencyChecker
      * Checks dependencies when disabling modules
      *
      * @param string[] $moduleNames
-     * @param bool $ignoreCurModuleStatus
+     * @param string $mode
      * @return array
      */
-    public function checkDependenciesWhenDisableModules($moduleNames, $ignoreCurModuleStatus = false)
+    public function checkDependenciesWhenDisableModules($moduleNames, $mode = Status::MODE_CONFIG)
     {
-        if ($ignoreCurModuleStatus) {
-            $enabledModules = $moduleNames;
+        if ($mode === Status::MODE_ENABLED) {
+            $enabledModules = array_diff(array_keys($this->loader->load()), $moduleNames);
+        } else if ($mode === Status::MODE_DISABLED) {
+            return [];
         } else {
             // assume disable succeeds: currently enabled modules - to-be-disabled modules
             $enabledModules = array_diff($this->list->getNames(), $moduleNames);
@@ -69,13 +71,15 @@ class DependencyChecker
      * Checks dependencies when enabling modules
      *
      * @param string[] $moduleNames
-     * @param bool $ignoreCurModuleStatus
+     * @param string $mode
      * @return array
      */
-    public function checkDependenciesWhenEnableModules($moduleNames, $ignoreCurModuleStatus = false)
+    public function checkDependenciesWhenEnableModules($moduleNames, $mode = Status::MODE_CONFIG)
     {
-        if ($ignoreCurModuleStatus) {
+        if ($mode === Status::MODE_DISABLED) {
             $enabledModules = $moduleNames;
+        } else if ($mode === Status::MODE_ENABLED) {
+            return [];
         } else {
             // assume enable succeeds: union of currently enabled modules and to-be-enabled modules
             $enabledModules = array_unique(array_merge($this->list->getNames(), $moduleNames));
