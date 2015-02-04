@@ -13,41 +13,46 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class AssertRelatedProductsSection
- * Assert that product is displayed in related products section
+ * Assert that product is displayed in related products section.
  */
-class AssertRelatedProductsSection extends AbstractConstraint
+class AssertProductRelatedProducts extends AbstractConstraint
 {
     /* tags */
     const SEVERITY = 'middle';
     /* end tags */
 
     /**
-     * Assert that product is displayed in related products section
+     * Assert that products are displayed in related products section.
      *
      * @param BrowserInterface $browser
      * @param CatalogProductSimple $product
-     * @param InjectableFixture[] $relatedProducts
      * @param CatalogProductView $catalogProductView
+     * @param InjectableFixture[]|null $promotedProducts
      * @return void
      */
     public function processAssert(
         BrowserInterface $browser,
         CatalogProductSimple $product,
-        array $relatedProducts,
-        CatalogProductView $catalogProductView
+        CatalogProductView $catalogProductView,
+        array $promotedProducts = null
     ) {
+        if (!$promotedProducts) {
+            $promotedProducts = $product->hasData('related_products')
+                ? $product->getDataFieldConfig('related_products')['source']->getProducts()
+                : [];
+        }
+
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        foreach ($relatedProducts as $relatedProduct) {
+        foreach ($promotedProducts as $promotedProduct) {
             \PHPUnit_Framework_Assert::assertTrue(
-                $catalogProductView->getRelatedProductBlock()->isRelatedProductVisible($relatedProduct->getName()),
-                'Product \'' . $relatedProduct->getName() . '\' is absent in related products.'
+                $catalogProductView->getRelatedProductBlock()->getProductItem($promotedProduct)->isVisible(),
+                'Product \'' . $promotedProduct->getName() . '\' is absent in related products.'
             );
         }
     }
 
     /**
-     * Text success product is displayed in related products section
+     * Text success product is displayed in related products section.
      *
      * @return string
      */

@@ -10,7 +10,6 @@
     <rule scope="testsuite">
         <allow>
             <namespace value="Magento" />
-            <type value="injectable" />
         </allow>
     </rule>
 </config>

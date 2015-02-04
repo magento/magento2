@@ -11,55 +11,62 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class AssertNoCrossSellsProductsSection
- * Assert that product is not displayed in cross-sell section
+ * Assert that product is displayed in cross-sell section.
  */
-class AssertNoCrossSellsProductsSection extends AbstractConstraint
+class AssertProductCrossSells extends AbstractConstraint
 {
     /* tags */
     const SEVERITY = 'middle';
     /* end tags */
 
     /**
-     * Assert that product is not displayed in cross-sell section
+     * Assert that product is displayed in cross-sell section.
      *
      * @param BrowserInterface $browser
-     * @param CatalogProductSimple $product
-     * @param InjectableFixture[] $relatedProducts
-     * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $checkoutCart
+     * @param CatalogProductSimple $product
+     * @param CatalogProductView $catalogProductView
+     * @param FixtureInterface[]|null $promotedProducts
      * @return void
      */
     public function processAssert(
         BrowserInterface $browser,
+        CheckoutCart $checkoutCart,
         CatalogProductSimple $product,
-        array $relatedProducts,
         CatalogProductView $catalogProductView,
-        CheckoutCart $checkoutCart
+        array $promotedProducts = null
     ) {
+        $errors = [];
+        if (!$promotedProducts) {
+            $promotedProducts = $product->hasData('cross_sell_products')
+                ? $product->getDataFieldConfig('cross_sell_products')['source']->getProducts()
+                : [];
+        }
+
         $checkoutCart->open();
         $checkoutCart->getCartBlock()->clearShoppingCart();
 
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->addToCart($product);
-        foreach ($relatedProducts as $relatedProduct) {
-            \PHPUnit_Framework_Assert::assertFalse(
-                $checkoutCart->getCrosssellBlock()->verifyProductCrosssell($relatedProduct),
-                'Product \'' . $relatedProduct->getName() . '\' is exist in cross-sell section.'
-            );
+        foreach ($promotedProducts as $promotedProduct) {
+            if (!$checkoutCart->getCrosssellBlock()->getProductItem($promotedProduct)->isVisible()) {
+                $errors[] = 'Product \'' . $promotedProduct->getName() . '\' is absent in cross-sell section.';
+            }
         }
+
+        \PHPUnit_Framework_Assert::assertEmpty($errors, implode(" ", $errors));
     }
 
     /**
-     * Text success product is not displayed in cross-sell section
+     * Text success product is displayed in cross-sell section.
      *
      * @return string
      */
     public function toString()
     {
-        return 'Product is not displayed in cross-sell section.';
+        return 'Product is displayed in cross-sell section.';
     }
 }

@@ -15,7 +15,7 @@ namespace Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable
 class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\CheckoutData
 {
     /**
-     * Get preset array
+     * Get preset array.
      *
      * @param $name
      * @return array|null
@@ -166,6 +166,17 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 ],
                 'qty' => 1,
             ],
+            'two_options_with_fixed_price' => [
+                'options' => [
+                    'configurable_options' => [
+                        [
+                            'title' => 'attribute_key_0',
+                            'value' => 'option_key_1',
+                        ],
+                    ],
+                ],
+                'qty' => 1,
+            ]
         ];
         return isset($presets[$name]) ? $presets[$name] : null;
     }

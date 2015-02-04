@@ -15,11 +15,48 @@ use Magento\Mtf\Client\Locator;
 class ProductItem extends Block
 {
     /**
+     * Link to product view page.
+     *
+     * @var string
+     */
+    protected $link = 'a.product-item-link';
+
+    /**
      * 'Add to Card' button.
      *
      * @var string
      */
     protected $addToCard = "button.action.tocart";
+
+    /**
+     * Check whether block is visible.
+     *
+     * @return bool
+     */
+    public function isVisible()
+    {
+        return $this->_rootElement->isVisible();
+    }
+
+    /**
+     * Open product view page by link.
+     *
+     * @return void
+     */
+    public function open()
+    {
+        $this->_rootElement->find($this->link, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Return product name.
+     *
+     * @return string
+     */
+    public function getProductName()
+    {
+        return trim($this->_rootElement->find($this->link)->getText());
+    }
 
     /**
      * Checking that "Add to Card" button is visible
@@ -29,5 +66,15 @@ class ProductItem extends Block
     public function isVisibleAddToCardButton()
     {
         return $this->_rootElement->find($this->addToCard, Locator::SELECTOR_CSS)->isVisible();
+    }
+
+    /**
+     * Click by "Add to Cart" button.
+     *
+     * @return void
+     */
+    public function clickAddToCart()
+    {
+        $this->_rootElement->find($this->addToCard, Locator::SELECTOR_CSS)->click();
     }
 }
