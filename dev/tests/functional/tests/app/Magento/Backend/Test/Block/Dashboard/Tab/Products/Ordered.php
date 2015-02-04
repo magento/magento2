@@ -16,6 +16,20 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 class Ordered extends Grid
 {
     /**
+     * Base part of row locator template
+     *
+     * @var string
+     */
+    protected $location = '//table[@id="productsOrderedGrid_table"]/tbody/tr';
+
+    /**
+     * Secondary part of row locator template
+     *
+     * @var string
+     */
+    protected $rowTemplate = 'td[contains(., "%s")]';
+
+    /**
      * Check if ordered product is in grid
      *
      * @param CatalogProductSimple $product
@@ -23,8 +37,6 @@ class Ordered extends Grid
      */
     public function isProductVisible(CatalogProductSimple $product)
     {
-        $location = '//table[@id="productsOrderedGrid_table"]/tbody/tr[';
-        $rowTemplate = 'td[contains(., "%s")]';
         $filter = [
             $product->getName(),
             $product->getPrice(),
@@ -32,10 +44,10 @@ class Ordered extends Grid
         ];
         $rows = [];
         foreach ($filter as $value) {
-            $rows[] = sprintf($rowTemplate, $value);
+            $rows[] = sprintf($this->rowTemplate, $value);
         }
-        $location = $location . implode(' and ', $rows) . ']';
+        $location = $this->location . '[' . implode(' and ', $rows) . ']';
 
-        return $this->_rootElement->find($location, Locator::SELECTOR_XPATH)->isVisible() ? true : false;
+        return $this->_rootElement->find($location, Locator::SELECTOR_XPATH)->isVisible();
     }
 }
