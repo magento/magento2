@@ -189,8 +189,10 @@ class Request
      * @param \Magento\Framework\HTTP\PhpEnvironment\Response $response OPTIONAL If NULL - will use internal getter
      * @return array
      */
-    public function prepareErrorResponse(\Exception $exception, \Magento\Framework\HTTP\PhpEnvironment\Response $response = null)
-    {
+    public function prepareErrorResponse(
+        \Exception $exception,
+        \Magento\Framework\HTTP\PhpEnvironment\Response $response = null
+    ) {
         $errorMsg = $exception->getMessage();
 
         if ($exception instanceof \Magento\Framework\Oauth\Exception) {

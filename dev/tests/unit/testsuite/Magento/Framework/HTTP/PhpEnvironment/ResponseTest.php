@@ -110,7 +110,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->response = $this->getMock(
             'Magento\Framework\HTTP\PhpEnvironment\Response',
-            ['getHeaders', 'send',]
+            ['getHeaders', 'send']
         );
 
         $this->headers->addHeaderLine('Header-name: header-value');
@@ -152,7 +152,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->response = $this->getMock(
             'Magento\Framework\HTTP\PhpEnvironment\Response',
-            ['getHeaders', 'send',]
+            ['getHeaders', 'send']
         );
 
         $this->headers->addHeaderLine('Header-name: header-value');
@@ -193,7 +193,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->response = $this->getMock(
             'Magento\Framework\HTTP\PhpEnvironment\Response',
-            ['getHeaders', 'send',]
+            ['getHeaders', 'send']
         );
 
         $this->headers->addHeaderLine('Header-name: header-value');
