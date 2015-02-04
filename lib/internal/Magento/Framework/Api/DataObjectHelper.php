@@ -14,13 +14,6 @@ class DataObjectHelper
     protected $objectFactory;
 
     /**
-     * Cached custom attribute codes by metadataServiceInterface
-     *
-     * @var array
-     */
-    protected $customAttributesCodes = [];
-
-    /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
      */
     protected $objectProcessor;
@@ -48,40 +41,13 @@ class DataObjectHelper
     /**
      * @param ExtensibleDataInterface $dataObject
      * @param array $data
+     * @param string $interfaceName
      * @return $this
      */
-    public function populateWithArray(ExtensibleDataInterface $dataObject, array $data)
+    public function populateWithArray(ExtensibleDataInterface $dataObject, array $data, $interfaceName = null)
     {
-        $this->_setDataValues($dataObject, $data);
+        $this->_setDataValues($dataObject, $data, $interfaceName);
         return $this;
-    }
-
-    /**
-     * Template method used to configure the attribute codes for the custom attributes
-     *
-     * @param ExtensibleDataInterface $dataObject
-     * @param MetadataServiceInterface metadataService
-     * @return string[]
-     */
-    public function getCustomAttributesCodes(
-        ExtensibleDataInterface $dataObject,
-        MetadataServiceInterface $metadataService
-    ) {
-        $metadataServiceClass = get_class($metadataService);
-        if (isset($this->customAttributesCodes[$metadataServiceClass])) {
-            return $this->customAttributesCodes[$metadataServiceClass];
-        }
-        $attributeCodes = [];
-        /** @var \Magento\Framework\Api\MetadataObjectInterface[] $customAttributesMetadata */
-        $customAttributesMetadata = $metadataService
-            ->getCustomAttributesMetadata(get_class($dataObject));
-        if (is_array($customAttributesMetadata)) {
-            foreach ($customAttributesMetadata as $attribute) {
-                $attributeCodes[] = $attribute->getAttributeCode();
-            }
-        }
-        $this->customAttributesCodes[$metadataServiceClass] = $attributeCodes;
-        return $attributeCodes;
     }
 
     /**
@@ -89,9 +55,10 @@ class DataObjectHelper
      *
      * @param ExtensibleDataInterface $dataObject
      * @param array $data
+     * @param string $interfaceName
      * @return $this
      */
-    protected function _setDataValues(ExtensibleDataInterface $dataObject, array $data)
+    protected function _setDataValues(ExtensibleDataInterface $dataObject, array $data, $interfaceName)
     {
         $dataObjectMethods = get_class_methods(get_class($dataObject));
         foreach ($data as $key => $value) {
@@ -117,7 +84,7 @@ class DataObjectHelper
                     $dataObject->$methodName($value);
                 } else {
                     $getterMethodName = 'get' . $camelCaseKey;
-                    $this->setComplexValue($dataObject, $getterMethodName, $methodName, $value);
+                    $this->setComplexValue($dataObject, $getterMethodName, $methodName, $value, $interfaceName);
                 }
             } else {
                 $dataObject->setCustomAttribute($key, $value);
@@ -132,15 +99,20 @@ class DataObjectHelper
      * @param string $getterMethodName
      * @param string $methodName
      * @param array $value
+     * @param string $interfaceName
      * @return $this
      */
     protected function setComplexValue(
         ExtensibleDataInterface $dataObject,
         $getterMethodName,
         $methodName,
-        array $value
+        array $value,
+        $interfaceName
     ) {
-        $returnType = $this->objectProcessor->getMethodReturnType(get_class($dataObject), $getterMethodName);
+        if ($interfaceName == null) {
+            $interfaceName = get_class($dataObject);
+        }
+        $returnType = $this->objectProcessor->getMethodReturnType($interfaceName, $getterMethodName);
         if ($this->typeProcessor->isTypeSimple($returnType)) {
             $dataObject->$methodName($value);
             return $this;
@@ -151,7 +123,7 @@ class DataObjectHelper
             $objects = [];
             foreach ($value as $arrayElementData) {
                 $object = $this->objectFactory->create($type, []);
-                $this->populateWithArray($object, $arrayElementData);
+                $this->populateWithArray($object, $arrayElementData, $type);
                 $objects[] = $object;
             }
             $dataObject->$methodName($objects);
@@ -160,7 +132,7 @@ class DataObjectHelper
 
         if (is_subclass_of($returnType, '\Magento\Framework\Api\ExtensibleDataInterface')) {
             $object = $this->objectFactory->create($returnType, []);
-            $this->populateWithArray($object, $value);
+            $this->populateWithArray($object, $value, $returnType);
         } else {
             $object = $this->objectFactory->create($returnType, $value);
         }
@@ -171,22 +143,22 @@ class DataObjectHelper
     /**
      * Merges second object onto the first
      *
-     * @param string                  $className
+     * @param string                  $interfaceName
      * @param ExtensibleDataInterface $firstDataObject
      * @param ExtensibleDataInterface $secondDataObject
      * @return $this
      * @throws \LogicException
      */
     public function mergeDataObjects(
-        $className,
+        $interfaceName,
         ExtensibleDataInterface $firstDataObject,
         ExtensibleDataInterface $secondDataObject
     ) {
-        if (!$firstDataObject instanceof $className || !$secondDataObject instanceof $className) {
-            throw new \LogicException('Wrong prototype object given. It can only be of "' . $className . '" type.');
+        if (!$firstDataObject instanceof $interfaceName || !$secondDataObject instanceof $interfaceName) {
+            throw new \LogicException('Wrong prototype object given. It can only be of "' . $interfaceName . '" type.');
         }
-        $secondObjectArray = $this->objectProcessor->buildOutputDataArray($secondDataObject, $className);
-        $this->_setDataValues($firstDataObject, $secondObjectArray);
+        $secondObjectArray = $this->objectProcessor->buildOutputDataArray($secondDataObject, $interfaceName);
+        $this->_setDataValues($firstDataObject, $secondObjectArray, $interfaceName);
         return $this;
     }
 }

@@ -8,25 +8,22 @@
 namespace Magento\Customer\Model\Data;
 
 use Magento\Customer\Api\Data\RegionInterface;
-use \Magento\Framework\Api\DataObjectHelper;
 use \Magento\Framework\Api\AttributeValueFactory;
 
 class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\AddressInterface
 {
     /**
-     * @param DataObjectHelper $dataObjectHelper
      * @param \Magento\Customer\Api\AddressMetadataInterface $metadataService
      * @param AttributeValueFactory $attributeValueFactory
      * @param array $data
      */
     public function __construct(
-        DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Api\AddressMetadataInterface $metadataService,
         AttributeValueFactory $attributeValueFactory,
         $data = []
     ) {
-        parent::__construct($dataObjectHelper, $metadataService, $attributeValueFactory, $data);
+        parent::__construct($metadataService, $attributeValueFactory, $data);
     }
 
     /**

@@ -24,30 +24,27 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
     protected $attributeValueFactory;
 
     /**
-     * @var DataObjectHelper
-     */
-    protected $dataObjectHelper;
-
-    /**
      * @var MetadataServiceInterface
      */
     protected $metadataService;
 
     /**
+     * @var string[]
+     */
+    protected $customAttributesCodes;
+
+    /**
      * Initialize internal storage
      *
-     * @param DataObjectHelper $dataObjectHelper
      * @param MetadataServiceInterface $metadataService
      * @param AttributeValueFactory $attributeValueFactory
      * @param array $data
      */
     public function __construct(
-        DataObjectHelper $dataObjectHelper,
         MetadataServiceInterface $metadataService,
         AttributeValueFactory $attributeValueFactory,
         $data = []
     ) {
-        $this->dataObjectHelper = $dataObjectHelper;
         $this->metadataService = $metadataService;
         $this->attributeValueFactory = $attributeValueFactory;
         parent::__construct($data);
@@ -86,7 +83,7 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      */
     public function setCustomAttributes(array $attributes)
     {
-        $customAttributesCodes = $this->dataObjectHelper->getCustomAttributesCodes($this, $this->metadataService);
+        $customAttributesCodes = $this->getCustomAttributesCodes();
         foreach ($attributes as $attribute) {
             if (!$attribute instanceof AttributeValue) {
                 throw new \LogicException('Custom Attribute array elements can only be type of AttributeValue');
@@ -108,7 +105,7 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
-        $customAttributesCodes = $this->dataObjectHelper->getCustomAttributesCodes($this, $this->metadataService);
+        $customAttributesCodes = $this->getCustomAttributesCodes();
         /* If key corresponds to custom attribute code, populate custom attributes */
         if (in_array($attributeCode, $customAttributesCodes)) {
             /** @var AttributeValue $attribute */
@@ -118,5 +115,26 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
             $this->_data[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY][$attributeCode] = $attribute;
         }
         return $this;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    protected function getCustomAttributesCodes()
+    {
+        if (!is_null($this->customAttributesCodes)) {
+            return $this->customAttributesCodes;
+        }
+        $attributeCodes = [];
+        $customAttributesMetadata = $this->metadataService->getCustomAttributesMetadata(get_class($this));
+        if (is_array($customAttributesMetadata)) {
+            /** @var $attribute \Magento\Framework\Api\MetadataObjectInterface */
+            foreach ($customAttributesMetadata as $attribute) {
+                $attributeCodes[] = $attribute->getAttributeCode();
+            }
+        }
+        $this->customAttributesCodes = $attributeCodes;
+        return $attributeCodes;
     }
 }
