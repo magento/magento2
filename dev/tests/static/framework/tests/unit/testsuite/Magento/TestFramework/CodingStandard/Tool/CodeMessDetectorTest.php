@@ -13,6 +13,6 @@ class CodeMessDetectorTest extends \PHPUnit_Framework_TestCase
             'some/ruleset/file.xml',
             'some/report/file.xml'
         );
-        $this->assertEquals(class_exists('PHP_PMD_TextUI_Command'), $messDetector->canRun());
+        $this->assertEquals(class_exists('PHPMD\TextUI\Command'), $messDetector->canRun());
     }
 }
