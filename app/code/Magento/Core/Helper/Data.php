@@ -61,22 +61,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Get information about available cache types
-     *
-     * @return array
-     */
-    public function getCacheTypes()
-    {
-        $types = [];
-        foreach ($this->_cacheConfig->getTypes() as $type => $node) {
-            if (array_key_exists('label', $node)) {
-                $types[$type] = $node['label'];
-            }
-        }
-        return $types;
-    }
-
-    /**
      * Encode the mixed $valueToEncode into the JSON format
      *
      * @param mixed $valueToEncode
