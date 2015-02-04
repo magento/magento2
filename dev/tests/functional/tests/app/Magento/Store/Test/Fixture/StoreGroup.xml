@@ -1,66 +1,33 @@
-<?xml version="1.0" ?>
-<!--
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
-<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
-         class="Magento\Store\Test\Fixture\StoreGroup">
-    <module>Magento_Store</module>
-    <type>flat</type>
-    <entity_type>store_group</entity_type>
-    <collection>Magento\Store\Model\Resource\Group\Collection</collection>
-    <identifier/>
-    <repository_class>Magento\Store\Test\Repository\StoreGroup</repository_class>
-    <handler_interface>Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface</handler_interface>
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+  <fixture name="storeGroup" module="Magento_Store" type="flat" entity_type="store_group" collection="Magento\Store\Model\Resource\Group\Collection" identifier="" repository_class="Magento\Store\Test\Repository\StoreGroup" handler_interface="Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface" class="Magento\Store\Test\Fixture\StoreGroup">
     <dataset name="default">
-        <field name="website_id" xsi:type="array">
-            <item name="dataSet" xsi:type="string">main_website</item>
+        <field name="website_id" type="array">
+            <item name="dataSet" type="string">main_website</item>
         </field>
-        <field name="name" xsi:type="string">StoreGroup%isolation%</field>
-        <field name="root_category_id" xsi:type="array">
-            <item name="dataSet" xsi:type="string">default_category</item>
+        <field name="name" type="string">StoreGroup%isolation%</field>
+        <field name="root_category_id" type="array">
+            <item name="dataSet" type="string">default_category</item>
         </field>
     </dataset>
-    <fields>
-        <field name="group_id">
-            <attribute_code>group_id</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required>1</is_required>
-            <default_value xsi:type="null" />
-            <input />
-        </field>
-        <field name="website_id">
-            <attribute_code>website_id</attribute_code>
-            <backend_type>virtual</backend_type>
-            <source>Magento\Store\Test\Fixture\StoreGroup\WebsiteId</source>
-            <default_value xsi:type="array">
-                <item name="dataSet" xsi:type="string">main_website</item>
+    <field name="group_id" backend_type="smallint" is_required="1" input="">
+      <default_value type="null"/>
+    </field>
+    <field name="website_id" backend_type="virtual" source="Magento\Store\Test\Fixture\StoreGroup\WebsiteId">
+      <default_value type="array">
+                <item name="dataSet" type="string">main_website</item>
             </default_value>
-        </field>
-        <field name="name">
-            <attribute_code>name</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value xsi:type="string">StoreGroup%isolation%</default_value>
-            <input />
-        </field>
-        <field name="root_category_id">
-            <attribute_code>root_category_id</attribute_code>
-            <backend_type>virtual</backend_type>
-            <source>Magento\Store\Test\Fixture\StoreGroup\CategoryId</source>
-            <default_value xsi:type="array">
-                <item name="dataSet" xsi:type="string">default_category</item>
+    </field>
+    <field name="name" backend_type="varchar" is_required="" input="">
+      <default_value type="string">StoreGroup%isolation%</default_value>
+    </field>
+    <field name="root_category_id" backend_type="virtual" source="Magento\Store\Test\Fixture\StoreGroup\CategoryId">
+      <default_value type="array">
+                <item name="dataSet" type="string">default_category</item>
             </default_value>
-        </field>
-        <field name="default_store_id">
-            <attribute_code>default_store_id</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required />
-            <default_value xsi:type="number">0</default_value>
-            <input />
-        </field>
-    </fields>
-</fixture>
+    </field>
+    <field name="default_store_id" backend_type="smallint" is_required="" input="">
+      <default_value type="number">0</default_value>
+    </field>
+  </fixture>
+</config>

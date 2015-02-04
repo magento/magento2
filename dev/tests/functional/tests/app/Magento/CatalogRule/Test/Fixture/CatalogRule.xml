@@ -1,146 +1,60 @@
-<?xml version="1.0" ?>
-<!--
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
-<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
-         class="Magento\CatalogRule\Test\Fixture\CatalogRule">
-    <module>Magento_CatalogRule</module>
-    <type>eav</type>
-    <entity_type>catalog_rule</entity_type>
-    <collection>Magento\CatalogRule\Model\Resource\Rule\Product\Price\Collection</collection>
-    <repository_class>Magento\CatalogRule\Test\Repository\CatalogRule</repository_class>
-    <handler_interface>Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface</handler_interface>
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+  <fixture name="catalogRule" module="Magento_CatalogRule" type="eav" entity_type="catalog_rule" collection="Magento\CatalogRule\Model\Resource\Rule\Product\Price\Collection" repository_class="Magento\CatalogRule\Test\Repository\CatalogRule" handler_interface="Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface" class="Magento\CatalogRule\Test\Fixture\CatalogRule">
     <dataset name="default">
-        <field name="name" xsi:type="string">CatalogPriceRule %isolation%</field>
-        <field name="description" xsi:type="string">Catalog Price Rule Description</field>
-        <field name="is_active" xsi:type="string">Active</field>
-        <field name="website_ids" xsi:type="array">
-            <item name="0" xsi:type="string">Main Website</item>
+        <field name="name" type="string">CatalogPriceRule %isolation%</field>
+        <field name="description" type="string">Catalog Price Rule Description</field>
+        <field name="is_active" type="string">Active</field>
+        <field name="website_ids" type="array">
+            <item name="0" type="string">Main Website</item>
         </field>
-        <field name="customer_group_ids" xsi:type="array">
-            <item name="0" xsi:type="string">NOT LOGGED IN</item>
+        <field name="customer_group_ids" type="array">
+            <item name="0" type="string">NOT LOGGED IN</item>
         </field>
-        <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
-        <field name="discount_amount" xsi:type="string">50</field>
+        <field name="simple_action" type="string">By Percentage of the Original Price</field>
+        <field name="discount_amount" type="string">50</field>
     </dataset>
-    <fields>
-        <field name="name">
-            <attribute_code>name</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>1</is_required>
-            <default_value xsi:type="string">CatalogPriceRule %isolation%</default_value>
-            <input>text</input>
-            <group>rule_information</group>
-        </field>
-        <field name="description">
-            <attribute_code>description</attribute_code>
-            <default_value xsi:type="string">Catalog Price Rule Description</default_value>
-            <input>text</input>
-            <group>rule_information</group>
-        </field>
-        <field name="is_active">
-           <attribute_code>is_active</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required>1</is_required>
-            <default_value xsi:type="string">Active</default_value>
-            <input>select</input>
-            <group>rule_information</group>
-        </field>
-        <field name="website_ids">
-            <attribute_code>website_ids</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required>1</is_required>
-            <default_value  xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+    <field name="name" backend_type="varchar" is_required="1" input="text" group="rule_information">
+      <default_value type="string">CatalogPriceRule %isolation%</default_value>
+    </field>
+    <field name="description" input="text" group="rule_information">
+      <default_value type="string">Catalog Price Rule Description</default_value>
+    </field>
+    <field name="is_active" backend_type="smallint" is_required="1" input="select" group="rule_information">
+      <default_value type="string">Active</default_value>
+    </field>
+    <field name="website_ids" backend_type="smallint" is_required="1" input="multiselect" group="rule_information">
+      <default_value type="array">
+                <item name="0" type="string">Main Website</item>
             </default_value>
-            <input>multiselect</input>
-            <group>rule_information</group>
-        </field>
-        <field name="customer_group_ids">
-            <attribute_code>customer_group_ids</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required>1</is_required>
-            <default_value  xsi:type="array">
-                <item name="0" xsi:type="string">NOT LOGGED IN</item>
+    </field>
+    <field name="customer_group_ids" backend_type="smallint" is_required="1" input="multiselect" group="rule_information">
+      <default_value type="array">
+                <item name="0" type="string">NOT LOGGED IN</item>
             </default_value>
-            <input>multiselect</input>
-            <group>rule_information</group>
-        </field>
-        <field name="from_date">
-            <attribute_code>from_date</attribute_code>
-            <backend_type>date</backend_type>
-            <is_required>0</is_required>
-            <default_value xsi:type="null" />
-            <input>text</input>
-            <group>rule_information</group>
-        </field>
-        <field name="to_date">
-            <attribute_code>to_date</attribute_code>
-            <backend_type>date</backend_type>
-            <is_required>0</is_required>
-            <default_value xsi:type="null" />
-            <input>text</input>
-            <group>rule_information</group>
-        </field>
-        <field name="simple_action">
-            <attribute_code>simple_action</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required>0</is_required>
-            <default_value xsi:type="string">By Percentage of the Original Price</default_value>
-            <input>select</input>
-            <group>actions</group>
-        </field>
-        <field name="discount_amount">
-            <attribute_code>discount_amount</attribute_code>
-            <backend_type>decimal</backend_type>
-            <is_required>1</is_required>
-            <default_value xsi:type="number">50</default_value>
-            <input>text</input>
-            <group>actions</group>
-        </field>
-        <field name="condition_type">
-            <attribute_code>condition_type</attribute_code>
-            <backend_type>virtual</backend_type>
-            <is_required>0</is_required>
-            <group>conditions</group>
-            <input>select</input>
-        </field>
-        <field name="condition_value">
-            <attribute_code>condition_value</attribute_code>
-            <backend_type>virtual</backend_type>
-            <is_required>0</is_required>
-            <group>conditions</group>
-        </field>
-        <field name="rule">
-            <attribute_code>rule</attribute_code>
-            <backend_type>virtual</backend_type>
-            <is_required>0</is_required>
-            <group>conditions</group>
-        </field>
-        <field name="conditions">
-            <attribute_code>conditions</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group>conditions</group>
-        </field>
-        <field name="id">
-            <attribute_code>id</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="sort_order">
-            <attribute_code>sort_order</attribute_code>
-            <default_value xsi:type="null" />
-            <input>text</input>
-            <group>rule_information</group>
-        </field>
-        <field name="stop_rules_processing">
-            <attribute_code>stop_rules_processing</attribute_code>
-            <default_value xsi:type="null" />
-            <input>select</input>
-            <group>rule_information</group>
-        </field>
-    </fields>
-</fixture>
+    </field>
+    <field name="from_date" backend_type="date" is_required="0" input="text" group="rule_information">
+      <default_value type="null"/>
+    </field>
+    <field name="to_date" backend_type="date" is_required="0" input="text" group="rule_information">
+      <default_value type="null"/>
+    </field>
+    <field name="simple_action" backend_type="smallint" is_required="0" input="select" group="actions">
+      <default_value type="string">By Percentage of the Original Price</default_value>
+    </field>
+    <field name="discount_amount" backend_type="decimal" is_required="1" input="text" group="actions">
+      <default_value type="number">50</default_value>
+    </field>
+    <field name="condition_type" backend_type="virtual" is_required="0" group="conditions" input="select"/>
+    <field name="condition_value" backend_type="virtual" is_required="0" group="conditions"/>
+    <field name="rule" backend_type="virtual" is_required="0" group="conditions"/>
+    <field name="conditions" backend_type="virtual" group="conditions"/>
+    <field name="id" backend_type="virtual"/>
+    <field name="sort_order" input="text" group="rule_information">
+      <default_value type="null"/>
+    </field>
+    <field name="stop_rules_processing" input="select" group="rule_information">
+      <default_value type="null"/>
+    </field>
+  </fixture>
+</config>

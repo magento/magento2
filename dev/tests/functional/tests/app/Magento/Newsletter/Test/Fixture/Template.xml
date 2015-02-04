@@ -1,111 +1,48 @@
-<?xml version="1.0" ?>
-<!--
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
-<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
-         class="Magento\Newsletter\Test\Fixture\Template">
-    <module>Magento_Newsletter</module>
-    <type>flat</type>
-    <entity_type>newsletter_template</entity_type>
-    <collection>Magento\Newsletter\Model\Resource\Template\Collection</collection>
-    <identifier>template_id</identifier>
-    <repository_class>Magento\Newsletter\Test\Repository\Template</repository_class>
-    <handler_interface>Magento\Newsletter\Test\Handler\Template\TemplateInterface</handler_interface>
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+  <fixture name="template" module="Magento_Newsletter" type="flat" entity_type="newsletter_template" collection="Magento\Newsletter\Model\Resource\Template\Collection" identifier="template_id" repository_class="Magento\Newsletter\Test\Repository\Template" handler_interface="Magento\Newsletter\Test\Handler\Template\TemplateInterface" class="Magento\Newsletter\Test\Fixture\Template">
     <dataset name="default">
-        <field name="code" xsi:type="string">TemplateName%isolation%</field>
-        <field name="subject" xsi:type="string">TemplateSubject%isolation%</field>
-        <field name="sender_name" xsi:type="string">SenderName%isolation%</field>
-        <field name="sender_email" xsi:type="string">SenderName%isolation%@example.com</field>
-        <field name="text" xsi:type="string">Some text %isolation%</field>
+        <field name="code" type="string">TemplateName%isolation%</field>
+        <field name="subject" type="string">TemplateSubject%isolation%</field>
+        <field name="sender_name" type="string">SenderName%isolation%</field>
+        <field name="sender_email" type="string">SenderName%isolation%@example.com</field>
+        <field name="text" type="string">Some text %isolation%</field>
     </dataset>
-    <fields>
-        <field name="id">
-            <attribute_code>template_id</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>1</is_required>
-            <default_value xsi:type="null" />
-            <input />
-        </field>
-        <field name="code">
-            <attribute_code>template_code</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value xsi:type="string">TemplateName%isolation%</default_value>
-            <input />
-        </field>
-        <field name="text">
-           <attribute_code>template_text</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required />
-            <default_value xsi:type="string">Some text %isolation%</default_value>
-            <input />
-        </field>
-        <field name="text_preprocessed">
-            <attribute_code>template_text_preprocessed</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required />
-            <default_value xsi:type="null" />
-            <input />
-        </field>
-        <field name="styles">
-             <attribute_code>template_styles</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required />
-            <default_value xsi:type="null" />
-            <input />
-        </field>
-        <field name="type">
-            <attribute_code>template_type</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required />
-            <default_value xsi:type="null" />
-            <input />
-        </field>
-        <field name="subject">
-            <attribute_code>template_subject</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value xsi:type="string">TemplateSubject%isolation%</default_value>
-            <input />
-        </field>
-        <field name="sender_name">
-            <attribute_code>template_sender_name</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value xsi:type="string">SenderName%isolation%</default_value>
-            <input />
-        </field>
-        <field name="sender_email">
-            <attribute_code>template_sender_email</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value xsi:type="string">SenderName%isolation%@example.com</default_value>
-            <input />
-        </field>
-        <field name="actual">
-            <attribute_code>template_actual</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required />
-            <default_value xsi:type="string">1</default_value>
-            <input />
-        </field>
-        <field name="added_at">
-            <attribute_code>added_at</attribute_code>
-            <backend_type>timestamp</backend_type>
-            <is_required />
-            <default_value xsi:type="null" />
-            <input />
-        </field>
-        <field name="modified_at">
-            <attribute_code>modified_at</attribute_code>
-            <backend_type>timestamp</backend_type>
-            <is_required />
-            <default_value xsi:type="null" />
-            <input />
-        </field>
-    </fields>
-</fixture>
+    <field name="template_id" backend_type="int" is_required="1" input="">
+      <default_value type="null"/>
+    </field>
+    <field name="template_code" backend_type="varchar" is_required="" input="">
+      <default_value type="string">TemplateName%isolation%</default_value>
+    </field>
+    <field name="template_text" backend_type="text" is_required="" input="">
+      <default_value type="string">Some text %isolation%</default_value>
+    </field>
+    <field name="template_text_preprocessed" backend_type="text" is_required="" input="">
+      <default_value type="null"/>
+    </field>
+    <field name="template_styles" backend_type="text" is_required="" input="">
+      <default_value type="null"/>
+    </field>
+    <field name="template_type" backend_type="int" is_required="" input="">
+      <default_value type="null"/>
+    </field>
+    <field name="template_subject" backend_type="varchar" is_required="" input="">
+      <default_value type="string">TemplateSubject%isolation%</default_value>
+    </field>
+    <field name="template_sender_name" backend_type="varchar" is_required="" input="">
+      <default_value type="string">SenderName%isolation%</default_value>
+    </field>
+    <field name="template_sender_email" backend_type="varchar" is_required="" input="">
+      <default_value type="string">SenderName%isolation%@example.com</default_value>
+    </field>
+    <field name="template_actual" backend_type="smallint" is_required="" input="">
+      <default_value type="string">1</default_value>
+    </field>
+    <field name="added_at" backend_type="timestamp" is_required="" input="">
+      <default_value type="null"/>
+    </field>
+    <field name="modified_at" backend_type="timestamp" is_required="" input="">
+      <default_value type="null"/>
+    </field>
+  </fixture>
+</config>
