@@ -403,6 +403,7 @@ return [
     ['getBlockClassName', 'Magento\Core\Model\Config'],
     ['getButtonsHtml', 'Magento_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search'],
     ['getCache', 'Magento\Core\Model\Config'],
+    ['getCacheTypes', 'Magento\Core\Helper\Data', '\Magento\Framework\App\Cache\TypeList::getTypeLabels'],
     ['getCacheBetaTypes'],
     ['getChangeLocaleUrl', 'Magento\Backend\Block\Page\Footer'],
     ['getCheckoutMehod', 'Magento\Checkout\Model\Type\Onepage'],

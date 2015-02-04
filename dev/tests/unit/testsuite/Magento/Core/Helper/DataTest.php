@@ -17,38 +17,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
     }
 
-    public function testGetCacheTypes()
-    {
-        $cachedTypes = [
-            'type1' => ['label' => 'node1', 'other' => 'other1'],
-            'type2' => ['label' => 'node2', 'other' => 'other2'],
-            'type3' => ['other' => 'other3'],
-        ];
-        $types = [
-            'type1' => 'node1',
-            'type2' => 'node2',
-        ];
-        $cacheConfigMock = $this->getMockBuilder('Magento\Framework\Cache\ConfigInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cacheConfigMock->expects($this->once())
-            ->method('getTypes')
-            ->will($this->returnValue($cachedTypes));
-        $context = $this->objectManager->getObject(
-            'Magento\Framework\App\Helper\Context',
-            [
-                'cacheConfig' => $cacheConfigMock,
-            ]
-        );
-        $helper = $this->getHelper(
-            [
-                'context' => $context,
-            ]
-        );
-
-        $this->assertEquals($types, $helper->getCacheTypes());
-    }
-
     public function testJsonEncode()
     {
         $valueToEncode = 'valueToEncode';
