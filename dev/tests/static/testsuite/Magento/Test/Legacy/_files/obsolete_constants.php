@@ -184,7 +184,7 @@ return [
     [
         'XML_PATH_DEV_ALLOW_IPS',
         'Magento\Core\Helper\Data',
-        'Magento\Framework\App\Config\Helper\Data::XML_PATH_DEV_ALLOW_IPS'
+        'Magento\Developer\Helper\Data::XML_PATH_DEV_ALLOW_IPS'
     ],
     ['XML_PATH_INSTALL_DATE', 'Mage_Core_Model_App', 'Mage_Core_Model_Config_Primary::XML_PATH_INSTALL_DATE'],
     ['XML_PATH_LOCALE_INHERITANCE', 'Mage_Core_Model_Translate'],

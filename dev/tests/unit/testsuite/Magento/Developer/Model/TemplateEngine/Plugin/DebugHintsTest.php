@@ -25,7 +25,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configHelperMock;
+    protected $devHelperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -36,7 +36,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->configHelperMock = $this->getMock('Magento\Framework\App\Config\Helper\Data', [], [], '', false);
+        $this->devHelperMock = $this->getMock('Magento\Developer\Helper\Data', [], [], '', false);
         $this->subjectMock = $this->getMock(
             'Magento\Framework\View\TemplateEngineFactory',
             [],
@@ -44,7 +44,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = new DebugHints($this->objectManagerMock, $this->scopeConfigMock, $this->configHelperMock);
+        $this->model = new DebugHints($this->objectManagerMock, $this->scopeConfigMock, $this->devHelperMock);
     }
 
     /**
@@ -53,7 +53,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterCreateActive($showBlockHints)
     {
-        $this->configHelperMock->expects($this->once())->method('isDevAllowed')->will($this->returnValue(true));
+        $this->devHelperMock->expects($this->once())->method('isDevAllowed')->will($this->returnValue(true));
         $this->_setupConfigFixture(true, $showBlockHints);
         $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
         $engineDecorated = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
@@ -82,7 +82,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterCreateInactive($isDevAllowed, $showTemplateHints)
     {
-        $this->configHelperMock->expects($this->any())->method('isDevAllowed')->will($this->returnValue($isDevAllowed));
+        $this->devHelperMock->expects($this->any())->method('isDevAllowed')->will($this->returnValue($isDevAllowed));
         $this->_setupConfigFixture($showTemplateHints, true);
         $this->objectManagerMock->expects($this->never())->method('create');
         $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface', [], [], '', false);

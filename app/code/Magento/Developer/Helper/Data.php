@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Config\Helper;
+namespace Magento\Developer\Helper;
 
 /**
  * App config data helper
@@ -11,15 +11,9 @@ namespace Magento\Framework\App\Config\Helper;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Store cache context
-     */
-    const CONTEXT_STORE = 'store';
-
-    /**#@+
-     * Paths for various config settings
+     * Dev allow ips config path
      */
     const XML_PATH_DEV_ALLOW_IPS = 'dev/restrict/allow_ips';
-    /**#@- */
 
     /**
      * @param null $storeId

@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Config\Helper;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config\Helper\Data
+     * @var \Magento\Developer\Helper\Data
      */
     protected $helper;
 
@@ -30,7 +30,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $className = 'Magento\Framework\App\Config\Helper\Data';
+        $className = 'Magento\Developer\Helper\Data';
         $arguments = $objectManagerHelper->getConstructArguments($className);
         /** @var \Magento\Framework\App\Helper\Context $context */
         $context = $arguments['context'];

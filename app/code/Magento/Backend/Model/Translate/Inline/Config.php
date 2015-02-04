@@ -16,20 +16,20 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Config\Helper\Data
+     * @var \Magento\Developer\Helper\Data
      */
-    protected $configHelper;
+    protected $devHelper;
 
     /**
      * @param \Magento\Backend\App\ConfigInterface $config
-     * @param \Magento\Framework\App\Config\Helper\Data $helper
+     * @param \Magento\Developer\Helper\Data $helper
      */
     public function __construct(
         \Magento\Backend\App\ConfigInterface $config,
-        \Magento\Framework\App\Config\Helper\Data $helper
+        \Magento\Developer\Helper\Data $helper
     ) {
         $this->config = $config;
-        $this->configHelper = $helper;
+        $this->devHelper = $helper;
     }
 
     /**
@@ -45,6 +45,6 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
      */
     public function isDevAllowed($scope = null)
     {
-        return $this->configHelper->isDevAllowed($scope);
+        return $this->devHelper->isDevAllowed($scope);
     }
 }

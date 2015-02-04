@@ -14,9 +14,6 @@
             </pagination>
         </design>
         <dev>
-            <restrict>
-                <allow_ips />
-            </restrict>
             <debug>
                 <profiler>0</profiler>
             </debug>

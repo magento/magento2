@@ -8,14 +8,14 @@ namespace Magento\Framework\App\Config\Helper;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config\Helper\Data
+     * @var \Magento\Developer\Helper\Data
      */
     protected $helper = null;
 
     protected function setUp()
     {
         $this->helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Config\Helper\Data'
+            'Magento\Developer\Helper\Data'
         );
     }
 
