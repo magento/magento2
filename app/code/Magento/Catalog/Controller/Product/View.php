@@ -94,6 +94,14 @@ class View extends \Magento\Catalog\Controller\Product
                 $this->messageManager->addNotice($notice);
             }
             $resultRedirect = $this->resultRedirectFactory->create();
+            if ($this->getRequest()->isAjax()) {
+                $this->getResponse()->representJson(
+                    $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode([
+                        'backUrl' => $this->_redirect->getRedirectUrl()
+                    ])
+                );
+                return;
+            }
             $resultRedirect->setRefererOrBaseUrl();
             return $resultRedirect;
         }
