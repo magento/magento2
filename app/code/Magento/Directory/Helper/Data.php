@@ -26,10 +26,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     const XML_PATH_DISPLAY_ALL_STATES = 'general/region/display_all';
 
-    /*
+    /**#@+
      * Path to config value, which is default country
      */
     const XML_PATH_DEFAULT_COUNTRY = 'general/country/default';
+    const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
+    const XML_PATH_DEFAULT_TIMEZONE = 'general/locale/timezone';
+    /**#@-*/
 
     /**
      * Country collection

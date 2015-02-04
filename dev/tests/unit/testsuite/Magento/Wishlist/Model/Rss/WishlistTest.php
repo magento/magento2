@@ -8,6 +8,8 @@
 
 namespace Magento\Wishlist\Model\Rss;
 
+use Magento\Directory\Helper\Data;
+
 class WishlistTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -166,7 +168,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
                             null,
                         ],
                         [
-                            \Magento\Core\Helper\Data::XML_PATH_DEFAULT_LOCALE,
+                            Data::XML_PATH_DEFAULT_LOCALE,
                             \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             null,
                             $locale

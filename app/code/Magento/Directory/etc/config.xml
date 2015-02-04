@@ -42,6 +42,8 @@
                 <date_format_medium>%a, %b %e %Y</date_format_medium>
                 <date_format_short>%m/%d/%y</date_format_short>
                 <language>en</language>
+                <code>en_US</code>
+                <timezone>America/Los_Angeles</timezone>
             </local>
         </general>
     </default>
