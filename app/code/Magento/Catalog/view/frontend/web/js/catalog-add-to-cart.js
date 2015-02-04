@@ -11,6 +11,8 @@ define([
     $.widget('mage.catalogAddToCart', {
 
         options: {
+            processStart: null,
+            processStop: null,
             bindSubmit: true,
             minicartSelector: '[data-block="minicart"]',
             messagesSelector: '.messages',
@@ -31,6 +33,10 @@ define([
             });
         },
 
+        isLoaderEnabled: function() {
+            return this.options.processStart && this.options.processStop;
+        },
+
         submitForm: function(form) {
             var self = this;
             $.ajax({
@@ -39,10 +45,15 @@ define([
                 type: 'post',
                 dataType: 'json',
                 beforeSend: function() {
-                    $('body').trigger('processStart');
+                    if (self.isLoaderEnabled()) {
+                        $('body').trigger(self.options.processStart);
+                    }
                 },
                 success: function(res) {
-                    $('body').trigger('processStop');
+                    if (self.isLoaderEnabled()) {
+                        $('body').trigger(self.options.processStop);
+                    }
+
                     if (res.backUrl) {
                         window.location = res.backUrl;
                         return;
