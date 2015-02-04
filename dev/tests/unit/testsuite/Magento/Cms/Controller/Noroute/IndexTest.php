@@ -114,7 +114,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->resultPageMock)
         );
-        $this->assertSame($this->resultPageMock, $this->_controller->execute());
+        $this->assertSame(
+            $this->resultPageMock,
+            $this->_controller->execute()
+        );
     }
 
     public function testExecuteResultForward()
@@ -144,6 +147,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(false)
         );
-        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->_controller->execute());
+        $this->assertSame(
+            $this->forwardMock,
+            $this->_controller->execute()
+        );
     }
 }

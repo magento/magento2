@@ -79,11 +79,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_view;
 
     /**
-     * @var \Magento\Framework\View\Page\Config
-     */
-    protected $pageConfig;
-
-    /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
@@ -100,7 +95,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\App\ViewInterface $view
-     * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -114,7 +108,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\App\ViewInterface $view,
-        \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->messageManager = $messageManager;
@@ -123,10 +116,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_design = $design;
         $this->_pageFactory = $pageFactory;
         $this->_storeManager = $storeManager;
-        $this->_storeManager = $storeManager;
         $this->_localeDate = $localeDate;
         $this->_escaper = $escaper;
-        $this->pageConfig = $pageConfig;
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
