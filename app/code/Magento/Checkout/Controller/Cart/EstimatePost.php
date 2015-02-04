@@ -5,10 +5,48 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Framework;
 use Magento\Checkout\Model\Cart as CustomerCart;
 
-class EstimatePost extends \Magento\Checkout\Controller\Cart\CouponPost
+class EstimatePost extends \Magento\Checkout\Controller\Cart
 {
+    /**
+     * @var \Magento\Quote\Model\QuoteRepository
+     */
+    protected $quoteRepository;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param CustomerCart $cart
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     */
+    public function __construct(
+        Framework\App\Action\Context $context,
+        Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        CustomerCart $cart,
+        Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository
+    ) {
+        $this->quoteRepository = $quoteRepository;
+        parent::__construct(
+            $context,
+            $scopeConfig,
+            $checkoutSession,
+            $storeManager,
+            $formKeyValidator,
+            $cart,
+            $resultRedirectFactory
+        );
+    }
+
     /**
      * Initialize shipping information
      *
