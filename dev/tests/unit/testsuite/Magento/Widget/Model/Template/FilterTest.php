@@ -18,7 +18,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject $storeMock */
         $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $storeMock->expects($this->once())->method('getBaseUrl')->with(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
-            ->will($this->returnValue($baseUrl));
+            ->willReturn($baseUrl);
 
         /** @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject $storeManagerMock */
         $storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
