@@ -9,8 +9,8 @@ namespace Magento\Tax\Model;
 use Magento\Tax\Api\Data\TaxDetailsInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
-use Magento\Tax\Api\Data\TaxDetailsDataBuilder;
-use Magento\Tax\Api\Data\TaxDetailsItemDataBuilder;
+use Magento\Tax\Api\Data\TaxDetailsInterfaceFactory;
+use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
 use Magento\Tax\Api\Data\AppliedTaxRateInterface;
 use Magento\Tax\Api\Data\AppliedTaxInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
@@ -26,11 +26,11 @@ use Magento\Tax\Api\TaxCalculationInterface;
 class TaxCalculation implements TaxCalculationInterface
 {
     /**
-     * Tax Details builder
+     * Tax Details factory
      *
-     * @var TaxDetailsDataBuilder
+     * @var TaxDetailsInterfaceFactory
      */
-    protected $taxDetailsBuilder;
+    protected $taxDetailsDataObjectFactory;
 
     /**
      * Tax configuration object
@@ -54,11 +54,11 @@ class TaxCalculation implements TaxCalculationInterface
     protected $discountTaxCompensations;
 
     /**
-     * Tax details item builder
+     * Tax details item factory
      *
-     * @var TaxDetailsItemDataBuilder
+     * @var TaxDetailsItemInterfaceFactory
      */
-    protected $taxDetailsItemBuilder;
+    protected $taxDetailsItemDataObjectFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -94,30 +94,38 @@ class TaxCalculation implements TaxCalculationInterface
     protected $calculatorFactory;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param Calculation $calculation
      * @param CalculatorFactory $calculatorFactory
      * @param Config $config
-     * @param TaxDetailsDataBuilder $taxDetailsBuilder
-     * @param TaxDetailsItemDataBuilder $taxDetailsItemBuilder
+     * @param TaxDetailsInterfaceFactory $taxDetailsDataObjectFactory
+     * @param TaxDetailsItemInterfaceFactory $taxDetailsItemDataObjectFactory
      * @param StoreManagerInterface $storeManager
      * @param TaxClassManagementInterface $taxClassManagement
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         Calculation $calculation,
         CalculatorFactory $calculatorFactory,
         Config $config,
-        TaxDetailsDataBuilder $taxDetailsBuilder,
-        TaxDetailsItemDataBuilder $taxDetailsItemBuilder,
+        TaxDetailsInterfaceFactory $taxDetailsDataObjectFactory,
+        TaxDetailsItemInterfaceFactory $taxDetailsItemDataObjectFactory,
         StoreManagerInterface $storeManager,
-        TaxClassManagementInterface $taxClassManagement
+        TaxClassManagementInterface $taxClassManagement,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->calculationTool = $calculation;
         $this->calculatorFactory = $calculatorFactory;
         $this->config = $config;
-        $this->taxDetailsBuilder = $taxDetailsBuilder;
-        $this->taxDetailsItemBuilder = $taxDetailsItemBuilder;
+        $this->taxDetailsDataObjectFactory = $taxDetailsDataObjectFactory;
+        $this->taxDetailsItemDataObjectFactory = $taxDetailsItemDataObjectFactory;
         $this->storeManager = $storeManager;
         $this->taxClassManagement = $taxClassManagement;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -142,7 +150,12 @@ class TaxCalculation implements TaxCalculationInterface
         ];
         $items = $quoteDetails->getItems();
         if (empty($items)) {
-            return $this->taxDetailsBuilder->populateWithArray($taxDetailsData)->create();
+            return $this->taxDetailsDataObjectFactory->create()
+                ->setSubtotal(0.0)
+                ->setTaxAmount(0.0)
+                ->setDiscountTaxCompensationAmount(0.0)
+                ->setAppliedTaxes([])
+                ->setItems([]);
         }
         $this->computeRelationships($items);
 
@@ -166,10 +179,9 @@ class TaxCalculation implements TaxCalculationInterface
                     $processedItems[$processedItem->getCode()] = $processedItem;
                     $processedChildren[] = $processedItem;
                 }
-                $processedItemBuilder = $this->calculateParent($processedChildren, $item->getQuantity());
-                $processedItemBuilder->setCode($item->getCode());
-                $processedItemBuilder->setType($item->getType());
-                $processedItem = $processedItemBuilder->create();
+                $processedItem = $this->calculateParent($processedChildren, $item->getQuantity());
+                $processedItem->setCode($item->getCode());
+                $processedItem->setType($item->getType());
             } else {
                 $processedItem = $this->processItem($item, $calculator, $round);
                 $taxDetailsData = $this->aggregateItemData($taxDetailsData, $processedItem);
@@ -177,7 +189,14 @@ class TaxCalculation implements TaxCalculationInterface
             $processedItems[$processedItem->getCode()] = $processedItem;
         }
 
-        return $this->taxDetailsBuilder->populateWithArray($taxDetailsData)->setItems($processedItems)->create();
+        $taxDetailsDataObject = $this->taxDetailsDataObjectFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $taxDetailsDataObject,
+            $taxDetailsData,
+            '\Magento\Tax\Api\Data\TaxDetailsInterface'
+        );
+        $taxDetailsDataObject->setItems($processedItems);
+        return $taxDetailsDataObject;
     }
 
     /**
@@ -270,7 +289,7 @@ class TaxCalculation implements TaxCalculationInterface
      *
      * @param TaxDetailsItemInterface[] $children
      * @param int $quantity
-     * @return TaxDetailsItemDataBuilder
+     * @return TaxDetailsItemInterface
      */
     protected function calculateParent($children, $quantity)
     {
@@ -289,13 +308,14 @@ class TaxCalculation implements TaxCalculationInterface
         $price = $this->calculationTool->round($rowTotal / $quantity);
         $priceInclTax = $this->calculationTool->round($rowTotalInclTax / $quantity);
 
-        $this->taxDetailsItemBuilder->setPrice($price);
-        $this->taxDetailsItemBuilder->setPriceInclTax($priceInclTax);
-        $this->taxDetailsItemBuilder->setRowTotal($rowTotal);
-        $this->taxDetailsItemBuilder->setRowTotalInclTax($rowTotalInclTax);
-        $this->taxDetailsItemBuilder->setRowTax($rowTax);
+        $taxDetailsItemDataObject = $this->taxDetailsItemDataObjectFactory->create()
+            ->setPrice($price)
+            ->setPriceInclTax($priceInclTax)
+            ->setRowTotal($rowTotal)
+            ->setRowTotalInclTax($rowTotalInclTax)
+            ->setRowTax($rowTax);
 
-        return $this->taxDetailsItemBuilder;
+        return $taxDetailsItemDataObject;
     }
 
     /**

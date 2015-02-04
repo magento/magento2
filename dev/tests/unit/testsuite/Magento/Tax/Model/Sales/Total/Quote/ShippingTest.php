@@ -23,17 +23,17 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $quoteDetailsBuilder;
+    private $quoteDetailsDataObjectFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $itemDetailsBuilder;
+    private $itemDetailsDataObjectFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $taxClassKeyBuilder;
+    private $taxClassKeyDataObjectFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -54,29 +54,22 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     {
         $this->taxConfigMock = $this->getMock('Magento\Tax\Model\Config', [], [], '', false);
         $this->taxCalculationMock = $this->getMock('Magento\Tax\Api\TaxCalculationInterface');
-        $this->quoteDetailsBuilder = $this->getMock('Magento\Tax\Api\Data\QuoteDetailsDataBuilder',
+        $this->quoteDetailsDataObjectFactory = $this->getMock('Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory',
             ['create'],
             [],
             '',
             false
         );
-        $this->itemDetailsBuilder = $this->getMock('Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder',
+        $this->itemDetailsDataObjectFactory = $this->getMock('Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory',
             [
-                'setType',
-                'setCode',
-                'setQuantity',
-                'setUnitPrice',
-                'setDiscountAmount',
-                'setTaxClassKey',
-                'setTaxIncluded',
                 'create',
             ],
             [],
             '',
             false
         );
-        $this->taxClassKeyBuilder = $this->getMock('Magento\Tax\Api\Data\TaxClassKeyDataBuilder',
-            ['setType', 'setValue', 'create'],
+        $this->taxClassKeyDataObjectFactory = $this->getMock('Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -96,9 +89,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->model = new Shipping(
             $this->taxConfigMock,
             $this->taxCalculationMock,
-            $this->quoteDetailsBuilder,
-            $this->itemDetailsBuilder,
-            $this->taxClassKeyBuilder,
+            $this->quoteDetailsDataObjectFactory,
+            $this->itemDetailsDataObjectFactory,
+            $this->taxClassKeyDataObjectFactory,
             $this->addressFactoryMock,
             $this->regionFactoryMock
         );

@@ -132,43 +132,39 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $taxCalculationService = $this->getMock('\Magento\Tax\Api\TaxCalculationInterface');
 
-        $taxClassKeyBuilder = $this->getMockBuilder('\Magento\Tax\Api\Data\TaxClassKeyDataBuilder')
+        $taxClassKeyDataObjectMock = $this->getMock('\Magento\Tax\Api\Data\TaxClassKeyInterface');
+        $taxClassKeyDataObjectFactoryMock = $this->getMockBuilder('\Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory')
             ->disableOriginalConstructor()
-            ->setMethods(['setType', 'setValue', 'create'])
             ->getMock();
-        $taxClassKeyBuilder
+        $taxClassKeyDataObjectFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($taxClassKeyDataObjectMock));
+        $taxClassKeyDataObjectMock
             ->expects($this->any())
             ->method('setType')
-            ->will($this->returnValue($taxClassKeyBuilder));
-        $taxClassKeyBuilder
+            ->willReturnSelf();
+        $taxClassKeyDataObjectMock
             ->expects($this->any())
             ->method('setValue')
-            ->will($this->returnValue($taxClassKeyBuilder));
-        $taxClassKeyBuilder
+            ->willReturnSelf();
+
+        $itemDataObjectMock = $this->getMock('\Magento\Tax\Api\Data\QuoteDetailsItemInterface');
+        $itemDataObjectFactoryMock = $this->getMockBuilder('\Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemDataObjectFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($taxClassKeyBuilder));
-
-        $itemBuilder = $this->getMockBuilder('\Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder')
-            ->disableOriginalConstructor()
-            ->setMethods(['getTaxClassKeyBuilder', 'create', 'setTaxClassKey', 'getAssociatedTaxables'])
-            ->getMock();
-        $itemBuilder
-            ->expects($this->any())
-            ->method('getTaxClassKeyBuilder')
-            ->will($this->returnValue($taxClassKeyBuilder));
-        $itemBuilder
+            ->will($this->returnValue($itemDataObjectMock));
+        $itemDataObjectMock
             ->expects($this->any())
             ->method('setTaxClassKey')
-            ->will($this->returnValue($itemBuilder));
-        $itemBuilder
-            ->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($items));
-        $itemBuilder
+            ->willReturnSelf();
+        $itemDataObjectMock
             ->expects($this->any())
             ->method('getAssociatedTaxables')
-            ->will($this->returnValue(null));
+            ->willReturnSelf();
 
         $regionFactory = $this->getMockBuilder('Magento\Customer\Api\Data\RegionInterfaceFactory')
             ->disableOriginalConstructor()
@@ -194,46 +190,20 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($regionFactory));
 
         $quoteDetails = $this->getMock('Magento\Tax\Api\Data\QuoteDetailsInterface');
-        $quoteDetailsBuilder = $this->getMock('\Magento\Tax\Api\Data\QuoteDetailsDataBuilder',
-            [
-                'getItemBuilder', 'getAddressBuilder', 'getTaxClassKeyBuilder', 'create', 'setBillingAddress',
-                'setShippingAddress', 'setCustomerTaxClassKey', 'setItems', ''
-            ],
+        $quoteDetailsDataObjectFactoryMock = $this->getMock('\Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
-        $quoteDetailsBuilder
-            ->expects($this->any())
-            ->method('getItemBuilder')
-            ->will($this->returnValue($itemBuilder));
-        $quoteDetailsBuilder
-            ->expects($this->any())
-            ->method('getAddressBuilder')
-            ->will($this->returnValue($addressFactory));
-        $quoteDetailsBuilder
-            ->expects($this->any())
-            ->method('getTaxClassKeyBuilder')
-            ->will($this->returnValue($taxClassKeyBuilder));
-        $quoteDetailsBuilder
+        $quoteDetailsDataObjectFactoryMock
             ->expects($this->any())
             ->method('create')
             ->will($this->returnValue($quoteDetails));
 
-        $quoteDetailsItemDataBuilder = $this->getMock(
-            'Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder',
-            [
-                'setCode', 'setQuantity', 'setTaxClassKey', 'setTaxIncluded', 'setType',
-                'setUnitPrice', 'setDiscountAmount', 'setParentCode', 'create'
-            ],
-            [],
-            '',
-            false
-        );
-
-        $taxClassKeyDataBuilder =  $this->getMock(
-            'Magento\Tax\Api\Data\TaxClassKeyDataBuilder',
-            ['setType', 'setValue', 'create'],
+        $quoteDetailsItemDataObjectFactoryMock = $this->getMock(
+            'Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -242,9 +212,9 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $taxTotalsCalcModel = new Tax(
             $taxConfig,
             $taxCalculationService,
-            $quoteDetailsBuilder,
-            $quoteDetailsItemDataBuilder,
-            $taxClassKeyDataBuilder,
+            $quoteDetailsDataObjectFactoryMock,
+            $quoteDetailsItemDataObjectFactoryMock,
+            $taxClassKeyDataObjectFactoryMock,
             $addressFactory,
             $regionFactory,
             $taxData
@@ -456,43 +426,39 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         $taxTotalsCalcModel = $objectManager->getObject('Magento\Tax\Model\Sales\Total\Quote\Tax');
 
-        $taxClassKeyBuilder = $this->getMockBuilder('\Magento\Tax\Api\Data\TaxClassKeyDataBuilder')
+        $taxClassKeyDataObjectMock = $this->getMock('\Magento\Tax\Api\Data\TaxClassKeyInterface');
+        $taxClassKeyDataObjectFactoryMock = $this->getMockBuilder('\Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory')
             ->disableOriginalConstructor()
-            ->setMethods(['setType', 'setValue', 'create'])
             ->getMock();
-        $taxClassKeyBuilder
+        $taxClassKeyDataObjectFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($taxClassKeyDataObjectMock));
+        $taxClassKeyDataObjectMock
             ->expects($this->any())
             ->method('setType')
-            ->will($this->returnValue($taxClassKeyBuilder));
-        $taxClassKeyBuilder
+            ->willReturnSelf();
+        $taxClassKeyDataObjectMock
             ->expects($this->any())
             ->method('setValue')
-            ->will($this->returnValue($taxClassKeyBuilder));
-        $taxClassKeyBuilder
+            ->willReturnSelf();
+
+        $itemDataObjectMock = $this->getMock('\Magento\Tax\Api\Data\QuoteDetailsItemInterface');
+        $itemDataObjectFactoryMock = $this->getMockBuilder('\Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemDataObjectFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($taxClassKeyBuilder));
-
-        $itemBuilder = $this->getMockBuilder('\Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder')
-            ->disableOriginalConstructor()
-            ->setMethods(['getTaxClassKeyBuilder', 'setTaxClassKey', 'create', 'getAssociatedTaxables'])
-            ->getMock();
-        $itemBuilder
-            ->expects($this->any())
-            ->method('getTaxClassKeyBuilder')
-            ->will($this->returnValue($taxClassKeyBuilder));
-        $itemBuilder
+            ->will($this->returnValue($itemDataObjectMock));
+        $itemDataObjectMock
             ->expects($this->any())
             ->method('setTaxClassKey')
-            ->will($this->returnValue($itemBuilder));
-        $itemBuilder
-            ->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($itemBuilder));
-        $itemBuilder
+            ->willReturnSelf();
+        $itemDataObjectMock
             ->expects($this->any())
             ->method('getAssociatedTaxables')
-            ->will($this->returnValue(null));
+            ->willReturnSelf();
 
         $regionFactory = $this->getMockBuilder('Magento\Customer\Api\Data\RegionInterfaceFactory')
             ->disableOriginalConstructor()
@@ -559,7 +525,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         foreach ($addressData as $key => $value) {
             $address->setData($key, $value);
         }
-        $taxTotalsCalcModel->mapQuoteExtraTaxables($itemBuilder, $address, false);
+        $taxTotalsCalcModel->mapQuoteExtraTaxables($itemDataObjectFactoryMock, $address, false);
     }
 
     /*
