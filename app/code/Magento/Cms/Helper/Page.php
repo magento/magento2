@@ -160,7 +160,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         }
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $this->_setLayoutType($inRange, $resultPage);
+        $this->setLayoutType($inRange, $resultPage);
         $resultPage->initLayout();
         $resultPage->addHandle('cms_page_view');
         $resultPage->addPageLayoutHandles(['id' => $this->_page->getIdentifier()]);
@@ -246,7 +246,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         }
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->_view->getPage();
-        $this->_setLayoutType($inRange, $resultPage);
+        $this->setLayoutType($inRange, $resultPage);
         $resultPage->initLayout();
         $resultPage->addHandle('cms_page_view');
         $resultPage->addPageLayoutHandles(['id' => $this->_page->getIdentifier()]);
@@ -329,7 +329,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\View\Result\Page $resultPage
      * @return \Magento\Framework\View\Result\Page
      */
-    protected function _setLayoutType($inRange, $resultPage)
+    protected function setLayoutType($inRange, $resultPage)
     {
         if ($this->_page->getPageLayout()) {
             if ($this->_page->getCustomPageLayout()
