@@ -388,7 +388,8 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     private function _createFirstAddress()
     {
         $address = $this->_addressFactory->create();
-        $this->dataObjectHelper->mergeDataObjects('\Magento\Customer\Api\Data\AddressInterface',
+        $this->dataObjectHelper->mergeDataObjects(
+            '\Magento\Customer\Api\Data\AddressInterface',
             $address,
             $this->_expectedAddresses[0]
         );
