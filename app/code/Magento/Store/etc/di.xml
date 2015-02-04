@@ -59,6 +59,9 @@
     <type name="Magento\Framework\Url\SecurityInfo">
         <plugin name="storeUrlSecurityInfo" type="Magento\Store\Url\Plugin\SecurityInfo"/>
     </type>
+    <type name="Magento\Framework\Url\RouteParamsResolver">
+        <plugin name="storeUrlRouteParamsResolver" type="Magento\Store\Url\Plugin\RouteParamsResolver"/>
+    </type>
     <type name="Magento\Store\Model\Resource\Website\Collection">
         <arguments>
             <argument name="fetchStrategy" xsi:type="object">Magento\Store\Model\Resource\Website\Collection\FetchStrategy</argument>
