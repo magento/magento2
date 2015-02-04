@@ -33,6 +33,11 @@ class AreaTest extends \PHPUnit_Framework_TestCase
      */
     private $configWriterMock;
 
+    /**
+     * @var Config\Chain\ModificationChain | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configChain;
+
     protected function setUp()
     {
         $this->areaListMock = $this->getMockBuilder('Magento\Framework\App\AreaList')
@@ -47,6 +52,9 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->configWriterMock = $this->getMockBuilder('Magento\Tools\Di\Compiler\Config\WriterInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->configChain = $this->getMockBuilder('Magento\Tools\Di\Compiler\Config\Chain\ModificationChain')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testDoOperationEmptyPath()
@@ -55,7 +63,8 @@ class AreaTest extends \PHPUnit_Framework_TestCase
             $this->areaListMock,
             $this->areaInstancesNamesList,
             $this->configReaderMock,
-            $this->configWriterMock
+            $this->configWriterMock,
+            $this->configChain
         );
 
         $this->assertNull($areaOperation->doOperation());
@@ -70,22 +79,13 @@ class AreaTest extends \PHPUnit_Framework_TestCase
             'preferences' => [],
             'instanceTypes' => []
         ];
-        $expectedConfig = [
-            'arguments' => array_map(
-                function ($arguments) {
-                    return serialize($arguments);
-                },
-                $arguments
-            ),
-            'preferences' => [],
-            'instanceTypes' => []
-        ];
 
         $areaOperation = new Area(
             $this->areaListMock,
             $this->areaInstancesNamesList,
             $this->configReaderMock,
             $this->configWriterMock,
+            $this->configChain,
             [$path]
         );
 
@@ -103,11 +103,16 @@ class AreaTest extends \PHPUnit_Framework_TestCase
                 App\Area::AREA_GLOBAL
             )
             ->willReturn($generatedConfig);
+        $this->configChain->expects($this->once())
+            ->method('modify')
+            ->with($generatedConfig)
+            ->willReturn($generatedConfig);
+
         $this->configWriterMock->expects($this->once())
             ->method('write')
             ->with(
                 App\Area::AREA_GLOBAL,
-                $expectedConfig
+                $generatedConfig
             );
 
         $areaOperation->doOperation();

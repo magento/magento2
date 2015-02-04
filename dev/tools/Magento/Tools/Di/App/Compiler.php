@@ -62,6 +62,16 @@ class Compiler implements \Magento\Framework\AppInterface
                         'Magento\Tools\Di\Compiler\Config\Writer\Filesystem',
                     'Magento\Tools\Di\Compiler\Log\Writer\WriterInterface' =>
                         'Magento\Tools\Di\Compiler\Log\Writer\Console'
+                ],
+                'Magento\Tools\Di\Compiler\Config\Chain\ModificationChain' => [
+                    'arguments' => [
+                        'modificationsList' => [
+                            'ArgumentsSerialization' =>
+                                ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization'],
+                            'PreferencesResolving' =>
+                                ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
+                        ]
+                    ]
                 ]
             ]
         );

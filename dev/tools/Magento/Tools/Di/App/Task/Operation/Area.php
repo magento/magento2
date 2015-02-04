@@ -39,10 +39,16 @@ class Area implements OperationInterface
     private $data = [];
 
     /**
+     * @var Config\Chain\ModificationChain
+     */
+    private $modificationChain;
+
+    /**
      * @param App\AreaList $areaList
-     * @param \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area $instancesNamesList
+     * @param \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area $areaInstancesNamesList
      * @param Config\Reader $configReader
      * @param Config\WriterInterface $configWriter
+     * @param Config\Chain\ModificationChain $modificationChain
      * @param array $data
      */
     public function __construct(
@@ -50,6 +56,7 @@ class Area implements OperationInterface
         \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area $areaInstancesNamesList,
         Config\Reader $configReader,
         Config\WriterInterface $configWriter,
+        Config\Chain\ModificationChain $modificationChain,
         $data = []
     ) {
         $this->areaList = $areaList;
@@ -57,6 +64,7 @@ class Area implements OperationInterface
         $this->configReader = $configReader;
         $this->configWriter = $configWriter;
         $this->data = $data;
+        $this->modificationChain = $modificationChain;
     }
 
     /**
@@ -76,12 +84,7 @@ class Area implements OperationInterface
         $areaCodes = array_merge([App\Area::AREA_GLOBAL], $this->areaList->getCodes());
         foreach ($areaCodes as $areaCode) {
             $config = $this->configReader->generateCachePerScope($definitionsCollection, $areaCode);
-
-            foreach ($config['arguments'] as $key => $value) {
-                if ($value !== null) {
-                    $config['arguments'][$key] = serialize($value);
-                }
-            }
+            $config = $this->modificationChain->modify($config);
 
             $this->configWriter->write(
                 $areaCode,

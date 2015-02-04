@@ -141,7 +141,6 @@ class Reader
      *
      * @param ConfigInterface $config
      * @param DefinitionsCollection $definitionsCollection
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      *
      * @return void
      */
@@ -149,7 +148,7 @@ class Reader
     {
         $definedInstances = $definitionsCollection->getInstancesNamesList();
 
-        foreach ($config->getPreferences() as $interface => $preference) {
+        foreach (array_keys($config->getPreferences()) as $interface) {
             if (in_array($interface, $definedInstances)) {
                 continue;
             }
