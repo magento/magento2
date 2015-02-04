@@ -51,6 +51,13 @@ class CustomerForm extends FormTabs
      */
     protected $fieldWrapperControl = './/*[contains(@class, "form__field")]/*[contains(@class,"control")]';
 
+    /**
+     * Table with customer information
+     *
+     * @var string
+     */
+    protected $dataTable = '.data-table';
+
     // @codingStandardsIgnoreStart
     /**
      * Field wrapper with absent control block on form.
@@ -94,7 +101,7 @@ class CustomerForm extends FormTabs
     public function updateCustomer(FixtureInterface $customer, $address = null)
     {
         $this->waitForm();
-        $this->waitFields();
+        $this->waitForElementVisible($this->dataTable);
 
         $isHasData = ($customer instanceof InjectableFixture) ? $customer->hasData() : true;
         if ($isHasData) {
@@ -118,7 +125,7 @@ class CustomerForm extends FormTabs
     public function getDataCustomer(FixtureInterface $customer, $address = null)
     {
         $this->waitForm();
-        $this->waitFields();
+        $this->waitForElementVisible($this->dataTable);
 
         $data = ['customer' => $customer->hasData() ? parent::getData($customer) : parent::getData()];
         if (null !== $address) {
