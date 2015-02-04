@@ -16,12 +16,12 @@ GalleryTest.prototype.setUp = function() {
         <a data-role="gallery-next" href="#"></a>
      </script>
      <script data-template="gallery-base-image" type="text/x-magento-template">
-        <img data-role="zoom-image" <% if (!fullSizeMode) { %>data-large="<%= large %>"
-            src="<%= medium %>"<% } else { %>src="<%= large %>"<% } %> alt="<%= title %>"/>
+        <img data-role="zoom-image" <% if (!data.fullSizeMode) { %>data-large="<%= data.large %>"
+            src="<%= data.medium %>"<% } else { %>src="<%= data.large %>"<% } %> alt="<%= data.title %>"/>
      </script>
      <script data-template="gallery-thumbs" type="text/x-magento-template">
          <div>
-         <% _.each(images, function(img, index){ %>
+         <% _.each(data.images, function(img, index){ %>
             <a title="<%= img.title %>" data-index="<%= index %>" data-role="gallery-thumb" href="#">
                 <img alt="<%= img.title %>" src="<%= img.small %>" itemprop="image">
             </a>
@@ -29,7 +29,7 @@ GalleryTest.prototype.setUp = function() {
          <div>
      </script>
      <script data-template="notice" type="text/x-magento-template">
-        <p class="notice" data-role="notice"><%= text %></p>
+        <p class="notice" data-role="notice"><%= data.text %></p>
      </script>
      <div data-role="media-gallery-test"></div>
     */

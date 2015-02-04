@@ -90,27 +90,27 @@ $thumbHeight =  $block->getVar("product_page_more_views:height") ?: $thumbWidth;
         <a class="gallery control next" data-role="gallery-next" href="#"></a>
     </script>
     <script data-template="gallery-base-image" type="text/x-magento-template">
-        <a class="product photo<%if (typeof hasImg !== 'undefined') { %> placeholder<% } %>" href="<%= large %>">
+        <a class="product photo<%if (typeof data.hasImg !== 'undefined') { %> placeholder<% } %>" href="<%= data.large %>">
             <span class="img photo container">
                 <img
                     data-role="zoom-image"
                     class="photo image"
                     itemprop="image"
-                    <% if (!fullSizeMode) { %>
-                    data-large="<%= large %>" src="<%= medium %>"
+                    <% if (!data.fullSizeMode) { %>
+                    data-large="<%= data.large %>" src="<%= data.medium %>"
                     <% } else { %>
-                    src="<%= large %>"
+                    src="<%= data.large %>"
                     <% } %>
-                    alt="<%= title %>"/>
+                    alt="<%= data.title %>"/>
             </span>
         </a>
     </script>
     <script data-template="gallery-thumbs" type="text/x-magento-template">
-        <% if (tumbsTitle) { %>
-        <strong class="title"><%= tumbsTitle %></strong>
+        <% if (data.tumbsTitle) { %>
+        <strong class="title"><%= data.tumbsTitle %></strong>
         <% } %>
         <ul class="items thumbs">
-            <% _.each(images, function(img, index){ %>
+            <% _.each(data.images, function(img, index){ %>
              <li class="item thumb">
                 <a title="<%= img.title %>" <% if (img.selected) { %>class="active"<% } %> data-index="<%= index %>" data-role="gallery-thumb" href="#">
                     <span class="img">
@@ -136,7 +136,7 @@ $thumbHeight =  $block->getVar("product_page_more_views:height") ?: $thumbWidth;
         <div data-role="zoom-lens"></div>
     </script>
     <script data-template="notice" type="text/x-magento-template">
-        <p class="notice" data-role="notice"><%= text %></p>
+        <p class="notice" data-role="notice"><%= data.text %></p>
     </script>
     <script>
         require(["jquery", "mage/mage"], function($){
