@@ -104,7 +104,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         // should be redirected to forgotpassword page
         $response = $this->getResponse();
         $this->assertEquals(302, $response->getHttpResponseCode());
-        $this->assertContains('customer/account/forgotpassword', $response->getHeader('Location')['value']);
+        $this->assertContains('customer/account/forgotpassword', $response->getHeader('Location')->getFieldValue());
     }
 
     /**

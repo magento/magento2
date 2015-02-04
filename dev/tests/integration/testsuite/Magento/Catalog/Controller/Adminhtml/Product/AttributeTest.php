@@ -24,7 +24,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
             'catalog/product_attribute/edit/attribute_id/100500',
-            $this->getResponse()->getHeader('Location')['value']
+            $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
         $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
@@ -49,7 +49,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
             'catalog/product/addAttribute/attribute/5',
-            $this->getResponse()->getHeader('Location')['value']
+            $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
         $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
@@ -69,7 +69,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
             'catalog/product_attribute/edit/attribute_id/0',
-            $this->getResponse()->getHeader('Location')['value']
+            $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
         $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
@@ -87,7 +87,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
             'catalog/product_attribute/index',
-            $this->getResponse()->getHeader('Location')['value']
+            $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
         $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
@@ -112,7 +112,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
             'catalog/product_attribute/index',
-            $this->getResponse()->getHeader('Location')['value']
+            $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
         $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
@@ -133,7 +133,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
             'catalog/product_attribute/edit/attribute_id/2',
-            $this->getResponse()->getHeader('Location')['value']
+            $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
         $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
@@ -158,7 +158,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertContains(
             'catalog/product_attribute/index',
-            $this->getResponse()->getHeader('Location')['value']
+            $this->getResponse()->getHeader('Location')->getFieldValue()
         );
     }
 
