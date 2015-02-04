@@ -98,7 +98,11 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
         $quoteDetails = $this->quoteDetailsFactory->create();
-        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
+        $this->dataObjectHelper->populateWithArray(
+            $quoteDetails,
+            $quoteDetailsData,
+            '\Magento\Tax\Api\Data\QuoteDetailsInterface'
+        );
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails, 1);
         $this->assertEquals($expected, $this->convertObjectToArray($taxDetails));
@@ -460,7 +464,11 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
         $quoteDetails = $this->quoteDetailsFactory->create();
-        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
+        $this->dataObjectHelper->populateWithArray(
+            $quoteDetails,
+            $quoteDetailsData,
+            '\Magento\Tax\Api\Data\QuoteDetailsInterface'
+        );
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails, $storeId);
 
@@ -918,7 +926,11 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
         $quoteDetails = $this->quoteDetailsFactory->create();
-        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
+        $this->dataObjectHelper->populateWithArray(
+            $quoteDetails,
+            $quoteDetailsData,
+            '\Magento\Tax\Api\Data\QuoteDetailsInterface'
+        );
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
@@ -1666,7 +1678,11 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
         $quoteDetails = $this->quoteDetailsFactory->create();
-        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
+        $this->dataObjectHelper->populateWithArray(
+            $quoteDetails,
+            $quoteDetailsData,
+            '\Magento\Tax\Api\Data\QuoteDetailsInterface'
+        );
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
@@ -1699,7 +1715,11 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
         $quoteDetails = $this->quoteDetailsFactory->create();
-        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
+        $this->dataObjectHelper->populateWithArray(
+            $quoteDetails,
+            $quoteDetailsData,
+            '\Magento\Tax\Api\Data\QuoteDetailsInterface'
+        );
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
@@ -1742,7 +1762,11 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
         $quoteDetails = $this->quoteDetailsFactory->create();
-        $this->dataObjectHelper->populateWithArray($quoteDetails, $quoteDetailsData);
+        $this->dataObjectHelper->populateWithArray(
+            $quoteDetails,
+            $quoteDetailsData,
+            '\Magento\Tax\Api\Data\QuoteDetailsInterface'
+        );
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 

@@ -87,7 +87,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         ];
         // Tax rate data object created
         $taxRate = $this->taxRateFactory->create();
-        $this->dataObjectHelper->populateWithArray($taxRate, $taxData);
+        $this->dataObjectHelper->populateWithArray($taxRate, $taxData, '\Magento\Tax\Api\Data\TaxRateInterface');
         //Tax rate service call
         $taxRateServiceData = $this->rateRepository->save($taxRate);
 
@@ -129,7 +129,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         ];
         // Tax rate data object created
         $taxRate = $this->taxRateFactory->create();
-        $this->dataObjectHelper->populateWithArray($taxRate, $taxData);
+        $this->dataObjectHelper->populateWithArray($taxRate, $taxData, '\Magento\Tax\Api\Data\TaxRateInterface');
         //Tax rate service call
         $taxRateServiceData = $this->rateRepository->save($taxRate);
 
@@ -175,7 +175,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             'zip_to' => 78780,
         ];
         $taxRate = $this->taxRateFactory->create();
-        $this->dataObjectHelper->populateWithArray($taxRate, $invalidTaxData);
+        $this->dataObjectHelper->populateWithArray($taxRate, $invalidTaxData, '\Magento\Tax\Api\Data\TaxRateInterface');
         $this->rateRepository->save($taxRate);
     }
 
@@ -197,10 +197,18 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         ];
 
         $taxRate1 = $this->taxRateFactory->create();
-        $this->dataObjectHelper->populateWithArray($taxRate1, $invalidTaxData);
+        $this->dataObjectHelper->populateWithArray(
+            $taxRate1,
+            $invalidTaxData,
+            '\Magento\Tax\Api\Data\TaxRateInterface'
+        );
 
         $taxRate2 = $this->taxRateFactory->create();
-        $this->dataObjectHelper->populateWithArray($taxRate2, $invalidTaxData);
+        $this->dataObjectHelper->populateWithArray(
+            $taxRate2,
+            $invalidTaxData,
+            '\Magento\Tax\Api\Data\TaxRateInterface'
+        );
 
         //Service call initiated twice to add the same code
         $this->rateRepository->save($taxRate1);
@@ -219,7 +227,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveThrowsExceptionIfGivenDataIsInvalid($dataArray, $errorMessages)
     {
         $taxRate = $this->taxRateFactory->create();
-        $this->dataObjectHelper->populateWithArray($taxRate, $dataArray);
+        $this->dataObjectHelper->populateWithArray($taxRate, $dataArray, '\Magento\Tax\Api\Data\TaxRateInterface');
         try {
             $this->rateRepository->save($taxRate);
         } catch (InputException $exception) {

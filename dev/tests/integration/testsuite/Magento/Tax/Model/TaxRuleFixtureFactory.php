@@ -46,7 +46,11 @@ class TaxRuleFixtureFactory
         $rules = [];
         foreach ($rulesData as $ruleData) {
             $taxRule = $taxRuleFactory->create();
-            $this->dataObjectHelper->populateWithArray($taxRule, $ruleData);
+            $this->dataObjectHelper->populateWithArray(
+                $taxRule,
+                $ruleData,
+                '\Magento\Tax\Api\Data\TaxRuleInterface'
+            );
 
             $rules[$ruleData['code']] = $taxRuleService->save($taxRule)->getId();
         }

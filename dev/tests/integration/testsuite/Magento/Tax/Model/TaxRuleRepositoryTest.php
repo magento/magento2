@@ -137,7 +137,11 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         ];
         // Tax rule data object created
         $taxRule = $this->taxRuleFactory->create();
-        $this->dataObjectHelper->populateWithArray($taxRule, $taxRuleData);
+        $this->dataObjectHelper->populateWithArray(
+            $taxRule,
+            $taxRuleData,
+            '\Magento\Tax\Api\Data\TaxRuleInterface'
+        );
 
         $this->taxRuleRepository->save($taxRule);
     }
@@ -159,7 +163,11 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         ];
         // Tax rule data object created
         $taxRule = $this->taxRuleFactory->create();
-        $this->dataObjectHelper->populateWithArray($taxRule, $taxRuleData);
+        $this->dataObjectHelper->populateWithArray(
+            $taxRule,
+            $taxRuleData,
+            '\Magento\Tax\Api\Data\TaxRuleInterface'
+        );
 
         //Tax rule service call
         $this->taxRuleRepository->save($taxRule);

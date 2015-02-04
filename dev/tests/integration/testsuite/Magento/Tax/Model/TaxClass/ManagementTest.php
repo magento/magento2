@@ -65,7 +65,8 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             [
                 TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
                 TaxClassKeyInterface::KEY_VALUE => $taxClassId,
-            ]
+            ],
+            '\Magento\Tax\Api\Data\TaxClassKeyInterface'
         );
         $this->assertEquals(
             $taxClassId,
@@ -77,7 +78,8 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             [
                 TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
                 TaxClassKeyInterface::KEY_VALUE => $taxClassName,
-            ]
+            ],
+            '\Magento\Tax\Api\Data\TaxClassKeyInterface'
         );
         $this->assertEquals(
             $taxClassId,
