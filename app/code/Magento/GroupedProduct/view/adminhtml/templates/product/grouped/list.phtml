@@ -9,8 +9,16 @@
 <tr title="#" class="pointer" data-role="row">
     <td data-column="info" class="col-draggable col-info">
         <span class="draggable-handle"></span>
-        <input type="hidden" name="links[associated][<%= data.id %>][id]" value="<%= data.id %>" data-role="id" />
-        <input type="hidden" name="links[associated][<%= data.id %>][position]" value="<%= data.position %>" data-role="position" />
+        <input
+            type="hidden"
+            name="links[associated][<%= data.id %>][id]"
+            value="<%= data.id %>"
+            data-role="id" />
+        <input
+            type="hidden"
+            name="links[associated][<%= data.id %>][position]"
+            value="<%= data.position %>"
+            data-role="position" />
     </td>
     <td data-column="name" class="editable col-name">
         <%= data.name %>
@@ -22,7 +30,11 @@
         <%= data.price %>
     </td>
     <td data-column="qty" class="editable col-qty col-number">
-        <input type="text" class="input-text " name="links[associated][<%= data.id %>][qty]" value="<%= data.qty %>">
+        <input
+            type="text"
+            class="input-text "
+            name="links[associated][<%= data.id %>][qty]"
+            value="<%= data.qty %>">
     </td>
     <td data-column="actions" class="col-actions">
         <button type="button" class="action- delete" data-role="delete"></button>

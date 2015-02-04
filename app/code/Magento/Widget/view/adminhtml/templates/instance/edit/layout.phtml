@@ -51,9 +51,9 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
                 '<tr>'+
                     '<td>'+
                         '<input disabled="disabled" type="radio" class="radio for_all" id="all_<?php echo $container['name'] ?>_<%= data.id %>" name="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>][for]" value="all" onclick="WidgetInstance.togglePageGroupChooser(this)" checked="checked" />&nbsp;'+
-                        '<label for="all_<?php echo $container['name'] ?>_<%= data.id %>"><?php echo $this->escapeJsQuote(__('All')) ?></label><br />'+
+                        '<label for="all_<?php echo $container['name'] ?>_<%= data.id %>"><?php echo $block->escapeJsQuote(__('All')) ?></label><br />'+
                         '<input disabled="disabled" type="radio" class="radio for_specific" id="specific_<?php echo $container['name'] ?>_<%= data.id %>" name="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>][for]" value="specific" onclick="WidgetInstance.togglePageGroupChooser(this)" />&nbsp;'+
-                        '<label for="specific_<?php echo $container['name'] ?>_<%= data.id %>"><?php echo $this->escapeJsQuote(__('Specific %1', $container['label'])) ?></label>'+
+                        '<label for="specific_<?php echo $container['name'] ?>_<%= data.id %>"><?php echo $block->escapeJsQuote(__('Specific %1', $container['label'])) ?></label>'+
                     '</td>'+
                     '<td>'+
                         '<div class="block_reference_container">'+
@@ -73,11 +73,11 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
             '<input disabled="disabled" type="hidden" class="product_type_id" name="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>][product_type_id]" value="<?php echo $container['product_type_id'] ?>" />'+
             '<p>' +
                 '<input disabled="disabled" type="text" class="input-text entities" name="widget_instance[<%= data.id %>][<?php echo $container['name'] ?>][entities]" value="<%= data.<?php echo $container['name'] ?>_entities %>" readonly="readonly" />&nbsp;' +
-                '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?php echo $container['code'] ?>\', \'<?php echo $container['name'] ?>_ids_<%= data.id %>\')"  title="<?php echo $this->escapeJsQuote(__('Open Chooser')) ?>">' +
-                    '<img src="<?php echo $this->getViewFileUrl('images/rule_chooser_trigger.gif') ?>" alt="<?php echo $this->escapeJsQuote(__('Open Chooser')); ?>" />' +
+                '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?php echo $container['code'] ?>\', \'<?php echo $container['name'] ?>_ids_<%= data.id %>\')"  title="<?php echo $block->escapeJsQuote(__('Open Chooser')) ?>">' +
+                    '<img src="<?php echo $block->getViewFileUrl('images/rule_chooser_trigger.gif') ?>" alt="<?php echo $block->escapeJsQuote(__('Open Chooser')); ?>" />' +
                 '</a>&nbsp;' +
-                '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?php echo $container['name'] ?>_ids_<%= data.id %>\')" title="<?php echo $this->escapeJsQuote(__('Apply')); ?>">' +
-                    '<img src="<?php echo $this->getViewFileUrl('images/rule_component_apply.gif') ?>" alt="<?php echo $this->escapeJsQuote(__('Apply')); ?>" />' +
+                '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?php echo $container['name'] ?>_ids_<%= data.id %>\')" title="<?php echo $block->escapeJsQuote(__('Apply')); ?>">' +
+                    '<img src="<?php echo $block->getViewFileUrl('images/rule_component_apply.gif') ?>" alt="<?php echo $block->escapeJsQuote(__('Apply')); ?>" />' +
                 '</a>' +
             '</p>'+
             '<div class="chooser"></div>'+

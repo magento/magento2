@@ -25,7 +25,11 @@
     <div class="js-file">
         <%= data.name %>
         <div class="remove-js">
-            <input type="checkbox" id="remove_js_files_<%= data.id %>" name="js_removed_files[]" value="<%= data.id %>" />
+            <input
+                type="checkbox"
+                id="remove_js_files_<%= data.id %>"
+                name="js_removed_files[]"
+                value="<%= data.id %>" />
             <label for="remove_js_files_<%= data.id %>"><?php echo __('Remove') ?></label>
         </div>
     </div>

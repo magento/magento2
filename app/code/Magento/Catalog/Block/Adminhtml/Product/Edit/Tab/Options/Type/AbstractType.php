@@ -49,8 +49,11 @@ class AbstractType extends \Magento\Backend\Block\Widget
                 $this->getNameInLayout() . '.option_price_type',
                 $this->getNameInLayout()
             )->setData(
-                ['id' => 'product_option_<%= data.option_id %>_price_type', 'class' => 'select product-option-price-type']
-            )
+                    [
+                        'id' => 'product_option_<%= data.option_id %>_price_type',
+                        'class' => 'select product-option-price-type',
+                    ]
+                )
         );
 
         $this->getChildBlock(

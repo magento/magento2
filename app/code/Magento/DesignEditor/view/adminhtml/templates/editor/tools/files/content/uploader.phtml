@@ -130,15 +130,21 @@ require([
         maxFileSize: <?php echo $block->getFileSizeService()->getMaxFileSize() ?> ,
         uploadCount: 0,
         add: function (e, data) {
-            var tmpl = mageTemplate('[data-template="<?php echo $block->getHtmlId(); ?>-template"]');
+            var tmpl = mageTemplate('[data-template="<?php echo $block->getHtmlId(); ?>-template"]'),
+                fileSize,
+                fileRowTmpl;
 
             $(this).assetfileupload('switchToUploadQueueView');
 
             var that = this;
             $.each(data.files, function (index, file) {
                 data.fileId = Math.random().toString(36).substr(2, 9);
-                var fileSize = typeof (file.size) == "undefined" ? $.mage.__('We could not detect a size.') : byteConvert(file.size);
-                var fileRowTmpl = tmpl({
+                
+                fileSize = typeof file.size === "undefined" ?
+                    $.mage.__('We could not detect a size.') :
+                    byteConvert(file.size);
+                
+                fileRowTmpl = tmpl({
                     data: {
                         size: fileSize,
                         name: file.name,
