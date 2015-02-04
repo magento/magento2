@@ -50,7 +50,8 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\TestFramework\Helper\ObjectManager $objectManager */
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->taxDetailsItem = $objectManager->getObject('Magento\Tax\Model\TaxDetails\ItemDetails');
-        $this->taxDetailsItemDataObjectFactoryMock = $this->getMockBuilder('Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory')
+        $this->taxDetailsItemDataObjectFactoryMock =
+            $this->getMockBuilder('Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

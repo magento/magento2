@@ -162,13 +162,6 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
 
     public function testCalculateTaxIfNoItemsInQuote()
     {
-        $taxDetailsData = [
-            \Magento\Tax\Api\Data\TaxDetailsInterface::KEY_SUBTOTAL => 0.0,
-            \Magento\Tax\Api\Data\TaxDetailsInterface::KEY_TAX_AMOUNT => 0.0,
-            \Magento\Tax\Api\Data\TaxDetailsInterface::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT => 0.0,
-            \Magento\Tax\Api\Data\TaxDetailsInterface::KEY_APPLIED_TAXES => [],
-            \Magento\Tax\Api\Data\TaxDetailsInterface::KEY_ITEMS => [],
-        ];
         $storeId = 3;
         $quoteDetailsMock = $this->getMock('\Magento\Tax\Api\Data\QuoteDetailsInterface');
 
