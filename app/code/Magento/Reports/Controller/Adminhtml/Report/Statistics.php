@@ -90,10 +90,9 @@ class Statistics extends \Magento\Backend\App\Action
             $codes = explode(',', $codes);
         }
 
-        $aliases = $this->reportTypes;
         $out = [];
         foreach ($codes as $code) {
-            $out[] = $aliases[$code];
+            $out[] = $this->reportTypes[$code];
         }
         return $out;
     }
