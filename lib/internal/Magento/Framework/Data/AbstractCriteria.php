@@ -37,8 +37,10 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
     {
         if (!$this->mapperInterfaceName) {
             throw new \Exception(
-                (string)new \Magento\Framework\Phrase("Missed Mapper Interface for Criteria Interface: ")
-                . get_class($this)
+                (string)new \Magento\Framework\Phrase(
+                    'Missed Mapper Interface for Criteria Interface: %1',
+                    [get_class($this)]
+                )
             );
         }
         return $this->mapperInterfaceName;
@@ -115,7 +117,10 @@ abstract class AbstractCriteria implements \Magento\Framework\Api\CriteriaInterf
     {
         if (isset($this->data[self::PART_FILTERS]['list'][$name])) {
             throw new \Exception(
-                (string)new \Magento\Framework\Phrase("Filter already exists in Criteria object: ") . $name
+                (string)new \Magento\Framework\Phrase(
+                    'Filter already exists in Criteria object: %1',
+                    [$name]
+                )
             );
         }
         $filter = new Object();
