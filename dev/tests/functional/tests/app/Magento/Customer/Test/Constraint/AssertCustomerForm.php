@@ -71,10 +71,6 @@ class AssertCustomerForm extends AbstractConstraint
         $pageCustomerIndex->open();
         $pageCustomerIndex->getCustomerGridBlock()->searchAndOpen($filter);
 
-        /** @var \Magento\Mtf\System\Event\EventManagerInterface $eventManager */
-        $eventManager = $this->objectManager->get('Magento\Mtf\System\Event\EventManagerInterface');
-        $eventManager->dispatchEvent(['exception'], [var_export($data, true)]);
-
         $dataForm = $pageCustomerIndexEdit->getCustomerForm()->getDataCustomer($customer, $address);
         $dataDiff = $this->verify($data, $dataForm);
         \PHPUnit_Framework_Assert::assertTrue(
