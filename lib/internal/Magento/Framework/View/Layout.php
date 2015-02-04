@@ -281,6 +281,14 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
+     * @return Layout\Generator\Context
+     */
+    public function getGeneratorContext()
+    {
+        return $this->generatorContext;
+    }
+
+    /**
      * Create structure of elements from the loaded XML configuration
      *
      * @throws \Magento\Framework\Exception
