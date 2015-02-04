@@ -11,7 +11,7 @@ namespace Magento\Persistent\Helper;
 
 use Magento\Framework\Store\ScopeInterface;
 
-class Data extends \Magento\Core\Helper\Data
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const XML_PATH_ENABLED = 'persistent/options/enabled';
 
@@ -44,24 +44,18 @@ class Data extends \Magento\Core\Helper\Data
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
      * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
         \Magento\Framework\Escaper $escaper
     ) {
         $this->_modulesReader = $modulesReader;
         $this->_escaper = $escaper;
         parent::__construct(
-            $context,
-            $storeManager,
-            $appState
+            $context
         );
     }
 

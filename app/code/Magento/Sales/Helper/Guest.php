@@ -12,7 +12,7 @@ use Magento\Framework\App as App;
  * Sales module base helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Guest extends \Magento\Core\Helper\Data
+class Guest extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Core registry
@@ -67,9 +67,13 @@ class Guest extends \Magento\Core\Helper\Data
     const COOKIE_LIFETIME = 600;
 
     /**
+     * @var \Magento\Framework\Store\StoreManagerInterface
+     */
+    private $_storeManager;
+
+    /**
      * @param App\Helper\Context $context
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
@@ -83,7 +87,6 @@ class Guest extends \Magento\Core\Helper\Data
     public function __construct(
         App\Helper\Context $context,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -93,16 +96,16 @@ class Guest extends \Magento\Core\Helper\Data
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->coreRegistry = $coreRegistry;
+        $this->_storeManager = $storeManager;
         $this->customerSession = $customerSession;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->messageManager = $messageManager;
         $this->orderFactory = $orderFactory;
         $this->resultRedirectFactory = $resultRedirectFactory;
+
         parent::__construct(
-            $context,
-            $storeManager,
-            $appState
+            $context
         );
     }
 

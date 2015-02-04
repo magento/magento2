@@ -23,15 +23,11 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
         \Magento\Reports\Model\Resource\Order\Collection $orderCollection
     ) {
         $this->_orderCollection = $orderCollection;
         parent::__construct(
-            $context,
-            $storeManager,
-            $appState
+            $context
         );
     }
 

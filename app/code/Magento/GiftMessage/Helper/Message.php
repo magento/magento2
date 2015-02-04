@@ -12,7 +12,7 @@ namespace Magento\GiftMessage\Helper;
  * Gift Message helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Message extends \Magento\Core\Helper\Data
+class Message extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Gift messages allow section in configuration
@@ -64,9 +64,13 @@ class Message extends \Magento\Core\Helper\Data
     protected $skipMessageCheck = [];
 
     /**
+     * @var \Magento\Framework\Store\StoreManagerInterface
+     */
+    private $_storeManager;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\GiftMessage\Model\MessageFactory $giftMessageFactory
@@ -77,7 +81,6 @@ class Message extends \Magento\Core\Helper\Data
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\GiftMessage\Model\MessageFactory $giftMessageFactory,
@@ -89,10 +92,10 @@ class Message extends \Magento\Core\Helper\Data
         $this->_layoutFactory = $layoutFactory;
         $this->_giftMessageFactory = $giftMessageFactory;
         $this->skipMessageCheck = $skipMessageCheck;
+        $this->_storeManager = $storeManager;
+
         parent::__construct(
-            $context,
-            $storeManager,
-            $appState
+            $context
         );
     }
 

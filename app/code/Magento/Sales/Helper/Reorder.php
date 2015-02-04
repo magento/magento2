@@ -11,7 +11,7 @@ namespace Magento\Sales\Helper;
 /**
  * Sales module base helper
  */
-class Reorder extends \Magento\Core\Helper\Data
+class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const XML_PATH_SALES_REORDER_ALLOW = 'sales/reorder/allow';
 
@@ -22,21 +22,15 @@ class Reorder extends \Magento\Core\Helper\Data
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
         \Magento\Customer\Model\Session $customerSession
     ) {
         $this->_customerSession = $customerSession;
         parent::__construct(
-            $context,
-            $storeManager,
-            $appState
+            $context
         );
     }
 

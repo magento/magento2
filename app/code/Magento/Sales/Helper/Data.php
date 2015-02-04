@@ -12,7 +12,7 @@ use Magento\Store\Model\Store;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\Core\Helper\Data
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Check allow to send new order confirmation email
