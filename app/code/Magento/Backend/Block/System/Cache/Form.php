@@ -13,7 +13,7 @@ namespace Magento\Backend\Block\System\Cache;
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
-     * @var \Magento\Framework\App\Cache\TypeList
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $cacheTypeList;
 
@@ -21,14 +21,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Framework\App\Cache\TypeList $cacheTypeList
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\App\Cache\TypeList $cacheTypeList,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         array $data = []
     ) {
         $this->cacheTypeList = $cacheTypeList;

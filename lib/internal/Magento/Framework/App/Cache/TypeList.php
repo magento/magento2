@@ -121,9 +121,7 @@ class TypeList implements TypeListInterface
     }
 
     /**
-     * Get label information of available cache types
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getTypeLabels()
     {
