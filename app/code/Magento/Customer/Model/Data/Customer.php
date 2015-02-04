@@ -7,25 +7,22 @@
 namespace Magento\Customer\Model\Data;
 
 use Magento\Customer\Api\Data\CustomerInterface;
-use \Magento\Framework\Api\DataObjectHelper;
 use \Magento\Framework\Api\AttributeValueFactory;
 
 class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\CustomerInterface
 {
     /**
-     * @param DataObjectHelper $dataObjectHelper
      * @param \Magento\Customer\Api\CustomerMetadataInterface $metadataService
      * @param AttributeValueFactory $attributeValueFactory
      * @param array $data
      */
     public function __construct(
-        DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
         AttributeValueFactory $attributeValueFactory,
         $data = []
     ) {
-        parent::__construct($dataObjectHelper, $metadataService, $attributeValueFactory, $data);
+        parent::__construct($metadataService, $attributeValueFactory, $data);
     }
 
     /**
