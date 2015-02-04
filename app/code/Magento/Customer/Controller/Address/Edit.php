@@ -9,10 +9,14 @@ namespace Magento\Customer\Controller\Address;
 class Edit extends \Magento\Customer\Controller\Address
 {
     /**
-     * @return void
+     * Customer address edit action
+     *
+     * @return \Magento\Framework\Controller\Result\Forward
      */
     public function execute()
     {
-        $this->_forward('form');
+        /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+        $resultForward = $this->resultForwardFactory->create();
+        return $resultForward->forward('form');
     }
 }

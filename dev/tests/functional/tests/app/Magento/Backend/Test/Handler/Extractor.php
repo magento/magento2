@@ -62,8 +62,10 @@ class Extractor
      */
     public function getData()
     {
+        /** @var \Magento\Mtf\Config $config */
+        $config = \Magento\Mtf\ObjectManagerFactory::getObjectManager()->get('Magento\Mtf\Config');
         $url = $_ENV['app_backend_url'] . $this->url;
-        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
+        $curl = new BackendDecorator(new CurlTransport(), $config);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0');
         $response = $curl->read();

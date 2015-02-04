@@ -7,6 +7,7 @@ namespace Magento\DesignEditor\Model;
 
 /**
  * Design editor state model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class State
 {
@@ -185,7 +186,7 @@ class State
             $this->_mutableConfig->setValue(
                 \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
                 $themeId,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
             $this->_configuration->setValue(\Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID, $themeId);
         }

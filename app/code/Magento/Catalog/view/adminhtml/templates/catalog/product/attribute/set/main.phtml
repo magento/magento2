@@ -9,8 +9,8 @@
 ?>
 <div class="attribute-set">
     <div class="edit-attribute-set attribute-set-col">
-        <?php echo $this->getSetFormHtml() ?>
-        <script>
+        <?php echo $block->getSetFormHtml() ?>
+        <script type="text/javascript">
 require([
     "jquery",
     "mage/mage"
@@ -25,13 +25,13 @@ require([
         <div class="fieldset-wrapper-title">
             <span class="title"><?php echo __('Groups') ?></span>
         </div>
-        <?php if (!$this->getIsReadOnly()): ?>
-        <?php echo $this->getAddGroupButton() ?>&nbsp;<?php echo $this->getDeleteGroupButton() ?>
+        <?php if (!$block->getIsReadOnly()): ?>
+        <?php echo $block->getAddGroupButton() ?>&nbsp;<?php echo $block->getDeleteGroupButton() ?>
         <p class="note-block"><?php echo __('Double click on a group to rename it') ?></p>
         <?php endif; ?>
 
-        <?php echo $this->getSetsFilterHtml() ?>
-        <?php echo $this->getGroupTreeHtml() ?>
+        <?php echo $block->getSetsFilterHtml() ?>
+        <?php echo $block->getGroupTreeHtml() ?>
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
@@ -39,11 +39,11 @@ require([
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
             <script>
-require(['jquery'], function(jQuery){
+require(["jquery", "extjs/ext-tree-checkbox"], function(jQuery){
 
             //<![CDATA[
-            var allowDragAndDrop = <?php echo($this->getIsReadOnly() ? 'false' : 'true'); ?>;
-            var canEditGroups = <?php echo($this->getIsReadOnly() ? 'false' : 'true'); ?>;
+            var allowDragAndDrop = <?php echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
+            var canEditGroups = <?php echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
 
             var TreePanels = function() {
                 // shorthand
@@ -70,7 +70,7 @@ require(['jquery'], function(jQuery){
                         });
 
                         tree.setRootNode(this.root);
-                        buildCategoryTree(this.root, <?php echo $this->getGroupTreeJson() ?>);
+                        buildCategoryTree(this.root, <?php echo $block->getGroupTreeJson() ?>);
                         // render the tree
                         tree.render();
                         this.root.expand(false, false);
@@ -109,7 +109,7 @@ require(['jquery'], function(jQuery){
                             id:'free'
                         });
                         tree2.setRootNode(this.root2);
-                        buildCategoryTree(this.root2, <?php echo $this->getAttributeTreeJson() ?>);
+                        buildCategoryTree(this.root2, <?php echo $block->getAttributeTreeJson() ?>);
 
                         this.root2.addListener('beforeinsert', editSet.rightBeforeInsert);
                         this.root2.addListener('beforeappend', editSet.rightBeforeAppend);
@@ -197,7 +197,7 @@ require(['jquery'], function(jQuery){
                         }
 
                         if( editSet.SystemNodesExists(editSet.currentNode) ) {
-                            alert('<?php echo $this->escapeJsQuote(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>');
+                            alert('<?php echo $block->escapeJsQuote(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>');
                             return;
                         }
 
@@ -302,7 +302,7 @@ require(['jquery'], function(jQuery){
                             editSet.req.form_key = FORM_KEY;
                         }
                         var req = {data : Ext.util.JSON.encode(editSet.req)};
-                        var con = new Ext.lib.Ajax.request('POST', '<?php echo $this->getMoveUrl() ?>', {success:editSet.success,failure:editSet.failure}, req);
+                        var con = new Ext.lib.Ajax.request('POST', '<?php echo $block->getMoveUrl() ?>', {success:editSet.success,failure:editSet.failure}, req);
                     },
 
                     success : function(o) {
@@ -319,7 +319,7 @@ require(['jquery'], function(jQuery){
                     },
 
                     failure : function(o) {
-                        alert('<?php echo $this->escapeJsQuote(__('We\'re unable to complete this request.')) ?>');
+                        alert('<?php echo $block->escapeJsQuote(__('We\'re unable to complete this request.')) ?>');
                     },
 
                     groupBeforeMove : function(tree, nodeThis, oldParent, newParent) {
@@ -334,7 +334,7 @@ require(['jquery'], function(jQuery){
 
                     rightBeforeAppend : function(tree, nodeThis, node, newParent) {
                         if (node.attributes.is_user_defined == 0) {
-                            alert('<?php echo $this->escapeJsQuote(__('You cannot remove system attributes from this set.')) ?>');
+                            alert('<?php echo $block->escapeJsQuote(__('You cannot remove system attributes from this set.')) ?>');
                             return false;
                         } else {
                             return true;
@@ -348,7 +348,7 @@ require(['jquery'], function(jQuery){
                         }
 
                         if (node.attributes.is_unassignable == 0) {
-                            alert('<?php echo $this->escapeJsQuote(__('You cannot remove system attributes from this set.')) ?>');
+                            alert('<?php echo $block->escapeJsQuote(__('You cannot remove system attributes from this set.')) ?>');
                             return false;
                         } else {
                             return true;

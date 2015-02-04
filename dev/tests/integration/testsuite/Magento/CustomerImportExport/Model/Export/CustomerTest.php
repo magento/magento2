@@ -182,7 +182,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'email' => 'example.com',
                 'created_at' => [$createdAtDate, ''],
                 'store_id' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    'Magento\Framework\Store\StoreManagerInterface'
                 )->getStore()->getId()
             ]
         ];

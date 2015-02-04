@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 abstract class AbstractFlatState
 {

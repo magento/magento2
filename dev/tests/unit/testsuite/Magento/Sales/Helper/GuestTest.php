@@ -26,7 +26,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $scopeConfigInterfaceMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerInterfaceMock;
 
     /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
@@ -57,7 +57,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     {
         $this->appContextHelperMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->scopeConfigInterfaceMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->storeManagerInterfaceMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerInterfaceMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->registryMock = $this->getMock('Magento\Framework\Registry');
         $this->sessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
@@ -160,8 +160,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('setPublicCookie')
             ->with(Guest::COOKIE_NAME, $this->anything(), $metaDataMock);
-        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->assertTrue($this->guest->loadValidOrder($requestMock, $responseMock));
+        $this->assertTrue($this->guest->loadValidOrder($requestMock));
     }
 
     public function testLoadValidOrderStoredCookie()
@@ -213,7 +212,6 @@ class GuestTest extends \PHPUnit_Framework_TestCase
             ->with(Guest::COOKIE_NAME, $this->anything(), $metaDataMock);
 
         $requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->assertTrue($this->guest->loadValidOrder($requestMock, $responseMock));
+        $this->assertTrue($this->guest->loadValidOrder($requestMock));
     }
 }
