@@ -25,7 +25,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
     const XML_PATH_DEFAULT_TIMEZONE = 'general/locale/timezone';
-    const XML_PATH_DEFAULT_COUNTRY = 'general/country/default';
     const XML_PATH_CONNECTION_TYPE = 'global/resources/default_setup/connection/type';
     /**#@- */
 
@@ -50,23 +49,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $_appState;
-
-    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
-        $this->_appState = $appState;
     }
 
     /**

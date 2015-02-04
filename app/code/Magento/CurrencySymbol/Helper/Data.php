@@ -21,20 +21,17 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
      * @param \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
         \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory
     ) {
         $this->_symbolFactory = $symbolFactory;
         parent::__construct(
             $context,
-            $storeManager,
-            $appState
+            $storeManager
         );
     }
 

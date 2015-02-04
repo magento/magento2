@@ -69,7 +69,6 @@ class Guest extends \Magento\Core\Helper\Data
     /**
      * @param App\Helper\Context $context
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
@@ -83,7 +82,6 @@ class Guest extends \Magento\Core\Helper\Data
     public function __construct(
         App\Helper\Context $context,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -101,8 +99,7 @@ class Guest extends \Magento\Core\Helper\Data
         $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct(
             $context,
-            $storeManager,
-            $appState
+            $storeManager
         );
     }
 
