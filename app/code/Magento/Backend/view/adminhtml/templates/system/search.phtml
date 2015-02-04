@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $this \Magento\Backend\Block\GlobalSearch */
+/** @var $block \Magento\Backend\Block\GlobalSearch */
 ?>
 <div class="search-global miniform" data-mage-init='{"globalSearch": {}}'>
     <form action="#" id="form-search">
@@ -18,7 +18,7 @@
                         id="search-global"
                         placeholder="<?php echo __('Search')?>"
                         name="query"
-                        data-mage-init='<?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getWidgetInitOptions()))?>'>
+                        data-mage-init='<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getWidgetInitOptions()))?>'>
             </div>
         </div>
         <div class="actions search-global-actions">

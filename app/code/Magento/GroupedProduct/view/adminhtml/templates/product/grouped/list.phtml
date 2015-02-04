@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/* @var $this \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts */
+/* @var $block \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts */
 ?>
 <script type="text/x-jquery-tmpl" id="group-product-template">
 <tr title="#" class="pointer" data-role="row">
@@ -31,8 +31,8 @@
 </script>
 <div class="grid-container" class="no-display">
     <table class="data-table" data-role="grouped-product-grid"
-        data-products="<?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode(
-                $this->getAssociatedProducts()
+        data-products="<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode(
+                $block->getAssociatedProducts()
         )); ?>">
         <thead>
             <tr class="headings">

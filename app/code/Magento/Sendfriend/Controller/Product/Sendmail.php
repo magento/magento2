@@ -45,11 +45,11 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
     public function execute()
     {
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
-            return $this->_redirect('*/*/send', ['_current' => true]);
+            $this->_redirect('sendfriend/product/send', ['_current' => true]);
+            return;
         }
 
         $product = $this->_initProduct();
-        $model = $this->_initSendToFriendModel();
         $data = $this->getRequest()->getPost();
 
         if (!$product || !$data) {
@@ -70,16 +70,16 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
             }
         }
 
-        $model->setSender($this->getRequest()->getPost('sender'));
-        $model->setRecipients($this->getRequest()->getPost('recipients'));
-        $model->setProduct($product);
+        $this->sendFriend->setSender($this->getRequest()->getPost('sender'));
+        $this->sendFriend->setRecipients($this->getRequest()->getPost('recipients'));
+        $this->sendFriend->setProduct($product);
 
         /* @var $session \Magento\Catalog\Model\Session */
         $catalogSession = $this->_objectManager->get('Magento\Catalog\Model\Session');
         try {
-            $validate = $model->validate();
+            $validate = $this->sendFriend->validate();
             if ($validate === true) {
-                $model->send();
+                $this->sendFriend->send();
                 $this->messageManager->addSuccess(__('The link to a friend was sent.'));
                 $url = $product->getProductUrl();
                 $this->getResponse()->setRedirect($this->_redirect->success($url));
@@ -102,7 +102,7 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
         // save form data
         $catalogSession->setSendfriendFormData($data);
 
-        $url = $this->_objectManager->create('Magento\Framework\UrlInterface')->getUrl('*/*/send', ['_current' => true]);
+        $url = $this->_url->getUrl('sendfriend/product/send', ['_current' => true]);
         $this->getResponse()->setRedirect($this->_redirect->error($url));
     }
 }
