@@ -62,7 +62,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             [
                 'Magento\Framework\App\Config\ScopeConfigInterface',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $scopeConfigMock,
             ],
             ['Magento\Cms\Helper\Page', $this->_cmsHelperMock],
@@ -114,7 +114,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->resultPageMock)
         );
-        $this->assertInstanceOf('Magento\Framework\View\Result\Page', $this->_controller->execute());
+        $this->assertSame($this->resultPageMock, $this->_controller->execute());
     }
 
     public function testExecuteResultForward()

@@ -9,19 +9,19 @@ namespace Magento\Cms\Controller\Index;
 class DefaultNoCookies extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory
+     * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $resultLayoutFactory;
+    protected $resultPageFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
-        $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 
@@ -29,11 +29,11 @@ class DefaultNoCookies extends \Magento\Framework\App\Action\Action
      * Default no cookies page action
      * Used if no cookies page don't configure or available
      *
-     * @return \Magento\Framework\View\Result\LayoutFactory
+     * @return \Magento\Framework\View\Result\PageFactory
      */
     public function execute()
     {
-        $resultLayout = $this->resultLayoutFactory->create();
-        return $resultLayout;
+        $resultPage = $this->resultPageFactory->create();
+        return $resultPage;
     }
 }

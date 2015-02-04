@@ -70,7 +70,7 @@ class Edit extends \Magento\Cms\Controller\Adminhtml\Block
         $resultPage = $this->resultPageFactory->create();
 
         // 5. Build edit form
-        $this->_initPage($resultPage)->addBreadcrumb(
+        $this->initPage($resultPage)->addBreadcrumb(
             $id ? __('Edit Block') : __('New Block'),
             $id ? __('Edit Block') : __('New Block')
         );

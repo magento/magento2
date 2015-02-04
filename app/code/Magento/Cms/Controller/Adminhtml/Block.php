@@ -35,7 +35,7 @@ class Block extends \Magento\Backend\App\Action
      * @param \Magento\Backend\Model\View\Result\Page $resultPage
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function _initPage($resultPage)
+    protected function initPage($resultPage)
     {
         $resultPage->setActiveMenu(
             'Magento_Cms::cms_block'
@@ -47,27 +47,6 @@ class Block extends \Magento\Backend\App\Action
             __('Static Blocks')
         );
         return $resultPage;
-    }
-
-    /**
-     * Init actions
-     *
-     * @return $this
-     */
-    protected function _initAction()
-    {
-        // load layout, set active menu and breadcrumbs
-        $this->_view->loadLayout();
-        $this->_setActiveMenu(
-            'Magento_Cms::cms_block'
-        )->_addBreadcrumb(
-            __('CMS'),
-            __('CMS')
-        )->_addBreadcrumb(
-            __('Static Blocks'),
-            __('Static Blocks')
-        );
-        return $this;
     }
 
     /**

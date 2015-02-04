@@ -186,7 +186,7 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->rawMock);
 
-        $this->wysiwygDirective->execute();
+        $this->assertSame($this->rawMock, $this->wysiwygDirective->execute());
     }
 
     /**
@@ -231,7 +231,7 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->rawMock);
 
-        $this->wysiwygDirective->execute();
+        $this->assertSame($this->rawMock, $this->wysiwygDirective->execute());
     }
 
     protected function prepareExecuteTest()
