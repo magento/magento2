@@ -5,8 +5,6 @@
  */
 namespace Magento\Developer\Helper;
 
-use Magento\Framework\App\Config\Helper\Data;
-
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -54,7 +52,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                Data::XML_PATH_DEV_ALLOW_IPS,
+                \Magento\Developer\Helper\Data::XML_PATH_DEV_ALLOW_IPS,
                 \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             )->will($this->returnValue($allowedIps));

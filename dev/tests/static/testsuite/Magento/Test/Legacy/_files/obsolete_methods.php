@@ -705,7 +705,7 @@ return [
     ['isAllowedGuestCheckout', 'Magento\Quote\Model\Quote'],
     ['isApplicableToQuote', 'Magento\Payment\Model\Method\AbstractMethod'],
     ['isCheckoutAvailable', 'Magento\Multishipping\Model\Checkout\Type\Multishipping'],
-    ['isDevAllowed', 'Magento\Core\Helper\Data', '\Magento\Framework\App\Config\Helper\Data::isDevAllowed'],
+    ['isDevAllowed', 'Magento\Core\Helper\Data', '\Magento\Developer\Helper\Data::isDevAllowed'],
     ['isDirectOutput', 'Magento\Framework\View\Layout'],
     ['isDirectOutput', 'Magento\Framework\View\LayoutInterface'],
     ['isFulAmountCovered'],
