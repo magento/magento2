@@ -260,7 +260,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $headers = $this->getResponse()->getHeaders();
         $failed = false;
         foreach ($headers as $header) {
-            if (preg_match('~customer\/account\/login~', $header['value'])) {
+            if (preg_match('~customer\/account\/login~', $header->getFieldValue())) {
                 $failed = true;
                 break;
             }
