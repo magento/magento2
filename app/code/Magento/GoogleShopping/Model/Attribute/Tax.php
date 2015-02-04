@@ -213,7 +213,11 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                     ];
 
                     $quoteDetailsObject = $this->_quoteDetailsFactory->create();
-                    $this->dataObjectHelper->populateWithArray($quoteDetailsObject, $quoteDetailsDataArray);
+                    $this->dataObjectHelper->populateWithArray(
+                        $quoteDetailsObject,
+                        $quoteDetailsDataArray,
+                        '\Magento\Tax\Api\Data\QuoteDetailsInterface'
+                    );
 
                     $taxDetails = $this->_taxCalculationService
                         ->calculateTax($quoteDetailsObject, $product->getStoreId());
