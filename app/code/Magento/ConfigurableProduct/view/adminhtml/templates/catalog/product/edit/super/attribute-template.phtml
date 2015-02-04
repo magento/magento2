@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-/* @var $this \Magento\Framework\View\Element\Template */
+/* @var $block \Magento\Framework\View\Element\Template */
 
 $havePriceVariation = array_reduce(
     $attribute['values'],
@@ -15,23 +15,23 @@ $havePriceVariation = array_reduce(
     },
     false
 );
-$id = $this->escapeHtml($attribute['attribute_id']);
+$id = $block->escapeHtml($attribute['attribute_id']);
 ?>
 
 <div class="entry-edit
             <?php echo $havePriceVariation ? ' have-price' : '' ?>
-            " <?php echo $this->getUiId('attribute-container', $attribute['attribute_code']) ?>
+            " <?php echo $block->getUiId('attribute-container', $attribute['attribute_code']) ?>
      data-role="configurable-attribute"
-     data-attribute="<?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attribute));?>">
+     data-attribute="<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attribute));?>">
     <input name="attributes[]" id="configurable_attribute_<?php echo $id ?>"
         value="<?php echo $id; ?>" type="hidden"/>
-    <input value="<?php echo $this->escapeHtml($attribute['id']); ?>" type="hidden"
+    <input value="<?php echo $block->escapeHtml($attribute['id']); ?>" type="hidden"
         name="product[configurable_attributes_data][<?php echo $id ?>][id]"/>
-    <input value="<?php echo $this->escapeHtml($attribute['attribute_code']); ?>" type="hidden"
+    <input value="<?php echo $block->escapeHtml($attribute['attribute_code']); ?>" type="hidden"
         name="product[configurable_attributes_data][<?php echo $id ?>][code]"/>
     <input value="<?php echo $id; ?>" type="hidden"
         name="product[configurable_attributes_data][<?php echo $id ?>][attribute_id]"/>
-    <input value="<?php echo $this->escapeHtml($attribute['position']); ?>" type="hidden"
+    <input value="<?php echo $block->escapeHtml($attribute['position']); ?>" type="hidden"
         name="product[configurable_attributes_data][<?php echo $id ?>][position]"/>
 
     <?php /* empty <div> to avoid undesired showing with $('.collapse:first', entry).collapse('show'); in theme.js
@@ -41,7 +41,7 @@ $id = $this->escapeHtml($attribute['attribute_id']);
     <div class="fieldset-wrapper collapsable-wrapper" id="<?php echo $id ?>-wrapper">
         <div class="fieldset-wrapper-title">
             <strong class="title" data-toggle="collapse" data-target="#<?php echo $id ?>-content">
-                <span><?php echo $this->escapeHtml($attribute['label']); ?></span>
+                <span><?php echo $block->escapeHtml($attribute['label']); ?></span>
             </strong>
             <div class="actions">
                 <button type="button" title="<?php echo __('Delete Variations Group'); ?>" class="action-delete">
@@ -55,9 +55,10 @@ $id = $this->escapeHtml($attribute['attribute_id']);
                 <div class="field field-variation">
                     <label class="label"><span><?php echo __('Variation Label'); ?></span></label>
                     <div class="control">
-                        <input type="text" value="<?php echo $this->escapeHtml($attribute['label']); ?>"
+                        <input type="text" value="<?php echo $block->escapeHtml($attribute['label']); ?>"
                                name="product[configurable_attributes_data][<?php echo $id ?>][label]"
-                               data-store-label="<?php echo $this->escapeHtml($attribute['label']); ?>"
+                               data-mage-init='{"useDefault": {}}'
+                               data-store-label="<?php echo $block->escapeHtml($attribute['label']); ?>"
                                class="store-label required-entry"/>
                     </div>
                     <div class="field-service">
@@ -88,7 +89,7 @@ $id = $this->escapeHtml($attribute['attribute_id']);
                             foreach ($attribute['options'] as $option) {
                                 ?>
                                 <tr data-role="option-container">
-                                    <td class="col-name" data-column="name"><?php echo $this->escapeHtml($option['label']) ?></td>
+                                    <td class="col-name" data-column="name"><?php echo $block->escapeHtml($option['label']) ?></td>
                                     <td class="col-change-price" data-column="change-price">
                                         <?php
                                         $pricingValue = '';
@@ -109,7 +110,7 @@ $id = $this->escapeHtml($attribute['attribute_id']);
                                 ?>
                                         <input type="hidden"
                                                name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][value_index]"
-                                               value="<?php echo $this->escapeHtml($valueIndex);
+                                               value="<?php echo $block->escapeHtml($valueIndex);
                                 ?>">
 
                                         <div class="field field-change-pricing">
@@ -119,7 +120,7 @@ $id = $this->escapeHtml($attribute['attribute_id']);
                                                         <div class="control">
                                                             <input type="text" class="pricing-value validate-number"
                                                                    name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][pricing_value]"
-                                                                   value="<?php echo $this->escapeHtml($pricingValue);
+                                                                   value="<?php echo $block->escapeHtml($pricingValue);
                                 ?>">
                                                         </div>
                                                     </div>
@@ -128,10 +129,10 @@ $id = $this->escapeHtml($attribute['attribute_id']);
                                                             <input name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][is_percent]" type="hidden" value="<?php echo $isPercent ? 1 : 0;
                                 ?>"/>
                                                             <button type="button" class="action toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
-                                                                <span><?php echo $isPercent ? __('%') : $this->getBaseCurrency()->getSymbol() ?></span>
+                                                                <span><?php echo $isPercent ? __('%') : $block->getBaseCurrency()->getSymbol() ?></span>
                                                             </button>
                                                             <ul class="dropdown" data-role="dropdown-menu" data-mage-init='{"menu":{}}'>
-                                                                <li data-value="0"><a class="item"><?php echo $this->getBaseCurrency()->getSymbol() ?></a></li>
+                                                                <li data-value="0"><a class="item"><?php echo $block->getBaseCurrency()->getSymbol() ?></a></li>
                                                                 <li data-value="1"><a class="item"><?php echo __('%')?></a></li>
                                                             </ul>
                                                         </div>
@@ -165,7 +166,7 @@ $id = $this->escapeHtml($attribute['attribute_id']);
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4" class="col-actions-add"><?php echo $this->getChildHtml('add_option'); ?></td>
+                                    <td colspan="4" class="col-actions-add"><?php echo $block->getChildHtml('add_option'); ?></td>
                                 </tr>
                             </tfoot>
                         </table>

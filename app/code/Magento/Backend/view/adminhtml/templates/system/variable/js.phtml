@@ -5,9 +5,11 @@
  */
 ?>
 <script>
-//<![CDATA[
+require([
+    'prototype'
+], function () {
 
-function toggleValueElement(element) {
+window.toggleValueElement = function(element) {
     var disabled = false;
     if (element.value == 1) {
         // use default value
@@ -24,5 +26,5 @@ function toggleValueElement(element) {
     }
 }
 
-//]]>
+});
 </script>

@@ -4,13 +4,14 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js */ ?>
-<?php echo $this->getFormHtml(); ?>
+<?php /** @var $block \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js */ ?>
+<?php echo $block->getFormHtml(); ?>
 
 <script>
 require([
     "jquery",
     "jquery/file-uploader",
+    "Magento_Theme/js/sortable",
     "mage/translate"
 ], function($){
 
@@ -18,7 +19,7 @@ require([
         dataType: 'json',
         replaceFileInput: false,
         sequentialUploads: true,
-        url : '<?php echo $this->getJsUploadUrl(); ?>',
+        url : '<?php echo $block->getJsUploadUrl(); ?>',
 
         /**
          * Add data

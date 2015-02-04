@@ -76,7 +76,7 @@ class Header extends \Magento\Framework\View\Element\Template
             } else {
                 $this->_data['welcome'] = $this->_scopeConfig->getValue(
                     'design/header/welcome',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 );
             }
         }

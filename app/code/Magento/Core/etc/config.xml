@@ -25,6 +25,10 @@
                 <minify_files>0</minify_files>
                 <minify_adapter>Magento\Framework\Code\Minifier\Adapter\Js\Jsmin</minify_adapter>
             </js>
+            <css>
+                <minify_files>0</minify_files>
+                <minify_adapter>Magento\Framework\Code\Minifier\Adapter\Css\CssMinifier</minify_adapter>
+            </css>
             <image>
                 <default_adapter>GD2</default_adapter>
                 <adapters>
@@ -98,6 +102,7 @@
             </startup>
             <url>
                 <use_custom>0</use_custom>
+                <use_custom_path>0</use_custom_path>
                 <custom />
             </url>
             <security>

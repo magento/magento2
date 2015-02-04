@@ -5,13 +5,21 @@
  */
 require_once dirname(__FILE__) . '/' . 'bootstrap.php';
 
-$objectManager->create('Magento\Mtf\Util\Generate\TestCase')->launch();
+// Generate page
 $objectManager->create('Magento\Mtf\Util\Generate\Page')->launch();
-$objectManager->create('Magento\Mtf\Util\Generate\Fixture')->launch();
-$objectManager->create('Magento\Mtf\Util\Generate\Constraint')->launch();
-$objectManager->create('Magento\Mtf\Util\Generate\Handler')->launch();
 
-$objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-$objectManager->create('Magento\Mtf\Util\Generate\Repository')->launch();
+// Generate fixtures
+$magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
+$magentoObjectManager = $magentoObjectManagerFactory->create($_SERVER);
+$fieldsProvider = $magentoObjectManager->create('\Magento\Mtf\Util\Generate\Fixture\FieldsProvider');
+$objectManager->create('Magento\Mtf\Util\Generate\Fixture', ['fieldsProvider' => $fieldsProvider])->launch();
+
+// Generate repositories
+$magentoObjectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
+$collectionProvider = $magentoObjectManager->create('\Magento\Mtf\Util\Generate\Repository\CollectionProvider');
+$objectManager->create('Magento\Mtf\Util\Generate\Repository', ['collectionProvider' => $collectionProvider])->launch();
+
+// Generate factories for old end-to-end tests
+$magentoObjectManager->create('Magento\Mtf\Util\Generate\Factory')->launch();
 
 \Magento\Mtf\Util\Generate\GenerateResult::displayResults();

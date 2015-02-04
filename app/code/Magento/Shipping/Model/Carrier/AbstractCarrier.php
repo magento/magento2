@@ -126,7 +126,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
         $path = 'carriers/' . $this->_code . '/' . $field;
         return $this->_scopeConfig->getValue(
             $path,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStore()
         );
     }
@@ -146,7 +146,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
         $path = 'carriers/' . $this->_code . '/' . $field;
         return $this->_scopeConfig->isSetFlag(
             $path,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStore()
         );
     }
@@ -584,7 +584,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->_logger->debug($debugData);
+            $this->_logger->debug(var_export($debugData, true));
         }
     }
 

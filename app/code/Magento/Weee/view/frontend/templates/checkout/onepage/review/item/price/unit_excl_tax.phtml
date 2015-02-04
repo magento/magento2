@@ -6,32 +6,32 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $this \Magento\Weee\Block\Item\Price\Renderer */
+/** @var $block \Magento\Weee\Block\Item\Price\Renderer */
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 ?>
-<?php if ($this->displayPriceWithWeeeDetails()): ?>
-    <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#eunit-item-tax-details<?php echo $_item->getId(); ?>"}'>
+<?php if ($block->displayPriceWithWeeeDetails()): ?>
+    <span class="cart-tax-total" data-mage-init='{"taxtToggle": {"itemTaxId" : "#eunit-item-tax-details<?php echo $_item->getId(); ?>"}}'>
 <?php else: ?>
     <span class="cart-price">
 <?php endif; ?>
 
-<?php echo $this->formatPrice($this->getUnitDisplayPriceExclTax()); ?>
+<?php echo $block->formatPrice($block->getUnitDisplayPriceExclTax()); ?>
     </span>
 
 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
     <span class="cart-tax-info" id="eunit-item-tax-details<?php echo $_item->getId(); ?>" style="display:none;">
-    <?php if ($this->displayPriceWithWeeeDetails()): ?>
+    <?php if ($block->displayPriceWithWeeeDetails()): ?>
         <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-            <span class="weee" data-label="<?php echo $tax['title']; ?>"><?php echo $this->formatPrice($tax['amount'], true, true); ?></span>
+            <span class="weee" data-label="<?php echo $tax['title']; ?>"><?php echo $block->formatPrice($tax['amount'], true, true); ?></span>
         <?php endforeach; ?>
     <?php endif; ?>
     </span>
 
-    <?php if ($this->displayFinalPrice()): ?>
-        <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#eunit-item-tax-details<?php echo $_item->getId(); ?>"}'>
+    <?php if ($block->displayFinalPrice()): ?>
+        <span class="cart-tax-total" data-mage-init='{"taxtToggle": {"itemTaxId" : "#eunit-item-tax-details<?php echo $_item->getId(); ?>"}}'>
             <span class="weee" data-label="<?php echo __('Total'); ?>">
-                <?php echo $this->formatPrice($this->getFinalUnitDisplayPriceExclTax()); ?>
+                <?php echo $block->formatPrice($block->getFinalUnitDisplayPriceExclTax()); ?>
             </span>
         </span>
     <?php endif; ?>
