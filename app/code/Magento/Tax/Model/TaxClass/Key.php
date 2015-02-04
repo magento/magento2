@@ -37,7 +37,7 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
      */
     public function setType($type)
     {
-        return $this->setData(TaxClassKeyInterface::KEY_TYPE);
+        return $this->setData(TaxClassKeyInterface::KEY_TYPE, $type);
     }
 
     /**
@@ -48,6 +48,6 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
      */
     public function setValue($value)
     {
-        return $this->setData(TaxClassKeyInterface::KEY_VALUE);
+        return $this->setData(TaxClassKeyInterface::KEY_VALUE, $value);
     }
 }
