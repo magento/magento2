@@ -5,24 +5,32 @@
  */
 namespace Magento\TestFramework\ErrorLog;
 
+use Monolog\Handler\HandlerInterface;
+
 class Logger extends \Magento\Framework\Logger\Monolog
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $messages = [];
 
     /**
      * Minimum error level to log message
-     * Possible values: -1 ignore all errors, 2 - log errors with level 0, 1, 2
-     * \Zend_Log::EMERG(0) to \Zend_Log::DEBUG(7)
+     * Possible values: -1 ignore all errors, and level constants form http://tools.ietf.org/html/rfc5424 standard
      *
      * @var int
      */
     protected $minimumErrorLevel;
 
-    public function __construct()
+    /**
+     * @param string             $name       The logging channel
+     * @param HandlerInterface[] $handlers   Optional stack of handlers, the first one in the array is called first, etc
+     * @param callable[]         $processors Optional array of processors
+     */
+    public function __construct($name, array $handlers = [], array $processors = [])
     {
         $this->minimumErrorLevel = defined('TESTS_ERROR_LOG_LISTENER_LEVEL') ? TESTS_ERROR_LOG_LISTENER_LEVEL : -1;
-        parent::__construct('integration-test');
+        parent::__construct($name, $handlers, $processors);
     }
 
     /**
@@ -39,5 +47,24 @@ class Logger extends \Magento\Framework\Logger\Monolog
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * @{inheritDoc}
+     *
+     * @param  integer $level   The logging level
+     * @param  string  $message The log message
+     * @param  array   $context The log context
+     * @return Boolean Whether the record has been processed
+     */
+    public function addRecord($level, $message, array $context = [])
+    {
+        if ($level <= $this->minimumErrorLevel) {
+            $this->messages[] = [
+                'level' => $this->getLevelName($level),
+                'message' => $message,
+            ];
+        }
+        return parent::addRecord($level, $message, $context);
     }
 }

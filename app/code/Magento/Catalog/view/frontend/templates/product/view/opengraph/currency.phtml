@@ -4,6 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Directory\Block\Currency */
+/** @var $block \Magento\Directory\Block\Currency */
 ?>
-<meta property="product:price:currency" content="<?php echo $this->stripTags($this->getCurrentCurrencyCode()); ?>"/>
+<meta property="product:price:currency" content="<?php echo $block->stripTags($block->getCurrentCurrencyCode()); ?>"/>

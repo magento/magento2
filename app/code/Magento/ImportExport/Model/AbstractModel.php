@@ -76,7 +76,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
         }
 
         if ($this->_debugMode) {
-            $this->_logger->debug($debugData);
+            $this->_logger->debug(var_export($debugData, true));
         }
 
         return $this;
