@@ -10,6 +10,8 @@
  */
 namespace Magento\Test\Legacy;
 
+use Magento\Framework\Test\Utility\Files;
+
 class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -129,6 +131,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                 $this->_testObsoleteActions($content);
                 $this->_testObsoleteConstants($content);
                 $this->_testObsoletePropertySkipCalculate($content);
+                $this->checkLibraryDependence($content, $file);
             },
             \Magento\TestFramework\Utility\ChangedFiles::getPhpFiles(__DIR__ . '/_files/changed_files*')
         );
@@ -489,6 +492,25 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             $content,
             "Configuration property 'skipCalculate' is obsolete."
         );
+    }
+
+    /**
+     * Checks that library is not using app defined code
+     *
+     * @param string $content
+     * @param string $file
+     */
+    protected function checkLibraryDependence($content, $file)
+    {
+        $path = Files::init()->getPathToSource();
+        if (strpos($file, $path . '/lib/') === 0) {
+            $this->_assertNotRegexp(
+                '~(?<![a-z\\d_:]|->|function\\s)__\\s*\\(~iS',
+                $content,
+                'Function __() is defined outside of the library and must not be used there. ' .
+                'Replacement suggestion: new \\Magento\\Framework\\Phrase()'
+            );
+        }
     }
 
     /**
