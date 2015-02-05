@@ -124,7 +124,7 @@ class Onepage extends Action
      */
     protected function _ajaxRedirectResponse()
     {
-        $this->getResponse()->setHeader('HTTP/1.1', '403 Session Expired')->setHeader('Login-Required', 'true');
+        $this->getResponse()->setStatusHeader(403, '1.1', 'Session Expired')->setHeader('Login-Required', 'true');
         return $this;
     }
 

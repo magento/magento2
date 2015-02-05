@@ -28,17 +28,18 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $responseMock->expects(
-            $this->at(0)
+            $this->once()
         )->method(
-            'setHeader'
+            'setStatusHeader'
         )->with(
-            'HTTP/1.1',
-            '404 Not Found'
+            404,
+            '1.1',
+            'Not Found'
         )->will(
             $this->returnValue($responseMock)
         );
         $responseMock->expects(
-            $this->at(1)
+            $this->once()
         )->method(
             'setHeader'
         )->with(

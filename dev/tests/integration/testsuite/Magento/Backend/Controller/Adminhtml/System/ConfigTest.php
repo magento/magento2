@@ -51,7 +51,7 @@ class ConfigTest extends \Magento\Backend\Utility\Controller
         $this->assertTrue($this->getResponse()->isRedirect(), 'Redirect was expected, but none was performed.');
 
         /** @var array|bool $url */
-        $url = parse_url($this->getResponse()->getHeader('Location')['value']);
+        $url = parse_url($this->getResponse()->getHeader('Location')->getFieldValue());
         $this->assertArrayNotHasKey(
             'query',
             $url,

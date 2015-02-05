@@ -10,6 +10,7 @@ namespace Magento\Customer\Model\Resource;
 use Magento\Customer\Model\Address as CustomerAddressModel;
 use Magento\Customer\Model\Resource\Address\Collection;
 use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 
@@ -135,11 +136,11 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     /**
      * Retrieve customers addresses matching the specified criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\AddressSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $this->addressSearchResultsBuilder->setSearchCriteria($searchCriteria);
 
@@ -150,27 +151,25 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
             $this->addFilterGroupToCollection($group, $collection);
         }
         $this->addressSearchResultsBuilder->setTotalCount($collection->getSize());
-        $sortOrders = $searchCriteria->getSortOrders();
         /** @var SortOrder $sortOrder */
-        if ($sortOrders) {
-            foreach ($searchCriteria->getSortOrders() as $sortOrder) {
-                $field = $sortOrder->getField();
-                $collection->addOrder(
-                    $field,
-                    ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
-                );
-            }
+        foreach ((array)$searchCriteria->getSortOrders() as $sortOrder) {
+            $field = $sortOrder->getField();
+            $collection->addOrder(
+                $field,
+                ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+            );
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
 
         /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
         $addresses = [];
-        $addressIds = $collection->getAllIds();
-        foreach ($addressIds as $addressId) {
-            $addresses[] = $this->getById($addressId);
+        /** @var \Magento\Customer\Model\Address $address */
+        foreach ($collection->getItems() as $address) {
+            $addresses[] = $this->getById($address->getId());
         }
         $this->addressSearchResultsBuilder->setItems($addresses);
+        $this->addressSearchResultsBuilder->setSearchCriteria($searchCriteria);
         return $this->addressSearchResultsBuilder->create();
     }
 
