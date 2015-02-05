@@ -15,6 +15,7 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\DataFixture;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Fixture\Category;
@@ -112,6 +113,12 @@ class ProductForm extends FormTabs
         } else {
             $tabs = $this->getFieldsByTabs($product);
 
+            //TODO: Remove after old product fixture will be deleted
+            if (null === $category && $product instanceof DataFixture) {
+                $categories = $product->getCategories();
+                $category = reset($categories);
+            }
+
             $this->showAdvancedSettings();
             $this->fillTabs($tabs, $element);
 
@@ -120,7 +127,8 @@ class ProductForm extends FormTabs
             }
         }
 
-        $category = $product->hasData('category_ids')
+        //TODO: Remove "!($product instanceof DataFixture)" after old product fixture will be deleted
+        $category = !($product instanceof DataFixture) && $product->hasData('category_ids')
             ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
             : [$category];
         if ($category[0]) {
