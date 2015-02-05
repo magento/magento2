@@ -188,12 +188,9 @@ define([
                         this.element.val(this.responseList.selected.find('.qs-option-name').text());
                         this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
                     }
-                }
-                break;
-
-            default:
-
-                return true;
+                    break;
+                default:
+                    return true;
             }
         },
 
