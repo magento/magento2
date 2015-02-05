@@ -17,9 +17,21 @@ class ObsoleteResponseTest extends \PHPUnit_Framework_TestCase
      */
     protected $obsoleteMethods = [];
 
+    /**
+     * @var array
+     */
+    protected $filesBlackList = [];
+
+    /**
+     * @var string
+     */
+    protected $appPath;
+
     protected function setUp()
     {
-        $this->obsoleteMethods = include __DIR__ . '/_files/obsolete_response_methods.php';
+        $this->appPath = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
+        $this->obsoleteMethods = include __DIR__ . '/_files/response/obsolete_response_methods.php';
+        $this->filesBlackList = $this->getBlackList();
     }
 
     /**
@@ -50,25 +62,40 @@ class ObsoleteResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function modulesFilesDataProvider()
     {
-        $result = [];
-        $appPath = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
-        $refactoredModules = $this->getRefactoredModules('refactored_modules*');
-        foreach ($refactoredModules as $refactoredFolder) {
-            $files = \Magento\Framework\Test\Utility\Files::init()->getFiles([$appPath . $refactoredFolder], '*.php');
-            $result = array_merge($result, $files);
+        $filesList = [];
+
+        foreach ($this->getFilesData('whitelist/refactored_modules*') as $refactoredFolder) {
+            $files = \Magento\Framework\Test\Utility\Files::init()->getFiles(
+                [$this->appPath . $refactoredFolder], '*.php'
+            );
+            $filesList = array_merge($filesList, $files);
         }
 
+        $result = array_map('realpath', $filesList);
+        $result = array_diff($result, $this->filesBlackList);
         return \Magento\Framework\Test\Utility\Files::composeDataSets($result);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getBlackList()
+    {
+        $blackListFiles = [];
+        foreach ($this->getFilesData('blacklist/files_list*') as $file) {
+            $blackListFiles[] = realpath($this->appPath . $file);
+        }
+        return $blackListFiles;
     }
 
     /**
      * @param string $filePattern
      * @return array
      */
-    protected function getRefactoredModules($filePattern)
+    protected function getFilesData($filePattern)
     {
         $result = [];
-        foreach (glob(__DIR__ . '/_files/response_whitelist/' . $filePattern) as $file) {
+        foreach (glob(__DIR__ . '/_files/response/' . $filePattern) as $file) {
             $fileData = include $file;
             $result = array_merge($result, $fileData);
         }
