@@ -89,8 +89,13 @@ define([
     }
 
     function findOptionId(element) {
+        if(!element){
+            return;
+        }
         var re, id,
-            name = element.name;
+            name = $(element).attr('name');
+
+
         if(name.indexOf('[') !== -1) {
             re = /\[([^\]]+)?\]/;
         } else {

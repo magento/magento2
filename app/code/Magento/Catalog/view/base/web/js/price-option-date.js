@@ -4,7 +4,8 @@
  */
 define([
     "jquery",
-    "Magento_Catalog/js/price-utils",
+    "priceUtils",
+    "priceOptions",
     "jquery/ui"
 ], function($,utils){
     "use strict";
@@ -53,7 +54,7 @@ define([
     function onCalendarDropdownChange (siblings) {
         return function(element, optionConfig, form) {
             var changes = {};
-            var optionId = utils.findOptionId(event.target);
+            var optionId = utils.findOptionId(element);
             var overhead = optionConfig[optionId].prices;
             var isNeedToUpdate = true;
             var optionHash = 'price-option-calendar-' + optionId;
@@ -92,7 +93,7 @@ define([
             if(daysNodes.length - 1 > expectedDays) { // remove unnecessary option nodes
                 daysNodes.each(function(i,e){
                     if(e.value > expectedDays) {
-                        e.remove();
+                        $(e).remove();
                     }
                 });
             } else if(daysNodes.length - 1 < expectedDays) { // add missing option nodes
