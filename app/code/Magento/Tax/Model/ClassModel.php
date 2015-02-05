@@ -123,7 +123,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function getClassId()
     {
-        return $this->getData('class_id');
+        return $this->getData(self::KEY_ID);
     }
 
     /**
@@ -131,7 +131,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function getClassName()
     {
-        return $this->getData('class_name');
+        return $this->getData(self::KEY_NAME);
     }
 
     /**
@@ -139,7 +139,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function getClassType()
     {
-        return $this->getData('class_type');
+        return $this->getData(self::KEY_TYPE);
     }
     /**
      * Set tax class ID.
@@ -149,7 +149,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function setClassId($classId)
     {
-        return $this->setData('class_id', $classId);
+        return $this->setData(self::KEY_ID, $classId);
     }
 
     /**
@@ -160,7 +160,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function setClassName($className)
     {
-        return $this->setData('class_name', $className);
+        return $this->setData(self::KEY_NAME, $className);
     }
 
     /**
@@ -171,7 +171,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function setClassType($classType)
     {
-        return $this->setData('class_type', $classType);
+        return $this->setData(self::KEY_TYPE, $classType);
     }
     //@codeCoverageIgnoreEnd
 }

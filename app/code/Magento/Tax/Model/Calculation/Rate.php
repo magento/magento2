@@ -372,7 +372,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
      */
     public function getZipIsRange()
     {
-        return $this->getData('zip_is_range');
+        return $this->getData(self::KEY_ZIP_IS_RANGE);
     }
     /**
      * Set country id
@@ -426,7 +426,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
      */
     public function setZipIsRange($zipIsRange)
     {
-        return $this->setData('zip_is_range', $zipIsRange);
+        return $this->setData(self::KEY_ZIP_IS_RANGE, $zipIsRange);
     }
 
     /**

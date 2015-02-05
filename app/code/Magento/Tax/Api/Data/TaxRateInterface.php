@@ -17,6 +17,7 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     const KEY_REGION_ID = 'tax_region_id';
     const KEY_REGION_NAME = 'region_name';
     const KEY_POSTCODE = 'tax_postcode';
+    const KEY_ZIP_IS_RANGE = 'zip_is_range';
     const KEY_ZIP_RANGE_FROM = 'zip_from';
     const KEY_ZIP_RANGE_TO = 'zip_to';
     const KEY_PERCENTAGE_RATE = 'rate';

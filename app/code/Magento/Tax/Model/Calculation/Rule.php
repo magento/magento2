@@ -5,7 +5,6 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
-use int;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Tax\Api\Data\TaxRuleInterface;
