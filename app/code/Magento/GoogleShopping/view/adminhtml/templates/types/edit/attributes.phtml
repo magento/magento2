@@ -10,7 +10,10 @@
 
 <?php if ($block->getAttributeSetSelected()): ?>
 <script>
-require(['prototype'], function(){
+require([
+    'mage/template',
+    'prototype'
+], function(mageTemplate){
 
 //<![CDATA[
 Gcontent = {};
@@ -18,7 +21,6 @@ Gcontent.Attribute = Class.create();
 Gcontent.Attribute.prototype = {
     idLabel : '<?php echo $block->getFieldId() ?>',
     top : '',
-    templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
     templateText : '',
     itemsCount : 0,
     initialize : function(template) {
@@ -33,8 +35,12 @@ Gcontent.Attribute.prototype = {
         this.top = $('gcontent_attribute_top');
 
         data.index = this.itemsCount++;
-        this.template = new Template(this.templateText, this.templateSyntax);
-        Element.insert(this.top, {'bottom':this.template.evaluate(data)});
+        this.template = mageTemplate(this.templateText);
+            Element.insert(this.top, {
+                'bottom': this.template({
+                    data: data
+                })
+            });
         this.top = $(this.idLabel + '_' + data.index);
 
         //set selected type
@@ -63,10 +69,10 @@ Gcontent.Attribute.prototype = {
     }
 }
 
-var attributesSelectTemplate = '<tr id="<?php echo $block->getFieldId() ?>_{{index}}">' +
+var attributesSelectTemplate = '<tr id="<?php echo $block->getFieldId() ?>_<%= data.index %>">' +
                 '<td>'+
                     '<?php echo $block->getAttributesSelectHtml(true) ?>' +
-                    '<input type="hidden" name="<?php echo $block->getFieldName() ?>[{{index}}][delete]" class="delete" value="">' +
+                    '<input type="hidden" name="<?php echo $block->getFieldName() ?>[<%= data.index %>][delete]" class="delete" value="">' +
                 '</td>' +
                 '<td><?php echo $block->getGcontentAttributesSelectHtml() ?></td>' +
                 '<td class="col-delete">' + <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getDeleteButtonHtml()) ?> + '</td>' +

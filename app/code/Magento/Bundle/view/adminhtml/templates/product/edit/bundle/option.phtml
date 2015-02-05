@@ -161,9 +161,9 @@ Bundle.Option.prototype = {
         this.template = mageTemplate(this.templateText);
 
         jQuery('#product_bundle_container')
-            .append(jQuery(this.template({
+            .append(this.template({
                 data: data
-            })));
+            }));
 
         jQuery('.collapse', jQuery('#product_bundle_container')).collapsable();
 
