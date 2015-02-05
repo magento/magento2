@@ -354,7 +354,6 @@ abstract class AbstractCalculator
      */
     protected function getAppliedTaxes($rowTax, $totalTaxRate, $appliedRates)
     {
-        $appliedTaxDataObject = $this->appliedTaxDataObjectFactory->create();
         /** @var \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes */
         $appliedTaxes = [];
         $totalAppliedAmount = 0;
@@ -376,6 +375,7 @@ abstract class AbstractCalculator
             }
             $totalAppliedAmount += $appliedAmount;
 
+            $appliedTaxDataObject = $this->appliedTaxDataObjectFactory->create();
             $appliedTaxDataObject->setAmount($appliedAmount);
             $appliedTaxDataObject->setPercent($appliedRate['percent']);
             $appliedTaxDataObject->setTaxRateKey($appliedRate['id']);
