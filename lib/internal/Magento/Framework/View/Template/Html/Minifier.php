@@ -68,7 +68,7 @@ class Minifier implements MinifierInterface
                 '#(?<!:)//(?!\<\!\[)(?!]]\>)[^\n\r]*#',
                 '',
                 preg_replace(
-                    '#//[^\n\r]*(\s\?\>)#',
+                    '#(?<!:)//[^\n\r]*(\s\?\>)#',
                     '$1',
                     $this->appDirectory->readFile($file)
                 )
