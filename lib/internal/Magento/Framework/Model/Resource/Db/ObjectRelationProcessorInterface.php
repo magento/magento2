@@ -22,6 +22,16 @@ interface ObjectRelationProcessorInterface
     public function delete(Connection $connection, $table, $condition, array $involvedData);
 
     /**
+     * Validate data that is about to be saved. Check that referenced entity(s) exists.
+     *
+     * @param string $table
+     * @param array $involvedData
+     * @return void
+     * @throws \LogicException
+     */
+    public function validate($table, array $involvedData);
+
+    /**
      * Start transaction
      *
      * @param Connection $connection
