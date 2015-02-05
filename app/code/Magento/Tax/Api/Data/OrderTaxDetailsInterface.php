@@ -21,9 +21,25 @@ interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleData
     public function getAppliedTaxes();
 
     /**
+     * Set applied taxes at order level
+     *
+     * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
+     * @return $this
+     */
+    public function setAppliedTaxes(array $appliedTaxes = null);
+
+    /**
      * Get order item tax details
      *
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] | null
      */
     public function getItems();
+
+    /**
+     * Set order item tax details
+     *
+     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }
