@@ -233,17 +233,20 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .product-item-info {
-        .products-grid &:hover {
-            margin: -10px;
-            padding: 9px;
-            border: 1px solid @color-gray-light2;
-            @_shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
-            .css(box-shadow, @_shadow);
-            position: relative;
-            z-index: 2;
-            .css(background, @color-white);
-            .product-item-inner {
-                display: block;
+        .products-grid & {
+            &:hover,
+            &.active {
+                margin: -10px;
+                padding: 9px;
+                border: 1px solid @color-gray-light2;
+                @_shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
+                .css(box-shadow, @_shadow);
+                position: relative;
+                z-index: 2;
+                .css(background, @color-white);
+                .product-item-inner {
+                    display: block;
+                }
             }
         }
     }
@@ -282,9 +285,13 @@
         .actions-primary { display: table-cell; }
     }
 
-    .product-item-inner {
-        .products-grid .product-item-info:not(:hover) & {
-            &:extend(.abs-visually-hidden-desktop-s all);
+    .products-grid {
+        .product-item-info:not(:hover) {
+            &:not(.active) {
+                .product-item-inner {
+                    &:extend(.abs-visually-hidden-desktop-s all);
+                }
+            }
         }
     }
 

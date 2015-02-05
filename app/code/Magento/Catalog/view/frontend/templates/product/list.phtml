@@ -51,7 +51,7 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
             <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php foreach ($_productCollection as $_product): ?>
                 <?php echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
-                <div class="product-item-info">
+                <div class="product-item-info" data-container="product-grid">
                     <?php // Product Image ?>
                     <a href="<?php echo $_product->getProductUrl() ?>" class="product photo product-item-photo" tabindex="-1">
                         <?php echo $imageBlock->init($_product, $image)->toHtml() ?>
