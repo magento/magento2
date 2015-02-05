@@ -86,23 +86,26 @@ class Status
      * Whether it is allowed to enable or disable specified modules
      *
      * @param bool $isEnabled
-     * @param string[] $modules
-     * @param string[] $allModules
+     * @param string[] $modulesToBeChanged
+     * @param string[] $currentlyEnabledModules
      * @param bool $prettyMessage
      *  
      * @return string[]
      */
-    public function checkConstraints($isEnabled, $modules, $allModules = null, $prettyMessage = false)
-    {
+    public function checkConstraints($isEnabled, $modulesToBeChanged, $currentlyEnabledModules = null,
+        $prettyMessage = false
+    ) {
         $errorMessages = [];
         if ($isEnabled) {
             $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenEnableModules(
-                $modules, $allModules
+                $modulesToBeChanged, $currentlyEnabledModules
             );
-            $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules($modules, $allModules);
+            $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules(
+                $modulesToBeChanged, $currentlyEnabledModules
+            );
         } else {
             $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenDisableModules(
-                $modules, $allModules
+                $modulesToBeChanged, $currentlyEnabledModules
             );
             $errorModulesConflict = [];
         }

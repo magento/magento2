@@ -40,14 +40,14 @@ class Modules extends AbstractActionController
      */
     public function indexAction()
     {
-        $allModules = $this->allModules->getAllModules(null, false);
+        $allModules = $this->allModules->getAllModules();
         $enabledModules =[];
         foreach ($allModules as $module ) {
             if ($module['selected']) {
                 $enabledModules [] = $module['name'];
             }
         }
-        $validity = $this->checkGraph($enabledModules, array_keys($allModules), true);
+        $validity = $this->checkGraph($enabledModules, true);
         ksort($allModules);
         if ($validity->getVariable("success")) {
             return new JsonModel(['success' => true, 'modules' => $allModules]);
@@ -67,31 +67,25 @@ class Modules extends AbstractActionController
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $enabledModules = isset($params['selectedModules']) ? $params['selectedModules'] : [];
-        $allModules = isset($params['allModules']) ? $params['allModules'] : [];
-        return $this->checkGraph($enabledModules, $allModules);
+        return $this->checkGraph($enabledModules);
     }
 
     /**
-     * @param [] $enabledModules
-     * @param [] $allModules
+     * @param [] $toBeEnabledModules
      * @param bool $prettyFormat
      * @return JsonModel
      */
-    private function checkGraph($enabledModules, $allModules, $prettyFormat = false)
+    private function checkGraph($toBeEnabledModules, $prettyFormat = false)
     {
         $status = $this->objectManager->create('Magento\Framework\Module\Status');
 
         // checking enabling constraints
-        $constraints = $status->checkConstraints(true, $enabledModules, $allModules, $prettyFormat);
+        $constraints = $status->checkConstraints(true, $toBeEnabledModules, [], $prettyFormat);
         if ($constraints) {
             $message = $this->handleConstraints(true, $constraints);
             return new JsonModel(['success' => false, 'error' => $message]);
         }
 
-        // checking disabling constraints
-        $constraints = $status->checkConstraints(
-            false, array_diff($allModules, $enabledModules), $allModules, $prettyFormat
-        );
         if ($constraints) {
             $message = $this->handleConstraints(false, $constraints);
             return new JsonModel(['success' => false, 'error' => $message]);
@@ -110,7 +104,8 @@ class Modules extends AbstractActionController
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $status = $this->objectManager->create('Magento\Framework\Module\Status');
 
-        $constraints = $status->checkConstraints($params['status'], [$params['module']], $params['selectedModules']);
+        $constraints = $status->checkConstraints($params['status'], [$params['module']],
+            array_diff($params['selectedModules'], [$params['module']]));
         if ($constraints) {
             $message = $this->handleConstraints($params['status'], $constraints);
             return new JsonModel(['success' => false, 'error' => $message]);
