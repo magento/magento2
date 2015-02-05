@@ -14,7 +14,7 @@ class MassChangelogTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var /Magento\Backend\App\Action\Context
+     * @var \Magento\Backend\App\Action\Context
      */
     protected $contextMock;
 
@@ -59,7 +59,7 @@ class MassChangelogTest extends \PHPUnit_Framework_TestCase
     protected $indexReg;
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $response;
 
@@ -137,7 +137,6 @@ class MassChangelogTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-
         $this->session = $this->getMock('\Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
         $this->session->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
         $this->actionFlag = $this->getMock('\Magento\Framework\App\ActionFlag', ['get'], [], '', false);
@@ -179,10 +178,10 @@ class MassChangelogTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *@param array $indexerIds
-     *@param Exception $exception
-     *@param array $expectsExceptionValues
-     *@dataProvider executeDataProvider
+     * @param array $indexerIds
+     * @param \Exception $exception
+     * @param array $expectsExceptionValues
+     * @dataProvider executeDataProvider
      */
     public function testExecute($indexerIds, $exception, $expectsExceptionValues)
     {
@@ -217,8 +216,13 @@ class MassChangelogTest extends \PHPUnit_Framework_TestCase
             $this->messageManager->expects($this->any())->method('addSuccess')->will($this->returnValue(1));
 
             if ($exception !== null) {
-                $this->messageManager->expects($this->exactly($expectsExceptionValues[2]))->method('addError')->with($exception->getMessage());
-                $this->messageManager->expects($this->exactly($expectsExceptionValues[1]))->method('addException')->with($exception, "We couldn't change indexer(s)' mode because of an error.");
+                $this->messageManager
+                    ->expects($this->exactly($expectsExceptionValues[2]))
+                    ->method('addError')
+                    ->with($exception->getMessage());
+                $this->messageManager->expects($this->exactly($expectsExceptionValues[1]))
+                    ->method('addException')
+                    ->with($exception, "We couldn't change indexer(s)' mode because of an error.");
             }
         }
 
@@ -229,8 +233,8 @@ class MassChangelogTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function executeDataProvider()
     {
         return [

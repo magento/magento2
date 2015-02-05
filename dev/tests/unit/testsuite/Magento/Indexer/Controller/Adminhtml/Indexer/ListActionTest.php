@@ -14,7 +14,7 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
     protected $object;
 
     /**
-     * @var /Magento\Backend\App\Action\Context
+     * @var \Magento\Backend\App\Action\Context
      */
     protected $contextMock;
 

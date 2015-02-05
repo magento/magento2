@@ -137,7 +137,6 @@ class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer
             false
         );
 
-
         $this->session = $this->getMock('\Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
         $this->session->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
         $this->actionFlag = $this->getMock('\Magento\Framework\App\ActionFlag', ['get'], [], '', false);
@@ -179,10 +178,10 @@ class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer
     }
 
     /**
-     *@param array $indexerIds
-     *@param Exception $exception
-     *@param array $expectsExceptionValues
-     *@dataProvider executeDataProvider
+     * @param array $indexerIds
+     * @param \Exception $exception
+     * @param array $expectsExceptionValues
+     * @dataProvider executeDataProvider
      */
     public function testExecute($indexerIds, $exception, $expectsExceptionValues)
     {
@@ -217,8 +216,12 @@ class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer
             $this->messageManager->expects($this->any())->method('addSuccess')->will($this->returnValue(1));
 
             if ($exception !== null) {
-                $this->messageManager->expects($this->exactly($expectsExceptionValues[2]))->method('addError')->with($exception->getMessage());
-                $this->messageManager->expects($this->exactly($expectsExceptionValues[1]))->method('addException')->with($exception, "We couldn't change indexer(s)' mode because of an error.");
+                $this->messageManager->expects($this->exactly($expectsExceptionValues[2]))
+                    ->method('addError')
+                    ->with($exception->getMessage());
+                $this->messageManager->expects($this->exactly($expectsExceptionValues[1]))
+                    ->method('addException')
+                    ->with($exception, "We couldn't change indexer(s)' mode because of an error.");
             }
         }
 
