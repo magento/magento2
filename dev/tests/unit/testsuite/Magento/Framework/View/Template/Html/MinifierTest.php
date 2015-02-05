@@ -108,6 +108,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             });
             //]]>
         </script>
+        <?php echo "http://some.link.com/" ?>
     </body>
 </html>
 TEXT;
@@ -124,7 +125,7 @@ TEXT;
                 }
             });
             //]]>
-        </script></body></html>
+        </script><?php echo "http://some.link.com/" ?></body></html>
 TEXT;
 
         $this->appDirectory->expects($this->once())
