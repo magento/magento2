@@ -103,11 +103,12 @@ class RelatedProductTest extends Functional
         $this->assertTrue($relatedBlock->isRelatedProductSelectable($simple2->getName()));
         $relatedBlock->selectProductForAddToCart($simple2->getName());
         $productPage->getViewBlock()->addToCart($configurable);
+        $productPage->getMessageBlock()->waitSuccessMessage();
 
         //Verify that both configurable product and simple product 2 are added to shopping cart
         $checkoutCartPage = Factory::getPageFactory()->getCheckoutCartIndex();
+        $checkoutCartPage->open();
         $checkoutCartBlock = $checkoutCartPage->getCartBlock();
-        $checkoutCartPage->getMessagesBlock()->waitSuccessMessage();
         $this->assertTrue(
             $checkoutCartBlock->isProductInShoppingCart($configurable),
             'Configurable product was not found in the shopping cart.'

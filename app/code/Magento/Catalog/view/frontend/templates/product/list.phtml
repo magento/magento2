@@ -119,7 +119,7 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
         </ol>
     </div>
     <?php echo $block->getToolbarHtml() ?>
-    <?php if (!$block->getIsRedirectToCartEnabled()) : ?>
+    <?php if (!$block->isRedirectToCartEnabled()) : ?>
         <script>
             require([
                 'jquery',

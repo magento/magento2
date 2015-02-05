@@ -591,7 +591,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @return bool
      */
-    public function getIsRedirectToCartEnabled()
+    public function isRedirectToCartEnabled()
     {
         return $this->_scopeConfig->getValue(
             'checkout/cart/redirect_to_cart',
