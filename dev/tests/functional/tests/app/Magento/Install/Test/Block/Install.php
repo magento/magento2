@@ -60,15 +60,7 @@ class Install extends Block
      */
     public function getAdminInfo()
     {
-        $adminData = [];
-        $rows = $this->_rootElement->getElements('#admin-info .row');
-        foreach ($rows as $row) {
-            $dataRow = $row->getElements('div');
-            $key = strtolower(str_replace(' ', '_', str_replace(':', '', $dataRow[0]->getText())));
-            $adminData[$key] = $dataRow[1]->getText();
-        }
-
-        return $adminData;
+        return $this->getTableDataByCssLocator('#admin-info');
     }
 
     /**
@@ -78,15 +70,26 @@ class Install extends Block
      */
     public function getDbInfo()
     {
-        $dbData = [];
-        $rows = $this->_rootElement->getElements('#db-info .row');
-        foreach ($rows as $row) {
-            $dataRow = $row->getElements('div');
-            $key = strtolower(str_replace(' ', '_', str_replace(':', '', $dataRow[0]->getText())));
-            $dbData[$key] = $dataRow[1]->getText();
+        return $this->getTableDataByCssLocator('#db-info');
+    }
+
+    private function getTableDataByCssLocator($locator)
+    {
+        $data = [];
+        $keys = [];
+        $definitionTitles = $this->_rootElement->getElements($locator . ' dt');
+        foreach ($definitionTitles as $dt) {
+            $keys[] = strtolower(str_replace(' ', '_', str_replace(':', '', $dt->getText())));
+        }
+        reset($keys);
+
+        $definitionDescriptions = $this->_rootElement->getElements($locator . ' dd');
+        foreach ($definitionDescriptions as $dd) {
+            $data[current($keys)] = $dd->getText();
+            next($keys);
         }
 
-        return $dbData;
+        return $data;
     }
 
     /**
