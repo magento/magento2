@@ -8,9 +8,9 @@
 
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('prototype/windows/themes/default.css') ?>"/>
-<link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('Magento_Core::prototype/magento.css') ?>"/>
-<link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('mage/translate-inline.css') ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $block->getViewFileUrl('prototype/windows/themes/default.css') ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $block->getViewFileUrl('Magento_Core::prototype/magento.css') ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $block->getViewFileUrl('mage/translate-inline.css') ?>"/>
 
 <script id="translate-inline-icon" type="text/x-magento-template">
     <img src="<%= img %>" height="16" width="16" class="translate-edit-icon">
@@ -56,7 +56,7 @@
 </script>
 
 <div data-role="translate-dialog"
-     data-mage-init='{"translateInline":{"ajaxUrl":"<?php echo $this->getAjaxUrl() ?>"},"loader":{}}'></div>
+     data-mage-init='{"translateInline":{"ajaxUrl":"<?php echo $block->getAjaxUrl() ?>"},"loader":{}}'></div>
 <script>
     require([
         "jquery",
@@ -66,9 +66,11 @@
         $('body').editTrigger(
             {
                 img: '<?php echo $this->getViewFileUrl('Magento_Core::fam_book_open.png') ?>',
-                alwaysShown:true, singleElement:false
+                alwaysShown:true,
+                singleElement:false
             }
         );
+        
         $('body').addClass('trnslate-inline-area');
     });
 </script>

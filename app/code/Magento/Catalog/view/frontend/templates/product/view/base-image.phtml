@@ -9,23 +9,23 @@
 /**
  * Product media data template
  *
- * @var $this \Magento\Catalog\Block\Product\View\Gallery
+ * @var $block \Magento\Catalog\Block\Product\View\Gallery
  */
 ?>
 <?php
-$_product = $this->getProduct();
+$_product = $block->getProduct();
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
 
 $image = 'product_page_main_image';
 
-$_resizedWidth = $this->getVar("{$image}:width");
-$_resizedHeight = $this->getVar("{$image}:height") ?: $_resizedWidth;
+$_resizedWidth = $block->getVar("{$image}:width");
+$_resizedHeight = $block->getVar("{$image}:height") ?: $_resizedWidth;
 
 $_hasImage = ($_product->getImage() && $_product->getImage() != "no_selection") ? true : false;
 
-$whiteBorders =  $this->getVar("product_image_white_borders");
-$thumbWidth =  $this->getVar("product_page_more_views:width");
-$thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
+$whiteBorders =  $block->getVar("product_image_white_borders");
+$thumbWidth =  $block->getVar("product_page_more_views:width");
+$thumbHeight =  $block->getVar("product_page_more_views:height") ?: $thumbWidth;
 ?>
 <div data-role="media-gallery">
     <div class="product photo main">
@@ -33,23 +33,23 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
             <a <?php echo($_hasImage) ? 'href="#" class="product photo magento-zoom"' : ' class="placeholder"'; ?>
                id="base-image" data-role="zoom-image"
                data-large="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image'); ?>">
-                <?php echo $this->getChildBlock('product.image.main')->setAddAttribute('itemprop="image"')->init($_product, $image)->toHtml() ?>
+                <?php echo $block->getChildBlock('product.image.main')->setAddAttribute('itemprop="image"')->init($_product, $image)->toHtml() ?>
             </a>
         </div>
         <div data-role="gallery-notice-container">
             <p class="notice" data-role="notice"></p>
         </div>
     </div>
-    <?php if (count($this->getGalleryImages()) > 0): ?>
+    <?php if (count($block->getGalleryImages()) > 0): ?>
 
         <div class="product photo thumbs">
             <strong class="title"><?php echo __('More Views') ?></strong>
             <ul class="items thumbs">
-                <?php foreach ($this->getGalleryImages() as $_image): ?>
+                <?php foreach ($block->getGalleryImages() as $_image): ?>
                 <?php
-                $imageSmall = $this->getImageUrl($_image, 'thumbnail', $whiteBorders, $thumbWidth, $thumbHeight);
-                $imageMedium = $this->getImageUrl($_image, 'image', $whiteBorders, $_resizedWidth, $_resizedHeight);
-                $imageLarge = $this->getImageUrl($_image, 'image');
+                $imageSmall = $block->getImageUrl($_image, 'thumbnail', $whiteBorders, $thumbWidth, $thumbHeight);
+                $imageMedium = $block->getImageUrl($_image, 'image', $whiteBorders, $_resizedWidth, $_resizedHeight);
+                $imageLarge = $block->getImageUrl($_image, 'image');
                 ?>
                 <li class="item thumb">
                     <a class="magento-zoom" data-role="gallery-thumb"
@@ -57,15 +57,15 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
                          data-image-small="<?php echo $imageSmall; ?>"
                          data-image-medium="<?php echo $imageMedium; ?>"
                          data-image-large="<?php echo $imageLarge; ?>"
-                        <?php if ($this->isMainImage($_image)): ?>
+                        <?php if ($block->isMainImage($_image)): ?>
                              data-image-selected="true"
                         <?php endif; ?>
-                         title="<?php echo $this->escapeHtml($_image->getLabel()) ?>">
+                         title="<?php echo $block->escapeHtml($_image->getLabel()) ?>">
                         <span class="img"
                               style="position:relative; z-index:1; display:block; width:<?php echo $thumbHeight; ?>px; height:<?php echo $thumbHeight; ?>px;">
                             <img itemprop="image"
                                  src="<?php echo $imageSmall; ?>"
-                                 alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>"/>
+                                 alt="<?php echo $block->escapeHtml($_image->getLabel()) ?>"/>
                         </span>
                     </a>
                 </li>
@@ -75,7 +75,7 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
     <?php endif; ?>
 </div>
 <?php if ($_hasImage): ?>
-    <script data-template="gallery-wrapper" type="text/x-jQuery-tmpl">
+    <script data-template="gallery-wrapper" type="text/x-magento-template">
         <div class="product photo main" style="bottom: <?php echo $thumbWidth ?>px;">
             <div data-role="gallery-base-image-container"></div>
             <div data-role="gallery-notice-container"></div>
@@ -85,29 +85,40 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
         <div class="product photo buttons" data-role="gallery-buttons-container">
         </div>
     </script>
-    <script data-template="gallery-buttons" type="text/x-jQuery-tmpl">
+    <script data-template="gallery-buttons" type="text/x-magento-template">
         <a class="gallery control prev" data-role="gallery-prev" href="#"></a>
         <a class="gallery control next" data-role="gallery-next" href="#"></a>
     </script>
-    <script data-template="gallery-base-image" type="text/x-jQuery-tmpl">
-        <a class="product photo{{if typeof hasImg !== 'undefined'}} placeholder{{/if}}" href="${large}">
+    <script data-template="gallery-base-image" type="text/x-magento-template">
+        <a class="product photo<%if (typeof data.hasImg !== 'undefined') { %> placeholder<% } %>" href="<%= data.large %>">
             <span class="img photo container">
-                <img data-role="zoom-image" class="photo image" itemprop="image" {{if !fullSizeMode}}data-large="${large}" src="${medium}"{{else}}src="${large}"{{/if}} alt="${title}"/>
+                <img
+                    data-role="zoom-image"
+                    class="photo image"
+                    itemprop="image"
+                    <% if (!data.fullSizeMode) { %>
+                    data-large="<%= data.large %>" src="<%= data.medium %>"
+                    <% } else { %>
+                    src="<%= data.large %>"
+                    <% } %>
+                    alt="<%= data.title %>"/>
             </span>
         </a>
     </script>
-    <script data-template="gallery-thumbs" type="text/x-jQuery-tmpl">
-        {{if tumbsTitle}}<strong class="title">${tumbsTitle}</strong>{{/if}}
+    <script data-template="gallery-thumbs" type="text/x-magento-template">
+        <% if (data.tumbsTitle) { %>
+        <strong class="title"><%= data.tumbsTitle %></strong>
+        <% } %>
         <ul class="items thumbs">
-            {{each(index, img) images}}
-            <li class="item thumb">
-                <a title="${img.title}" {{if img.selected}}class="active"{{/if}} data-index="${index}" data-role="gallery-thumb" href="#">
-                        <span class="img">
-                            <img alt="${img.title}" src="${img.small}" itemprop="image" width="${size.width}">
-                        </span>
+            <% _.each(data.images, function(img, index){ %>
+             <li class="item thumb">
+                <a title="<%= img.title %>" <% if (img.selected) { %>class="active"<% } %> data-index="<%= index %>" data-role="gallery-thumb" href="#">
+                    <span class="img">
+                        <img alt="<%= img.title %>" src="<%= img.small %>" itemprop="image" width="<%= size.width %>">
+                    </span>
                 </a>
             </li>
-            {{/each}}
+            <% });%>
         </ul>
     </script>
     <script data-template="zoom-display" type="text/x-jQuery-tmpl">
@@ -124,8 +135,8 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
     <script data-template="zoom-lens" type="text/z-jQuery-tmpl">
         <div data-role="zoom-lens"></div>
     </script>
-    <script data-template="notice" type="text/x-jQuery-tmpl">
-        <p class="notice" data-role="notice">${text}</p>
+    <script data-template="notice" type="text/x-magento-template">
+        <p class="notice" data-role="notice"><%= data.text %></p>
     </script>
     <script>
         require(["jquery", "mage/mage"], function($){
@@ -144,7 +155,7 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
                     },
                     controls: {
                         notice: {
-                            text: '<?php echo $this->escapeJsQuote(__("Click on image to view it full sized")) ?>'
+                            text: '<?php echo $block->escapeJsQuote(__("Click on image to view it full sized")) ?>'
                         }
                     }
                 })
@@ -155,7 +166,7 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
                             top: 65
                         },
                         notice: {
-                            text: '<?php echo $this->escapeJsQuote(__("Click on image to zoom")) ?>'
+                            text: '<?php echo $block->escapeJsQuote(__("Click on image to zoom")) ?>'
                         }
                     }
                 })

@@ -3,16 +3,14 @@
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
-/*global Handlebars*/
 define([
-    "jquery",
-    "underscore",
-    "jquery/ui",
-    "jquery/template",
-    "handlebars",
-    "mage/translate"
-], function($, _){
-    "use strict";
+    'jquery',
+    'underscore',
+    'mage/template',
+    'jquery/ui',
+    'mage/translate'
+], function ($, _, mageTemplate) {
+    'use strict';
 
     /**
      * Check wether the incoming string is not empty or if doesn't consist of spaces.
@@ -20,8 +18,8 @@ define([
      * @param {String} value - Value to check.
      * @returns {Boolean}
      */
-    function isEmpty(value){
-        return (value.length === 0) || (value == null)  || /^\s+$/.test(value);
+    function isEmpty(value) {
+        return (value.length === 0) || (value == null) || /^\s+$/.test(value);
     }
 
     $.widget('mage.quickSearch', {
@@ -30,13 +28,16 @@ define([
             minSearchLength: 2,
             responseFieldElements: 'ul li',
             selectClass: 'selected',
-            template: '<li class="{{row_class}}" id="qs-option-{{index}}" role="option"><span class="qs-option-name">{{title}}</span><span aria-hidden="true" class="amount">{{num_of_results}}</span></li>',
+            template: '<li class="<%= data.row_class %>" id="qs-option-<%= data.index %>" role="option"><span class="qs-option-name"><%= data.title %></span><span aria-hidden="true" class="amount"><%= data.num_of_results %></span></li>',
             submitBtn: 'button[type="submit"]',
             searchLabel: '[data-role=minisearch-label]'
         },
 
-        _create: function() {
-            this.responseList = { indexList: null, selected: null };
+        _create: function () {
+            this.responseList = {
+                indexList: null,
+                selected: null
+            };
             this.autoComplete = $(this.options.destinationSelector);
             this.searchForm = $(this.options.formSelector);
             this.submitBtn = this.searchForm.find(this.options.submitBtn)[0];
@@ -48,7 +49,7 @@ define([
 
             this.element.attr('autocomplete', this.options.autocomplete);
 
-            this.element.on('blur', $.proxy(function() {
+            this.element.on('blur', $.proxy(function () {
 
                 setTimeout($.proxy(function () {
                     if (this.autoComplete.is(':hidden')) {
@@ -61,7 +62,7 @@ define([
 
             this.element.trigger('blur');
 
-            this.element.on('focus', $.proxy(function() {
+            this.element.on('focus', $.proxy(function () {
                 this.searchLabel.addClass('active');
             }, this));
             this.element.on('keydown', this._onKeyDown);
@@ -76,7 +77,7 @@ define([
          * @private
          * @return {Element} The first element in the suggestion list.
          */
-        _getFirstVisibleElement: function() {
+        _getFirstVisibleElement: function () {
             return this.responseList.indexList ? this.responseList.indexList.first() : false;
         },
 
@@ -84,7 +85,7 @@ define([
          * @private
          * @return {Element} The last element in the suggestion list.
          */
-        _getLastElement: function() {
+        _getLastElement: function () {
             return this.responseList.indexList ? this.responseList.indexList.last() : false;
         },
 
@@ -103,10 +104,11 @@ define([
         /**
          * Clears the item selected from the suggestion list and resets the suggestion list.
          * @private
-         * @param {boolean} all Controls whether to clear the suggestion list.
+         * @param {Boolean} all - Controls whether to clear the suggestion list.
          */
-        _resetResponseList: function(all) {
+        _resetResponseList: function (all) {
             this.responseList.selected = null;
+
             if (all === true) {
                 this.responseList.indexList = null;
             }
@@ -116,9 +118,9 @@ define([
          * Executes when the search box is submitted. Sets the search input field to the
          * value of the selected item.
          * @private
-         * @param {Event} e The submit event
+         * @param {Event} e - The submit event
          */
-        _onSubmit: function(e) {
+        _onSubmit: function (e) {
             var value = this.element.val();
 
             if (isEmpty(value)) {
@@ -134,10 +136,10 @@ define([
          * Executes when keys are pressed in the search input field. Performs specific actions
          * depending on which keys are pressed.
          * @private
-         * @param {Event} e The key down event
+         * @param {Event} e - The key down event
          * @return {Boolean} Default return type for any unhandled keys
          */
-        _onKeyDown: function(e) {
+        _onKeyDown: function (e) {
             var keyCode = e.keyCode || e.which;
 
             switch (keyCode) {
@@ -186,9 +188,12 @@ define([
                         this.element.val(this.responseList.selected.find('.qs-option-name').text());
                         this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
                     }
-                    break;
-                default:
-                    return true;
+                }
+                break;
+
+            default:
+
+                return true;
             }
         },
 
@@ -198,7 +203,7 @@ define([
          * and mouseout events on the populated suggestion list dropdown.
          * @private
          */
-        _onPropertyChange: function() {
+        _onPropertyChange: function () {
             var searchField = this.element,
                 clonePosition = {
                     position: 'absolute',
@@ -208,7 +213,7 @@ define([
                     width: searchField.outerWidth()
                 },
                 source = this.options.template,
-                template = Handlebars.compile(source),
+                template = mageTemplate(source),
                 dropdown = $('<ul role="listbox"></ul>'),
                 value = this.element.val();
 
@@ -218,7 +223,9 @@ define([
                 $.get(this.options.url, {q: value}, $.proxy(function (data) {
                     $.each(data, function(index, element) {
                         element.index = index;
-                        var html = template(element);
+                        var html = template({
+                            data: element
+                        });
                         dropdown.append(html);
                     });
                     this.responseList.indexList = this.autoComplete.html(dropdown)
@@ -261,6 +268,6 @@ define([
             }
         }
     });
-    
+
     return $.mage.quickSearch;
 });
