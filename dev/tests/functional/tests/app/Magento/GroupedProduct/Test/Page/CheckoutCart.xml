@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
-  <page name="CheckoutCart" mca="checkout/cart/index" module="Magento_Checkout">
+  <page name="CheckoutCart" mca="checkout/cart/index">
     <block name="cartBlock">
       <render name="grouped" class="Magento\GroupedProduct\Test\Block\Checkout\Cart"/>
     </block>
