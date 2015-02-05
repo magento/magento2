@@ -8,10 +8,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="UpdateProductReviewEntityTest">
     <variation name="UpdateProductReviewEntityTestVariation1" firstConstraint="assertReviewSuccessSaveMessage" method="test">
-      <data name="reviewInitial/dataSet">review_for_simple_product_with_rating</data>
-      <data name="review/data/nickname">name_upd_%isolation%</data>
-      <data name="review/data/title">title_upd_%isolation%</data>
-      <data name="review/data/detail">review_upd_%isolation%</data>
+      <data name="reviewInitial/dataSet" xsi:type="string">review_for_simple_product_with_rating</data>
+      <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
+      <data name="review/data/title" xsi:type="string">title_upd_%isolation%</data>
+      <data name="review/data/detail" xsi:type="string">review_upd_%isolation%</data>
       <constraint name="assertReviewSuccessSaveMessage" next="assertProductReviewInGrid"/>
       <constraint name="assertProductReviewInGrid" next="assertProductRatingOnReviewPage" prev="assertReviewSuccessSaveMessage"/>
       <constraint name="assertProductRatingOnReviewPage" prev="assertProductReviewInGrid"/>

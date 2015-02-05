@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="AddRelatedProductsEntityTest">
     <variation name="AddRelatedProductsEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="productData">catalogProductSimple::default</data>
-      <data name="relatedProductsData">catalogProductSimple::default, configurableProductInjectable::default</data>
+      <data name="productData" xsi:type="string">catalogProductSimple::default</data>
+      <data name="relatedProductsData" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertRelatedProductsSection" prev="assertProductInGrid"/>

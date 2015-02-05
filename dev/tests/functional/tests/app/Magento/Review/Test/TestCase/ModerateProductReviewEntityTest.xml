@@ -8,21 +8,21 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="ModerateProductReviewEntityTest">
     <variation name="ModerateProductReviewEntityTestVariation1" firstConstraint="assertProductReviewBackendSuccessSaveMessage" method="test">
-      <data name="reviewInitial/dataSet">frontend_review</data>
-      <data name="review/data/status_id">Approved</data>
-      <data name="review/data/nickname">Nick%isolation%</data>
-      <data name="review/data/title">Title %isolation%</data>
-      <data name="review/data/detail">Details %isolation%</data>
+      <data name="reviewInitial/dataSet" xsi:type="string">frontend_review</data>
+      <data name="review/data/status_id" xsi:type="string">Approved</data>
+      <data name="review/data/nickname" xsi:type="string">Nick%isolation%</data>
+      <data name="review/data/title" xsi:type="string">Title %isolation%</data>
+      <data name="review/data/detail" xsi:type="string">Details %isolation%</data>
       <constraint name="assertProductReviewBackendSuccessSaveMessage" next="assertProductReviewInGrid"/>
       <constraint name="assertProductReviewInGrid" next="assertProductReviewOnProductPage" prev="assertProductReviewBackendSuccessSaveMessage"/>
       <constraint name="assertProductReviewOnProductPage" prev="assertProductReviewInGrid"/>
     </variation>
     <variation name="ModerateProductReviewEntityTestVariation2" firstConstraint="assertProductReviewBackendSuccessSaveMessage" method="test">
-      <data name="reviewInitial/dataSet">frontend_review</data>
-      <data name="review/data/status_id">Not Approved</data>
-      <data name="review/data/nickname">Nick%isolation%</data>
-      <data name="review/data/title">Title %isolation%</data>
-      <data name="review/data/detail">Details %isolation%</data>
+      <data name="reviewInitial/dataSet" xsi:type="string">frontend_review</data>
+      <data name="review/data/status_id" xsi:type="string">Not Approved</data>
+      <data name="review/data/nickname" xsi:type="string">Nick%isolation%</data>
+      <data name="review/data/title" xsi:type="string">Title %isolation%</data>
+      <data name="review/data/detail" xsi:type="string">Details %isolation%</data>
       <constraint name="assertProductReviewBackendSuccessSaveMessage" next="assertProductReviewInGrid"/>
       <constraint name="assertProductReviewInGrid" next="assertProductReviewNotOnProductPage" prev="assertProductReviewBackendSuccessSaveMessage"/>
       <constraint name="assertProductReviewNotOnProductPage" prev="assertProductReviewInGrid"/>

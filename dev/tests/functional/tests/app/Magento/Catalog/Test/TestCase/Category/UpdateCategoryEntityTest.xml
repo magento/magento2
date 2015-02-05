@@ -8,17 +8,17 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="UpdateCategoryEntityTest">
     <variation name="UpdateCategoryEntityTestVariation1" firstConstraint="assertCategorySaveMessage" method="test">
-      <data name="category/data/name">Name%isolation%</data>
-      <data name="category/data/is_active">Yes</data>
-      <data name="category/data/url_key">UrlKey%isolation%</data>
-      <data name="category/data/description">-</data>
-      <data name="category/data/meta_title">-</data>
-      <data name="category/data/include_in_menu">Yes</data>
-      <data name="category/data/available_product_listing_config">Yes</data>
-      <data name="category/data/available_sort_by/sort_2">-</data>
-      <data name="category/data/available_sort_by/sort_1">-</data>
-      <data name="category/data/default_product_listing_config">No</data>
-      <data name="category/data/default_sort_by">Name</data>
+      <data name="category/data/name" xsi:type="string">Name%isolation%</data>
+      <data name="category/data/is_active" xsi:type="string">Yes</data>
+      <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
+      <data name="category/data/description" xsi:type="string">-</data>
+      <data name="category/data/meta_title" xsi:type="string">-</data>
+      <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">-</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">No</data>
+      <data name="category/data/default_sort_by" xsi:type="string">Name</data>
       <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
       <constraint name="assertCategoryForm" next="assertUrlRewriteCategoryInGrid" prev="assertCategorySaveMessage"/>
       <constraint name="assertUrlRewriteCategoryInGrid" next="assertCategoryRedirect" prev="assertCategoryForm"/>
@@ -26,34 +26,34 @@
       <constraint name="assertCategoryPage" prev="assertCategoryRedirect"/>
     </variation>
     <variation name="UpdateCategoryEntityTestVariation2" firstConstraint="assertCategorySaveMessage" method="test">
-      <data name="category/data/name">Name%isolation%</data>
-      <data name="category/data/is_active">Yes</data>
-      <data name="category/data/url_key">UrlKey%isolation%</data>
-      <data name="category/data/description">Category Description</data>
-      <data name="category/data/meta_title">Category Title</data>
-      <data name="category/data/include_in_menu">Yes</data>
-      <data name="category/data/available_product_listing_config">No</data>
-      <data name="category/data/available_sort_by/sort_2">Position</data>
-      <data name="category/data/available_sort_by/sort_1">Price</data>
-      <data name="category/data/default_product_listing_config">Yes</data>
-      <data name="category/data/default_sort_by">-</data>
+      <data name="category/data/name" xsi:type="string">Name%isolation%</data>
+      <data name="category/data/is_active" xsi:type="string">Yes</data>
+      <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
+      <data name="category/data/description" xsi:type="string">Category Description</data>
+      <data name="category/data/meta_title" xsi:type="string">Category Title</data>
+      <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">Position</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">Price</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">Yes</data>
+      <data name="category/data/default_sort_by" xsi:type="string">-</data>
       <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
       <constraint name="assertCategoryForm" next="assertUrlRewriteCategoryInGrid" prev="assertCategorySaveMessage"/>
       <constraint name="assertUrlRewriteCategoryInGrid" next="assertCategoryPage" prev="assertCategoryForm"/>
       <constraint name="assertCategoryPage" prev="assertUrlRewriteCategoryInGrid"/>
     </variation>
     <variation name="UpdateCategoryEntityTestVariation3" firstConstraint="assertCategorySaveMessage" method="test">
-      <data name="category/data/name">Name%isolation%</data>
-      <data name="category/data/is_active">No</data>
-      <data name="category/data/url_key">-</data>
-      <data name="category/data/description">-</data>
-      <data name="category/data/meta_title">-</data>
-      <data name="category/data/include_in_menu">-</data>
-      <data name="category/data/available_product_listing_config">-</data>
-      <data name="category/data/available_sort_by/sort_2">-</data>
-      <data name="category/data/available_sort_by/sort_1">-</data>
-      <data name="category/data/default_product_listing_config">-</data>
-      <data name="category/data/default_sort_by">-</data>
+      <data name="category/data/name" xsi:type="string">Name%isolation%</data>
+      <data name="category/data/is_active" xsi:type="string">No</data>
+      <data name="category/data/url_key" xsi:type="string">-</data>
+      <data name="category/data/description" xsi:type="string">-</data>
+      <data name="category/data/meta_title" xsi:type="string">-</data>
+      <data name="category/data/include_in_menu" xsi:type="string">-</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">-</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">-</data>
+      <data name="category/data/default_sort_by" xsi:type="string">-</data>
       <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
       <constraint name="assertCategoryForm" prev="assertCategorySaveMessage"/>
     </variation>

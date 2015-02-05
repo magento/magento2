@@ -8,11 +8,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="UpdateStoreEntityTest">
     <variation name="UpdateStoreEntityTestVariation1" firstConstraint="assertStoreSuccessSaveMessage" method="test">
-      <data name="storeInitial/dataSet">custom</data>
-      <data name="store/data/group_id/dataSet">default</data>
-      <data name="store/data/name">storename_updated%isolation%</data>
-      <data name="store/data/code">storecode_updated%isolation%</data>
-      <data name="store/data/is_active">Enabled</data>
+      <data name="storeInitial/dataSet" xsi:type="string">custom</data>
+      <data name="store/data/group_id/dataSet" xsi:type="string">default</data>
+      <data name="store/data/name" xsi:type="string">storename_updated%isolation%</data>
+      <data name="store/data/code" xsi:type="string">storecode_updated%isolation%</data>
+      <data name="store/data/is_active" xsi:type="string">Enabled</data>
       <constraint name="assertStoreSuccessSaveMessage" next="assertStoreInGrid"/>
       <constraint name="assertStoreInGrid" next="assertStoreForm" prev="assertStoreSuccessSaveMessage"/>
       <constraint name="assertStoreForm" next="assertStoreBackend" prev="assertStoreInGrid"/>

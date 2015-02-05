@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="DeleteSearchTermEntityTest">
     <variation name="DeleteSearchTermEntityTestVariation1" firstConstraint="assertSearchTermSuccessDeleteMessage" method="test">
-      <data name="searchTerm/dataSet">default</data>
+      <data name="searchTerm/dataSet" xsi:type="string">default</data>
       <constraint name="assertSearchTermSuccessDeleteMessage" next="assertSearchTermNotInGrid"/>
       <constraint name="assertSearchTermNotInGrid" next="assertSearchTermNotOnFrontend" prev="assertSearchTermSuccessDeleteMessage"/>
       <constraint name="assertSearchTermNotOnFrontend" next="assertSearchSynonymNotOnFrontend" prev="assertSearchTermNotInGrid"/>

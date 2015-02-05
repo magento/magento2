@@ -8,20 +8,20 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="CreateCustomerGroupEntityTest">
     <variation name="CreateCustomerGroupEntityTestVariation1" firstConstraint="assertCustomerGroupSuccessSaveMessage" method="test">
-      <data name="customerGroup/data/tax_class_id/dataSet">Retail Customer</data>
-      <data name="customerGroup/data/customer_group_code">GroupName%isolation%</data>
+      <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">Retail Customer</data>
+      <data name="customerGroup/data/customer_group_code" xsi:type="string">GroupName%isolation%</data>
       <constraint name="assertCustomerGroupSuccessSaveMessage" next="assertCustomerGroupInGrid"/>
       <constraint name="assertCustomerGroupInGrid" next="assertCustomerGroupOnCustomerForm" prev="assertCustomerGroupSuccessSaveMessage"/>
       <constraint name="assertCustomerGroupOnCustomerForm" prev="assertCustomerGroupInGrid"/>
     </variation>
     <variation name="CreateCustomerGroupEntityTestVariation2" firstConstraint="assertCustomerGroupAlreadyExists" method="test">
-      <data name="customerGroup/data/tax_class_id/dataSet">Retail Customer</data>
-      <data name="customerGroup/data/customer_group_code">General</data>
+      <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">Retail Customer</data>
+      <data name="customerGroup/data/customer_group_code" xsi:type="string">General</data>
       <constraint name="assertCustomerGroupAlreadyExists"/>
     </variation>
     <variation name="CreateCustomerGroupEntityTestVariation3" firstConstraint="assertCustomerGroupSuccessSaveMessage" method="test">
-      <data name="customerGroup/data/tax_class_id/dataSet">customer_tax_class</data>
-      <data name="customerGroup/data/customer_group_code">GroupName%isolation%</data>
+      <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">customer_tax_class</data>
+      <data name="customerGroup/data/customer_group_code" xsi:type="string">GroupName%isolation%</data>
       <constraint name="assertCustomerGroupSuccessSaveMessage" next="assertCustomerGroupInGrid"/>
       <constraint name="assertCustomerGroupInGrid" next="assertCustomerGroupOnCustomerForm" prev="assertCustomerGroupSuccessSaveMessage"/>
       <constraint name="assertCustomerGroupOnCustomerForm" prev="assertCustomerGroupInGrid"/>

@@ -8,16 +8,16 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="DeleteStoreEntityTest">
     <variation name="DeleteStoreEntityTestVariation1" firstConstraint="assertStoreSuccessDeleteAndBackupMessages" method="test">
-      <data name="store/dataSet">custom</data>
-      <data name="createBackup">Yes</data>
+      <data name="store/dataSet" xsi:type="string">custom</data>
+      <data name="createBackup" xsi:type="string">Yes</data>
       <constraint name="assertStoreSuccessDeleteAndBackupMessages" next="assertStoreNotInGrid"/>
       <constraint name="assertStoreNotInGrid" next="assertBackupInGrid" prev="assertStoreSuccessDeleteAndBackupMessages"/>
       <constraint name="assertBackupInGrid" next="assertStoreNotOnFrontend" prev="assertStoreNotInGrid"/>
       <constraint name="assertStoreNotOnFrontend" prev="assertBackupInGrid"/>
     </variation>
     <variation name="DeleteStoreEntityTestVariation2" firstConstraint="assertStoreSuccessDeleteMessage" method="test">
-      <data name="store/dataSet">custom</data>
-      <data name="createBackup">No</data>
+      <data name="store/dataSet" xsi:type="string">custom</data>
+      <data name="createBackup" xsi:type="string">No</data>
       <constraint name="assertStoreSuccessDeleteMessage" next="assertStoreNotInGrid"/>
       <constraint name="assertStoreNotInGrid" next="assertStoreNotOnFrontend" prev="assertStoreSuccessDeleteMessage"/>
       <constraint name="assertStoreNotOnFrontend" prev="assertStoreNotInGrid"/>

@@ -8,15 +8,15 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="DeleteStoreGroupEntityTest">
     <variation name="DeleteStoreGroupEntityTestVariation1" firstConstraint="assertStoreGroupSuccessDeleteAndBackupMessages" method="test">
-      <data name="storeGroup/dataSet">custom</data>
-      <data name="createBackup">Yes</data>
+      <data name="storeGroup/dataSet" xsi:type="string">custom</data>
+      <data name="createBackup" xsi:type="string">Yes</data>
       <constraint name="assertStoreGroupSuccessDeleteAndBackupMessages" next="assertStoreGroupNotInGrid"/>
       <constraint name="assertStoreGroupNotInGrid" next="assertBackupInGrid" prev="assertStoreGroupSuccessDeleteAndBackupMessages"/>
       <constraint name="assertBackupInGrid" prev="assertStoreGroupNotInGrid"/>
     </variation>
     <variation name="DeleteStoreGroupEntityTestVariation2" firstConstraint="assertStoreGroupSuccessDeleteMessage" method="test">
-      <data name="storeGroup/dataSet">custom</data>
-      <data name="createBackup">No</data>
+      <data name="storeGroup/dataSet" xsi:type="string">custom</data>
+      <data name="createBackup" xsi:type="string">No</data>
       <constraint name="assertStoreGroupSuccessDeleteMessage" next="assertStoreGroupNotInGrid"/>
       <constraint name="assertStoreGroupNotInGrid" prev="assertStoreGroupSuccessDeleteMessage"/>
     </variation>

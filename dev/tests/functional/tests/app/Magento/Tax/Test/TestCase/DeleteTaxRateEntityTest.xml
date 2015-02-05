@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="DeleteTaxRateEntityTest">
     <variation name="DeleteTaxRateEntityTestVariation1" firstConstraint="assertTaxRateSuccessDeleteMessage" method="test">
-      <data name="taxRate/dataSet">default</data>
+      <data name="taxRate/dataSet" xsi:type="string">default</data>
       <constraint name="assertTaxRateSuccessDeleteMessage" next="assertTaxRateNotInGrid"/>
       <constraint name="assertTaxRateNotInGrid" next="assertTaxRateNotInTaxRule" prev="assertTaxRateSuccessDeleteMessage"/>
       <constraint name="assertTaxRateNotInTaxRule" prev="assertTaxRateNotInGrid"/>

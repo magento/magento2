@@ -8,16 +8,16 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="DeleteCategoryUrlRewriteEntityTest">
     <variation name="DeleteCategoryUrlRewriteEntityTestVariation1" firstConstraint="assertUrlRewriteDeletedMessage" method="test">
-      <data name="urlRewrite/data/target_path/entity">catalog/category/view/id/%category::default%</data>
-      <data name="urlRewrite/data/redirect_type">No</data>
-      <data name="urlRewrite/data/request_path">-</data>
+      <data name="urlRewrite/data/target_path/entity" xsi:type="string">catalog/category/view/id/%category::default%</data>
+      <data name="urlRewrite/data/redirect_type" xsi:type="string">No</data>
+      <data name="urlRewrite/data/request_path" xsi:type="string">-</data>
       <constraint name="assertUrlRewriteDeletedMessage" next="assertPageByUrlRewriteIsNotFound"/>
       <constraint name="assertPageByUrlRewriteIsNotFound" prev="assertUrlRewriteDeletedMessage"/>
     </variation>
     <variation name="DeleteCategoryUrlRewriteEntityTestVariation2" firstConstraint="assertUrlRewriteDeletedMessage" method="test">
-      <data name="urlRewrite/data/target_path/entity">catalog/category/view/id/%category::default%</data>
-      <data name="urlRewrite/data/redirect_type">No</data>
-      <data name="urlRewrite/data/request_path">example%isolation%.html</data>
+      <data name="urlRewrite/data/target_path/entity" xsi:type="string">catalog/category/view/id/%category::default%</data>
+      <data name="urlRewrite/data/redirect_type" xsi:type="string">No</data>
+      <data name="urlRewrite/data/request_path" xsi:type="string">example%isolation%.html</data>
       <constraint name="assertUrlRewriteDeletedMessage" next="assertPageByUrlRewriteIsNotFound"/>
       <constraint name="assertPageByUrlRewriteIsNotFound" prev="assertUrlRewriteDeletedMessage"/>
     </variation>

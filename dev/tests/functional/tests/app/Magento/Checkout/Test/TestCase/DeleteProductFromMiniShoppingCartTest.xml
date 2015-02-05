@@ -8,14 +8,14 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="DeleteProductFromMiniShoppingCartTest">
     <variation name="DeleteProductFromMiniShoppingCartTestVariation1" firstConstraint="assertProductAbsentInMiniShoppingCart" method="test">
-      <data name="description">delete Simple</data>
-      <data name="products">catalogProductSimple::default, catalogProductVirtual::default</data>
+      <data name="description" xsi:type="string">delete Simple</data>
+      <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
       <constraint name="assertProductAbsentInMiniShoppingCart" next="assertProductPresentInMiniShoppingCart"/>
       <constraint name="assertProductPresentInMiniShoppingCart" prev="assertProductAbsentInMiniShoppingCart"/>
     </variation>
     <variation name="DeleteProductFromMiniShoppingCartTestVariation2" firstConstraint="assertCartIsEmpty" method="test">
-      <data name="description">delete Simple</data>
-      <data name="products">catalogProductSimple::default</data>
+      <data name="description" xsi:type="string">delete Simple</data>
+      <data name="products" xsi:type="string">catalogProductSimple::default</data>
       <constraint name="assertCartIsEmpty"/>
     </variation>
   </testCase>

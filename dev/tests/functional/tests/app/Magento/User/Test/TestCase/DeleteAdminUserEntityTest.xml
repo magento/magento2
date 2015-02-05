@@ -12,7 +12,7 @@
       <constraint name="assertUserInGrid" prev="assertImpossibleDeleteYourOwnAccount"/>
     </variation>
     <variation name="DeleteAdminUserEntityTestVariation2" firstConstraint="assertUserSuccessDeleteMessage" method="test">
-      <data name="isDefaultUser">1</data>
+      <data name="isDefaultUser" xsi:type="string">1</data>
       <constraint name="assertUserSuccessDeleteMessage" next="assertUserNotInGrid"/>
       <constraint name="assertUserNotInGrid" prev="assertUserSuccessDeleteMessage"/>
     </variation>
