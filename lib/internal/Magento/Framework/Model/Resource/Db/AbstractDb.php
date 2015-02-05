@@ -116,6 +116,11 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     protected $_serializableFields = [];
 
     /**
+     * @var ObjectRelationProcessorInterface
+     */
+    protected $relationProcessor;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Framework\App\Resource $resource
@@ -457,22 +462,24 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      */
     public function delete(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->beginTransaction();
+        $this->relationProcessor->beginTransaction($this->_getWriteAdapter());
         try {
             $object->beforeDelete();
             $this->_beforeDelete($object);
-            $this->_getWriteAdapter()->delete(
+            $this->relationProcessor->delete(
+                $this->_getWriteAdapter(),
                 $this->getMainTable(),
-                $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId())
+                $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId()),
+                $object->getData()
             );
             $this->_afterDelete($object);
 
             $object->isDeleted(true);
             $object->afterDelete();
-            $this->commit();
+            $this->relationProcessor->commit();
             $object->afterDeleteCommit();
         } catch (\Exception $e) {
-            $this->rollBack();
+            $this->relationProcessor->rollBack();
             throw $e;
         }
         return $this;
