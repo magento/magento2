@@ -17,6 +17,44 @@ class Minifier implements MinifierInterface
     protected $filesystem;
 
     /**
+     * All inline HTML tags
+     *
+     * @var array
+     */
+    protected $inlineHtmlTags = [
+        'b',
+        'big',
+        'i',
+        'small',
+        'tt',
+        'abbr',
+        'acronym',
+        'cite',
+        'code',
+        'dfn',
+        'em',
+        'kbd',
+        'strong',
+        'samp',
+        'var',
+        'a',
+        'bdo',
+        'br',
+        'img',
+        'map',
+        'object',
+        'q',
+        'span',
+        'sub',
+        'sup',
+        'button',
+        'input',
+        'label',
+        'select',
+        'textarea',
+    ];
+
+    /**
      * @param Filesystem $filesystem
      */
     public function __construct(
@@ -61,18 +99,23 @@ class Minifier implements MinifierInterface
     public function minify($file)
     {
         $file = $this->appDirectory->getRelativePath($file);
-        $content = preg_replace('#\> \<#', '><', preg_replace(
-            '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)(?:<(?>textarea|pre|script)\b|\z))#',
-            ' ',
+        $content = preg_replace(
+            '#(?<!' . implode('|', $this->inlineHtmlTags) . ')(?<!\?)\> \<#',
+            '><',
             preg_replace(
-                '#(?<!:)//(?!\<\!\[)(?!]]\>)[^\n\r]*#',
-                '',
+                '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)'
+                . '(?:<(?>textarea|pre|script)\b|\z))#',
+                ' ',
                 preg_replace(
-                    '#(?<!:)//[^\n\r]*(\s\?\>)#',
-                    '$1',
-                    $this->appDirectory->readFile($file)
+                    '#(?<!:)//(?!\<\!\[)(?!]]\>)[^\n\r]*#',
+                    '',
+                    preg_replace(
+                        '#(?<!:)//[^\n\r]*(\s\?\>)#',
+                        '$1',
+                        $this->appDirectory->readFile($file)
+                    )
                 )
-            ))
+            )
         );
 
         if (!$this->htmlDirectory->isExist()) {
