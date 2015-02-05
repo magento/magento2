@@ -138,7 +138,7 @@ class CustomOptions extends Form
 
             /** @var SimpleElement $optionElement */
             $optionElement = $listCustomOptions[$title];
-            $typeMethod = preg_replace('/[^a-zA-Z]/', '', $option['type']);
+            $typeMethod = preg_replace('/[^a-zA-Z]/', '', $this->getOptionType($option['type']));
             $getTypeData = 'get' . ucfirst(strtolower($typeMethod)) . 'Data';
 
             $optionData = $this->$getTypeData($optionElement);
@@ -423,7 +423,7 @@ class CustomOptions extends Form
         $result = [];
 
         foreach ($options as $key => $option) {
-            switch ($option['type']) {
+            switch ($this->getOptionType($option['type'])) {
                 case 'datetime':
                     list($day, $month, $year, $hour, $minute, $dayPart) = explode('/', $option['value']);
                     $option['value'] = [
@@ -472,7 +472,7 @@ class CustomOptions extends Form
                 sprintf($this->optionByName, $option['title']),
                 Locator::SELECTOR_XPATH
             );
-            $type = $option['type'];
+            $type = $this->getOptionType($option['type']);
             $mapping = $this->dataMapping([$type => $option['value']]);
 
             if ('radiobuttons' == $type || 'checkbox' == $type) {
@@ -485,5 +485,17 @@ class CustomOptions extends Form
             }
             $this->_fill($mapping, $optionBlock);
         }
+    }
+
+    /**
+     * Get customer option type
+     *
+     * @param string $option
+     * @return string
+     */
+    protected function getOptionType($option)
+    {
+        $option = substr($option, strpos($option, "/") + 1);
+        return strtolower(preg_replace('/[^a-z]/i', '', $option));
     }
 }

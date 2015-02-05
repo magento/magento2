@@ -204,16 +204,17 @@ class Options extends Tab
     /**
      * Convert option name
      *
-     * @param string $str
+     * @param string $inputType
      * @return string
      */
-    protected function optionNameConvert($str)
+    protected function optionNameConvert($inputType)
     {
-        $str = str_replace([' ', '&'], "", $str);
-        if ($end = strpos($str, '-')) {
-            $str = substr($str, 0, $end) . ucfirst(substr($str, ($end + 1)));
+        $option = substr($inputType, strpos($inputType, "/") + 1);
+        $option = str_replace([' ', '&'], "", $option);
+        if ($end = strpos($option, '-')) {
+            $option = substr($option, 0, $end) . ucfirst(substr($option, ($end + 1)));
         }
 
-        return $str;
+        return $option;
     }
 }

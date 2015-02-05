@@ -38,13 +38,19 @@ class ProductDetails extends \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
-
+        // Select attribute set
+        if (isset($data['attribute_set_id'])) {
+            $this->_fill([$data['attribute_set_id']], $element);
+            unset($data['attribute_set_id']);
+        }
+        // Select categories
         if (isset($data['category_ids'])) {
             /* Fix browser behavior for click by hidden list result of suggest(category) element */
             $this->scrollToCategory();
             $this->_fill([$data['category_ids']], $element);
             unset($data['category_ids']);
         }
+
         $this->_fill($data, $element);
 
         return $this;
