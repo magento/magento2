@@ -21,17 +21,17 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      *
      * @var \Magento\Catalog\Helper\Product\Configuration
      */
-    protected $_productConfigur = null;
+    protected $productConfig = null;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Catalog\Helper\Product\Configuration $productConfigur
+     * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Catalog\Helper\Product\Configuration $productConfigur
+        \Magento\Catalog\Helper\Product\Configuration $productConfig
     ) {
-        $this->_productConfigur = $productConfigur;
+        $this->productConfig = $productConfig;
         parent::__construct($context);
     }
 
@@ -80,7 +80,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      */
     public function getOptions(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item)
     {
-        $options = $this->_productConfigur->getOptions($item);
+        $options = $this->productConfig->getOptions($item);
 
         $links = $this->getLinks($item);
         if ($links) {
