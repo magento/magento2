@@ -80,7 +80,7 @@ class UpdateSimpleProductEntityTest extends Injectable
         $initialCategory = $initialProduct->hasData('category_ids')
             ? $initialProduct->getDataFieldConfig('category_ids')['source']->getCategories()[0]
             : null;
-        $category = $product->hasData('category_ids')
+        $category = $product->hasData('category_ids') && $product->getCategoryIds()[0]
             ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
             : $initialCategory;
 
