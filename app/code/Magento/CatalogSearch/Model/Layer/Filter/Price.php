@@ -171,7 +171,7 @@ class Price extends AbstractFilter
      *
      * @param float|string $fromPrice
      * @param float|string $toPrice
-     * @return float|\Magento\Framework\Phrase|string
+     * @return float|\Magento\Framework\Phrase
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
