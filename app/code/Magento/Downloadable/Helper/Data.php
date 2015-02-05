@@ -38,6 +38,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Downloadable\Model\Link|Item $link
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsShareable($link)
     {
@@ -50,7 +51,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             case \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG:
                 $shareable = (bool)$this->_scopeConfig->isSetFlag(
                     \Magento\Downloadable\Model\Link::XML_PATH_CONFIG_IS_SHAREABLE,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 );
         }
         return $shareable;

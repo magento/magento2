@@ -52,7 +52,7 @@ class Stock extends \Magento\ProductAlert\Controller\Unsubscribe
             )->setProductId(
                 $product->getId()
             )->setWebsiteId(
-                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
+                $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getWebsiteId()
             )->loadByParam();
             if ($model->getId()) {
                 $model->delete();

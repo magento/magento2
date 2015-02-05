@@ -5,6 +5,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 return [
     ['__get', 'Magento\Framework\Object'],
     ['__set', 'Magento\Framework\Object'],
@@ -293,6 +296,7 @@ return [
     ['checkDateTime', 'Magento\Framework\Stdlib\DateTime\DateTime'],
     ['chooseTemplate', 'Magento\Checkout\Block\Cart'],
     ['cleanCache', 'Magento\Core\Model\Config'],
+    ['cleanCache', '\Magento\Core\Model\Observer', '\Magento\Backend\Model\Observer'],
     ['cleanDbRow', 'Magento\Framework\App\Resource'],
     ['cleanMergedJsCss', 'Magento\Core\Model\Design\Package', 'Magento\Framework\View\Asset\MergeService'],
     ['cleanMergedJsCss', 'Magento\Core\Model\Design\Package\Proxy', 'Magento\Framework\View\Asset\MergeService'],
@@ -1621,9 +1625,9 @@ return [
         'getRatingSummary',
         'Magento\Catalog\Model\Product'
     ],
-    ['getCurrentStore', 'Magento\Store\Model\StoreManagerInterface'],
-    ['getAnyStoreView', 'Magento\Store\Model\StoreManagerInterface'],
-    ['throwStoreException', 'Magento\Store\Model\StoreManagerInterface'],
+    ['getCurrentStore', 'Magento\Framework\Store\StoreManagerInterface'],
+    ['getAnyStoreView', 'Magento\Framework\Store\StoreManagerInterface'],
+    ['throwStoreException', 'Magento\Framework\Store\StoreManagerInterface'],
     ['getCustomer', 'Magento\ProductAlert\Helper\Data'],
     ['addCustomerFilter', 'Magento\ProductAlert\Model\Resource\Stock\Collection'],
     ['addCustomerFilter', 'Magento\ProductAlert\Model\Resource\Price\Collection'],
@@ -2027,7 +2031,19 @@ return [
     ['getAllNonNominalItems', 'Magento\Sales\Model\Quote\Address'],
     ['getAllNominalItems', 'Magento\Sales\Model\Quote\Address'],
     ['isNominal', 'Magento\Sales\Model\Order\Item'],
+    ['getIsConfigurable', 'Magento\Catalog\Api\Data\EavAttributeInterface'],
+    ['getIsConfigurable', 'Magento\Catalog\Model\Category\Attribute'],
+    ['getIsConfigurable', 'Magento\Catalog\Model\Resource\Eav\Attribute'],
     ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem'],
     ['checkQuoteAmount', 'Magento\Sales\Helper\Data'],
-    ['getEntityTypeId', 'Magento\Customer\Model\Customer']
+    ['getResource', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getResourceCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getAdvancedResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getEntityTypeId', 'Magento\Customer\Model\Customer'],
+    ['setIsConfigurable', 'Magento\Catalog\Api\Data\ProductAttributeDataBuilder'],
+    ['_getSendfriendModel', 'Magento\Sendfriend\Block\Send'],
+    ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
+    ['register', 'Magento\Sendfriend\Model\Sendfriend'],
+    ['_getImageHelper', 'Magento\Catalog\Model\Product'],
 ];

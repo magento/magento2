@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -11,8 +14,8 @@
  */
 ?>
 <?php
-    $_items = $this->getReviewsCollection()->getItems();
-    $format = $this->getDateFormat() ?: 'short';
+    $_items = $block->getReviewsCollection()->getItems();
+    $format = $block->getDateFormat() ?: 'short';
 ?>
 <?php if (count($_items)):?>
 <div class="block review-list" id="customer-reviews">
@@ -21,17 +24,17 @@
     </div>
     <div class="block-content">
         <div class="toolbar review-toolbar">
-            <?php echo $this->getChildHtml('toolbar') ?>
+            <?php echo $block->getChildHtml('toolbar') ?>
         </div>
         <ol class="items review-items">
         <?php foreach ($_items as $_review):?>
             <li class="item review-item" itemscope itemprop="review" itemtype="http://schema.org/Review">
-                <div class="review-title" itemprop="name"><?php echo $this->escapeHtml($_review->getTitle()) ?></div>
+                <div class="review-title" itemprop="name"><?php echo $block->escapeHtml($_review->getTitle()) ?></div>
                 <?php if (count($_review->getRatingVotes())): ?>
                     <div class="review-ratings">
                     <?php foreach ($_review->getRatingVotes() as $_vote): ?>
                     <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
-                        <span class="label rating-label"><span><?php echo $this->escapeHtml($_vote->getRatingCode()) ?></span></span>
+                        <span class="label rating-label"><span><?php echo $block->escapeHtml($_vote->getRatingCode()) ?></span></span>
                         <div class="rating-result" title="<?php echo $_vote->getPercent() ?>%">
 	                        <meta itemprop="worstRating" content = "1"/>
 	                        <meta itemprop="bestRating" content = "100"/>
@@ -44,23 +47,23 @@
                     </div>
                 <?php endif; ?>
                 <div class="review-content" itemprop="description">
-                    <?php echo nl2br($this->escapeHtml($_review->getDetail())) ?>
+                    <?php echo nl2br($block->escapeHtml($_review->getDetail())) ?>
                 </div>
                 <div class="review-details">
                     <p class="review-author">
                         <span class="review-details-label"><?php echo __('Review by')?></span>
-                        <strong class="review-details-value" itemprop="author"><?php echo $this->escapeHtml($_review->getNickname()) ?></strong>
+                        <strong class="review-details-value" itemprop="author"><?php echo $block->escapeHtml($_review->getNickname()) ?></strong>
                     </p>
                     <p class="review-date">
                         <span class="review-details-label"><?php echo __('Posted on') ?></span>
-                        <time class="review-details-value" itemprop="datePublished" datetime="<?php echo $this->formatDate($_review->getCreatedAt(), $format) ?>"><?php echo $this->formatDate($_review->getCreatedAt(), $format) ?></time>
+                        <time class="review-details-value" itemprop="datePublished" datetime="<?php echo $block->formatDate($_review->getCreatedAt(), $format) ?>"><?php echo $block->formatDate($_review->getCreatedAt(), $format) ?></time>
                     </p>
                 </div>
             </li>
         <?php endforeach; ?>
         </ol>
         <div class="toolbar review-toolbar">
-            <?php echo $this->getChildHtml('toolbar') ?>
+            <?php echo $block->getChildHtml('toolbar') ?>
         </div>
     </div>
 </div>

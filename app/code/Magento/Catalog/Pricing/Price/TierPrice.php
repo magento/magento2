@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
@@ -250,6 +252,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * Get clear tier price list stored in DB
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getStoredTierPrices()
     {

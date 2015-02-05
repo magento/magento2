@@ -4,16 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Checkout\Block\Cart\Sidebar */
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Checkout\Block\Cart\Sidebar */
 ?>
-<?php if ($this->getInList()): ?>
+<?php if ($block->getInList()): ?>
     <li data-block="minicart" class="minicart-wrapper">
 <?php else:  ?>
     <div data-block="minicart" class="minicart-wrapper">
 <?php endif; ?>
-<?php $_cartQty = (float) $this->getSummaryCount() ?>
-<?php if (!$this->getIsLinkMode() || !$this->getIsNeedToDisplaySideBar()): ?>
-    <a class="action showcart" href="<?php echo $this->getUrl('checkout/cart'); ?>">
+<?php $_cartQty = (float) $block->getSummaryCount() ?>
+<?php if (!$block->getIsLinkMode() || !$block->getIsNeedToDisplaySideBar()): ?>
+    <a class="action showcart" href="<?php echo $block->getUrl('checkout/cart'); ?>">
         <span class="text"><?php echo __('My Cart'); ?></span>
         <span class="counter qty<?php echo($_cartQty > 0) ? '' : ' empty'; ?>">
             <span class="counter-number">
@@ -28,8 +30,8 @@
             </span>
         </span>
     </a>
-    <?php if ($this->getIsNeedToDisplaySideBar()): ?>
-        <div class="block block-minicart<?php echo($_cartQty > 0) ? '' : ' empty'; ?>" <?php if ($this->getIsNeedToDisplaySideBar()): ?> data-mage-init='{"dropdownDialog":{"appendTo":"[data-block=minicart]", "triggerTarget":".showcart", "timeout": "2000", "triggerClass":"active", "parentClass":"active"}}'<?php endif ?>>
+    <?php if ($block->getIsNeedToDisplaySideBar()): ?>
+        <div class="block block-minicart<?php echo($_cartQty > 0) ? '' : ' empty'; ?>" <?php if ($block->getIsNeedToDisplaySideBar()): ?> data-mage-init='{"dropdownDialog":{"appendTo":"[data-block=minicart]", "triggerTarget":".showcart", "timeout": "2000", "triggerClass":"active", "parentClass":"active"}}'<?php endif ?>>
             <div class="title">
                 <strong>
                     <span class="text"><?php echo __('My Cart'); ?></span>
@@ -39,15 +41,15 @@
                 </strong>
             </div>
             <div class="content">
-                <?php if ($_cartQty || $this->getAllowCartLink()): ?>
+                <?php if ($_cartQty || $block->getAllowCartLink()): ?>
                     <div class="items-total">
                         <?php echo($_cartQty == 1) ? __('1 item ') : __('%1 items ', $_cartQty) ?>
                     </div>
-                    <?php $isPossibleOnepageCheckout = $_cartQty && $this->isPossibleOnepageCheckout() ?>
+                    <?php $isPossibleOnepageCheckout = $_cartQty && $block->isPossibleOnepageCheckout() ?>
                     <?php if ($isPossibleOnepageCheckout): ?>
-                        <?php echo $this->getChildHtml('subtotal'); ?>
+                        <?php echo $block->getChildHtml('subtotal'); ?>
                     <?php endif; ?>
-                    <?php echo $this->getChildHtml('minicart_info') ?>
+                    <?php echo $block->getChildHtml('minicart_info') ?>
                     <div class="actions">
                         <div class="primary">
                             <?php if ($isPossibleOnepageCheckout): ?>
@@ -58,23 +60,23 @@
                                     title="<?php echo __('Go to Checkout') ?>">
                                     <span><?php echo __('Go to Checkout') ?></span>
                                 </button>
-                                <?php echo $this->getChildHtml('extra_actions') ?>
+                                <?php echo $block->getChildHtml('extra_actions') ?>
                             <?php endif; ?>
                         </div>
                         <div class="secondary">
-                            <a class="action viewcart" href="<?php echo $this->getUrl('checkout/cart'); ?>">
+                            <a class="action viewcart" href="<?php echo $block->getUrl('checkout/cart'); ?>">
                                 <span><?php echo __('Go to Shopping Cart') ?></span>
                             </a>
                         </div>
                     </div>
                 <?php endif ?>
-                <?php $_items = $this->getRecentItems() ?>
+                <?php $_items = $block->getRecentItems() ?>
                 <?php if (count($_items)): ?>
                     <strong class="subtitle"><?php echo __('Recently added item(s)') ?></strong>
                     <div data-action="scroll" class="products minilist">
                         <ol id="mini-cart" class="minilist items">
                             <?php foreach ($_items as $_item): ?>
-                            <?php echo $this->getItemHtml($_item) ?>
+                            <?php echo $block->getItemHtml($_item) ?>
                             <?php endforeach; ?>
                         </ol>
                     </div>
@@ -82,8 +84,8 @@
                     <strong class="subtitle empty">
                         <?php echo __('You have no items in your shopping cart.') ?>
                     </strong>
-                    <?php if ($this->getCartEmptyMessage()): ?>
-                        <p class="minicart empty text"><?php echo $this->getCartEmptyMessage(); ?></p>
+                    <?php if ($block->getCartEmptyMessage()): ?>
+                        <p class="minicart empty text"><?php echo $block->getCartEmptyMessage(); ?></p>
                     <?php endif; ?>
                 <?php endif ?>
             </div>
@@ -97,14 +99,14 @@
     ], function($){
         "use strict";
         $('[data-block="minicart"]').mage('sidebar', {
-            checkoutUrl: '<?php echo $this->getCheckoutUrl();?>',
+            checkoutUrl: '<?php echo $block->getCheckoutUrl();?>',
             checkoutButton: '#top-cart-btn-checkout',
             removeButton: '#mini-cart a.action.delete',
             confirmMessage: '<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>'
         });
     });
 </script>
-<?php if ($this->getInList()): ?>
+<?php if ($block->getInList()): ?>
     </li>
 <?php else:  ?>
     </div>

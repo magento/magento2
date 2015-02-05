@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\Filesystem\DriverPool;
+
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -50,10 +52,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->_filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->will($this->returnValueMap([
-                [\Magento\Framework\App\Filesystem\DirectoryList::THEMES, $themesDirMock],
-                [\Magento\Framework\App\Filesystem\DirectoryList::APP, $appDirMock],
-                [\Magento\Framework\App\Filesystem\DirectoryList::ROOT, $this->rootDirMock],
-                [\Magento\Framework\App\Filesystem\DirectoryList::TEMPLATE_MINIFICATION_DIR, $this->rootDirMock],
+                [\Magento\Framework\App\Filesystem\DirectoryList::THEMES, DriverPool::FILE, $themesDirMock],
+                [\Magento\Framework\App\Filesystem\DirectoryList::APP, DriverPool::FILE, $appDirMock],
+                [\Magento\Framework\App\Filesystem\DirectoryList::ROOT, DriverPool::FILE, $this->rootDirMock],
+                [\Magento\Framework\App\Filesystem\DirectoryList::TEMPLATE_MINIFICATION_DIR, DriverPool::FILE, $this->rootDirMock],
             ]));
 
         $this->_templateEngine = $this->getMock(

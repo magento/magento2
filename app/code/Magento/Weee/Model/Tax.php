@@ -11,6 +11,9 @@ use Magento\Store\Model\Website;
 use Magento\Tax\Model\Calculation;
 use Magento\Customer\Api\AccountManagementInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Tax extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -51,7 +54,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     protected $_attributeFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -86,7 +89,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Tax\Model\CalculationFactory $calculationFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param AccountManagementInterface $accountManagement
@@ -96,12 +99,13 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Tax\Model\CalculationFactory $calculationFactory,
         \Magento\Customer\Model\Session $customerSession,
         AccountManagementInterface $accountManagement,
@@ -197,6 +201,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param Website $website
      * @param bool $calculateTax
      * @return \Magento\Framework\Object[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getProductWeeeAttributes(
         $product,

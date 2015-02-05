@@ -28,7 +28,7 @@ class Notices extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'web/browser_capabilities/javascript',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -41,7 +41,7 @@ class Notices extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'web/browser_capabilities/local_storage',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -54,7 +54,7 @@ class Notices extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'design/head/demonotice',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 

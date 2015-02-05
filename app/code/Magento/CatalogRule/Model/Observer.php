@@ -15,13 +15,16 @@ use Magento\Catalog\Model\Resource\Product\Collection as ProductCollection;
 use Magento\CatalogRule\Model\Rule;
 use Magento\CatalogRule\Model\Rule\Product\Price;
 use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Stdlib\DateTime;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Observer
 {
     /**

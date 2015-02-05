@@ -3,37 +3,40 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 
 /**
- * @var $this \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links
+ * @var $block \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links
  */
 ?>
-<?php $_product = $this->getProduct()?>
-<?php $this->getConfigJson() ?>
+<?php $_product = $block->getProduct()?>
+<?php $block->getConfigJson() ?>
 <div class="form-inline">
     <div class="field">
         <label class="label" for="name"><span><?php echo __('Title')?></span></label>
         <div class="control">
-            <input type="text" class="input-text" id="downloadable_links_title" name="product[links_title]" value="<?php echo $this->getLinksTitle() ?>" <?php echo($_product->getStoreId() && $this->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <input type="text" class="input-text" id="downloadable_links_title" name="product[links_title]" value="<?php echo $block->getLinksTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
             <?php if ($_product->getStoreId()): ?>
-                <input id="link_title_default" type="checkbox" name="use_default[]" value="links_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $this->getUsedDefault() ? 'checked="checked"' : '' ?> />
+                <input id="link_title_default" type="checkbox" name="use_default[]" value="links_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
                 <label class="normal" for="link_title_default"><?php echo __('Use Default Value'); ?></label>
             <?php endif; ?>
         </div>
         <div class="field-service">
-            <?php echo !$this->isSingleStoreMode() ? __('[STORE VIEW]') : ''; ?>
+            <?php echo !$block->isSingleStoreMode() ? __('[STORE VIEW]') : ''; ?>
         </div>
     </div>
 
     <div class="field">
         <label class="label" for="name"><span><?php echo __('Links can be purchased separately')?></span></label>
         <div class="control">
-            <?php echo $this->getPurchasedSeparatelySelect()?>
+            <?php echo $block->getPurchasedSeparatelySelect()?>
         </div>
         <div class="field-service">
-            <?php echo !$this->isSingleStoreMode() ? __('[GLOBAL]') : ''; ?>
+            <?php echo !$block->isSingleStoreMode() ? __('[GLOBAL]') : ''; ?>
         </div>
     </div>
 
@@ -41,7 +44,7 @@
         <thead>
             <tr>
                 <th><?php echo __('Title')?> <span class="required">*</span></th>
-                <?php if ($this->getCanReadPrice() !== false) : ?>
+                <?php if ($block->getCanReadPrice() !== false) : ?>
                 <th><?php echo __('Price')?></th>
                 <?php endif; ?>
                 <th><?php echo __('Max. Downloads')?></th>
@@ -54,7 +57,7 @@
         </thead>
         <tfoot>
             <tr>
-                <td colspan="8" class="col-actions-add"><?php echo $this->getAddButtonHtml()?></td>
+                <td colspan="8" class="col-actions-add"><?php echo $block->getAddButtonHtml()?></td>
             </tr>
         </tfoot>
         <tbody id="link_items_body">
@@ -71,8 +74,7 @@ require([
     'Magento_Ui/js/lib/registry/registry',
     'jquery/file-uploader',
     'mage/mage',
-    'prototype',
-
+    'prototype'
 ], function(jQuery, registry){
     registry.get('downloadable', function (Downloadable) {
         var linkTemplate = '<tr>'+
@@ -82,17 +84,17 @@ require([
                 '<input type="text" class="required-entry input-text" name="downloadable[link][{{id}}][title]" value="{{title}}" />'+
                 '<?php echo $_product->getStoreId() ? '<input type="checkbox" id="downloadable_link_{{id}}_title" name="downloadable[link][{{id}}][use_default_title]" value="1" /><label class="normal" for="downloadable_link_{{id}}_title">Use Default Value</label>' : '' ?>'+
             '</td>'+
-            <?php if ($this->getCanReadPrice() !== false) : ?>
+            <?php if ($block->getCanReadPrice() !== false) : ?>
             '<td class="input-price">'+
-                '<input type="text" id="downloadable_link_{{id}}_price_value" class="input-text validate-number link-prices<?php if ($this->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][{{id}}][price]" value="{{price}}"<?php if ($this->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
-                '<label>[<?php echo $this->getBaseCurrencyCode($_product->getStoreId()) ?>]</label>' +
-                <?php if ($_product->getStoreId() && $this->getIsPriceWebsiteScope()) : ?>
-                '<br /><input type="checkbox" id="downloadable_link_{{id}}_price" name="downloadable[link][{{id}}][use_default_price]" value="1"<?php if ($this->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> <label for="downloadable_link_{{id}}_price">Use Default Value</label>' +
+                '<input type="text" id="downloadable_link_{{id}}_price_value" class="input-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][{{id}}][price]" value="{{price}}"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
+                '<label>[<?php echo $block->getBaseCurrencyCode($_product->getStoreId()) ?>]</label>' +
+                <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
+                '<br /><input type="checkbox" id="downloadable_link_{{id}}_price" name="downloadable[link][{{id}}][use_default_price]" value="1"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> <label for="downloadable_link_{{id}}_price">Use Default Value</label>' +
                 <?php endif; ?>
             '</td>' +
             <?php else : ?>
             '<input type="hidden" id="downloadable_link_{{id}}_price_value" class="link-prices" name="downloadable[link][{{id}}][price]" value="0" />' +
-            <?php if ($_product->getStoreId() && $this->getIsPriceWebsiteScope()) : ?>
+            <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
             '<input type="hidden" id="downloadable_link_{{id}}_price" name="downloadable[link][{{id}}][use_default_price]" value="1" />' +
             <?php endif; ?>
             <?php endif; ?>
@@ -115,10 +117,10 @@ require([
                             '<div id="downloadable_link_{{id}}_sample_file-new" class="file-row-info"></div>'+
                             '<div class="fileinput-button form-buttons">'+
                                 '<span><?php echo __('Browse Files...') ?></span>' +
-                                '<input id="downloadable_link_{{id}}_sample_file" type="file" name="<?php echo $this->getFileFieldName('link_samples') ?>">' +
-                                '<script>' +
+                                '<input id="downloadable_link_{{id}}_sample_file" type="file" name="<?php echo $block->getFileFieldName('link_samples') ?>">' +
+                                '<script type="text/javascript">' +
                                 '/*<![CDATA[*/' +
-                                    'linksUploader("#downloadable_link_{{id}}_sample_file", "<?php echo $this->getUploadUrl('link_samples') ?>"); ' +
+                                    'linksUploader("#downloadable_link_{{id}}_sample_file", "<?php echo $block->getUploadUrl('link_samples') ?>"); ' +
                                 '/*]]>*/' +
                                 '</scr'+'ipt>'+
                             '</div>'+
@@ -143,10 +145,10 @@ require([
                             '<div id="downloadable_link_{{id}}_file-new" class="file-row-info new-file"></div>'+
                             '<div class="fileinput-button form-buttons">'+
                                 '<span><?php echo __('Browse Files...') ?></span>' +
-                                '<input id="downloadable_link_{{id}}_file" type="file" name="<?php echo $this->getFileFieldName('links') ?>">' +
-                                '<script>' +
+                                '<input id="downloadable_link_{{id}}_file" type="file" name="<?php echo $block->getFileFieldName('links') ?>">' +
+                                '<script type="text/javascript">' +
                                 '/*<![CDATA[*/' +
-                                    'linksUploader("#downloadable_link_{{id}}_file", "<?php echo $this->getUploadUrl('links') ?>"); ' +
+                                    'linksUploader("#downloadable_link_{{id}}_file", "<?php echo $block->getUploadUrl('links') ?>"); ' +
                                 '/*]]>*/' +
                                 '</scr'+'ipt>'+
                             '</div>'+
@@ -181,7 +183,7 @@ require([
                     data.link_id  = 0;
                     data.link_type = 'file';
                     data.sample_type = 'none';
-                    data.number_of_downloads = '<?php echo $this->getConfigMaxDownloads() ?>';
+                    data.number_of_downloads = '<?php echo $block->getConfigMaxDownloads() ?>';
                 }
 
                 data.id = this.itemCount;
@@ -269,7 +271,7 @@ require([
                     'downloadable[link]['+data.id+'][sample]',
                     data.sample_file_save,
                     'downloadable_link_'+data.id+'_sample_file',
-                    <?php echo $this->getConfigJson('link_samples') ?>
+                    <?php echo $block->getConfigJson('link_samples') ?>
                 );
                 // link file
                 new Downloadable.FileUploader(
@@ -279,7 +281,7 @@ require([
                     'downloadable[link]['+data.id+']',
                     data.file_save,
                     'downloadable_link_'+data.id+'_file',
-                    <?php echo $this->getConfigJson() ?>
+                    <?php echo $block->getConfigJson() ?>
                 );
 
                 linkFile = $('downloadable_link_'+data.id+'_file_type');
@@ -395,7 +397,7 @@ require([
             Event.observe('add_link_item', 'click', linkItems.add.bind(linkItems));
         }
 
-        <?php foreach ($this->getLinkData() as $item): ?>
+        <?php foreach ($block->getLinkData() as $item): ?>
             linkItems.add(<?php echo $item->toJson()?>);
         <?php endforeach; ?>
 

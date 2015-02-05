@@ -6,11 +6,11 @@
  * Create/edit some category
  */
 define([
-    "jquery",
-    "prototype"
-], function(jQuery){
+    'jquery',
+    'prototype'
+], function (jQuery) {
 
-var categorySubmit = function (url, useAjax) {
+    var categorySubmit = function (url, useAjax) {
     var activeTab = $('active_tab_id');
     if (activeTab) {
         if (activeTab.tabsJsObject && activeTab.tabsJsObject.tabs('activeAnchor')) {
@@ -69,6 +69,10 @@ var categorySubmit = function (url, useAjax) {
     jQuery('#category_edit_form').trigger('submit');
 };
 
-window.categorySubmit = categorySubmit;
-
+    return function (config, element) {
+        config = config || {};
+        jQuery(element).on('click', function (event) {
+            categorySubmit(config.url, config.ajax);
+        });
+    };
 });

@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote;
 
 /**
  * One page common functionality block
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 {
@@ -100,6 +101,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -137,7 +139,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      */
     public function getConfig($path)
     {
-        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**

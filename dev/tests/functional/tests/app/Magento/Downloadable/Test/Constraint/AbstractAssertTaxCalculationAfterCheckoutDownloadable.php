@@ -11,7 +11,7 @@ use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Sales\Test\Page\OrderView;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Tax\Test\Constraint\AbstractAssertTaxCalculationAfterCheckout;
 
 /**

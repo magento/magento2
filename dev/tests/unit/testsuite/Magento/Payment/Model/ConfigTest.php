@@ -4,9 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Payment\Model;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase

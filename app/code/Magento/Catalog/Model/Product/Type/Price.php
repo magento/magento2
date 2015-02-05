@@ -48,7 +48,7 @@ class Price
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -71,7 +71,7 @@ class Price
 
     /**
      * @param \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -80,7 +80,7 @@ class Price
      */
     public function __construct(
         \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -157,6 +157,7 @@ class Price
      * @param Product $childProduct
      * @param float $childProductQty
      * @return float
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getChildFinalPrice($product, $productQty, $childProduct, $childProductQty)
     {
@@ -243,6 +244,8 @@ class Price
      * @param   Product $product
      * @return  float|array
      * @deprecated (MAGETWO-31465)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getTierPrice($qty, $product)
     {
@@ -330,7 +333,7 @@ class Price
      */
     protected function _getCustomerGroupId($product)
     {
-        if ($product->getCustomerGroupId()) {
+        if (!is_null($product->getCustomerGroupId())) {
             return $product->getCustomerGroupId();
         }
         return $this->_customerSession->getCustomerGroupId();
@@ -410,6 +413,7 @@ class Price
      * @param float $finalPrice
      * @return float
      * @deprecated (MAGETWO-31469)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _applyOptionsPrice($product, $qty, $finalPrice)
     {

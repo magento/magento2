@@ -7,6 +7,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 return [
     ['_addresses', 'Magento\Customer\Model\Customer'],
     ['_addMinimalPrice', 'Magento\Catalog\Model\Resource\Product\Collection'],
@@ -364,4 +367,5 @@ return [
     ['_lables', 'Magento\SalesRule\Model\Rule'],
     ['_catalogData', 'Magento\Catalog\Block\Product\AbstractProduct'],
     ['_env', 'Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection'],
+    ['_catalogImage', 'Magento\Catalog\Model\Product'],
 ];

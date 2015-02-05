@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Block;
 
 class Dashboard extends \Magento\Backend\Block\Template
@@ -28,7 +31,7 @@ class Dashboard extends \Magento\Backend\Block\Template
 
         $this->addChild('sales', 'Magento\Backend\Block\Dashboard\Sales');
 
-        if ($this->_scopeConfig->getValue(self::XML_PATH_ENABLE_CHARTS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+        if ($this->_scopeConfig->getValue(self::XML_PATH_ENABLE_CHARTS, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)) {
             $block = $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Diagrams');
         } else {
             $block = $this->getLayout()->createBlock(

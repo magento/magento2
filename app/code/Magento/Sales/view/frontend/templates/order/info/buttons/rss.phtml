@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Sales\Block\Order\Info\Buttons\Rss */
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Sales\Block\Order\Info\Buttons\Rss */
 ?>
-<?php if ($this->isRssAllowed() && $this->getLink()): ?>
-<a href="<?php echo $this->getLink() ?>" class="action rss">
-    <span><?php echo $this->getLabel() ?></span>
+<?php if ($block->isRssAllowed() && $block->getLink()): ?>
+<a href="<?php echo $block->getLink() ?>" class="action rss">
+    <span><?php echo $block->getLabel() ?></span>
 </a>
 <?php endif; ?>

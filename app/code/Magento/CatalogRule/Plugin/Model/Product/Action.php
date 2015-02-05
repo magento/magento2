@@ -30,6 +30,7 @@ class Action
      * @return ProductAction
      *
      * @SuppressWarnings(PHPMD.UnusedFormatParameter)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterUpdateAttributes(ProductAction $object, ProductAction $result)
     {

@@ -167,6 +167,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param string|int|array $condition
      * @throws \Magento\Framework\Exception if some error in the input could be detected.
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addFieldToFilter($field, $condition)
     {
@@ -496,7 +497,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param string $callback
      * @param array $args
-     * @internal param string $method
      * @return array
      */
     public function walk($callback, array $args = [])
@@ -646,6 +646,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param bool $flag
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function distinct($flag)
     {
@@ -658,6 +659,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function loadData($printQuery = false, $logQuery = false)
     {

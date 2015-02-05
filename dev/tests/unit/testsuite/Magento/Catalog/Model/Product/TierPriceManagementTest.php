@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Customer\Model\GroupManagement;
@@ -76,7 +79,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
         $this->websiteMock =
             $this->getMock('Magento\Store\Model\Website', ['getId', '__wakeup'], [], '', false);
         $this->productMock = $this->getMock(
@@ -126,7 +129,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue($configValue));
         if ($expected) {
             $this->priceBuilderMock
@@ -179,7 +182,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue(0));
         $this->priceModifierMock->expects($this->once())->method('removeTierPrice')->with($this->productMock, 4, 5, 0);
 
@@ -211,7 +214,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue(1));
         $this->priceModifierMock->expects($this->once())->method('removeTierPrice')->with($this->productMock, 4, 5, 1);
 
@@ -240,7 +243,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue(1));
 
         $this->productMock->expects($this->once())->method('setData')->with(
@@ -286,7 +289,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue(0));
 
         $this->productMock->expects($this->once())->method('setData')->with(
@@ -314,7 +317,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue(0));
 
         $this->productMock->expects($this->once())->method('setData')->with(

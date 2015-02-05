@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\SalesRule\Model\Resource\Report;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
@@ -55,7 +58,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->entityFactory = $this->getMock(
-            'Magento\Core\Model\EntityFactory',
+            'Magento\Framework\Data\Collection\EntityFactory',
             [],
             [],
             '',

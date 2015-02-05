@@ -3,10 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php /** @var $this \Magento\AdminNotification\Block\System\Messages */ ?>
 
-<?php $lastCritical = $this->getLastCritical();?>
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\AdminNotification\Block\System\Messages */ ?>
+
+<?php $lastCritical = $block->getLastCritical();?>
 <div id="system_messages" class="message-system<?php if ($lastCritical): ?> message-system-unread<?php endif; ?>">
     <div class="message-system-inner">
         <?php if ($lastCritical): ?>
@@ -18,13 +21,13 @@
         <?php endif; ?>
         <div class="message-system-short">
             System Messages:
-            <?php if ($this->getCriticalCount()): ?>
-                <span class="error"><a href="#" title="<?php echo $this->escapeHtml(__('Critical System Messages'));?>"><?php echo $this->getCriticalCount();?></a></span>
+            <?php if ($block->getCriticalCount()): ?>
+                <span class="error"><a href="#" title="<?php echo $block->escapeHtml(__('Critical System Messages'));?>"><?php echo $block->getCriticalCount();?></a></span>
             <?php endif;?>
-            <?php if ($this->getMajorCount()): ?>
-               <span class="warning"><a href="#" title="<?php echo $this->escapeHtml(__('Major System Messages'));?>"><?php echo $this->getMajorCount();?></a></span>
+            <?php if ($block->getMajorCount()): ?>
+               <span class="warning"><a href="#" title="<?php echo $block->escapeHtml(__('Major System Messages'));?>"><?php echo $block->getMajorCount();?></a></span>
             <?php endif;?>
         </div>
-        <div id="message-system-all" title="<?php echo $this->escapeHtml(__('System messages'));?>" data-mage-init='<?php echo $this->escapeHtml($this->getSystemMessageDialogJson());?>'></div>
+        <div id="message-system-all" title="<?php echo $block->escapeHtml(__('System messages'));?>" data-mage-init='<?php echo $block->escapeHtml($block->getSystemMessageDialogJson());?>'></div>
     </div>
 </div>

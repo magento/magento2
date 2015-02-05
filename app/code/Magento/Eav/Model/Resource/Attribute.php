@@ -86,6 +86,7 @@ abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _afterSave(AbstractModel $object)
     {

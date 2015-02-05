@@ -12,6 +12,8 @@ use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
  * Product list toolbar
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Toolbar extends \Magento\Framework\View\Element\Template
 {
@@ -648,12 +650,12 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             )->setFrameLength(
                 $this->_scopeConfig->getValue(
                     'design/pagination/pagination_frame',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             )->setJump(
                 $this->_scopeConfig->getValue(
                     'design/pagination/pagination_frame_skip',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             )->setLimit(
                 $this->getLimit()

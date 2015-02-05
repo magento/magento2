@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\AdminOrder;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -77,6 +80,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectFactory;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');

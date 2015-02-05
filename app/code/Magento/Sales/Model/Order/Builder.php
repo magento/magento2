@@ -8,6 +8,9 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Model\OrderFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class Builder
 {
     /**

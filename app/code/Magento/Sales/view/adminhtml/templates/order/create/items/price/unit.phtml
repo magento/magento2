@@ -3,12 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid $this */
+/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid $block */
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 ?>
 <div class="price-excl-tax">
-<?php echo $this->formatPrice($_item->getCalculationPrice()) ?>
+<?php echo $block->formatPrice($_item->getCalculationPrice()) ?>
 </div>

@@ -148,14 +148,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $customerStorage = $this->_createCustomerStorageMock();
         $customerEntity = $this->_createCustomerEntityMock();
         $addressCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false)
+            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         foreach ($this->_addresses as $address) {
             $addressCollection->addItem(new \Magento\Framework\Object($address));
         }
 
         $regionCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false)
+            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         foreach ($this->_regions as $region) {
             $regionCollection->addItem(new \Magento\Framework\Object($region));
@@ -186,7 +186,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createAttrCollectionMock()
     {
-        $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
+        $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
         $attributeCollection = $this->getMock(
             'Magento\Framework\Data\Collection',
             ['getEntityTypeCode'],

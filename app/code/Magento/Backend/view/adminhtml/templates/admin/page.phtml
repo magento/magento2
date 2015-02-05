@@ -3,53 +3,56 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\Backend\Block\Page */ ?>
+<?php /** @var $block \Magento\Backend\Block\Page */ ?>
 <!doctype html>
-<html lang="<?php echo $this->getLang() ?>" class="no-js">
+<html lang="<?php echo $block->getLang() ?>" class="no-js">
 
 <head>
-    <?php echo $this->getChildHtml('head') ?>
+    <?php echo $block->getChildHtml('head') ?>
 </head>
 
-<body id="html-body"<?php echo $this->getBodyClass() ? ' class="' . $this->getBodyClass() . '"' : ''; ?> data-container="body" data-mage-init='{"loaderAjax":{},"loader":{}}'>
+<body id="html-body"<?php echo $block->getBodyClass() ? ' class="' . $block->getBodyClass() . '"' : ''; ?> data-container="body" data-mage-init='{"loaderAjax":{},"loader":{}}'>
     <div class="page-wrapper">
-        <?php echo $this->getChildHtml('notification_window'); ?>
-        <?php echo $this->getChildHtml('global_notices') ?>
+        <?php echo $block->getChildHtml('notification_window'); ?>
+        <?php echo $block->getChildHtml('global_notices') ?>
         <div class="page-header-wrapper">
-            <?php echo $this->getChildHtml('header') ?>
+            <?php echo $block->getChildHtml('header') ?>
         </div>
-        <?php echo $this->getChildHtml('menu') ?>
-        <?php echo $this->getChildHtml('notifications'); ?>
+        <?php echo $block->getChildHtml('menu') ?>
+        <?php echo $block->getChildHtml('notifications'); ?>
 
         <section class="page-content" id="anchor-content">
-            <?php echo $this->getChildHtml('main-top'); ?>
+            <?php echo $block->getChildHtml('main-top'); ?>
             <div id="messages" data-container-for="messages" class="messages">
-                <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+                <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
             </div>
-            <?php echo $this->getChildHtml('page_main_actions'); ?>
-            <?php if ($this->getChildHtml('left')): ?>
-                <div id="page:main-container" class="<?php echo $this->getContainerCssClass() ?> col-2-left-layout">
+            <?php echo $block->getChildHtml('page_main_actions'); ?>
+            <?php if ($block->getChildHtml('left')): ?>
+                <div id="page:main-container" class="<?php echo $block->getContainerCssClass() ?> col-2-left-layout">
                     <div class="main-col" id="content">
-                        <?php echo $this->getChildHtml('content') ?>
+                        <?php echo $block->getChildHtml('content') ?>
                     </div>
 
                     <div class="side-col" id="page:left">
-                        <?php echo $this->getChildHtml('left') ?>
+                        <?php echo $block->getChildHtml('left') ?>
                     </div>
                 </div>
             <?php else: ?>
                 <div id="page:main-container" class="col-1-layout">
-                    <?php echo $this->getChildHtml('content') ?>
+                    <?php echo $block->getChildHtml('content') ?>
                 </div>
             <?php endif; ?>
         </section>
 
-        <?php echo $this->getChildHtml('js') ?>
+        <?php echo $block->getChildHtml('js') ?>
         <div class="page-footer-wrapper">
-            <?php echo $this->getChildHtml('footer') ?>
+            <?php echo $block->getChildHtml('footer') ?>
         </div>
     </div>
-    <?php echo $this->getChildHtml('before_body_end') ?>
+    <?php echo $block->getChildHtml('before_body_end') ?>
 </body>
 </html>

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Eav\Helper;
 
 /**
@@ -126,7 +129,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getInputTypesValidatorData()
     {
-        return $this->_scopeConfig->getValue(self::XML_PATH_VALIDATOR_DATA_INPUT_TYPES, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(self::XML_PATH_VALIDATOR_DATA_INPUT_TYPES, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**

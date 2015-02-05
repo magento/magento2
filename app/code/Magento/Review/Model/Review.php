@@ -19,6 +19,7 @@ use Magento\Review\Model\Resource\Review\Status\Collection as StatusCollection;
  * @method \Magento\Review\Model\Review setEntityPkValue(int $value)
  * @method int getStatusId()
  * @method \Magento\Review\Model\Review setStatusId(int $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Review extends \Magento\Framework\Model\AbstractModel
 {
@@ -97,7 +98,7 @@ class Review extends \Magento\Framework\Model\AbstractModel
     /**
      * Core model store manager interface
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -116,11 +117,12 @@ class Review extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Review\Model\Resource\Review\Summary\CollectionFactory $summaryFactory
      * @param \Magento\Review\Model\Review\SummaryFactory $summaryModFactory
      * @param \Magento\Review\Model\Review\Summary $reviewSummary
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -130,7 +132,7 @@ class Review extends \Magento\Framework\Model\AbstractModel
         \Magento\Review\Model\Resource\Review\Summary\CollectionFactory $summaryFactory,
         \Magento\Review\Model\Review\SummaryFactory $summaryModFactory,
         \Magento\Review\Model\Review\Summary $reviewSummary,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,

@@ -22,6 +22,7 @@ use Magento\Customer\Api\GroupManagementInterface;
  * @method int getCurrencyId()
  * @method Quote setOrderId($orderId)
  * @method int getOrderId()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Quote extends \Magento\Framework\Session\SessionManager
 {
@@ -64,7 +65,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
     protected $quoteRepository;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -85,8 +86,9 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param GroupManagementInterface $groupManagement
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -100,7 +102,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
         CustomerRepositoryInterface $customerRepository,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         GroupManagementInterface $groupManagement
     ) {
         $this->customerRepository = $customerRepository;

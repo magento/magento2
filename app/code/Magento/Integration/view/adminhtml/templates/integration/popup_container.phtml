@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  *
- * @var \Magento\Backend\Block\Template $this
+ * @var \Magento\Backend\Block\Template $block
  */
 ?>
 <script>
@@ -16,11 +16,11 @@ require([
 ], function($){
 
     window.integration = new Integration(
-        '<?php echo $this->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
-        '<?php echo $this->getUrl('*/*/tokensDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
-        '<?php echo $this->getUrl('*/*/tokensExchange', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
-        '<?php echo $this->getUrl('*/*'); ?>',
-        '<?php echo $this->getUrl('*/*/loginSuccessCallback'); ?>'
+        '<?php echo $block->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
+        '<?php echo $block->getUrl('*/*/tokensDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
+        '<?php echo $block->getUrl('*/*/tokensExchange', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
+        '<?php echo $block->getUrl('*/*'); ?>',
+        '<?php echo $block->getUrl('*/*/loginSuccessCallback'); ?>'
     );
 
     /**

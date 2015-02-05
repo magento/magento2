@@ -30,6 +30,7 @@ class Destinations extends \Magento\GoogleShopping\Model\Attribute\DefaultAttrib
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

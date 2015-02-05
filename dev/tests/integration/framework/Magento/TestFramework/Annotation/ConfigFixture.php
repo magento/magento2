@@ -48,7 +48,7 @@ class ConfigFixture
             $scopeConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
             $result = $scopeConfig->getValue(
                 $configPath,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $scopeCode
             );
         }
@@ -82,7 +82,7 @@ class ConfigFixture
             )->setValue(
                 $configPath,
                 $value,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeCode
             );
         }

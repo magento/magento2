@@ -78,6 +78,8 @@ class Save extends \Magento\Backend\App\Action
      * We can save only new shipment. Existing shipments are not editable
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

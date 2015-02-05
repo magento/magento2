@@ -3,39 +3,42 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/** @var $this \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
-$elementName = $this->getElement()->getName() . '[images]';
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
+$elementName = $block->getElement()->getName() . '[images]';
 ?>
-<div id="<?php echo $this->getHtmlId() ?>"
+<div id="<?php echo $block->getHtmlId() ?>"
      class='gallery'
-     data-mage-init='{"productGallery":{"template":"#<?php echo $this->getHtmlId() ?>-template"}}'
-     data-images="<?php echo $this->escapeHtml($this->getImagesJson()) ?>"
-     data-types="<?php echo $this->escapeHtml(
-         $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getImageTypes())
+     data-mage-init='{"productGallery":{"template":"#<?php echo $block->getHtmlId() ?>-template"}}'
+     data-images="<?php echo $block->escapeHtml($block->getImagesJson()) ?>"
+     data-types="<?php echo $block->escapeHtml(
+         $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getImageTypes())
      ) ?>"
     >
-    <?php if (!$this->getElement()->getReadonly()) {
+    <?php if (!$block->getElement()->getReadonly()) {
     ?>
         <div class="image image-placeholder">
-            <?php echo $this->getUploaderHtml();
+            <?php echo $block->getUploaderHtml();
     ?>
-            <img class="spacer" src="<?php echo $this->getViewFileUrl('images/spacer.gif')?>"/>
+            <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
             <p class="image-placeholder-text"><?php echo __('Click here or drag and drop to add images');
     ?></p>
         </div>
     <?php 
 } ?>
-    <?php foreach ($this->getImageTypes() as $typeData) {
+    <?php foreach ($block->getImageTypes() as $typeData) {
     ?>
-        <input name="<?php echo $this->escapeHtml($typeData['name']) ?>"
-               class="image-<?php echo $this->escapeHtml($typeData['code']) ?>"
+        <input name="<?php echo $block->escapeHtml($typeData['name']) ?>"
+               class="image-<?php echo $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
-               value="<?php echo $this->escapeHtml($typeData['value']) ?>"/>
+               value="<?php echo $block->escapeHtml($typeData['value']) ?>"/>
     <?php 
 } ?>
 
 
-    <script id="<?php echo $this->getHtmlId() ?>-template" type="text/x-jquery-tmpl">
+    <script id="<?php echo $block->getHtmlId() ?>-template" type="text/x-jquery-tmpl">
         <div class="image item {{if disabled == 1 }}hidden-for-front{{/if}}"
              data-role="image">
             <input type="hidden" name="<?php echo $elementName ?>[${file_id}][position]" value="${position}" class="position"/>
@@ -45,15 +48,15 @@ $elementName = $this->getElement()->getName() . '[images]';
             <input type="hidden" name="<?php echo $elementName ?>[${file_id}][disabled]" value="${disabled}"/>
             <input type="hidden" name="<?php echo $elementName ?>[${file_id}][removed]" value="" class="is-removed"/>
             <ul class="type-labels" style="display: none">
-                <?php foreach ($this->getImageTypes() as $typeData) {
+                <?php foreach ($block->getImageTypes() as $typeData) {
     ?>
-                    <li class="type-<?php echo $this->escapeHtml(
+                    <li class="type-<?php echo $block->escapeHtml(
                         $typeData['code']
-                    ) ?>"><?php echo $this->escapeHtml($typeData['label']) ?></li>
+                    ) ?>"><?php echo $block->escapeHtml($typeData['label']) ?></li>
                 <?php 
 } ?>
             </ul>
-            <img class="spacer" src="<?php echo $this->getViewFileUrl('images/spacer.gif')?>"/>
+            <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
             <img class="product-image" src="${url}" alt="${label}"/>
             <div class="actions" >
                 <button type="button" class="action-delete" data-role="delete-button" title="<?php echo __('Delete image') ?>">
@@ -99,16 +102,16 @@ $elementName = $this->getElement()->getName() . '[images]';
                         </label>
                         <div class="control">
                             <ul class="multiselect-alt">
-                                <?php foreach ($this->getMediaAttributes() as $attribute) {
+                                <?php foreach ($block->getMediaAttributes() as $attribute) {
     ?>
                                     <li class="item">
                                         <label>
                                             <input class="image-type"
                                                    data-role="type-selector"
                                                    type="checkbox"
-                                                   value="<?php echo $this->escapeHtml($attribute->getAttributeCode()) ?>"
+                                                   value="<?php echo $block->escapeHtml($attribute->getAttributeCode()) ?>"
                                                 />
-                                            <?php echo $this->escapeHtml($attribute->getFrontendLabel()) ?>
+                                            <?php echo $block->escapeHtml($attribute->getFrontendLabel()) ?>
                                         </label>
                                     </li>
                                 <?php 

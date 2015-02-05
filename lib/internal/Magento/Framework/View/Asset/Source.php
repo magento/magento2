@@ -160,7 +160,7 @@ class Source
      */
     public function getContentType($path)
     {
-        return pathinfo($path, PATHINFO_EXTENSION);
+        return strtolower(pathinfo($path, PATHINFO_EXTENSION));
     }
 
     /**

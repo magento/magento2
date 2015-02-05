@@ -11,6 +11,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Bundle Price Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
@@ -40,7 +41,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
 
     /**
      * @param \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -50,7 +51,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      */
     public function __construct(
         \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -74,6 +75,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Is min/max prices have been calculated by index
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsPricesCalculatedByIndex()
     {
@@ -181,6 +183,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param  bool|null                  $includeTax
      * @param  bool                       $takeTierPrice
      * @return float|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getTotalPrices($product, $which = null, $includeTax = null, $takeTierPrice = true)
     {
@@ -523,6 +528,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param   float                    $qty
      * @param   \Magento\Catalog\Model\Product $product
      * @return  float|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getTierPrice($qty, $product)
     {

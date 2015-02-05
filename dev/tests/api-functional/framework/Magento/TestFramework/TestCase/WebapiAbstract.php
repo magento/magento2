@@ -11,6 +11,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Webapi\Model\Soap\Fault;
 
+/**
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ */
 abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
 {
     /** TODO: Reconsider implementation of fixture-management methods after implementing several tests */
@@ -487,7 +490,7 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         if ($cleanAppCache) {
             if ($updateLocalConfig) {
                 $objectManager->get('Magento\Framework\App\Config\ReinitableConfigInterface')->reinit();
-                $objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();
+                $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->reinitStores();
             }
 
             if (!$this->_cleanAppConfigCache()) {

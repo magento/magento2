@@ -232,6 +232,7 @@ class Column extends \Magento\Backend\Block\Widget
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getSortable()
     {

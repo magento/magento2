@@ -38,6 +38,9 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      * Return html for control element
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getValuesHtml()
     {
