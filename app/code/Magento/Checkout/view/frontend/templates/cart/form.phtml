@@ -6,16 +6,16 @@
 
 // @codingStandardsIgnoreFile
 
-/**  @var $this \Magento\Checkout\Block\Cart */
+/**  @var $block \Magento\Checkout\Block\Cart */
 ?>
 <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
-<?php echo $this->getChildHtml('form_before') ?>
-<form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>"
+<?php echo $block->getChildHtml('form_before') ?>
+<form action="<?php echo $block->getUrl('checkout/cart/updatePost') ?>"
           method="post"
           id="form-validate"
           data-mage-init='{"validation":{}}'
           class="form form-cart">
-    <?php echo $this->getBlockHtml('formkey'); ?>
+    <?php echo $block->getBlockHtml('formkey'); ?>
     <div class="cart table-wrapper<?php echo $mergedCells == 2 ? ' detailed' : ''; ?>">
         <table id="shopping-cart-table"
                class="cart items data table"
@@ -30,14 +30,14 @@
                     <th class="col subtotal" scope="col"><span><?php echo __('Subtotal') ?></span></th>
                 </tr>
             </thead>
-            <?php foreach ($this->getItems() as $_item): ?>
-                <?php echo $this->getItemHtml($_item) ?>
+            <?php foreach ($block->getItems() as $_item): ?>
+                <?php echo $block->getItemHtml($_item) ?>
             <?php endforeach ?>
         </table>
     </div>
     <div class="cart main actions">
-        <?php if ($this->getContinueShoppingUrl()): ?>
-            <a class="action continue" href="<?php echo $this->getContinueShoppingUrl() ?>" title="<?php echo __('Continue Shopping') ?>">
+        <?php if ($block->getContinueShoppingUrl()): ?>
+            <a class="action continue" href="<?php echo $block->getContinueShoppingUrl() ?>" title="<?php echo __('Continue Shopping') ?>">
                 <span><?php echo __('Continue Shopping') ?></span>
             </a>
         <?php endif; ?>
@@ -52,4 +52,4 @@
         <![endif]-->
     </div>
 </form>
-<?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
+<?php echo $block->getChildHtml('shopping.cart.table.after'); ?>

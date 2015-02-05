@@ -6,15 +6,15 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $this \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix */
+/** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix */
 ?>
 <?php
-$variations = $this->getVariations();
+$variations = $block->getVariations();
 if (!$variations) {
     return;
 }
-$usedProductAttributes = $this->getUsedAttributes();
-$productByUsedAttributes = $this->getAssociatedProducts();
+$usedProductAttributes = $block->getUsedAttributes();
+$productByUsedAttributes = $block->getAssociatedProducts();
 ?>
 
 <h3 class="title"><?php echo __('Current Variations'); ?></h3>
@@ -30,10 +30,10 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                     <th class="col-image" data-column="image">
                         <?php echo __('Image'); ?>
                     </th>
-                    <th class="col-name <?php echo $this->getAttributeFrontendClass('name'); ?>" data-column="name">
+                    <th class="col-name <?php echo $block->getAttributeFrontendClass('name'); ?>" data-column="name">
                         <?php echo __('Name'); ?>
                     </th>
-                    <th class="col-sku <?php echo $this->getAttributeFrontendClass('sku'); ?>" data-column="sku">
+                    <th class="col-sku <?php echo $block->getAttributeFrontendClass('sku'); ?>" data-column="sku">
                         <?php echo __('SKU'); ?>
                     </th>
                     <th class="col-price" data-column="price">
@@ -42,7 +42,7 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                     <th class="col-qty" data-column="qty">
                         <?php echo __('Quantity'); ?>
                     </th>
-                    <th class="col-weight <?php echo str_replace('required-entry', '', $this->getAttributeFrontendClass('weight')); ?>" data-column="weight">
+                    <th class="col-weight <?php echo str_replace('required-entry', '', $block->getAttributeFrontendClass('weight')); ?>" data-column="weight">
                         <?php echo __('Weight'); ?>
                     </th>
                     <?php
@@ -57,7 +57,7 @@ $productByUsedAttributes = $this->getAssociatedProducts();
             <tbody>
             <?php
             $isEven = true;
-            $productPrice = (float)$this->getProduct()->getPrice();
+            $productPrice = (float)$block->getProduct()->getPrice();
             foreach ($variations as $variation) {
                 $attributeValues = [];
                 $attributeLabels = [];
@@ -74,7 +74,7 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                         $price += ($priceInfo['is_percent'] ? $productPrice / 100.0 : 1.0) * $priceInfo['pricing_value'];
                     }
                 }
-                $attributeLabels = $this->escapeHtml($attributeLabels);
+                $attributeLabels = $block->escapeHtml($attributeLabels);
                 $key = implode('-', $attributeValues);
                 if (isset($productByUsedAttributes[$key])) {
                     $product = $productByUsedAttributes[$key];
@@ -92,31 +92,31 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                              class="variation" data-role="image"/>
                     </td>
                     <td class="col-name" data-column="name">
-                        <a href="<?php echo $this->getEditProductUrl($product->getId())?>"
-                           target="_blank"><?php echo $this->escapeHtml($product->getName())?></a>
+                        <a href="<?php echo $block->getEditProductUrl($product->getId())?>"
+                           target="_blank"><?php echo $block->escapeHtml($product->getName())?></a>
 
                         <button type="button" data-action="choose" class="action-choose" title="<?php echo __('Choose');
                     ?>"
-                                data-attributes="<?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attributeValues));
+                                data-attributes="<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attributeValues));
                     ?>">
                             <span><?php echo __('Choose');
                     ?></span>
                         </button>
                     </td>
                     <td class="col-sku" data-column="sku">
-                        <span data-column="sku"><?php echo $this->escapeHtml($product->getSku())?></span>
+                        <span data-column="sku"><?php echo $block->escapeHtml($product->getSku())?></span>
                     </td>
                     <td class="col-price" data-column="price">
-                        <?php echo $this->renderPrice($price);
+                        <?php echo $block->renderPrice($price);
                     ?>
                     </td>
-                    <td class="col-qty" data-column="qty"><?php echo $this->getProductStockQty($product) ?></td>
+                    <td class="col-qty" data-column="qty"><?php echo $block->getProductStockQty($product) ?></td>
                     <td class="col-weight" data-column="weight"><?php echo $product->getWeight()?></td>
                     <?php
                     foreach ($usedProductAttributes as $attribute) {
                         /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
                         echo '<td class="col-' . preg_replace('#[^a-z0-9]+#', '-', strtolower($attribute->getStoreLabel())) . '">',
-                            $this->escapeHtml($variation[$attribute->getId()]['label']), '</td>', PHP_EOL;
+                            $block->escapeHtml($variation[$attribute->getId()]['label']), '</td>', PHP_EOL;
                     }
                     ?>
                     <td class="col-actions hidden" data-column="actions">
@@ -138,8 +138,8 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                     <?php
 
                 } else {
-                    $checked = $this->getProduct()->getId() && !$this->getProduct()->dataHasChangedFor('type_id') ? '' : ' checked="checked"';
-                    $disabled = $this->getProduct()->getId() && !$this->getProduct()->dataHasChangedFor('type_id') ? ' disabled="disabled"' : '';
+                    $checked = $block->getProduct()->getId() && !$block->getProduct()->dataHasChangedFor('type_id') ? '' : ' checked="checked"';
+                    $disabled = $block->getProduct()->getId() && !$block->getProduct()->dataHasChangedFor('type_id') ? ' disabled="disabled"' : '';
                     ?>
                 <tr data-role="row" class="<?php echo $isEven ? 'even' : '' ?>">
                     <td class="col-display" data-column="display">
@@ -153,7 +153,7 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                     ?></span>
                                 <input name="image" type="file" <?php echo $disabled;
                     ?>
-                                       data-url="<?php echo $this->escapeHtml($this->getImageUploadUrl()) ?>"
+                                       data-url="<?php echo $block->escapeHtml($block->getImageUploadUrl()) ?>"
                                        title="<?php echo __('Upload Image');
                     ?>" />
                                 <input id="variations-matrix-<?php echo $key?>-image"
@@ -177,16 +177,16 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                         <input type="text"
                                id="variations-matrix-<?php echo $key?>-name"
                                name="variations-matrix[<?php echo $key?>][name]"
-                               value="<?php echo $this->escapeHtml($this->getProduct()->getName()), '-', implode('-', $attributeLabels)?>"
-                               class="<?php echo $this->getAttributeFrontendClass('name');
+                               value="<?php echo $block->escapeHtml($block->getProduct()->getName()), '-', implode('-', $attributeLabels)?>"
+                               class="<?php echo $block->getAttributeFrontendClass('name');
                     ?>"<?php echo $disabled?>/>
                         <input type="hidden" name="variations-matrix[<?php echo $key?>][configurable_attribute]"
-                               value="<?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attributeValues));
+                               value="<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attributeValues));
                     ?>"<?php echo $disabled?>/>
 
                         <button type="button" data-action="choose" class="action-choose" title="<?php echo __('Choose');
                     ?>"
-                                data-attributes="<?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attributeValues));
+                                data-attributes="<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attributeValues));
                     ?>"<?php echo $disabled;
                     ?>>
                             <span><?php echo __('Choose');
@@ -197,12 +197,12 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                         <input type="text"
                                id="variations-matrix-<?php echo $key?>-sku"
                                name="variations-matrix[<?php echo $key?>][sku]"
-                               value="<?php echo $this->escapeHtml($this->getProduct()->getSku()), '-', implode('-', $attributeLabels)?>"
-                               class="<?php echo $this->getAttributeFrontendClass('sku');
+                               value="<?php echo $block->escapeHtml($block->getProduct()->getSku()), '-', implode('-', $attributeLabels)?>"
+                               class="<?php echo $block->getAttributeFrontendClass('sku');
                     ?>"<?php echo $disabled?>/>
                     </td>
                     <td class="col-price" data-column="price">
-                        <?php echo $this->renderPrice($price) ?>
+                        <?php echo $block->renderPrice($price) ?>
                     </td>
                     <td class="col-qty" data-column="qty">
                         <input type="text"
@@ -215,16 +215,16 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                         <input type="text"
                                id="variations-matrix-<?php echo $key?>-weight"
                                name="variations-matrix[<?php echo $key?>][weight]"
-                               class="<?php echo str_replace('required-entry', '', $this->getAttributeFrontendClass('weight'));
+                               class="<?php echo str_replace('required-entry', '', $block->getAttributeFrontendClass('weight'));
                     ?>"
-                               value="<?php echo $this->getProduct()->getWeight()?>"<?php echo $disabled?>>
+                               value="<?php echo $block->getProduct()->getWeight()?>"<?php echo $disabled?>>
                     </td>
                     <?php
                     foreach ($usedProductAttributes as $attribute) {
                         /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
                         echo '<td class="col-'
                             . preg_replace('#[^a-z0-9]+#', '-', strtolower($attribute->getStoreLabel())) . '">',
-                            $this->escapeHtml($variation[$attribute->getId()]['label']),
+                            $block->escapeHtml($variation[$attribute->getId()]['label']),
                             '</td>', PHP_EOL;
                     }
                     ?>
