@@ -61,7 +61,9 @@ define([
                     var attributeTmpl = widgetContainer.find('[data-template-for=configurable-attribute]').html();
 
                     attributeTmpl = mageTemplate(attributeTmpl, {
-                        data: attribute
+                        data: {
+                            attribute: attribute
+                        }
                     });
 
                     $(attributeTmpl)
