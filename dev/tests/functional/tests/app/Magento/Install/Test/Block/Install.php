@@ -26,14 +26,14 @@ class Install extends Block
      *
      * @var string
      */
-    protected $adminInfo = "//*[@id='admin-info']";
+    protected $adminInfo = '#admin-info';
 
     /**
      * Database info block.
      *
      * @var string
      */
-    protected $dbInfo = "//*[@id='db-info']";
+    protected $dbInfo = '#db-info';
 
     /**
      * 'Launch Magento Admin' button.
@@ -56,24 +56,31 @@ class Install extends Block
     /**
      * Get admin info.
      *
-     * @return string
+     * @return array
      */
     public function getAdminInfo()
     {
-        return $this->getTableDataByCssLocator('#admin-info');
+        return $this->getTableDataByCssLocator($this->adminInfo);
     }
 
     /**
      * Get database info.
      *
-     * @return string
+     * @return array
      */
     public function getDbInfo()
     {
-        return $this->getTableDataByCssLocator('#db-info');
+        return $this->getTableDataByCssLocator($this->dbInfo);
     }
 
-    private function getTableDataByCssLocator($locator)
+    /**
+     * Get table data by correspondent div css locator.
+     * Data inside the table must be presented via <dt>/<dd>/<dl> tags due to actual HTML5 standard.
+     *
+     * @param string $locator
+     * @return array
+     */
+    protected function getTableDataByCssLocator($locator)
     {
         $data = [];
         $keys = [];
