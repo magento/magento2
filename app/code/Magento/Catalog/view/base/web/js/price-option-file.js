@@ -1,29 +1,36 @@
 /**
- * @category    mage file change/delete
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
 define([
-    "jquery",
-    "jquery/ui"
-], function($){
-    "use strict";
+    'jquery',
+    'jquery/ui'
+], function ($) {
+    'use strict';
 
-    $.widget('mage.fileOption', {
+    $.widget('mage.priceOptionFile', {
         options: {
+            fileName: '',
+            fileNamed: '',
+            fieldNameAction: '',
+            changeFileSelector: '',
+            deleteFileSelector: ''
         },
 
-        _create: function() {
+        /**
+         * Creates instance of widget
+         * @private
+         */
+        _create: function () {
             this.fileDeleteFlag = this.fileChangeFlag = false;
             this.inputField = this.element.find('input[name=' + this.options.fileName + ']')[0];
             this.inputFieldAction = this.element.find('input[name=' + this.options.fieldNameAction + ']')[0];
             this.fileNameSpan = this.element.parent('dd').find('.' + this.options.fileNamed);
 
-            $(this.options.changeFileSelector).on('click', $.proxy(function() {
+            $(this.options.changeFileSelector).on('click', $.proxy(function () {
                 this._toggleFileChange();
             }, this));
-            $(this.options.deleteFileSelector).on('click', $.proxy(function() {
+            $(this.options.deleteFileSelector).on('click', $.proxy(function () {
                 this._toggleFileDelete();
             }, this));
         },
@@ -33,9 +40,10 @@ define([
          * then the option to change the file is disabled.
          * @private
          */
-        _toggleFileChange: function() {
+        _toggleFileChange: function () {
             this.element.toggle();
             this.fileChangeFlag = !this.fileChangeFlag;
+
             if (!this.fileDeleteFlag) {
                 $(this.inputFieldAction).attr('value', this.fileChangeFlag ? 'save_new' : 'save_old');
                 this.inputField.disabled = !this.fileChangeFlag;
@@ -48,7 +56,7 @@ define([
          * disabled.
          * @private
          */
-        _toggleFileDelete: function() {
+        _toggleFileDelete: function () {
             this.fileDeleteFlag = $(this.options.deleteFileSelector + ':checked').val();
             $(this.inputFieldAction).attr('value',
                 this.fileDeleteFlag ? '' : this.fileChangeFlag ? 'save_new' : 'save_old');
@@ -56,6 +64,6 @@ define([
             this.fileNameSpan.css('text-decoration', this.fileDeleteFlag ? 'line-through' : 'none');
         }
     });
-    
-    return $.mage.fileOption;
+
+    return $.mage.priceOptionFile;
 });
