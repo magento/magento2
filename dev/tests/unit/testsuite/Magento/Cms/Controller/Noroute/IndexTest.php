@@ -23,12 +23,12 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected $_requestMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $forwardFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $forwardMock;
 
@@ -45,11 +45,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->resultPageMock = $this->getMockBuilder('\Magento\Framework\View\Result\Page')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->forwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
+        $this->forwardFactoryMock = $this->getMockBuilder('\Magento\Framework\Controller\Result\ForwardFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->forwardMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
+        $this->forwardMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Forward')
             ->disableOriginalConstructor()
             ->getMock();
         $this->forwardFactoryMock->expects($this->any())

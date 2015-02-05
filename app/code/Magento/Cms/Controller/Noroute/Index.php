@@ -47,7 +47,7 @@ class Index extends \Magento\Framework\App\Action\Action
             $resultPage->setHeader('Status', '404 File not found');
             return $resultPage;
         } else {
-            /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
             $resultForward = $this->resultForwardFactory->create();
             $resultForward->setController('index');
             $resultForward->forward('defaultNoRoute');
