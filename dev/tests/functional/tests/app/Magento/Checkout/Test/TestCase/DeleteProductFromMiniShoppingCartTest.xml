@@ -10,11 +10,13 @@
         <variation name="DeleteProductFromMiniShoppingCartTestVariation1">
             <data name="description">delete Simple</data>
             <data name="products">catalogProductSimple::default, catalogProductVirtual::default</data>
+            <data name="deletedProductIndex">0</data>
             <data name="constraint">assertProductAbsentInMiniShoppingCart, assertProductPresentInMiniShoppingCart</data>
         </variation>
         <variation name="DeleteProductFromMiniShoppingCartTestVariation2">
             <data name="description">delete Simple</data>
             <data name="products">catalogProductSimple::default</data>
+            <data name="deletedProductIndex">0</data>
             <data name="constraint">assertCartIsEmpty</data>
         </variation>
     </testCase>

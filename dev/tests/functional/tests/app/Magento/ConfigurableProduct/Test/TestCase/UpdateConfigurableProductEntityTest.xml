@@ -27,6 +27,7 @@
         </variation>
         <variation name="UpdateConfigurableProductEntityTestVariation2">
             <data name="description">Add new variations</data>
+            <data name="attributeTypeAction">0</data>
             <data name="updatedProduct/data/configurable_attributes_data/preset">two_new_options</data>
             <data name="updatedProduct/data/checkout_data/preset">three_attributes</data>
             <data name="updatedProduct/data/checkout_data/cartItem/price">159</data>
