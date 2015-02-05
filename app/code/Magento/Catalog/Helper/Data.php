@@ -514,7 +514,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 ->setCode($product->getSku())
                 ->setShortDescription($product->getShortDescription())
                 ->setTaxClassKey($taxClassKey)
-                ->setTaxIncluded($priceIncludesTax)
+                ->setIsTaxIncluded($priceIncludesTax)
                 ->setType('product')
                 ->setUnitPrice($price);
 
