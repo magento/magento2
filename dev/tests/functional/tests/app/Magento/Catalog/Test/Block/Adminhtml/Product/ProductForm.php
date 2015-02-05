@@ -118,7 +118,9 @@ class ProductForm extends FormTabs
                 $categories = $product->getCategories();
                 $category = reset($categories);
             }
-
+            if ($category) {
+                $tabs['product-details']['category_ids']['value'] = $category->getName();
+            }
             $this->showAdvancedSettings();
             $this->fillTabs($tabs, $element);
 
@@ -127,39 +129,7 @@ class ProductForm extends FormTabs
             }
         }
 
-        //TODO: Remove "!($product instanceof DataFixture)" after old product fixture will be deleted
-        $category = !($product instanceof DataFixture) && $product->hasData('category_ids')
-            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
-            : [$category];
-        if ($category[0]) {
-            $this->fillCategory($category, $element);
-        }
-
         return $this;
-    }
-
-    /**
-     * Fill category data from product fixture.
-     *
-     * @param array|null $categoryList
-     * @param SimpleElement|null $element
-     * @return void
-     */
-    public function fillCategory($categoryList, $element)
-    {
-        /** @var Category $category */
-        foreach ($categoryList as $category) {
-            if ($category->hasData('id')) {
-                $tabs['product-details']['category_ids']['value'] = $category->getName();
-                $this->fillTabs($tabs, $element);
-            } else {
-                $this->openTab('product-details');
-                $this->blockFactory->create(
-                    'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails\NewCategoryIds',
-                    ['element' => $this->browser->find('body')]
-                )->addNewCategory($category);
-            }
-        }
     }
 
     /**

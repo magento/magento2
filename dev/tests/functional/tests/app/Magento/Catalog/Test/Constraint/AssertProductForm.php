@@ -31,18 +31,6 @@ class AssertProductForm extends AbstractAssertForm
     ];
 
     /**
-     * Skipped fields for verify data.
-     *
-     * @var array
-     */
-    protected $skippedFields = [
-        'is_searchable',
-        'is_visible_in_advanced_search',
-        'is_filterable',
-        'is_filterable_in_search',
-    ];
-
-    /**
      * Sort fields for fixture and form data
      *
      * @var array

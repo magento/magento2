@@ -6,7 +6,6 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Form;
 use Magento\Mtf\Client\Element\SimpleElement;

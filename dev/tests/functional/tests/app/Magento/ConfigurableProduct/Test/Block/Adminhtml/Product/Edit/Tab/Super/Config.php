@@ -91,15 +91,15 @@ class Config extends Tab
      */
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
-        $attributes = isset($fields['configurable_attributes_data']['value'])
+        $attributes = isset($fields['configurable_attributes_data']['source'])
             ? $fields['configurable_attributes_data']['value']
             : [];
 
         $this->showContent();
-
-        if (!empty($attributes['attributes_data'])) {
-            $this->getAttributeBlock()->fillAttributes($attributes['attributes_data']);
-        }
+        $attributesValue = isset($fields['configurable_attributes_data']['source'])
+            ? $fields['configurable_attributes_data']['source']->getAttributesData()
+            : [];
+        $this->getAttributeBlock()->fillAttributes($attributesValue);
         if (!empty($attributes['matrix'])) {
             $this->generateVariations();
             $this->getVariationsBlock()->fillVariations($attributes['matrix']);

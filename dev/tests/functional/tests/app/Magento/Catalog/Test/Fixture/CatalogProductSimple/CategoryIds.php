@@ -58,7 +58,7 @@ class CategoryIds implements FixtureInterface
             $presets = explode(',', $data['presets']);
             foreach ($presets as $preset) {
                 $category = $fixtureFactory->createByCode('category', ['dataSet' => $preset]);
-                if (!isset($data['persist']) || $data['persist'] !== 'no') {
+                if (!isset($data['new_category']) || $data['new_category'] !== 'no') {
                     $category->persist();
                 }
 

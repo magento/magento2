@@ -940,10 +940,6 @@ class ConfigurableAttributesData implements FixtureInterface
             'frontend_input',
             'attribute_code',
             'attribute_id',
-            'is_searchable',
-            'is_visible_in_advanced_search',
-            'is_filterable',
-            'is_filterable_in_search',
             'is_required',
             'options',
         ];

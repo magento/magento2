@@ -7,14 +7,13 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails;
 
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Fixture\Category;
-use Magento\Backend\Test\Block\Widget\FormTabs;
+use Magento\Backend\Test\Block\Widget\Form;
 
 /**
  * Create new category.
  */
-class NewCategoryIds extends FormTabs
+class NewCategoryIds extends Form
 {
     /**
      * Button "New Category".
@@ -28,51 +27,39 @@ class NewCategoryIds extends FormTabs
      *
      * @var string
      */
-    protected $createCategoryDialog = './/ancestor::body//*[contains(@class,"mage-new-category-dialog")]';
+    protected $createCategoryDialog = '.mage-new-category-dialog';
 
     /**
      * "Parent Category" block on dialog box.
      *
      * @var string
      */
-    protected $parentCategoryBlock = '//*[contains(@class,"field-new_category_parent")]';
-
-    /**
-     * Field "Category Name" on dialog box.
-     *
-     * @var string
-     */
-    protected $fieldNewCategoryName = '//input[@id="new_category_name"]';
+    protected $parentCategoryBlock = '.field-new_category_parent';
 
     /**
      * Button "Create Category" on dialog box.
      *
      * @var string
      */
-    protected $createCategoryButton = '//button[contains(@class,"action-create")]';
+    protected $createCategoryButton = '.action-create';
 
     /**
-     * Save new category.
+     * Add new category to product.
      *
-     * @param FixtureInterface $fixture
+     * @param Category $category
      * @return void
      */
-    public function addNewCategory(FixtureInterface $fixture)
+    public function addNewCategory(Category $category)
     {
-        $categoryName = $fixture->getName();
-        $parentCategory = $fixture->getDataFieldConfig('parent_id')['source']->getParentCategory()->getName();
+        $parentCategory = $category->getDataFieldConfig('parent_id')['source']->getParentCategory()->getName();
 
         $this->openNewCategoryDialog();
-        $this->_rootElement->find(
-            $this->createCategoryDialog . $this->fieldNewCategoryName,
-            Locator::SELECTOR_XPATH
-        )->setValue($categoryName);
+        $this->fill($category);
 
         $this->selectParentCategory($parentCategory);
 
-        $buttonCreateCategory = $this->createCategoryDialog . $this->createCategoryButton;
-        $this->_rootElement->find($buttonCreateCategory, Locator::SELECTOR_XPATH)->click();
-        $this->waitForElementNotVisible($buttonCreateCategory, Locator::SELECTOR_XPATH);
+        $this->_rootElement->find($this->createCategoryButton)->click();
+        $this->waitForElementNotVisible($this->createCategoryButton);
     }
 
     /**
@@ -84,8 +71,8 @@ class NewCategoryIds extends FormTabs
     protected function selectParentCategory($categoryName)
     {
         $this->_rootElement->find(
-            $this->createCategoryDialog . $this->parentCategoryBlock,
-            Locator::SELECTOR_XPATH,
+            $this->parentCategoryBlock,
+            Locator::SELECTOR_CSS,
             '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails\ParentCategoryIds'
         )->setValue($categoryName);
     }
@@ -98,6 +85,6 @@ class NewCategoryIds extends FormTabs
     protected function openNewCategoryDialog()
     {
         $this->_rootElement->find($this->buttonNewCategory)->click();
-        $this->waitForElementVisible($this->createCategoryDialog, Locator::SELECTOR_XPATH);
+        $this->waitForElementVisible($this->createCategoryDialog);
     }
 }
