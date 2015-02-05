@@ -164,7 +164,7 @@ a.collapsed-options {
 
 .disabledClass {
     padding: 5px 5px 5px 5px;
-    background-color:#c0c0c0;
+    color: #707070;
     width:480px;
     font-weight: normal;
 }

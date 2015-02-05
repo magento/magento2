@@ -50,6 +50,7 @@ angular.module('customize-your-store', ['ngStorage'])
             $http.get('index.php/modules').success(function (data) {
                 $state.loadedModules = data;
                 if (data.error) {
+                    $scope.updateOnExpand($scope.store.advanced);
                     $scope.corruptConfig = $sce.trustAsHtml(data.error);
                 }
             });
