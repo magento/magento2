@@ -194,32 +194,4 @@ class Observer extends \Magento\Framework\Model\AbstractModel
         $response->setTypes($types);
         return $this;
     }
-
-    /**
-     * Change default JavaScript templates for options rendering
-     *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return $this
-     */
-    public function updateProductOptions(\Magento\Framework\Event\Observer $observer)
-    {
-        $response = $observer->getEvent()->getResponseObject();
-        $options = $response->getAdditionalOptions();
-
-        $_product = $this->_registry->registry('current_product');
-        if (!$_product) {
-            return $this;
-        }
-
-        $algorithm = $this->_taxData->getCalculationAlgorithm();
-        $options['calculationAlgorithm'] = $algorithm;
-        // prepare correct template for options render
-        if ($this->_taxData->displayBothPrices()) {
-            $options['optionTemplate'] = '<%- label %> <%- finalPrice.formatted %> ('
-                . __('Excl. tax:') . ' <%- basePrice.formatted %>)';
-        }
-
-        $response->setAdditionalOptions($options);
-        return $this;
-    }
 }
