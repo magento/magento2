@@ -47,4 +47,17 @@ class ObjectRelationProcessor implements ObjectRelationProcessorInterface
     {
         $this->connection->rollBack();
     }
+
+    /**
+     * Validate data that is about to be saved. Check that referenced entity(s) exists.
+     *
+     * @param string $table
+     * @param array $involvedData
+     * @return void
+     * @throws \LogicException
+     */
+    public function validate($table, array $involvedData)
+    {
+
+    }
 }

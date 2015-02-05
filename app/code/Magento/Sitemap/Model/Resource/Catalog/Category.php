@@ -40,17 +40,19 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Category $categoryResource
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Category $categoryResource
     ) {
         $this->_storeManager = $storeManager;
         $this->_categoryResource = $categoryResource;
-        parent::__construct($resource);
+        parent::__construct($resource, $objectRelationProcessor);
     }
 
     /**

@@ -36,10 +36,13 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
 
     /**
      * @param AppResource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      */
-    public function __construct(AppResource $resource)
-    {
-        parent::__construct($resource);
+    public function __construct(
+        AppResource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+    ) {
+        parent::__construct($resource, $objectRelationProcessor);
     }
 
     /**

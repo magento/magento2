@@ -28,12 +28,16 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param Relation $catalogProductRelation
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, Relation $catalogProductRelation)
-    {
+    public function __construct(
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        Relation $catalogProductRelation
+    ) {
         $this->_catalogProductRelation = $catalogProductRelation;
-        parent::__construct($resource);
+        parent::__construct($resource, $objectRelationProcessor);
     }
 
     /**

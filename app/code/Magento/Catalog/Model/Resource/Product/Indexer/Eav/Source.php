@@ -25,18 +25,20 @@ class Source extends AbstractEav
      * Construct
      *
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper
     ) {
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($resource, $eavConfig, $eventManager);
+        parent::__construct($resource, $objectRelationProcessor, $eavConfig, $eventManager);
     }
 
     /**

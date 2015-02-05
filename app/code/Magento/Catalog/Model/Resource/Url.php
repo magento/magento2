@@ -89,6 +89,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Product $productResource
@@ -97,6 +98,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         Product $productResource,
@@ -108,7 +110,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $this->productResource = $productResource;
         $this->_catalogCategory = $catalogCategory;
         $this->_logger = $logger;
-        parent::__construct($resource);
+        parent::__construct($resource, $objectRelationProcessor);
     }
 
     /**

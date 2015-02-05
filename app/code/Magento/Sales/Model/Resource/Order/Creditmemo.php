@@ -40,17 +40,19 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      * Constructor
      *
      * @param AppResource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
      * @param CreditmemoGrid $gridAggregator
      */
     public function __construct(
         AppResource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
         CreditmemoGrid $gridAggregator
     ) {
-        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($resource, $objectRelationProcessor, $attribute, $salesIncrement, $gridAggregator);
     }
 
     /**

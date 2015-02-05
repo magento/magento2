@@ -45,17 +45,19 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
 
     /**
      * @param AppResource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
      * @param ShipmentGrid $gridAggregator
      */
     public function __construct(
         AppResource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
         ShipmentGrid $gridAggregator
     ) {
-        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($resource, $objectRelationProcessor, $attribute, $salesIncrement, $gridAggregator);
     }
 
     /**

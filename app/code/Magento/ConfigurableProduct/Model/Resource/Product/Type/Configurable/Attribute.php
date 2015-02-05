@@ -41,17 +41,19 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogData = $catalogData;
-        parent::__construct($resource);
+        parent::__construct($resource, $objectRelationProcessor);
     }
 
     /**

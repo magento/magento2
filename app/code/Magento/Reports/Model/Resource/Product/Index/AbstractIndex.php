@@ -25,15 +25,17 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
 
     /**
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
         \Magento\Reports\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
-        parent::__construct($resource);
+        parent::__construct($resource, $objectRelationProcessor);
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
     }

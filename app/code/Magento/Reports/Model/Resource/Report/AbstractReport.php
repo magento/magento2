@@ -38,6 +38,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
 
     /**
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
@@ -46,13 +47,14 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
     ) {
-        parent::__construct($resource);
+        parent::__construct($resource, $objectRelationProcessor);
         $this->_logger = $logger;
         $this->_localeDate = $localeDate;
         $this->_reportsFlagFactory = $reportsFlagFactory;

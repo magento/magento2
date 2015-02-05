@@ -23,12 +23,16 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
      * Class constructor
      *
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param \Magento\Eav\Model\Config $eavConfig
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Eav\Model\Config $eavConfig)
-    {
+    public function __construct(
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        \Magento\Eav\Model\Config $eavConfig
+    ) {
         $this->_eavConfig = $eavConfig;
-        parent::__construct($resource);
+        parent::__construct($resource, $objectRelationProcessor);
     }
 
     /**

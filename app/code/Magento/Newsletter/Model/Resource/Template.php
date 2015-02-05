@@ -24,11 +24,15 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\Stdlib\DateTime\DateTime $date)
-    {
-        parent::__construct($resource);
+    public function __construct(
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date
+    ) {
+        parent::__construct($resource, $objectRelationProcessor);
         $this->_date = $date;
     }
 

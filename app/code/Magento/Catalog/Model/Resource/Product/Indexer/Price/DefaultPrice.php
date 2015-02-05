@@ -43,19 +43,21 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
 
     /**
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
-        parent::__construct($resource, $eavConfig);
+        parent::__construct($resource, $objectRelationProcessor, $eavConfig);
     }
 
     /**
