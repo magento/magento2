@@ -1769,19 +1769,19 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
             if (isset($billingAddressDataObject) && $isShippingAsBilling) {
                 /** Set existing billing address as default shipping */
                 $customerAddress = $billingAddressDataObject;
-                $customerAddress->setDefaultShipping(true);
+                $customerAddress->setIsDefaultShipping(true);
             }
         }
 
         switch ($addressType) {
             case \Magento\Quote\Model\Quote\Address::ADDRESS_TYPE_BILLING:
                 if (is_null($customer->getDefaultBilling())) {
-                    $customerAddress->setDefaultBilling(true);
+                    $customerAddress->setIsDefaultBilling(true);
                 }
                 break;
             case \Magento\Quote\Model\Quote\Address::ADDRESS_TYPE_SHIPPING:
                 if (is_null($customer->getDefaultShipping())) {
-                    $customerAddress->setDefaultShipping(true);
+                    $customerAddress->setIsDefaultShipping(true);
                 }
                 break;
             default:
