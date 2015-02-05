@@ -29,7 +29,7 @@
         "magento/magento-composer-installer": "*"
     },
     "suggest": {
-        "magento/module-cookie": "0.42.0-beta5"
+        "magento/module-cookie": "0.42.0-beta6"
     },
     "type": "magento2-module",
     "version": "0.42.0-beta6",
