@@ -9,16 +9,16 @@
     <application>
         <reopenBrowser>testCase</reopenBrowser>
         <backendLogin>admin</backendLogin>
-        <backendPassword>222222w</backendPassword>
-        <appBackendUrl>http://magento.dev/admin/</appBackendUrl>
-        <backendLoginUrl>admin</backendLoginUrl>
+        <backendPassword>123123q</backendPassword>
+        <appBackendUrl>http://magento2ce.com/admin/</appBackendUrl>
+        <backendLoginUrl>admin/auth/login</backendLoginUrl>
     </application>
     <install>
         <host>127.0.0.1</host>
         <user>root</user>
         <password>123123q</password>
         <dbName>default</dbName>
-        <baseUrl>http://127.0.0.1/magento2/</baseUrl>
+        <baseUrl>http://magento2ce.com/</baseUrl>
         <backendName>backend</backendName>
     </install>
 </config>
