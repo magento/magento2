@@ -44,9 +44,10 @@ class ObsoleteResponseTest extends \PHPUnit_Framework_TestCase
             function ($file) {
                 $content = file_get_contents($file);
                 foreach ($this->obsoleteMethods as $method) {
+                    $quotedMethod = preg_quote($method, '/');
                     $this->assertSame(
                         0,
-                        preg_match('/(?<=[a-z\d_:]|->|function\s)' . $method . '\s*\(/iS', $content),
+                        preg_match('/(?<=[a-z\d_:]|->|function\s)' . $quotedMethod . '\s*\(/iS', $content),
                         "File: $file\nContains obsolete method: $method . "
                     );
                 }
@@ -66,7 +67,8 @@ class ObsoleteResponseTest extends \PHPUnit_Framework_TestCase
 
         foreach ($this->getFilesData('whitelist/refactored_modules*') as $refactoredFolder) {
             $files = \Magento\Framework\Test\Utility\Files::init()->getFiles(
-                [$this->appPath . $refactoredFolder], '*.php'
+                [$this->appPath . $refactoredFolder],
+                '*.php'
             );
             $filesList = array_merge($filesList, $files);
         }
