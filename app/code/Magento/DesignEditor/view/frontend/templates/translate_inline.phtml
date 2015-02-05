@@ -13,19 +13,19 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $block->getViewFileUrl('mage/translate-inline-vde.css') ?>"/>
 
 <script id="translate-inline-dialog-form-template" type="text/x-magento-template">
-    <form id="${id}" data-form="translate-inline-dialog-form">
-        <% _.each(items, function(item, i) { %>
+    <form id="<%= data.id %>" data-form="translate-inline-dialog-form">
+        <% _.each(data.items, function(item, i) { %>
             <input id="perstore_<%= i %>" name="translate[<%= i %>][perstore]" type="hidden" value="0"/>
             <input name="translate[<%= i %>][original]" type="hidden" value="<%= escape(item.original) %>"/>
             <textarea id="custom_<%= i %>"
                       name="translate[<%= i %>][custom]"
                       data-translate-input-index="<%= i %>"><%= escape(item.translated) %></textarea>
-        <% }) %>
+        <% }); %>
     </form>
 </script>
 
 <script data-template="translate-inline-icon" type="text/x-magento-template">
-  <img src="<%= img %>" height="16" width="16" class="translate-edit-icon">
+  <img src="<%= data.img %>" height="16" width="16" class="translate-edit-icon">
 </script>
 
 <div id="translate-dialog" data-role="translate-dialog"
