@@ -50,11 +50,11 @@ class Modules extends AbstractActionController
         $validity = $this->checkGraph($enabledModules, array_keys($allModules), true);
         ksort($allModules);
         if ($validity->getVariable("success")) {
-            return new JsonModel(['success' => true, 'modules' => $allModules ]);
+            return new JsonModel(['success' => true, 'modules' => $allModules]);
         } else {
             $errorMessage = $validity->getVariable("error");
             return new JsonModel(['success' => false,  'modules' => $allModules,
-                'error' => '<b> Corrupt config.php!</b> <br />' . $errorMessage ]);
+                'error' => '<b> Corrupt config.php!</b> <br />' . $errorMessage]);
         }
     }
 

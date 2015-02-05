@@ -30,9 +30,7 @@ angular.module('customize-your-store', ['ngStorage'])
         }
 
         $scope.checkModuleConstraints = function () {
-            if (!$scope.store.loadedAllModules) {
-                $state.loadModules();
-            }
+            $state.loadModules();
             $localStorage.store = $scope.store;
             $scope.loading = true;
             $http.post('index.php/modules/all-modules-valid', $scope.store)
