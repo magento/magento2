@@ -204,15 +204,16 @@ class CommonTaxCollector extends AbstractTotal
             $sequence = 'sequence-' . $this->getNextIncrement();
             $item->setTaxCalculationItemId($sequence);
         }
-        $itemDataObject = $itemDataObjectFactory->create()
-            ->setCode($item->getTaxCalculationItemId())
+        /** @var \Magento\Tax\Api\Data\QuoteDetailsItemInterface $itemDataObject */
+        $itemDataObject = $itemDataObjectFactory->create();
+        $itemDataObject->setCode($item->getTaxCalculationItemId())
             ->setQuantity($item->getQty())
             ->setTaxClassKey(
                 $this->taxClassKeyDataObjectFactory->create()
                     ->setType(TaxClassKeyInterface::TYPE_ID)
                     ->setValue($item->getProduct()->getTaxClassId())
             )
-            ->setTaxIncluded($priceIncludesTax)
+            ->setIsTaxIncluded($priceIncludesTax)
             ->setType(self::ITEM_TYPE_PRODUCT);
 
         if ($useBaseCurrency) {
@@ -264,6 +265,7 @@ class CommonTaxCollector extends AbstractTotal
             } else {
                 $unitPrice = $extraTaxable[self::KEY_ASSOCIATED_TAXABLE_UNIT_PRICE];
             }
+            /** @var \Magento\Tax\Api\Data\QuoteDetailsItemInterface $itemDataObject */
             $itemDataObject = $itemDataObjectFactory->create();
             $itemDataObject->setCode($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_CODE])
                 ->setType($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_TYPE])
@@ -274,7 +276,7 @@ class CommonTaxCollector extends AbstractTotal
                         ->setValue($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_TAX_CLASS_ID])
                 )
                 ->setUnitPrice($unitPrice)
-                ->setTaxIncluded($extraTaxableIncludesTax)
+                ->setIsTaxIncluded($extraTaxableIncludesTax)
                 ->setAssociatedItemCode($item->getTaxCalculationItemId());
             $itemDataObjects[] = $itemDataObject;
         }
@@ -372,6 +374,7 @@ class CommonTaxCollector extends AbstractTotal
             $address->setBaseShippingTaxCalculationAmount($address->getBaseShippingAmount());
         }
         if ($address->getShippingTaxCalculationAmount() !== null) {
+            /** @var \Magento\Tax\Api\Data\QuoteDetailsItemInterface $itemDataObject */
             $itemDataObject = $this->quoteDetailsItemDataObjectFactory->create()
                 ->setType(self::ITEM_TYPE_SHIPPING)
                 ->setCode(self::ITEM_CODE_SHIPPING)
@@ -393,7 +396,9 @@ class CommonTaxCollector extends AbstractTotal
                     ->setType(TaxClassKeyInterface::TYPE_ID)
                     ->setValue($this->_config->getShippingTaxClass($address->getQuote()->getStore()))
             );
-            $itemDataObject->setTaxIncluded($this->_config->shippingPriceIncludesTax($address->getQuote()->getStore()));
+            $itemDataObject->setIsTaxIncluded(
+                $this->_config->shippingPriceIncludesTax($address->getQuote()->getStore())
+            );
             return $itemDataObject;
         }
 
