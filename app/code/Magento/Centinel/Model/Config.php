@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Config centinel model
  */
@@ -117,6 +119,7 @@ class Config
      * Return flag - is centinel mode test
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsTestMode()
     {
@@ -131,13 +134,14 @@ class Config
      */
     private function _getServiceConfigValue($key)
     {
-        return $this->_scopeConfig->getValue($this->_serviceConfigPath . '/' . $key, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->getStore());
+        return $this->_scopeConfig->getValue($this->_serviceConfigPath . '/' . $key, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $this->getStore());
     }
 
     /**
      * Define if debugging is enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDebugFlag()
     {

@@ -60,7 +60,7 @@
         <!--<const name="TESTS_BAMBOO_PROFILER_METRICS_FILE" value="../../build/profiler_metrics.php"/>-->
         <!-- Magento mode for tests execution. Possible values are "default", "developer" and "production". -->
         <const name="TESTS_MAGENTO_MODE" value="developer"/>
-        <!-- Minimum error log level to listen for. Possible values are \Zend_Log::EMERG(0) to \Zend_Log::DEBUG(7) respectively. -->
+        <!-- Minimum error log level to listen for. Possible values: -1 ignore all errors, and level constants form http://tools.ietf.org/html/rfc5424 standard -->
         <const name="TESTS_ERROR_LOG_LISTENER_LEVEL" value="-1"/>
         <!-- Connection parameters for MongoDB library tests -->
         <!--<const name="MONGODB_CONNECTION_STRING" value="mongodb://localhost:27017"/>-->

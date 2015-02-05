@@ -3,13 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php
-/** @var $this \Magento\User\Block\Role\Tab\Edit */
+/** @var $block \Magento\User\Block\Role\Tab\Edit */
 ?>
 
-<?php echo $this->getChildHtml(); ?>
+<?php echo $block->getChildHtml(); ?>
 
 <fieldset class="fieldset form-inline entry-edit">
     <legend class="legend">
@@ -21,21 +24,21 @@
 
         <div class="control">
             <select id="all" name="all" onchange="jQuery('[data-role=tree-resources-container]').toggle()" class="select">
-                <option value="0" <?php echo($this->isEverythingAllowed() ? '' : 'selected="selected"'); ?>><?php echo __('Custom') ?></option>
-                <option value="1" <?php echo($this->isEverythingAllowed() ? 'selected="selected"' : ''); ?>><?php echo __('All') ?></option>
+                <option value="0" <?php echo($block->isEverythingAllowed() ? '' : 'selected="selected"'); ?>><?php echo __('Custom') ?></option>
+                <option value="1" <?php echo($block->isEverythingAllowed() ? 'selected="selected"' : ''); ?>><?php echo __('All') ?></option>
             </select>
         </div>
     </div>
 
-    <div class="field<?php if ($this->isEverythingAllowed()):?> no-display<?php endif?>" data-role="tree-resources-container">
+    <div class="field<?php if ($block->isEverythingAllowed()):?> no-display<?php endif?>" data-role="tree-resources-container">
         <label class="label"><span><?php echo __('Resources') ?></span></label>
 
         <div class="control">
             <div class="tree x-tree" data-role="resource-tree" data-mage-init='<?php
-            echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode([
+            echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode([
                 'rolesTree' => [
-                    "treeInitData" => $this->getTree(),
-                    "treeInitSelectedData" => $this->getSelectedResources(),
+                    "treeInitData" => $block->getTree(),
+                    "treeInitSelectedData" => $block->getSelectedResources(),
                 ],
             ]));
             ?>'></div>

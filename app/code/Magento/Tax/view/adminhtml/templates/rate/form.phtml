@@ -3,8 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="entry-edit">
-    <?php echo $this->getFormHtml() ?>
+    <?php echo $block->getFormHtml() ?>
 </div>
-<?php echo $this->getChildHtml('form_after');?>
+<?php echo $block->getChildHtml('form_after');?>

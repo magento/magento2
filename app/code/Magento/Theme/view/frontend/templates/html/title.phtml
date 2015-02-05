@@ -4,23 +4,25 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
- * @var $this \Magento\Theme\Block\Html\Title
+ * @var $block \Magento\Theme\Block\Html\Title
  */
-$cssClass = $this->getCssClass() ? ' ' . $this->getCssClass() : '';
+$cssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : '';
 $title = '';
-if (trim($this->getPageTitle())) {
-    $title = '<span class="base" data-ui-id="page-title" ' .  $this->getAddBaseAttribute() . '>' . $this->escapeHtml($this->getPageTitle()) . '</span>';
+if (trim($block->getPageTitle())) {
+    $title = '<span class="base" data-ui-id="page-title" ' .  $block->getAddBaseAttribute() . '>' . $block->escapeHtml($block->getPageTitle()) . '</span>';
 }
 ?>
 <?php if ($title): ?>
 <div class="page-title<?php echo $cssClass; ?>">
     <h1 class="title"
-        <?php if ($this->getId()): ?>id="<?php echo $this->getId(); ?>"<?php endif; ?>
+        <?php if ($block->getId()): ?>id="<?php echo $block->getId(); ?>"<?php endif; ?>
         tabindex="0"
-        <?php echo $this->getAddBaseAttributeAria(); ?>>
+        <?php echo $block->getAddBaseAttributeAria(); ?>>
             <?php echo $title ?>
     </h1>
-    <?php echo $this->getChildHtml(); ?>
+    <?php echo $block->getChildHtml(); ?>
 </div>
 <?php endif; ?>

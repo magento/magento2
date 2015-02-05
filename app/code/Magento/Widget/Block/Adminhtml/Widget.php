@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * WYSIWYG widget plugin main block
  *

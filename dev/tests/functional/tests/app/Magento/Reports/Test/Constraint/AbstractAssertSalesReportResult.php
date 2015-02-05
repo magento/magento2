@@ -7,8 +7,8 @@
 namespace Magento\Reports\Test\Constraint;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Page\BackendPage;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Page\BackendPage;
 
 /**
  * Class AbstractAssertSalesReportResult

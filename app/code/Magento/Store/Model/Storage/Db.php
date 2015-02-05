@@ -14,7 +14,11 @@ use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteFactory as WebsiteFactory;
 
-class Db implements \Magento\Store\Model\StoreManagerInterface
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Db implements \Magento\Framework\Store\StoreManagerInterface
 {
     /**
      * Flag that shows that system has only one store view
@@ -133,6 +137,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      * @param State $appState
      * @param bool $isSingleStoreAllowed
      * @param null $currentStore
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         StoreFactory $storeFactory,
@@ -179,6 +184,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      * Init store, group and website collections
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _initStores()
     {
@@ -283,6 +289,8 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      * @param null|string|bool|int|Store $storeId
      * @return Store
      * @throws \Magento\Framework\App\InitException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getStore($storeId = null)
     {
@@ -433,6 +441,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      * @param bool $withDefault
      * @param bool $codeKey
      * @return Group[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getGroups($withDefault = false, $codeKey = false)
     {
@@ -525,7 +534,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
     {
         return (bool)$this->_scopeConfig->getValue(
             \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 }

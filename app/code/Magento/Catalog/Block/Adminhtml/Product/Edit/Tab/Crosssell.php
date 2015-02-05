@@ -15,6 +15,9 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Catalog\Model\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Crosssell extends Extended
 {
     /**
@@ -187,6 +190,7 @@ class Crosssell extends Extended
      * Add columns to grid
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()
     {
@@ -295,7 +299,7 @@ class Crosssell extends Extended
                 'type' => 'currency',
                 'currency_code' => (string)$this->_scopeConfig->getValue(
                     \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 ),
                 'index' => 'price',
                 'header_css_class' => 'col-price',

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Usps\Model;
 
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
@@ -11,6 +14,8 @@ use Magento\Shipping\Model\Rate\Result;
 
 /**
  * USPS shipping
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -195,6 +200,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setRequest(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
@@ -270,7 +278,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $r->setOrigPostal(
                 $this->_scopeConfig->getValue(
                     \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $request->getStoreId()
                 )
             );
@@ -282,7 +290,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $r->setOrigCountryId(
                 $this->_scopeConfig->getValue(
                     \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $request->getStoreId()
                 )
             );
@@ -362,6 +370,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @link http://www.usps.com/webtools/htm/Rate-Calculators-v2-3.htm
      * @return Result
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _getXmlQuotes()
     {
@@ -484,6 +495,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $response
      * @return Result
      * @link http://www.usps.com/webtools/htm/Rate-Calculators-v2-3.htm
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _parseXmlResponse($response)
     {
@@ -584,6 +597,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $type
      * @param string $code
      * @return array|false
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getCode($type, $code = '')
     {
@@ -1019,6 +1033,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $trackingvalue
      * @param string $response
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _parseXmlTrackingResponse($trackingvalue, $response)
     {
@@ -1122,6 +1138,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string $countryId
      * @return string|false
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _getCountryName($countryId)
     {
@@ -1450,6 +1467,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $serviceType
      * @return string
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _formUsSignatureConfirmationShipmentRequest(\Magento\Framework\Object $request, $serviceType)
     {
@@ -1549,6 +1567,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\Object $request
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _formIntlShipmentRequest(\Magento\Framework\Object $request)
     {
@@ -1800,6 +1821,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\Object $request
      * @return \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _doShipmentRequest(\Magento\Framework\Object $request)
     {

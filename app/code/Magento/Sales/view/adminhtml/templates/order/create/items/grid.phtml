@@ -4,14 +4,16 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
- * @var $this \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid
+ * @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid
  */
 ?>
 
-<?php $_items = $this->getItems() ?>
+<?php $_items = $block->getItems() ?>
 <?php if (empty($_items)): ?>
     <div class="grid" id="order-items_grid">
         <table cellspacing="0" class="data-table order-tables">
@@ -39,7 +41,7 @@
     <div class="hor-scroll">
     <?php if (count($_items)>10): ?>
         <div class="actions update">
-            <?php echo $this->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()'); ?>
+            <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()'); ?>
         </div>
     <?php endif; ?>
         <table cellspacing="0" class="data-table order-tables">
@@ -58,11 +60,11 @@
                 <tr>
                     <td class="col-total" colspan="2"><?php echo __('Total %1 product(s)', count($_items)) ?></td>
                     <td colspan="2" class="col-subtotal"><?php echo __('Subtotal:') ?></td>
-                    <td class="col-price"><strong><?php echo $this->formatPrice($this->getSubtotal()) ?></strong></td>
-                    <td class="col-price"><strong><?php echo $this->formatPrice($this->getDiscountAmount()) ?></strong></td>
+                    <td class="col-price"><strong><?php echo $block->formatPrice($block->getSubtotal()) ?></strong></td>
+                    <td class="col-price"><strong><?php echo $block->formatPrice($block->getDiscountAmount()) ?></strong></td>
                     <td class="col-price"><strong>
                     <?php
-                        echo $this->formatPrice($this->getSubtotal() + $this->getDiscountAmount());
+                        echo $block->formatPrice($block->getSubtotal() + $block->getDiscountAmount());
                     ?></strong></td>
                     <td colspan="2">&nbsp;</td>
                 </tr>
@@ -72,60 +74,60 @@
                 <tbody class="<?php echo($i%2) ? 'even' : 'odd' ?>">
                     <tr>
                         <td class="col-product">
-                            <span id="order_item_<?php echo $_item->getId() ?>_title"><?php echo $this->escapeHtml($_item->getName()) ?></span>
+                            <span id="order_item_<?php echo $_item->getId() ?>_title"><?php echo $block->escapeHtml($_item->getName()) ?></span>
                             <div>
                                 <strong><?php echo __('SKU') ?>:</strong>
-                                <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($this->escapeHtml($_item->getSku()))); ?>
+                                <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))); ?>
                             </div>
                         </td>
                         <td class="col-configure">
-                            <?php echo $this->getConfigureButtonHtml($_item) ?>
+                            <?php echo $block->getConfigureButtonHtml($_item) ?>
                         </td>
                         <td class="col-price">
 
-                            <?php echo $this->getItemUnitPriceHtml($_item); ?>
+                            <?php echo $block->getItemUnitPriceHtml($_item); ?>
 
-                            <?php $_isCustomPrice = $this->usedCustomPriceForItem($_item) ?>
-                            <?php if ($_tier = $this->getTierHtml($_item)): ?>
+                            <?php $_isCustomPrice = $block->usedCustomPriceForItem($_item) ?>
+                            <?php if ($_tier = $block->getTierHtml($_item)): ?>
                             <div id="item_tier_block_<?php echo $_item->getId() ?>"<?php if ($_isCustomPrice): ?> style="display:none"<?php endif; ?>>
                                 <a href="#" onclick="$('item_tier_<?php echo $_item->getId() ?>').toggle();return false;"><?php echo __('Tier Pricing') ?></a>
                                 <div style="display:none" id="item_tier_<?php echo $_item->getId() ?>"><?php echo $_tier ?></div>
                             </div>
                             <?php endif; ?>
-                            <?php if ($this->canApplyCustomPrice($_item)): ?>
+                            <?php if ($block->canApplyCustomPrice($_item)): ?>
                             <div class="nobr">
                             <input type="checkbox" id="item_use_custom_price_<?php echo $_item->getId() ?>"<?php if ($_isCustomPrice): ?> checked="checked"<?php endif; ?> onclick="order.toggleCustomPrice(this, 'item_custom_price_<?php echo $_item->getId() ?>', 'item_tier_block_<?php echo $_item->getId() ?>');"/>
                             <label class="normal" for="item_use_custom_price_<?php echo $_item->getId() ?>"><?php echo __('Custom Price') ?>*</label>
                             </div>
                             <?php endif; ?>
-                            <input id="item_custom_price_<?php echo $_item->getId() ?>" name="item[<?php echo $_item->getId() ?>][custom_price]" value="<?php echo sprintf("%.2f", $this->getOriginalEditablePrice($_item))?>"<?php if (!$_isCustomPrice): ?> style="display:none" disabled="disabled"<?php endif; ?> class="input-text item-price"/>
+                            <input id="item_custom_price_<?php echo $_item->getId() ?>" name="item[<?php echo $_item->getId() ?>][custom_price]" value="<?php echo sprintf("%.2f", $block->getOriginalEditablePrice($_item))?>"<?php if (!$_isCustomPrice): ?> style="display:none" disabled="disabled"<?php endif; ?> class="input-text item-price"/>
                         </td>
                         <td class="col-qty"><input name="item[<?php echo $_item->getId() ?>][qty]" class="input-text item-qty" value="<?php echo $_item->getQty()*1 ?>" maxlength="12" /></td>
                         <td class="col-subtotal col-price">
-                            <?php echo $this->getItemRowTotalHtml($_item); ?>
+                            <?php echo $block->getItemRowTotalHtml($_item); ?>
                         </td>
                         <td class="col-discount col-price">
-                            <?php echo $this->formatPrice(-$_item->getTotalDiscountAmount()) ?><br />
+                            <?php echo $block->formatPrice(-$_item->getTotalDiscountAmount()) ?><br />
                             <input id="item_use_discount_<?php echo $_item->getId() ?>" name="item[<?php echo $_item->getId() ?>][use_discount]"<?php if (!$_item->getNoDiscount()): ?>checked="checked"<?php endif; ?> value="1" type="checkbox" />
                             <label for="item_use_discount_<?php echo $_item->getId() ?>" class="normal"><?php echo __('Apply') ?></label>
                         </td>
                         <td class="col-price col-row-subtotal">
-                            <?php echo $this->getItemRowTotalWithDiscountHtml($_item); ?>
+                            <?php echo $block->getItemRowTotalWithDiscountHtml($_item); ?>
                         </td>
                         <td class="col-actions last">
                             <select name="item[<?php echo $_item->getId() ?>][action]" style="width:100px;">
                                 <option value=""></option>
                                 <option value="remove"><?php echo __('Remove') ?></option>
-                                <?php if ($this->getCustomerId() && $this->getMoveToCustomerStorage()): ?>
+                                <?php if ($block->getCustomerId() && $block->getMoveToCustomerStorage()): ?>
                                     <option value="cart"><?php echo __('Move to Shopping Cart') ?></option>
-                                    <?php if ($this->isMoveToWishlistAllowed($_item)): ?>
-                                        <?php $wishlists = $this->getCustomerWishlists();?>
+                                    <?php if ($block->isMoveToWishlistAllowed($_item)): ?>
+                                        <?php $wishlists = $block->getCustomerWishlists();?>
                                         <?php if (count($wishlists) <= 1):?>
                                             <option value="wishlist"><?php echo __('Move to Wishlist') ?></option>
                                         <?php else: ?>
                                             <optgroup label="<?php echo __('Move to Wishlist') ?>">
                                                 <?php foreach ($wishlists as $wishlist):?>
-                                                    <option value="wishlist_<?php echo $wishlist->getId();?>"><?php echo $this->escapeHtml($wishlist->getName());?></option>
+                                                    <option value="wishlist_<?php echo $wishlist->getId();?>"><?php echo $block->escapeHtml($wishlist->getName());?></option>
                                                 <?php endforeach;?>
                                             </optgroup>
                                         <?php endif; ?>
@@ -142,19 +144,19 @@
                                 }
                                 ?>
                                 <div class="message <?php if ($_item->getHasError()): ?>error<?php else: ?>notice<?php endif; ?>">
-                                    <?php echo $this->escapeHtml($message); ?>
+                                    <?php echo $block->escapeHtml($message); ?>
                                 </div>
                             <?php endforeach; ?>
                         </td>
                     </tr>
-                    <?php echo $this->getItemExtraInfo($_item)->toHtml(); ?>
+                    <?php echo $block->getItemExtraInfo($_item)->toHtml(); ?>
                 </tbody>
                 <?php endforeach; ?>
         </table>
-        <p><small><?php echo $this->getInclExclTaxMessage(); ?></small></p>
-        <p><?php echo $this->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()'); ?></p>
+        <p><small><?php echo $block->getInclExclTaxMessage(); ?></small></p>
+        <p><?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()'); ?></p>
     </div>
-    <div class="order-coupons" id="order-coupons"><?php echo $this->getChildHtml();?></div>
+    <div class="order-coupons" id="order-coupons"><?php echo $block->getChildHtml();?></div>
     <script>
 require([
     'Magento_Sales/order/create/form'
@@ -164,7 +166,7 @@ require([
 </script>
 </div>
 
-<?php if ($this->isGiftMessagesAvailable()) : ?>
+<?php if ($block->isGiftMessagesAvailable()) : ?>
 <script>
 require([
     "prototype",

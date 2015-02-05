@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Model\Quote\Address\Total;
 
 /**
@@ -65,7 +68,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory
      * @param mixed $sourceData
      * @param mixed $store
@@ -75,7 +78,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         \Psr\Log\LoggerInterface $logger,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory,
         $sourceData = null,
         $store = null
@@ -138,12 +141,13 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * Initialize retrievers array
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function _initRetrievers()
     {
         $sorts = $this->_scopeConfig->getValue(
             self::XML_PATH_SALES_TOTALS_SORT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->_store
         );
         foreach ($sorts as $code => $sortOrder) {

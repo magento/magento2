@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Stdlib\Cookie;
 
 use Magento\Framework\Stdlib\Cookie\PhpCookieReader;

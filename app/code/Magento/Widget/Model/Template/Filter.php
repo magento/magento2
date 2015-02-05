@@ -7,6 +7,7 @@ namespace Magento\Widget\Model\Template;
 
 /**
  * Template Filter Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter extends \Magento\Cms\Model\Template\Filter
 {
@@ -27,13 +28,14 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
      * @param \Magento\Widget\Model\Resource\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Stdlib\String $string,
@@ -42,7 +44,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\VariableFactory $coreVariableFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Core\Model\Asset;
 
 /**
@@ -50,7 +53,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isMergeCssFiles()
     {
-        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_CSS_FILES, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_CSS_FILES, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -60,7 +63,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isMergeJsFiles()
     {
-        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_JS_FILES, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_JS_FILES, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -73,7 +76,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     {
         return (bool)$this->scopeConfig->isSetFlag(
             sprintf(self::XML_PATH_MINIFICATION_ENABLED, $contentType),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -87,7 +90,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     {
         return (string)$this->scopeConfig->getValue(
             sprintf(self::XML_PATH_MINIFICATION_ADAPTER, $contentType),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\User\Test\Fixture;
 
-use Mtf\Fixture\DataFixture;
+use Magento\Mtf\Fixture\DataFixture;
 
 /**
  * ACL resources fixture

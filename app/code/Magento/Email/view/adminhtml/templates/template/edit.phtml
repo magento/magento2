@@ -3,22 +3,25 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if (!$this->getEditMode()): ?>
-<form action="<?php echo $this->getLoadUrl() ?>" method="post" id="email_template_load_form">
-    <?php echo $this->getBlockHtml('formkey')?>
+<?php if (!$block->getEditMode()): ?>
+<form action="<?php echo $block->getLoadUrl() ?>" method="post" id="email_template_load_form">
+    <?php echo $block->getBlockHtml('formkey')?>
     <fieldset class="fieldset form-inline">
         <legend class="legend"><span><?php echo __('Load default template') ?></span></legend>
         <div class="field">
             <label class="label" for="template_select"><?php echo __('Template') ?></label>
             <div class="control">
                 <select id="template_select" name="code" class="select required-entry">
-                    <?php foreach ($this->getTemplateOptions() as $group => $options): ?>
+                    <?php foreach ($block->getTemplateOptions() as $group => $options): ?>
                         <?php if ($group): ?>
-                            <optgroup label="<?php echo $this->escapeHtml($group) ?>">
+                            <optgroup label="<?php echo $block->escapeHtml($group) ?>">
                         <?php endif; ?>
                         <?php foreach ($options as $option): ?>
-                            <option value="<?php echo $this->escapeHtml($option['value']) ?>"<?php echo $this->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?php echo $this->escapeHtml($option['label']) ?></option>
+                            <option value="<?php echo $block->escapeHtml($option['value']) ?>"<?php echo $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?php echo $block->escapeHtml($option['label']) ?></option>
                         <?php endforeach; ?>
                         <?php if ($group): ?>
                             </optgroup>
@@ -29,22 +32,22 @@
         </div>
         <div class="field required">
             <div class="control">
-                <?php echo $this->getLoadButtonHtml() ?>
+                <?php echo $block->getLoadButtonHtml() ?>
             </div>
         </div>
     </fieldset>
 </form>
 <?php endif ?>
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="email_template_edit_form">
-    <?php echo $this->getBlockHtml('formkey')?>
+<form action="<?php echo $block->getSaveUrl() ?>" method="post" id="email_template_edit_form">
+    <?php echo $block->getBlockHtml('formkey')?>
     <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
-    <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?php echo $this->getOrigTemplateCode() ?>" />
-    <?php echo $this->getFormHtml() ?>
+    <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?php echo $block->getOrigTemplateCode() ?>" />
+    <?php echo $block->getFormHtml() ?>
 </form>
-<form action="<?php echo $this->getPreviewUrl() ?>" method="post" id="email_template_preview_form" target="_blank">
-    <?php echo $this->getBlockHtml('formkey')?>
+<form action="<?php echo $block->getPreviewUrl() ?>" method="post" id="email_template_preview_form" target="_blank">
+    <?php echo $block->getBlockHtml('formkey')?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?php echo $this->isTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?php echo $block->isTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
     </div>
@@ -52,9 +55,10 @@
 <script>
 require([
     "jquery",
+    "tinymce",
     "mage/mage",
     "Magento_Backend/variables"
-], function(jQuery){
+], function(jQuery, tinyMCE){
 
 //<![CDATA[
     jQuery('#email_template_edit_form').mage('form').mage('validation');
@@ -81,8 +85,8 @@ require([
 
             this.bindEvents();
 
-            this.renderPaths(<?php echo $this->getUsedDefaultForPaths(); ?>, 'used_default_for');
-            this.renderPaths(<?php echo $this->getUsedCurrentlyForPaths(); ?>, 'used_currently_for');
+            this.renderPaths(<?php echo $block->getUsedDefaultForPaths(); ?>, 'used_default_for');
+            this.renderPaths(<?php echo $block->getUsedCurrentlyForPaths(); ?>, 'used_currently_for');
         },
 
         bindEvents: function(){
@@ -156,7 +160,7 @@ require([
 
         deleteTemplate: function() {
             if(window.confirm("<?php echo __('Are you sure that you want to delete this template?') ?>")) {
-                   window.location.href = '<?php echo $this->getDeleteUrl() ?>';
+                   window.location.href = '<?php echo $block->getDeleteUrl() ?>';
             }
         },
 

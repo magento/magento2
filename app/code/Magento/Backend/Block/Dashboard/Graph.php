@@ -186,6 +186,10 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @param bool $directUrl
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getChartUrl($directUrl = true)
     {
@@ -206,7 +210,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         $timezoneLocal = $this->_scopeConfig->getValue(
             $this->_localeDate->getDefaultTimezonePath(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         list($dateStart, $dateEnd) = $this->_collectionFactory->create()->getDateRange(

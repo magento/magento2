@@ -43,7 +43,7 @@ class Observer
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -61,7 +61,7 @@ class Observer
      * @param \Magento\Directory\Model\Currency\Import\Factory $importFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      */
@@ -69,7 +69,7 @@ class Observer
         \Magento\Directory\Model\Currency\Import\Factory $importFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
     ) {
@@ -84,16 +84,17 @@ class Observer
     /**
      * @param mixed $schedule
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function scheduledUpdateCurrencyRates($schedule)
     {
         $importWarnings = [];
         if (!$this->_scopeConfig->getValue(
             self::IMPORT_ENABLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) || !$this->_scopeConfig->getValue(
             self::CRON_STRING_PATH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             return;
@@ -103,7 +104,7 @@ class Observer
         $rates = [];
         $service = $this->_scopeConfig->getValue(
             self::IMPORT_SERVICE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if ($service) {
             try {
@@ -131,7 +132,7 @@ class Observer
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_TEMPLATE,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             )->setTemplateOptions(
                 [
@@ -143,12 +144,12 @@ class Observer
             )->setFrom(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_IDENTITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             )->addTo(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_RECIPIENT,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             );
             $transport = $this->_transportBuilder->getTransport();

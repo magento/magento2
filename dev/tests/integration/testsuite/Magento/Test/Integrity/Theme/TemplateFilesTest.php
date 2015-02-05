@@ -62,6 +62,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
      *
      * @param  \SimpleXMLElement $layoutXml
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getLayoutTemplates($layoutXml)
     {

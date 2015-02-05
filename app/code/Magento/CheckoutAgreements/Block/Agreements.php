@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\CheckoutAgreements\Block;
 
 class Agreements extends \Magento\Framework\View\Element\Template
@@ -32,7 +35,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
     public function getAgreements()
     {
         if (!$this->hasAgreements()) {
-            if (!$this->_scopeConfig->isSetFlag('checkout/options/enable_agreements', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+            if (!$this->_scopeConfig->isSetFlag('checkout/options/enable_agreements', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)) {
                 $agreements = [];
             } else {
                 /** @var \Magento\CheckoutAgreements\Model\Resource\Agreement\Collection $agreements */

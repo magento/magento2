@@ -56,6 +56,7 @@ Magento/Core/Model/Store
 Magento/Store/Model
 Magento/Cron/Model/Config/Backend/Product
 Magento/Customer/Block/Account/Dashboard
+Magento/Customer/Controller/Adminhtml/Index
 Magento/Customer/Model/Config/Backend/Show
 Magento/Customer/Model/Metadata
 Magento/Customer/Model/Resource/Customer
@@ -144,3 +145,6 @@ Magento/GroupedProduct/Model/Resource/Product/Type/Grouped
 lib/internal/Magento/Framework/Interception/ObjectManager/Config
 app/code/Magento/OfflinePayments/Model
 Magento/Weee/Model/Resource
+Magento/Theme/Model/Design/Backend
+Magento/Core/Model/Resource/Layout/Link
+Magento/Theme/Model/Resource/Design

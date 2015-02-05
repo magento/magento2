@@ -12,6 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class Category
  * @package Magento\Catalog\Block\Rss
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
@@ -36,7 +37,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     protected $rssModel;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -61,6 +62,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -213,7 +215,10 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
      */
     public function isAllowed()
     {
-        return $this->_scopeConfig->isSetFlag('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->isSetFlag(
+            'rss/catalog/category',
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

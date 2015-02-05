@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 use Magento\TestFramework\Helper\ObjectManager;
@@ -63,7 +66,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
         $this->_resource->expects($this->any())->method('getConnection')
             ->with('default')
             ->will($this->returnValue($this->_connection));
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->_store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->_store->expects($this->any())->method('getId')->will($this->returnValue('store_id_1'));
         $this->_storeManager->expects($this->any())->method('getStores')->will(

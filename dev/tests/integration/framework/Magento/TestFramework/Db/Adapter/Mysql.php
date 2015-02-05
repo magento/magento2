@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * See \Magento\TestFramework\Db\Adapter\TransactionInterface
  */

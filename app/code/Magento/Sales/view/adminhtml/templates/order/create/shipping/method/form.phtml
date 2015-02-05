@@ -3,14 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Method\Form */ ?>
-<?php $_shippingRateGroups = $this->getShippingRates(); ?>
+<?php /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Method\Form */ ?>
+<?php $_shippingRateGroups = $block->getShippingRates(); ?>
 <?php if ($_shippingRateGroups): ?>
     <div id="order-shipping-method-choose" style="display:none">
     <dl class="shipment-methods">
     <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
-        <dt><strong><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></strong></dt>
+        <dt><strong><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></strong></dt>
         <dd>
             <ul>
             <?php foreach ($_rates as $_rate): ?>
@@ -20,17 +23,17 @@
                    <?php if ($_rate->getErrorMessage()): ?>
                         <div class="messages">
                             <div class="message error">
-                                <div><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></div>
+                                <div><?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></div>
                             </div>
                         </div>
                    <?php else: ?>
-                        <?php $_checked = $this->isMethodActive($_code) ? 'checked="checked"' : '' ?>
+                        <?php $_checked = $block->isMethodActive($_code) ? 'checked="checked"' : '' ?>
                         <input <?php echo $_radioProperty ?> value="<?php echo $_code ?>" id="s_method_<?php echo $_code ?>" <?php echo $_checked ?>/>
                         <label class="normal" for="s_method_<?php echo $_code ?>">
-                            <?php echo $this->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
+                            <?php echo $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
                             <strong>
-                                <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
-                                <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+                                <?php $_excl = $block->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
+                                <?php $_incl = $block->getShippingPrice($_rate->getPrice(), true); ?>
 
                                 <?php echo $_excl; ?>
                                 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
@@ -46,13 +49,13 @@
     <?php endforeach; ?>
     </dl>
     </div>
-    <?php if ($_rate = $this->getActiveMethodRate()): ?>
+    <?php if ($_rate = $block->getActiveMethodRate()): ?>
         <div id="order-shipping-method-info">
-            <strong><?php echo $this->escapeHtml($this->getCarrierName($_rate->getCarrier())) ?></strong><br/>
-            <?php echo $this->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
+            <strong><?php echo $block->escapeHtml($block->getCarrierName($_rate->getCarrier())) ?></strong><br/>
+            <?php echo $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
             <strong>
-                <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
-                <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+                <?php $_excl = $block->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
+                <?php $_incl = $block->getShippingPrice($_rate->getPrice(), true); ?>
 
                 <?php echo $_excl; ?>
                 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
@@ -72,7 +75,7 @@ require(['prototype'], function(){
 });
 </script>
     <?php endif; ?>
-<?php elseif ($this->getIsRateRequest()): ?>
+<?php elseif ($block->getIsRateRequest()): ?>
     <strong><?php echo __('Sorry, no quotes are available for this order.') ?></strong>
 <?php else: ?>
     <div id="order-shipping-method-summary">
@@ -86,10 +89,10 @@ require(['prototype'], function(){
 <script>
     require(["Magento_Sales/order/create/form"], function(){
 
-        order.overlay('shipping-method-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
-        order.overlay('address-shipping-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
+        order.overlay('shipping-method-overlay', <?php if ($block->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
+        order.overlay('address-shipping-overlay', <?php if ($block->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
 
-        <?php if ($this->getQuote()->isVirtual()): ?>
+        <?php if ($block->getQuote()->isVirtual()): ?>
             order.isOnlyVirtualProduct = true;
         <?php endif; ?>
     });

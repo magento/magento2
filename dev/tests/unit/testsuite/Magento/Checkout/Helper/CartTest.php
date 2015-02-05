@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Helper;
 
 use Magento\Framework\App\Action\Action;
@@ -77,7 +80,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilderMock));
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $contextMock->expects($this->any())->method('getUrlEncoder')->will($this->returnValue($this->urlEncoder));
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
         $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
         $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->cartMock = $this->getMock('\Magento\Checkout\Model\Cart', [], [], '', false);
@@ -159,7 +162,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
         $this->scopeConfigMock->expects($this->once())->method('isSetFlag')
-            ->with(Cart::XML_PATH_REDIRECT_TO_CART, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+            ->with(Cart::XML_PATH_REDIRECT_TO_CART, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId)
             ->will($this->returnValue(true));
         $this->assertTrue($this->helper->getShouldRedirectToCart($storeId));
     }
@@ -201,10 +204,11 @@ class CartTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedPostData
      *
      * @dataProvider deletePostJsonDataProvider
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetDeletePostJson($id, $url, $isAjax, $expectedPostData)
     {
-        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
         $coreData = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
         $scopeConfig = $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface');
         $checkoutCart = $this->getMock('\Magento\Checkout\Model\Cart', [], [], '', false);

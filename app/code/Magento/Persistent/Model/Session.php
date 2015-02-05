@@ -66,7 +66,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -104,12 +104,13 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -119,7 +120,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -163,6 +164,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Get if model loads expired sessions
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getLoadExpired()
     {

@@ -19,6 +19,9 @@ use OAuth\OAuth1\Signature\SignatureInterface;
 use OAuth\OAuth1\Token\StdOAuth1Token;
 use OAuth\OAuth1\Token\TokenInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OauthClient extends AbstractService
 {
     /** @var string|null */
@@ -80,7 +83,7 @@ class OauthClient extends AbstractService
      */
     public function getTestApiEndpoint()
     {
-        $defaultStoreCode = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
+        $defaultStoreCode = Bootstrap::getObjectManager()->get('Magento\Framework\Store\StoreManagerInterface')
             ->getStore()->getCode();
         return new Uri(TESTS_BASE_URL . '/rest/' . $defaultStoreCode . '/V1/testmodule1');
     }

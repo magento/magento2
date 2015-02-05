@@ -8,7 +8,7 @@ namespace Magento\Checkout\Test\Constraint;
 
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertGrandTotalInShoppingCart

@@ -79,7 +79,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
         if (!$this->_copyright) {
             $this->_copyright = $this->_scopeConfig->getValue(
                 'design/footer/copyright',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $this->_copyright;

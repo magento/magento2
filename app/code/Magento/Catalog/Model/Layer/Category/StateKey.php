@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Layer\StateKeyInterface;
 class StateKey implements StateKeyInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -22,11 +22,11 @@ class StateKey implements StateKeyInterface
     protected $customerSession;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Session $customerSession
     ) {
         $this->storeManager = $storeManager;

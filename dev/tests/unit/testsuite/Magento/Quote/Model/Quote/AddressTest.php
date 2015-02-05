@@ -3,9 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Test class for \Magento\Sales\Model\Order

@@ -7,8 +7,8 @@
 namespace Magento\Checkout\Test\Constraint;
 
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertAddedProductToCartSuccessMessage

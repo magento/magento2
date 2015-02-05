@@ -1,6 +1,5 @@
 <?php
 /**
- * @spi
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,12 +7,12 @@
 namespace Magento\Catalog\Test\Handler\Curl;
 
 use Magento\Catalog\Test\Fixture\ProductAttribute;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Handler\Curl;
-use Mtf\System\Config;
-use Mtf\Util\Protocol\CurlInterface;
-use Mtf\Util\Protocol\CurlTransport;
-use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Handler\Curl;
+use Magento\Mtf\System\Config;
+use Magento\Mtf\Util\Protocol\CurlInterface;
+use Magento\Mtf\Util\Protocol\CurlTransport;
+use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
  * Class CreateProductAttribute

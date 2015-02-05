@@ -10,8 +10,8 @@ use Magento\Customer\Test\Fixture\AddressInjectable;
 use Magento\Tax\Test\Fixture\TaxRule;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleNew;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Delete TaxRuleEntity

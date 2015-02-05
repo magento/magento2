@@ -85,7 +85,7 @@ class Config extends \Magento\Framework\Object
     protected $_backendUrl;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -97,9 +97,10 @@ class Config extends \Magento\Framework\Object
      * @param \Magento\Core\Model\Variable\Config $variableConfig
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param array $windowSize
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Model\UrlInterface $backendUrl,
@@ -109,7 +110,7 @@ class Config extends \Magento\Framework\Object
         \Magento\Core\Model\Variable\Config $variableConfig,
         \Magento\Widget\Model\Widget\Config $widgetConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         array $windowSize = [],
         array $data = []
     ) {
@@ -217,7 +218,7 @@ class Config extends \Magento\Framework\Object
     {
         $wysiwygState = $this->_scopeConfig->getValue(
             self::WYSIWYG_STATUS_CONFIG_PATH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
         return in_array($wysiwygState, [self::WYSIWYG_ENABLED, self::WYSIWYG_HIDDEN]);
@@ -232,7 +233,7 @@ class Config extends \Magento\Framework\Object
     {
         $status = $this->_scopeConfig->getValue(
             self::WYSIWYG_STATUS_CONFIG_PATH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         return $status == self::WYSIWYG_HIDDEN;
     }

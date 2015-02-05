@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Resource;
  * Product entity resource model
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends AbstractResource
 {
@@ -62,7 +63,7 @@ class Product extends AbstractResource
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
      * @param Category $catalogCategory
@@ -80,7 +81,7 @@ class Product extends AbstractResource
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory,
         Category $catalogCategory,
@@ -311,6 +312,7 @@ class Product extends AbstractResource
      *
      * @param \Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _saveCategories(\Magento\Framework\Object $object)
     {

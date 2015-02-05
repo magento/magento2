@@ -71,6 +71,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      * Default entites and attributes
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getDefaultEntities()
     {
@@ -218,7 +219,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
                         'type' => 'varchar',
                         'label' => 'Custom Design',
                         'input' => 'select',
-                        'source' => 'Magento\Core\Model\Theme\Source\Theme',
+                        'source' => 'Magento\Theme\Model\Theme\Source\Theme',
                         'required' => false,
                         'sort_order' => 10,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
@@ -653,7 +654,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
                         'type' => 'varchar',
                         'label' => 'Custom Design',
                         'input' => 'select',
-                        'source' => 'Magento\Core\Model\Theme\Source\Theme',
+                        'source' => 'Magento\Theme\Model\Theme\Source\Theme',
                         'required' => false,
                         'sort_order' => 1,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,

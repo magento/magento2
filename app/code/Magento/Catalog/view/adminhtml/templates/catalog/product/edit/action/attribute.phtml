@@ -3,16 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="attributes-edit-form" class="attributes-edit-form" enctype="multipart/form-data">
-    <?php echo $this->getBlockHtml('formkey')?>
+<form action="<?php echo $block->getSaveUrl() ?>" method="post" id="attributes-edit-form" class="attributes-edit-form" enctype="multipart/form-data">
+    <?php echo $block->getBlockHtml('formkey')?>
 </form>
 <script>
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('#attributes-edit-form').mage('form')
-        .mage('validation', {validationUrl: '<?php echo $this->getValidationUrl() ?>'});
+        .mage('validation', {validationUrl: '<?php echo $block->getValidationUrl() ?>'});
 
 });
 </script>

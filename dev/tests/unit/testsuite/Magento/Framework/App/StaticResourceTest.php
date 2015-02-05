@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\App;
 
 class StaticResourceTest extends \PHPUnit_Framework_TestCase
@@ -52,6 +55,11 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var \Magento\Framework\View\Asset\MinifyService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $minifyService;
+
     protected function setUp()
     {
         $this->state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
@@ -64,6 +72,11 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
         $this->configLoader = $this->getMock(
             'Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false
         );
+        $this->minifyService = $this->getMockBuilder('Magento\Framework\View\Asset\MinifyService')
+            ->disableOriginalConstructor()
+            ->setMethods(['getAssets'])
+            ->getMock();
+
         $this->object = new \Magento\Framework\App\StaticResource(
             $this->state,
             $this->response,
@@ -73,6 +86,7 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
             $this->moduleList,
             $this->objectManager,
             $this->configLoader,
+            $this->minifyService,
             $this->getMockForAbstractClass('\Magento\Framework\View\DesignInterface')
         );
     }
@@ -139,6 +153,7 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
         $this->response->expects($this->once())
             ->method('setFilePath')
             ->with('resource/file.css');
+        $this->minifyService->expects($this->once())->method('getAssets')->willReturnArgument(0);
         $this->object->launch();
     }
 

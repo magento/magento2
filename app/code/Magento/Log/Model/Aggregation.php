@@ -23,14 +23,14 @@ class Aggregation extends \Magento\Framework\Model\AbstractModel
     protected $_lastRecord;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -38,7 +38,7 @@ class Aggregation extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -75,6 +75,7 @@ class Aggregation extends \Magento\Framework\Model\AbstractModel
      *
      * @param  string $lastDate
      * @return null|void
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function _removeEmpty($lastDate)
     {
@@ -186,6 +187,7 @@ class Aggregation extends \Magento\Framework\Model\AbstractModel
      * @param int|string $in
      * @param null $offset
      * @return bool|string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function _date($in, $offset = null)
     {
@@ -202,6 +204,7 @@ class Aggregation extends \Magento\Framework\Model\AbstractModel
      * @param int|string $in
      * @param null $offset
      * @return int
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function _timestamp($in, $offset = null)
     {

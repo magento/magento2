@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Model\Resource;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -230,7 +232,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare validator mock object
      *
-     * @return \Magento\Core\Model\Validator\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Validator\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function prepareValidatorFactory()
     {
@@ -240,7 +242,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $validatorFactory = $this->getMock(
-            'Magento\Core\Model\Validator\Factory',
+            'Magento\Framework\Validator\Factory',
             ['createValidator'],
             [],
             '',

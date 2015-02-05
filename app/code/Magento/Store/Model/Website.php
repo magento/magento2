@@ -5,7 +5,7 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Core Website model
@@ -26,6 +26,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\Store\Model\Website setDefaultGroupId(int $value)
  * @method int getIsDefault()
  * @method \Magento\Store\Model\Website setIsDefault(int $value)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Website extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Framework\Object\IdentityInterface,
@@ -170,11 +172,12 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -184,7 +187,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
         \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Store\Model\GroupFactory $storeGroupFactory,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -237,7 +240,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
         if (!isset($this->_configCache[$path])) {
             $config = $this->_coreConfig->getValue(
                 $path,
-                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE,
                 $this->getCode()
             );
             if (!$config) {
@@ -505,11 +508,11 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     public function beforeDelete()
     {
         $this->_configDataResource->clearScopeData(
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITES,
             $this->getId()
         );
         $this->_configDataResource->clearScopeData(
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES,
             $this->getStoreIds()
         );
         return parent::beforeDelete();

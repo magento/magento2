@@ -3,9 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-$_option = $this->getOption();
+$_option = $block->getOption();
 $class = ($_option->getIsRequire()) ? ' required' : '';
 ?>
 
@@ -13,8 +16,8 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
     echo ' textarea';
 } ?><?php echo $class ?>">
     <label class="label">
-        <span><?php echo $this->escapeHtml($_option->getTitle()) ?></span>
-        <?php echo $this->getFormatedPrice() ?>
+        <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
+        <?php echo $block->getFormatedPrice() ?>
     </label>
 
     <div class="control">
@@ -34,7 +37,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
     echo 'data-validate=' . json_encode($_textValidate);
 } ?>
                    name="options[<?php echo $_option->getId() ?>]"
-                   value="<?php echo $this->escapeHtml($this->getDefaultValue()) ?>"/>
+                   value="<?php echo $block->escapeHtml($block->getDefaultValue()) ?>"/>
         <?php elseif ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_AREA): ?>
             <?php $_textAreaValidate = null;
             if ($_option->getIsRequire()) {
@@ -51,7 +54,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
 } ?>
                       name="options[<?php echo $_option->getId() ?>]"
                       rows="5"
-                      cols="25"><?php echo $this->escapeHtml($this->getDefaultValue()) ?></textarea>
+                      cols="25"><?php echo $block->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif; ?>
         <?php if ($_option->getMaxCharacters()): ?>
             <p class="note"><?php echo __('Maximum number of characters:') ?>

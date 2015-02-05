@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 /**
@@ -27,6 +30,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider dataProviderCollectArray
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testCollect($itemData, $appliedRatesData, $taxDetailsData, $quoteDetailsData,
         $addressData, $verifyData
@@ -84,7 +88,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->will($this->returnValue($items));
 
-        $storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->getMockBuilder('\Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getStore', 'hasSingleStore', 'isSingleStoreMode', 'getStores', 'getWebsite', 'getWebsites',
                 'reinitStores', 'getDefaultStoreView', 'setIsSingleStoreModeAllowed', 'getGroup', 'getGroups',

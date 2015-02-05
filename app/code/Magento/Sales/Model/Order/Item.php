@@ -94,6 +94,9 @@ use Magento\Sales\Api\Data\OrderItemInterface;
  * @method \Magento\Sales\Model\Order\Item setBaseTaxRefunded(float $value)
  * @method \Magento\Sales\Model\Order\Item setDiscountRefunded(float $value)
  * @method \Magento\Sales\Model\Order\Item setBaseDiscountRefunded(float $value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends AbstractExtensibleModel implements OrderItemInterface
 {
@@ -164,7 +167,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     protected $productRepository;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -179,8 +182,9 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -188,7 +192,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         AttributeDataBuilder $customAttributeBuilder,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -371,6 +375,8 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * Retrieve item status identifier
      *
      * @return int
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getStatusId()
     {
@@ -625,6 +631,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * Check if discount has to be applied to parent item
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getForceApplyDiscountToParentItem()
     {
@@ -668,6 +675,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      *
      * @param bool $shipment
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isDummy($shipment = false)
     {

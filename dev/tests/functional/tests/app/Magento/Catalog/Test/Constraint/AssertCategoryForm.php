@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Constraint;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
-use Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Assert that displayed category data on edit page equals passed from fixture.
@@ -48,7 +48,7 @@ class AssertCategoryForm extends AbstractAssertForm
         $fixtureData = $this->prepareFixtureData($category->getData());
         $formData = $catalogCategoryEdit->getEditForm()->getData($category);
         $error = $this->verifyData($this->sortData($fixtureData), $this->sortData($formData));
-        \PHPUnit_Framework_Assert::assertEmpty($error);
+        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
     }
 
     /**

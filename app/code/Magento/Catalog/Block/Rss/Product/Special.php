@@ -11,6 +11,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 /**
  * Class Special
  * @package Magento\Catalog\Block\Rss\Product
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Special extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
@@ -40,7 +41,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     protected $httpContext;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -76,6 +77,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
      * @param \Magento\Framework\Stdlib\DateTime\DateFactory $dateFactory
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -119,7 +121,10 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     {
         $newUrl = $this->rssUrlBuilder->getUrl(['type' => 'special_products', 'store_id' => $this->getStoreId()]);
         $title = __('%1 - Special Products', $this->storeManager->getStore()->getFrontendName());
-        $lang = $this->_scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $lang = $this->_scopeConfig->getValue(
+            'general/locale/code',
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+        );
 
         $data = [
             'title' => $title,
@@ -251,7 +256,10 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
      */
     public function isAllowed()
     {
-        return $this->_scopeConfig->isSetFlag('rss/catalog/special', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->isSetFlag(
+            'rss/catalog/special',
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

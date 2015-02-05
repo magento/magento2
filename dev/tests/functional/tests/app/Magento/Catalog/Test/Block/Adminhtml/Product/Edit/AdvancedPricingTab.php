@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit;
 
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class AdvancedPricingTab

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -27,6 +30,7 @@ use Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory;
  * @method \Magento\Wishlist\Model\Item setAddedAt(string $value)
  * @method string getDescription()
  * @method \Magento\Wishlist\Model\Item setDescription(string $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends AbstractModel implements ItemInterface
 {
@@ -85,7 +89,7 @@ class Item extends AbstractModel implements ItemInterface
     protected $_flagOptionsSaved = null;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -122,7 +126,7 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param OptionFactory $wishlistOptFactory
@@ -132,11 +136,12 @@ class Item extends AbstractModel implements ItemInterface
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         OptionFactory $wishlistOptFactory,

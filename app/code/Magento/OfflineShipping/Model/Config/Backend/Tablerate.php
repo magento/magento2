@@ -46,6 +46,8 @@ class Tablerate extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        $this->_tablerateFactory->create()->uploadAndImport($this);
+        /** @var \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate $tableRate */
+        $tableRate = $this->_tablerateFactory->create();
+        $tableRate->uploadAndImport($this);
     }
 }

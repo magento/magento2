@@ -39,14 +39,4 @@ class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
      * @var bool
      */
     protected $_isOffline = true;
-
-    /**
-     * Get instructions text from config
-     *
-     * @return string
-     */
-    public function getInstructions()
-    {
-        return trim($this->getConfigData('instructions'));
-    }
 }

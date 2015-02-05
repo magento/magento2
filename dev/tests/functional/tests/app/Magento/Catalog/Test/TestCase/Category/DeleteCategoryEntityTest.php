@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\TestCase\Category;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for DeleteCategoryEntity
@@ -70,7 +70,6 @@ class DeleteCategoryEntityTest extends Injectable
      */
     public function test(Category $category)
     {
-        $this->markTestIncomplete('MAGETWO-31723');
         $category->persist();
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($category);

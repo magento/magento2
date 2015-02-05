@@ -6,9 +6,9 @@
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab;
 
-use Mtf\Factory\Factory;
+use Magento\Mtf\Factory\Factory;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Conditions

@@ -14,9 +14,9 @@ use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Tax\Test\Fixture\TaxRule;
-use Mtf\Client\BrowserInterface;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Class AssertTaxRuleApplying
@@ -126,7 +126,7 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         $this->productSimple = $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => '100_dollar_product_for_tax_rule',
+                'dataSet' => 'product_100_dollar_for_tax_rule',
                 'data' => [
                     'tax_class_id' => ['tax_product_class' => $taxProductClass],
                 ]

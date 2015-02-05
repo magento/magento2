@@ -22,7 +22,7 @@ class Advanced extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -30,12 +30,12 @@ class Advanced extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Construct
      *
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
         $this->_storeManager = $storeManager;
@@ -85,6 +85,7 @@ class Advanced extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @param string|array $value
      * @return string|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function prepareCondition($attribute, $value)
     {
@@ -122,6 +123,7 @@ class Advanced extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string|array $value
      * @param int $rate
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addRatedPriceFilter($collection, $attribute, $value, $rate = 1)
     {
@@ -166,6 +168,7 @@ class Advanced extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @param string|array $value
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addIndexableAttributeModifiedFilter($collection, $attribute, $value)
     {

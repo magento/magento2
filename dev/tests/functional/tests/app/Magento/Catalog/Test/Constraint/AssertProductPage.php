@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
-use Mtf\Client\BrowserInterface;
-use Mtf\Constraint\AbstractAssertForm;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertProductPage
@@ -131,11 +131,10 @@ class AssertProductPage extends AbstractAssertForm
      */
     protected function verifySpecialPrice()
     {
-        $fixtureProductSpecialPrice = $this->product->getSpecialPrice();
-        if (!$fixtureProductSpecialPrice) {
+        if (!$this->product->hasData('special_price')) {
             return null;
         }
-
+        $fixtureProductSpecialPrice = $this->product->getSpecialPrice();
         $fixtureProductSpecialPrice = number_format($fixtureProductSpecialPrice, 2);
         $formProductSpecialPrice = $this->productView->getPriceBlock()->getSpecialPrice();
         if ($fixtureProductSpecialPrice == $formProductSpecialPrice) {

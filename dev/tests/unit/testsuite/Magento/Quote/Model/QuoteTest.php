@@ -3,16 +3,20 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Model;
 
 use Magento\Quote\Model\Quote\Address;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Quote\Model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
@@ -523,6 +527,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testSetCustomerAddressData()
     {
         $customerId = 1;
@@ -925,10 +932,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->setStoreId($storeId);
 
         $valueMap = [
-            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/multi_address', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
         $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')
@@ -951,10 +958,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->setStoreId($storeId);
 
         $valueMap = [
-            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/multi_address', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/amount', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/tax_including', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
         $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')

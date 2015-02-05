@@ -7,7 +7,7 @@
 namespace Magento\Reports\Test\TestCase;
 
 use Magento\Review\Test\Fixture\Review;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for ProductReviewReportEntity

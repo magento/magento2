@@ -9,6 +9,7 @@ namespace Magento\ProductAlert\Model;
  * ProductAlert observer
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Observer
 {
@@ -68,7 +69,7 @@ class Observer
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -115,7 +116,7 @@ class Observer
     /**
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\ProductAlert\Model\Resource\Price\CollectionFactory $priceColFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -124,11 +125,12 @@ class Observer
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\ProductAlert\Model\EmailFactory $emailFactory
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\ProductAlert\Model\Resource\Price\CollectionFactory $priceColFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -173,6 +175,8 @@ class Observer
      *
      * @param \Magento\ProductAlert\Model\Email $email
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _processPrice(\Magento\ProductAlert\Model\Email $email)
     {
@@ -185,7 +189,7 @@ class Observer
             }
             if (!$this->_scopeConfig->getValue(
                 self::XML_PATH_PRICE_ALLOW,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $website->getDefaultGroup()->getDefaultStore()->getId()
             )
             ) {
@@ -258,6 +262,8 @@ class Observer
      *
      * @param \Magento\ProductAlert\Model\Email $email
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _processStock(\Magento\ProductAlert\Model\Email $email)
     {
@@ -271,7 +277,7 @@ class Observer
             }
             if (!$this->_scopeConfig->getValue(
                 self::XML_PATH_STOCK_ALLOW,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $website->getDefaultGroup()->getDefaultStore()->getId()
             )
             ) {
@@ -350,7 +356,7 @@ class Observer
         if (count($this->_errors)) {
             if (!$this->_scopeConfig->getValue(
                 self::XML_PATH_ERROR_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
             ) {
                 return $this;
@@ -361,7 +367,7 @@ class Observer
             $transport = $this->_transportBuilder->setTemplateIdentifier(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_TEMPLATE,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             )->setTemplateOptions(
                 [
@@ -373,12 +379,12 @@ class Observer
             )->setFrom(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_IDENTITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             )->addTo(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_RECIPIENT,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             )->getTransport();
 

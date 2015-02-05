@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product\Visibility;
 
 /**
  * Class ProductsListTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductsListTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,7 +51,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
     protected $widgetConditionsHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -82,7 +83,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->builder = $this->getMock('Magento\Rule\Model\Condition\Sql\Builder', [], [], '', false);
         $this->rule = $this->getMock('Magento\CatalogWidget\Model\Rule', [], [], '', false);
         $this->widgetConditionsHelper = $this->getMock('Magento\Widget\Helper\Conditions');
-        $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
         $this->design = $this->getMock('\Magento\Framework\View\DesignInterface');
 
         $objectManagerHelper = new ObjectManagerHelper($this);

@@ -67,7 +67,7 @@ class Translate extends \Magento\Framework\App\Config\Value
         $types = array_keys(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_INVALID_CACHES,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         );
         if ($this->isValueChanged()) {

@@ -14,6 +14,7 @@ use Magento\Review\Model\Review;
  * Review controller
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Framework\App\Action\Action
 {
@@ -83,7 +84,7 @@ class Product extends \Magento\Framework\App\Action\Action
     /**
      * Core model store manager interface
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -105,8 +106,9 @@ class Product extends \Magento\Framework\App\Action\Action
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Catalog\Model\Design $catalogDesign
      * @param \Magento\Framework\Session\Generic $reviewSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -119,7 +121,7 @@ class Product extends \Magento\Framework\App\Action\Action
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Catalog\Model\Design $catalogDesign,
         \Magento\Framework\Session\Generic $reviewSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_storeManager = $storeManager;

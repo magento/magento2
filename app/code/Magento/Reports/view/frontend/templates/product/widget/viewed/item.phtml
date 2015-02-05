@@ -3,31 +3,34 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Reports\Block\Product\Widget\Viewed\Item */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Reports\Block\Product\Widget\Viewed\Item */
 ?>
 
 <?php
-$type = $this->getType() . '-' . $this->getViewMode();
+$type = $block->getType() . '-' . $block->getViewMode();
 
-$item = $this->getProduct();
+$item = $block->getProduct();
 
-$imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
-$image = $this->getImageType();
+$imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+$image = $block->getImageType();
 $rating = 'short';
 ?>
 <div class="block" id="widget_viewed_item" data-sku="<?php echo $item->getSku(); ?>" style="display: none;">
     <li class="item product">
         <div class="product">
             <?php echo '<!-- ' . $image . '-->' ?>
-            <a href="<?php echo $this->getProductUrl($item) ?>" class="product photo">
+            <a href="<?php echo $block->getProductUrl($item) ?>" class="product photo">
                 <?php echo $imageBlock->init($item, $image)->toHtml() ?>
             </a>
             <div class="product details">
-                <strong class="product name"><a title="<?php echo $this->escapeHtml($item->getName()) ?>" href="<?php echo $this->getProductUrl($item) ?>">
-                    <?php echo $this->escapeHtml($item->getName()) ?></a>
+                <strong class="product name"><a title="<?php echo $block->escapeHtml($item->getName()) ?>" href="<?php echo $block->getProductUrl($item) ?>">
+                    <?php echo $block->escapeHtml($item->getName()) ?></a>
                 </strong>
 
-                <?php echo $this->getProductPriceHtml(
+                <?php echo $block->getProductPriceHtml(
                     $item,
                     \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                     \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
@@ -37,19 +40,19 @@ $rating = 'short';
                 ) ?>
 
                 <?php if ($rating): ?>
-                    <?php echo $this->getReviewsSummaryHtml($item, $rating) ?>
+                    <?php echo $block->getReviewsSummaryHtml($item, $rating) ?>
                 <?php endif; ?>
 
                 <div class="product actions">
                     <div class="primary">
                         <?php if ($item->isSaleable()): ?>
                             <?php if ($item->getTypeInstance()->hasRequiredOptions($item)): ?>
-                                <button class="action tocart" data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($item) ?>"}}' type="button" title="<?php echo __('Add to Cart') ?>">
+                                <button class="action tocart" data-mage-init='{"redirectUrl": {"url": "<?php echo $block->getAddToCartUrl($item) ?>"}}' type="button" title="<?php echo __('Add to Cart') ?>">
                                     <span><?php echo __('Add to Cart') ?></span>
                                 </button>
                             <?php else: ?>
                                 <?php $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
-                                $postData = $postDataHelper->getPostData($this->getAddToCartUrl($item), ['product' => $item->getEntityId()])
+                                $postData = $postDataHelper->getPostData($block->getAddToCartUrl($item), ['product' => $item->getEntityId()])
                                 ?>
                                 <button class="action tocart"
                                         data-post='<?php echo $postData; ?>'
@@ -68,11 +71,11 @@ $rating = 'short';
 
                     <div class="secondary-addto-links" data-role="add-to-links">
                         <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()): ?>
-                            <a href="#" data-post='<?php echo $this->getAddToWishlistParams($item); ?>'  class="action towishlist" data-action="add-to-wishlist" title="<?php echo __('Add to Wishlist') ?>">
+                            <a href="#" data-post='<?php echo $block->getAddToWishlistParams($item); ?>'  class="action towishlist" data-action="add-to-wishlist" title="<?php echo __('Add to Wishlist') ?>">
                                 <span><?php echo __('Add to Wishlist') ?></span>
                             </a>
                         <?php endif; ?>
-                        <?php if ($this->getAddToCompareUrl()): ?>
+                        <?php if ($block->getAddToCompareUrl()): ?>
                             <?php
                             $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
                             ?>

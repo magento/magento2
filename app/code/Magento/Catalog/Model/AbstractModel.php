@@ -55,7 +55,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -64,7 +64,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param AttributeDataBuilder $customAttributeBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -74,7 +74,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         AttributeDataBuilder $customAttributeBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -313,6 +313,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param   string $attributeCode
      * @return  bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getExistsStoreValueFlag($attributeCode)
     {

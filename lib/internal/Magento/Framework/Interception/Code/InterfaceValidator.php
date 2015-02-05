@@ -36,6 +36,8 @@ class InterfaceValidator
      *
      * @return void
      * @throws ValidatorException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function validate($pluginClass, $interceptedType)
     {

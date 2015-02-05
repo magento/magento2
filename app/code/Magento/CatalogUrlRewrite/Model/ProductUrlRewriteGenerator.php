@@ -40,7 +40,7 @@ class ProductUrlRewriteGenerator
     /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry */
     protected $productCategories;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var \Magento\Framework\Store\StoreManagerInterface */
     protected $storeManager;
 
     /**
@@ -49,7 +49,7 @@ class ProductUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator,
@@ -57,7 +57,7 @@ class ProductUrlRewriteGenerator
         CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator,
         ObjectRegistryFactory $objectRegistryFactory,
         StoreViewService $storeViewService,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->canonicalUrlRewriteGenerator = $canonicalUrlRewriteGenerator;
         $this->currentUrlRewritesRegenerator = $currentUrlRewritesRegenerator;

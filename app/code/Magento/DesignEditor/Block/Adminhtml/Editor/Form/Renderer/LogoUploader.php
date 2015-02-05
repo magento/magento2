@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
 
 /**
@@ -93,7 +96,7 @@ class LogoUploader extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Ren
     {
         $image = null;
         if (null !== $store) {
-            $image = basename($this->_scopeConfig->getValue('design/header/logo_src', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()));
+            $image = basename($this->_scopeConfig->getValue('design/header/logo_src', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store->getId()));
         }
         return $image;
     }

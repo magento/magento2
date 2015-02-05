@@ -15,6 +15,7 @@ namespace Magento\Framework\View\Element;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractBlock extends \Magento\Framework\Object implements BlockInterface
 {
@@ -621,7 +622,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
         $this->_eventManager->dispatch('view_block_abstract_to_html_before', ['block' => $this]);
         if ($this->_scopeConfig->getValue(
             'advanced/modules_disable_output/' . $this->getModuleName(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )) {
             return '';
         }

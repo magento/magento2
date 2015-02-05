@@ -39,6 +39,8 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
      * Edit category page
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
@@ -47,7 +49,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         $categoryId = (int)$this->getRequest()->getParam('id');
 
         if ($storeId && !$categoryId && !$parentId) {
-            $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore($storeId);
+            $store = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore($storeId);
             $this->getRequest()->setParam('id', (int)$store->getRootCategoryId());
         }
 

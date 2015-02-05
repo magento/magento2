@@ -6,11 +6,11 @@
 
 namespace Magento\Tax\Test\Block\Adminhtml\Rule\Edit;
 
-use Mtf\Client\Locator;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Tax\Test\Fixture\TaxRule;
-use Mtf\Client\Element\SimpleElement;
-use Mtf\Block\Form as FormInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Block\Form as FormInterface;
 
 /**
  * Form for tax rule creation.
@@ -220,7 +220,7 @@ class Form extends FormInterface
                         return $input->isVisible() ? true : null;
                     }
                 );
-                $element->find($this->addNewInput)->setValue($taxClass);
+                $element->find($this->addNewInput)->keys([$taxClass]);
                 $element->find($this->saveButton)->click();
                 $this->waitUntilOptionIsVisible($element, $taxClass);
             }
@@ -276,7 +276,7 @@ class Form extends FormInterface
                 return $element->isVisible() ? true : null;
             }
         );
-        /** @var \Mtf\Client\Element\MultiselectlistElement $taxRates */
+        /** @var \Magento\Mtf\Client\Element\MultiselectlistElement $taxRates */
         $taxRates = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
 
         return $taxRates->getAllValues();

@@ -312,8 +312,7 @@ return [
     'wishlist_item_option' => 'Magento_Wishlist',
     'wishlist' => 'Magento_Wishlist',
     'admin_system_messages' => 'Magento_AdminNotification',
-    'core_theme' => 'Magento_Core',
-    'core_theme_files' => 'Magento_Core',
-    'core_theme_files_link' => 'Magento_Core',
+    'theme' => 'Magento_Theme',
+    'theme_files' => 'Magento_Theme',
     'vde_theme_change' => 'Magento_DesignEditor'
 ];

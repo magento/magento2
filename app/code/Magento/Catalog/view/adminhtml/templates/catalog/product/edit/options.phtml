@@ -3,8 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options */ ?>
+<?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options */ ?>
 
 <div class="fieldset-wrapper" id="product-custom-options-wrapper">
     <div class="fieldset-wrapper-title">
@@ -22,12 +25,12 @@
 
             <div id="product_options_container">
                 <div id="product_options_container_top"></div>
-                <?php echo $this->getOptionsBoxHtml() ?>
+                <?php echo $block->getOptionsBoxHtml() ?>
             </div>
 
             <div class="actions">
-                <?php echo $this->getChildHtml('import_button') ?>
-                <?php echo $this->getAddButtonHtml() ?>
+                <?php echo $block->getChildHtml('import_button') ?>
+                <?php echo $block->getAddButtonHtml() ?>
             </div>
         </fieldset>
     </div>

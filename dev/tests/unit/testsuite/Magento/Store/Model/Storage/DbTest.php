@@ -4,6 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Store\Model\Storage;
 
 /**
@@ -341,7 +344,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )->will($this->returnValue(true));
         $this->assertFalse($this->_model->isSingleStoreMode());
 
@@ -350,7 +353,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )->will($this->returnValue(false));
         $this->assertFalse($this->_model->isSingleStoreMode());
 
@@ -359,7 +362,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )->will($this->returnValue(true));
         //set $this->hasSingleStore() to true
         $this->prepareMockForReinit();
@@ -371,7 +374,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )->will($this->returnValue(false));
         $this->assertTrue($this->_model->isSingleStoreMode());
     }

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\Order\Pdf\Total;
 
 /**
@@ -89,6 +92,7 @@ class DefaultTotal extends \Magento\Framework\Object
      * )
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFullTaxInfo()
     {

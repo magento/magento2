@@ -6,15 +6,15 @@
 
 namespace Magento\Backend\Test\Block\Widget;
 
-use Mtf\Block\BlockFactory;
-use Mtf\Block\Mapper;
-use Mtf\Client\Locator;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
-use Mtf\Client\BrowserInterface;
-use Mtf\Client\Element\SimpleElement;
-use Mtf\Util\Iterator\File;
-use Mtf\Util\XmlConverter;
+use Magento\Mtf\Block\BlockFactory;
+use Magento\Mtf\Block\Mapper;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Util\Iterator\File;
+use Magento\Mtf\Util\XmlConverter;
 
 /**
  * Class FormTabs
@@ -253,7 +253,7 @@ class FormTabs extends Form
         foreach ($data as $field => $value) {
             $attributes = $fixture->getDataFieldConfig($field);
             $attributes['value'] = $value;
-            if (array_key_exists('group', $attributes) && $attributes['group'] !== null) {
+            if (array_key_exists('group', $attributes) && $attributes['group'] != 'null') {
                 $tabs[$attributes['group']][$field] = $attributes;
             } elseif (!array_key_exists('group', $attributes)) {
                 $this->unassignedFields[$field] = $attributes;

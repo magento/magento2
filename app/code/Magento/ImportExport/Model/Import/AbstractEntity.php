@@ -8,6 +8,8 @@ namespace Magento\ImportExport\Model\Import;
 
 /**
  * Import entity abstract model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractEntity
 {
@@ -244,6 +246,7 @@ abstract class AbstractEntity
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
      * @param array $data
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
@@ -265,7 +268,7 @@ abstract class AbstractEntity
             $data['page_size']
         ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int)$this->_scopeConfig->getValue(
             static::XML_PATH_PAGE_SIZE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) : 0);
         $this->_maxDataSize = isset(
             $data['max_data_size']
@@ -274,7 +277,7 @@ abstract class AbstractEntity
             $data['bunch_size']
         ) ? $data['bunch_size'] : (static::XML_PATH_BUNCH_SIZE ? (int)$this->_scopeConfig->getValue(
             static::XML_PATH_BUNCH_SIZE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) : 0);
     }
 
@@ -319,6 +322,8 @@ abstract class AbstractEntity
      * Validate data rows and save bunches to DB
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _saveValidatedBunches()
     {
@@ -596,6 +601,7 @@ abstract class AbstractEntity
      * @param array $rowData Row data
      * @param int $rowNumber
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isAttributeValid($attributeCode, array $attributeParams, array $rowData, $rowNumber)
     {

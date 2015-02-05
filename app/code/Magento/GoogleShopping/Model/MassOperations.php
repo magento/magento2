@@ -12,6 +12,7 @@ use Magento\GoogleShopping\Model\Resource\Item\Collection as ItemCollection;
  * Controller for mass opertions with items
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassOperations
 {
@@ -32,7 +33,7 @@ class MassOperations
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -69,18 +70,19 @@ class MassOperations
      * @param \Magento\GoogleShopping\Model\ItemFactory $itemFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Notification\NotifierInterface $notifier
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\GoogleShopping\Helper\Data $gleShoppingData
      * @param \Magento\GoogleShopping\Helper\Category $gleShoppingCategory
      * @param array $data
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory,
         \Magento\GoogleShopping\Model\ItemFactory $itemFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Notification\NotifierInterface $notifier,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Psr\Log\LoggerInterface $logger,
         \Magento\GoogleShopping\Helper\Data $gleShoppingData,
         \Magento\GoogleShopping\Helper\Category $gleShoppingCategory,
@@ -143,6 +145,8 @@ class MassOperations
      * @param int $storeId
      * @return $this
      * @throws \Exception|\Zend_Gdata_App_CaptchaRequiredException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addProducts($productIds, $storeId)
     {
@@ -217,6 +221,7 @@ class MassOperations
      * @param int[]|ItemCollection $items
      * @return $this
      * @throws \Exception|\Zend_Gdata_App_CaptchaRequiredException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function synchronizeItems($items)
     {
@@ -303,6 +308,7 @@ class MassOperations
      * @param int[]|ItemCollection $items
      * @return $this
      * @throws \Exception|\Zend_Gdata_App_CaptchaRequiredException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function deleteItems($items)
     {

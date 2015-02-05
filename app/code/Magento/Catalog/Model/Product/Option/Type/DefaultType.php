@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\Model\Exception;
@@ -11,6 +14,7 @@ use Magento\Framework\Model\Exception;
  * Catalog product option default type
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultType extends \Magento\Framework\Object
 {
@@ -186,7 +190,7 @@ class DefaultType extends \Magento\Framework\Object
      */
     public function getConfigData($key)
     {
-        return $this->_scopeConfig->getValue('catalog/custom_options/' . $key, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue('catalog/custom_options/' . $key, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -216,6 +220,7 @@ class DefaultType extends \Magento\Framework\Object
      * Check skip required option validation
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getSkipCheckRequiredOption()
     {
@@ -298,6 +303,7 @@ class DefaultType extends \Magento\Framework\Object
      * @param string $optionValue
      * @param array $productOptionValues Values for product option
      * @return string|null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
@@ -321,6 +327,7 @@ class DefaultType extends \Magento\Framework\Object
      * @param string $optionValue Prepared for cart option value
      * @param float $basePrice For percent price type
      * @return float
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getOptionPrice($optionValue, $basePrice)
     {
@@ -335,6 +342,7 @@ class DefaultType extends \Magento\Framework\Object
      * @param string $optionValue Prepared for cart option value
      * @param string $skuDelimiter Delimiter for Sku parts
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getOptionSku($optionValue, $skuDelimiter)
     {

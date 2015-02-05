@@ -13,6 +13,7 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @param string|null $coreRoute
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($coreRoute = null)
     {
@@ -20,7 +21,7 @@ class Index extends \Magento\Framework\App\Action\Action
             'Magento\Framework\App\Config\ScopeConfigInterface'
         )->getValue(
             \Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if (!$this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId)) {
             $this->_forward('defaultIndex');

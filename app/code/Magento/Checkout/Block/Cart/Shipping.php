@@ -76,7 +76,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getConfig($path)
     {
-        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -124,7 +124,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     {
         if ($name = $this->_scopeConfig->getValue(
             'carriers/' . $carrierCode . '/title',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $name;
@@ -196,6 +196,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * Show City in Shipping Estimation
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCityActive()
     {
@@ -206,6 +207,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * Show State in Shipping Estimation. Result updated using plugins
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getStateActive()
     {
