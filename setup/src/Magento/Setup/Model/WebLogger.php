@@ -120,7 +120,7 @@ class WebLogger implements LoggerInterface
      */
     public function get()
     {
-        $fileContents = explode('\n', $this->directory->readFile($this->logFile));
+        $fileContents = explode(PHP_EOL, $this->directory->readFile($this->logFile));
         return $fileContents;
     }
 
