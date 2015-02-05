@@ -68,7 +68,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey
      * @return $this
      */
-    public function setCustomerTaxClassKey($customerTaxClassKey);
+    public function setCustomerTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey = null);
 
     /**
      * Get customer id
