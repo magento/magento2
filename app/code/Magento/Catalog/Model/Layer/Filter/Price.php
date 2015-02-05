@@ -227,7 +227,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param float|string $fromPrice
      * @param float|string $toPrice
-     * @return \Magento\Framework\Phrase
+     * @return float|\Magento\Framework\Phrase
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {

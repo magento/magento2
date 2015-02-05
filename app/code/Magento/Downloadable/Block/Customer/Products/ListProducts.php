@@ -136,7 +136,7 @@ class ListProducts extends \Magento\Framework\View\Element\Template
      * Return number of left downloads or unlimited
      *
      * @param Item $item
-     * @return \Magento\Framework\Phrase|string
+     * @return \Magento\Framework\Phrase|int
      */
     public function getRemainingDownloads($item)
     {
