@@ -9,6 +9,7 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface;
 
 /**
  * Stock item resource model
@@ -29,14 +30,16 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param AppResource $resource
+     * @param ObjectRelationProcessorInterface $objectRelationProcessor
      * @param Processor $processor
      */
     public function __construct(
         AppResource $resource,
+        ObjectRelationProcessorInterface $objectRelationProcessor,
         Processor $processor
     ) {
         $this->stockIndexerProcessor = $processor;
-        parent::__construct($resource);
+        parent::__construct($resource, $objectRelationProcessor);
     }
 
     /**

@@ -28,6 +28,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
 
     /**
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -35,6 +36,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,
@@ -42,7 +44,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     ) {
         $this->attrLockValidator = $lockValidator;
         $this->_eavConfig = $eavConfig;
-        parent::__construct($resource, $storeManager, $eavEntityType);
+        parent::__construct($resource, $objectRelationProcessor, $storeManager, $eavEntityType);
     }
 
     /**
