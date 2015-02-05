@@ -425,7 +425,7 @@ class ConsoleController extends AbstractActionController
             ->get('Magento\Framework\Module\DbVersionInfo');
         $outdated = $dbVersionInfo->getDbVersionErrors();
         if (!empty($outdated)) {
-            $this->log->log('You need to update these modules:');
+            $this->log->log('The module code base doesn’t match the DB schema and data.');
             foreach ($outdated as $row) {
                 $this->log->log(sprintf(
                     "%20s %10s: %11s  ->  %-11s",
@@ -435,7 +435,10 @@ class ConsoleController extends AbstractActionController
                     $row[DbVersionInfo::KEY_REQUIRED]
                 ));
             }
-            $this->log->log('Run the "Update" command to update your DB schema and data.');
+            $this->log->log(
+                'Some modules use code versions newer or older than the database. ' .
+                'First update the module code, then run the “Update” command.'
+            );
         } else {
             $this->log->log('All modules are up to date');
         }

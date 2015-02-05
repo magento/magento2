@@ -207,7 +207,8 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
                 ]],
                 [
                     1 => '%wModule_One%wschema:%w1.0.0%w->%w1.0.1%w',
-                    2 => "Run 'update' command to update your DB schema and/or data"
+                    2 => 'Some modules use code versions newer or older than the database. ' .
+                    "First update the module code, then run the “Update” command."
                 ],
             ],
             'no outdated modules' => [
