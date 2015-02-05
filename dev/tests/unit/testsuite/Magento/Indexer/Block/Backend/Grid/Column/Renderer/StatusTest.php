@@ -8,11 +8,11 @@ namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 class StatusTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param array $index
+     * @param array $indexValues
      * @param string $expectedResult
      * @dataProvider renderDataProvider
      */
-    public function testRender($index, $expectedResult)
+    public function testRender($indexValues, $expectedResult)
     {
         $context = $this->getMockBuilder('\Magento\Backend\Block\Context')
             ->disableOriginalConstructor()
@@ -22,10 +22,10 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $obj->setGetter(null);
         $obj->setDefault('');
         $obj->setValue('');
-        $obj->setIndex($index[0]);
-        $obj->setData($index[0], $index[0]);
+        $obj->setIndex($indexValues[0]);
+        $obj->setData($indexValues[0], $indexValues[0]);
         $model->setColumn($obj);
-        $model->setIndex($index[0]);
+        $model->setIndex($indexValues[0]);
         $result = $model->render($obj);
         $this->assertEquals($result, '<span class="' . $expectedResult['class'] . '"><span>' . $expectedResult['text'] . '</span></span>');
     }

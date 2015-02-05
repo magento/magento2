@@ -8,12 +8,12 @@ namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 class ScheduledTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param bool $bool
+     * @param bool $rowValue
      * @param string $class
      * @param string $text
      * @dataProvider typeProvider
      */
-    public function testRender($bool, $class, $text)
+    public function testRender($rowValue, $class, $text)
     {
         $html = '<span class="' . $class . '"><span>' . $text . '</span></span>';
         $row = new \Magento\Framework\Object();
@@ -24,7 +24,7 @@ class ScheduledTest extends \PHPUnit_Framework_TestCase
 
         $model = new Scheduled($context);
         $column->setGetter('getValue');
-        $row->setValue($bool);
+        $row->setValue($rowValue);
         $model->setColumn($column);
 
         $result = $model->render($row);

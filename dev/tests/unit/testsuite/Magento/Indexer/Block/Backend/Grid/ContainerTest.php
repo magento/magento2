@@ -18,6 +18,5 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($block->_controller, $controller);
         $this->assertEquals($block->_blockGroup, $blockGroup);
-
     }
 }
