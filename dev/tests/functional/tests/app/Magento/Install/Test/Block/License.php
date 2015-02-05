@@ -19,7 +19,7 @@ class License extends Block
      *
      * @var string
      */
-    protected $back = '.btn.btn-large.btn-prime';
+    protected $back = '[ng-click="nextState()"]';
 
     /**
      * License text.

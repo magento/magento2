@@ -40,7 +40,7 @@ class Install extends Block
      *
      * @var string
      */
-    protected $launchAdmin = "//*[@type='button']";
+    protected $launchAdmin = '.btn-large.btn-prime';
 
     /**
      * Click on 'Install Now' button.
@@ -50,7 +50,7 @@ class Install extends Block
     public function clickInstallNow()
     {
         $this->_rootElement->find($this->installNow, Locator::SELECTOR_XPATH)->click();
-        $this->waitForElementVisible($this->launchAdmin, Locator::SELECTOR_XPATH);
+        $this->waitForElementVisible($this->launchAdmin, Locator::SELECTOR_CSS);
     }
 
     /**
