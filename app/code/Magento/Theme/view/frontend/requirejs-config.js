@@ -6,7 +6,6 @@
 var config = {
     map: {
         "*": {
-            "cookieBlock":            "Magento_Theme/js/notices",
             "rowBuilder":             "Magento_Theme/js/row-builder",
             "toggleAdvanced":         "mage/toggle",
             "translateInline":        "mage/translate-inline",

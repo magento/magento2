@@ -363,7 +363,7 @@ return [
     ['Mage_Adminhtml_Model_System_Config_Backend_Baseurl', 'Magento\Backend\Model\Config\Backend\Baseurl'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Cache', 'Magento\Backend\Model\Config\Backend\Cache'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Category', 'Magento\Catalog\Model\Config\Backend\Category'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Cookie', 'Magento\Backend\Model\Config\Backend\Cookie'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Cookie', 'Magento\Cookie\Model\Config\Backend\Cookie'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Datashare', 'Magento\Backend\Model\Config\Backend\Datashare'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Encrypted', 'Magento\Backend\Model\Config\Backend\Encrypted'],
     ['Mage_Adminhtml_Model_System_Config_Backend_File', 'Magento\Backend\Model\Config\Backend\File'],
@@ -974,6 +974,7 @@ return [
     ['Mage_Sales_Model_Entity_Quote_Payment_Collection'],
     ['Mage_Sales_Model_Entity_Sale_Collection'],
     ['Mage_Sales_Model_Entity_Setup'],
+    ['Magento\Cms\Controller\Index\NoCookies'],
     ['Mage_Shipping_ShippingController'],
     ['Mage_Tag_Block_Adminhtml_Report_Customer_Detail_Grid'],
     ['Mage_Tag_Block_Adminhtml_Report_Customer_Grid'],
@@ -2017,7 +2018,7 @@ return [
     ['Magento\Catalog\Helper\Product\Flat'],
     ['Magento\Catalog\Helper\Flat\AbstractFlat'],
     ['Magento\Core\App\Action\Plugin\Install', 'Magento\Framework\App\Bootstrap'],
-    ['Magento\Core\App\Action\Plugin\Session', 'Magento\Core\Block\RequireCookie'],
+    ['Magento\Core\App\Action\Plugin\Session', 'Magento\Cookie\Block\RequireCookie'],
     [
         'Magento\Core\Model\LocaleInterface',
         'Magento\Framework\Locale\ResolverInterface, Magento\Framework\Locale\CurrencyInterface,' .
@@ -2212,6 +2213,7 @@ return [
     ['Magento\Core\Block\Store\Switcher', 'Magento\Store\Block\Store\Switcher'],
     ['Magento\Core\Block\Switcher', 'Magento\Store\Block\Switcher'],
     ['Magento\Core\Helper\Cookie', 'Magento\Store\Helper\Cookie'],
+    ['Magento\Store\Helper\Cookie', 'Magento\Cookie\Helper\Cookie'],
     ['Magento\Core\Model\BaseScopeResolver'],
     ['Magento\Core\Model\Config\Scope\Processor\Placeholder', 'Magento\Store\Model\Config\Processor\Placeholder'],
     ['Magento\Core\Model\Config\Scope\Reader\DefaultReader', 'Magento\Store\Model\Config\Reader\DefaultReader'],
@@ -2908,4 +2910,10 @@ return [
         'Magento\Core\Model\TemplateEngine\Plugin\DebugHints',
         'Magento\Developer\Model\TemplateEngine\Plugin\DebugHints'
     ],
+    ['Magento\Backend\Model\Config\Backend\Cookie', 'Magento\Cookie\Model\Config\Backend\Cookie'],
+    ['Magento\Backend\Model\Config\Backend\Cookie\Domain', 'Magento\Cookie\Model\Config\Backend\Domain'],
+    ['Magento\Backend\Model\Config\Backend\Cookie\Lifetime', 'Magento\Cookie\Model\Config\Backend\Lifetime'],
+    ['Magento\Backend\Model\Config\Backend\Cookie\Path', 'Magento\Cookie\Model\Config\Backend\Path'],
+    ['Magento\Core\Block\RequireCookie', 'Magento\Cookie\Block\RequireCookie'],
+    ['Magento\Core\Controller\Index\NoCookies', 'Magento\Cookie\Controller\Index\NoCookies']
 ];
