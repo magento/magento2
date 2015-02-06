@@ -474,6 +474,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             $object->beforeDelete();
             $this->_beforeDelete($object);
             $this->objectRelationProcessor->delete(
+                $this->transactionManager,
                 $connection,
                 $this->getMainTable(),
                 $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId()),
