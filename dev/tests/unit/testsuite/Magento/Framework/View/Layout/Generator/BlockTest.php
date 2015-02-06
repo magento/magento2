@@ -50,6 +50,8 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                                     [
                                         'test_argument' => $argumentData
                                     ],
+                                    'config_path',
+                                    'scope',
                                 ],
                             ]
                         ],
@@ -138,6 +140,14 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $eventManager->expects($this->once())->method('dispatch')
             ->with('core_layout_block_create_after', [$literal => $blockInstance]);
 
+        $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
+        $scopeConfigMock->expects($this->once())->method('isSetFlag')
+            ->with('config_path', 'scope', 'default')->willReturn(true);
+
+        $scopeResolverMock = $this->getMock('Magento\Framework\App\ScopeResolverInterface', [], [], '', false);
+        $scopeResolverMock->expects($this->once())->method('getScope')
+            ->willReturn('default');
+
         /** @var \Magento\Framework\View\Layout\Generator\Block $block */
         $block = (new \Magento\TestFramework\Helper\ObjectManager($this))
             ->getObject(
@@ -145,7 +155,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 [
                     'argumentInterpreter' => $argumentInterpreter,
                     'blockFactory' => $blockFactory,
-                    'eventManager' => $eventManager
+                    'eventManager' => $eventManager,
+                    'scopeConfig' => $scopeConfigMock,
+                    'scopeResolver' => $scopeResolverMock,
                 ]
             );
         $block->process($readerContext, $generatorContext);
