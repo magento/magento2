@@ -61,14 +61,6 @@ class CartTest extends \PHPUnit_Framework_TestCase
             $this->returnSelf()
         );
 
-        $redirect->expects(
-            $this->once()
-        )->method(
-            'redirect'
-        )->will(
-            $this->returnValue('http://some-url/index.php/checkout/cart/')
-        );
-
         $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $storeMock->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://some-url/'));
 

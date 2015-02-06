@@ -64,10 +64,12 @@
                             <div class="product-item-actions">
                                 <div class="actions-primary">
                                     <?php if ($_item->isSaleable()): ?>
-                                        <button type="button" class="action tocart primary"
-                                                data-url="<?php echo $this->helper('Magento\Catalog\Helper\Product\Compare')->getAddToCartUrl($_item) ?>">
-                                            <span><?php echo __('Add to Cart') ?></span>
-                                        </button>
+                                        <form data-role="tocart-form" action="<?php echo $this->helper('Magento\Catalog\Helper\Product\Compare')->getAddToCartUrl($_item); ?>" method="post">
+                                            <button type="submit" class="action tocart primary">
+                                                <span><?php echo __('Add to Cart'); ?></span>
+                                                <span><?php echo __('Add to Cart'); ?></span>
+                                            </button>
+                                        </form>
                                     <?php else: ?>
                                         <?php if ($_item->getIsSalable()): ?>
                                             <div class="stock available"><span><?php echo __('In stock') ?></span></div>
@@ -129,6 +131,17 @@
                 </tbody>
             </table>
         </div>
+        <?php if (!$block->isRedirectToCartEnabled()) : ?>
+            <script>
+                require([
+                    'jquery',
+                    'domReady!',
+                    'Magento_Catalog/js/catalog-add-to-cart'
+                ], function($) {
+                    $('[data-role=tocart-form]').catalogAddToCart();
+                });
+            </script>
+        <?php endif; ?>
 <?php else: ?>
     <div class="message info empty"><div><?php echo __('You have no items to compare.') ?></div></div>
 <?php endif; ?>
