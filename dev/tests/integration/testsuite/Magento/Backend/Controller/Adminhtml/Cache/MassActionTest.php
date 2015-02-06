@@ -6,8 +6,8 @@
 
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Cache\Type\ConfigSegment;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class MassActionTest extends \Magento\Backend\Utility\Controller
 {
@@ -24,14 +24,6 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
         $config = Bootstrap::getObjectManager()->get('Magento\Framework\App\DeploymentConfig');
         $data = $config->getSegment(ConfigSegment::SEGMENT_KEY);
         self::$typesSegment = new ConfigSegment($data);
-    }
-
-    protected function setUp()
-    {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('Test was skipped by MAGETWO-32880');
-        }
-        parent::setUp();
     }
 
     protected function tearDown()
@@ -56,18 +48,11 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setParams(['types' => $typesToEnable]);
         $this->dispatch('backend/admin/cache/massEnable');
 
-        Bootstrap::getInstance()->reinitialize();
-
-        /** @var  \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList */
-        $cacheTypeList = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\TypeListInterface');
-        $types = array_keys($cacheTypeList->getTypes());
-        /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
-        $cacheState = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\StateInterface');
-        foreach ($types as $type) {
-            if (in_array($type, $typesToEnable)) {
-                $this->assertTrue($cacheState->isEnabled($type), "Type '{$type}' has not been enabled");
+        foreach ($this->getCacheStates() as $cacheType => $cacheState) {
+            if (in_array($cacheType, $typesToEnable)) {
+                $this->assertEquals(1, $cacheState, "Type '{$cacheType}' has not been enabled");
             } else {
-                $this->assertFalse($cacheState->isEnabled($type), "Type '{$type}' must remain disabled");
+                $this->assertEquals(0, $cacheState, "Type '{$cacheType}' has not been enabled");
             }
         }
     }
@@ -83,20 +68,28 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setParams(['types' => $typesToDisable]);
         $this->dispatch('backend/admin/cache/massDisable');
 
-        Bootstrap::getInstance()->reinitialize();
-
-        /** @var  \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList */
-        $cacheTypeList = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\TypeListInterface');
-        $types = array_keys($cacheTypeList->getTypes());
-        /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
-        $cacheState = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\StateInterface');
-        foreach ($types as $type) {
-            if (in_array($type, $typesToDisable)) {
-                $this->assertFalse($cacheState->isEnabled($type), "Type '{$type}' has not been disabled");
+        foreach ($this->getCacheStates() as $cacheType => $cacheState) {
+            if (in_array($cacheType, $typesToDisable)) {
+                $this->assertEquals(0, $cacheState, "Type '{$cacheType}' has not been disabled");
             } else {
-                $this->assertTrue($cacheState->isEnabled($type), "Type '{$type}' must remain enabled");
+                $this->assertEquals(1, $cacheState, "Type '{$cacheType}' must remain enabled");
             }
         }
+    }
+
+    /**
+     * Retrieve cache states (enabled/disabled) information
+     *
+     * Access configuration file directly as it is not possible to re-include modified file under HHVM
+     * @link https://github.com/facebook/hhvm/issues/1447
+     *
+     * @return array
+     */
+    protected function getCacheStates()
+    {
+        $configPath = Bootstrap::getInstance()->getAppTempDir() . '/etc/config.php';
+        $configData = eval(str_replace('<?php', '', file_get_contents($configPath)));
+        return $configData['cache_types'];
     }
 
     /**
@@ -129,7 +122,7 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
         $cacheTypeList = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\TypeListInterface');
         $invalidatedTypes = array_keys($cacheTypeList->getInvalidated());
         $failed = array_intersect($typesToRefresh, $invalidatedTypes);
-        $this->assertEmpty($failed, 'Could not refresh following cache types: ' . join(', ', $failed));
+        $this->assertEmpty($failed, 'Could not refresh following cache types: ' . implode(', ', $failed));
     }
 
     /**
@@ -143,8 +136,8 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
                 [
                     \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
                     \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
-                    \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER
-                ]
+                    \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER,
+                ],
             ]
         ];
     }
