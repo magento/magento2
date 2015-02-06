@@ -809,7 +809,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
         }
 
-        return $this->getSpecifyOptionMessage();
+        return (string)$this->getSpecifyOptionMessage();
     }
 
     /**
@@ -834,7 +834,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
             }
             if (empty($attributes)) {
-                throw new \Magento\Framework\Model\Exception($this->getSpecifyOptionMessage());
+                throw new \Magento\Framework\Model\Exception((string)$this->getSpecifyOptionMessage());
             }
         }
         return $this;
@@ -843,11 +843,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Retrieve message for specify option(s)
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getSpecifyOptionMessage()
     {
-        return (string)__('Please specify the product\'s option(s).');
+        return __('Please specify the product\'s option(s).');
     }
 
     /**
