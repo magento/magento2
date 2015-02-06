@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
-  <page name="OrderView" area="Adminhtml" mca="sales/order/view" module="Magento_Sales">
+  <page name="SalesOrderView" area="Adminhtml" mca="sales/order/view" module="Magento_Sales">
     <block name="pageActions" class="Magento\Sales\Test\Block\Adminhtml\Order\Actions" locator=".page-actions" strategy="css selector"/>
     <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>
     <block name="orderForm" class="Magento\Sales\Test\Block\Adminhtml\Order\View\OrderForm" locator="[id='page:main-container']" strategy="css selector"/>
