@@ -43,16 +43,6 @@ class Block implements Layout\ReaderInterface
     protected $argumentParser;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\Framework\App\ScopeResolverInterface
-     */
-    protected $scopeResolver;
-
-    /**
      * @var \Magento\Framework\View\Layout\ReaderPool
      */
     protected $readerPool;
@@ -68,22 +58,16 @@ class Block implements Layout\ReaderInterface
      * @param Layout\ScheduledStructure\Helper $helper
      * @param Layout\Argument\Parser $argumentParser
      * @param Layout\ReaderPool $readerPool
-     * @param App\Config\ScopeConfigInterface $scopeConfig
-     * @param App\ScopeResolverInterface $scopeResolver
      * @param string|null $scopeType
      */
     public function __construct(
         Layout\ScheduledStructure\Helper $helper,
         Layout\Argument\Parser $argumentParser,
         Layout\ReaderPool $readerPool,
-        App\Config\ScopeConfigInterface $scopeConfig,
-        App\ScopeResolverInterface $scopeResolver,
         $scopeType = null
     ) {
         $this->helper = $helper;
         $this->argumentParser = $argumentParser;
-        $this->scopeConfig = $scopeConfig;
-        $this->scopeResolver = $scopeResolver;
         $this->readerPool = $readerPool;
         $this->scopeType = $scopeType;
     }
@@ -147,10 +131,8 @@ class Block implements Layout\ReaderInterface
         $scheduledStructure->setStructureElementData($elementName, $data);
 
         $configPath = (string)$currentElement->getAttribute('ifconfig');
-        if (!empty($configPath)
-            && !$this->scopeConfig->isSetFlag($configPath, $this->scopeType, $this->scopeResolver->getScope())
-        ) {
-            $scheduledStructure->setElementToRemoveList($elementName);
+        if (!empty($configPath)) {
+            $scheduledStructure->setElementToIfconfigList($elementName, $configPath, $this->scopeType);
         }
     }
 
@@ -218,14 +200,9 @@ class Block implements Layout\ReaderInterface
         /** @var $actionElement Layout\Element */
         foreach ($this->getElementsByType($blockElement, self::TYPE_ACTION) as $actionElement) {
             $configPath = $actionElement->getAttribute('ifconfig');
-            if ($configPath
-                && !$this->scopeConfig->isSetFlag($configPath, $this->scopeType, $this->scopeResolver->getScope())
-            ) {
-                continue;
-            }
             $methodName = $actionElement->getAttribute('method');
             $actionArguments = $this->parseArguments($actionElement);
-            $actions[] = [$methodName, $actionArguments];
+            $actions[] = [$methodName, $actionArguments, $configPath, $this->scopeType];
         }
         return $actions;
     }

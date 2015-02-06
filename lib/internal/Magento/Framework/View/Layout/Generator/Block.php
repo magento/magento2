@@ -35,23 +35,37 @@ class Block implements Layout\GeneratorInterface
     protected $logger;
 
     /**
-     * Constructor
-     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var \Magento\Framework\App\ScopeResolverInterface
+     */
+    protected $scopeResolver;
+
+    /**
      * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
      * @param \Magento\Framework\Data\Argument\InterpreterInterface $argumentInterpreter
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      */
     public function __construct(
         \Magento\Framework\View\Element\BlockFactory $blockFactory,
         \Magento\Framework\Data\Argument\InterpreterInterface $argumentInterpreter,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\ScopeResolverInterface $scopeResolver
     ) {
         $this->blockFactory = $blockFactory;
         $this->argumentInterpreter = $argumentInterpreter;
         $this->eventManager = $eventManager;
         $this->logger = $logger;
+        $this->scopeConfig = $scopeConfig;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -100,8 +114,12 @@ class Block implements Layout\GeneratorInterface
         // Run all actions after layout initialization
         foreach ($blockActions as $elementName => $actions) {
             foreach ($actions as $action) {
-                list($methodName, $actionArguments) = $action;
-                $this->generateAction($blocks[$elementName], $methodName, $actionArguments);
+                list($methodName, $actionArguments, $configPath, $scopeType) = $action;
+                if (empty($configPath)
+                    || $this->scopeConfig->isSetFlag($configPath, $scopeType, $this->scopeResolver->getScope())
+                ) {
+                    $this->generateAction($blocks[$elementName], $methodName, $actionArguments);
+                }
             }
         }
         return $this;

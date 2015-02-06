@@ -72,11 +72,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     protected $structure;
 
     /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure
-     */
-    protected $scheduledStructure;
-
-    /**
      * Renderers registered for particular name
      *
      * @var array
@@ -119,11 +114,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @var bool
      */
     protected $cacheable;
-
-    /**
-     * @var \Magento\Framework\View\Page\Config\Structure
-     */
-    protected $pageConfigStructure;
 
     /**
      * @var \Magento\Framework\View\Layout\GeneratorPool
@@ -173,16 +163,14 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $this->_processorFactory = $processorFactory;
         $this->_eventManager = $eventManager;
         $this->structure = $structure;
-        $this->scheduledStructure = $scheduledStructure;
         $this->messageManager = $messageManager;
         $this->themeResolver = $themeResolver;
-        $this->pageConfigStructure = $pageConfigStructure;
         $this->readerPool = $readerPool;
         $this->generatorPool = $generatorPool;
         $this->cacheable = $cacheable;
         $this->cache = $cache;
 
-        $this->readerContext = new Layout\Reader\Context($this->scheduledStructure, $this->pageConfigStructure);
+        $this->readerContext = new Layout\Reader\Context($scheduledStructure, $pageConfigStructure);
         $this->generatorContext = new Layout\Generator\Context($this->structure, $this);
     }
 

@@ -103,6 +103,7 @@ class Layout
             'pageConfigStructure' => $objectManager->create('Magento\Framework\View\Page\Config\Structure'),
             'reader' => $objectManager->get('commonRenderPool'),
             'generatorPool' => $objectManager->get('Magento\Framework\View\Layout\GeneratorPool'),
+            'cache' => $objectManager->get('Magento\Framework\App\Cache\Type\Layout'),
         ];
     }
 }
