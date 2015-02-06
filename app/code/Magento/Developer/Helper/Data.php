@@ -6,7 +6,7 @@
 namespace Magento\Developer\Helper;
 
 /**
- * App config data helper
+ * Developer config data helper
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -16,7 +16,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_DEV_ALLOW_IPS = 'dev/restrict/allow_ips';
 
     /**
-     * @param null $storeId
+     * Check if the client remote address is allowed developer ip
+     *
+     * @param string|null $storeId
      * @return bool
      */
     public function isDevAllowed($storeId = null)

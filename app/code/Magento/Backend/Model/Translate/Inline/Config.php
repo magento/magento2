@@ -22,14 +22,14 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
 
     /**
      * @param \Magento\Backend\App\ConfigInterface $config
-     * @param \Magento\Developer\Helper\Data $helper
+     * @param \Magento\Developer\Helper\Data $devHelper
      */
     public function __construct(
         \Magento\Backend\App\ConfigInterface $config,
-        \Magento\Developer\Helper\Data $helper
+        \Magento\Developer\Helper\Data $devHelper
     ) {
         $this->config = $config;
-        $this->devHelper = $helper;
+        $this->devHelper = $devHelper;
     }
 
     /**
