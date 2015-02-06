@@ -76,7 +76,6 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
                 $this->selectedDelete($data['selected']);
             } else {
                 $this->messageManager->addError(__('Please select item(s).'));
-                $resultRedirect->setPath(static::REDIRECT_URL);
             }
         } catch (\Exception $e) {
             $this->messageManager->addError($e->getMessage());

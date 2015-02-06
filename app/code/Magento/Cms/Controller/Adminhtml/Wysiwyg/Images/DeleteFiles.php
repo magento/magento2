@@ -10,7 +10,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
-
     /**
      * @var \Magento\Framework\Controller\Result\JSONFactory
      */

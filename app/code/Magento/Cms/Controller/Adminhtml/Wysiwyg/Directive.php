@@ -38,8 +38,6 @@ class Directive extends \Magento\Backend\App\Action
     /**
      * Template directives callback
      *
-     * todo: move this to some model
-     *
      * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()

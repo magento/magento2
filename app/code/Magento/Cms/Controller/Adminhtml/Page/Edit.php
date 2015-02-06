@@ -72,7 +72,7 @@ class Edit extends \Magento\Backend\App\Action
     /**
      * Edit CMS page
      *
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
@@ -86,7 +86,7 @@ class Edit extends \Magento\Backend\App\Action
             $model->load($id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This page no longer exists.'));
-                /** \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+                /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
                 return $resultRedirect->setPath('*/*/');
