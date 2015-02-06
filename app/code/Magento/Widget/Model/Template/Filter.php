@@ -119,8 +119,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      */
     public function mediaDirective($construction)
     {
-        $value = isset($construction[2]) ? $construction[2] : '';
-        $params = $this->_getIncludeParameters($value);
+        $params = $this->_getIncludeParameters($construction[2]);
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
