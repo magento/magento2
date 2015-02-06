@@ -15,6 +15,7 @@ angular.module('customize-your-store', ['ngStorage'])
             selectAll: true,
             allModules: [],
             errorFlag : false,
+            showError: false,
             selectedModules : [],
             disabledModules: [],
             errorMessage: '',
