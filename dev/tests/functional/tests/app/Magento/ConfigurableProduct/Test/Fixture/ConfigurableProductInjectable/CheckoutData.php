@@ -176,6 +176,20 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     ],
                 ],
                 'qty' => 1,
+            ],
+            'two_options_one_two_dollars' => [
+                'options' => [
+                    'configurable_options' => [
+                        [
+                            'title' => 'attribute_key_0',
+                            'value' => 'option_key_0',
+                        ],
+                    ],
+                ],
+                'cartItem' => [
+                    'price' => 11,
+                ],
+                'qty' => 1,
             ]
         ];
         return isset($presets[$name]) ? $presets[$name] : null;

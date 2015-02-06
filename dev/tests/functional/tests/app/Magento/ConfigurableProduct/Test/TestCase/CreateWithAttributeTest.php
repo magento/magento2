@@ -6,9 +6,9 @@
 
 namespace Magento\ConfigurableProduct\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\Product;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Fixture\ProductAttribute;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
 use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\TestCase\Functional;
 
@@ -194,7 +194,7 @@ class CreateWithAttributeTest extends Functional
         );
         $price = $productViewBlock->getPriceBlock()->getPrice();
         $this->assertEquals(
-            number_format($product->getProductPrice(), 2),
+            number_format($product->getPrice(), 2),
             $price,
             'Product price does not correspond to specified.'
         );

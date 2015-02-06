@@ -60,6 +60,9 @@ class GroupId implements FixtureInterface
             $this->data = $data['customerGroup']->getCustomerGroupCode();
             $this->customerGroupFixture = $data['customerGroup'];
         }
+        if (isset($data['value'])) {
+            $this->data = $data['value'];
+        }
     }
 
     /**

@@ -26,7 +26,7 @@ class ProductPagination extends Block
     /**
      * Getting the active element to go to the next page
      *
-     * @return \Magento\Mtf\Client\Element|null
+     * @return \Magento\Mtf\Client\ElementInterface|null
      */
     public function getNextPage()
     {

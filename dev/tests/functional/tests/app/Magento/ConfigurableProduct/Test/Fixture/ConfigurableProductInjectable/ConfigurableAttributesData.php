@@ -245,6 +245,47 @@ class ConfigurableAttributesData implements FixtureInterface
             ],
         ],
 
+        'filterable_two_options_with_zero_price' => [
+            'attributes_data' => [
+                'attribute_key_0' => [
+                    'options' => [
+                        'option_key_0' => [
+                            'label' => 'option_key_1_%isolation%',
+                            'pricing_value' => 0,
+                            'is_percent' => 'No',
+                            'include' => 'Yes',
+                        ],
+                        'option_key_1' => [
+                            'label' => 'option_2_%isolation%',
+                            'pricing_value' => 0,
+                            'is_percent' => 'No',
+                            'include' => 'Yes',
+                        ],
+                    ],
+                ],
+            ],
+            'attributes' => [
+                'attribute_key_0' => 'catalogProductAttribute::filterable_dropdown_two_options',
+            ],
+            'products' => [],
+            'matrix' => [
+                'attribute_key_0:option_key_0' => [
+                    'display' => 'Yes',
+                    'quantity_and_stock_status' => [
+                        'qty' => 10,
+                    ],
+                    'weight' => 1,
+                ],
+                'attribute_key_0:option_key_1' => [
+                    'display' => 'Yes',
+                    'quantity_and_stock_status' => [
+                        'qty' => 20,
+                    ],
+                    'weight' => 2,
+                ],
+            ],
+        ],
+
         'two_new_options' => [
             'attributes_data' => [
                 'attribute_key_0' => [
@@ -568,10 +609,48 @@ class ConfigurableAttributesData implements FixtureInterface
             'attributes' => [
                 'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
             ],
-            'products' => [
-                'attribute_key_0:option_key_0' => 'catalogProductSimple::product_without_category',
-                'attribute_key_0:option_key_1' => 'catalogProductSimple::product_without_category',
+            'products' => [],
+            'matrix' => [
+                'attribute_key_0:option_key_0' => [
+                    'display' => 'Yes',
+                    'quantity_and_stock_status' => [
+                        'qty' => 100,
+                    ],
+                    'weight' => 1,
+                ],
+                'attribute_key_0:option_key_1' => [
+                    'display' => 'Yes',
+                    'quantity_and_stock_status' => [
+                        'qty' => 200,
+                    ],
+                    'weight' => 1,
+                ],
             ],
+        ],
+
+        'two_options_one_two_dollars' => [
+            'attributes_data' => [
+                'attribute_key_0' => [
+                    'options' => [
+                        'option_key_0' => [
+                            'label' => 'option_key_1_%isolation%',
+                            'pricing_value' => 1,
+                            'is_percent' => 'No',
+                            'include' => 'Yes',
+                        ],
+                        'option_key_1' => [
+                            'label' => 'option_2_%isolation%',
+                            'pricing_value' => 1,
+                            'is_percent' => 'No',
+                            'include' => 'Yes',
+                        ],
+                    ],
+                ],
+            ],
+            'attributes' => [
+                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
+            ],
+            'products' => [],
             'matrix' => [
                 'attribute_key_0:option_key_0' => [
                     'display' => 'Yes',
@@ -827,7 +906,8 @@ class ConfigurableAttributesData implements FixtureInterface
                         'quantity_and_stock_status' => [
                             'qty' => 10,
                         ],
-                    ]
+                    ],
+                    $row
                 );
             }
 

@@ -64,6 +64,7 @@ class RemoveTaxRule extends Curl
      * Recursively remove tax rules
      *
      * @param string $data
+     * @return mixed
      */
     protected function _removeTaxRules($data)
     {

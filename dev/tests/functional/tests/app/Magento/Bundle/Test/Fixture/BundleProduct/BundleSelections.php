@@ -614,6 +614,30 @@ class BundleSelections implements FixtureInterface
                     ],
                 ],
             ],
+
+            'one_options_assigned_simple_big_qty' => [
+                'bundle_options' => [
+                    [
+                        'title' => 'Drop-down Option',
+                        'type' => 'Drop-down',
+                        'assigned_products' => [
+                            [
+                                'search_data' => [
+                                    'name' => '%product_name%',
+                                ],
+                                'data' => [
+                                    'selection_qty' => 1,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'products' => [
+                    [
+                        'catalogProductSimple::simple_big_qty',
+                    ],
+                ],
+            ],
         ];
         if (!isset($presets[$name])) {
             throw new \InvalidArgumentException(

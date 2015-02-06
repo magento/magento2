@@ -161,11 +161,8 @@ class View extends AbstractConfigureBlock
      */
     public function addToCart(FixtureInterface $product)
     {
-        $checkoutData = null;
-        if ($product instanceof InjectableFixture) {
-            /** @var CatalogProductSimple $product */
-            $checkoutData = $product->getCheckoutData();
-        }
+        /** @var CatalogProductSimple $product */
+        $checkoutData = $product->getCheckoutData();
 
         $this->fillOptions($product);
         if (isset($checkoutData['qty'])) {

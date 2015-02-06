@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Product\ProductList;
 
-use Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem;
+use Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem as RelatedProductItem;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
@@ -34,7 +34,7 @@ class Related extends PromotedSection
     /**
      * Return list of products.
      *
-     * @return ProductItem[]
+     * @return RelatedProductItem[]
      */
     public function getProducts()
     {
