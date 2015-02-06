@@ -20,8 +20,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for CustomerReviewReportEntity
- *
  * Preconditions:
  * 1. Create customer
  * 2. Create simple product
@@ -30,7 +28,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Fill data according to DataSet
  * 6. Click Submit review
  *
- * Test Flow:
+ * Steps:
  * 1. Open Reports -> Review : By Customers
  * 2. Assert Reviews qty
  * 3. Click Show Reviews
@@ -38,6 +36,8 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * @group Reports_(MX)
  * @ZephyrId MAGETWO-27555
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerReviewReportEntityTest extends Injectable
 {

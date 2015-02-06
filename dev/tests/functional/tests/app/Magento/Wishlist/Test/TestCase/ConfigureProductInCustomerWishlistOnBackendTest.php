@@ -11,8 +11,6 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create customer
  * 2. Create products
@@ -39,7 +37,7 @@ class ConfigureProductInCustomerWishlistOnBackendTest extends AbstractWishlistTe
     /* end tags */
 
     /**
-     * Prepare data
+     * Create customer.
      *
      * @param Customer $customer
      * @return array
@@ -52,7 +50,7 @@ class ConfigureProductInCustomerWishlistOnBackendTest extends AbstractWishlistTe
     }
 
     /**
-     * Configure customer wish list on backend
+     * Configure customer wish list on backend.
      *
      * @param Customer $customer
      * @param string $product

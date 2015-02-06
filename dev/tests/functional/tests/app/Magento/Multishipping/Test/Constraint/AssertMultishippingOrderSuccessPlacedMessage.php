@@ -11,7 +11,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 /**
  * Assert that success message for multiple address checkout is correct.
  */
-class AssertOrderSuccessPlacedMessage extends AbstractConstraint
+class AssertMultishippingOrderSuccessPlacedMessage extends AbstractConstraint
 {
     /* tags */
     const SEVERITY = 'high';

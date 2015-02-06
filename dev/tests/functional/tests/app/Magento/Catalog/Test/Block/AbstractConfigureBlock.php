@@ -97,7 +97,7 @@ abstract class AbstractConfigureBlock extends Form
 
             if (isset($options[$attribute])) {
                 $result[] = [
-                    'type' => strtolower(preg_replace('/[^a-z]/i', '', $options[$attribute]['type'])),
+                    'type' => $options[$attribute]['type'],
                     'title' => isset($options[$attribute]['title'])
                             ? $options[$attribute]['title']
                             : $attribute,

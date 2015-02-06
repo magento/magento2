@@ -34,7 +34,7 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
     /* end tags */
 
     /**
-     * Run suggest searching result test
+     * Run suggest searching result test.
      *
      * @param Customer $customer
      * @param string $products
@@ -59,7 +59,7 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
     }
 
     /**
-     * Add products from wish list to cart
+     * Add products from wish list to cart.
      *
      * @param array $products
      * @param int $qty
@@ -74,14 +74,14 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
                 $this->wishlistIndex->getWishlistBlock()->clickUpdateWishlist();
             }
             $this->wishlistIndex->getItemsBlock()->getItemProduct($product)->clickAddToCart();
-            if ($this->wishlistIndex->getItemsBlock()->isVisible()) {
+            if (!$this->wishlistIndex->getWishlistBlock()->isVisible()) {
                 $this->catalogProductView->getViewBlock()->addToCart($product);
             }
         }
     }
 
     /**
-     * Create cart fixture
+     * Create cart fixture.
      *
      * @param array $products
      * @return Cart

@@ -54,6 +54,9 @@
             <field name="status" xsi:type="string">Product online</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="is_virtual" xsi:type="string">Yes</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
             <field name="downloadable_links" xsi:type="array">
                 <item name="preset" xsi:type="string">with_two_separately_links</item>
             </field>
@@ -79,6 +82,9 @@
             <field name="status" xsi:type="string">Product online</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="is_virtual" xsi:type="string">Yes</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
             <field name="downloadable_links" xsi:type="array">
                 <item name="preset" xsi:type="string">with_two_separately_links</item>
             </field>

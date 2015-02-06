@@ -47,6 +47,12 @@ class ProductDetails extends ProductTab
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
+        // Select attribute set
+        if (isset($data['attribute_set_id'])) {
+            $this->_fill([$data['attribute_set_id']], $element);
+            unset($data['attribute_set_id']);
+        }
+        // Select categories
         if (isset($data['category_ids'])) {
             /* Fix browser behavior for click by hidden list result of suggest(category) element */
             $this->scrollToCategory();
@@ -63,6 +69,7 @@ class ProductDetails extends ProductTab
             }
             unset($data['category_ids']);
         }
+
         $this->_fill($data, $element);
 
         return $this;

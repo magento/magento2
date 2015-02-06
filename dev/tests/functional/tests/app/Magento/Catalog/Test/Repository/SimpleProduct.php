@@ -140,7 +140,7 @@ class SimpleProduct extends Product
                                 [
                                     'title' => 'custom option drop down',
                                     'is_require' => true,
-                                    'type' => 'Drop-down',
+                                    'type' => 'Select/Drop-down',
                                     'options' => [
                                         [
                                             'title' => 'Title Drop - down 1',

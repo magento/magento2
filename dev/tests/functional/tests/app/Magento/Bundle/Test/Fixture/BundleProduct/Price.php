@@ -92,6 +92,8 @@ class Price implements FixtureInterface
      * Get preset array
      *
      * @return array|null
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getPreset()
     {

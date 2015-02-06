@@ -37,6 +37,13 @@ class AttributeForm extends FormTabs
     protected $saveButton = '#save';
 
     /**
+     * Attribute to determine whether tab is opened.
+     *
+     * @var string
+     */
+    protected $isTabOpened = '.opened ';
+
+    /**
      * @constructor
      * @param SimpleElement $element
      * @param Mapper $mapper
@@ -88,8 +95,11 @@ class AttributeForm extends FormTabs
         $strategy = isset($this->tabs[$tabName]['strategy'])
             ? $this->tabs[$tabName]['strategy']
             : Locator::SELECTOR_CSS;
-        $tab = $this->_rootElement->find($selector, $strategy);
-        $tab->click();
+
+        $isTabOpened = $this->_rootElement->find($this->isTabOpened . $selector, $strategy);
+        if (!$isTabOpened->isVisible()) {
+            $this->_rootElement->find($selector, $strategy)->click();
+        }
 
         return $this;
     }
