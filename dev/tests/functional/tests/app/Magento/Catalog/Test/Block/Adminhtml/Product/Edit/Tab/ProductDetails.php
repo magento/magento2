@@ -51,6 +51,7 @@ class ProductDetails extends ProductTab
             /* Fix browser behavior for click by hidden list result of suggest(category) element */
             $this->scrollToCategory();
             if (isset($fields['category_ids']['source'])
+                && $fields['category_ids']['source']->getCategories() !== null
                 && !$fields['category_ids']['source']->getCategories()[0]->hasData('id')
             ) {
                 $this->blockFactory->create(
