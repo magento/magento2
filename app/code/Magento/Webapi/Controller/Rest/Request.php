@@ -98,7 +98,7 @@ class Request extends \Magento\Webapi\Controller\Request
             }
             $qualityToTypes[$quality][$mimeType] = true;
         }
-        krsort($qualityToTypes, SORT_STRING);
+        krsort($qualityToTypes);
 
         foreach ($qualityToTypes as $typeList) {
             $orderedTypes += $typeList;
