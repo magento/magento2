@@ -92,7 +92,8 @@ class Status
      *  
      * @return string[]
      */
-    public function checkConstraints($isEnabled,
+    public function checkConstraints(
+        $isEnabled,
         $modulesToBeChanged,
         $currentlyEnabledModules = null,
         $prettyMessage = false

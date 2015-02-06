@@ -82,19 +82,16 @@
         <span class="caret"></span>
     </div>
     <div ng-show="store.advanced.expanded" class="form-group">
-        <div ng-show="corruptConfig !== undefined" class="col-sm-10  error-container">
+        <div ng-show="store.errorMessage !== undefined && store.errorMessage !== false " class="col-sm-10  error-container">
             <input type="checkbox" ng-model="store.force" ng-click="toggleForce()">&nbsp; Skip dependency check for individual modules
         </div>
-        <div ng-show="corruptConfig !== undefined" class="col-sm-10 error-container animate-show text-danger glyphicon glyphicon-remove-sign" ng-bind-html="corruptConfig">
+        <div ng-show="store.errorMessage !== undefined && store.errorMessage !== false " class="col-sm-10 error-container animate-show text-danger glyphicon glyphicon-remove-sign"> An error has occurred. <a href="#" class="text-danger" style="text-decoration: none;" ng-click="expandError()">Click to see detailed error.</a><span class="caret"></span>
         </div>
-        <div class="form-group">
-            <div  class="col-sm-10">
-                <div ng-show="checkModuleConstraints.result.success === false && checkModuleConstraints.result !== undefined" class="error-container animate-show text-danger glyphicon glyphicon-remove-sign" ng-bind-html="checkModuleConstraints.result.error">
-                </div>
-            </div>
+        <div ng-show="store.errorMessage !== undefined && store.errorFlag === true" class="col-sm-10 error-container animate-show text-danger glyphicon glyphicon-remove-sign" ng-bind-html="store.errorMessage">
         </div>
         <div class="col-sm-8" ng-show="loading"><p style="color:blue">Validating Constraints for enabling/disabling modules...<img src="pub/images/ajax-loader.gif"/></div>
-        <div class="form-group">
+        <div>&nbsp;</div>
+        <div class="col-sm-10 form-group">
             <input type="checkbox"
                ng-model="store.selectAll"
                ng-click="toggleAllModules()">&nbsp;Select All

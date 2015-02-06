@@ -14,9 +14,10 @@ angular.module('customize-your-store', ['ngStorage'])
             loadedAllModules: false,
             selectAll: true,
             allModules: [],
+            errorFlag : false,
             selectedModules : [],
             disabledModules: [],
-            corruptConfig: '',
+            errorMessage: '',
             force: false,
             advanced: {
                 expanded: false
@@ -40,7 +41,7 @@ angular.module('customize-your-store', ['ngStorage'])
                         $scope.loading = false;
                         $scope.nextState();
                     } else {
-                        $scope.checkModuleConstraints.result.error = $sce.trustAsHtml($scope.checkModuleConstraints.result.error);
+                        $scope.store.errorMessage = $sce.trustAsHtml($scope.checkModuleConstraints.result.error);
                         $scope.loading = false;
                     }
                 });
@@ -51,7 +52,7 @@ angular.module('customize-your-store', ['ngStorage'])
                 $state.loadedModules = data;
                 if (data.error) {
                     $scope.updateOnExpand($scope.store.advanced);
-                    $scope.corruptConfig = $sce.trustAsHtml(data.error);
+                    $scope.store.errorMessage = $sce.trustAsHtml(data.error);
                 }
             });
         }
@@ -76,6 +77,10 @@ angular.module('customize-your-store', ['ngStorage'])
         $scope.updateOnExpand = function(obj) {
             $state.loadModules();
             obj.expanded = !obj.expanded;
+        };
+
+        $scope.expandError = function() {
+            $scope.store.errorFlag = !$scope.store.errorFlag;
         };
 
         $scope.toggleForce = function() {
@@ -104,7 +109,7 @@ angular.module('customize-your-store', ['ngStorage'])
                 .success(function (data) {
                     $scope.checkModuleConstraints.result = data;
                     if ((($scope.checkModuleConstraints.result.error !== undefined) && (!$scope.checkModuleConstraints.result.success))) {
-                        $scope.checkModuleConstraints.result.error = $sce.trustAsHtml($scope.checkModuleConstraints.result.error);
+                        $scope.store.errorMessage = $sce.trustAsHtml($scope.checkModuleConstraints.result.error);
                         if (moduleStatus) {
                             $scope.store.selectedModules.splice(idx, 1);
                         } else {
@@ -112,6 +117,8 @@ angular.module('customize-your-store', ['ngStorage'])
                         }
                     } else {
                         $state.loadedModules = data;
+                        $scope.store.errorMessage = false;
+                        $scope.store.showError = false;
                         $scope.store.loadedAllModules = false;
                         $scope.store.allModules =[];
                         $scope.store.selectedModules =[];
@@ -132,6 +139,7 @@ angular.module('customize-your-store', ['ngStorage'])
                 for(var i = 0; i < $scope.store.allModules.length; i++) {
                     var idx = $scope.store.selectedModules.indexOf($scope.store.allModules[i]);
                     if ($scope.store.disabledModules.indexOf($scope.store.allModules[i]) < 0) {
+                        $scope.store.selectedModules.splice(idx, 1);
                     }
                 }
             }
