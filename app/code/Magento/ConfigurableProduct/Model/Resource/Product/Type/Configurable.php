@@ -17,17 +17,15 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_catalogProductRelation;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Catalog\Model\Resource\Product\Relation $catalogProductRelation
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Catalog\Model\Resource\Product\Relation $catalogProductRelation
     ) {
         $this->_catalogProductRelation = $catalogProductRelation;
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
     }
 
     /**

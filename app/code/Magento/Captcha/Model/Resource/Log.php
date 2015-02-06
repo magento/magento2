@@ -35,20 +35,18 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_remoteAddress;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
     ) {
         $this->_coreDate = $coreDate;
         $this->_remoteAddress = $remoteAddress;
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
     }
 
     /**

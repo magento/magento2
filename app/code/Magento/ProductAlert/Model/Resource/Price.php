@@ -19,17 +19,15 @@ class Price extends \Magento\ProductAlert\Model\Resource\AbstractResource
     protected $_dateFactory;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
     ) {
         $this->_dateFactory = $dateFactory;
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
     }
 
     /**

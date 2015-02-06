@@ -35,16 +35,14 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -54,7 +52,7 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $this->_configuration = $configuration;
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
     }
 
     /**

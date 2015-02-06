@@ -29,17 +29,15 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $stockIndexerProcessor;
 
     /**
-     * @param AppResource $resource
-     * @param TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Processor $processor
      */
     public function __construct(
-        AppResource $resource,
-        TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         Processor $processor
     ) {
         $this->stockIndexerProcessor = $processor;
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
     }
 
     /**

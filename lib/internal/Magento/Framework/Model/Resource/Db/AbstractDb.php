@@ -126,18 +126,13 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     protected $objectRelationProcessor;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param TransactionManagerInterface $transactionManager
-     * @param ObjectRelationProcessor $objectRelationProcessor
+     * @param Context $context
      */
-    public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        TransactionManagerInterface $transactionManager,
-        ObjectRelationProcessor $objectRelationProcessor
-    ) {
-        $this->transactionManager = $transactionManager;
-        $this->_resources = $resource;
-        $this->objectRelationProcessor = $objectRelationProcessor;
+    public function __construct(\Magento\Framework\Model\Resource\Db\Context $context)
+    {
+        $this->transactionManager = $context->getTransactionManager();
+        $this->_resources = $context->getResources();
+        $this->objectRelationProcessor = $context->getObjectRelationProcessor();
         parent::__construct();
     }
 

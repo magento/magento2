@@ -56,8 +56,7 @@ class Order extends SalesResource implements OrderResourceInterface
     }
 
     /**
-     * @param AppResource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
      * @param AddressHandler $addressHandler
@@ -65,8 +64,7 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param OrderGrid $gridAggregator
      */
     public function __construct(
-        AppResource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
         AddressHandler $addressHandler,
@@ -75,7 +73,7 @@ class Order extends SalesResource implements OrderResourceInterface
     ) {
         $this->stateHandler = $stateHandler;
         $this->addressHandler = $addressHandler;
-        parent::__construct($resource, $transactionManager, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($context, $attribute, $salesIncrement, $gridAggregator);
     }
 
     /**

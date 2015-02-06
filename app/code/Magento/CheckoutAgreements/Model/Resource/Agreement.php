@@ -19,17 +19,15 @@ class Agreement extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $filterManager;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Filter\FilterManager $filterManager
     ) {
         $this->filterManager = $filterManager;
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
     }
 
     /**

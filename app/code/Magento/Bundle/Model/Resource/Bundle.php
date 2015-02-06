@@ -18,16 +18,14 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_productRelation;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Catalog\Model\Resource\Product\Relation $productRelation
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Catalog\Model\Resource\Product\Relation $productRelation
     ) {
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
         $this->_productRelation = $productRelation;
     }
 

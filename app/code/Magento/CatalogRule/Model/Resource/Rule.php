@@ -93,8 +93,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     protected $priceCurrency;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Product\ConditionFactory $conditionFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
@@ -107,8 +106,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\ConditionFactory $conditionFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
@@ -128,7 +126,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         $this->_logger = $logger;
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
     }
 
     /**

@@ -79,22 +79,20 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $storeManager;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param StockConfigurationInterface $stockConfiguration
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         StockConfigurationInterface $stockConfiguration,
         StoreManagerInterface $storeManager
     ) {
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
         $this->_scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
         $this->stockConfiguration = $stockConfiguration;

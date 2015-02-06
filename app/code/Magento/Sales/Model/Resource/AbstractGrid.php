@@ -34,18 +34,7 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      */
     protected $addressTableName = 'sales_order_address';
 
-    /**
-     * @param AppResource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
-     */
-    public function __construct(
-        AppResource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
-    ) {
-        parent::__construct($resource, $transactionManager);
-    }
-
-    /**
+     /**
      * Resource initialization
      *
      * @return void

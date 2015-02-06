@@ -16,16 +16,14 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\DB\Helper $resourceHelper
     ) {
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
         $this->_resourceHelper = $resourceHelper;
     }
 

@@ -23,8 +23,7 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
     protected $_updatedatFactory;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
@@ -34,8 +33,7 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
      * @param \Magento\SalesRule\Model\Resource\Report\Rule\UpdatedatFactory $updatedatFactory
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
@@ -45,8 +43,7 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
         \Magento\SalesRule\Model\Resource\Report\Rule\UpdatedatFactory $updatedatFactory
     ) {
         parent::__construct(
-            $resource,
-            $transactionManager,
+            $context,
             $logger,
             $localeDate,
             $reportsFlagFactory,

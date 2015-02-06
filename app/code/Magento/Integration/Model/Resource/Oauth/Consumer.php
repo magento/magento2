@@ -13,17 +13,15 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_dateTime;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
         $this->_dateTime = $dateTime;
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
     }
 
     /**

@@ -25,16 +25,14 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection
     ) {
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
         $this->_subscriberCollection = $subscriberCollection;
     }
 

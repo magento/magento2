@@ -21,8 +21,7 @@ class Order extends AbstractReport
     protected $_updateDatFactory;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
@@ -32,8 +31,7 @@ class Order extends AbstractReport
      * @param \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
@@ -43,8 +41,7 @@ class Order extends AbstractReport
         \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory
     ) {
         parent::__construct(
-            $resource,
-            $transactionManager,
+            $context,
             $logger,
             $localeDate,
             $reportsFlagFactory,

@@ -21,16 +21,14 @@ class Quote extends AbstractDb
     protected $_config;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Eav\Model\Config $config
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Config $config
     ) {
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
         $this->_config = $config;
     }
 

@@ -40,20 +40,18 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogData = $catalogData;
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
     }
 
     /**

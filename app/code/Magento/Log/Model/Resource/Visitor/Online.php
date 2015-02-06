@@ -21,17 +21,15 @@ class Online extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_date;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date
     ) {
         $this->_date = $date;
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
     }
 
     /**

@@ -38,17 +38,15 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param LogWriter $logger
      */
     public function __construct(
-        Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         LogWriter $logger
     ) {
         $this->logger = $logger;
-        parent::__construct($resource, $transactionManager);
+        parent::__construct($context);
     }
 
     /**

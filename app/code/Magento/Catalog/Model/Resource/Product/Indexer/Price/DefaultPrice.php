@@ -42,22 +42,20 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
     protected $_eventManager = null;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
-        parent::__construct($resource, $transactionManager, $eavConfig);
+        parent::__construct($context, $eavConfig);
     }
 
     /**

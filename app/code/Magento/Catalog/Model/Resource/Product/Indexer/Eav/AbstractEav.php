@@ -22,19 +22,17 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
     /**
      * Construct
      *
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
         $this->_eventManager = $eventManager;
-        parent::__construct($resource, $transactionManager, $eavConfig);
+        parent::__construct($context, $eavConfig);
     }
 
     /**

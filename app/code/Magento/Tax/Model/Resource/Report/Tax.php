@@ -22,8 +22,7 @@ class Tax extends \Magento\Reports\Model\Resource\Report\AbstractReport
     protected $_updatedAtFactory;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
@@ -33,8 +32,7 @@ class Tax extends \Magento\Reports\Model\Resource\Report\AbstractReport
      * @param \Magento\Tax\Model\Resource\Report\Tax\UpdatedatFactory $updatedAtFactory
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
@@ -46,8 +44,7 @@ class Tax extends \Magento\Reports\Model\Resource\Report\AbstractReport
         $this->_createdAtFactory = $createdAtFactory;
         $this->_updatedAtFactory = $updatedAtFactory;
         parent::__construct(
-            $resource,
-            $transactionManager,
+            $context,
             $logger,
             $localeDate,
             $reportsFlagFactory,
