@@ -628,7 +628,7 @@ class ConfigurableAttributesData implements FixtureInterface
             ],
         ],
 
-        'two_options_one_two_dollars' => [
+        'configurable_required' => [
             'attributes_data' => [
                 'attribute_key_0' => [
                     'options' => [

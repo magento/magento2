@@ -177,7 +177,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 ],
                 'qty' => 1,
             ],
-            'two_options_one_two_dollars' => [
+            'configurable_required' => [
                 'options' => [
                     'configurable_options' => [
                         [
