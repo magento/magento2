@@ -92,37 +92,20 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $literal
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setElementToRemoveListCount
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $isSetFlagCount
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $scheduleStructureCount
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getScopeCount
-     * @covers Magento\Framework\View\Layout\Reader\Block::interpret()
      * @dataProvider processDataProvider
      */
     public function testProcessBlock(
         $literal,
-        $setElementToRemoveListCount,
-        $isSetFlagCount,
-        $scheduleStructureCount,
-        $getScopeCount
+        $scheduleStructureCount
     ) {
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->will($this->returnValue($this->scheduledStructure));
-        $this->scheduledStructure->expects($setElementToRemoveListCount)
-            ->method('setElementToRemoveList')->with($literal);
-        $scope = $this->getMock('Magento\Framework\App\ScopeInterface', [], [], '', false);
 
         $testValue = 'some_value';
-        $scopeConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
-        $scopeConfig->expects($isSetFlagCount)->method('isSetFlag')
-            ->with($testValue, null, $scope)
-            ->will($this->returnValue(false));
 
         $helper = $this->getMock('Magento\Framework\View\Layout\ScheduledStructure\Helper', [], [], '', false);
         $helper->expects($scheduleStructureCount)->method('scheduleStructure')->will($this->returnValue($literal));
-
-        $scopeResolver = $this->getMock('Magento\Framework\App\ScopeResolverInterface', [], [], '', false);
-        $scopeResolver->expects($getScopeCount)->method('getScope')->will($this->returnValue($scope));
 
         $this->prepareReaderPool('<' . $literal . ' ifconfig="' . $testValue . '"/>');
 
@@ -130,8 +113,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $block = $this->getBlock(
             [
                 'helper' => $helper,
-                'scopeConfig' => $scopeConfig,
-                'scopeResolver' => $scopeResolver,
                 'readerPool' => $this->readerPool,
             ]
         );
@@ -165,8 +146,8 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     public function processDataProvider()
     {
         return [
-            ['block', $this->once(), $this->once(), $this->once(), $this->once()],
-            ['page', $this->never(), $this->never(), $this->never(), $this->never()]
+            ['block', $this->once()],
+            ['page', $this->never()]
         ];
     }
 }
