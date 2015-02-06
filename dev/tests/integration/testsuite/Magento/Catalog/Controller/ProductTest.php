@@ -16,7 +16,10 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     protected function setUp()
     {
-        $this->markTestIncomplete('MAGETWO-31059');
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('Randomly fails due to known HHVM bug (DOMText mixed with DOMElement)');
+        }
+        parent::setUp();
     }
 
     public function assert404NotFound()
