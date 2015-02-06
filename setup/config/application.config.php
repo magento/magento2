@@ -12,8 +12,7 @@ return [
     ],
     'module_listener_options' => [
         'module_paths' => [
-            __DIR__ . '/../module',
-            __DIR__ . '/../vendor',
+            __DIR__ . '/../src',
         ],
         'config_glob_paths' => [
             __DIR__ . '/autoload/{,*.}{global,local}.php',
