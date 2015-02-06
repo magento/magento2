@@ -59,6 +59,7 @@ class SetupModule extends Setup
      * @param SetupFileResolver $fileResolver
      * @param string $moduleName
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
      * @param string $connectionName
      */
     public function __construct(
@@ -67,13 +68,14 @@ class SetupModule extends Setup
         SetupFileResolver $fileResolver,
         $moduleName,
         \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
         $connectionName = SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         parent::__construct($resource, $connectionName);
         $this->logger = $log;
         $this->fileResolver = $fileResolver;
         $this->moduleConfig = $moduleList->getOne($moduleName);
-        $this->resource = new Resource($resource);
+        $this->resource = new Resource($resource, $objectRelationProcessor);
         $this->resourceName = $this->fileResolver->getResourceCode($moduleName);
     }
 
