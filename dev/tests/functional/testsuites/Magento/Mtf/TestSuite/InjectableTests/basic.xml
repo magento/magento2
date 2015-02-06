@@ -12,4 +12,9 @@
             <namespace value="Magento" />
         </allow>
     </rule>
+    <rule scope="testcase">
+        <deny>
+            <tag group="test_type" value="3rd_party_test" />
+        </deny>
+    </rule>
 </config>

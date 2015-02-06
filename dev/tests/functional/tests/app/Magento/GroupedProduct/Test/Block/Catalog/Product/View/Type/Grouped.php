@@ -91,7 +91,7 @@ class Grouped extends Block
                     sprintf($this->subProductByName, $productData['name']),
                     Locator::SELECTOR_XPATH
                 );
-                $subProduct->find($this->qty)->keys([$productData['qty']]);
+                $subProduct->find($this->qty)->setValue($productData['qty']);
                 $this->_rootElement->click();
             }
         }

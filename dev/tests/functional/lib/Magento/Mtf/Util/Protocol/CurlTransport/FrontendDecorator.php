@@ -6,7 +6,7 @@
 
 namespace Magento\Mtf\Util\Protocol\CurlTransport;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 
@@ -48,9 +48,9 @@ class FrontendDecorator implements CurlInterface
      * Constructor
      *
      * @param CurlTransport $transport
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      */
-    public function __construct(CurlTransport $transport, CustomerInjectable $customer)
+    public function __construct(CurlTransport $transport, Customer $customer)
     {
         $this->transport = $transport;
         $this->authorize($customer);
@@ -59,11 +59,11 @@ class FrontendDecorator implements CurlInterface
     /**
      * Authorize customer on frontend
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @throws \Exception
      * @return void
      */
-    protected function authorize(CustomerInjectable $customer)
+    protected function authorize(Customer $customer)
     {
         $url = $_ENV['app_frontend_url'] . 'customer/account/login/';
         $this->transport->write(CurlInterface::POST, $url);

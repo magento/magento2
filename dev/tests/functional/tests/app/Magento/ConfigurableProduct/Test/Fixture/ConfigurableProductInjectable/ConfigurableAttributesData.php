@@ -329,6 +329,53 @@ class ConfigurableAttributesData implements FixtureInterface
             ],
         ],
 
+        'two_searchable_options' => [
+            'attributes_data' => [
+                'attribute_key_0' => [
+                    'frontend_label' => 'two_searchable_options_%isolation%',
+                    'frontend_input' => 'Dropdown',
+                    'label' => 'two_searchable_options_%isolation%',
+                    'is_required' => 'No',
+                    'is_searchable' => 'Yes',
+                    'is_visible_in_advanced_search' => 'Yes',
+                    'is_filterable' => 'Filterable (with results)',
+                    'is_filterable_in_search' => 'Yes',
+                    'options' => [
+                        'option_key_0' => [
+                            'label' => 'option_key_1_%isolation%',
+                            'pricing_value' => 1,
+                            'is_percent' => 'No',
+                            'include' => 'Yes',
+                        ],
+                        'option_key_1' => [
+                            'label' => 'option_key_2_%isolation%',
+                            'pricing_value' => 2,
+                            'is_percent' => 'No',
+                            'include' => 'Yes',
+                        ],
+                    ],
+                ],
+            ],
+            'attributes' => [],
+            'products' => [],
+            'matrix' => [
+                'attribute_key_0:option_key_0' => [
+                    'display' => 'Yes',
+                    'quantity_and_stock_status' => [
+                        'qty' => 100,
+                    ],
+                    'weight' => 1,
+                ],
+                'attribute_key_0:option_key_1' => [
+                    'display' => 'Yes',
+                    'quantity_and_stock_status' => [
+                        'qty' => 100,
+                    ],
+                    'weight' => 2,
+                ],
+            ],
+        ],
+
         'one_new_options' => [
             'attributes_data' => [
                 'attribute_key_0' => [

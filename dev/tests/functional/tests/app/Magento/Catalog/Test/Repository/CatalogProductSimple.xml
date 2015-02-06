@@ -575,6 +575,9 @@
                 <item name="preset" xsi:type="string">-</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
             <field name="custom_options" xsi:type="array">
                 <item name="preset" xsi:type="string">two_options</item>
             </field>

@@ -13,8 +13,6 @@ use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 
 /**
- * Test Creation for ViewedProductsReportEntity
- *
  * Test Flow:
  * Preconditions:
  * 1. Create products
@@ -67,6 +65,7 @@ class ViewedProductsReportEntityTest extends Injectable
      */
     public function __prepare(CatalogProductIndex $catalogProductIndexPage)
     {
+        $this->markTestIncomplete('Bug: MAGETWO-33029');
         $catalogProductIndexPage->open();
         $catalogProductIndexPage->getProductGrid()->massaction([], 'Delete', true, 'Select All');
     }
