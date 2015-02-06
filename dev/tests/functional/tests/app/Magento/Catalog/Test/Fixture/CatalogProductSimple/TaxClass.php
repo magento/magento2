@@ -89,7 +89,8 @@ class TaxClass implements FixtureInterface
     protected function setTaxClassId($taxClassName)
     {
         $url = $_ENV['app_backend_url'] . 'tax/rule/new/';
-        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
+        $config = \Magento\Mtf\ObjectManagerFactory::getObjectManager()->create('Magento\Mtf\Config');
+        $curl = new BackendDecorator(new CurlTransport(), $config);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], []);
         $response = $curl->read();

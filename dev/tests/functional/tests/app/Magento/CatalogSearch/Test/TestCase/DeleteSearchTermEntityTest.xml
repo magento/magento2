@@ -5,11 +5,14 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
-    <testCase name="DeleteSearchTermEntityTest">
-        <variation name="DeleteSearchTermEntityTestVariation1">
-            <data name="searchTerm/dataSet">default</data>
-            <data name="constraint">assertSearchTermSuccessDeleteMessage, assertSearchTermNotInGrid, assertSearchTermNotOnFrontend, assertSearchSynonymNotOnFrontend</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="DeleteSearchTermEntityTest">
+    <variation name="DeleteSearchTermEntityTestVariation1" firstConstraint="assertSearchTermSuccessDeleteMessage" method="test">
+      <data name="searchTerm/dataSet" xsi:type="string">default</data>
+      <constraint name="assertSearchTermSuccessDeleteMessage" next="assertSearchTermNotInGrid"/>
+      <constraint name="assertSearchTermNotInGrid" next="assertSearchTermNotOnFrontend" prev="assertSearchTermSuccessDeleteMessage"/>
+      <constraint name="assertSearchTermNotOnFrontend" next="assertSearchSynonymNotOnFrontend" prev="assertSearchTermNotInGrid"/>
+      <constraint name="assertSearchSynonymNotOnFrontend" prev="assertSearchTermNotOnFrontend"/>
+    </variation>
+  </testCase>
 </config>

@@ -5,71 +5,74 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
-    <testCase name="UpdateGroupedProductEntityTest">
-        <variation name="UpdateGroupedProductEntityTestVariation1">
-            <data name="originalProduct/dataSet">grouped_product_out_of_stock</data>
-            <data name="product/data/name">GroupedProduct_edited %isolation%</data>
-            <data name="product/data/sku">GroupedProduct_sku_edited %isolation%</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
-            <data name="product/data/category_ids/presets">category_%isolation%</data>
-            <data name="product/data/associated/products">-</data>
-            <data name="product/data/associated/preset">-</data>
-            <data name="product/data/description">This is edited description for grouped product</data>
-            <data name="product/data/short_description">This is edited short description for grouped product</data>
-            <data name="product/data/url_key">updated-grouped-product-%isolation%</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInStock, assertProductPage</data>
-        </variation>
-        <variation name="UpdateGroupedProductEntityTestVariation2">
-            <data name="originalProduct/dataSet">default</data>
-            <data name="product/data/name">GroupedProduct_edited %isolation%</data>
-            <data name="product/data/sku">GroupedProduct_sku_edited %isolation%</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/category_ids/presets">-</data>
-            <data name="product/data/associated/products">catalogProductVirtual::default,catalogProductVirtual::product_50_dollar</data>
-            <data name="product/data/associated/preset">defaultVirtualProduct</data>
-            <data name="product/data/description">-</data>
-            <data name="product/data/short_description">-</data>
-            <data name="product/data/url_key">updated-grouped-product-%isolation%</data>
-            <data name="constraint">assertProductSaveMessage, assertGroupedProductForm</data>
-        </variation>
-        <variation name="UpdateGroupedProductEntityTestVariation3">
-            <data name="originalProduct/dataSet">default</data>
-            <data name="product/data/name">GroupedProduct_edited %isolation%</data>
-            <data name="product/data/sku">GroupedProduct_sku_edited %isolation%</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/category_ids/presets">-</data>
-            <data name="product/data/associated/products">catalogProductSimple::simple_for_composite_products,catalogProductSimple::default</data>
-            <data name="product/data/associated/preset">defaultSimpleProduct_without_qty</data>
-            <data name="product/data/description">-</data>
-            <data name="product/data/short_description">-</data>
-            <data name="product/data/url_key">updated-grouped-product-%isolation%</data>
-            <data name="constraint">assertProductSaveMessage, assertGroupedProductsDefaultQty, assertGroupedProductForm</data>
-        </variation>
-        <variation name="UpdateGroupedProductEntityTestVariation4">
-            <data name="originalProduct/dataSet">default</data>
-            <data name="product/data/name">GroupedProduct_edited %isolation%</data>
-            <data name="product/data/sku">GroupedProduct_sku_edited %isolation%</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-            <data name="product/data/category_ids/presets">-</data>
-            <data name="product/data/associated/products">catalogProductSimple::withSpecialPrice,catalogProductSimple::withSpecialPrice</data>
-            <data name="product/data/associated/preset">defaultSimpleProduct_with_specialPrice</data>
-            <data name="product/data/description">-</data>
-            <data name="product/data/short_description">-</data>
-            <data name="product/data/url_key">updated-grouped-product-%isolation%</data>
-            <data name="constraint">assertProductSaveMessage, assertSpecialPriceOnGroupedProductPage</data>
-        </variation>
-        <variation name="UpdateGroupedProductEntityTestVariation5">
-            <data name="originalProduct/dataSet">default</data>
-            <data name="product/data/name">GroupedProduct_edited %isolation%</data>
-            <data name="product/data/sku">GroupedProduct_sku_edited %isolation%</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
-            <data name="product/data/category_ids/presets">-</data>
-            <data name="product/data/associated/products">-</data>
-            <data name="product/data/associated/preset">-</data>
-            <data name="product/data/description">-</data>
-            <data name="product/data/short_description">-</data>
-            <data name="product/data/url_key">assertProductSaveMessage, assertProductOutOfStock</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="UpdateGroupedProductEntityTest">
+    <variation name="UpdateGroupedProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="originalProduct/dataSet" xsi:type="string">grouped_product_out_of_stock</data>
+      <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">category_%isolation%</data>
+      <data name="product/data/associated/products" xsi:type="string">-</data>
+      <data name="product/data/associated/preset" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">This is edited description for grouped product</data>
+      <data name="product/data/short_description" xsi:type="string">This is edited short description for grouped product</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInStock"/>
+      <constraint name="assertProductInStock" next="assertProductPage" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductPage" prev="assertProductInStock"/>
+    </variation>
+    <variation name="UpdateGroupedProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="originalProduct/dataSet" xsi:type="string">default</data>
+      <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/associated/products" xsi:type="string">catalogProductVirtual::default,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/associated/preset" xsi:type="string">defaultVirtualProduct</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <constraint name="assertProductSaveMessage" next="assertGroupedProductForm"/>
+      <constraint name="assertGroupedProductForm" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="UpdateGroupedProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="originalProduct/dataSet" xsi:type="string">default</data>
+      <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/associated/products" xsi:type="string">catalogProductSimple::simple_for_composite_products,catalogProductSimple::default</data>
+      <data name="product/data/associated/preset" xsi:type="string">defaultSimpleProduct_without_qty</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <constraint name="assertProductSaveMessage" next="assertGroupedProductsDefaultQty"/>
+      <constraint name="assertGroupedProductsDefaultQty" next="assertGroupedProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertGroupedProductForm" prev="assertGroupedProductsDefaultQty"/>
+    </variation>
+    <variation name="UpdateGroupedProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="originalProduct/dataSet" xsi:type="string">default</data>
+      <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/associated/products" xsi:type="string">catalogProductSimple::withSpecialPrice,catalogProductSimple::withSpecialPrice</data>
+      <data name="product/data/associated/preset" xsi:type="string">defaultSimpleProduct_with_specialPrice</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <constraint name="assertProductSaveMessage" next="assertSpecialPriceOnGroupedProductPage"/>
+      <constraint name="assertSpecialPriceOnGroupedProductPage" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="UpdateGroupedProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="originalProduct/dataSet" xsi:type="string">default</data>
+      <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/associated/products" xsi:type="string">-</data>
+      <data name="product/data/associated/preset" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductOutOfStock"/>
+      <constraint name="assertProductOutOfStock" prev="assertProductSaveMessage"/>
+    </variation>
+  </testCase>
 </config>

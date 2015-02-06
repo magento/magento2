@@ -5,30 +5,38 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
-    <testCase name="CreateProductReviewFrontendEntityTest">
-        <variation name="CreateProductReviewFrontendEntityTestVariation1">
-            <data name="description">Create product review with rating</data>
-            <data name="review/data/customer">-</data>
-            <data name="review/data/nickname">name_%isolation%</data>
-            <data name="review/data/title">title_%isolation%</data>
-            <data name="review/data/detail">review_%isolation%</data>
-            <data name="review/data/ratings/1/dataSet">visibleOnDefaultWebsite</data>
-            <data name="review/data/ratings/1/rating">4</data>
-            <data name="review/data/entity_id/dataSet">catalogProductSimple::default</data>
-            <data name="constraint">assertReviewCreationSuccessMessage, assertProductReviewInGrid, assertProductRatingOnReviewPage, assertProductRatingInProductPage</data>
-        </variation>
-        <variation name="CreateProductReviewFrontendEntityTestVariation2">
-            <data name="description">MAGETWO-12403 - Add Product Review from Customer's Prospective</data>
-            <data name="review/data/customer">Guest</data>
-            <data name="review/data/nickname">name_%isolation%</data>
-            <data name="review/data/title">title_%isolation%</data>
-            <data name="review/data/detail">review_%isolation%</data>
-            <data name="review/data/ratings/1/dataSet">-</data>
-            <data name="review/data/ratings/1/rating">-</data>
-            <data name="review/data/entity_id/dataSet">catalogProductSimple::default</data>
-            <data name="constraint">assertReviewCreationSuccessMessage, assertProductReviewIsAbsentOnProductPage, assertProductReviewForm, assertSetApprovedProductReview, assertReviewLinksIsPresentOnProductPage, assertProductReviewOnProductPage</data>
-            <data name="tag">bamboo_plan:end_to_end,test_type:acceptance_test</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="CreateProductReviewFrontendEntityTest">
+    <variation name="CreateProductReviewFrontendEntityTestVariation1" firstConstraint="assertReviewCreationSuccessMessage" method="test">
+      <data name="description" xsi:type="string">Create product review with rating</data>
+      <data name="review/data/customer" xsi:type="string">-</data>
+      <data name="review/data/nickname" xsi:type="string">name_%isolation%</data>
+      <data name="review/data/title" xsi:type="string">title_%isolation%</data>
+      <data name="review/data/detail" xsi:type="string">review_%isolation%</data>
+      <data name="review/data/ratings/1/dataSet" xsi:type="string">visibleOnDefaultWebsite</data>
+      <data name="review/data/ratings/1/rating" xsi:type="string">4</data>
+      <data name="review/data/entity_id/dataSet" xsi:type="string">catalogProductSimple::default</data>
+      <constraint name="assertReviewCreationSuccessMessage" next="assertProductReviewInGrid"/>
+      <constraint name="assertProductReviewInGrid" next="assertProductRatingOnReviewPage" prev="assertReviewCreationSuccessMessage"/>
+      <constraint name="assertProductRatingOnReviewPage" next="assertProductRatingInProductPage" prev="assertProductReviewInGrid"/>
+      <constraint name="assertProductRatingInProductPage" prev="assertProductRatingOnReviewPage"/>
+    </variation>
+    <variation name="CreateProductReviewFrontendEntityTestVariation2" firstConstraint="assertReviewCreationSuccessMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12403 - Add Product Review from Customer's Prospective</data>
+      <data name="review/data/customer" xsi:type="string">Guest</data>
+      <data name="review/data/nickname" xsi:type="string">name_%isolation%</data>
+      <data name="review/data/title" xsi:type="string">title_%isolation%</data>
+      <data name="review/data/detail" xsi:type="string">review_%isolation%</data>
+      <data name="review/data/ratings/1/dataSet" xsi:type="string">-</data>
+      <data name="review/data/ratings/1/rating" xsi:type="string">-</data>
+      <data name="review/data/entity_id/dataSet" xsi:type="string">catalogProductSimple::default</data>
+      <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
+      <constraint name="assertReviewCreationSuccessMessage" next="assertProductReviewIsAbsentOnProductPage"/>
+      <constraint name="assertProductReviewIsAbsentOnProductPage" next="assertProductReviewForm" prev="assertReviewCreationSuccessMessage"/>
+      <constraint name="assertProductReviewForm" next="assertSetApprovedProductReview" prev="assertProductReviewIsAbsentOnProductPage"/>
+      <constraint name="assertSetApprovedProductReview" next="assertReviewLinksIsPresentOnProductPage" prev="assertProductReviewForm"/>
+      <constraint name="assertReviewLinksIsPresentOnProductPage" next="assertProductReviewOnProductPage" prev="assertSetApprovedProductReview"/>
+      <constraint name="assertProductReviewOnProductPage" prev="assertReviewLinksIsPresentOnProductPage"/>
+    </variation>
+  </testCase>
 </config>

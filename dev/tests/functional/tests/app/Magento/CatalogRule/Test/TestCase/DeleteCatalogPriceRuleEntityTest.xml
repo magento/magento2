@@ -5,11 +5,12 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
-    <testCase name="DeleteCatalogPriceRuleEntityTest">
-        <variation name="DeleteCatalogPriceRuleEntityTestVariation1">
-            <data name="catalogPriceRule/dataSet">active_catalog_price_rule_with_conditions</data>
-            <data name="constraint">assertCatalogPriceRuleSuccessDeleteMessage, assertCatalogPriceRuleNotInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="DeleteCatalogPriceRuleEntityTest">
+    <variation name="DeleteCatalogPriceRuleEntityTestVariation1" firstConstraint="assertCatalogPriceRuleSuccessDeleteMessage" method="test">
+      <data name="catalogPriceRule/dataSet" xsi:type="string">active_catalog_price_rule_with_conditions</data>
+      <constraint name="assertCatalogPriceRuleSuccessDeleteMessage" next="assertCatalogPriceRuleNotInGrid"/>
+      <constraint name="assertCatalogPriceRuleNotInGrid" prev="assertCatalogPriceRuleSuccessDeleteMessage"/>
+    </variation>
+  </testCase>
 </config>

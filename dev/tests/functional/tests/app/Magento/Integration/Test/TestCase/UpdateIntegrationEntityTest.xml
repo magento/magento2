@@ -5,25 +5,29 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
-    <testCase name="UpdateIntegrationEntityTest">
-        <variation name="UpdateIntegrationEntityTestVariation1">
-            <data name="integration/data/name">Integration_%isolation%</data>
-            <data name="integration/data/email">-</data>
-            <data name="integration/data/endpoint">https://endpoint.com</data>
-            <data name="integration/data/identity_link_url">https://testlink.com</data>
-            <data name="integration/data/resource_access">-</data>
-            <data name="integration/data/resources">-</data>
-            <data name="constraint">assertIntegrationSuccessSaveMessage, assertIntegrationForm, assertIntegrationInGrid</data>
-        </variation>
-        <variation name="UpdateIntegrationEntityTestVariation2">
-            <data name="integration/data/name">Integration_%isolation%</data>
-            <data name="integration/data/email">-</data>
-            <data name="integration/data/endpoint">-</data>
-            <data name="integration/data/identity_link_url">-</data>
-            <data name="integration/data/resource_access">Custom</data>
-            <data name="integration/data/resources">Sales</data>
-            <data name="constraint">assertIntegrationSuccessSaveMessage, assertIntegrationForm, assertIntegrationInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="UpdateIntegrationEntityTest">
+    <variation name="UpdateIntegrationEntityTestVariation1" firstConstraint="assertIntegrationSuccessSaveMessage" method="test">
+      <data name="integration/data/name" xsi:type="string">Integration_%isolation%</data>
+      <data name="integration/data/email" xsi:type="string">-</data>
+      <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
+      <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+      <data name="integration/data/resource_access" xsi:type="string">-</data>
+      <data name="integration/data/resources" xsi:type="string">-</data>
+      <constraint name="assertIntegrationSuccessSaveMessage" next="assertIntegrationForm"/>
+      <constraint name="assertIntegrationForm" next="assertIntegrationInGrid" prev="assertIntegrationSuccessSaveMessage"/>
+      <constraint name="assertIntegrationInGrid" prev="assertIntegrationForm"/>
+    </variation>
+    <variation name="UpdateIntegrationEntityTestVariation2" firstConstraint="assertIntegrationSuccessSaveMessage" method="test">
+      <data name="integration/data/name" xsi:type="string">Integration_%isolation%</data>
+      <data name="integration/data/email" xsi:type="string">-</data>
+      <data name="integration/data/endpoint" xsi:type="string">-</data>
+      <data name="integration/data/identity_link_url" xsi:type="string">-</data>
+      <data name="integration/data/resource_access" xsi:type="string">Custom</data>
+      <data name="integration/data/resources" xsi:type="string">Sales</data>
+      <constraint name="assertIntegrationSuccessSaveMessage" next="assertIntegrationForm"/>
+      <constraint name="assertIntegrationForm" next="assertIntegrationInGrid" prev="assertIntegrationSuccessSaveMessage"/>
+      <constraint name="assertIntegrationInGrid" prev="assertIntegrationForm"/>
+    </variation>
+  </testCase>
 </config>

@@ -5,17 +5,20 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
-    <testCase name="DeleteWebsiteEntityTest">
-        <variation name="DeleteWebsiteEntityTestVariation1">
-            <data name="website/dataSet">custom_website</data>
-            <data name="createBackup">Yes</data>
-            <data name="constraint">assertWebsiteSuccessDeleteAndBackupMessages, assertWebsiteNotInGrid, assertBackupInGrid</data>
-        </variation>
-        <variation name="DeleteWebsiteEntityTestVariation2">
-            <data name="website/dataSet">custom_website</data>
-            <data name="createBackup">No</data>
-            <data name="constraint">assertWebsiteSuccessDeleteMessage, assertWebsiteNotInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="DeleteWebsiteEntityTest">
+    <variation name="DeleteWebsiteEntityTestVariation1" firstConstraint="assertWebsiteSuccessDeleteAndBackupMessages" method="test">
+      <data name="website/dataSet" xsi:type="string">custom_website</data>
+      <data name="createBackup" xsi:type="string">Yes</data>
+      <constraint name="assertWebsiteSuccessDeleteAndBackupMessages" next="assertWebsiteNotInGrid"/>
+      <constraint name="assertWebsiteNotInGrid" next="assertBackupInGrid" prev="assertWebsiteSuccessDeleteAndBackupMessages"/>
+      <constraint name="assertBackupInGrid" prev="assertWebsiteNotInGrid"/>
+    </variation>
+    <variation name="DeleteWebsiteEntityTestVariation2" firstConstraint="assertWebsiteSuccessDeleteMessage" method="test">
+      <data name="website/dataSet" xsi:type="string">custom_website</data>
+      <data name="createBackup" xsi:type="string">No</data>
+      <constraint name="assertWebsiteSuccessDeleteMessage" next="assertWebsiteNotInGrid"/>
+      <constraint name="assertWebsiteNotInGrid" prev="assertWebsiteSuccessDeleteMessage"/>
+    </variation>
+  </testCase>
 </config>

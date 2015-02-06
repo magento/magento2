@@ -5,15 +5,16 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
-    <testCase name="CreateNewsletterTemplateEntityTest">
-        <variation name="CreateNewsletterTemplateEntityTestVariation1">
-            <data name="template/data/code">TemplateName%isolation%</data>
-            <data name="template/data/subject">TemplateSubject%isolation%</data>
-            <data name="template/data/sender_name">SenderName%isolation%</data>
-            <data name="template/data/sender_email">SenderName%isolation%@example.com</data>
-            <data name="template/data/text">Some content %isolation%</data>
-            <data name="constraint">assertNewsletterSuccessCreateMessage, assertNewsletterInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="CreateNewsletterTemplateEntityTest">
+    <variation name="CreateNewsletterTemplateEntityTestVariation1" firstConstraint="assertNewsletterSuccessCreateMessage" method="test">
+      <data name="template/data/code" xsi:type="string">TemplateName%isolation%</data>
+      <data name="template/data/subject" xsi:type="string">TemplateSubject%isolation%</data>
+      <data name="template/data/sender_name" xsi:type="string">SenderName%isolation%</data>
+      <data name="template/data/sender_email" xsi:type="string">SenderName%isolation%@example.com</data>
+      <data name="template/data/text" xsi:type="string">Some content %isolation%</data>
+      <constraint name="assertNewsletterSuccessCreateMessage" next="assertNewsletterInGrid"/>
+      <constraint name="assertNewsletterInGrid" prev="assertNewsletterSuccessCreateMessage"/>
+    </variation>
+  </testCase>
 </config>

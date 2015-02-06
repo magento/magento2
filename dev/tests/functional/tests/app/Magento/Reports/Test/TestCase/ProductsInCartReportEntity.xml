@@ -5,18 +5,18 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
-    <testCase name="ProductsInCartReportEntity">
-        <variation name="ProductsInCartReportEntityVariation1">
-            <data name="product/dataSet">default</data>
-            <data name="carts">1</data>
-            <data name="constraint">assertProductInCartResult</data>
-        </variation>
-        <variation name="ProductsInCartReportEntityVariation2">
-            <data name="product/dataSet">default</data>
-            <data name="carts">2</data>
-            <data name="isGuest">1</data>
-            <data name="constraint">assertProductInCartResult</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="ProductsInCartReportEntity">
+    <variation name="ProductsInCartReportEntityVariation1" firstConstraint="assertProductInCartResult" method="test">
+      <data name="product/dataSet" xsi:type="string">default</data>
+      <data name="carts" xsi:type="string">1</data>
+      <constraint name="assertProductInCartResult"/>
+    </variation>
+    <variation name="ProductsInCartReportEntityVariation2" firstConstraint="assertProductInCartResult" method="test">
+      <data name="product/dataSet" xsi:type="string">default</data>
+      <data name="carts" xsi:type="string">2</data>
+      <data name="isGuest" xsi:type="string">1</data>
+      <constraint name="assertProductInCartResult"/>
+    </variation>
+  </testCase>
 </config>

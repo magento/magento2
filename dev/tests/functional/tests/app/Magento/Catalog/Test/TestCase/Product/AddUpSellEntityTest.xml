@@ -5,17 +5,23 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/variations.xsd">
-    <testCase name="AddUpSellEntityTest">
-        <variation name="AddUpSellEntityTestVariation1">
-            <data name="productData">catalogProductSimple::default</data>
-            <data name="upSellProductsData">catalogProductSimple::default, configurableProductInjectable::default</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertUpSellsProductsSection</data>
-        </variation>
-        <variation name="AddUpSellEntityTestVariation2">
-            <data name="productData">configurableProductInjectable::default</data>
-            <data name="upSellProductsData">catalogProductSimple::default, configurableProductInjectable::default</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertConfigurableProductForm, assertUpSellsProductsSection</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="AddUpSellEntityTest">
+    <variation name="AddUpSellEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="productData" xsi:type="string">catalogProductSimple::default</data>
+      <data name="upSellProductsData" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductForm" next="assertUpSellsProductsSection" prev="assertProductInGrid"/>
+      <constraint name="assertUpSellsProductsSection" prev="assertProductForm"/>
+    </variation>
+    <variation name="AddUpSellEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="productData" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="upSellProductsData" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertConfigurableProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertConfigurableProductForm" next="assertUpSellsProductsSection" prev="assertProductInGrid"/>
+      <constraint name="assertUpSellsProductsSection" prev="assertConfigurableProductForm"/>
+    </variation>
+  </testCase>
 </config>

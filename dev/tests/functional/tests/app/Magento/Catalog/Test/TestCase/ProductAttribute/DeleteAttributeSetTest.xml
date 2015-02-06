@@ -5,13 +5,15 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/variations.xsd">
-    <testCase name="DeleteAttributeSetTest">
-        <variation name="DeleteAttributeSetTestVariation1">
-            <data name="productTemplate/dataSet">custom_attribute_set</data>
-            <data name="productTemplate/data/assigned_attributes/presets">default</data>
-            <data name="product/dataSet">default</data>
-            <data name="constraint">assertProductTemplateSuccessDeleteMessage, assertProductTemplateNotInGrid, assertProductNotInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="DeleteAttributeSetTest">
+    <variation name="DeleteAttributeSetTestVariation1" firstConstraint="assertProductTemplateSuccessDeleteMessage" method="test">
+      <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+      <data name="productTemplate/data/assigned_attributes/presets" xsi:type="string">default</data>
+      <data name="product/dataSet" xsi:type="string">default</data>
+      <constraint name="assertProductTemplateSuccessDeleteMessage" next="assertProductTemplateNotInGrid"/>
+      <constraint name="assertProductTemplateNotInGrid" next="assertProductNotInGrid" prev="assertProductTemplateSuccessDeleteMessage"/>
+      <constraint name="assertProductNotInGrid" prev="assertProductTemplateNotInGrid"/>
+    </variation>
+  </testCase>
 </config>

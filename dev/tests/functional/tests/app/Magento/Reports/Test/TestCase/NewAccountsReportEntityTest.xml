@@ -5,38 +5,38 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
-    <testCase name="NewAccountsReportEntityTest">
-        <variation name="NewAccountsReportEntityTestVariation1">
-            <data name="customer/dataSet">default</data>
-            <data name="total">1</data>
-            <data name="customersReport/report_from">m/d/Y</data>
-            <data name="customersReport/report_to">m/d/Y</data>
-            <data name="customersReport/report_period">Year</data>
-            <data name="constraint">assertNewAccountsReportTotalResult</data>
-        </variation>
-        <variation name="NewAccountsReportEntityTestVariation2">
-            <data name="customer/dataSet">default</data>
-            <data name="total">1</data>
-            <data name="customersReport/report_from">m/d/Y</data>
-            <data name="customersReport/report_to">m/d/Y</data>
-            <data name="customersReport/report_period">Month</data>
-            <data name="constraint">assertNewAccountsReportTotalResult</data>
-        </variation>
-        <variation name="NewAccountsReportEntityTestVariation3">
-            <data name="customer/dataSet">default</data>
-            <data name="total">1</data>
-            <data name="customersReport/report_from">m/d/Y</data>
-            <data name="customersReport/report_to">m/d/Y</data>
-            <data name="customersReport/report_period">Day</data>
-            <data name="constraint">assertNewAccountsReportTotalResult</data>
-        </variation>
-        <variation name="NewAccountsReportEntityTestVariation4">
-            <data name="customer/dataSet">default</data>
-            <data name="customersReport/report_from">m/d/Y 12:00 a+1 day</data>
-            <data name="customersReport/report_to">m/d/Y 12:00 a+1 day</data>
-            <data name="customersReport/report_period">Day</data>
-            <data name="constraint">assertNewAccountsReportTotalResult</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="NewAccountsReportEntityTest">
+    <variation name="NewAccountsReportEntityTestVariation1" firstConstraint="assertNewAccountsReportTotalResult" method="test">
+      <data name="customer/dataSet" xsi:type="string">default</data>
+      <data name="total" xsi:type="string">1</data>
+      <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>
+      <data name="customersReport/report_to" xsi:type="string">m/d/Y</data>
+      <data name="customersReport/report_period" xsi:type="string">Year</data>
+      <constraint name="assertNewAccountsReportTotalResult"/>
+    </variation>
+    <variation name="NewAccountsReportEntityTestVariation2" firstConstraint="assertNewAccountsReportTotalResult" method="test">
+      <data name="customer/dataSet" xsi:type="string">default</data>
+      <data name="total" xsi:type="string">1</data>
+      <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>
+      <data name="customersReport/report_to" xsi:type="string">m/d/Y</data>
+      <data name="customersReport/report_period" xsi:type="string">Month</data>
+      <constraint name="assertNewAccountsReportTotalResult"/>
+    </variation>
+    <variation name="NewAccountsReportEntityTestVariation3" firstConstraint="assertNewAccountsReportTotalResult" method="test">
+      <data name="customer/dataSet" xsi:type="string">default</data>
+      <data name="total" xsi:type="string">1</data>
+      <data name="customersReport/report_from" xsi:type="string">m/d/Y</data>
+      <data name="customersReport/report_to" xsi:type="string">m/d/Y</data>
+      <data name="customersReport/report_period" xsi:type="string">Day</data>
+      <constraint name="assertNewAccountsReportTotalResult"/>
+    </variation>
+    <variation name="NewAccountsReportEntityTestVariation4" firstConstraint="assertNewAccountsReportTotalResult" method="test">
+      <data name="customer/dataSet" xsi:type="string">default</data>
+      <data name="customersReport/report_from" xsi:type="string">m/d/Y 12:00 a+1 day</data>
+      <data name="customersReport/report_to" xsi:type="string">m/d/Y 12:00 a+1 day</data>
+      <data name="customersReport/report_period" xsi:type="string">Day</data>
+      <constraint name="assertNewAccountsReportTotalResult"/>
+    </variation>
+  </testCase>
 </config>

@@ -5,80 +5,84 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/variations.xsd">
-    <testCase name="UpdateCustomerFrontendEntityTest">
-        <variation name="UpdateCustomerFrontendEntityTestVariation1">
-            <data name="description">Update customer information and add US address</data>
-            <data name="customer/data/firstname">Jany %isolation%</data>
-            <data name="customer/data/lastname">Doe %isolation%</data>
-            <data name="customer/data/email">janydoe%isolation%@example.com</data>
-            <data name="address/data/firstname">Jany %isolation%</data>
-            <data name="address/data/lastname">Doe %isolation%</data>
-            <data name="address/data/company">Company %isolation%</data>
-            <data name="address/data/street">Some street %isolation%</data>
-            <data name="address/data/city">City %isolation%</data>
-            <data name="address/data/country_id">United States</data>
-            <data name="address/data/region_id">Colorado</data>
-            <data name="address/data/region">-</data>
-            <data name="address/data/telephone">555-888-111-999</data>
-            <data name="address/data/fax">161-999-8888</data>
-            <data name="address/data/postcode">12345</data>
-            <data name="constraint">assertCustomerAddressSuccessSaveMessage, assertCustomerDefaultAddresses</data>
-        </variation>
-        <variation name="UpdateCustomerFrontendEntityTestVariation2">
-            <data name="description">Update customer information and add UK address</data>
-            <data name="customer/data/firstname">Jonny %isolation%</data>
-            <data name="customer/data/lastname">Doe %isolation%</data>
-            <data name="customer/data/email">jonny%isolation%@example.com</data>
-            <data name="address/data/firstname">John %isolation%</data>
-            <data name="address/data/lastname">Doe %isolation%</data>
-            <data name="address/data/company">Company %isolation%</data>
-            <data name="address/data/street">Some street %isolation%</data>
-            <data name="address/data/city">City %isolation%</data>
-            <data name="address/data/country_id">United Kingdom</data>
-            <data name="address/data/region_id">-</data>
-            <data name="address/data/region">Region %isolation%</data>
-            <data name="address/data/telephone">0123456789-02134567</data>
-            <data name="address/data/fax">5555-874-99634</data>
-            <data name="address/data/postcode">12345</data>
-            <data name="constraint">assertCustomerAddressSuccessSaveMessage, assertCustomerDefaultAddresses</data>
-        </variation>
-        <variation name="UpdateCustomerFrontendEntityTestVariation3">
-            <data name="description">Update customer information and add France address</data>
-            <data name="customer/data/firstname">Jean %isolation%</data>
-            <data name="customer/data/lastname">Reno %isolation%</data>
-            <data name="customer/data/email">jean%isolation%@example.com</data>
-            <data name="address/data/firstname">Jean %isolation%</data>
-            <data name="address/data/lastname">Reno %isolation%</data>
-            <data name="address/data/company">Magento %isolation%</data>
-            <data name="address/data/street">18-20 Rue Maréchal Leclerc</data>
-            <data name="address/data/city">Quintin</data>
-            <data name="address/data/country_id">France</data>
-            <data name="address/data/region_id">Côtes-d'Armor</data>
-            <data name="address/data/region">-</data>
-            <data name="address/data/telephone">555-888-111-999</data>
-            <data name="address/data/fax">161-999-8888</data>
-            <data name="address/data/postcode">12345</data>
-            <data name="constraint">assertCustomerAddressSuccessSaveMessage, assertCustomerDefaultAddresses</data>
-        </variation>
-        <variation name="UpdateCustomerFrontendEntityTestVariation4">
-            <data name="description">MAGETWO-12394: Register Customer. Update address</data>
-            <data name="customer/data/firstname">-</data>
-            <data name="customer/data/lastname">-</data>
-            <data name="customer/data/email">-</data>
-            <data name="address/data/firstname">John</data>
-            <data name="address/data/lastname">Doe</data>
-            <data name="address/data/company">Magento %isolation%</data>
-            <data name="address/data/street">6161 West Centinela Avenue</data>
-            <data name="address/data/city">Culver City</data>
-            <data name="address/data/country_id">United States</data>
-            <data name="address/data/region_id">California</data>
-            <data name="address/data/region">-</data>
-            <data name="address/data/telephone">555-55-555-55</data>
-            <data name="address/data/fax">-</data>
-            <data name="address/data/postcode">90230</data>
-            <data name="constraint">assertCustomerAddressSuccessSaveMessage, assertCustomerDefaultAddresses</data>
-            <data name="tag">bamboo_plan:end_to_end,test_type:acceptance_test</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="UpdateCustomerFrontendEntityTest">
+    <variation name="UpdateCustomerFrontendEntityTestVariation1" firstConstraint="assertCustomerAddressSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update customer information and add US address</data>
+      <data name="customer/data/firstname" xsi:type="string">Jany %isolation%</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe %isolation%</data>
+      <data name="customer/data/email" xsi:type="string">janydoe%isolation%@example.com</data>
+      <data name="address/data/firstname" xsi:type="string">Jany %isolation%</data>
+      <data name="address/data/lastname" xsi:type="string">Doe %isolation%</data>
+      <data name="address/data/company" xsi:type="string">Company %isolation%</data>
+      <data name="address/data/street" xsi:type="string">Some street %isolation%</data>
+      <data name="address/data/city" xsi:type="string">City %isolation%</data>
+      <data name="address/data/country_id" xsi:type="string">United States</data>
+      <data name="address/data/region_id" xsi:type="string">Colorado</data>
+      <data name="address/data/region" xsi:type="string">-</data>
+      <data name="address/data/telephone" xsi:type="string">555-888-111-999</data>
+      <data name="address/data/fax" xsi:type="string">161-999-8888</data>
+      <data name="address/data/postcode" xsi:type="string">12345</data>
+      <constraint name="assertCustomerAddressSuccessSaveMessage" next="assertCustomerDefaultAddresses"/>
+      <constraint name="assertCustomerDefaultAddresses" prev="assertCustomerAddressSuccessSaveMessage"/>
+    </variation>
+    <variation name="UpdateCustomerFrontendEntityTestVariation2" firstConstraint="assertCustomerAddressSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update customer information and add UK address</data>
+      <data name="customer/data/firstname" xsi:type="string">Jonny %isolation%</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe %isolation%</data>
+      <data name="customer/data/email" xsi:type="string">jonny%isolation%@example.com</data>
+      <data name="address/data/firstname" xsi:type="string">John %isolation%</data>
+      <data name="address/data/lastname" xsi:type="string">Doe %isolation%</data>
+      <data name="address/data/company" xsi:type="string">Company %isolation%</data>
+      <data name="address/data/street" xsi:type="string">Some street %isolation%</data>
+      <data name="address/data/city" xsi:type="string">City %isolation%</data>
+      <data name="address/data/country_id" xsi:type="string">United Kingdom</data>
+      <data name="address/data/region_id" xsi:type="string">-</data>
+      <data name="address/data/region" xsi:type="string">Region %isolation%</data>
+      <data name="address/data/telephone" xsi:type="string">0123456789-02134567</data>
+      <data name="address/data/fax" xsi:type="string">5555-874-99634</data>
+      <data name="address/data/postcode" xsi:type="string">12345</data>
+      <constraint name="assertCustomerAddressSuccessSaveMessage" next="assertCustomerDefaultAddresses"/>
+      <constraint name="assertCustomerDefaultAddresses" prev="assertCustomerAddressSuccessSaveMessage"/>
+    </variation>
+    <variation name="UpdateCustomerFrontendEntityTestVariation3" firstConstraint="assertCustomerAddressSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update customer information and add France address</data>
+      <data name="customer/data/firstname" xsi:type="string">Jean %isolation%</data>
+      <data name="customer/data/lastname" xsi:type="string">Reno %isolation%</data>
+      <data name="customer/data/email" xsi:type="string">jean%isolation%@example.com</data>
+      <data name="address/data/firstname" xsi:type="string">Jean %isolation%</data>
+      <data name="address/data/lastname" xsi:type="string">Reno %isolation%</data>
+      <data name="address/data/company" xsi:type="string">Magento %isolation%</data>
+      <data name="address/data/street" xsi:type="string">18-20 Rue Maréchal Leclerc</data>
+      <data name="address/data/city" xsi:type="string">Quintin</data>
+      <data name="address/data/country_id" xsi:type="string">France</data>
+      <data name="address/data/region_id" xsi:type="string">Côtes-d'Armor</data>
+      <data name="address/data/region" xsi:type="string">-</data>
+      <data name="address/data/telephone" xsi:type="string">555-888-111-999</data>
+      <data name="address/data/fax" xsi:type="string">161-999-8888</data>
+      <data name="address/data/postcode" xsi:type="string">12345</data>
+      <constraint name="assertCustomerAddressSuccessSaveMessage" next="assertCustomerDefaultAddresses"/>
+      <constraint name="assertCustomerDefaultAddresses" prev="assertCustomerAddressSuccessSaveMessage"/>
+    </variation>
+    <variation name="UpdateCustomerFrontendEntityTestVariation4" firstConstraint="assertCustomerAddressSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12394: Register Customer. Update address</data>
+      <data name="customer/data/firstname" xsi:type="string">-</data>
+      <data name="customer/data/lastname" xsi:type="string">-</data>
+      <data name="customer/data/email" xsi:type="string">-</data>
+      <data name="address/data/firstname" xsi:type="string">John</data>
+      <data name="address/data/lastname" xsi:type="string">Doe</data>
+      <data name="address/data/company" xsi:type="string">Magento %isolation%</data>
+      <data name="address/data/street" xsi:type="string">6161 West Centinela Avenue</data>
+      <data name="address/data/city" xsi:type="string">Culver City</data>
+      <data name="address/data/country_id" xsi:type="string">United States</data>
+      <data name="address/data/region_id" xsi:type="string">California</data>
+      <data name="address/data/region" xsi:type="string">-</data>
+      <data name="address/data/telephone" xsi:type="string">555-55-555-55</data>
+      <data name="address/data/fax" xsi:type="string">-</data>
+      <data name="address/data/postcode" xsi:type="string">90230</data>
+      <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
+      <constraint name="assertCustomerAddressSuccessSaveMessage" next="assertCustomerDefaultAddresses"/>
+      <constraint name="assertCustomerDefaultAddresses" prev="assertCustomerAddressSuccessSaveMessage"/>
+    </variation>
+  </testCase>
 </config>

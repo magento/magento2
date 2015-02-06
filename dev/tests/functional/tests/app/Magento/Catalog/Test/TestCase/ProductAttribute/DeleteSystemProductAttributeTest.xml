@@ -5,12 +5,12 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/variations.xsd">
-    <testCase name="DeleteSystemProductAttributeTest">
-        <variation name="DeleteSystemProductAttributeTestVariation1">
-            <data name="productAttribute/data/attribute_code">news_from_date</data>
-            <data name="productAttribute/data/is_user_defined">Yes</data>
-            <data name="constraint">assertAbsenceDeleteAttributeButton </data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+  <testCase name="DeleteSystemProductAttributeTest">
+    <variation name="DeleteSystemProductAttributeTestVariation1" firstConstraint="assertAbsenceDeleteAttributeButton" method="test">
+      <data name="productAttribute/data/attribute_code" xsi:type="string">news_from_date</data>
+      <data name="productAttribute/data/is_user_defined" xsi:type="string">Yes</data>
+      <constraint name="assertAbsenceDeleteAttributeButton"/>
+    </variation>
+  </testCase>
 </config>
