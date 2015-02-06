@@ -57,9 +57,8 @@ class SetupModule extends Setup
      * @param LoggerInterface $log
      * @param ModuleListInterface $moduleList
      * @param SetupFileResolver $fileResolver
-     * @param string $moduleName
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
+     * @param $moduleName
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param string $connectionName
      */
     public function __construct(
@@ -67,15 +66,14 @@ class SetupModule extends Setup
         ModuleListInterface $moduleList,
         SetupFileResolver $fileResolver,
         $moduleName,
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         $connectionName = SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
-        parent::__construct($resource, $connectionName);
+        parent::__construct($context->getResources(), $connectionName);
         $this->logger = $log;
         $this->fileResolver = $fileResolver;
         $this->moduleConfig = $moduleList->getOne($moduleName);
-        $this->resource = new Resource($resource, $transactionManager);
+        $this->resource = new Resource($context);
         $this->resourceName = $this->fileResolver->getResourceCode($moduleName);
     }
 
