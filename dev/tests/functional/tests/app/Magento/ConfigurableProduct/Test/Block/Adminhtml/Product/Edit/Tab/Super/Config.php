@@ -99,6 +99,9 @@ class Config extends Tab
         $attributesValue = isset($fields['configurable_attributes_data']['source'])
             ? $fields['configurable_attributes_data']['source']->getAttributesData()
             : [];
+        foreach ($attributesValue as $key => $value) {
+            $attributesValue[$key] = array_merge($value, $attributes['attributes_data'][$key]);
+        }
         $this->getAttributeBlock()->fillAttributes($attributesValue);
         if (!empty($attributes['matrix'])) {
             $this->generateVariations();
