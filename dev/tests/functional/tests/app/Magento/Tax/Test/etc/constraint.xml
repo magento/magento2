@@ -33,15 +33,15 @@
     <constraint name="assertTaxRateIsInCorrectRange" module="Magento_Tax" severity="low"/>
     <constraint name="assertTaxRateInTaxRule" module="Magento_Tax" severity="low"/>
     <constraint name="assertTaxRuleIsApplied" module="Magento_Tax" severity="high"/>
-    <constraint name="assertTaxRuleIsAppliedToAllPricesExcludingTax" module="Magento_Tax"/>
-    <constraint name="assertTaxRuleIsAppliedToAllPricesIncludingTax" module="Magento_Tax"/>
-    <constraint name="assertTaxRuleIsAppliedToAllPricesExcludingIncludingTax" module="Magento_Tax"/>
-    <constraint name="assertTaxCalculationAfterCheckoutExcludingIncludingTax" module="Magento_Tax"/>
-    <constraint name="assertTaxCalculationAfterCheckoutExcludingTax" module="Magento_Tax"/>
-    <constraint name="assertTaxCalculationAfterCheckoutIncludingTax" module="Magento_Tax"/>
-    <constraint name="assertOrderTaxOnBackendExcludingIncludingTax" module="Magento_Tax"/>
-    <constraint name="assertOrderTaxOnBackendIncludingTax" module="Magento_Tax"/>
-    <constraint name="assertOrderTaxOnBackendExcludingTax" module="Magento_Tax"/>
+    <constraint name="assertTaxRuleIsAppliedToAllPricesExcludingTax" module="Magento_Tax" severity="low"/>
+    <constraint name="assertTaxRuleIsAppliedToAllPricesIncludingTax" module="Magento_Tax" severity="low"/>
+    <constraint name="assertTaxRuleIsAppliedToAllPricesExcludingIncludingTax" module="Magento_Tax" severity="low"/>
+    <constraint name="assertTaxCalculationAfterCheckoutExcludingIncludingTax" module="Magento_Tax" severity="low"/>
+    <constraint name="assertTaxCalculationAfterCheckoutExcludingTax" module="Magento_Tax" severity="low"/>
+    <constraint name="assertTaxCalculationAfterCheckoutIncludingTax" module="Magento_Tax" severity="low"/>
+    <constraint name="assertOrderTaxOnBackendExcludingIncludingTax" module="Magento_Tax" severity="low"/>
+    <constraint name="assertOrderTaxOnBackendIncludingTax" module="Magento_Tax" severity="low"/>
+    <constraint name="assertOrderTaxOnBackendExcludingTax" module="Magento_Tax" severity="low"/>
     <constraint name="assertTaxRuleIsAppliedToAllPrices" module="Magento_Tax" severity="high"/>
     <constraint name="assertTaxWithCrossBorderApplied" module="Magento_Tax" severity="high"/>
     <constraint name="assertTaxRuleIsNotApplied" module="Magento_Tax" severity="high"/>

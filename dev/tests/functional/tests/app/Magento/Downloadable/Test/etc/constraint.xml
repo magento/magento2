@@ -15,13 +15,13 @@
         <argument name="product">Magento\Mtf\Fixture\FixtureInterface</argument>
     </constraint>
     <constraint name="assertDownloadableProductInCustomerWishlistOnBackendGrid" module="Magento_Downloadable" severity="low"/>
-    <constraint name="assertTaxRuleIsAppliedToAllPricesDownloadableExcludingTax" module="Magento_Downloadable"/>
-    <constraint name="assertTaxRuleIsAppliedToAllPricesDownloadableIncludingTax" module="Magento_Downloadable"/>
-    <constraint name="assertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax" module="Magento_Downloadable"/>
-    <constraint name="assertTaxCalculationAfterCheckoutDownloadableExcludingTax" module="Magento_Downloadable"/>
-    <constraint name="assertTaxCalculationAfterCheckoutDownloadableIncludingTax" module="Magento_Downloadable"/>
-    <constraint name="assertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax" module="Magento_Downloadable"/>
-    <constraint name="assertOrderTaxOnBackendDownloadableExcludingTax" module="Magento_Downloadable"/>
-    <constraint name="assertOrderTaxOnBackendDownloadableIncludingTax" module="Magento_Downloadable"/>
-    <constraint name="assertOrderTaxOnBackendDownloadableExcludingIncludingTax" module="Magento_Downloadable"/>
+    <constraint name="assertTaxRuleIsAppliedToAllPricesDownloadableExcludingTax" module="Magento_Downloadable" severity="low"/>
+    <constraint name="assertTaxRuleIsAppliedToAllPricesDownloadableIncludingTax" module="Magento_Downloadable" severity="low"/>
+    <constraint name="assertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax" module="Magento_Downloadable" severity="low"/>
+    <constraint name="assertTaxCalculationAfterCheckoutDownloadableExcludingTax" module="Magento_Downloadable" severity="low"/>
+    <constraint name="assertTaxCalculationAfterCheckoutDownloadableIncludingTax" module="Magento_Downloadable" severity="low"/>
+    <constraint name="assertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax" module="Magento_Downloadable" severity="low"/>
+    <constraint name="assertOrderTaxOnBackendDownloadableExcludingTax" module="Magento_Downloadable" severity="low"/>
+    <constraint name="assertOrderTaxOnBackendDownloadableIncludingTax" module="Magento_Downloadable" severity="low"/>
+    <constraint name="assertOrderTaxOnBackendDownloadableExcludingIncludingTax" module="Magento_Downloadable" severity="low"/>
 </config>
