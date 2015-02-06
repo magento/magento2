@@ -26,22 +26,23 @@ class AssertAddToCartButtonPresent extends AbstractConstraint
      * Assert that "Add to cart" button is present on page.
      *
      * @param InjectableFixture $product
-     * @param Category $category
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
      * @param CatalogProductView $catalogProductView
+     * @param Category $category [optional]
      *
      * @return void
      */
     public function processAssert(
         InjectableFixture $product,
-        Category $category,
         CmsIndex $cmsIndex,
         CatalogCategoryView $catalogCategoryView,
-        CatalogProductView $catalogProductView
+        CatalogProductView $catalogProductView,
+        Category $category = null
     ) {
         $cmsIndex->open();
-        $cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
+        $categoryName = $category === null ? $product->getCategoryIds()[0] : $category->getName();
+        $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
 
         $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
         while (!$isProductVisible && $catalogCategoryView->getBottomToolbar()->nextPage()) {

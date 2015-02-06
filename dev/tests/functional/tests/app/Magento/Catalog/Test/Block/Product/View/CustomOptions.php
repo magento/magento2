@@ -138,7 +138,7 @@ class CustomOptions extends Form
 
             /** @var SimpleElement $optionElement */
             $optionElement = $listCustomOptions[$title];
-            $typeMethod = preg_replace('/[^a-zA-Z]/', '', $this->getOptionType($option['type']));
+            $typeMethod = preg_replace('/[^a-zA-Z]/i', '', $this->getOptionType($option['type']));
             $getTypeData = 'get' . ucfirst(strtolower($typeMethod)) . 'Data';
 
             $optionData = $this->$getTypeData($optionElement);
@@ -495,7 +495,7 @@ class CustomOptions extends Form
      */
     protected function getOptionType($option)
     {
-        $option = substr($option, strpos($option, "/") + 1);
+        $option = strpos($option, "/") !== false ? substr($option, strpos($option, "/") + 1) : $option;
         return strtolower(preg_replace('/[^a-z]/i', '', $option));
     }
 }
