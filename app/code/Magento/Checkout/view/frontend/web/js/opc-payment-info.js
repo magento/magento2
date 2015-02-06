@@ -139,7 +139,9 @@ define([
          */
         _disablePaymentMethods: function () {
             var paymentForm = $(this.options.payment.form),
-                tmpl = this.freeInputTmpl({});
+                tmpl = this.freeInputTmpl({
+                    data: {}
+                });
 
             paymentForm.find('input[name="payment[method]"]').prop('disabled', true);
             paymentForm.find(this.options.payment.methodsContainer).find('[name^="payment["]').prop('disabled', true);

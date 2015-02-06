@@ -47,17 +47,17 @@
         </div>
     </form>
     <script id="form-tmpl" type="text/x-magento-template">
-      <form id="wishlist-hidden-form" method="post" action="<%= url %>" class="no-display">
-          <% if (qty) { %>
-          <input name="qty" value="<%= qty %>">
+      <form id="wishlist-hidden-form" method="post" action="<%= data.url %>" class="no-display">
+          <% if (data.qty) { %>
+          <input name="qty" value="<%= data.qty %>">
           <% } %>
           
-          <% if (item) { %>
-          <input name="item" value="<%= item %>">
+          <% if (data.item) { %>
+          <input name="item" value="<%= data.item %>">
           <% } %>
           
-          <% if (entity) { %>
-          <input name="entity" value="<%= entity %>">
+          <% if (data.entity) { %>
+          <input name="entity" value="<%= data.entity %>">
           <% } %>
       </form>
   </script>

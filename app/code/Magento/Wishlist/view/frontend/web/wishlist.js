@@ -192,7 +192,9 @@ define([
                         entity: json.entity,
                         url: json.url
                     },
-                    html = mageTemplate(_this.options.formTmplSelector, tmplJson);
+                    html = mageTemplate(_this.options.formTmplSelector, {
+                        data: tmplJson
+                    });
 
                 $(html).appendTo('body');
                 $(_this.options.formTmplId).submit();

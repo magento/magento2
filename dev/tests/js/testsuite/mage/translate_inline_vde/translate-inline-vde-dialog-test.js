@@ -7,8 +7,8 @@ TranslateInlineDialogVdeTest = TestCase('TranslateInlineDialogVdeTest');
 TranslateInlineDialogVdeTest.prototype.testInit = function() {
     /*:DOC +=
         <script id="translate-inline-dialog-form-template" type="text/x-magento-template">
-             <form id="${id}" data-form="translate-inline-dialog-form">
-                 <% _.each(items, function(item, i) { %>
+             <form id="<%= data.id %>" data-form="translate-inline-dialog-form">
+                 <% _.each(data.items, function(item, i) { %>
                      <input id="perstore_<%= i %>" name="translate[<%= i %>][perstore]" type="hidden" value="0"/>
                      <input name="translate[<%= i %>][original]" type="hidden" value="<%= escape(item.original) %>"/>
                      <textarea id="custom_<%= i %>"
@@ -26,8 +26,8 @@ TranslateInlineDialogVdeTest.prototype.testInit = function() {
 TranslateInlineDialogVdeTest.prototype.testWithTemplate = function() {
     /*:DOC +=
         <script id="translate-inline-dialog-form-template" type="text/x-magento-template">
-             <form id="${id}" data-form="translate-inline-dialog-form">
-                 <% _.each(items, function(item, i) { %>
+             <form id="<%= data.id %>" data-form="translate-inline-dialog-form">
+                 <% _.each(data.items, function(item, i) { %>
                     <input id="perstore_<%= i %>" name="translate[<%= i %>][perstore]" type="hidden" value="0"/>
                     <input name="translate[<%= i %>][original]" type="hidden" value="<%= escape(item.original) %>"/>
                     <textarea id="custom_<%= i %>"
@@ -46,8 +46,8 @@ TranslateInlineDialogVdeTest.prototype.testOpenAndClose = function() {
     /*:DOC += 
         <div id="randomElement" data-translate=""></div>
         <script id="translate-inline-dialog-form-template" type="text/x-magento-template">
-             <form id="${id}" data-form="translate-inline-dialog-form">
-                 <% _.each(items, function(item, i) { %>
+             <form id="<%= data.id %>" data-form="translate-inline-dialog-form">
+                 <% _.each(data.items, function(item, i) { %>
                      <input id="perstore_<%= i %>" name="translate[<%= i %>][perstore]" type="hidden" value="0"/>
                      <input name="translate[<%= i %>][original]" type="hidden" value="<%= escape(item.original) %>"/>
                      <textarea id="custom_<%= i %>"

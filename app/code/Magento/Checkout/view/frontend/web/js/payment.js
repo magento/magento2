@@ -92,7 +92,9 @@ define([
          * @private
          */
         _disablePaymentMethods: function () {
-            var tmpl = mageTemplate(this.options.tmpl, {});
+            var tmpl = mageTemplate(this.options.tmpl, {
+                data: {}
+            });
 
             this.element.find('input[name="payment[method]"]').prop('disabled', true).end()
                 .find('input[id^="use"][name^="payment[use"]:not(:checked)').prop('disabled', true).parent().hide();

@@ -32,7 +32,7 @@ TranslateInlineTest.prototype.testDialogOpenOnEdit = function() {
 };
 TranslateInlineTest.prototype.testTranslationFormTemplate = function() {
     /*:DOC += <script id="translate-form-template" type="text/x-magento-template">
-      <form id="<%= id %>"><%= newTemplateVariable %></form>
+      <form id="<%= data.id %>"><%= data.newTemplateVariable %></form>
       </script>
       <div data-role="translate-dialog"></div>
      */
@@ -95,7 +95,7 @@ TranslateInlineTest.prototype.testTranslationFormTemplate = function() {
 };*/
 TranslateInlineTest.prototype.testDestroy = function() {
     /*:DOC += <script id="translate-form-template" type="text/x-magento-template">
-      <form id="<%= id %>"><%= newTemplateVariable %></form>
+      <form id="<%= data.id %>"><%= data.newTemplateVariable %></form>
       </script>
       <div data-role="translate-dialog"></div>
       <img id="edit-trigger-id">

@@ -16,15 +16,15 @@
     <img src="<%= data.img %>" height="16" width="16" class="translate-edit-icon">
 </script>
 <script id="translate-form-template" type="text/x-magento-template">
-    <form id="<%= id %>">
-        <% _.each(items, function(item, i) { %>
+    <form id="<%= data.id %>">
+        <% _.each(data.items, function(item, i) { %>
             <div class="magento_table_container"><table cellspacing="0">
                     <% _.each(item, function(value, index) { %>
                         <tr>
                             <th class="label" style="text-transform: capitalize;"><%= index %>:</th>
                             <td class="value"><%= value %></td>
                         </tr>
-                    <% }) %>
+                    <% }); %>
                 <tr>
                     <th class="label">
                         <label for="perstore_<%= i %>">Store View Specific:</label>
@@ -46,10 +46,10 @@
                     </td>
                 </tr>
             </table></div>
-        <% }) %>
+        <% }); %>
     </form>
-    <% if (message) { %>
-        <p class="a-center accent"><%= message %></p>
+    <% if (data.message) { %>
+        <p class="a-center accent"><%= data.message %></p>
     <% } %>
 </script>
 

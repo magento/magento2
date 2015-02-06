@@ -215,8 +215,8 @@ class Observer extends \Magento\Framework\Model\AbstractModel
         $options['calculationAlgorithm'] = $algorithm;
         // prepare correct template for options render
         if ($this->_taxData->displayBothPrices()) {
-            $options['optionTemplate'] = '<%- label %> <%- finalPrice.formatted %> ('
-                . __('Excl. tax:') . ' <%- basePrice.formatted %>)';
+            $options['optionTemplate'] = '<%- data.label %> <%- data.finalPrice.formatted %> ('
+                . __('Excl. tax:') . ' <%- data.basePrice.formatted %>)';
         }
 
         $response->setAdditionalOptions($options);

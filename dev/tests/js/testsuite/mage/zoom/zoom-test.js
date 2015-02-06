@@ -11,7 +11,7 @@ ZoomTest.prototype.setUp = function() {
         </div>
      </script>
      <script data-template="zoom-enlarged-image" type="text/x-magento-template">
-        <img data-role="enlarged-image" src="<%= img %>" />
+        <img data-role="enlarged-image" src="<%= data.img %>" />
      </script>
      <script data-template="zoom-track" type="text/x-magento-template">
         <div data-role="zoom-track"></div>
@@ -20,7 +20,7 @@ ZoomTest.prototype.setUp = function() {
         <div data-role="zoom-lens"></div>
      </script>
      <script data-template="notice" type="text/x-magento-template">
-        <p class="notice" data-role="notice"><%= text %></p>
+        <p class="notice" data-role="notice"><%= data.text %></p>
      </script>
      <div data-role="zoom-test">
         <img />

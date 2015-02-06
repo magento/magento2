@@ -14,7 +14,10 @@ define([
 
     $.widget('mage.regionUpdater', {
         options: {
-            regionTemplate: '<option value="<%= value %>" title="<%= title %>" <% if (isSelected) { %>selected="selected"<% } %>><%= title %></option>',
+            regionTemplate:
+                '<option value="<%= data.value %>" title="<%= data.title %>" <% if (data.isSelected) { %>selected="selected"<% } %>>' +
+                    '<%= data.title %>' +
+                '</option>',
             isRegionRequired: true,
             isZipRequired: true,
             isCountryRequired: true,
@@ -87,7 +90,9 @@ define([
                     tmplData.isSelected = true;
                 }
 
-                tmpl = this.regionTmpl(tmplData);
+                tmpl = this.regionTmpl({
+                    data: tmplData
+                });
 
                 return $(tmpl);
             }, this));

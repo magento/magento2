@@ -120,7 +120,9 @@ define([
             row.addClass(this.options.rowContainerClass).attr('id', this.options.rowIdPrefix + index);
 
             tmpl = this.rowTemplate({
-                _index_: index
+                data: {
+                    _index_: index
+                }
             });
 
             $(tmpl).appendTo(row);
