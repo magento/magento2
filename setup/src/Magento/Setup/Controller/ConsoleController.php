@@ -426,7 +426,7 @@ class ConsoleController extends AbstractActionController
             ->get('Magento\Framework\Module\DbVersionInfo');
         $outdated = $dbVersionInfo->getDbVersionErrors();
         if (!empty($outdated)) {
-            $this->log->log('The module code base doesn’t match the DB schema and data.');
+            $this->log->log("The module code base doesn't match the DB schema and data.");
             $versionParser = new VersionParser();
             $codebaseUpdateNeeded = false;
             foreach ($outdated as $row) {
