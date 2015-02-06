@@ -227,6 +227,10 @@ class Block implements Layout\GeneratorInterface
     {
         $result = [];
         foreach ($arguments as $argumentName => $argumentData) {
+            if (!isset($argumentData[\Magento\Framework\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE])) {
+                $result[$argumentName] = $argumentData;
+                continue;
+            }
             $result[$argumentName] = $this->argumentInterpreter->evaluate($argumentData);
         }
         return $result;

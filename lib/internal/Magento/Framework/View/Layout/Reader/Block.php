@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Layout\Reader;
 
 use Magento\Framework\App;
+use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Layout;
 
 /**
@@ -53,23 +54,31 @@ class Block implements Layout\ReaderInterface
     protected $scopeType;
 
     /**
+     * @var InterpreterInterface
+     */
+    protected $argumentInterpreter;
+
+    /**
      * Constructor
      *
      * @param Layout\ScheduledStructure\Helper $helper
      * @param Layout\Argument\Parser $argumentParser
      * @param Layout\ReaderPool $readerPool
+     * @param InterpreterInterface $argumentInterpreter
      * @param string|null $scopeType
      */
     public function __construct(
         Layout\ScheduledStructure\Helper $helper,
         Layout\Argument\Parser $argumentParser,
         Layout\ReaderPool $readerPool,
+        InterpreterInterface $argumentInterpreter,
         $scopeType = null
     ) {
         $this->helper = $helper;
         $this->argumentParser = $argumentParser;
         $this->readerPool = $readerPool;
         $this->scopeType = $scopeType;
+        $this->argumentInterpreter = $argumentInterpreter;
     }
 
     /**
@@ -128,6 +137,7 @@ class Block implements Layout\ReaderInterface
         $data = $scheduledStructure->getStructureElementData($elementName, []);
         $data['attributes'] = $this->getAttributes($currentElement);
         $this->updateScheduledData($currentElement, $data);
+        $this->evaluateArguments($currentElement, $data);
         $scheduledStructure->setStructureElementData($elementName, $data);
 
         $configPath = (string)$currentElement->getAttribute('ifconfig');
@@ -150,6 +160,7 @@ class Block implements Layout\ReaderInterface
         $elementName = $currentElement->getAttribute('name');
         $data = $scheduledStructure->getStructureElementData($elementName, []);
         $this->updateScheduledData($currentElement, $data);
+        $this->evaluateArguments($currentElement, $data);
         $scheduledStructure->setStructureElementData($elementName, $data);
     }
 
@@ -257,5 +268,19 @@ class Block implements Layout\ReaderInterface
             }
         }
         return $result;
+    }
+
+    /**
+     * Compute argument values
+     *
+     * @param Layout\Element $blockElement
+     * @param array $data
+     */
+    protected function evaluateArguments(Layout\Element $blockElement, array &$data)
+    {
+        $arguments = $this->getArguments($blockElement);
+        foreach ($arguments as $argumentName => $argumentData) {
+            $data['arguments'][$argumentName] = $this->argumentInterpreter->evaluate($argumentData);
+        }
     }
 }
