@@ -74,23 +74,23 @@ class Install extends Block
     }
 
     /**
-     * Get table data by correspondent div css locator.
+     * Get table data by correspondent div css selector.
      * Data inside the table must be presented via <dt>/<dd>/<dl> tags due to actual HTML5 standard.
      *
-     * @param string $locator
+     * @param string $selector
      * @return array
      */
-    protected function getTableDataByCssLocator($locator)
+    protected function getTableDataByCssLocator($selector)
     {
         $data = [];
         $keys = [];
-        $definitionTitles = $this->_rootElement->getElements($locator . ' dt');
+        $definitionTitles = $this->_rootElement->getElements($selector . ' dt');
         foreach ($definitionTitles as $dt) {
             $keys[] = strtolower(str_replace(' ', '_', str_replace(':', '', $dt->getText())));
         }
         reset($keys);
 
-        $definitionDescriptions = $this->_rootElement->getElements($locator . ' dd');
+        $definitionDescriptions = $this->_rootElement->getElements($selector . ' dd');
         foreach ($definitionDescriptions as $dd) {
             $data[current($keys)] = $dd->getText();
             next($keys);
