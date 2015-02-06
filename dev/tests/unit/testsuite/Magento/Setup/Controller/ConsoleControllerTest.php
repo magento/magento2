@@ -226,6 +226,18 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
                     2 => 'Some modules use code versions newer or older than the database. ' .
                         'First update the module code, then run the "Update" command.'
                 ],
+            ],
+            'one none module' => [
+                [[
+                    DbVersionInfo::KEY_MODULE => 'Module_One',
+                    DbVersionInfo::KEY_TYPE => 'schema',
+                    DbVersionInfo::KEY_CURRENT => 'none',
+                    DbVersionInfo::KEY_REQUIRED => '1.0.0',
+                ]],
+                [
+                    1 => '%wModule_One%wschema:%wnone%w->%w1.0.0%w',
+                    2 => 'Run the "Update" command to update your DB schema and data'
+                ],
             ]
         ];
     }

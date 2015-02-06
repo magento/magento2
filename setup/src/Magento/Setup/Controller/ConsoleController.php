@@ -430,7 +430,7 @@ class ConsoleController extends AbstractActionController
             $versionParser = new VersionParser();
             $codebaseUpdateNeeded = false;
             foreach ($outdated as $row) {
-                if (!$codebaseUpdateNeeded) {
+                if (!$codebaseUpdateNeeded && $row[DbVersionInfo::KEY_CURRENT] !== 'none') {
                     // check if module code base update is needed
                     $currentVersion = $versionParser->parseConstraints($row[DbVersionInfo::KEY_CURRENT]);
                     $requiredVersion = $versionParser->parseConstraints('>' . $row[DbVersionInfo::KEY_REQUIRED]);
