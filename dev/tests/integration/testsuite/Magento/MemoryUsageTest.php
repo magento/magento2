@@ -19,6 +19,9 @@ class MemoryUsageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped("For HHVM it's not relevant while MAGETWO-33679 is not resolved");
+        }
         $this->_helper = new \Magento\TestFramework\Helper\Memory(
             new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer())
         );
