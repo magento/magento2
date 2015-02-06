@@ -83,7 +83,7 @@
     </div>
     <div ng-show="store.advanced.expanded" class="form-group">
         <div ng-show="corruptConfig !== undefined" class="col-sm-10  error-container">
-            <input type="checkbox" ng-model="store.force" ng-click="toggleForce()">&nbsp; Allow force enable/disable of modules
+            <input type="checkbox" ng-model="store.force" ng-click="toggleForce()">&nbsp; Skip dependency check for individual modules
         </div>
         <div ng-show="corruptConfig !== undefined" class="col-sm-10 error-container animate-show text-danger glyphicon glyphicon-remove-sign" ng-bind-html="corruptConfig">
         </div>

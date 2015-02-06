@@ -49,7 +49,7 @@ class Modules extends AbstractActionController
                 $enabledModules[] = $module['name'];
             }
         }
-        $validity = $this->checkGraph($enabledModules, true);
+        $validity = $this->checkGraph($enabledModules);
         ksort($allModules);
         if ($validity->getVariable("success")) {
             return new JsonModel(['success' => true, 'modules' => $allModules]);
