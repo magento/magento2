@@ -80,7 +80,14 @@ var attributesSelectTemplate = '<tr id="<?php echo $block->getFieldId() ?>_<%= d
 
 optionIndex = 0;
 gContentAttribute = new Gcontent.Attribute(attributesSelectTemplate);
-//]]>
+
+<?php if ($block->getAttributesData()): ?>
+
+    <?php foreach ($block->getAttributesData() as $data): ?>
+        gContentAttribute.add(<?php echo $block->jsonFormat($data) ?>);
+    <?php endforeach; ?>
+
+<?php endif; ?>
 
 });
 </script>
@@ -106,20 +113,6 @@ gContentAttribute = new Gcontent.Attribute(attributesSelectTemplate);
         </tfoot>
     </table>
 </div>
-
-<?php if ($block->getAttributesData()): ?>
-<script>
-require(['prototype'], function(){
-
-//<![CDATA[
-    <?php foreach ($block->getAttributesData() as $data): ?>
-        gContentAttribute.add(<?php echo $block->jsonFormat($data) ?>);
-    <?php endforeach; ?>
-//]]>
-
-});
-</script>
-<?php endif; ?>
 
 <?php else: ?>
     <?php echo __("Please, select Attribute Set to load attributes") ?>
