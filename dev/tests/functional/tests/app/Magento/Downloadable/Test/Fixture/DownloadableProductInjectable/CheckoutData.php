@@ -97,6 +97,21 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     ],
                 ]
             ],
+
+            'one_dollar_product_with_one_separately_link' => [
+                'options' => [
+                    'links' => [
+                        [
+                            'label' => 'link_0',
+                            'value' => 'Yes'
+                        ]
+                    ],
+                ],
+                'cartItem' => [
+                    'price' => 3,
+                    'subtotal' => 3,
+                ],
+            ],
         ];
         return isset($presets[$name]) ? $presets[$name] : [];
     }

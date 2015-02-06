@@ -219,6 +219,29 @@ class Associated implements FixtureInterface
                     'catalogProductSimple::product_100_dollar',
                 ],
             ],
+            'simple_downloadable_virtual' => [
+                'assigned_products' => [
+                    [
+                        'id' => '%id%',
+                        'name' => '%item1_simple::getProductName%',
+                        'position' => '%position%',
+                        'qty' => 3,
+                    ],
+                    [
+                        'id' => '%id%',
+                        'name' => '%item2_downloadable::getProductName%',
+                        'position' => '%position%',
+                        'qty' => 7,
+                    ],
+                    [
+                        'id' => '%id%',
+                        'name' => '%item3_virtual::getProductName%',
+                        'position' => '%position%',
+                        'qty' => 11,
+                    ],
+                ],
+                'products' => [],
+            ],
         ];
         if (!isset($presets[$name])) {
             return null;

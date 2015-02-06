@@ -105,15 +105,9 @@ class Grouped extends Block
      */
     public function getOptions(FixtureInterface $product)
     {
+        /** @var GroupedProductInjectable $product */
+        $associatedProducts = $product->getAssociated()['products'];
         $options = [];
-        if ($product instanceof InjectableFixture) {
-            /** @var GroupedProductInjectable $product */
-            $associatedProducts = $product->getAssociated()['products'];
-        } else {
-            // TODO: Removed after refactoring(removed) old product fixture.
-            /** @var GroupedProduct $product */
-            $associatedProducts = $product->getAssociatedProducts();
-        }
 
         foreach ($associatedProducts as $subProduct) {
             /** @var CatalogProductSimple $subProduct */

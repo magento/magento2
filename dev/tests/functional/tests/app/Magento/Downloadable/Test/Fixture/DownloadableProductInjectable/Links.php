@@ -118,6 +118,25 @@ class Links implements FixtureInterface
                     ],
                 ],
             ],
+            'one_separately_link' => [
+                'title' => 'Links%isolation%',
+                'links_purchased_separately' => 'Yes',
+                'downloadable' => [
+                    'link' => [
+                        [
+                            'title' => 'link1%isolation%',
+                            'price' => 2,
+                            'number_of_downloads' => 2,
+                            'sample' => [
+                                'sample_type_url' => 'Yes',
+                                'sample_url' => 'http://example.com',
+                            ],
+                            'file_type_url' => 'Yes',
+                            'file_link_url' => 'http://example.com',
+                        ],
+                    ],
+                ],
+            ],
             'with_two_separately_links' => [
                 'title' => 'Links%isolation%',
                 'links_purchased_separately' => 'Yes',
