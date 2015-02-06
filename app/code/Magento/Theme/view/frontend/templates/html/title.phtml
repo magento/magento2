@@ -19,7 +19,6 @@ if (trim($block->getPageTitle())) {
 <div class="page-title<?php echo $cssClass; ?>">
     <h1 class="title"
         <?php if ($block->getId()): ?>id="<?php echo $block->getId(); ?>"<?php endif; ?>
-        tabindex="0"
         <?php echo $block->getAddBaseAttributeAria(); ?>>
             <?php echo $title ?>
     </h1>

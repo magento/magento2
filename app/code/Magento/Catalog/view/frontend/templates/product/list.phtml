@@ -72,10 +72,10 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                                     <?php if ($_product->isSaleable()): ?>
                                         <button type="button"
                                                 title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                                                aria-label="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
                                                 class="action tocart primary"
-                                                data-post='<?php echo $block->getAddToCartPostParams($_product); ?>'
-                                                aria-label="<?php echo $_productNameStripped; ?> <?php echo $block->escapeHtml(__('Add to Cart')); ?>">
-                                            <span><?php echo __('Add to Cart') ?></span>
+                                                data-post='<?php echo $block->getAddToCartPostParams($_product); ?>'">
+                                            <span aria-hidden="true"><?php echo __('Add to Cart') ?></span>
                                         </button>
                                     <?php else: ?>
                                         <?php if ($_product->getIsSalable()): ?>
@@ -90,11 +90,11 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                                         <a href="#" 
                                            class="action towishlist"
                                            title="<?php echo $block->escapeHtml(__('Add to Wishlist')); ?>"
+                                           aria-label="<?php echo $block->escapeHtml(__('Add to Wishlist')); ?>"
                                            data-post='<?php echo $block->getAddToWishlistParams($_product); ?>'
                                            data-action="add-to-wishlist"
-                                           role="button"
-                                           aria-label="<?php echo $_productNameStripped; ?> <?php echo $block->escapeHtml(__('Add to Wishlist')); ?>">
-                                            <span><?php echo __('Add to Wishlist') ?></span>
+                                           role="button">
+                                            <span aria-hidden="true"><?php echo __('Add to Wishlist') ?></span>
                                         </a>
                                     <?php endif; ?>
                                     <?php
@@ -103,10 +103,10 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                                     <a href="#" 
                                        class="action tocompare"
                                        title="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
+                                       aria-label="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
                                        data-post='<?php echo $compareHelper->getPostDataParams($_product); ?>'
-                                       role="button"
-                                       aria-label="<?php echo $_productNameStripped; ?> <?php echo $block->escapeHtml(__('Add to Compare')); ?>">
-                                        <span><?php echo __('Add to Compare') ?></span>
+                                       role="button">
+                                        <span aria-hidden="true"><?php echo __('Add to Compare') ?></span>
                                     </a>
                                 </div>
                             </div>
