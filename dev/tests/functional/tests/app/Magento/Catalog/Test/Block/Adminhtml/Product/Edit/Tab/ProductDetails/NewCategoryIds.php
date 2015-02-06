@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Backend\Test\Block\Widget\Form;
 
@@ -51,30 +50,16 @@ class NewCategoryIds extends Form
      */
     public function addNewCategory(Category $category)
     {
-        $parentCategory = $category->getDataFieldConfig('parent_id')['source']->getParentCategory()->getName();
+        $data = [
+            'name' => $category->getName(),
+            'parent_category' => $category->getDataFieldConfig('parent_id')['source']->getParentCategory()->getName()
+        ];
 
         $this->openNewCategoryDialog();
-        $this->fill($category);
-
-        $this->selectParentCategory($parentCategory);
+        $this->_fill($this->dataMapping($data));
 
         $this->_rootElement->find($this->createCategoryButton)->click();
         $this->waitForElementNotVisible($this->createCategoryButton);
-    }
-
-    /**
-     * Select parent category for new one.
-     *
-     * @param string $categoryName
-     * @return void
-     */
-    protected function selectParentCategory($categoryName)
-    {
-        $this->_rootElement->find(
-            $this->parentCategoryBlock,
-            Locator::SELECTOR_CSS,
-            '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails\ParentCategoryIds'
-        )->setValue($categoryName);
     }
 
     /**

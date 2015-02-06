@@ -31,6 +31,13 @@ class ProductDetails extends ProductTab
     protected $categoryFollowingSibling = '//*[@id="attribute-category_ids-container"]/following-sibling::div[%d]';
 
     /**
+     * Locator for following sibling of category element.
+     *
+     * @var string
+     */
+    protected $newCategoryRootElement = 'body';
+
+    /**
      * Fill data to fields on tab.
      *
      * @param array $fields
@@ -48,7 +55,7 @@ class ProductDetails extends ProductTab
             ) {
                 $this->blockFactory->create(
                     'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails\NewCategoryIds',
-                    ['element' => $this->browser->find('body')]
+                    ['element' => $this->browser->find($this->newCategoryRootElement)]
                 )->addNewCategory($fields['category_ids']['source']->getCategories()[0]);
             } else {
                 $this->_fill([$data['category_ids']], $element);

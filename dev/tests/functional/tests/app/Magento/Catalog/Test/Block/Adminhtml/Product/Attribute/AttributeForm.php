@@ -52,7 +52,7 @@ class AttributeForm extends FormTabs
         BrowserInterface $browser,
         XmlConverter $xmlConverter,
         array $config = []
-    ){
+    ) {
         parent::__construct($element, $mapper, $blockFactory, $browser, $xmlConverter, $config);
         $this->browser->switchToFrame(new Locator($this->iFrame));
     }
