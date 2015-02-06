@@ -130,6 +130,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
     ) {
+        $this->relationProcessor = $objectRelationProcessor;
         $this->_resources = $resource;
         parent::__construct();
     }
