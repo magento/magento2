@@ -5,15 +5,14 @@
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
-
 class UpdatedTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param string $bool
+     * @param string $defaultValue
      * @param string $assert
      * @dataProvider renderProvider
      */
-    public function testRender($bool, $assert)
+    public function testRender($defaultValue, $assert)
     {
         $context = $this->getMockBuilder('\Magento\Backend\Block\Context')
             ->disableOriginalConstructor()
@@ -21,12 +20,11 @@ class UpdatedTest extends \PHPUnit_Framework_TestCase
         $model = new Updated($context);
         $obj = new \Magento\Framework\Object();
         $obj->setGetter('getValue');
-        $obj->setDefault($bool);
+        $obj->setDefault($defaultValue);
         $obj->setValue('');
         $model->setColumn($obj);
         $result = $model->render($obj);
         $this->assertEquals($result, $assert);
-
     }
 
     public function renderProvider()
