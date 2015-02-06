@@ -310,8 +310,13 @@ class Observer
         $options['calculationAlgorithm'] = $algorithm;
         // prepare correct template for options render
         if ($this->_taxData->displayBothPrices()) {
-            $options['optionTemplate'] = '<%- data.label %> <%- data.finalPrice.formatted %> ('
-                . __('Excl. tax:') . ' <%- data.basePrice.formatted %>)';
+            $options['optionTemplate'] = sprintf(
+                '<%%= label %%>'
+                . '<%% if(finalPrice.value) { %%>'
+                . ' +<%%= finalPrice.formatted %%> (%1$s <%%= basePrice.formatted %%>)'
+                . '<%% } %%>',
+                __('Excl. tax:')
+            );
         }
 
         $response->setAdditionalOptions($options);
