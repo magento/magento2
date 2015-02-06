@@ -28,16 +28,16 @@ class Session extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Class constructor
      *
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
         \Magento\Persistent\Model\SessionFactory $sessionFactory
     ) {
         $this->_sessionFactory = $sessionFactory;
-        parent::__construct($resource, $objectRelationProcessor);
+        parent::__construct($resource, $transactionManager);
     }
 
     /**

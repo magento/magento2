@@ -35,14 +35,14 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Filter\FilterManager $filter
      * @param Helper $resourceHelper
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Filter\FilterManager $filter,
         \Magento\Search\Model\Resource\Helper $resourceHelper
@@ -50,7 +50,7 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $this->_eventManager = $eventManager;
         $this->filter = $filter;
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($resource, $objectRelationProcessor);
+        parent::__construct($resource, $transactionManager);
     }
 
     /**

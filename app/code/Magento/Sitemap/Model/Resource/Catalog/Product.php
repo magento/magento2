@@ -84,7 +84,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
      * @param \Magento\Sitemap\Helper\Data $sitemapData
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
@@ -96,7 +96,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
         \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
@@ -114,7 +114,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $this->_eavConfigFactory = $eavConfigFactory;
         $this->_mediaConfig = $mediaConfig;
         $this->_sitemapData = $sitemapData;
-        parent::__construct($resource, $objectRelationProcessor);
+        parent::__construct($resource, $transactionManager);
     }
 
     /**

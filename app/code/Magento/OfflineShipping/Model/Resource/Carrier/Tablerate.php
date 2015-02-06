@@ -123,7 +123,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
@@ -134,7 +134,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
@@ -143,7 +143,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Framework\Filesystem $filesystem
     ) {
-        parent::__construct($resource, $objectRelationProcessor);
+        parent::__construct($resource, $transactionManager);
         $this->_coreConfig = $coreConfig;
         $this->_logger = $logger;
         $this->_storeManager = $storeManager;

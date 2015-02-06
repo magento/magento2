@@ -48,7 +48,7 @@ class Engine extends AbstractDb implements EngineInterface
      * Construct
      *
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param Advanced $searchResource
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
@@ -56,7 +56,7 @@ class Engine extends AbstractDb implements EngineInterface
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogSearch\Model\Resource\Advanced $searchResource,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
@@ -66,7 +66,7 @@ class Engine extends AbstractDb implements EngineInterface
         $this->_searchResource = $searchResource;
         $this->_catalogSearchData = $catalogSearchData;
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($resource, $objectRelationProcessor);
+        parent::__construct($resource, $transactionManager);
     }
 
     /**

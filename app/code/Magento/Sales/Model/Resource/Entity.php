@@ -57,14 +57,14 @@ abstract class Entity extends AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
      * @param Attribute $attribute
      * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param GridInterface|null $gridAggregator
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\Sales\Model\Increment $salesIncrement,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
@@ -72,7 +72,7 @@ abstract class Entity extends AbstractDb
         $this->attribute = $attribute;
         $this->salesIncrement = $salesIncrement;
         $this->gridAggregator = $gridAggregator;
-        parent::__construct($resource, $objectRelationProcessor);
+        parent::__construct($resource, $transactionManager);
     }
 
     /**

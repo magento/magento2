@@ -26,19 +26,19 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param Customer\CollectionFactory $customersFactory
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_customersFactory = $customersFactory;
-        parent::__construct($resource, $objectRelationProcessor);
+        parent::__construct($resource, $transactionManager);
     }
 
     /**

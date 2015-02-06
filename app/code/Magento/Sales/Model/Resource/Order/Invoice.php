@@ -36,19 +36,19 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
 
     /**
      * @param Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
      * @param InvoiceGrid $gridAggregator
      */
     public function __construct(
         Resource $resource,
-        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
         InvoiceGrid $gridAggregator
     ) {
-        parent::__construct($resource, $objectRelationProcessor, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($resource, $transactionManager, $attribute, $salesIncrement, $gridAggregator);
     }
 
     /**

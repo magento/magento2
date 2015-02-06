@@ -116,22 +116,28 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     protected $_serializableFields = [];
 
     /**
-     * @var ObjectRelationProcessorInterface
+     * @var TransactionManagerInterface
      */
-    protected $relationProcessor;
+    protected $transactionManager;
 
     /**
-     * Class constructor
-     *
+     * @var ObjectRelationProcessor
+     */
+    protected $objectRelationProcessor;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+     * @param TransactionManagerInterface $transactionManager
+     * @param ObjectRelationProcessor $objectRelationProcessor
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+        TransactionManagerInterface $transactionManager,
+        ObjectRelationProcessor $objectRelationProcessor
     ) {
-        $this->relationProcessor = $objectRelationProcessor;
+        $this->transactionManager = $transactionManager;
         $this->_resources = $resource;
+        $this->objectRelationProcessor = $objectRelationProcessor;
         parent::__construct();
     }
 
@@ -398,7 +404,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             $object->beforeSave();
             if ($object->isSaveAllowed()) {
                 $this->_serializeFields($object);
-                $this->relationProcessor->validate($this->getMainTable(), $object->getData());
+                $this->transactionManager->validate($this->getMainTable(), $object->getData());
                 $this->_beforeSave($object);
                 $this->_checkUnique($object);
                 if (!is_null($object->getId()) && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
@@ -464,27 +470,28 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @throws \Exception
      */
     public function delete(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->relationProcessor->beginTransaction($this->_getWriteAdapter());
+        $connection = $this->transactionManager->start($this->_getWriteAdapter());
         try {
             $object->beforeDelete();
             $this->_beforeDelete($object);
-            $this->relationProcessor->delete(
-                $this->_getWriteAdapter(),
+            $this->objectRelationProcessor->delete(
+                $connection,
                 $this->getMainTable(),
                 $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId()),
                 $object->getData()
             );
+            $this->transactionManager->end($connection);
             $this->_afterDelete($object);
-
             $object->isDeleted(true);
             $object->afterDelete();
-            $this->relationProcessor->commit();
+            $this->transactionManager->commit();
             $object->afterDeleteCommit();
         } catch (\Exception $e) {
-            $this->relationProcessor->rollBack();
+            $this->transactionManager->rollBack();
             throw $e;
         }
         return $this;

@@ -60,7 +60,7 @@ class SetupFactory
             $this->serviceLocator->get('Magento\Setup\Module\Setup\FileResolver'),
             $moduleName,
             $this->getResource(),
-            $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\ObjectRelationProcessor')
+            $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\TransactionManager')
         );
     }
 

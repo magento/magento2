@@ -33,7 +33,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor
+     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
@@ -41,7 +41,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessorInterface $objectRelationProcessor,
+        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
@@ -51,7 +51,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $this->_storeManager = $storeManager;
         $this->_logger = $logger;
         $this->_reviewSummary = $reviewSummary;
-        parent::__construct($resource, $objectRelationProcessor);
+        parent::__construct($resource, $transactionManager);
     }
 
     /**

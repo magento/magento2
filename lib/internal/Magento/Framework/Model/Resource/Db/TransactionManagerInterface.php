@@ -8,7 +8,7 @@ namespace Magento\Framework\Model\Resource\Db;
 
 use Magento\Framework\DB\Adapter\AdapterInterface as Connection;
 
-interface ObjectRelationProcessorInterface
+interface TransactionManagerInterface
 {
     /**
      * Process delete operation
@@ -35,9 +35,17 @@ interface ObjectRelationProcessorInterface
      * Start transaction
      *
      * @param Connection $connection
+     * @return Connection
+     */
+    public function start(Connection $connection);
+
+    /**
+     * Vote that connection is ready to commit
+     *
+     * @param Connection $connection
      * @return void
      */
-    public function beginTransaction(Connection $connection);
+    public function end(Connection $connection);
 
     /**
      * Commit transaction

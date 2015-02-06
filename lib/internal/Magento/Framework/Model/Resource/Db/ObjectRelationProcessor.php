@@ -8,56 +8,27 @@ namespace Magento\Framework\Model\Resource\Db;
 
 use Magento\Framework\DB\Adapter\AdapterInterface as Connection;
 
-class ObjectRelationProcessor implements ObjectRelationProcessorInterface
+class ObjectRelationProcessor
 {
     /**
-     * @var Connection
-     */
-    protected $connection = null;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function delete(Connection $connection, $table, $condition, array $involvedData)
-    {
-        $connection->delete($table, $condition);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function beginTransaction(Connection $connection)
-    {
-        $this->connection = $connection;
-        $this->connection->beginTransaction();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function commit()
-    {
-        $this->connection->commit();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rollBack()
-    {
-        $this->connection->rollBack();
-    }
-
-    /**
-     * Validate data that is about to be saved. Check that referenced entity(s) exists.
+     * Process delete action
      *
+     * @param TransactionManagerInterface $transactionManager
+     * @param Connection $connection
      * @param string $table
+     * @param string $condition
      * @param array $involvedData
      * @return void
      * @throws \LogicException
      */
-    public function validate($table, array $involvedData)
-    {
-
+    public function delete(
+        TransactionManagerInterface $transactionManager,
+        Connection $connection,
+        $table,
+        $condition,
+        array $involvedData
+    ) {
+        $connection->delete($table, $condition);
+        $transactionManager->end($connection);
     }
 }
