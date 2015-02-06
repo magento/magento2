@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Controller;
 
+use Composer\Package\Version\VersionParser;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\ConsoleLogger;
@@ -426,7 +427,17 @@ class ConsoleController extends AbstractActionController
         $outdated = $dbVersionInfo->getDbVersionErrors();
         if (!empty($outdated)) {
             $this->log->log('The module code base doesn’t match the DB schema and data.');
+            $versionParser = new VersionParser();
+            $codebaseUpdateNeeded = false;
             foreach ($outdated as $row) {
+                if (!$codebaseUpdateNeeded) {
+                    // check if module code base update is needed
+                    $currentVersion = $versionParser->parseConstraints($row[DbVersionInfo::KEY_CURRENT]);
+                    $requiredVersion = $versionParser->parseConstraints('>' . $row[DbVersionInfo::KEY_REQUIRED]);
+                    if ($requiredVersion->matches($currentVersion)) {
+                        $codebaseUpdateNeeded = true;
+                    };
+                }
                 $this->log->log(sprintf(
                     "%20s %10s: %11s  ->  %-11s",
                     $row[DbVersionInfo::KEY_MODULE],
@@ -435,10 +446,14 @@ class ConsoleController extends AbstractActionController
                     $row[DbVersionInfo::KEY_REQUIRED]
                 ));
             }
-            $this->log->log(
-                'Some modules use code versions newer or older than the database. ' .
-                'First update the module code, then run the “Update” command.'
-            );
+            if ($codebaseUpdateNeeded) {
+                $this->log->log(
+                    'Some modules use code versions newer or older than the database. ' .
+                    'First update the module code, then run the "Update" command.'
+                );
+            } else {
+                $this->log->log('Run the "Update" command to update your DB schema and data');
+            }
         } else {
             $this->log->log('All modules are up to date');
         }
