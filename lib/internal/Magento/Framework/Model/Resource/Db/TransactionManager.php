@@ -10,37 +10,32 @@ use Magento\Framework\DB\Adapter\AdapterInterface as Connection;
 
 class TransactionManager implements TransactionManagerInterface
 {
-    /**
-     * @var Connection
-     */
-    protected $connection = null;
+    const STATE_IN_PROGRESS = 'in progress';
+    const STATE_FINISHED = 'finished';
 
     /**
-     * {@inheritdoc}
+     * @var array
      */
-    public function delete(Connection $connection, $table, $condition, array $involvedData)
-    {
-        $connection->delete($table, $condition);
-    }
+    protected $participants;
 
     /**
      * {@inheritdoc}
      */
     public function start(Connection $connection)
     {
-        $this->connection = $connection;
-        $this->connection->beginTransaction();
+        $key = $this->getConnectionKey($connection);
+        $this->participants[$key]['item'] = $connection;
+        $this->participants[$key]['state'] = self::STATE_IN_PROGRESS;
+        $connection->beginTransaction();
     }
 
     /**
-     * Vote that connection is ready to commit
-     *
-     * @param Connection $connection
-     * @return void
+     * {@inheritdoc}
      */
     public function end(Connection $connection)
     {
-
+        $key = $this->getConnectionKey($connection);
+        $this->participants[$key]['state'] = self::STATE_FINISHED;
     }
 
     /**
@@ -48,7 +43,17 @@ class TransactionManager implements TransactionManagerInterface
      */
     public function commit()
     {
-        $this->connection->commit();
+        foreach ($this->participants as $item) {
+            if ($item['state'] != self::STATE_FINISHED) {
+                throw new \Exception('Incomplete transactions. Cannot update row: a foreign key constraint fails');
+            }
+        }
+
+        foreach ($this->participants as $item) {
+            /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+            $connection = $item['item'];
+            $connection->commit();
+        }
     }
 
     /**
@@ -56,19 +61,21 @@ class TransactionManager implements TransactionManagerInterface
      */
     public function rollBack()
     {
-        $this->connection->rollBack();
+        foreach ($this->participants as $item) {
+            /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+            $connection = $item['item'];
+            $connection->rollBack();
+        }
     }
 
     /**
-     * Validate data that is about to be saved. Check that referenced entity(s) exists.
+     * Get object key
      *
-     * @param string $table
-     * @param array $involvedData
-     * @return void
-     * @throws \LogicException
+     * @param Connection $connection
+     * @return string
      */
-    public function validate($table, array $involvedData)
+    protected function getConnectionKey(Connection $connection)
     {
-
+        return spl_object_hash($connection);
     }
 }

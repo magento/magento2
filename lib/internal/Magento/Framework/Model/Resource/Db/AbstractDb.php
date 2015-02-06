@@ -399,7 +399,6 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             $object->beforeSave();
             if ($object->isSaveAllowed()) {
                 $this->_serializeFields($object);
-                $this->transactionManager->validate($this->getMainTable(), $object->getData());
                 $this->_beforeSave($object);
                 $this->_checkUnique($object);
                 if (!is_null($object->getId()) && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
@@ -480,7 +479,6 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                 $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId()),
                 $object->getData()
             );
-            $this->transactionManager->end($connection);
             $this->_afterDelete($object);
             $object->isDeleted(true);
             $object->afterDelete();
