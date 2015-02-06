@@ -119,6 +119,7 @@ angular.module('customize-your-store', ['ngStorage'])
                         $state.loadedModules = data;
                         $scope.store.errorMessage = false;
                         $scope.store.showError = false;
+                        $scope.store.errorFlag = false;
                         $scope.store.loadedAllModules = false;
                         $scope.store.allModules =[];
                         $scope.store.selectedModules =[];
