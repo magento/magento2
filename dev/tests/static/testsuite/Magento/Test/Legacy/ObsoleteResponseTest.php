@@ -47,7 +47,7 @@ class ObsoleteResponseTest extends \PHPUnit_Framework_TestCase
                     $quotedMethod = preg_quote($method, '/');
                     $this->assertSame(
                         0,
-                        preg_match('/(?<=[a-z\d_:]|->|function\s)' . $quotedMethod . '\s*\(/iS', $content),
+                        preg_match('/(?<=[a-z\\d_:]|->|function\s)' . $quotedMethod . '\s*\(/iS', $content),
                         "File: $file\nContains obsolete method: $method . "
                     );
                 }
