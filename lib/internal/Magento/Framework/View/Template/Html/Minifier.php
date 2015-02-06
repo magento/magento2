@@ -100,7 +100,7 @@ class Minifier implements MinifierInterface
     {
         $file = $this->appDirectory->getRelativePath($file);
         $content = preg_replace(
-            '#(?<!' . implode('|', $this->inlineHtmlTags) . ')(?<!\?)\> \<#',
+            '#(?<!' . implode('|', $this->inlineHtmlTags) . ')\> \<#',
             '><',
             preg_replace(
                 '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)'
