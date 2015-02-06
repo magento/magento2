@@ -50,7 +50,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
             $url = $this->_getUrl();
 
             if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
-                $url = $this->_urlBuilder->getBaseUrl('media') . $url;
+                $url = $this->_urlBuilder->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]) . $url;
             }
 
             $html = '<a href="' .
