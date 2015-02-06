@@ -36,15 +36,17 @@ class Modules extends AbstractActionController
     }
 
     /**
+     * Returns list of Modules
+     *
      * @return JsonModel
      */
     public function indexAction()
     {
         $allModules = $this->allModules->getAllModules();
-        $enabledModules =[];
+        $enabledModules = [];
         foreach ($allModules as $module ) {
             if ($module['selected']) {
-                $enabledModules [] = $module['name'];
+                $enabledModules[] = $module['name'];
             }
         }
         $validity = $this->checkGraph($enabledModules, true);
@@ -71,23 +73,20 @@ class Modules extends AbstractActionController
     }
 
     /**
-     * @param [] $toBeEnabledModules
+     * Checks validity of enabling/disabling modules.
+     *
+     * @param array $toBeEnabledModules
      * @param bool $prettyFormat
      * @return JsonModel
      */
-    private function checkGraph($toBeEnabledModules, $prettyFormat = false)
+    private function checkGraph(array $toBeEnabledModules, $prettyFormat = false)
     {
         $status = $this->objectManager->create('Magento\Framework\Module\Status');
 
         // checking enabling constraints
         $constraints = $status->checkConstraints(true, $toBeEnabledModules, [], $prettyFormat);
         if ($constraints) {
-            $message = $this->handleConstraints(true, $constraints);
-            return new JsonModel(['success' => false, 'error' => $message]);
-        }
-
-        if ($constraints) {
-            $message = $this->handleConstraints(false, $constraints);
+            $message = $this->getConstraintsFailureMessage(true, $constraints);
             return new JsonModel(['success' => false, 'error' => $message]);
         }
 
@@ -107,7 +106,7 @@ class Modules extends AbstractActionController
         $constraints = $status->checkConstraints($params['status'], [$params['module']],
             array_diff($params['selectedModules'], [$params['module']]));
         if ($constraints) {
-            $message = $this->handleConstraints($params['status'], $constraints);
+            $message = $this->getConstraintsFailureMessage($params['status'], $constraints);
             return new JsonModel(['success' => false, 'error' => $message]);
         }
 
@@ -121,10 +120,10 @@ class Modules extends AbstractActionController
      * Handles constraints
      *
      * @param bool $isEnable
-     * @param string $constraints
+     * @param string[] $constraints
      * @return string
      */
-    private function handleConstraints($isEnable, $constraints)
+    private function getConstraintsFailureMessage($isEnable, array $constraints)
     {
         if ($isEnable) {
             $updateType = 'enable';

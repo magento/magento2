@@ -18,11 +18,31 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
      */
     private $deploymentConfig;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Magento\Framework\Module\DependencyChecker
+     */
+    private $dependencyChecker;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerFactory
+     */
+    private $objectManagerFactory;
+
+
     public function setUp()
     {
         $this->moduleLoader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
+        $this->dependencyChecker = $this->getMock('Magento\Framework\Module\DependencyChecker', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-
+        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerFactory = $this->getMock('Magento\Setup\Model\ObjectManagerFactory', [], [], '', false);
+        $this->objectManagerFactory->expects($this->once())->method('create')->willReturn($this->objectManager);
+        $this->objectManager->expects($this->once())->method('get')->willReturn($this->dependencyChecker);
     }
 
     /**
@@ -30,42 +50,89 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedConfig
      * @param array $expectedResult
      *
-     * @dataProvider testGetAllModulesDataProvider
+     * @dataProvider getAllModulesDataProvider
      */
     public function testGetAllModules($expectedAllModules, $expectedConfig, $expectedResult)
     {
         $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
         $this->deploymentConfig->expects($this->once())->method('getSegment')
             ->will($this->returnValue($expectedConfig));
+        $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
+            ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
+        );
 
-        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig);
+        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerFactory);
         $allModules = $moduleStatus->getAllModules();
         $this->assertSame($expectedResult[0], $allModules['module1']['selected']);
         $this->assertSame($expectedResult[1], $allModules['module2']['selected']);
         $this->assertSame($expectedResult[2], $allModules['module3']['selected']);
+        $this->assertSame($expectedResult[3], $allModules['module4']['selected']);
+    }
+
+    /**
+     * @param array $expectedAllModules
+     * @param array $expectedConfig
+     * @param array $expectedResult
+     *
+     * @dataProvider getAllModulesDataProvider
+     */
+    public function testGetAllModulesWithInputs($expectedAllModules, $expectedConfig, $expectedResult)
+    {
+        $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
+        $this->deploymentConfig->expects($this->never())->method('getSegment')
+            ->will($this->returnValue($expectedConfig));
+        $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
+            ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
+        );
+
+        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerFactory);
+        $allModules = $moduleStatus->getAllModules(['module1' , 'module2']);
+        $this->assertSame(true, $allModules['module1']['selected']);
+        $this->assertSame(true, $allModules['module2']['selected']);
+        $this->assertSame(false, $allModules['module3']['selected']);
+        $this->assertSame(false, $allModules['module4']['selected']);
+    }
+
+    /**
+     * @param array $expectedAllModules
+     * @param array $expectedConfig
+     * @param array $expectedResult
+     *
+     *  @dataProvider getAllModulesDataProvider
+     */
+    public function testSetIsEnabled($expectedAllModules, $expectedConfig, $expectedResult)
+    {
+        $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
+        $this->deploymentConfig->expects($this->once())->method('getSegment')
+            ->will($this->returnValue($expectedConfig));
+        $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
+            ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
+        );
+
+        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerFactory);
+        $moduleStatus->setIsEnabled(false, 'module1');
+        $allModules = $moduleStatus->getAllModules();
+        $this->assertSame(false, $allModules['module1']['selected']);
+        $this->assertSame($expectedResult[1], $allModules['module2']['selected']);
+        $this->assertSame($expectedResult[2], $allModules['module3']['selected']);
+        $this->assertSame($expectedResult[3], $allModules['module4']['selected']);
     }
 
     /**
      * @return array
      */
-    public function testGetAllModulesDataProvider()
+    public function getAllModulesDataProvider()
     {
-        $expectedAllModules = ['module1' => '' , 'module2' => '' , 'module3' => '' ];
+        $expectedAllModules = [
+            'module1' => ['name' => 'module1'],
+            'module2' => ['name' => 'module2'],
+            'module3' => ['name' => 'module3'],
+            'module4' => ['name' => 'module4']
+        ];
         $expectedConfig = ['module1' => 0, 'module3' => 0];
         return [
-            [$expectedAllModules, $expectedConfig, [false, true, false]],
-            [$expectedAllModules, null, [true, true, true]],
-            [$expectedAllModules, [], [true, true, true]],
+            [$expectedAllModules, $expectedConfig, [false, true, false, true]],
+            [$expectedAllModules, [], [true, true, true, true]],
         ];
-    }
-
-    public function testGetAllModulesWithNull()
-    {
-        $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue(null));
-        $this->deploymentConfig->expects($this->never())->method('getSegment');
-
-        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig);
-        $allModules = $moduleStatus->getAllModules();
-        $this->assertSame([], $allModules);
     }
 }

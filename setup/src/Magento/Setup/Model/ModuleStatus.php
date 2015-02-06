@@ -57,10 +57,10 @@ class ModuleStatus
     /**
      * Returns list of Modules to be displayed
      *
-     * @param [] $selectedModules
+     * @param array $selectedModules
      * @return array
      */
-    public function getAllModules($selectedModules = null)
+    public function getAllModules(array $selectedModules = null)
     {
         if (isset($this->allModules)) {
             if (isset($selectedModules)) {
@@ -102,7 +102,7 @@ class ModuleStatus
      */
     private function getListOfDisableModules()
     {
-        $canBeDisabled =[];
+        $canBeDisabled = [];
         $enabledModules = $this->getListOfEnabledModules();
         foreach ($this->allModules as $module) {
             $errorMessages = $this->dependencyChecker->checkDependenciesWhenDisableModules(
@@ -110,7 +110,7 @@ class ModuleStatus
                 $enabledModules
             );
             if (sizeof($errorMessages[$module['name']]) === 0) {
-                $canBeDisabled [] = $module['name'];
+                $canBeDisabled[] = $module['name'];
             }
         }
         return $canBeDisabled;
@@ -126,7 +126,7 @@ class ModuleStatus
         $enabledModules = [];
         foreach ($this->allModules as $module) {
             if ($module['selected']) {
-                $enabledModules [] =  $module['name'];
+                $enabledModules[] =  $module['name'];
             }
         }
         return $enabledModules;

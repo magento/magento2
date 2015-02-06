@@ -92,20 +92,25 @@ class Status
      *  
      * @return string[]
      */
-    public function checkConstraints($isEnabled, $modulesToBeChanged, $currentlyEnabledModules = null,
+    public function checkConstraints($isEnabled,
+        $modulesToBeChanged,
+        $currentlyEnabledModules = null,
         $prettyMessage = false
     ) {
         $errorMessages = [];
         if ($isEnabled) {
             $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenEnableModules(
-                $modulesToBeChanged, $currentlyEnabledModules
+                $modulesToBeChanged,
+                $currentlyEnabledModules
             );
             $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules(
-                $modulesToBeChanged, $currentlyEnabledModules
+                $modulesToBeChanged,
+                $currentlyEnabledModules
             );
         } else {
             $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenDisableModules(
-                $modulesToBeChanged, $currentlyEnabledModules
+                $modulesToBeChanged,
+                $currentlyEnabledModules
             );
             $errorModulesConflict = [];
         }

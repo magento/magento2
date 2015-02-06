@@ -98,9 +98,9 @@ angular.module('customize-your-store', ['ngStorage'])
             // validate enabling disabling here.
             var idx = $scope.store.selectedModules.indexOf(module);
             var moduleStatus = (idx > -1) ? true : false;
-            var h = {'allModules' : $scope.store.allModules, 'selectedModules' : $scope.store.selectedModules, 'module' : module, 'status' : moduleStatus};
+            var allParameters = {'allModules' : $scope.store.allModules, 'selectedModules' : $scope.store.selectedModules, 'module' : module, 'status' : moduleStatus};
 
-            $http.post('index.php/modules/validate', h )
+            $http.post('index.php/modules/validate', allParameters)
                 .success(function (data) {
                     $scope.checkModuleConstraints.result = data;
                     if ((($scope.checkModuleConstraints.result.error !== undefined) && (!$scope.checkModuleConstraints.result.success))) {
@@ -132,7 +132,6 @@ angular.module('customize-your-store', ['ngStorage'])
                 for(var i = 0; i < $scope.store.allModules.length; i++) {
                     var idx = $scope.store.selectedModules.indexOf($scope.store.allModules[i]);
                     if ($scope.store.disabledModules.indexOf($scope.store.allModules[i]) < 0) {
-                        $scope.store.selectedModules.splice(idx, 1);
                     }
                 }
             }
