@@ -13,16 +13,22 @@
 function buildConfig(type, dir, port) {
     'use strict';
 
+    var isLib           = dir === 'lib',
+        requireConfigs  = ['<%= path.spec %>/require.config.js'],
+        specsRoot       = '<%= path.spec %>/' + type,
+        specs           =  specsRoot + (isLib ? '/lib/**/*.js' : '/**/' + dir + '/**/*.js');
+
+    if (!isLib) {
+        requireConfigs.push('<%= path.spec %>/' + type + '/config/' + dir + '.js');
+    }
+
     return {
         src: '<%= path.spec %>/shim.js',
         options: {
             host: 'http://localhost:' + port,
-            specs: '<%= path.spec %>/' + type + '/**/' + dir + '/**/*.js',
+            specs: specs,
             templateOptions: {
-                requireConfigFile: [
-                    '<%= path.spec %>/require.config.js',
-                    '<%= path.spec %>/' + type + '/config/' + dir + '.js'
-                ]
+                requireConfigFile: requireConfigs
             }
         }
     };
@@ -51,9 +57,9 @@ module.exports = function (grunt) {
 
         options = this.options({
             port: 3000,
-            theme: 'blank',
-            areaDir: 'adminhtml',
-            shareDir: 'base',
+            theme: null,
+            areaDir: null,
+            shareDir: null,
             enableLogs: false,
             middleware: null
         });
