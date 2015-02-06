@@ -47,7 +47,7 @@ try {
     $compilationDirs = [
         $rootDir . '/app/code',
         $rootDir . '/lib/internal/Magento',
-        $rootDir . '/dev/tools/Magento/Tools/View'
+        $rootDir . '/dev/tools/Magento/Tools'
     ];
 
     /** @var Writer\WriterInterface $logWriter Writer model for success messages */
