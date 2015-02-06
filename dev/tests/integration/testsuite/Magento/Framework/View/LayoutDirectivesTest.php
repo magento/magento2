@@ -21,10 +21,15 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
      */
     protected $builderFactory;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->layoutFactory = $objectManager->get('Magento\Framework\View\LayoutFactory');
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->layoutFactory = $this->objectManager->get('Magento\Framework\View\LayoutFactory');
     }
 
     /**
@@ -35,6 +40,7 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getLayoutModel($fixtureFile)
     {
+        $this->objectManager->get('Magento\Framework\App\Cache\Type\Layout')->clean();
         $layout = $this->layoutFactory->create();
         /** @var $xml \Magento\Framework\View\Layout\Element */
         $xml = simplexml_load_file(

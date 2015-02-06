@@ -2908,4 +2908,5 @@ return [
         'Magento\Core\Model\TemplateEngine\Plugin\DebugHints',
         'Magento\Developer\Model\TemplateEngine\Plugin\DebugHints'
     ],
+    ['Magento\Backend\Model\View', 'Magento\Framework\App\View'],
 ];

@@ -2046,4 +2046,7 @@ return [
     ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
     ['register', 'Magento\Sendfriend\Model\Sendfriend'],
     ['_getImageHelper', 'Magento\Catalog\Model\Product'],
+    ['beforeGenerateBlock', 'Magento\Backend\Model\View\Layout\Builder'],
+    ['beforeGenerateBlock', 'Magento\Backend\Model\View\Page\Builder'],
+    ['filterAclNodes', 'Magento\Backend\Model\View\Layout\Filter\Acl', 'Magento\Backend\Model\View\Layout\Filter\Acl::filterAclElements'],
 ];
