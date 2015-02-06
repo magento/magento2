@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="ReAuthorizeTokensIntegrationEntityTest">
     <variation name="ReAuthorizeTokensIntegrationEntityTestVariation1" firstConstraint="assertIntegrationSuccessReauthorizeMessage" method="test">
-      <data name="description">Re-authorize integration</data>
+      <data name="description" xsi:type="string">Re-authorize integration</data>
       <constraint name="assertIntegrationSuccessReauthorizeMessage" next="assertIntegrationForm"/>
       <constraint name="assertIntegrationForm" next="assertIntegrationTokensAfterReauthorize" prev="assertIntegrationSuccessReauthorizeMessage"/>
       <constraint name="assertIntegrationTokensAfterReauthorize" prev="assertIntegrationForm"/>

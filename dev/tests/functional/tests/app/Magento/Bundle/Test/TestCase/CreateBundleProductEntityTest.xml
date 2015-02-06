@@ -8,105 +8,105 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="CreateBundleProductEntityTest">
     <variation name="CreateBundleProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">BundleProduct %isolation%</data>
-      <data name="product/data/sku_type">-</data>
-      <data name="product/data/sku">bundle_sku_%isolation%</data>
-      <data name="product/data/status">-</data>
-      <data name="product/data/price_type">-</data>
-      <data name="product/data/price/value">-</data>
-      <data name="product/data/price/preset">-</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/weight_type">-</data>
-      <data name="product/data/weight">-</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/description">Bundle Product Dynamic Required</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">-</data>
-      <data name="product/data/stock_data/use_config_manage_stock">No</data>
-      <data name="product/data/stock_data/manage_stock">No</data>
-      <data name="product/data/shipment_type">-</data>
-      <data name="product/data/bundle_selections/preset">default_dynamic</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
-      <data name="product/data/checkout_data/preset">default</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">-</data>
-      <data name="product/data/use_config_gift_message_available">-</data>
-      <data name="product/data/gift_message_available">-</data>
+      <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">-</data>
+      <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">-</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">Bundle Product Dynamic Required</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">No</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">No</data>
+      <data name="product/data/shipment_type" xsi:type="string">-</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertBundleItemsOnProductPage" prev="assertProductSaveMessage"/>
       <constraint name="assertBundleItemsOnProductPage" prev="assertProductInGrid"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">BundleProduct %isolation%</data>
-      <data name="product/data/sku_type">Fixed</data>
-      <data name="product/data/sku">bundle_sku_%isolation%</data>
-      <data name="product/data/status">Product offline</data>
-      <data name="product/data/price_type">Dynamic</data>
-      <data name="product/data/price/value">-</data>
-      <data name="product/data/price/preset">-</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
-      <data name="product/data/weight_type">Dynamic</data>
-      <data name="product/data/weight">-</data>
-      <data name="product/data/category">category_%isolation%</data>
-      <data name="product/data/description">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">-</data>
-      <data name="product/data/stock_data/use_config_manage_stock">-</data>
-      <data name="product/data/stock_data/manage_stock">-</data>
-      <data name="product/data/shipment_type">Separately</data>
-      <data name="product/data/bundle_selections/preset">default_dynamic</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
-      <data name="product/data/checkout_data/preset">default</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">Catalog, Search</data>
-      <data name="product/data/use_config_gift_message_available">No</data>
-      <data name="product/data/gift_message_available">Yes</data>
+      <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Fixed</data>
+      <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">Product offline</data>
+      <data name="product/data/price_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+      <data name="product/data/weight_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">Separately</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">No</data>
+      <data name="product/data/gift_message_available" xsi:type="string">Yes</data>
       <constraint name="assertProductSaveMessage" next="assertProductNotSearchableBySku"/>
       <constraint name="assertProductNotSearchableBySku" prev="assertProductSaveMessage"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">BundleProduct %isolation%</data>
-      <data name="product/data/sku_type">Dynamic</data>
-      <data name="product/data/sku">bundle_sku_%isolation%</data>
-      <data name="product/data/status">Product online</data>
-      <data name="product/data/price_type">Dynamic</data>
-      <data name="product/data/price/value">-</data>
-      <data name="product/data/price/preset">dynamic-200</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
-      <data name="product/data/weight_type">Dynamic</data>
-      <data name="product/data/weight">-</data>
-      <data name="product/data/category">category_%isolation%</data>
-      <data name="product/data/description">Bundle Product Dynamic</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">Price Range</data>
-      <data name="product/data/stock_data/use_config_manage_stock">-</data>
-      <data name="product/data/stock_data/manage_stock">-</data>
-      <data name="product/data/shipment_type">Together</data>
-      <data name="product/data/bundle_selections/preset">all_types_dynamic</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
-      <data name="product/data/checkout_data/preset">all_types_bundle_options</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">Catalog, Search</data>
-      <data name="product/data/use_config_gift_message_available">No</data>
-      <data name="product/data/gift_message_available">Yes</data>
+      <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">Product online</data>
+      <data name="product/data/price_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">dynamic-200</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/weight_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+      <data name="product/data/description" xsi:type="string">Bundle Product Dynamic</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">Price Range</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">Together</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">all_types_dynamic</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">all_types_bundle_options</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">No</data>
+      <data name="product/data/gift_message_available" xsi:type="string">Yes</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertBundleProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertBundleProductForm" next="assertProductSearchableBySku" prev="assertProductInGrid"/>
@@ -119,36 +119,36 @@
       <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">BundleProduct %isolation%</data>
-      <data name="product/data/sku_type">Fixed</data>
-      <data name="product/data/sku">bundle_sku_%isolation%</data>
-      <data name="product/data/status">-</data>
-      <data name="product/data/price_type">Fixed</data>
-      <data name="product/data/price/value">10</data>
-      <data name="product/data/price/preset">fixed-15</data>
-      <data name="product/data/tax_class_id/dataSet">None</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/weight_type">Fixed</data>
-      <data name="product/data/weight">10</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/description">Bundle Product Fixed Required</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">-</data>
-      <data name="product/data/stock_data/use_config_manage_stock">-</data>
-      <data name="product/data/stock_data/manage_stock">-</data>
-      <data name="product/data/shipment_type">-</data>
-      <data name="product/data/bundle_selections/preset">default_fixed</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
-      <data name="product/data/checkout_data/preset">default</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">-</data>
-      <data name="product/data/use_config_gift_message_available">-</data>
-      <data name="product/data/gift_message_available">-</data>
+      <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Fixed</data>
+      <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">Fixed</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/price/preset" xsi:type="string">fixed-15</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">None</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">Fixed</data>
+      <data name="product/data/weight" xsi:type="string">10</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">Bundle Product Fixed Required</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">-</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">default_fixed</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertBundleProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertBundleProductForm" next="assertProductSearchableBySku" prev="assertProductInGrid"/>
@@ -157,36 +157,36 @@
       <constraint name="assertBundleItemsOnProductPage" prev="assertBundleProductPage"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">BundleProduct %isolation%</data>
-      <data name="product/data/sku_type">Fixed</data>
-      <data name="product/data/sku">bundle_sku_%isolation%</data>
-      <data name="product/data/status">Product online</data>
-      <data name="product/data/price_type">Fixed</data>
-      <data name="product/data/price/value">100</data>
-      <data name="product/data/price/preset">fixed-24</data>
-      <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
-      <data name="product/data/weight_type">Fixed</data>
-      <data name="product/data/weight">10</data>
-      <data name="product/data/category">category_%isolation%</data>
-      <data name="product/data/description">Bundle Product Fixed</data>
-      <data name="product/data/group_price/preset">default</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">As Low as</data>
-      <data name="product/data/stock_data/use_config_manage_stock">-</data>
-      <data name="product/data/stock_data/manage_stock">-</data>
-      <data name="product/data/shipment_type">Separately</data>
-      <data name="product/data/bundle_selections/preset">all_types_fixed</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
-      <data name="product/data/checkout_data/preset">all_types_bundle_fixed_and_custom_options</data>
-      <data name="product/data/custom_options/preset">all_types</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">Catalog, Search</data>
-      <data name="product/data/use_config_gift_message_available">No</data>
-      <data name="product/data/gift_message_available">No</data>
+      <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Fixed</data>
+      <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">Product online</data>
+      <data name="product/data/price_type" xsi:type="string">Fixed</data>
+      <data name="product/data/price/value" xsi:type="string">100</data>
+      <data name="product/data/price/preset" xsi:type="string">fixed-24</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/weight_type" xsi:type="string">Fixed</data>
+      <data name="product/data/weight" xsi:type="string">10</data>
+      <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+      <data name="product/data/description" xsi:type="string">Bundle Product Fixed</data>
+      <data name="product/data/group_price/preset" xsi:type="string">default</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">As Low as</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">Separately</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">all_types_fixed</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">all_types_bundle_fixed_and_custom_options</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">all_types</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">No</data>
+      <data name="product/data/gift_message_available" xsi:type="string">No</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertBundleProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertBundleProductForm" next="assertProductVisibleInCategory" prev="assertProductInGrid"/>
@@ -199,36 +199,36 @@
       <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">BundleProduct %isolation%</data>
-      <data name="product/data/sku_type">Fixed</data>
-      <data name="product/data/sku">bundle_sku_%isolation%</data>
-      <data name="product/data/status">Product online</data>
-      <data name="product/data/price_type">Fixed</data>
-      <data name="product/data/price/value">10</data>
-      <data name="product/data/price/preset">fixed-1</data>
-      <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
-      <data name="product/data/weight_type">Fixed</data>
-      <data name="product/data/weight">10</data>
-      <data name="product/data/category">category_%isolation%</data>
-      <data name="product/data/description">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">10</data>
-      <data name="product/data/special_from_date/pattern">m/d/Y</data>
-      <data name="product/data/special_to_date/pattern">m/d/Y +3 days</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">Price Range</data>
-      <data name="product/data/stock_data/use_config_manage_stock">No</data>
-      <data name="product/data/stock_data/manage_stock">Yes</data>
-      <data name="product/data/shipment_type">Together</data>
-      <data name="product/data/bundle_selections/preset">with_not_required_options</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
-      <data name="product/data/checkout_data/preset">with_not_required_options</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">Catalog</data>
-      <data name="product/data/use_config_gift_message_available">No</data>
-      <data name="product/data/gift_message_available">No</data>
+      <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Fixed</data>
+      <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">Product online</data>
+      <data name="product/data/price_type" xsi:type="string">Fixed</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/price/preset" xsi:type="string">fixed-1</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+      <data name="product/data/weight_type" xsi:type="string">Fixed</data>
+      <data name="product/data/weight" xsi:type="string">10</data>
+      <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">10</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">m/d/Y</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">m/d/Y +3 days</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">Price Range</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">No</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
+      <data name="product/data/shipment_type" xsi:type="string">Together</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">with_not_required_options</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">with_not_required_options</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">Catalog</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">No</data>
+      <data name="product/data/gift_message_available" xsi:type="string">No</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertBundleProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertBundleProductForm" next="assertBundleProductPage" prev="assertProductInGrid"/>
@@ -237,36 +237,36 @@
       <constraint name="assertBundlePriceView" prev="assertProductOutOfStock"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">BundleProduct %isolation%</data>
-      <data name="product/data/sku_type">Dynamic</data>
-      <data name="product/data/sku">bundle_sku_%isolation%</data>
-      <data name="product/data/status">-</data>
-      <data name="product/data/price_type">Dynamic</data>
-      <data name="product/data/price/value">-</data>
-      <data name="product/data/price/preset">dynamic-50</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/weight_type">Fixed</data>
-      <data name="product/data/weight">10</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/description">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">default</data>
-      <data name="product/data/price_view">As Low as</data>
-      <data name="product/data/stock_data/use_config_manage_stock">No</data>
-      <data name="product/data/stock_data/manage_stock">No</data>
-      <data name="product/data/shipment_type">Together</data>
-      <data name="product/data/bundle_selections/preset">default_dynamic</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
-      <data name="product/data/checkout_data/preset">default</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">Search</data>
-      <data name="product/data/use_config_gift_message_available">-</data>
-      <data name="product/data/gift_message_available">-</data>
+      <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">dynamic-50</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">Fixed</data>
+      <data name="product/data/weight" xsi:type="string">10</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">default</data>
+      <data name="product/data/price_view" xsi:type="string">As Low as</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">No</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">No</data>
+      <data name="product/data/shipment_type" xsi:type="string">Together</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">Search</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertBundleProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertBundleProductForm" next="assertProductSearchableBySku" prev="assertProductInGrid"/>
@@ -276,142 +276,142 @@
       <constraint name="assertTierPriceOnBundleProductPage" prev="assertBundleItemsOnProductPage"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">Bundle Dynamic %isolation%</data>
-      <data name="product/data/sku_type">Dynamic</data>
-      <data name="product/data/sku">sku_bundle_dynamic_%isolation%</data>
-      <data name="product/data/status">-</data>
-      <data name="product/data/price_type">Dynamic</data>
-      <data name="product/data/price/value">-</data>
-      <data name="product/data/price/preset">dynamic-8</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/weight_type">-</data>
-      <data name="product/data/weight">-</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/description">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">20</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">-</data>
-      <data name="product/data/stock_data/use_config_manage_stock">-</data>
-      <data name="product/data/stock_data/manage_stock">-</data>
-      <data name="product/data/shipment_type">-</data>
-      <data name="product/data/bundle_selections/preset">default_dynamic</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
-      <data name="product/data/checkout_data/preset">default</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">-</data>
-      <data name="product/data/use_config_gift_message_available">-</data>
-      <data name="product/data/gift_message_available">-</data>
+      <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">dynamic-8</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">20</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">-</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertBundleInCategory"/>
       <constraint name="assertBundleInCategory" prev="assertProductSaveMessage"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">Bundle Dynamic %isolation%</data>
-      <data name="product/data/sku_type">Dynamic</data>
-      <data name="product/data/sku">sku_bundle_dynamic_%isolation%</data>
-      <data name="product/data/status">-</data>
-      <data name="product/data/price_type">Dynamic</data>
-      <data name="product/data/price/value">-</data>
-      <data name="product/data/price/preset">dynamic-32</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/weight_type">-</data>
-      <data name="product/data/weight">-</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/description">-</data>
-      <data name="product/data/group_price/preset">MAGETWO-23061</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">-</data>
-      <data name="product/data/stock_data/use_config_manage_stock">-</data>
-      <data name="product/data/stock_data/manage_stock">-</data>
-      <data name="product/data/shipment_type">-</data>
-      <data name="product/data/bundle_selections/preset">default_dynamic</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
-      <data name="product/data/checkout_data/preset">default</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">-</data>
-      <data name="product/data/use_config_gift_message_available">-</data>
-      <data name="product/data/gift_message_available">-</data>
+      <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">dynamic-32</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">MAGETWO-23061</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">-</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertBundleInCategory"/>
       <constraint name="assertBundleInCategory" next="assertBundlePriceView" prev="assertProductSaveMessage"/>
       <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertBundleInCategory"/>
       <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation10" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">Bundle Dynamic %isolation%</data>
-      <data name="product/data/sku_type">Dynamic</data>
-      <data name="product/data/sku">sku_bundle_dynamic_%isolation%</data>
-      <data name="product/data/status">-</data>
-      <data name="product/data/price_type">Dynamic</data>
-      <data name="product/data/price/value">-</data>
-      <data name="product/data/price/preset">dynamic-40</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/weight_type">-</data>
-      <data name="product/data/weight">-</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/description">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">-</data>
-      <data name="product/data/stock_data/use_config_manage_stock">-</data>
-      <data name="product/data/stock_data/manage_stock">-</data>
-      <data name="product/data/shipment_type">-</data>
-      <data name="product/data/bundle_selections/preset">default_dynamic</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
-      <data name="product/data/checkout_data/preset">default</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">-</data>
-      <data name="product/data/use_config_gift_message_available">-</data>
-      <data name="product/data/gift_message_available">-</data>
+      <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">dynamic-40</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">-</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertBundleInCategory"/>
       <constraint name="assertBundleInCategory" next="assertBundlePriceView" prev="assertProductSaveMessage"/>
       <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertBundleInCategory"/>
       <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation11" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">Bundle Fixed %isolation%</data>
-      <data name="product/data/sku_type">Fixed</data>
-      <data name="product/data/sku">sku_bundle_fixed_%isolation%</data>
-      <data name="product/data/status">-</data>
-      <data name="product/data/price_type">Fixed</data>
-      <data name="product/data/price/value">110</data>
-      <data name="product/data/price/preset">fixed-115</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/weight_type">-</data>
-      <data name="product/data/weight">-</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/description">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">-</data>
-      <data name="product/data/stock_data/use_config_manage_stock">-</data>
-      <data name="product/data/stock_data/manage_stock">-</data>
-      <data name="product/data/shipment_type">-</data>
-      <data name="product/data/bundle_selections/preset">second</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
-      <data name="product/data/checkout_data/preset">with_custom_options_1</data>
-      <data name="product/data/custom_options/preset">drop_down_with_one_option_fixed_price</data>
-      <data name="product/data/custom_options/import_products">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
-      <data name="product/data/visibility">-</data>
-      <data name="product/data/use_config_gift_message_available">-</data>
-      <data name="product/data/gift_message_available">-</data>
+      <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Fixed</data>
+      <data name="product/data/sku" xsi:type="string">sku_bundle_fixed_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">Fixed</data>
+      <data name="product/data/price/value" xsi:type="string">110</data>
+      <data name="product/data/price/preset" xsi:type="string">fixed-115</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">-</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">second</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">with_custom_options_1</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertBundleInCategory"/>
       <constraint name="assertBundleInCategory" next="assertBundlePriceView" prev="assertProductSaveMessage"/>
       <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertBundleInCategory"/>
@@ -419,105 +419,105 @@
       <constraint name="assertProductCustomOptionsOnBundleProductPage" prev="assertBundlePriceType"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation12" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">Bundle Fixed %isolation%</data>
-      <data name="product/data/sku_type">Fixed</data>
-      <data name="product/data/sku">sku_bundle_fixed_%isolation%</data>
-      <data name="product/data/status">-</data>
-      <data name="product/data/price_type">Fixed</data>
-      <data name="product/data/price/value">110</data>
-      <data name="product/data/price/preset">fixed-159</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/weight_type">-</data>
-      <data name="product/data/weight">-</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/description">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">-</data>
-      <data name="product/data/stock_data/use_config_manage_stock">-</data>
-      <data name="product/data/stock_data/manage_stock">-</data>
-      <data name="product/data/shipment_type">-</data>
-      <data name="product/data/bundle_selections/preset">second</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
-      <data name="product/data/checkout_data/preset">with_custom_options_2</data>
-      <data name="product/data/custom_options/preset">drop_down_with_one_option_percent_price</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">-</data>
-      <data name="product/data/use_config_gift_message_available">-</data>
-      <data name="product/data/gift_message_available">-</data>
+      <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Fixed</data>
+      <data name="product/data/sku" xsi:type="string">sku_bundle_fixed_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">Fixed</data>
+      <data name="product/data/price/value" xsi:type="string">110</data>
+      <data name="product/data/price/preset" xsi:type="string">fixed-159</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">-</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">second</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">with_custom_options_2</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertBundleInCategory"/>
       <constraint name="assertBundleInCategory" next="assertBundlePriceView" prev="assertProductSaveMessage"/>
       <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertBundleInCategory"/>
       <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation13" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">Bundle Dynamic %isolation%</data>
-      <data name="product/data/sku_type">Dynamic</data>
-      <data name="product/data/sku">sku_bundle_dynamic_%isolation%</data>
-      <data name="product/data/status">-</data>
-      <data name="product/data/price_type">Dynamic</data>
-      <data name="product/data/price/value">-</data>
-      <data name="product/data/price/preset">-</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/weight_type">-</data>
-      <data name="product/data/weight">-</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/description">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">-</data>
-      <data name="product/data/stock_data/use_config_manage_stock">-</data>
-      <data name="product/data/stock_data/manage_stock">-</data>
-      <data name="product/data/shipment_type">-</data>
-      <data name="product/data/bundle_selections/preset">default_dynamic</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
-      <data name="product/data/checkout_data/preset">default</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">-</data>
-      <data name="product/data/use_config_gift_message_available">-</data>
-      <data name="product/data/gift_message_available">-</data>
+      <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">-</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation14" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">Bundle Fixed %isolation%</data>
-      <data name="product/data/sku_type">Fixed</data>
-      <data name="product/data/sku">sku_bundle_fixed_%isolation%</data>
-      <data name="product/data/status">-</data>
-      <data name="product/data/price_type">Fixed</data>
-      <data name="product/data/price/value">10</data>
-      <data name="product/data/price/preset">-</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/weight_type">-</data>
-      <data name="product/data/weight">-</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/description">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/special_price">-</data>
-      <data name="product/data/special_from_date/pattern">-</data>
-      <data name="product/data/special_to_date/pattern">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/price_view">-</data>
-      <data name="product/data/stock_data/use_config_manage_stock">-</data>
-      <data name="product/data/stock_data/manage_stock">-</data>
-      <data name="product/data/shipment_type">-</data>
-      <data name="product/data/bundle_selections/preset">second</data>
-      <data name="product/data/bundle_selections/products">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
-      <data name="product/data/checkout_data/preset">default</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">-</data>
-      <data name="product/data/use_config_gift_message_available">-</data>
-      <data name="product/data/gift_message_available">-</data>
+      <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Fixed</data>
+      <data name="product/data/sku" xsi:type="string">sku_bundle_fixed_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">Fixed</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">-</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">second</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage"/>
     </variation>
   </testCase>

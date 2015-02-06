@@ -8,13 +8,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="ActionNewsletterTemplateEntityTest">
     <variation name="ActionNewsletterTemplateEntityTestVariation1" firstConstraint="assertNewsletterPreview" method="test">
-      <data name="newsletter/dataSet">default</data>
-      <data name="action">Preview</data>
+      <data name="newsletter/dataSet" xsi:type="string">default</data>
+      <data name="action" xsi:type="string">Preview</data>
       <constraint name="assertNewsletterPreview"/>
     </variation>
     <variation name="ActionNewsletterTemplateEntityTestVariation2" firstConstraint="assertNewsletterQueue" method="test">
-      <data name="newsletter/dataSet">default</data>
-      <data name="action">Queue Newsletter</data>
+      <data name="newsletter/dataSet" xsi:type="string">default</data>
+      <data name="action" xsi:type="string">Queue Newsletter</data>
       <constraint name="assertNewsletterQueue"/>
     </variation>
   </testCase>

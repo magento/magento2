@@ -8,12 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="UpdateProductReviewEntityOnProductPageTest">
     <variation name="UpdateProductReviewEntityOnProductPageTestVariation1" firstConstraint="assertProductReviewBackendSuccessSaveMessage" method="test">
-      <data name="rating">3</data>
-      <data name="review/data/status_id">Approved</data>
-      <data name="productRating/data/select_stores">Main Website/Main Website Store/Default Store View</data>
-      <data name="review/data/nickname">name%isolation%</data>
-      <data name="review/data/title">title%isolation%</data>
-      <data name="review/data/detail">details%isolation%</data>
+      <data name="rating" xsi:type="string">3</data>
+      <data name="review/data/status_id" xsi:type="string">Approved</data>
+      <data name="productRating/data/select_stores" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+      <data name="review/data/nickname" xsi:type="string">name%isolation%</data>
+      <data name="review/data/title" xsi:type="string">title%isolation%</data>
+      <data name="review/data/detail" xsi:type="string">details%isolation%</data>
       <constraint name="assertProductReviewBackendSuccessSaveMessage" next="assertProductReviewInGrid"/>
       <constraint name="assertProductReviewInGrid" next="assertProductReviewOnProductPage" prev="assertProductReviewBackendSuccessSaveMessage"/>
       <constraint name="assertProductReviewOnProductPage" next="assertProductRatingInProductPage" prev="assertProductReviewInGrid"/>

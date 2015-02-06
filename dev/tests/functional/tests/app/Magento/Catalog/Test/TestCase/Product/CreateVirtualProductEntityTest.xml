@@ -8,102 +8,102 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="CreateVirtualProductEntityTest">
     <variation name="CreateVirtualProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">VirtualProduct %isolation%</data>
-      <data name="product/data/sku">virtual_sku_%isolation%</data>
-      <data name="product/data/price/value">10</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/qty">-</data>
-      <data name="product/data/is_virtual">Yes</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/price/preset">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/inventory_manage_stock">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">-</data>
+      <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/inventory_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
     </variation>
     <variation name="CreateVirtualProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">VirtualProduct %isolation%</data>
-      <data name="product/data/sku">virtual_sku_%isolation%</data>
-      <data name="product/data/price/value">10</data>
-      <data name="product/data/tax_class_id/dataSet">None</data>
-      <data name="product/data/quantity_and_stock_status/qty">999</data>
-      <data name="product/data/is_virtual">Yes</data>
-      <data name="product/data/category">category_%isolation%</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/price/preset">-</data>
-      <data name="product/data/tier_price/preset">MAGETWO-23002</data>
-      <data name="product/data/inventory_manage_stock">Yes</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">Catalog, Search</data>
+      <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">None</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">MAGETWO-23002</data>
+      <data name="product/data/inventory_manage_stock" xsi:type="string">Yes</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <constraint name="assertProductSaveMessage" next="assertProductVisibleInCategory"/>
       <constraint name="assertProductVisibleInCategory" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductSearchableBySku" prev="assertProductVisibleInCategory"/>
       <constraint name="assertProductSearchableBySku" prev="assertProductForm"/>
     </variation>
     <variation name="CreateVirtualProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">VirtualProduct %isolation%</data>
-      <data name="product/data/sku">-</data>
-      <data name="product/data/price/value">10</data>
-      <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
-      <data name="product/data/quantity_and_stock_status/qty">999</data>
-      <data name="product/data/is_virtual">Yes</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/price/preset">MAGETWO-23030</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/inventory_manage_stock">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">Search</data>
+      <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">-</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">MAGETWO-23030</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/inventory_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">Search</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertProductSkuAutoGenerated" prev="assertProductSaveMessage"/>
       <constraint name="assertProductSkuAutoGenerated" next="assertProductSearchableBySku" prev="assertProductForm"/>
       <constraint name="assertProductSearchableBySku" prev="assertProductSkuAutoGenerated"/>
     </variation>
     <variation name="CreateVirtualProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">VirtualProduct %isolation%</data>
-      <data name="product/data/sku">virtual_sku_%isolation%</data>
-      <data name="product/data/price/value">10</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/qty">-</data>
-      <data name="product/data/is_virtual">Yes</data>
-      <data name="product/data/category">category_%isolation%</data>
-      <data name="product/data/group_price/preset">MAGETWO-23055</data>
-      <data name="product/data/price/preset">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/inventory_manage_stock">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">Catalog</data>
+      <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+      <data name="product/data/group_price/preset" xsi:type="string">MAGETWO-23055</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/inventory_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">Catalog</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertProductVisibleInCategory" prev="assertProductSaveMessage"/>
       <constraint name="assertProductVisibleInCategory" prev="assertProductForm"/>
     </variation>
     <variation name="CreateVirtualProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">VirtualProduct %isolation%</data>
-      <data name="product/data/sku">virtual_sku_%isolation%</data>
-      <data name="product/data/price/value">9000</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/qty">-</data>
-      <data name="product/data/is_virtual">Yes</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/group_price/preset">MAGETWO-23055</data>
-      <data name="product/data/price/preset">-</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/inventory_manage_stock">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
-      <data name="product/data/custom_options/preset">options-suite</data>
-      <data name="product/data/custom_options/import_products">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
-      <data name="product/data/visibility">-</data>
+      <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">9000</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">MAGETWO-23055</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/inventory_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">options-suite</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductSearchableBySku"/>
       <constraint name="assertProductSearchableBySku" next="assertProductPage" prev="assertProductSaveMessage"/>
       <constraint name="assertProductPage" next="assertProductGroupedPriceOnProductPage" prev="assertProductSearchableBySku"/>
@@ -111,42 +111,42 @@
       <constraint name="assertProductCustomOptionsOnProductPage" prev="assertProductGroupedPriceOnProductPage"/>
     </variation>
     <variation name="CreateVirtualProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">VirtualProduct %isolation%</data>
-      <data name="product/data/sku">virtual_sku_%isolation%</data>
-      <data name="product/data/price/value">10</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/qty">999</data>
-      <data name="product/data/is_virtual">Yes</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/price/preset">MAGETWO-23030</data>
-      <data name="product/data/tier_price/preset">-</data>
-      <data name="product/data/inventory_manage_stock">No</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">-</data>
+      <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">MAGETWO-23030</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/inventory_manage_stock" xsi:type="string">No</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductPage"/>
       <constraint name="assertProductPage" next="assertProductSpecialPriceOnProductPage" prev="assertProductSaveMessage"/>
       <constraint name="assertProductSpecialPriceOnProductPage" next="assertProductInStock" prev="assertProductPage"/>
       <constraint name="assertProductInStock" prev="assertProductSpecialPriceOnProductPage"/>
     </variation>
     <variation name="CreateVirtualProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="product/data/name">VirtualProduct %isolation%</data>
-      <data name="product/data/sku">virtual_sku_%isolation%</data>
-      <data name="product/data/price/value">9000</data>
-      <data name="product/data/tax_class_id/dataSet">-</data>
-      <data name="product/data/quantity_and_stock_status/qty">999</data>
-      <data name="product/data/is_virtual">Yes</data>
-      <data name="product/data/category">-</data>
-      <data name="product/data/group_price/preset">-</data>
-      <data name="product/data/price/preset">-</data>
-      <data name="product/data/tier_price/preset">default</data>
-      <data name="product/data/inventory_manage_stock">-</data>
-      <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
-      <data name="product/data/custom_options/preset">-</data>
-      <data name="product/data/custom_options/import_products">-</data>
-      <data name="product/data/visibility">-</data>
+      <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">9000</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">default</data>
+      <data name="product/data/inventory_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductPage"/>
       <constraint name="assertProductPage" next="assertProductTierPriceOnProductPage" prev="assertProductSaveMessage"/>
       <constraint name="assertProductTierPriceOnProductPage" next="assertProductOutOfStock" prev="assertProductPage"/>

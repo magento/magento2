@@ -8,11 +8,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="UserLoginAfterChangingPermissionsTest">
     <variation name="UserLoginAfterChangingPermissionsTestVariation1" firstConstraint="assertUserSuccessLogin" method="test">
-      <data name="role/data/rolename">AdminRole%isolation%</data>
-      <data name="role/data/resource_access">Custom</data>
-      <data name="role/data/roles_resources">Sales</data>
-      <data name="updatedRole/data/rolename">UpdatedAdminRole%isolation%</data>
-      <data name="updatedRole/data/resource_access">All</data>
+      <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>
+      <data name="role/data/resource_access" xsi:type="string">Custom</data>
+      <data name="role/data/roles_resources" xsi:type="string">Sales</data>
+      <data name="updatedRole/data/rolename" xsi:type="string">UpdatedAdminRole%isolation%</data>
+      <data name="updatedRole/data/resource_access" xsi:type="string">All</data>
       <constraint name="assertUserSuccessLogin"/>
     </variation>
   </testCase>

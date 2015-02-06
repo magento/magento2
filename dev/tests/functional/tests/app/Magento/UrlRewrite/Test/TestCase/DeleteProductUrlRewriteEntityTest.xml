@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
   <testCase name="DeleteProductUrlRewriteEntityTest">
     <variation name="DeleteProductUrlRewriteEntityTestVariation1" firstConstraint="assertUrlRewriteDeletedMessage" method="test">
-      <data name="productRedirect/dataSet">default_without_target</data>
-      <data name="productRedirect/data/target_path/entity">product/%catalogProductSimple::100_dollar_product%</data>
+      <data name="productRedirect/dataSet" xsi:type="string">default_without_target</data>
+      <data name="productRedirect/data/target_path/entity" xsi:type="string">product/%catalogProductSimple::100_dollar_product%</data>
       <constraint name="assertUrlRewriteDeletedMessage" next="assertUrlRewriteNotInGrid"/>
       <constraint name="assertUrlRewriteNotInGrid" next="assertPageByUrlRewriteIsNotFound" prev="assertUrlRewriteDeletedMessage"/>
       <constraint name="assertPageByUrlRewriteIsNotFound" prev="assertUrlRewriteNotInGrid"/>

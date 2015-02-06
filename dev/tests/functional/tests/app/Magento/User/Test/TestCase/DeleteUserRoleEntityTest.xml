@@ -12,7 +12,7 @@
       <constraint name="assertRoleInGrid" prev="assertImpossibleDeleteYourOwnRole"/>
     </variation>
     <variation name="DeleteUserRoleEntityTestVariation2" firstConstraint="assertRoleSuccessDeleteMessage" method="test">
-      <data name="isDefaultUser">1</data>
+      <data name="isDefaultUser" xsi:type="string">1</data>
       <constraint name="assertRoleSuccessDeleteMessage" next="assertRoleNotInGrid"/>
       <constraint name="assertRoleNotInGrid" prev="assertRoleSuccessDeleteMessage"/>
     </variation>
