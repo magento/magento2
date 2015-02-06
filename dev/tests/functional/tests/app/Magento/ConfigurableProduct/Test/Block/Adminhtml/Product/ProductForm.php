@@ -34,13 +34,6 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
 
         if ($product instanceof DataFixture) {
             $tabs = $this->normalizeDeprecateData($tabs);
-            $category = ($category === null) ? $product->getCategories()['category'] : $category;
-        }
-
-        if ($category) {
-            $tabs['product-details']['category_ids']['value'] = ($category instanceof InjectableFixture)
-                ? $category->getName()
-                : $category->getCategoryName();
         }
 
         $this->showAdvancedSettings();

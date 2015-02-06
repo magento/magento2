@@ -6,13 +6,15 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
+use Magento\Catalog\Test\Fixture\Category;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab;
 
 /**
  * Product details tab.
  */
-class ProductDetails extends \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab
+class ProductDetails extends ProductTab
 {
     /**
      * Locator for preceding sibling of category element.
@@ -29,6 +31,13 @@ class ProductDetails extends \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\
     protected $categoryFollowingSibling = '//*[@id="attribute-category_ids-container"]/following-sibling::div[%d]';
 
     /**
+     * Locator for following sibling of category element.
+     *
+     * @var string
+     */
+    protected $newCategoryRootElement = '.mage-new-category-dialog';
+
+    /**
      * Fill data to fields on tab.
      *
      * @param array $fields
@@ -38,11 +47,19 @@ class ProductDetails extends \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
-
         if (isset($data['category_ids'])) {
             /* Fix browser behavior for click by hidden list result of suggest(category) element */
             $this->scrollToCategory();
-            $this->_fill([$data['category_ids']], $element);
+            if (isset($fields['category_ids']['source'])
+                && !$fields['category_ids']['source']->getCategories()[0]->hasData('id')
+            ) {
+                $this->blockFactory->create(
+                    'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails\NewCategoryIds',
+                    ['element' => $this->browser->find($this->newCategoryRootElement)]
+                )->addNewCategory($fields['category_ids']['source']->getCategories()[0]);
+            } else {
+                $this->_fill([$data['category_ids']], $element);
+            }
             unset($data['category_ids']);
         }
         $this->_fill($data, $element);

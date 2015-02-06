@@ -8,10 +8,14 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute;
 
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Backend\Test\Block\Widget\FormTabs;
+use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Block\BlockFactory;
+use Magento\Mtf\Block\Mapper;
+use Magento\Mtf\Util\XmlConverter;
 
 /**
  * Edit attribute form on catalog product edit page.
@@ -33,6 +37,27 @@ class AttributeForm extends FormTabs
     protected $saveButton = '#save';
 
     /**
+     * @constructor
+     * @param SimpleElement $element
+     * @param Mapper $mapper
+     * @param BlockFactory $blockFactory
+     * @param BrowserInterface $browser
+     * @param XmlConverter $xmlConverter
+     * @param array $config
+     */
+    public function __construct(
+        SimpleElement $element,
+        Mapper $mapper,
+        BlockFactory $blockFactory,
+        BrowserInterface $browser,
+        XmlConverter $xmlConverter,
+        array $config = []
+    ) {
+        parent::__construct($element, $mapper, $blockFactory, $browser, $xmlConverter, $config);
+        $this->browser->switchToFrame(new Locator($this->iFrame));
+    }
+
+    /**
      * Fill the attribute form.
      *
      * @param FixtureInterface $fixture
@@ -41,7 +66,6 @@ class AttributeForm extends FormTabs
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
-        $this->browser->switchToFrame(new Locator($this->iFrame));
         $browser = $this->browser;
         $selector = $this->saveButton;
         $this->browser->waitUntil(
@@ -65,8 +89,6 @@ class AttributeForm extends FormTabs
             ? $this->tabs[$tabName]['strategy']
             : Locator::SELECTOR_CSS;
         $tab = $this->_rootElement->find($selector, $strategy);
-        $target = $this->browser->find('.page-footer-wrapper'); // Handle menu overlap problem
-        $this->_rootElement->dragAndDrop($target);
         $tab->click();
 
         return $this;
