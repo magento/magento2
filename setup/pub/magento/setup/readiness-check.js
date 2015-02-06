@@ -94,6 +94,7 @@ angular.module('readiness-check', [])
         $scope.updateOnProcessed = function(value) {
             if (!$rootScope.hasErrors) {
                 $rootScope.hasErrors = (value != 'success');
+                $scope.hasErrors = $rootScope.hasErrors;
             }
         };
 
@@ -120,6 +121,7 @@ angular.module('readiness-check', [])
 
         $scope.progress = function() {
             $rootScope.hasErrors = false;
+            $scope.hasErrors = false;
             angular.forEach($scope.items, function(item) {
                 item.show();
             });
