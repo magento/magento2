@@ -114,7 +114,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 </html>
 TEXT;
         $expectedContent = <<<TEXT
-<?php /** * Copyright © 2015 Magento. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
+<?php /** * Copyright © 2015 Magento. All rights reserved. * See COPYING.txt for license details. */ ?><?php ?><html><head><title>Test title</title></head><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?><div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
             //<![CDATA[
             var someVar = 123;
             testFunctionCall(function () {
@@ -126,7 +126,7 @@ TEXT;
                 }
             });
             //]]>
-        </script><?php echo "http://some.link.com/" ?> <em>inline text</em> </body></html>
+        </script><?php echo "http://some.link.com/" ?><em>inline text</em> </body></html>
 TEXT;
 
         $this->appDirectory->expects($this->once())
