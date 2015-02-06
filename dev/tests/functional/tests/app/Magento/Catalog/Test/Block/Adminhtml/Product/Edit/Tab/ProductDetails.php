@@ -35,7 +35,7 @@ class ProductDetails extends ProductTab
      *
      * @var string
      */
-    protected $newCategoryRootElement = 'body';
+    protected $newCategoryRootElement = '.mage-new-category-dialog';
 
     /**
      * Fill data to fields on tab.
