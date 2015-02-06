@@ -54,4 +54,10 @@
     <assertProductOptionsAbsentInShoppingCart module="Magento_Checkout">
         <severity>low</severity>
     </assertProductOptionsAbsentInShoppingCart>
+    <assertShippingInShoppingCart module="Magento_Checkout">
+        <severity>low</severity>
+    </assertShippingInShoppingCart>
+    <assertTaxInShoppingCart module="Magento_Checkout">
+        <severity>low</severity>
+    </assertTaxInShoppingCart>
 </constraint>
