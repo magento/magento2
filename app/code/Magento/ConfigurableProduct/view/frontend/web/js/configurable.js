@@ -32,9 +32,9 @@ define([
             superSelector: '.super-attribute-select',
             priceHolderSelector: '.price-box',
             state: {},
-            optionTemplate: '<%= label %>' +
-                            '<% if (finalPrice.value) { %>' +
-                                ' <%= finalPrice.formatted %>' +
+            optionTemplate: '<%= data.label %>' +
+                            '<% if (data.finalPrice.value) { %>' +
+                                ' <%= data.finalPrice.formatted %>' +
                             '<% } %>',
             mediaGallerySelector: '[data-role=media-gallery]'
         },
@@ -371,7 +371,9 @@ define([
 
             data.label = option.label;
 
-            return this.options.optionTemplate(data);
+            return this.options.optionTemplate({
+                data: data
+            });
         },
 
         _parsePrice: function(option, selOption, price, name){

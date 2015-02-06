@@ -71,7 +71,9 @@ define([
                     .find(this.options.templates.summaryBlock)
                     .html();
                 template = mageTemplate($.trim(template), {
-                    _label_: this.cache.currentElement.options[key].title
+                    data: {
+                        _label_: this.cache.currentElement.options[key].title
+                    }
                 });
 
                 this.cache.currentKey = key;
@@ -99,8 +101,10 @@ define([
                 .find(this.options.templates.optionBlock)
                 .html();
             template = mageTemplate($.trim(template), {
-                _quantity_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].qty,
-                _label_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].name
+                data: {
+                    _quantity_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].qty,
+                    _label_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].name
+                }
             });
             this.cache.summaryContainer
                 .find(this.options.optionSelector)

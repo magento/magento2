@@ -41,12 +41,12 @@
                 <ul data-mage-init='{"productSummary": []}' class="bundle items"></ul>
                 <script data-template="bundle-summary" type="text/x-magento-template">
                     <li>
-                        <strong class="label"><%=_label_%>:</strong>
+                        <strong class="label"><%= data._label_ %>:</strong>
                         <div data-container="options"></div>
                     </li>
                 </script>
                 <script data-template="bundle-option" type="text/x-magento-template">
-                    <div><?php echo __('%1 x %2', '<%= _quantity_ %>', '<%= _label_ %>') ?></div>
+                    <div><?php echo __('%1 x %2', '<%= data._quantity_ %>', '<%= data._label_ %>') ?></div>
                 </script>
             </div>
         </div>
