@@ -50,13 +50,13 @@ define([
             if (priceBox.data('magePriceBox') && priceBox.priceBox('option') && priceBox.priceBox('option').priceConfig) {
                 this._setOption('optionTemplate', priceBox.priceBox('option').priceConfig.optionTemplate);
                 this._setOption('priceFormat', priceBox.priceBox('option').priceConfig.priceFormat);
+                priceBox.priceBox('setDefault', this.options.optionConfig.prices);
             }
             this._applyQtyFix();
             this._applyOptionNodeFix(options);
 
             options.on('change', this._onBundleOptionChanged.bind(this));
             qty.on('change', this._onQtyFieldChanged.bind(this));
-            priceBox.priceBox('setDefault', this.options.optionConfig.prices);
         },
 
         /**
