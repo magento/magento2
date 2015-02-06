@@ -2,26 +2,26 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="sitemap" module="Magento_Sitemap" type="flat" entity_type="sitemap" collection="Magento\Sitemap\Model\Resource\Sitemap\Collection" repository_class="Magento\Sitemap\Test\Repository\Sitemap" handler_interface="Magento\Sitemap\Test\Handler\Sitemap\SitemapInterface" class="Magento\Sitemap\Test\Fixture\Sitemap">
     <dataset name="default">
-        <field name="sitemap_filename" type="string">sitemap.xml</field>
-        <field name="sitemap_path" type="string">/</field>
+        <field name="sitemap_filename" xsi:type="string">sitemap.xml</field>
+        <field name="sitemap_path" xsi:type="string">/</field>
     </dataset>
     <field name="sitemap_id" backend_type="int" is_required="1" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="sitemap_type" backend_type="varchar" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="sitemap_filename" backend_type="varchar" is_required="" input="">
-      <default_value type="string">sitemap.xml</default_value>
+      <default_value xsi:type="string">sitemap.xml</default_value>
     </field>
     <field name="sitemap_path" backend_type="varchar" is_required="" input="">
-      <default_value type="string">/</default_value>
+      <default_value xsi:type="string">/</default_value>
     </field>
     <field name="sitemap_time" backend_type="timestamp" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="store_id" backend_type="smallint" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
   </fixture>
 </config>

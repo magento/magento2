@@ -2,27 +2,27 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="taxRule" module="Magento_Tax" type="flat" entity_type="tax_calculation_rule" collection="Magento\Tax\Model\Resource\Calculation\Rule\Collection" identifier="code" repository_class="Magento\Tax\Test\Repository\TaxRule" handler_interface="Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface" class="Magento\Tax\Test\Fixture\TaxRule">
     <dataset name="default">
-        <field name="code" type="string">TaxIdentifier%isolation%</field>
-        <field name="tax_rate" type="array">
-            <item name="dataSet" type="string">US-CA-Rate_1</item>
+        <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+        <field name="tax_rate" xsi:type="array">
+            <item name="dataSet" xsi:type="string">US-CA-Rate_1</item>
         </field>
     </dataset>
     <field name="tax_calculation_rule_id" backend_type="int" is_required="1" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="code" backend_type="varchar" is_required="" input="">
-      <default_value type="string">TaxIdentifier%isolation%</default_value>
+      <default_value xsi:type="string">TaxIdentifier%isolation%</default_value>
     </field>
     <field name="priority" backend_type="int" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="position" backend_type="int" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="tax_rate" backend_type="virtual" source="Magento\Tax\Test\Fixture\TaxRule\TaxRate">
-      <default_value type="array">
-                <item name="dataSet" type="array">
-                    <item name="0" type="string">US-CA-Rate_1</item>
+      <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="array">
+                    <item name="0" xsi:type="string">US-CA-Rate_1</item>
                 </item>
             </default_value>
     </field>

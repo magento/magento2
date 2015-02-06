@@ -2,36 +2,36 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="store" module="Magento_Store" type="flat" entity_type="store" collection="Magento\Store\Model\Resource\Store\Collection" repository_class="Magento\Store\Test\Repository\Store" handler_interface="Magento\Store\Test\Handler\Store\StoreInterface" class="Magento\Store\Test\Fixture\Store">
     <dataset name="default">
-        <field name="group_id" type="array">
-            <item name="dataSet" type="string">default</item>
+        <field name="group_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default</item>
         </field>
-        <field name="name" type="string">Default Store View</field>
-        <field name="code" type="string">default</field>
-        <field name="is_active" type="string">Enabled</field>
-        <field name="store_id" type="string">1</field>
+        <field name="name" xsi:type="string">Default Store View</field>
+        <field name="code" xsi:type="string">default</field>
+        <field name="is_active" xsi:type="string">Enabled</field>
+        <field name="store_id" xsi:type="string">1</field>
     </dataset>
     <field name="store_id" backend_type="smallint" is_required="1" input="">
-      <default_value type="string">1</default_value>
+      <default_value xsi:type="string">1</default_value>
     </field>
     <field name="code" backend_type="varchar" is_required="" input="text">
-      <default_value type="string">default</default_value>
+      <default_value xsi:type="string">default</default_value>
     </field>
     <field name="website_id" backend_type="smallint" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="group_id" backend_type="smallint" is_required="" input="select" source="Magento\Store\Test\Fixture\Store\GroupId">
-      <default_value type="array">
-                <item name="dataSet" type="string">default</item>
+      <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
             </default_value>
     </field>
     <field name="name" backend_type="varchar" is_required="" input="text">
-      <default_value type="string">Default Store View</default_value>
+      <default_value xsi:type="string">Default Store View</default_value>
     </field>
     <field name="sort_order" backend_type="smallint" is_required="" input="text">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="is_active" backend_type="smallint" is_required="" input="select">
-      <default_value type="string">Enabled</default_value>
+      <default_value xsi:type="string">Enabled</default_value>
     </field>
   </fixture>
 </config>

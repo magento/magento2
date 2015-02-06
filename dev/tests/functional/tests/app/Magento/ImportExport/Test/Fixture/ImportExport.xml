@@ -2,20 +2,20 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="importExport" module="Magento_ImportExport" type="flat" entity_type="importexport_importdata" class="Magento\ImportExport\Test\Fixture\ImportExport">
     <dataset name="default">
-        <field name="entity" type="string">Products</field>
-        <field name="behavior" type="string">CSV</field>
+        <field name="entity" xsi:type="string">Products</field>
+        <field name="behavior" xsi:type="string">CSV</field>
     </dataset>
     <field name="id" backend_type="int" is_required="1" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="entity" backend_type="varchar" is_required="" input="">
-      <default_value type="string">Products</default_value>
+      <default_value xsi:type="string">Products</default_value>
     </field>
     <field name="behavior" backend_type="varchar" is_required="" input="">
-      <default_value type="string">CSV</default_value>
+      <default_value xsi:type="string">CSV</default_value>
     </field>
     <field name="data_export" backend_type="longtext" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
   </fixture>
 </config>

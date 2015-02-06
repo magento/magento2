@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="globalSearch" module="Magento_Backend" class="Magento\Backend\Test\Fixture\GlobalSearch">
     <dataset name="default">
-        <field name="query" type="string">catalogProductSimple::default::name</field>
+        <field name="query" xsi:type="string">catalogProductSimple::default::name</field>
     </dataset>
     <field name="query" backend_type="virtual" source="Magento\Backend\Test\Fixture\GlobalSearch\Query"/>
   </fixture>

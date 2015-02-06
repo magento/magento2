@@ -2,75 +2,75 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="category" module="Magento_Catalog" type="eav" entity_type="catalog_category_entity" collection="Magento\Catalog\Model\Resource\Category\Collection" repository_class="Magento\Catalog\Test\Repository\Category" handler_interface="Magento\Catalog\Test\Handler\Category\CategoryInterface" class="Magento\Catalog\Test\Fixture\Category">
     <dataset name="default">
-        <field name="name" type="string">Category%isolation%</field>
-        <field name="url_key" type="string">category%isolation%</field>
-        <field name="is_active" type="string">Yes</field>
-        <field name="include_in_menu" type="string">Yes</field>
-        <field name="parent_id" type="array">
-            <item name="dataSet" type="string">default_category</item>
+        <field name="name" xsi:type="string">Category%isolation%</field>
+        <field name="url_key" xsi:type="string">category%isolation%</field>
+        <field name="is_active" xsi:type="string">Yes</field>
+        <field name="include_in_menu" xsi:type="string">Yes</field>
+        <field name="parent_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default_category</item>
         </field>
     </dataset>
     <field name="entity_id" backend_type="int" is_required="1" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="entity_type_id" backend_type="smallint" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="attribute_set_id" backend_type="smallint" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="description" backend_type="text" is_required="0" input="textarea" group="general_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="parent_id" backend_type="int" is_required="" input="" group="null" source="Magento\Catalog\Test\Fixture\Category\ParentId">
-      <default_value type="number">2</default_value>
+      <default_value xsi:type="number">2</default_value>
     </field>
     <field name="created_at" backend_type="timestamp" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="updated_at" backend_type="timestamp" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="path" backend_type="varchar" is_required="" group="null" input="">
-      <default_value type="string">Default Category</default_value>
+      <default_value xsi:type="string">Default Category</default_value>
     </field>
     <field name="position" backend_type="int" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="level" backend_type="int" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="children_count" backend_type="int" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="available_product_listing_config" backend_type="int" is_required="" group="display_setting" input="checkbox">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="available_sort_by" backend_type="varchar" is_required="0" group="display_setting" input="multiselect">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="default_product_listing_config" backend_type="varchar" is_required="0" group="display_setting" input="checkbox">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="default_sort_by" backend_type="varchar" is_required="0" group="display_setting" input="select">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="meta_title" backend_type="text" is_required="" input="" group="general_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="id" backend_type="virtual" group="null"/>
     <field name="name" backend_type="virtual" group="general_information">
-      <default_value type="string">Category%isolation%</default_value>
+      <default_value xsi:type="string">Category%isolation%</default_value>
     </field>
     <field name="is_active" backend_type="virtual" group="general_information">
-      <default_value type="string">Yes</default_value>
+      <default_value xsi:type="string">Yes</default_value>
     </field>
     <field name="is_anchor" backend_type="virtual" group="display_setting"/>
     <field name="url_key" backend_type="virtual" group="general_information">
-      <default_value type="string">category%isolation%</default_value>
+      <default_value xsi:type="string">category%isolation%</default_value>
     </field>
     <field name="include_in_menu" backend_type="virtual" group="general_information">
-      <default_value type="string">Yes</default_value>
+      <default_value xsi:type="string">Yes</default_value>
     </field>
     <field name="landing_page" backend_type="virtual" input="select" group="display_setting" source="\Magento\Catalog\Test\Fixture\Category\LandingPage"/>
     <field name="display_mode" backend_type="virtual" input="select" group="display_setting"/>

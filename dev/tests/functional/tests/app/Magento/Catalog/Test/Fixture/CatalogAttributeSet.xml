@@ -2,26 +2,26 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="catalogAttributeSet" module="Magento_Catalog" type="flat" entity_type="eav_attribute_set" collection="Magento\Catalog\Model\Resource\Product\Link\Product\Collection" repository_class="Magento\Catalog\Test\Repository\CatalogAttributeSet" handler_interface="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface" class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">
     <dataset name="default">
-        <field name="attribute_set_name" type="string">Default_attribute_set_%isolation%</field>
-        <field name="skeleton_set" type="array">
-            <item name="dataSet" type="string">default</item>
+        <field name="attribute_set_name" xsi:type="string">Default_attribute_set_%isolation%</field>
+        <field name="skeleton_set" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default</item>
         </field>
     </dataset>
     <field name="attribute_set_id" backend_type="smallint" is_required="1" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="entity_type_id" backend_type="smallint" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="attribute_set_name" backend_type="varchar" is_required="" input="">
-      <default_value type="string">Default_attribute_set_%isolation%</default_value>
+      <default_value xsi:type="string">Default_attribute_set_%isolation%</default_value>
     </field>
     <field name="sort_order" backend_type="smallint" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="skeleton_set" backend_type="varchar" is_required="" input="" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\SkeletonSet">
-      <default_value type="array">
-                <item name="dataSet" type="string">default</item>
+      <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
             </default_value>
     </field>
     <field name="assigned_attributes" backend_type="virtual" source="Magento\Catalog\Test\Fixture\CatalogAttributeSet\AssignedAttributes"/>

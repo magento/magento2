@@ -2,16 +2,16 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="taxClass" module="Magento_Tax" type="flat" entity_type="tax_class" collection="Magento\Tax\Model\Resource\TaxClass\Collection" identifier="" repository_class="Magento\Tax\Test\Repository\TaxClass" handler_interface="Magento\Tax\Test\Handler\TaxClass\TaxClassInterface" class="Magento\Tax\Test\Fixture\TaxClass">
     <dataset name="default">
-        <field name="class_name" type="string">Tax Class %isolation%</field>
+        <field name="class_name" xsi:type="string">Tax Class %isolation%</field>
     </dataset>
     <field name="class_id" backend_type="smallint" is_required="1" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="class_name" backend_type="varchar" is_required="" input="">
-      <default_value type="string">Tax Class %isolation%</default_value>
+      <default_value xsi:type="string">Tax Class %isolation%</default_value>
     </field>
     <field name="class_type" backend_type="varchar" is_required="" input="">
-      <default_value type="string">CUSTOMER</default_value>
+      <default_value xsi:type="string">CUSTOMER</default_value>
     </field>
     <field name="id" backend_type="virtual"/>
   </fixture>

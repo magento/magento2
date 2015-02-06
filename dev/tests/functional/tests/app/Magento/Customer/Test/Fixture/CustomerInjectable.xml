@@ -2,86 +2,86 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="customerInjectable" module="Magento_Customer" type="eav" entity_type="customer" collection="Magento\Customer\Model\Resource\Customer\Collection" identifier="email" repository_class="Magento\Customer\Test\Repository\CustomerInjectable" handler_interface="Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface" class="Magento\Customer\Test\Fixture\CustomerInjectable">
     <dataset name="default">
-        <field name="firstname" type="string">John</field>
-        <field name="lastname" type="string">Doe</field>
-        <field name="email" type="string">John.Doe%isolation%@example.com</field>
-        <field name="password" type="string">123123q</field>
-        <field name="password_confirmation" type="string">123123q</field>
+        <field name="firstname" xsi:type="string">John</field>
+        <field name="lastname" xsi:type="string">Doe</field>
+        <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+        <field name="password" xsi:type="string">123123q</field>
+        <field name="password_confirmation" xsi:type="string">123123q</field>
     </dataset>
     <field name="address" backend_type="virtual" source="Magento\Customer\Test\Fixture\CustomerInjectable\Address"/>
     <field name="confirmation" backend_type="varchar" is_required="0" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="id" backend_type="virtual" group="null"/>
     <field name="created_at" backend_type="static" is_required="0" input="date">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="created_in" backend_type="varchar" is_required="0" input="text" group="account_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="default_billing" backend_type="int" is_required="0" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="default_shipping" backend_type="int" is_required="0" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="disable_auto_group_change" backend_type="static" is_required="0" input="boolean" group="account_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="dob" backend_type="datetime" is_required="0" input="date" group="account_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="email" backend_type="static" is_required="1" input="text" group="account_information">
-      <default_value type="string">John.Doe%isolation%@example.com</default_value>
+      <default_value xsi:type="string">John.Doe%isolation%@example.com</default_value>
     </field>
     <field name="firstname" backend_type="varchar" is_required="1" input="text" group="account_information">
-      <default_value type="string">John</default_value>
+      <default_value xsi:type="string">John</default_value>
     </field>
     <field name="gender" backend_type="int" is_required="0" input="select" group="account_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="group_id" backend_type="static" is_required="1" input="select" group="account_information" source="Magento\Customer\Test\Fixture\CustomerInjectable\GroupId">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="lastname" backend_type="varchar" is_required="1" input="text" group="account_information">
-      <default_value type="string">Doe</default_value>
+      <default_value xsi:type="string">Doe</default_value>
     </field>
     <field name="middlename" backend_type="varchar" is_required="0" input="text" group="account_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="password_hash" backend_type="varchar" is_required="0" input="hidden">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="prefix" backend_type="varchar" is_required="0" input="text" group="account_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="rp_token" backend_type="varchar" is_required="0" input="hidden">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="rp_token_created_at" backend_type="datetime" is_required="0" input="date">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="store_id" backend_type="static" is_required="1" input="select" group="account_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="suffix" backend_type="varchar" is_required="0" input="text" group="account_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="taxvat" backend_type="varchar" is_required="0" input="text" group="account_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="website_id" backend_type="static" is_required="1" input="select" group="account_information">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="amount_delta" backend_type="static" is_required="1" input="text" group="store_credit">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="is_subscribed" backend_type="virtual"/>
     <field name="password" backend_type="virtual" group="null">
-      <default_value type="string">123123q</default_value>
+      <default_value xsi:type="string">123123q</default_value>
     </field>
     <field name="password_confirmation" backend_type="virtual" group="null">
-      <default_value type="string">123123q</default_value>
+      <default_value xsi:type="string">123123q</default_value>
     </field>
     <field name="current_password" backend_type="virtual" group="null"/>
   </fixture>

@@ -2,199 +2,199 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="catalogProductSimple" module="Magento_Catalog" type="eav" entity_type="catalog_product" product_type="simple" collection="Magento\Catalog\Model\Resource\Product\Collection" identifier="sku" repository_class="Magento\Catalog\Test\Repository\CatalogProductSimple" handler_interface="Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface" class="Magento\Catalog\Test\Fixture\CatalogProductSimple">
     <dataset name="default">
-        <field name="name" type="string">Test simple product %isolation%</field>
-        <field name="sku" type="string">test_simple_sku_%isolation%</field>
-        <field name="attribute_set_id" type="array">
-            <item name="dataSet" type="string">default</item>
+        <field name="name" xsi:type="string">Test simple product %isolation%</field>
+        <field name="sku" xsi:type="string">test_simple_sku_%isolation%</field>
+        <field name="attribute_set_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default</item>
         </field>
-        <field name="price" type="array">
-            <item name="value" type="string">100.00</item>
+        <field name="price" xsi:type="array">
+            <item name="value" xsi:type="string">100.00</item>
         </field>
-        <field name="weight" type="string">12.00</field>
-        <field name="quantity_and_stock_status" type="array">
-            <item name="qty" type="string">10.00</item>
-            <item name="is_in_stock" type="string">In Stock</item>
+        <field name="weight" xsi:type="string">12.00</field>
+        <field name="quantity_and_stock_status" xsi:type="array">
+            <item name="qty" xsi:type="string">10.00</item>
+            <item name="is_in_stock" xsi:type="string">In Stock</item>
         </field>
-        <field name="website_ids" type="array">
-            <item name="0" type="string">Main Website</item>
+        <field name="website_ids" xsi:type="array">
+            <item name="0" xsi:type="string">Main Website</item>
         </field>
     </dataset>
     <data_config>
-        <item name="type_id" type="string">simple</item>
-        <item name="create_url_params" type="array">
-            <item name="type" type="string">simple</item>
-            <item name="set" type="string">4</item>
+        <item name="type_id" xsi:type="string">simple</item>
+        <item name="create_url_params" xsi:type="array">
+            <item name="type" xsi:type="string">simple</item>
+            <item name="set" xsi:type="string">4</item>
         </item>
-        <item name="input_prefix" type="string">product</item>
+        <item name="input_prefix" xsi:type="string">product</item>
     </data_config>
     <field name="category_ids" backend_type="static" is_required="0" input="text" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="color" backend_type="int" is_required="0" input="select">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="country_of_manufacture" backend_type="varchar" is_required="0" input="select">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="created_at" backend_type="static" is_required="1" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="custom_design" backend_type="varchar" is_required="0" input="select">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="custom_design_from" backend_type="datetime" is_required="0" input="date">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="custom_design_to" backend_type="datetime" is_required="0" input="date">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="custom_layout_update" backend_type="text" is_required="0" input="textarea">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="description" backend_type="text" is_required="0" input="textarea" group="product-details">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="gallery" backend_type="varchar" is_required="0" input="gallery">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="gift_message_available" backend_type="varchar" is_required="0" input="select">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="group_price" backend_type="decimal" is_required="0" input="text" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="has_options" backend_type="static" is_required="0" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="image" backend_type="varchar" is_required="0" input="media_image">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="image_label" backend_type="varchar" is_required="0" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="manufacturer" backend_type="int" is_required="0" input="select">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="media_gallery" backend_type="varchar" is_required="0" input="gallery">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="meta_description" backend_type="varchar" is_required="0" group="search-engine-optimization" input="textarea">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="meta_keyword" backend_type="text" is_required="0" group="search-engine-optimization" input="textarea">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="meta_title" backend_type="varchar" is_required="0" group="search-engine-optimization" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="minimal_price" backend_type="decimal" is_required="0" input="price">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="msrp" backend_type="decimal" is_required="0" input="price">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="msrp_display_actual_price_type" backend_type="varchar" is_required="0" input="select">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="name" backend_type="varchar" is_required="1" input="text" group="product-details">
-      <default_value type="string">Test simple product %isolation%</default_value>
+      <default_value xsi:type="string">Test simple product %isolation%</default_value>
     </field>
     <field name="old_id" backend_type="int" is_required="0" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="options_container" backend_type="varchar" is_required="0" input="select">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="page_layout" backend_type="varchar" is_required="0" input="select">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="price" backend_type="decimal" is_required="1" input="price" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\Price">
-      <default_value type="array">
-                <item name="value" type="number">100</item>
+      <default_value xsi:type="array">
+                <item name="value" xsi:type="number">100</item>
             </default_value>
     </field>
     <field name="quantity_and_stock_status" backend_type="array" is_required="0" input="" group="product-details">
-      <default_value type="array">
-                <item name="qty" type="number">10</item>
-                <item name="is_in_stock" type="string">In Stock</item>
+      <default_value xsi:type="array">
+                <item name="qty" xsi:type="number">10</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
             </default_value>
     </field>
     <field name="required_options" backend_type="static" is_required="0" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="sku" backend_type="static" is_required="1" input="text" group="product-details">
-      <default_value type="string">test_simple_sku_%isolation%</default_value>
+      <default_value xsi:type="string">test_simple_sku_%isolation%</default_value>
     </field>
     <field name="small_image" backend_type="varchar" is_required="0" input="media_image">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="small_image_label" backend_type="varchar" is_required="0" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="special_from_date" backend_type="datetime" is_required="0" input="date">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="short_description" backend_type="text" is_required="0" input="textarea" group="autosettings">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="special_price" backend_type="decimal" is_required="0" input="price" group="advanced-pricing">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="special_to_date" backend_type="datetime" is_required="0" input="date">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="status" backend_type="int" is_required="0" input="checkbox" group="product-details">
-      <default_value type="string">Product online</default_value>
+      <default_value xsi:type="string">Product online</default_value>
     </field>
     <field name="tax_class_id" backend_type="int" is_required="0" input="select" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass">
-      <default_value type="string">Taxable Goods</default_value>
+      <default_value xsi:type="string">Taxable Goods</default_value>
     </field>
     <field name="thumbnail" backend_type="varchar" is_required="0" input="media_image">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="thumbnail_label" backend_type="varchar" is_required="0" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="tier_price" backend_type="decimal" is_required="0" input="text" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="updated_at" backend_type="static" is_required="1" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="url_key" backend_type="varchar" is_required="0" input="text" group="search-engine-optimization">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="url_path" backend_type="varchar" is_required="0" input="text">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="visibility" backend_type="int" is_required="0" input="select" group="autosettings">
-      <default_value type="string">Catalog, Search</default_value>
+      <default_value xsi:type="string">Catalog, Search</default_value>
     </field>
     <field name="weight" backend_type="decimal" is_required="0" input="weight" group="product-details">
-      <default_value type="number">12</default_value>
+      <default_value xsi:type="number">12</default_value>
     </field>
     <field name="id" backend_type="virtual" group="null"/>
     <field name="type_id" backend_type="virtual"/>
     <field name="attribute_set_id" backend_type="virtual" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId">
-      <default_value type="array">
-                <item name="dataSet" type="string">default</item>
+      <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
             </default_value>
     </field>
     <field name="custom_attribute" backend_type="virtual" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomAttribute"/>
     <field name="custom_options" backend_type="virtual" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions"/>
     <field name="website_ids" backend_type="virtual" group="websites">
-      <default_value type="array">
-                <item name="0" type="string">Main Website</item>
+      <default_value xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
             </default_value>
     </field>
     <field name="is_returnable" backend_type="varchar" is_required="0" input="select" group="autosettings">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="news_from_date" backend_type="datetime" is_required="0" input="date" source="Magento\Backend\Test\Fixture\Source\Date">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="news_to_date" backend_type="datetime" is_required="0" input="date" source="Magento\Backend\Test\Fixture\Source\Date">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="stock_data" backend_type="virtual" group="advanced-inventory"/>
     <field name="checkout_data" backend_type="virtual" group="null" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CheckoutData"/>
@@ -204,7 +204,7 @@
     <field name="is_virtual" backend_type="virtual" group="product-details"/>
     <field name="attributes" backend_type="virtual"/>
     <field name="fpt" backend_type="decimal" is_required="0" input="text" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\Fpt">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
   </fixture>
 </config>

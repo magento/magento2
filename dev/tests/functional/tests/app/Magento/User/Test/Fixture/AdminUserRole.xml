@@ -2,35 +2,35 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="adminUserRole" module="Magento_User" type="flat" entity_type="authorization_role" collection="Magento\User\Model\Resource\Role\User\Collection" repository_class="Magento\User\Test\Repository\AdminUserRole" handler_interface="Magento\User\Test\Handler\AdminUserRole\AdminUserRoleInterface" class="Magento\User\Test\Fixture\AdminUserRole">
     <dataset name="default">
-        <field name="rolename" type="string">AdminRole%isolation%</field>
-        <field name="resource_access" type="string">All</field>
+        <field name="rolename" xsi:type="string">AdminRole%isolation%</field>
+        <field name="resource_access" xsi:type="string">All</field>
     </dataset>
     <field name="role_id" backend_type="int" is_required="1" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="parent_id" backend_type="int" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="tree_level" backend_type="smallint" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="sort_order" backend_type="smallint" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="role_type" backend_type="varchar" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="user_id" backend_type="int" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="rolename" backend_type="varchar" is_required="" input="" group="role-info">
-      <default_value type="string">AdminRole%isolation%</default_value>
+      <default_value xsi:type="string">AdminRole%isolation%</default_value>
     </field>
     <field name="user_type" backend_type="varchar" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="resource_access" backend_type="virtual" group="role-resources">
-      <default_value type="string">All</default_value>
+      <default_value xsi:type="string">All</default_value>
     </field>
     <field name="roles_resources" backend_type="virtual" group="role-resources"/>
     <field name="in_role_users" backend_type="virtual" group="in_role_users" source="Magento\User\Test\Fixture\AdminUserRole\InRoleUsers"/>

@@ -2,40 +2,40 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="checkoutAgreement" module="Magento_CheckoutAgreements" type="flat" entity_type="checkout_agreement" collection="Magento\CheckoutAgreements\Model\Resource\Agreement\Collection" repository_class="Magento\CheckoutAgreements\Test\Repository\CheckoutAgreement" handler_interface="Magento\CheckoutAgreements\Test\Handler\CheckoutAgreement\CheckoutAgreementInterface" class="Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement">
     <dataset name="default">
-        <field name="name" type="string">DefaultName%isolation%</field>
-        <field name="is_active" type="string">Enabled</field>
-        <field name="is_html" type="string">Text</field>
-        <field name="stores" type="array">
-            <item name="dataSet" type="string">default</item>
+        <field name="name" xsi:type="string">DefaultName%isolation%</field>
+        <field name="is_active" xsi:type="string">Enabled</field>
+        <field name="is_html" xsi:type="string">Text</field>
+        <field name="stores" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default</item>
         </field>
-        <field name="checkbox_text" type="string">test_checkbox%isolation%</field>
-        <field name="content" type="string">TestMessage%isolation%</field>
+        <field name="checkbox_text" xsi:type="string">test_checkbox%isolation%</field>
+        <field name="content" xsi:type="string">TestMessage%isolation%</field>
     </dataset>
     <field name="agreement_id" backend_type="int" is_required="1" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="name" backend_type="varchar" is_required="" input="">
-      <default_value type="string">DefaultName%isolation%</default_value>
+      <default_value xsi:type="string">DefaultName%isolation%</default_value>
     </field>
     <field name="content" backend_type="text" is_required="" input="">
-      <default_value type="string">TestMessage%isolation%</default_value>
+      <default_value xsi:type="string">TestMessage%isolation%</default_value>
     </field>
     <field name="content_height" backend_type="varchar" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="checkbox_text" backend_type="text" is_required="" input="">
-      <default_value type="string">test_checkbox%isolation%</default_value>
+      <default_value xsi:type="string">test_checkbox%isolation%</default_value>
     </field>
     <field name="is_active" backend_type="smallint" is_required="" input="">
-      <default_value type="string">Enabled</default_value>
+      <default_value xsi:type="string">Enabled</default_value>
     </field>
     <field name="is_html" backend_type="smallint" is_required="" input="">
-      <default_value type="string">Text</default_value>
+      <default_value xsi:type="string">Text</default_value>
     </field>
     <field name="store_ids" backend_type="virtual" source="Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement\Stores">
-      <default_value type="array">
-                <item name="dataSet" type="array">
-                    <item name="0" type="string">default</item>
+      <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="array">
+                    <item name="0" xsi:type="string">default</item>
                 </item>
             </default_value>
     </field>

@@ -2,81 +2,81 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="integration" module="Magento_Integration" type="composite" entity_type="integration" collection="Magento\Integration\Model\Resource\Integration\Collection" repository_class="Magento\Integration\Test\Repository\Integration" handler_interface="Magento\Integration\Test\Handler\Integration\IntegrationInterface" class="Magento\Integration\Test\Fixture\Integration">
     <dataset name="default">
-        <field name="name" type="string">default_integration_%isolation%</field>
-        <field name="email" type="string">test_%isolation%@example.com</field>
-        <field name="resource_access" type="string">All</field>
+        <field name="name" xsi:type="string">default_integration_%isolation%</field>
+        <field name="email" xsi:type="string">test_%isolation%@example.com</field>
+        <field name="resource_access" xsi:type="string">All</field>
     </dataset>
     <field name="integration_id" backend_type="int" is_required="1" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="name" backend_type="varchar" is_required="" input="" group="integration_info">
-      <default_value type="string">default_integration_%isolation%</default_value>
+      <default_value xsi:type="string">default_integration_%isolation%</default_value>
     </field>
     <field name="email" backend_type="varchar" is_required="" input="" group="integration_info">
-      <default_value type="string">test_%isolation%@example.com</default_value>
+      <default_value xsi:type="string">test_%isolation%@example.com</default_value>
     </field>
     <field name="endpoint" backend_type="varchar" is_required="" input="" group="integration_info">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="status" backend_type="smallint" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="consumer_id" backend_type="int" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="created_at" backend_type="timestamp" is_required="" input="">
-      <default_value type="string">CURRENT_TIMESTAMP</default_value>
+      <default_value xsi:type="string">CURRENT_TIMESTAMP</default_value>
     </field>
     <field name="updated_at" backend_type="timestamp" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="setup_type" backend_type="smallint" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="identity_link_url" backend_type="varchar" is_required="" input="" group="integration_info">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="entity_id" backend_type="int" is_required="1" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="admin_id" backend_type="int" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="customer_id" backend_type="int" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="type" backend_type="varchar" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="token" backend_type="varchar" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="secret" backend_type="varchar" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="verifier" backend_type="varchar" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="callback_url" backend_type="varchar" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="revoked" backend_type="smallint" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="authorized" backend_type="smallint" is_required="" input="">
-      <default_value type="number">0</default_value>
+      <default_value xsi:type="number">0</default_value>
     </field>
     <field name="user_type" backend_type="int" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="key" backend_type="varchar" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="rejected_callback_url" backend_type="varchar" is_required="" input="">
-      <default_value type="null"/>
+      <default_value xsi:type="null"/>
     </field>
     <field name="resource_access" backend_type="virtual" group="api">
-      <default_value type="string">All</default_value>
+      <default_value xsi:type="string">All</default_value>
     </field>
     <field name="resources" backend_type="virtual" group="api"/>
     <field name="token_secret" backend_type="virtual" group="integration_info"/>
