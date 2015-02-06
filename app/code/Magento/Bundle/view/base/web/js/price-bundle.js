@@ -5,9 +5,10 @@
 define([
     'jquery',
     'underscore',
-    'Magento_Catalog/js/price-utils',
-    'Magento_Catalog/js/price-box'
-], function ($, _, utils) {
+    'mage/template',
+    'priceUtils',
+    'priceBox'
+], function ($, _, mageTemplate, utils) {
     'use strict';
 
     var globalOptions = {
@@ -16,7 +17,12 @@ define([
         qtyFieldSelector: 'input.qty',
         priceBoxSelector: '.price-box',
         optionHandlers: {},
-        controlContainer: 'dd' // should be eliminated
+        optionTemplate: '<%= label %>' +
+        '<% if (finalPrice.value) { %>' +
+        ' <%= finalPrice.formatted %>' +
+        '<% } %>',
+        controlContainer: 'dd', // should be eliminated
+        priceFormat: {}
     };
 
     $.widget('mage.priceBundle', {
@@ -26,7 +32,7 @@ define([
          * @private
          */
         _init: function initPriceBundle() {
-            var form    = this.element,
+            var form = this.element,
                 options = $(this.options.productBundleSelector, form);
 
             options.trigger('change');
@@ -36,12 +42,17 @@ define([
          * @private
          */
         _create: function createPriceBundle() {
-            var form      = this.element,
-                options   = $(this.options.productBundleSelector, form),
-                priceBox  = $(this.options.priceBoxSelector, form),
-                qty       = $(this.options.qtyFieldSelector, form);
+            var form = this.element,
+                options = $(this.options.productBundleSelector, form),
+                priceBox = $(this.options.priceBoxSelector, form),
+                qty = $(this.options.qtyFieldSelector, form);
 
+            if (priceBox.data('magePriceBox') && priceBox.priceBox('option') && priceBox.priceBox('option').priceConfig) {
+                this._setOption('optionTemplate', priceBox.priceBox('option').priceConfig.optionTemplate);
+                this._setOption('priceFormat', priceBox.priceBox('option').priceConfig.priceFormat);
+            }
             this._applyQtyFix();
+            this._applyOptionNodeFix(options);
 
             options.on('change', this._onBundleOptionChanged.bind(this));
             qty.on('change', this._onQtyFieldChanged.bind(this));
@@ -86,7 +97,7 @@ define([
 
             if (field.data('optionId') && field.data('optionValueId')) {
                 optionInstance = field.data('option');
-                optionConfig   = this.options.optionConfig
+                optionConfig = this.options.optionConfig
                     .options[field.data('optionId')]
                     .selections[field.data('optionValueId')];
                 optionConfig.qty = field.val();
@@ -112,6 +123,59 @@ define([
                             });
                         }
                     }
+                });
+            });
+        },
+
+        /**
+         * Helper to fix issue with option nodes:
+         *  - you can't place any html in option ->
+         *    so you can't style it via CSS
+         * @param {jQuery} options
+         * @private
+         */
+        _applyOptionNodeFix: function applyOptionNodeFix(options) {
+            var config = this.options,
+                format = config.priceFormat,
+                template = config.optionTemplate;
+            template = mageTemplate(template);
+            options.filter('select').each(function (index, element) {
+                var $element = $(element),
+                    optionId = utils.findOptionId($element),
+                    optionName = $element.prop('name'),
+                    optionType = $element.prop('type'),
+                    optionConfig = config.optionConfig && config.optionConfig.options[optionId].selections;
+
+                $element.find('option').each(function (idx, option) {
+                    var $option,
+                        optionValue,
+                        toTemplate,
+                        prices;
+
+                    $option = $(option);
+                    optionValue = $option.val();
+
+                    if (!optionValue && optionValue !== 0) {
+                        return;
+                    }
+
+                    toTemplate = {
+                        label: optionConfig[optionValue] && optionConfig[optionValue].name
+                    };
+                    prices = optionConfig[optionValue].prices;
+
+                    _.each(prices, function (price, type) {
+                        var value = +(price.amount);
+                        value += _.reduce(price.adjustments, function (sum, x) {
+                            return sum + x;
+                        }, 0);
+                        toTemplate[type] = {
+                            value: value,
+                            formatted: utils.formatPrice(value, format)
+                        };
+                    });
+
+                    $option.text(template(toTemplate));
                 });
             });
         },
@@ -154,14 +218,14 @@ define([
             optionHash,
             tempChanges,
             qtyField,
-            optionId      = utils.findOptionId(element[0]),
-            optionValue   = element.val() || null,
-            optionName    = element.prop('name'),
-            optionType    = element.prop('type'),
-            optionConfig  = config.options[optionId].selections,
-            optionQty     = 0,
+            optionId = utils.findOptionId(element[0]),
+            optionValue = element.val() || null,
+            optionName = element.prop('name'),
+            optionType = element.prop('type'),
+            optionConfig = config.options[optionId].selections,
+            optionQty = 0,
             canQtyCustomize = false,
-            selectedIds   = config.selected;
+            selectedIds = config.selected;
 
         switch (optionType) {
             case 'radio':
