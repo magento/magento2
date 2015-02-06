@@ -398,6 +398,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             $object->beforeSave();
             if ($object->isSaveAllowed()) {
                 $this->_serializeFields($object);
+                $this->relationProcessor->validate($this->getMainTable(), $object->getData());
                 $this->_beforeSave($object);
                 $this->_checkUnique($object);
                 if (!is_null($object->getId()) && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
