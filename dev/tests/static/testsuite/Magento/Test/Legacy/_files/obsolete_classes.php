@@ -2908,4 +2908,5 @@ return [
     ],
     ['Zend_Controller_Router_Route'],
     ['Zend_Controller_Router_Route_Interface'],
+    ['Magento\Framework\App\Http\RequestInterface'],
 ];

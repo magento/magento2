@@ -28,7 +28,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Http\RequestInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\RequestInterface
      */
     protected $requestMock;
 

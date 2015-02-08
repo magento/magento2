@@ -51,6 +51,8 @@ class FirebugTest extends \PHPUnit_Framework_TestCase
 
     public function testDisplay()
     {
+        $this->markTestSkipped('ZF1 Required!');
+
         $this->_response->expects($this->atLeastOnce())->method('sendHeaders');
         $this->_request->expects($this->atLeastOnce())->method('getHeader');
 

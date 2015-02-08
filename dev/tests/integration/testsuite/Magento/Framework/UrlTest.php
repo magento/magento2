@@ -416,10 +416,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
         $request = $objectManager->get('Magento\Framework\App\RequestInterface');
-        $request->setServer(['HTTP_REFERER' => 'http://localhost/']);
+        $request->setServer(new \Zend\Stdlib\Parameters(['HTTP_REFERER' => 'http://localhost/']));
         $this->assertTrue($this->_model->isOwnOriginUrl());
 
-        $request->setServer(['HTTP_REFERER' => 'http://example.com/']);
+        $request->setServer(new \Zend\Stdlib\Parameters(['HTTP_REFERER' => 'http://example.com/']));
         $this->assertFalse($this->_model->isOwnOriginUrl());
     }
 }

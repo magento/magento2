@@ -124,7 +124,8 @@ class PostTest extends \PHPUnit_Framework_TestCase
             'getActionName',
             'setActionName',
             'getParam',
-            'getCookie'
+            'getCookie',
+            'isSecure',
         ];
         $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $this->_requestMock = $this->getMock(

@@ -30,7 +30,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
      */
     public function testForgotpasswordAction()
     {
-        $this->getRequest()->setPost('email', 'test@test.com');
+        $this->getRequest()->setPostValue('email', 'test@test.com');
         $this->dispatch('backend/admin/auth/forgotpassword');
         $this->assertRedirect(
             $this->equalTo(
@@ -116,10 +116,10 @@ class AuthTest extends \Magento\Backend\Utility\Controller
         )->setQuery(
             'id',
             $user->getId()
-        )->setPost(
+        )->setPostValue(
             'password',
             $password
-        )->setPost(
+        )->setPostValue(
             'confirmation',
             $passwordConfirmation
         );
@@ -212,10 +212,10 @@ class AuthTest extends \Magento\Backend\Utility\Controller
         )->setQuery(
             'id',
             $user->getId()
-        )->setPost(
+        )->setPostValue(
             'password',
             $newDummyPassword
-        )->setPost(
+        )->setPostValue(
             'confirmation',
             'invalid'
         );

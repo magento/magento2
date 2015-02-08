@@ -64,8 +64,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
             'id',
             2
         )->setServer(
-            ['REQUEST_METHOD' => 'POST']
-        )->setPost(
+            new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST'])
+        )->setPostValue(
             [
                 'form_key' => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname' => 'James',
@@ -111,8 +111,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
             'id',
             1
         )->setServer(
-            ['REQUEST_METHOD' => 'POST']
-        )->setPost(
+            new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST'])
+        )->setPostValue(
             [
                 'form_key' => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname' => 'James',

@@ -70,7 +70,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
         $request = $objectManager->create('Magento\TestFramework\Request');
-        $request->setServer(['HTTP_USER_AGENT' => 'Mozilla Firefox']);
+        $request->setServer(new \Zend\Stdlib\Parameters(['HTTP_USER_AGENT' => 'Mozilla Firefox']));
         $this->_model->detectDesign($request);
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\DesignInterface'
@@ -110,7 +110,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $model = $objectManager->create('Magento\Framework\App\Area', ['areaCode' => 'adminhtml']);
         /** @var $request \Magento\TestFramework\Request */
         $request = $objectManager->create('Magento\TestFramework\Request');
-        $request->setServer(['HTTP_USER_AGENT' => 'Mozilla Firefox']);
+        $request->setServer(new \Zend\Stdlib\Parameters(['HTTP_USER_AGENT' => 'Mozilla Firefox']));
         $model->detectDesign($request);
         $design = $objectManager->get('Magento\Framework\View\DesignInterface');
         $this->assertNotEquals('Magento/blank', $design->getDesignTheme()->getThemePath());

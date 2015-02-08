@@ -19,7 +19,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\TestFramework\Request $request */
         $request = $objectManager->get('Magento\TestFramework\Request');
-        $request->setServer(['HTTP_HOST' => 'localhost']);
+        $request->setServer(new \Zend\Stdlib\Parameters(['HTTP_HOST' => 'localhost']));
     }
 
     public function testGetHttpHeaderMethods()
@@ -34,6 +34,6 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRequestUri()
     {
-        $this->assertNull($this->_header->getRequestUri());
+        $this->assertEquals('/', $this->_header->getRequestUri());
     }
 }

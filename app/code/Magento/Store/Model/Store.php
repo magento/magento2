@@ -331,7 +331,7 @@ class Store extends AbstractModel implements
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\Http\RequestInterface $request,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,

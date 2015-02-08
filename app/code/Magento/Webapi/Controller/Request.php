@@ -7,38 +7,46 @@
  */
 namespace Magento\Webapi\Controller;
 
-class Request extends \Zend_Controller_Request_Http implements \Magento\Framework\App\RequestInterface
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\HTTP\PhpEnvironment\Request as HttpRequest;
+use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+
+class Request extends HttpRequest implements RequestInterface
 {
     /** @var int */
     protected $_consumerId = 0;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface
+     * @var CookieReaderInterface
      */
     protected $_cookieReader;
 
     /**
      * Modify pathInfo: strip down the front name and query parameters.
      *
-     * @param \Magento\Framework\App\AreaList $areaList
-     * @param \Magento\Framework\Config\ScopeInterface $configScope
-     * @param \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader
+     * @param AreaList $areaList
+     * @param ScopeInterface $configScope
+     * @param CookieReaderInterface $cookieReader
      * @param null|string|\Zend_Uri $uri
      */
     public function __construct(
-        \Magento\Framework\App\AreaList $areaList,
-        \Magento\Framework\Config\ScopeInterface $configScope,
-        \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader,
+        AreaList $areaList,
+        ScopeInterface $configScope,
+        CookieReaderInterface $cookieReader,
         $uri = null
     ) {
         parent::__construct($uri);
-        $areaFrontName = $areaList->getFrontName($configScope->getCurrentScope());
-        $this->_pathInfo = $this->_requestUri;
-        /** Remove base url and area from path */
-        $this->_pathInfo = preg_replace("#.*?/{$areaFrontName}/?#", '/', $this->_pathInfo);
-        /** Remove GET parameters from path */
-        $this->_pathInfo = preg_replace('#\?.*#', '', $this->_pathInfo);
         $this->_cookieReader = $cookieReader;
+
+        $pathInfo = $this->getRequestUri();
+        /** Remove base url and area from path */
+        $areaFrontName = $areaList->getFrontName($configScope->getCurrentScope());
+        $pathInfo = preg_replace("#.*?/{$areaFrontName}/?#", '/', $pathInfo);
+        /** Remove GET parameters from path */
+        $pathInfo = preg_replace('#\?.*#', '', $pathInfo);
+        $this->setPathInfo($pathInfo);
     }
 
     /**
@@ -58,12 +66,12 @@ class Request extends \Zend_Controller_Request_Http implements \Magento\Framewor
      *
      * Added CGI environment support.
      */
-    public function getHeader($header)
+    public function getHeader($name, $default = false)
     {
-        $headerValue = parent::getHeader($header);
+        $headerValue = parent::getHeader($name);
         if ($headerValue == false) {
             /** Workaround for php-fpm environment */
-            $header = strtoupper(str_replace('-', '_', $header));
+            $header = strtoupper(str_replace('-', '_', $name));
             if (isset($_SERVER[$header]) && in_array($header, ['CONTENT_TYPE', 'CONTENT_LENGTH'])) {
                 $headerValue = $_SERVER[$header];
             }
