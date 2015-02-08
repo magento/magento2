@@ -6,6 +6,7 @@
 namespace Magento\Backend\Model\View\Layout\Reader;
 
 use Magento\Framework\View\Layout;
+use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
  * Backend block structure reader with ACL support
@@ -16,6 +17,7 @@ class Block extends Layout\Reader\Block
         Layout\ScheduledStructure\Helper $helper,
         Layout\Argument\Parser $argumentParser,
         Layout\ReaderPool $readerPool,
+        InterpreterInterface $argumentInterpreter,
         $scopeType = null
     ) {
         $this->attributes[] = 'acl';
@@ -23,6 +25,7 @@ class Block extends Layout\Reader\Block
             $helper,
             $argumentParser,
             $readerPool,
+            $argumentInterpreter,
             $scopeType
         );
     }
