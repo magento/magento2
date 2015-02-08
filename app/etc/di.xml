@@ -286,7 +286,12 @@
     <virtualType name="layoutArgumentGeneratorInterpreterInternal" type="Magento\Framework\Data\Argument\Interpreter\Composite">
         <arguments>
             <argument name="interpreters" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Options</item>
+                <item name="array" xsi:type="object">layoutArrayArgumentGeneratorInterpreterProxy</item>
+                <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
+                <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
                 <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</item>
+                <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
                 <item name="object" xsi:type="object">layoutObjectArgumentInterpreter</item>
                 <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
                 <item name="helper" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod</item>
@@ -309,6 +314,11 @@
             <argument name="itemInterpreter" xsi:type="object">layoutArgumentReaderInterpreterInternal</argument>
         </arguments>
     </virtualType>
+    <virtualType name="layoutArrayArgumentGeneratorInterpreter" type="Magento\Framework\Data\Argument\Interpreter\ArrayType">
+        <arguments>
+            <argument name="itemInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreterInternal</argument>
+        </arguments>
+    </virtualType>
     <!--
     Array item can be of any type just like an argument, including array type itself, which creates circular dependency.
     Proxy is used to resolve the circular dependency, so that array items undergo the same interpretation as arguments.
@@ -316,6 +326,11 @@
     <virtualType name="layoutArrayArgumentReaderInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
         <arguments>
             <argument name="instanceName" xsi:type="string">layoutArrayArgumentReaderInterpreter</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutArrayArgumentGeneratorInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">layoutArrayArgumentGeneratorInterpreter</argument>
         </arguments>
     </virtualType>
     <virtualType name="layoutObjectArgumentInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Object">
