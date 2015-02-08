@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\View;
 
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\View\Layout\Element;
@@ -126,7 +127,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     protected $builder;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface
+     * @var FrontendInterface
      */
     protected $cache;
 
@@ -140,7 +141,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param Page\Config\Structure $pageConfigStructure
      * @param Layout\ReaderPool $readerPool
      * @param Layout\GeneratorPool $generatorPool
-     * @param \Magento\Framework\Cache\FrontendInterface $cache
+     * @param FrontendInterface $cache
      * @param bool $cacheable
      */
     public function __construct(
@@ -153,7 +154,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         Page\Config\Structure $pageConfigStructure,
         Layout\ReaderPool $readerPool,
         Layout\GeneratorPool $generatorPool,
-        \Magento\Framework\Cache\FrontendInterface $cache,
+        FrontendInterface $cache,
         $cacheable = true
     ) {
         $this->_elementClass = 'Magento\Framework\View\Layout\Element';

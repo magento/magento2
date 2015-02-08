@@ -280,7 +280,14 @@ class Block implements Layout\ReaderInterface
     {
         $arguments = $this->getArguments($blockElement);
         foreach ($arguments as $argumentName => $argumentData) {
-            $data['arguments'][$argumentName] = $this->argumentInterpreter->evaluate($argumentData);
+            $result = $this->argumentInterpreter->evaluate($argumentData);
+            if (is_array($result)) {
+                $data['arguments'][$argumentName] = isset($data['arguments'][$argumentName])
+                    ? array_replace_recursive($data['arguments'][$argumentName], $result)
+                    : $result;
+            } else {
+                $data['arguments'][$argumentName] = $result;
+            }
         }
     }
 }
