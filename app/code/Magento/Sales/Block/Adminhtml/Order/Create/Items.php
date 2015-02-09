@@ -35,7 +35,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Accordion header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

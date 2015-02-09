@@ -402,7 +402,7 @@ class Editor extends Textarea
      * Translate string using defined helper
      *
      * @param string $string String to be translated
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function translate($string)
     {
