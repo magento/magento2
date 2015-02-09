@@ -60,6 +60,8 @@ class TemplateFile extends File
     public function getFile($area, ThemeInterface $themeModel, $file, $module = null)
     {
         $template = parent::getFile($area, $themeModel, $file, $module);
+        var_dump(get_class($this->appState));
+        var_dump($this->appState->getMode());
         switch ($this->appState->getMode()) {
             case State::MODE_PRODUCTION:
                 return $this->templateMinifier->getPathToMinified($template);

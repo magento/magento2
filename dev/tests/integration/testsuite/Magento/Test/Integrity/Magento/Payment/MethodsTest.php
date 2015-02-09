@@ -52,8 +52,8 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
             );
             $model->setInfoInstance($paymentInfo);
         }
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\App\State')->setUpdateMode(State::MODE_DEVELOPER);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setMode(State::MODE_DEVELOPER);
         $this->assertNotEmpty($model->getTitle());
         foreach ([$model->getFormBlockType(), $model->getInfoBlockType()] as $blockClass) {
             $message = "Block class: {$blockClass}";
@@ -85,6 +85,8 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
                 }
             }
         }
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setMode(State::MODE_DEFAULT);
     }
 
     /**
