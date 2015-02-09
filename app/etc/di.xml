@@ -267,7 +267,7 @@
             <argument name="session" xsi:type="object">Magento\Framework\Session\Generic\Proxy</argument>
         </arguments>
     </type>
-    <virtualType name="layoutArgumentReaderInterpreterInternal" type="Magento\Framework\Data\Argument\Interpreter\Composite">
+    <virtualType name="layoutArgumentReaderInterpreter" type="Magento\Framework\Data\Argument\Interpreter\Composite">
         <arguments>
             <argument name="interpreters" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Options</item>
@@ -302,11 +302,6 @@
     <virtualType name="layoutArgumentGeneratorInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater">
         <arguments>
             <argument name="subject" xsi:type="object">layoutArgumentGeneratorInterpreterInternal</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="layoutArgumentReaderInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater">
-        <arguments>
-            <argument name="subject" xsi:type="object">layoutArgumentReaderInterpreterInternal</argument>
         </arguments>
     </virtualType>
     <virtualType name="layoutArrayArgumentReaderInterpreter" type="Magento\Framework\Data\Argument\Interpreter\ArrayType">
