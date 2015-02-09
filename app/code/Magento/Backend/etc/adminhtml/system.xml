@@ -554,33 +554,6 @@
                     <label>Default No-route URL</label>
                 </field>
             </group>
-            <group id="cookie" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Default Cookie Settings</label>
-                <field id="cookie_lifetime" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Cookie Lifetime</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Cookie\Lifetime</backend_model>
-                </field>
-                <field id="cookie_path" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Cookie Path</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Cookie\Path</backend_model>
-                </field>
-                <field id="cookie_domain" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Cookie Domain</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Cookie\Domain</backend_model>
-                </field>
-                <field id="cookie_httponly" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Use HTTP Only</label>
-                    <comment>
-                        <![CDATA[<strong style="color:red">Warning</strong>:  Do not set to "No". User security could be compromised.]]>
-                    </comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="cookie_restriction" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Cookie Restriction Mode</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Cookie</backend_model>
-                </field>
-            </group>
             <group id="session" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Session Validation Settings</label>
                 <field id="use_remote_addr" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
