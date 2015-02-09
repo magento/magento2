@@ -9,7 +9,7 @@ namespace Magento\GroupedProduct\Test\TestCase;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
+use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -84,11 +84,11 @@ class CreateGroupedProductEntityTest extends Injectable
     /**
      * Test create grouped product
      *
-     * @param GroupedProductInjectable $product
+     * @param GroupedProduct $product
      * @param Category $category
      * @return void
      */
-    public function test(GroupedProductInjectable $product, Category $category)
+    public function test(GroupedProduct $product, Category $category)
     {
         //Steps
         $this->catalogProductIndex->open();

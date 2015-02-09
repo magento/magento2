@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
+namespace Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;

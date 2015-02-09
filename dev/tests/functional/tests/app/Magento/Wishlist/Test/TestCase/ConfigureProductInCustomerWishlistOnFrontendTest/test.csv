@@ -2,5 +2,5 @@
 "catalogProductSimple::with_two_custom_option";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"
 "configurableProduct::default";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"
 "bundleProduct::bundle_dynamic_product";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"
-"downloadableProductInjectable::with_two_separately_links";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"
-"groupedProductInjectable::three_simple_products";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"
+"downloadableProduct::with_two_separately_links";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"
+"groupedProduct::three_simple_products";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"

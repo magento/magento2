@@ -5,6 +5,6 @@
 "configurable";"catalogProductVirtual::default";"assertProductSaveMessage, assertProductInGrid"
 "virtual";"catalogProductSimple::default";"assertProductSaveMessage, assertProductInGrid"
 "virtual";"configurableProduct::not_virtual_for_type_switching";"assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart, assertChildProductIsNotDisplayedSeparately"
-"virtual";"downloadableProductInjectable::default";"assertProductSaveMessage, assertProductInGrid, assertDownloadableProductForm, assertProductPage, assertProductInStock"
+"virtual";"downloadableProduct::default";"assertProductSaveMessage, assertProductInGrid, assertDownloadableProductForm, assertProductPage, assertProductInStock"
 "downloadable";"catalogProductSimple::default";"assertProductSaveMessage, assertProductInGrid"
 "downloadable";"configurableProduct::not_virtual_for_type_switching";"assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart, assertChildProductIsNotDisplayedSeparately"

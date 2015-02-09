@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GroupedProduct\Test\Handler\GroupedProductInjectable;
+namespace Magento\GroupedProduct\Test\Handler\GroupedProduct;
 
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as AbstractCurl;
 use Magento\Mtf\Fixture\FixtureInterface;
@@ -13,7 +13,7 @@ use Magento\Mtf\Fixture\FixtureInterface;
  * Class Curl
  * Create new grouped product via curl
  */
-class Curl extends AbstractCurl implements GroupedProductInjectableInterface
+class Curl extends AbstractCurl implements GroupedProductInterface
 {
     /**
      * Prepare POST data for creating product request

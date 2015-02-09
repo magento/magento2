@@ -7,15 +7,15 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
-         class="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable">
+         class="Magento\Downloadable\Test\Fixture\DownloadableProduct">
     <module>Magento_Downloadable</module>
     <type>eav</type>
     <entity_type>catalog_product</entity_type>
     <product_type>downloadable</product_type>
     <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
     <identifier>sku</identifier>
-    <repository_class>Magento\Downloadable\Test\Repository\DownloadableProductInjectable</repository_class>
-    <handler_interface>Magento\Downloadable\Test\Handler\DownloadableProductInjectable\DownloadableProductInjectableInterface</handler_interface>
+    <repository_class>Magento\Downloadable\Test\Repository\DownloadableProduct</repository_class>
+    <handler_interface>Magento\Downloadable\Test\Handler\DownloadableProduct\DownloadableProductInterface</handler_interface>
     <dataset name="default">
         <field name="name" xsi:type="string">DownloadableProduct_%isolation%</field>
         <field name="sku" xsi:type="string">DownloadableProduct_%isolation%</field>
@@ -126,7 +126,7 @@
             <default_value xsi:type="null" />
             <input>text</input>
             <group>advanced-pricing</group>
-            <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\GroupPriceOptions</source>
+            <source>Magento\Downloadable\Test\Fixture\DownloadableProduct\GroupPriceOptions</source>
         </field>
         <field name="has_options">
             <attribute_code>has_options</attribute_code>
@@ -347,7 +347,7 @@
             </default_value>
             <input>text</input>
             <group>downloadable_information</group>
-            <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\Links</source>
+            <source>Magento\Downloadable\Test\Fixture\DownloadableProduct\Links</source>
         </field>
         <field name="downloadable_sample">
             <attribute_code>downloadable_sample</attribute_code>
@@ -356,7 +356,7 @@
             <default_value xsi:type="string">dafault</default_value>
             <input>text</input>
             <group>downloadable_information</group>
-            <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\Samples</source>
+            <source>Magento\Downloadable\Test\Fixture\DownloadableProduct\Samples</source>
         </field>
         <field name="sku">
             <attribute_code>sku</attribute_code>
@@ -525,7 +525,7 @@
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
             <group>null</group>
-            <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\CheckoutData</source>
+            <source>Magento\Downloadable\Test\Fixture\DownloadableProduct\CheckoutData</source>
         </field>
         <field name="cross_sell_products">
             <attribute_code>cross_sell_products</attribute_code>

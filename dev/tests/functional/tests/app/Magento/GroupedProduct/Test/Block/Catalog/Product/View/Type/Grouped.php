@@ -8,7 +8,6 @@ namespace Magento\GroupedProduct\Test\Block\Catalog\Product\View\Type;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
-use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
@@ -74,7 +73,7 @@ class Grouped extends Block
      */
     public function fill(FixtureInterface $product)
     {
-        /** @var GroupedProductInjectable $product */
+        /** @var GroupedProduct $product */
         $associatedProducts = $product->getAssociated()['products'];
         $checkoutData = $product->getCheckoutData();
         if (isset($checkoutData['options'])) {
@@ -105,7 +104,7 @@ class Grouped extends Block
      */
     public function getOptions(FixtureInterface $product)
     {
-        /** @var GroupedProductInjectable $product */
+        /** @var GroupedProduct $product */
         $associatedProducts = $product->getAssociated()['products'];
         $options = [];
 

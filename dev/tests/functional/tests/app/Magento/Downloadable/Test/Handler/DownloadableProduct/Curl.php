@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Downloadable\Test\Handler\DownloadableProductInjectable;
+namespace Magento\Downloadable\Test\Handler\DownloadableProduct;
 
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
 use Magento\Mtf\Fixture\FixtureInterface;
@@ -17,7 +17,7 @@ use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
  * Class Curl
  * Create new downloadable product via curl
  */
-class Curl extends ProductCurl implements DownloadableProductInjectableInterface
+class Curl extends ProductCurl implements DownloadableProductInterface
 {
     /**
      * Constructor

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
+namespace Magento\Downloadable\Test\Fixture\DownloadableProduct;
 
 /**
  * Class CheckoutData

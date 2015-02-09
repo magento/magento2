@@ -7,15 +7,15 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
-         class="Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable">
+         class="Magento\GroupedProduct\Test\Fixture\GroupedProduct">
     <module>Magento_GroupedProduct</module>
     <type>eav</type>
     <entity_type>catalog_product</entity_type>
     <product_type>grouped</product_type>
     <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
     <identifier>sku</identifier>
-    <repository_class>Magento\GroupedProduct\Test\Repository\GroupedProductInjectable</repository_class>
-    <handler_interface>Magento\GroupedProduct\Test\Handler\GroupedProductInjectable\GroupedProductInjectableInterface</handler_interface>
+    <repository_class>Magento\GroupedProduct\Test\Repository\GroupedProduct</repository_class>
+    <handler_interface>Magento\GroupedProduct\Test\Handler\GroupedProduct\GroupedProductInterface</handler_interface>
     <dataset name="default">
         <field name="name" xsi:type="string">GroupedProduct_%isolation%</field>
         <field name="sku" xsi:type="string">GroupedProduct_%isolation%</field>
@@ -71,7 +71,7 @@
             <backend_type>virtual</backend_type>
             <is_required>1</is_required>
             <group>grouped</group>
-            <source>Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable\Associated</source>
+            <source>Magento\GroupedProduct\Test\Fixture\GroupedProduct\Associated</source>
         </field>
         <field name="custom_design_from">
             <attribute_code>custom_design_from</attribute_code>
@@ -370,13 +370,13 @@
         <field name="price">
             <attribute_code>price</attribute_code>
             <backend_type>virtual</backend_type>
-            <source>Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable\Price</source>
+            <source>Magento\GroupedProduct\Test\Fixture\GroupedProduct\Price</source>
         </field>
         <field name="checkout_data">
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
             <group>null</group>
-            <source>Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable\CheckoutData</source>
+            <source>Magento\GroupedProduct\Test\Fixture\GroupedProduct\CheckoutData</source>
         </field>
         <field name="tax_class">
             <default_value xsi:type="string">taxable_goods</default_value>
