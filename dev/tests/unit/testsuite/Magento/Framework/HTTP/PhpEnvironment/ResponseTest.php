@@ -115,15 +115,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
         $this->headers->addHeaderLine('Header-name: header-value');
 
-        $header = $this->getMock(
-            'Zend\Http\Header\GenericHeader',
-            ['getFieldName'],
-            ['Header-name', 'header-value']
-        );
-        $header
-            ->expects($this->once())
-            ->method('getFieldName')
-            ->will($this->returnValue('Header-name'));
+        $header = \Zend\Http\Header\GenericHeader::fromString('Header-name: header-value');
 
         $this->headers
             ->expects($this->once())
@@ -132,54 +124,14 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->headers
             ->expects($this->once())
-            ->method('current')
+            ->method('get')
+            ->with('Header-name')
             ->will($this->returnValue($header));
         $this->headers
             ->expects($this->once())
             ->method('removeHeader')
             ->with($header)
             ->will($this->returnValue(true));
-
-        $response
-            ->expects($this->once())
-            ->method('getHeaders')
-            ->will($this->returnValue($this->headers));
-
-        $response->clearHeader('Header-name');
-    }
-
-    public function testClearHeaderIfHeaderExistsAndWasNotFound()
-    {
-        $response = $this->response = $this->getMock(
-            'Magento\Framework\HTTP\PhpEnvironment\Response',
-            ['getHeaders', 'send']
-        );
-
-        $this->headers->addHeaderLine('Header-name: header-value');
-
-        $header = $this->getMock(
-            'Zend\Http\Header\GenericHeader',
-            ['getFieldName'],
-            ['Header-name', 'header-value']
-        );
-        $header
-            ->expects($this->once())
-            ->method('getFieldName')
-            ->will($this->returnValue('Wrong-header-name'));
-
-        $this->headers
-            ->expects($this->once())
-            ->method('has')
-            ->with('Header-name')
-            ->will($this->returnValue(true));
-        $this->headers
-            ->expects($this->once())
-            ->method('current')
-            ->will($this->returnValue($header));
-        $this->headers
-            ->expects($this->never())
-            ->method('removeHeader')
-            ->with($header);
 
         $response
             ->expects($this->once())
@@ -198,15 +150,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
         $this->headers->addHeaderLine('Header-name: header-value');
 
-        $header = $this->getMock(
-            'Zend\Http\Header\GenericHeader',
-            ['getFieldName'],
-            ['Header-name', 'header-value']
-        );
-        $header
-            ->expects($this->never())
-            ->method('getFieldName')
-            ->will($this->returnValue('Wrong-header-name'));
+        $header = \Zend\Http\Header\GenericHeader::fromString('Header-name: header-value');
 
         $this->headers
             ->expects($this->once())
@@ -215,7 +159,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->headers
             ->expects($this->never())
-            ->method('current')
+            ->method('get')
+            ->with('Header-name')
             ->will($this->returnValue($header));
         $this->headers
             ->expects($this->never())
