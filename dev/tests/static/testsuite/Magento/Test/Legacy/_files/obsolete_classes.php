@@ -2243,6 +2243,8 @@ return [
     ['Magento\BaseScopeResolverInterface', 'Magento\Framework\App\ScopeResolverInterface'],
     ['Magento\Framework\Locale\ScopeConfigInterface'],
     ['Magento\Framework\StoreManagerInterface', 'Magento\Store\Model\StoreManagerInterface'],
+    ['Magento\Framework\Store\StoreManagerInterface', 'Magento\Store\Model\StoreManagerInterface'],
+    ['Magento\Framework\Store\ScopeInterface', 'Magento\Store\Model\ScopeInterface'],
     ['Magento\Core\Model\Module\Output\Config', 'Magento\Framework\Module\Output\Config'],
     ['Magento\Core\Model\Resource\Setup\Context', 'Magento\Framework\Module\Setup\Context'],
     ['Magento\Core\Model\Resource\Setup\Migration', 'Magento\Framework\Module\Setup\Migration'],
