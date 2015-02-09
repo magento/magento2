@@ -21,7 +21,7 @@ class CustomizeStore extends Form
      *
      * @var string
      */
-    protected $next = "[ng-click*='next']";
+    protected $next = "[ng-click*='checkModuleConstraints']";
 
     /**
      * First field selector
