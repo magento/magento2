@@ -7,16 +7,23 @@ namespace Magento\Indexer\Block\Backend;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
+
     public function testPseudoConstruct()
     {
-        $controller = 'indexer';
-        $blockGroup = 'Magento_Indexer';
-        $contextMock = $this->getMockBuilder('\Magento\Backend\Block\Widget\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
+       $headerText = __('Indexer Management');
+
+        $buttonList = $this->getMock('\Magento\Backend\Block\Widget\Button\ButtonList', ['remove', 'add'], [], '', false);
+        $buttonList->expects($this->once())->method('add');
+        $buttonList->expects($this->once())->method('remove')->with('add');
+
+        $urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Backend\Block\Widget\Context', ['getUrlBuilder', 'getButtonList'], [], '', false);
+
+        $contextMock->expects($this->once())->method('getUrlBuilder')->will($this->returnValue($urlBuilderMock));
+        $contextMock->expects($this->once())->method('getButtonList')->will($this->returnValue($buttonList));
+
         $block = new Container($contextMock);
 
-        $this->assertEquals($block->_controller, $controller);
-        $this->assertEquals($block->_blockGroup, $blockGroup);
+        $this->assertEquals($block->getHeaderText(), $headerText);
     }
 }
