@@ -2906,7 +2906,7 @@ return [
         'Magento\Core\Model\TemplateEngine\Plugin\DebugHints',
         'Magento\Developer\Model\TemplateEngine\Plugin\DebugHints'
     ],
-    ['Magento\Core\Model\Layout\Merge', 'Magento\Widget\Model\Layout\Merge'],
+    ['Magento\Core\Model\Layout\Merge', 'Magento\Framework\View\Model\Layout\Merge'],
     ['Magento\Core\Model\Layout\Translator', 'Magento\Framework\View\Model\Layout\Translator'],
     ['Magento\Core\Model\Layout\Update\Validator', 'Magento\Framework\View\Model\Layout\Update\Validator'],
     ['Magento\Core\Model\PageLayout\Config\Builder', 'Magento\Theme\Model\PageLayout\Config\Builder'],

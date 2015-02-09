@@ -84,7 +84,7 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
         unset($argumentData['updater']);
 
         // Arguments, evaluation of which causes a run-time error, because of unsafe assumptions to the environment
-        $typeAttr = \Magento\Widget\Model\Layout\Merge::TYPE_ATTRIBUTE;
+        $typeAttr = \Magento\Framework\View\Model\Layout\Merge::TYPE_ATTRIBUTE;
         $ignoredArguments = [
             [
                 $typeAttr => 'object',
