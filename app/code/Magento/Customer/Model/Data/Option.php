@@ -43,4 +43,37 @@ class Option extends \Magento\Framework\Api\AbstractExtensibleObject implements
     {
         return $this->_get(self::OPTIONS);
     }
+
+    /**
+     * Set option label
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label)
+    {
+        return $this->setData(self::LABEL, $label);
+    }
+
+    /**
+     * Set option value
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        return $this->setData(self::VALUE, $value);
+    }
+
+    /**
+     * Set nested options
+     *
+     * @param \Magento\Customer\Api\Data\OptionInterface[] $options
+     * @return $this
+     */
+    public function setOptions(array $options = null)
+    {
+        return $this->setData(self::OPTIONS, $options);
+    }
 }

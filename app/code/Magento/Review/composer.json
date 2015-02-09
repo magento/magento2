@@ -2,7 +2,7 @@
     "name": "magento/module-review",
     "description": "N/A",
     "require": {
-        "php": "~5.4.11|~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0",
         "magento/module-store": "0.42.0-beta6",
         "magento/module-catalog": "0.42.0-beta6",
         "magento/module-core": "0.42.0-beta6",
@@ -14,6 +14,9 @@
         "magento/framework": "0.42.0-beta6",
         "magento/module-ui": "0.42.0-beta6",
         "magento/magento-composer-installer": "*"
+    },
+    "suggest": {
+        "magento/module-cookie": "0.42.0-beta6"
     },
     "type": "magento2-module",
     "version": "0.42.0-beta6",
