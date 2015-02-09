@@ -7,12 +7,32 @@ namespace Magento\CheckoutAgreements\Api\Data;
 
 interface AgreementInterface
 {
+    /**#@+
+     * Constants for keys of data array. Identical to the name of the getter in snake case
+     */
+    const AGREEMENT_ID = 'agreement_id';
+    const NAME = 'name';
+    const CONTENT = 'content';
+    const CONTENT_HEIGHT = 'content_height';
+    const CHECKBOX_TEXT = 'checkbox_text';
+    const IS_ACTIVE = 'is_active';
+    const IS_HTML = 'is_html';
+    /**#@-*/
+
     /**
      * Returns the agreement ID.
      *
      * @return int Agreement ID.
      */
     public function getAgreementId();
+
+    /**
+     * Sets the agreement ID.
+     *
+     * @param int id
+     * @return $this
+     */
+    public function setAgreementId($id);
 
     /**
      * Returns the agreement name.
@@ -22,11 +42,27 @@ interface AgreementInterface
     public function getName();
 
     /**
+     * Sets the agreement name.
+     *
+     * @param string name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
      * Returns the agreement content.
      *
      * @return string Agreement content.
      */
     public function getContent();
+
+    /**
+     * Sets the agreement content.
+     *
+     * @param string content
+     * @return $this
+     */
+    public function setContent($content);
 
     /**
      * Returns the agreement content height, which is an optional CSS property.
@@ -36,11 +72,27 @@ interface AgreementInterface
     public function getContentHeight();
 
     /**
+     * Sets the agreement content height, which is an optional CSS property.
+     *
+     * @param string|null height
+     * @return $this
+     */
+    public function setContentHeight($height);
+
+    /**
      * Returns the agreement checkbox text.
      *
      * @return string Agreement checkbox text.
      */
     public function getCheckboxText();
+
+    /**
+     * Sets the agreement checkbox text.
+     *
+     * @param string text
+     * @return $this
+     */
+    public function setCheckboxText($text);
 
     /**
      * Returns the agreement status.
@@ -51,6 +103,14 @@ interface AgreementInterface
     public function getIsActive();
 
     /**
+     * Sets the agreement status.
+     *
+     * @param bool status
+     * @return $this
+     */
+    public function setIsActive($status);
+
+    /**
      * Returns the agreement content type.
      *
      * @return bool * true - HTML.
@@ -58,4 +118,14 @@ interface AgreementInterface
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsHtml();
+
+    /**
+     * Sets the agreement content type.
+     * * true - HTML
+     * * false - plain text
+     *
+     * @param bool isHtml
+     * @return $this
+     */
+    public function setIsHtml($isHtml);
 }
