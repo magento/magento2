@@ -7,6 +7,10 @@ namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\View\Layout;
 
+/**
+ * Class Block
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Block implements Layout\GeneratorInterface
 {
     /**
@@ -177,7 +181,9 @@ class Block implements Layout\GeneratorInterface
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid block type: %1', $block));
+            throw new \Magento\Framework\Model\Exception(
+                (string)new \Magento\Framework\Phrase('Invalid block type: %1', [$block])
+            );
         }
         return $block;
     }
