@@ -2018,7 +2018,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        return $identities;
+        return array_unique($identities);
     }
 
     /**
