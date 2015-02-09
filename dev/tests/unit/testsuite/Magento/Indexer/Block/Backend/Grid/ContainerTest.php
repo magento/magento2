@@ -7,15 +7,12 @@ namespace Magento\Indexer\Block\Backend;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testPseudoConstruct()
     {
-       $headerText = __('Indexer Management');
-
+        $headerText = __('Indexer Management');
         $buttonList = $this->getMock('\Magento\Backend\Block\Widget\Button\ButtonList', ['remove', 'add'], [], '', false);
         $buttonList->expects($this->once())->method('add');
         $buttonList->expects($this->once())->method('remove')->with('add');
-
         $urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
         $contextMock = $this->getMock('\Magento\Backend\Block\Widget\Context', ['getUrlBuilder', 'getButtonList'], [], '', false);
 
