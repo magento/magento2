@@ -58,9 +58,9 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     protected $filesystem;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryDataBuilder
+     * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
      */
-    protected $entryBuilder;
+    protected $entryFactory;
 
     /**
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
@@ -73,6 +73,11 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     protected $attributeRepository;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
@@ -80,8 +85,9 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      * @param ContentValidator $contentValidator
      * @param \Magento\Framework\Filesystem $filesystem
      * @param EntryResolver $entryResolver
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryDataBuilder $entryBuilder
+     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $entryFactory
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaGallery
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
@@ -91,8 +97,9 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         \Magento\Catalog\Model\Product\Gallery\ContentValidator $contentValidator,
         \Magento\Framework\Filesystem $filesystem,
         EntryResolver $entryResolver,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryDataBuilder $entryBuilder,
-        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaGallery
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $entryFactory,
+        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaGallery,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->productRepository = $productRepository;
         $this->storeManager = $storeManager;
@@ -101,8 +108,9 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $this->contentValidator = $contentValidator;
         $this->filesystem = $filesystem;
         $this->entryResolver = $entryResolver;
-        $this->entryBuilder = $entryBuilder;
+        $this->entryFactory = $entryFactory;
         $this->mediaGallery = $mediaGallery;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -269,7 +277,12 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         foreach ((array)$product->getMediaGallery('images') as $image) {
             if (intval($image['value_id']) == intval($imageId)) {
                 $image['types'] = array_keys($productImages, $image['file']);
-                $output = $this->entryBuilder->populateWithArray($image)->create();
+                $output = $this->entryFactory->create();
+                $this->dataObjectHelper->populateWithArray(
+                    $output,
+                    $image,
+                    '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface'
+                );
                 break;
             }
         }
@@ -298,13 +311,15 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $productImages = $this->getMediaAttributeValues($product);
 
         foreach ($gallery as $image) {
-            $this->entryBuilder->setId($image['value_id']);
-            $this->entryBuilder->setLabel($image['label_default']);
-            $this->entryBuilder->setTypes(array_keys($productImages, $image['file']));
-            $this->entryBuilder->setIsDisabled($image['disabled_default']);
-            $this->entryBuilder->setPosition($image['position_default']);
-            $this->entryBuilder->setFile($image['file']);
-            $result[] = $this->entryBuilder->create();
+            /** @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry */
+            $entry = $this->entryFactory->create();
+            $entry->setId($image['value_id'])
+                ->setLabel($image['label_default'])
+                ->setTypes(array_keys($productImages, $image['file']))
+                ->setIsDisabled($image['disabled_default'])
+                ->setPosition($image['position_default'])
+                ->setFile($image['file']);
+            $result[] = $entry;
         }
         return $result;
     }

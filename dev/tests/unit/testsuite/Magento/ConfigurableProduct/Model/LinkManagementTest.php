@@ -18,7 +18,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productBuilder;
+    protected $productFactory;
 
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
@@ -35,17 +35,25 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $object;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelperMock;
+
     public function setUp()
     {
         $this->productRepository = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
         $this->objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->productBuilder = $this->getMock(
-            '\Magento\Catalog\Api\Data\ProductDataBuilder',
-            ['create', 'populateWithArray'],
+        $this->productFactory = $this->getMock(
+            '\Magento\Catalog\Api\Data\ProductInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
+        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->configurableType =
             $this->getMockBuilder('Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable')
@@ -55,8 +63,9 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             '\Magento\ConfigurableProduct\Model\LinkManagement',
             [
                 'productRepository' => $this->productRepository,
-                'productBuilder' => $this->productBuilder,
-                'configurableType' => $this->configurableType
+                'productFactory' => $this->productFactory,
+                'configurableType' => $this->configurableType,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
             ]
         );
     }
@@ -96,14 +105,14 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $childProduct->expects($this->once())->method('getStoreId')->willReturn(1);
         $childProduct->expects($this->once())->method('getAttributes')->willReturn([$attribute]);
 
-        $this->productBuilder->expects($this->once())
-            ->method('populateWithArray')
-            ->with(['store_id' => 1, 'code' => 10])
-            ->willReturnSelf();
-
         $productMock = $this->getMock('\Magento\Catalog\Api\Data\ProductInterface');
 
-        $this->productBuilder->expects($this->once())
+        $this->dataObjectHelperMock->expects($this->once())
+            ->method('populateWithArray')
+            ->with($productMock, ['store_id' => 1, 'code' => 10], '\Magento\Catalog\Api\Data\ProductInterface')
+            ->willReturnSelf();
+
+        $this->productFactory->expects($this->once())
             ->method('create')
             ->willReturn($productMock);
 

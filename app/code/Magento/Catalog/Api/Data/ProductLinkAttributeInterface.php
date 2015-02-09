@@ -16,9 +16,25 @@ interface ProductLinkAttributeInterface
     public function getCode();
 
     /**
+     * Set attribute code
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setCode($code);
+
+    /**
      * Get attribute type
      *
      * @return string
      */
     public function getType();
+
+    /**
+     * Set attribute type
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setType($type);
 }

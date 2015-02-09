@@ -19,9 +19,25 @@ interface KeyValueObjectInterface
     public function getKey();
 
     /**
+     * Set object key
+     *
+     * @param string $key
+     * @return $this
+     */
+    public function setKey($key);
+
+    /**
      * Get object value
      *
      * @return string
      */
     public function getValue();
+
+    /**
+     * Set object value
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setValue($value);
 }

@@ -19,24 +19,10 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method \Magento\Catalog\Model\Resource\Eav\Attribute getFrontendInputRenderer()
  * @method string setFrontendInputRenderer(string $value)
  * @method int setIsGlobal(int $value)
- * @method int setIsVisible(int $value)
- * @method int setIsSearchable(int $value)
  * @method \Magento\Catalog\Model\Resource\Eav\Attribute getSearchWeight()
  * @method int setSearchWeight(int $value)
- * @method int setIsFilterable(int $value)
- * @method int setIsComparable(int $value)
- * @method int setIsVisibleOnFront(int $value)
- * @method int setIsHtmlAllowedOnFront(int $value)
  * @method \Magento\Catalog\Model\Resource\Eav\Attribute getIsUsedForPriceRules()
  * @method int setIsUsedForPriceRules(int $value)
- * @method int setIsFilterableInSearch(int $value)
- * @method int setUsedInProductListing(int $value)
- * @method int setUsedForSortBy(int $value)
- * @method string setApplyTo(string $value)
- * @method int setIsVisibleInAdvancedSearch(int $value)
- * @method int setPosition(int $value)
- * @method int setIsWysiwygEnabled(int $value)
- * @method int setIsUsedForPromoRules(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -53,6 +39,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     const MODULE_NAME = 'Magento_Catalog';
 
     const ENTITY = 'catalog_eav_attribute';
+
+    const KEY_IS_GLOBAL = 'is_global';
 
     /**
      * @var LockValidatorInterface
@@ -107,6 +95,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
@@ -131,6 +120,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
@@ -158,6 +148,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
             $resourceHelper,
             $universalFactory,
             $optionDataBuilder,
+            $dataObjectProcessor,
             $localeDate,
             $reservedAttributeList,
             $localeResolver,
@@ -185,11 +176,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     public function beforeSave()
     {
         $this->setData('modulePrefix', self::MODULE_NAME);
-        if (isset($this->_origData['is_global'])) {
-            if (!isset($this->_data['is_global'])) {
-                $this->_data['is_global'] = self::SCOPE_GLOBAL;
+        if (isset($this->_origData[self::KEY_IS_GLOBAL])) {
+            if (!isset($this->_data[self::KEY_IS_GLOBAL])) {
+                $this->_data[self::KEY_IS_GLOBAL] = self::SCOPE_GLOBAL;
             }
-            if ($this->_data['is_global'] != $this->_origData['is_global']) {
+            if ($this->_data[self::KEY_IS_GLOBAL] != $this->_origData[self::KEY_IS_GLOBAL]) {
                 try {
                     $this->attrLockValidator->validate($this);
                 } catch (\Magento\Framework\Model\Exception $exception) {
@@ -229,7 +220,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
             $this->_productFlatIndexerProcessor->markIndexerAsInvalid();
         }
         if ($this->_isOriginalIndexable() !== $this->isIndexable()
-            || ($this->isIndexable() && $this->dataHasChangedFor('is_global'))
+            || ($this->isIndexable() && $this->dataHasChangedFor(self::KEY_IS_GLOBAL))
         ) {
             $this->_indexerEavProcessor->markIndexerAsInvalid();
         }
@@ -302,7 +293,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getIsGlobal()
     {
-        return $this->_getData('is_global');
+        return $this->_getData(self::KEY_IS_GLOBAL);
     }
 
     /**
@@ -357,11 +348,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getApplyTo()
     {
-        if ($this->getData('apply_to')) {
-            if (is_array($this->getData('apply_to'))) {
-                return $this->getData('apply_to');
+        if ($this->getData(self::APPLY_TO)) {
+            if (is_array($this->getData(self::APPLY_TO))) {
+                return $this->getData(self::APPLY_TO);
             }
-            return explode(',', $this->getData('apply_to'));
+            return explode(',', $this->getData(self::APPLY_TO));
         } else {
             return [];
         }
@@ -606,6 +597,189 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getScope()
     {
-        return $this->isScopeGlobal() ? 'global' : ($this->isScopeWebsite() ? 'website' : 'store');
+        if ($this->isScopeGlobal()) {
+            return self::SCOPE_GLOBAL_TEXT;
+        } elseif ($this->isScopeWebsite()) {
+            return self::SCOPE_WEBSITE_TEXT;
+        } else {
+            return self::SCOPE_STORE_TEXT;
+        }
+    }
+
+    /**
+     * Set whether WYSIWYG is enabled flag
+     *
+     * @param bool $isWysiwygEnabled
+     * @return $this
+     */
+    public function setIsWysiwygEnabled($isWysiwygEnabled)
+    {
+        return $this->setData(self::IS_WYSIWYG_ENABLED, $isWysiwygEnabled);
+    }
+
+    /**
+     * Set whether the HTML tags are allowed on the frontend
+     *
+     * @param bool $isHtmlAllowedOnFront
+     * @return $this
+     */
+    public function setIsHtmlAllowedOnFront($isHtmlAllowedOnFront)
+    {
+        return $this->setData(self::IS_HTML_ALLOWED_ON_FRONT, $isHtmlAllowedOnFront);
+    }
+
+    /**
+     * Set whether it is used for sorting in product listing
+     *
+     * @param bool $usedForSortBy
+     * @return $this
+     */
+    public function setUsedForSortBy($usedForSortBy)
+    {
+        return $this->setData(self::USED_FOR_SORT_BY, $usedForSortBy);
+    }
+
+    /**
+     * Set whether it used in layered navigation
+     *
+     * @param bool $isFilterable
+     * @return $this
+     */
+    public function setIsFilterable($isFilterable)
+    {
+        return $this->setData(self::IS_FILTERABLE, $isFilterable);
+    }
+
+    /**
+     * Set whether it is used in search results layered navigation
+     *
+     * @param bool $isFilterableInSearch
+     * @return $this
+     */
+    public function setIsFilterableInSearch($isFilterableInSearch)
+    {
+        return $this->setData(self::IS_FILTERABLE_IN_SEARCH, $isFilterableInSearch);
+    }
+
+    /**
+     * Set position
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        return $this->setData(self::POSITION, $position);
+    }
+
+    /**
+     * Set apply to value for the element
+     *
+     * @param string []|string
+     * @return $this
+     */
+    public function setApplyTo($applyTo)
+    {
+        if (is_array($applyTo)) {
+            $applyTo = implode(',', $applyTo);
+        }
+        return $this->setData(self::APPLY_TO, $applyTo);
+    }
+
+    /**
+     * Whether the attribute can be used in Quick Search
+     *
+     * @param string $isSearchable
+     * @return $this
+     */
+    public function setIsSearchable($isSearchable)
+    {
+        return $this->setData(self::IS_SEARCHABLE, $isSearchable);
+    }
+
+    /**
+     * Set whether the attribute can be used in Advanced Search
+     *
+     * @param string $isVisibleInAdvancedSearch
+     * @return $this
+     */
+    public function setIsVisibleInAdvancedSearch($isVisibleInAdvancedSearch)
+    {
+        return $this->setData(self::IS_VISIBLE_IN_ADVANCED_SEARCH, $isVisibleInAdvancedSearch);
+    }
+
+    /**
+     * Set whether the attribute can be compared on the frontend
+     *
+     * @param string $isComparable
+     * @return $this
+     */
+    public function setIsComparable($isComparable)
+    {
+        return $this->setData(self::IS_COMPARABLE, $isComparable);
+    }
+
+    /**
+     * Set whether the attribute can be used for promo rules
+     *
+     * @param string $isUsedForPromoRules
+     * @return $this
+     */
+    public function setIsUsedForPromoRules($isUsedForPromoRules)
+    {
+        return $this->setData(self::IS_USED_FOR_PROMO_RULES, $isUsedForPromoRules);
+    }
+
+    /**
+     * Set whether the attribute is visible on the frontend
+     *
+     * @param string $isVisibleOnFront
+     * @return $this
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront)
+    {
+        return $this->setData(self::IS_VISIBLE_ON_FRONT, $isVisibleOnFront);
+    }
+
+    /**
+     * Set whether the attribute can be used in product listing
+     *
+     * @param string $usedInProductListing
+     * @return $this
+     */
+    public function setUsedInProductListing($usedInProductListing)
+    {
+        return $this->setData(self::USED_IN_PRODUCT_LISTING, $usedInProductListing);
+    }
+
+    /**
+     * Set whether attribute is visible on frontend.
+     *
+     * @param bool $isVisible
+     * @return $this
+     */
+    public function setIsVisible($isVisible)
+    {
+        return $this->setData(self::IS_VISIBLE, $isVisible);
+    }
+
+    /**
+     * Set attribute scope
+     *
+     * @param string $scope
+     * @return $this
+     */
+    public function setScope($scope)
+    {
+        if ($scope == self::SCOPE_GLOBAL_TEXT) {
+            return $this->setData(self::KEY_IS_GLOBAL, self::SCOPE_GLOBAL);
+        } elseif ($scope == self::SCOPE_WEBSITE_TEXT) {
+            return $this->setData(self::KEY_IS_GLOBAL, self::SCOPE_WEBSITE);
+        } elseif ($scope == self::SCOPE_STORE_TEXT) {
+            return $this->setData(self::KEY_IS_GLOBAL, self::SCOPE_STORE);
+        } else {
+            //Ignore unrecognized scope
+            return $this;
+        }
     }
 }

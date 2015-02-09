@@ -14,20 +14,20 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     protected $categoryRepository;
 
     /**
-     * @var \Magento\Catalog\Api\Data\CategoryProductLinkDataBuilder
+     * @var \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory
      */
-    protected $productLinkBuilder;
+    protected $productLinkFactory;
 
     /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\Catalog\Api\Data\CategoryProductLinkDataBuilder $productLinkInterfaceBuilder
+     * @param \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory $productLinkFactory
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Catalog\Api\Data\CategoryProductLinkDataBuilder $productLinkInterfaceBuilder
+        \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory $productLinkFactory
     ) {
         $this->categoryRepository = $categoryRepository;
-        $this->productLinkBuilder = $productLinkInterfaceBuilder;
+        $this->productLinkFactory = $productLinkFactory;
     }
 
     /**
@@ -46,13 +46,12 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
 
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($products->getItems() as $productId => $product) {
-            $links[] = $this->productLinkBuilder->populateWithArray(
-                [
-                    'sku' => $product->getSku(),
-                    'position' => $productsPosition[$productId],
-                    'category_id' => $category->getId(),
-                ]
-            )->create();
+            /** @var \Magento\Catalog\Api\Data\CategoryProductLinkInterface $link */
+            $link = $this->productLinkFactory->create();
+            $link->setSku($product->getSku())
+                ->setPosition($productsPosition[$productId])
+                ->setCategoryId($category->getId());
+            $links[] = $link;
         }
         return $links;
     }

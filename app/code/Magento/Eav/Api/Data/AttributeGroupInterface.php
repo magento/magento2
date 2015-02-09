@@ -22,6 +22,14 @@ interface AttributeGroupInterface
     public function getAttributeGroupId();
 
     /**
+     * Set id
+     *
+     * @param string $attributeGroupId
+     * @return $this
+     */
+    public function setAttributeGroupId($attributeGroupId);
+
+    /**
      * Retrieve name
      *
      * @return string|null
@@ -29,9 +37,25 @@ interface AttributeGroupInterface
     public function getAttributeGroupName();
 
     /**
+     * Set name
+     *
+     * @param string $attributeGroupName
+     * @return $this
+     */
+    public function setAttributeGroupName($attributeGroupName);
+
+    /**
      * Retrieve attribute set id
      *
      * @return int|null
      */
     public function getAttributeSetId();
+
+    /**
+     * Set attribute set id
+     *
+     * @param int $attributeSetId
+     * @return $this
+     */
+    public function setAttributeSetId($attributeSetId);
 }

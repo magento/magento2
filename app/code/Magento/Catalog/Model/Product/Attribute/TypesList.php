@@ -14,20 +14,28 @@ class TypesList implements \Magento\Catalog\Api\ProductAttributeTypesListInterfa
     private $inputTypeFactory;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductAttributeTypeDataBuilder
+     * @var \Magento\Catalog\Api\Data\ProductAttributeTypeInterfaceFactory
      */
-    private $attributeTypeBuilder;
+    private $attributeTypeFactory;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    private $dataObjectHelper;
 
     /**
      * @param Source\InputtypeFactory $inputTypeFactory
-     * @param \Magento\Catalog\Api\Data\ProductAttributeTypeDataBuilder $attributeTypeBuilder
+     * @param \Magento\Catalog\Api\Data\ProductAttributeTypeInterfaceFactory $attributeTypeFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Attribute\Source\InputtypeFactory $inputTypeFactory,
-        \Magento\Catalog\Api\Data\ProductAttributeTypeDataBuilder $attributeTypeBuilder
+        \Magento\Catalog\Api\Data\ProductAttributeTypeInterfaceFactory $attributeTypeFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->inputTypeFactory = $inputTypeFactory;
-        $this->attributeTypeBuilder = $attributeTypeBuilder;
+        $this->attributeTypeFactory = $attributeTypeFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -39,7 +47,13 @@ class TypesList implements \Magento\Catalog\Api\ProductAttributeTypesListInterfa
         $inputType = $this->inputTypeFactory->create();
 
         foreach ($inputType->toOptionArray() as $option) {
-            $types[] = $this->attributeTypeBuilder->populateWithArray($option)->create();
+            $type = $this->attributeTypeFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $type,
+                $option,
+                '\Magento\Catalog\Api\Data\ProductAttributeTypeInterface'
+            );
+            $types[] = $type;
         }
         return $types;
     }

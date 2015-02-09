@@ -33,7 +33,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productLinkBuilderMock;
+    protected $productLinkFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -68,9 +68,9 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->productLinkBuilderMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\ProductLinkDataBuilder',
-            ['populateWithArray', 'create'],
+        $this->productLinkFactoryMock = $this->getMock(
+            '\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -91,7 +91,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             [
                 'productRepository' => $this->productRepositoryMock,
                 'collectionProvider' => $this->collectionProviderMock,
-                'productLinkBuilder' => $this->productLinkBuilderMock,
+                'productLinkFactory' => $this->productLinkFactoryMock,
                 'linkInitializer' => $this->linkInitializerMock,
                 'productResource' => $this->productResourceMock,
                 'linkTypeProvider' => $this->linkTypeProviderMock
@@ -123,12 +123,29 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             ->with($this->productMock, $linkType)
             ->willReturn($itemCollection);
         $this->productMock->expects($this->once())->method('getSku')->willReturn($productSku);
-        $this->productLinkBuilderMock->expects($this->once())
-            ->method('populateWithArray')
-            ->with($expectedItem)
+        $productLinkMock = $this->getMock('\Magento\Catalog\Api\Data\ProductLinkInterface');
+        $productLinkMock->expects($this->once())
+            ->method('setProductSku')
+            ->with($productSku)
             ->willReturnSelf();
-        $this->productLinkBuilderMock->expects($this->once())->method('create')->willReturn('test');
-        $this->assertEquals(['test'], $this->model->getLinkedItemsByType($productSku, $linkType));
+        $productLinkMock->expects($this->once())
+            ->method('setLinkType')
+            ->with($linkType)
+            ->willReturnSelf();
+        $productLinkMock->expects($this->once())
+            ->method('setLinkedProductSku')
+            ->with($item['sku'])
+            ->willReturnSelf();
+        $productLinkMock->expects($this->once())
+            ->method('setLinkedProductType')
+            ->with($item['type'])
+            ->willReturnSelf();
+        $productLinkMock->expects($this->once())
+            ->method('setPosition')
+            ->with($item['position'])
+            ->willReturnSelf();
+        $this->productLinkFactoryMock->expects($this->once())->method('create')->willReturn($productLinkMock);
+        $this->assertEquals([$productLinkMock], $this->model->getLinkedItemsByType($productSku, $linkType));
     }
 
     /**
@@ -217,7 +234,8 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
                 [
                     'getLinkedProductSku', 'getProductSku', 'getLinkType',
                     '__toArray', 'getLinkedProductType', 'getPosition', 'getCustomAttribute', 'getCustomAttributes',
-                    'setCustomAttribute', 'setCustomAttributes', 'getMetadataServiceInterface'
+                    'setCustomAttribute', 'setCustomAttributes', 'getMetadataServiceInterface',
+                    'setLinkedProductSku', 'setProductSku', 'setLinkType', 'setLinkedProductType', 'setPosition',
                 ]
             );
             $productLinkMock->expects($this->any())

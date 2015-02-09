@@ -17,9 +17,25 @@ interface ProductTypeInterface
     public function getName();
 
     /**
+     * Set product type code
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
      * Get product type label
      *
      * @return string
      */
     public function getLabel();
+
+    /**
+     * Set product type label
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label);
 }

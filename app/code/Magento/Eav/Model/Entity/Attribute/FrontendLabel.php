@@ -12,12 +12,19 @@ namespace Magento\Eav\Model\Entity\Attribute;
 class FrontendLabel extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Eav\Api\Data\AttributeFrontendLabelInterface
 {
+    /**#@+
+     * Constants
+     */
+    const KEY_STORE_ID = 'store_id';
+    const KEY_LABEL = 'label';
+    /**#@-*/
+
     /**
      * {@inheritdoc}
      */
     public function getStoreId()
     {
-        return $this->getData('store_id');
+        return $this->getData(self::KEY_STORE_ID);
     }
 
     /**
@@ -25,6 +32,28 @@ class FrontendLabel extends \Magento\Framework\Model\AbstractExtensibleModel imp
      */
     public function getLabel()
     {
-        return $this->getData('label');
+        return $this->getData(self::KEY_LABEL);
+    }
+
+    /**
+     * Set store id
+     *
+     * @param int $storeId
+     * @return $this
+     */
+    public function setStoreId($storeId)
+    {
+        return $this->setData(self::KEY_STORE_ID, $storeId);
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label)
+    {
+        return $this->setData(self::KEY_LABEL, $label);
     }
 }

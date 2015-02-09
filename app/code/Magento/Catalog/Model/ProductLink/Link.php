@@ -12,6 +12,16 @@ namespace Magento\Catalog\Model\ProductLink;
 class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Api\Data\ProductLinkInterface
 {
+    /**#@+
+     * Constants
+     */
+    const KEY_PRODUCT_SKU = 'product_sku';
+    const KEY_LINK_TYPE = 'link_type';
+    const KEY_LINKED_PRODUCT_SKU = 'linked_product_sku';
+    const KEY_LINKED_PRODUCT_TYPE = 'linked_product_type';
+    const KEY_POSITION = 'position';
+    /**#@-*/
+
     /**
      * @var array
      */
@@ -73,7 +83,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getProductSku()
     {
-        return $this->_get('product_sku');
+        return $this->_get(self::KEY_PRODUCT_SKU);
     }
 
     /**
@@ -84,7 +94,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getLinkType()
     {
-        return $this->_get('link_type');
+        return $this->_get(self::KEY_LINK_TYPE);
     }
 
     /**
@@ -95,7 +105,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getLinkedProductSku()
     {
-        return $this->_get('linked_product_sku');
+        return $this->_get(self::KEY_LINKED_PRODUCT_SKU);
     }
 
     /**
@@ -105,7 +115,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getLinkedProductType()
     {
-        return $this->_get('linked_product_type');
+        return $this->_get(self::KEY_LINKED_PRODUCT_TYPE);
     }
 
     /**
@@ -115,6 +125,61 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getPosition()
     {
-        return $this->_get('position');
+        return $this->_get(self::KEY_POSITION);
+    }
+
+    /**
+     * Set product SKU
+     *
+     * @param string $productSku
+     * @return $this
+     */
+    public function setProductSku($productSku)
+    {
+        return $this->setProductSku(self::KEY_PRODUCT_SKU, $productSku);
+    }
+
+    /**
+     * Set link type
+     *
+     * @param string $linkType
+     * @return $this
+     */
+    public function setLinkType($linkType)
+    {
+        return $this->setProductSku(self::KEY_LINK_TYPE, $linkType);
+    }
+
+    /**
+     * Set linked product sku
+     *
+     * @param string $linkedProductSku
+     * @return $this
+     */
+    public function setLinkedProductSku($linkedProductSku)
+    {
+        return $this->setProductSku(self::KEY_LINKED_PRODUCT_SKU, $linkedProductSku);
+    }
+
+    /**
+     * Set linked product type (simple, virtual, etc)
+     *
+     * @param string $linkedProductType
+     * @return $this
+     */
+    public function setLinkedProductType($linkedProductType)
+    {
+        return $this->setProductSku(self::KEY_LINKED_PRODUCT_TYPE, $linkedProductType);
+    }
+
+    /**
+     * Set linked item position
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        return $this->setProductSku(self::KEY_POSITION, $position);
     }
 }

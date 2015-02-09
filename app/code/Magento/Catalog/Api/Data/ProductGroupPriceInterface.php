@@ -16,9 +16,25 @@ interface ProductGroupPriceInterface
     public function getCustomerGroupId();
 
     /**
+     * Set customer group id
+     *
+     * @param int $customerGroupId
+     * @return $this
+     */
+    public function setCustomerGroupId($customerGroupId);
+
+    /**
      * Retrieve price value
      *
      * @return float
      */
     public function getValue();
+
+    /**
+     * Set price value
+     *
+     * @param float $value
+     * @return $this
+     */
+    public function setValue($value);
 }

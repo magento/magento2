@@ -29,19 +29,14 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
     protected $linkInitializer;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductLinkDataBuilder
+     * @var \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory
      */
-    protected $productLinkBuilder;
+    protected $productLinkFactory;
 
     /**
      * @var \Magento\Catalog\Model\Resource\Product
      */
     protected $productResource;
-
-    /**
-     * @var \Magento\Framework\Api\AttributeValueBuilder
-     */
-    protected $valueBuilder;
 
     /**
      * @var \Magento\Catalog\Model\Product\LinkTypeProvider
@@ -51,27 +46,24 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param CollectionProvider $collectionProvider
-     * @param Data\ProductLinkDataBuilder $productLinkBuilder
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
      * @param LinksInitializer $linkInitializer
      * @param \Magento\Catalog\Model\Resource\Product $productResource
-     * @param \Magento\Framework\Api\AttributeValueBuilder $valueBuilder
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         CollectionProvider $collectionProvider,
-        \Magento\Catalog\Api\Data\ProductLinkDataBuilder $productLinkBuilder,
+        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
         LinksInitializer $linkInitializer,
         \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Framework\Api\AttributeValueBuilder $valueBuilder,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
     ) {
         $this->productRepository = $productRepository;
         $this->entityCollectionProvider = $collectionProvider;
-        $this->productLinkBuilder = $productLinkBuilder;
+        $this->productLinkFactory = $productLinkFactory;
         $this->productResource = $productResource;
         $this->linkInitializer = $linkInitializer;
-        $this->valueBuilder = $valueBuilder;
         $this->linkTypeProvider = $linkTypeProvider;
     }
 
@@ -88,23 +80,22 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
             throw new NoSuchEntityException('Unknown link type: ' . (string)$type);
         }
         foreach ($collection as $item) {
-            $data = [
-                'product_sku' => $product->getSku(),
-                'link_type' => $type,
-                'linked_product_sku' => $item['sku'],
-                'linked_product_type' => $item['type'],
-                'position' => $item['position'],
-            ];
-            $this->productLinkBuilder->populateWithArray($data);
+            /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
+            $productLink = $this->productLinkFactory->create();
+            $productLink->setProductSku($product->getSku())
+                ->setLinkType($type)
+                ->setLinkedProductSku($item['sku'])
+                ->setLinkedProductType($item['type'])
+                ->setPosition($item['position']);
             if (isset($item['custom_attributes'])) {
                 foreach ($item['custom_attributes'] as $option) {
-                    $this->productLinkBuilder->setCustomAttribute(
+                    $productLink->setCustomAttribute(
                         $option['attribute_code'],
                         $option['value']
                     );
                 }
             }
-            $output[] = $this->productLinkBuilder->create();
+            $output[] = $productLink;
         }
         return $output;
     }

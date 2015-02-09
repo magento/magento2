@@ -41,7 +41,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $entryBuilderMock;
+    protected $entryFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -62,6 +62,11 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $productMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelperMock;
 
     protected function setUp()
     {
@@ -84,13 +89,16 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->entryBuilderMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryDataBuilder',
-            ['populateWithArray', 'create', 'setId', 'setLabel', 'setTypes', 'setIsDisabled', 'setPosition', 'setFile'],
+        $this->entryFactoryMock = $this->getMock(
+            '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
+        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mediaGalleryMock = $this->getMock(
             '\Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media',
             [],
@@ -113,8 +121,9 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
             $this->contentValidatorMock,
             $this->filesystemMock,
             $this->entryResolverMock,
-            $this->entryBuilderMock,
-            $this->mediaGalleryMock
+            $this->entryFactoryMock,
+            $this->mediaGalleryMock,
+            $this->dataObjectHelperMock
         );
     }
 
@@ -576,16 +585,13 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     public function testGetWithNonExistingImage()
     {
         $productSku = 'testProduct';
-        $imageId = 42;
+        $imageId = 43;
         $images = [['value_id' => 42, 'types' => [], 'file' => 'file.jpg']];
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
         $this->productMock->expects($this->once())->method('getMediaAttributes')->willReturn(['code' => 0]);
         $this->productMock->expects($this->once())->method('getData')->with('code')->willReturn('codeValue');
         $this->productMock->expects($this->once())->method('getMediaGallery')->with('images')->willReturn($images);
-        $this->entryBuilderMock->expects($this->once())->method('populateWithArray')->with($images[0])
-            ->willReturnSelf();
-        $this->entryBuilderMock->expects($this->once())->method('create')->willReturn(null);
         $this->model->get($productSku, $imageId);
     }
 
@@ -599,10 +605,12 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('getMediaAttributes')->willReturn(['code' => 0]);
         $this->productMock->expects($this->once())->method('getData')->with('code')->willReturn('codeValue');
         $this->productMock->expects($this->once())->method('getMediaGallery')->with('images')->willReturn($images);
-        $this->entryBuilderMock->expects($this->once())->method('populateWithArray')->with($images[0])
+        $entryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+        $this->dataObjectHelperMock->expects($this->once())->method('populateWithArray')
+            ->with($entryMock, $images[0], '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface')
             ->willReturnSelf();
-        $this->entryBuilderMock->expects($this->once())->method('create')->willReturn([]);
-        $this->assertEquals([], $this->model->get($productSku, $imageId));
+        $this->entryFactoryMock->expects($this->once())->method('create')->willReturn($entryMock);
+        $this->assertEquals($entryMock, $this->model->get($productSku, $imageId));
     }
 
     public function testGetList()
@@ -625,13 +633,20 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn($gallery);
         $this->productMock->expects($this->once())->method('getMediaAttributes')->willReturn(['code' => 0]);
         $this->productMock->expects($this->once())->method('getData')->with('code')->willReturn('codeValue');
-        $this->entryBuilderMock->expects($this->once())->method('setId')->with($gallery[0]['value_id']);
-        $this->entryBuilderMock->expects($this->once())->method('setLabel')->with($gallery[0]['label_default']);
-        $this->entryBuilderMock->expects($this->once())->method('setTypes')->with([]);
-        $this->entryBuilderMock->expects($this->once())->method('setIsDisabled')->with($gallery[0]['disabled_default']);
-        $this->entryBuilderMock->expects($this->once())->method('setPosition')->with($gallery[0]['position_default']);
-        $this->entryBuilderMock->expects($this->once())->method('setFile')->with($gallery[0]['file']);
-        $this->entryBuilderMock->expects($this->once())->method('create')->willReturn($gallery[0]);
-        $this->assertEquals($gallery, $this->model->getList($productSku));
+        $entryMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface');
+        $entryMock->expects($this->once())->method('setId')
+            ->with($gallery[0]['value_id'])->willReturnSelf();
+        $entryMock->expects($this->once())->method('setLabel')
+            ->with($gallery[0]['label_default'])->willReturnSelf();
+        $entryMock->expects($this->once())->method('setTypes')
+            ->with([])->willReturnSelf();
+        $entryMock->expects($this->once())->method('setIsDisabled')
+            ->with($gallery[0]['disabled_default'])->willReturnSelf();
+        $entryMock->expects($this->once())->method('setPosition')
+            ->with($gallery[0]['position_default'])->willReturnSelf();
+        $entryMock->expects($this->once())->method('setFile')
+            ->with($gallery[0]['file'])->willReturnSelf();
+        $this->entryFactoryMock->expects($this->once())->method('create')->willReturn($entryMock);
+        $this->assertEquals([$entryMock], $this->model->getList($productSku));
     }
 }

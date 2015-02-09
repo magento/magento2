@@ -20,9 +20,25 @@ interface ProductAttributeTypeInterface
     public function getValue();
 
     /**
+     * Set value
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setValue($value);
+
+    /**
      * Get type label
      *
      * @return string
      */
     public function getLabel();
+
+    /**
+     * Set type label
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label);
 }

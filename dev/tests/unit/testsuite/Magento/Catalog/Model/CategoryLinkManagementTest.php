@@ -22,21 +22,21 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productLinkBuilderMock;
+    protected $productLinkFactoryMock;
 
     protected function setUp()
     {
         $this->categoryRepositoryMock = $this->getMock('\Magento\Catalog\Model\CategoryRepository', [], [], '', false);
-        $this->productLinkBuilderMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\CategoryProductLinkDataBuilder',
-            ['populateWithArray', 'create'],
+        $this->productLinkFactoryMock = $this->getMock(
+            '\Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
         $this->model = new \Magento\Catalog\Model\CategoryLinkManagement(
             $this->categoryRepositoryMock,
-            $this->productLinkBuilderMock
+            $this->productLinkFactoryMock
         );
     }
 
@@ -46,7 +46,7 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
         $productId = 55;
         $productsPosition = [$productId => 25];
         $productSku = 'testSku';
-        $expectedValue = 'testComplete';
+        $categoryProductLinkMock = $this->getMock('\Magento\Catalog\Api\Data\CategoryProductLinkInterface');
         $categoryMock = $this->getMock(
             '\Magento\Catalog\Model\Category',
             [],
@@ -57,11 +57,6 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $productMock->expects($this->once())->method('getSku')->willReturn($productSku);
         $items = [$productId => $productMock];
-        $productLinkArray = [
-            'sku' => $productSku,
-            'position' => 25,
-            'category_id' => $categoryId,
-        ];
         $productsMock = $this->getMock('\Magento\Framework\Data\Collection\Db', [], [], '', false);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
@@ -69,9 +64,19 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())->method('getProductCollection')->willReturn($productsMock);
         $categoryMock->expects($this->once())->method('getId')->willReturn($categoryId);
         $productsMock->expects($this->once())->method('getItems')->willReturn($items);
-        $this->productLinkBuilderMock->expects($this->once())->method('populateWithArray')->with($productLinkArray)
+        $this->productLinkFactoryMock->expects($this->once())->method('create')->willReturn($categoryProductLinkMock);
+        $categoryProductLinkMock->expects($this->once())
+            ->method('setSku')
+            ->with($productSku)
             ->willReturnSelf();
-        $this->productLinkBuilderMock->expects($this->once())->method('create')->willReturn($expectedValue);
-        $this->assertEquals([$expectedValue], $this->model->getAssignedProducts($categoryId));
+        $categoryProductLinkMock->expects($this->once())
+            ->method('setPosition')
+            ->with(25)
+            ->willReturnSelf();
+        $categoryProductLinkMock->expects($this->once())
+            ->method('setCategoryId')
+            ->with($categoryId)
+            ->willReturnSelf();
+        $this->assertEquals([$categoryProductLinkMock], $this->model->getAssignedProducts($categoryId));
     }
 }

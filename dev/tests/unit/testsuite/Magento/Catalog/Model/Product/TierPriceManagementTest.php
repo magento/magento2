@@ -26,7 +26,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $priceBuilderMock;
+    protected $priceFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -72,9 +72,9 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->priceBuilderMock = $this->getMock(
-            'Magento\Catalog\Api\Data\ProductTierPriceDataBuilder',
-            ['populateWithArray', 'create'],
+        $this->priceFactoryMock = $this->getMock(
+            'Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -101,7 +101,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->service = new TierPriceManagement(
             $this->repositoryMock,
-            $this->priceBuilderMock,
+            $this->priceFactoryMock,
             $this->storeManagerMock,
             $this->priceModifierMock,
             $this->configMock,
@@ -132,21 +132,26 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
             ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue($configValue));
         if ($expected) {
-            $this->priceBuilderMock
-                ->expects($this->once())
-                ->method('populateWithArray')
-                ->with($expected);
-            $this->priceBuilderMock
+            $priceMock = $this->getMock('\Magento\Catalog\Api\Data\ProductTierPriceInterface');
+            $priceMock->expects($this->once())
+                ->method('setValue')
+                ->with($expected['value'])
+                ->willReturnSelf();
+            $priceMock->expects($this->once())
+                ->method('setQty')
+                ->with($expected['qty'])
+                ->willReturnSelf();
+            $this->priceFactoryMock
                 ->expects($this->once())
                 ->method('create')
-                ->will($this->returnValue('data'));
+                ->will($this->returnValue($priceMock));
         } else {
-            $this->priceBuilderMock->expects($this->never())->method('populateWithArray');
+            $this->priceFactoryMock->expects($this->never())->method('create');
         }
         $prices = $this->service->getList('product_sku', $customerGroupId);
         $this->assertCount($expected ? 1 : 0, $prices);
         if ($expected) {
-            $this->assertEquals('data', $prices[0]);
+            $this->assertEquals($priceMock, $prices[0]);
         }
     }
 

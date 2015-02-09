@@ -35,4 +35,37 @@ class GalleryEntryContent extends \Magento\Framework\Model\AbstractExtensibleMod
     {
         return $this->getData(self::NAME);
     }
+
+    /**
+     * Set media data (base64 encoded content)
+     *
+     * @param string $entryData
+     * @return $this
+     */
+    public function setEntryData($entryData)
+    {
+        return $this->setData(self::DATA, $entryData);
+    }
+
+    /**
+     * Set MIME type
+     *
+     * @param string $mimeType
+     * @return $this
+     */
+    public function setMimeType($mimeType)
+    {
+        return $this->setData(self::MIME_TYPE, $mimeType);
+    }
+
+    /**
+     * Set image name
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setData(self::NAME, $name);
+    }
 }

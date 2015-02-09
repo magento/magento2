@@ -27,4 +27,26 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         return $this->getData(self::LABEL);
     }
+
+    /**
+     * Set value
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        return $this->setData(self::VALUE, $value);
+    }
+
+    /**
+     * Set type label
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label)
+    {
+        return $this->setData(self::LABEL, $label);
+    }
 }

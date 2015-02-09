@@ -24,9 +24,9 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductTierPriceDataBuilder
+     * @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory
      */
-    protected $priceBuilder;
+    protected $priceFactory;
 
     /**
      * @var \Magento\Framework\Store\StoreManagerInterface
@@ -55,7 +55,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
 
     /**
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Api\Data\ProductTierPriceDataBuilder $priceBuilder
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $priceFactory
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param PriceModifier $priceModifier
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -64,7 +64,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Api\Data\ProductTierPriceDataBuilder $priceBuilder,
+        \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $priceFactory,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\PriceModifier $priceModifier,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -72,7 +72,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         GroupRepositoryInterface $groupRepository
     ) {
         $this->productRepository = $productRepository;
-        $this->priceBuilder = $priceBuilder;
+        $this->priceFactory = $priceFactory;
         $this->storeManager = $storeManager;
         $this->priceModifier = $priceModifier;
         $this->config = $config;
@@ -175,13 +175,11 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
             if ((is_numeric($customerGroupId) && intval($price['cust_group']) === intval($customerGroupId))
                 || ($customerGroupId === 'all' && $price['all_groups'])
             ) {
-                $this->priceBuilder->populateWithArray(
-                    [
-                        \Magento\Catalog\Api\Data\ProductTierPriceInterface::VALUE => $price[$priceKey],
-                        \Magento\Catalog\Api\Data\ProductTierPriceInterface::QTY => $price['price_qty'],
-                    ]
-                );
-                $prices[] = $this->priceBuilder->create();
+                /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
+                $tierPrice = $this->priceFactory->create();
+                $tierPrice->setValue($price[$priceKey])
+                    ->setQty($price['price_qty']);
+                $prices[] = $tierPrice;
             }
         }
         return $prices;

@@ -39,12 +39,12 @@ class DataObjectHelper
     }
 
     /**
-     * @param ExtensibleDataInterface $dataObject
+     * @param mixed $dataObject
      * @param array $data
      * @param string $interfaceName
      * @return $this
      */
-    public function populateWithArray(ExtensibleDataInterface $dataObject, array $data, $interfaceName = null)
+    public function populateWithArray($dataObject, array $data, $interfaceName = null)
     {
         $this->_setDataValues($dataObject, $data, $interfaceName);
         return $this;
@@ -53,12 +53,12 @@ class DataObjectHelper
     /**
      * Update Data Object with the data from array
      *
-     * @param ExtensibleDataInterface $dataObject
+     * @param mixed $dataObject
      * @param array $data
      * @param string $interfaceName
      * @return $this
      */
-    protected function _setDataValues(ExtensibleDataInterface $dataObject, array $data, $interfaceName)
+    protected function _setDataValues($dataObject, array $data, $interfaceName)
     {
         $dataObjectMethods = get_class_methods(get_class($dataObject));
         foreach ($data as $key => $value) {
@@ -69,6 +69,7 @@ class DataObjectHelper
                 'setIs' . $camelCaseKey,
             ];
             if ($key === ExtensibleDataInterface::CUSTOM_ATTRIBUTES
+                && ($dataObject instanceof ExtensibleDataInterface)
                 && is_array($data[$key])
                 && !empty($data[$key])
             ) {
@@ -87,7 +88,9 @@ class DataObjectHelper
                     $this->setComplexValue($dataObject, $getterMethodName, $methodName, $value, $interfaceName);
                 }
             } else {
-                $dataObject->setCustomAttribute($key, $value);
+                if ($dataObject instanceof ExtensibleDataInterface) {
+                    $dataObject->setCustomAttribute($key, $value);
+                }
             }
         }
 
@@ -144,15 +147,15 @@ class DataObjectHelper
      * Merges second object onto the first
      *
      * @param string                  $interfaceName
-     * @param ExtensibleDataInterface $firstDataObject
-     * @param ExtensibleDataInterface $secondDataObject
+     * @param mixed $firstDataObject
+     * @param mixed $secondDataObject
      * @return $this
      * @throws \LogicException
      */
     public function mergeDataObjects(
         $interfaceName,
-        ExtensibleDataInterface $firstDataObject,
-        ExtensibleDataInterface $secondDataObject
+        $firstDataObject,
+        $secondDataObject
     ) {
         if (!$firstDataObject instanceof $interfaceName || !$secondDataObject instanceof $interfaceName) {
             throw new \LogicException('Wrong prototype object given. It can only be of "' . $interfaceName . '" type.');

@@ -57,6 +57,24 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
 
     const OPTION_TYPE_TIME = 'time';
 
+    /**#@+
+     * Constants
+     */
+    const KEY_PRODUCT_SKU = 'product_sku';
+    const KEY_OPTION_ID = 'option_id';
+    const KEY_TITLE = 'title';
+    const KEY_TYPE = 'type';
+    const KEY_SORT_ORDER = 'sort_order';
+    const KEY_IS_REQUIRE = 'is_require';
+    const KEY_PRICE = 'price';
+    const KEY_PRICE_TYPE = 'price_type';
+    const KEY_SKU = 'sku';
+    const KEY_FILE_EXTENSION = 'file_extension';
+    const KEY_MAX_CHARACTERS = 'max_characters';
+    const KEY_IMAGE_SIZE_Y = 'image_size_y';
+    const KEY_IMAGE_SIZE_X = 'image_size_x';
+    /**#@-*/
+
     /**
      * @var Product
      */
@@ -425,10 +443,10 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
     {
         if ($flag && $this->getPriceType() == 'percent') {
             $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
-            $price = $basePrice * ($this->_getData('price') / 100);
+            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             return $price;
         }
-        return $this->_getData('price');
+        return $this->_getData(self::KEY_PRICE);
     }
 
     /**
@@ -580,7 +598,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getProductSku()
     {
-        $productSku = $this->_getData('product_sku');
+        $productSku = $this->_getData(self::KEY_PRODUCT_SKU);
         if (!$productSku) {
             $productSku = $this->getProduct()->getSku();
         }
@@ -595,7 +613,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getOptionId()
     {
-        return $this->_getData('option_id');
+        return $this->_getData(self::KEY_OPTION_ID);
     }
 
     /**
@@ -605,7 +623,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getTitle()
     {
-        return $this->_getData('title');
+        return $this->_getData(self::KEY_TITLE);
     }
 
     /**
@@ -615,7 +633,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getType()
     {
-        return $this->_getData('type');
+        return $this->_getData(self::KEY_TYPE);
     }
 
     /**
@@ -625,7 +643,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getSortOrder()
     {
-        return $this->_getData('sort_order');
+        return $this->_getData(self::KEY_SORT_ORDER);
     }
 
     /**
@@ -636,7 +654,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getIsRequire()
     {
-        return $this->_getData('is_require');
+        return $this->_getData(self::KEY_IS_REQUIRE);
     }
 
     /**
@@ -646,7 +664,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getPriceType()
     {
-        return $this->_getData('price_type');
+        return $this->_getData(self::KEY_PRICE_TYPE);
     }
 
     /**
@@ -656,7 +674,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getSku()
     {
-        return $this->_getData('sku');
+        return $this->_getData(self::KEY_SKU);
     }
 
     /**
@@ -664,7 +682,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getFileExtension()
     {
-        return $this->getData('file_extension');
+        return $this->getData(self::KEY_FILE_EXTENSION);
     }
 
     /**
@@ -672,7 +690,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getMaxCharacters()
     {
-        return $this->getData('max_characters');
+        return $this->getData(self::KEY_MAX_CHARACTERS);
     }
 
     /**
@@ -680,7 +698,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getImageSizeX()
     {
-        return $this->getData('image_size_x');
+        return $this->getData(self::KEY_IMAGE_SIZE_X);
     }
 
     /**
@@ -688,7 +706,151 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function getImageSizeY()
     {
-        return $this->getData('image_size_y');
+        return $this->getData(self::KEY_IMAGE_SIZE_Y);
+    }
+    /**
+     * Set product SKU
+     *
+     * @param string $productSku
+     * @return $this
+     */
+    public function setProductSku($productSku)
+    {
+        return $this->setData(self::KEY_PRODUCT_SKU, $productSku);
+    }
+
+    /**
+     * Set option id
+     *
+     * @param int $optionId
+     * @return $this
+     */
+    public function setOptionId($optionId)
+    {
+        return $this->setData(self::KEY_OPTION_ID, $optionId);
+    }
+
+    /**
+     * Set option title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::KEY_TITLE, $title);
+    }
+
+    /**
+     * Set option type
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setType($type)
+    {
+        return $this->setData(self::KEY_TYPE, $type);
+    }
+
+    /**
+     * Set sort order
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::KEY_SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * Set is require
+     *
+     * @param bool $isRequired
+     * @return $this
+     */
+    public function setIsRequire($isRequired)
+    {
+        return $this->setData(self::KEY_IS_REQUIRE, $isRequired);
+    }
+
+    /**
+     * Set price
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(self::KEY_PRICE, $price);
+    }
+
+    /**
+     * Set price type
+     *
+     * @param string $priceType
+     * @return $this
+     */
+    public function setPriceType($priceType)
+    {
+        return $this->setData(self::KEY_PRICE_TYPE, $priceType);
+    }
+
+    /**
+     * Set Sku
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(self::KEY_SKU, $sku);
+    }
+
+    /**
+     * @param string $fileExtension
+     * @return $this
+     */
+    public function setFileExtension($fileExtension)
+    {
+        return $this->setData(self::KEY_FILE_EXTENSION, $fileExtension);
+    }
+
+    /**
+     * @param int $maxCharacters
+     * @return $this
+     */
+    public function setMaxCharacters($maxCharacters)
+    {
+        return $this->setData(self::KEY_MAX_CHARACTERS, $maxCharacters);
+    }
+
+    /**
+     * @param int $imageSizeX
+     * @return $this
+     */
+    public function setImageSizeX($imageSizeX)
+    {
+        return $this->setData(self::KEY_IMAGE_SIZE_X, $imageSizeX);
+    }
+
+    /**
+     * @param int $imageSizeY
+     * @return $this
+     */
+    public function setImageSizeY($imageSizeY)
+    {
+        return $this->setData(self::KEY_IMAGE_SIZE_Y, $imageSizeY);
+    }
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface[] $values
+     * @return $this
+     */
+    public function setValues(array $values = null)
+    {
+        $this->_values = $values;
+        return $this;
     }
     //@codeCoverageIgnoreEnd
 }

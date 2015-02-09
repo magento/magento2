@@ -28,26 +28,26 @@ class Tree
     protected $categoryCollection;
 
     /**
-     * @var \Magento\Catalog\Api\Data\CategoryTreeDataBuilder
+     * @var \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory
      */
-    protected $treeBuilder;
+    protected $treeFactory;
 
     /**
      * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Category\Collection $categoryCollection
-     * @param \Magento\Catalog\Api\Data\CategoryTreeDataBuilder $treeBuilder
+     * @param \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory $treeFactory
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Category\Collection $categoryCollection,
-        \Magento\Catalog\Api\Data\CategoryTreeDataBuilder $treeBuilder
+        \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory $treeFactory
     ) {
         $this->categoryTree = $categoryTree;
         $this->storeManager = $storeManager;
         $this->categoryCollection = $categoryCollection;
-        $this->treeBuilder = $treeBuilder;
+        $this->treeFactory = $treeFactory;
     }
 
     /**
@@ -107,21 +107,23 @@ class Tree
      * @param \Magento\Framework\Data\Tree\Node $node
      * @param int $depth
      * @param int $currentLevel
-     * @return \Magento\Catalog\Api\Data\CategoryTreeInterface[]
+     * @return \Magento\Catalog\Api\Data\CategoryTreeInterface
      */
     public function getTree($node, $depth = null, $currentLevel = 0)
     {
         /** @var \Magento\Catalog\Api\Data\CategoryTreeInterface[] $children */
         $children = $this->getChildren($node, $depth, $currentLevel);
-        $this->treeBuilder->setId($node->getId())
+        /** @var \Magento\Catalog\Api\Data\CategoryTreeInterface $tree */
+        $tree = $this->treeFactory->create();
+        $tree->setId($node->getId())
             ->setParentId($node->getParentId())
             ->setName($node->getName())
             ->setPosition($node->getPosition())
             ->setLevel($node->getLevel())
             ->setIsActive($node->getIsActive())
             ->setProductCount($node->getProductCount())
-        ->setChildrenData($children);
-        return $this->treeBuilder->create();
+            ->setChildrenData($children);
+        return $tree;
     }
 
     /**

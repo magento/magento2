@@ -24,11 +24,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeBuilderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $productHelperMock;
 
     /**
@@ -75,17 +70,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->attributeResourceMock =
             $this->getMock('Magento\Catalog\Model\Resource\Attribute', [], [], '', false);
-        $this->attributeBuilderMock =
-            $this->getMock(
-                'Magento\Catalog\Api\Data\ProductAttributeDataBuilder',
-                [
-                    'populate',
-                    'setAttributeId',
-                    '__wakeup'
-                ],
-                [],
-                '',
-                false);
         $this->productHelperMock =
             $this->getMock('Magento\Catalog\Helper\Product', [], [], '', false);
         $this->filterManagerMock =
@@ -120,7 +104,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new Repository(
             $this->attributeResourceMock,
-            $this->attributeBuilderMock,
             $this->productHelperMock,
             $this->filterManagerMock,
             $this->eavAttributeRepositoryMock,
@@ -225,10 +208,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $attributeMock = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
         $existingModelMock = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
-        $this->attributeBuilderMock->expects($this->once())
-            ->method('populate')
-            ->with($attributeMock)
-            ->willReturn($this->attributeBuilderMock);
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn('12');
         $attributeCode = 'test attribute code';
         $attributeMock->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);
@@ -253,17 +232,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $attributeMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Eav\Attribute',
-            ['getFrontendLabels', 'getDefaultFrontendLabel', '__wakeup', 'getAttributeId'],
+            ['getFrontendLabels', 'getDefaultFrontendLabel', '__wakeup', 'getAttributeId', 'setAttributeId'],
             [],
             '',
             false
         );
-        $this->attributeBuilderMock->expects($this->once())
-            ->method('populate')
-            ->with($attributeMock)
-            ->willReturn($this->attributeBuilderMock);
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
-        $this->attributeBuilderMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
+        $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
         $attributeMock->expects($this->once())->method('getFrontendLabels')->willReturn(null);
         $attributeMock->expects($this->once())->method('getDefaultFrontendLabel')->willReturn(null);
 
@@ -278,17 +253,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $attributeMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Eav\Attribute',
-            ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', '__wakeup'],
+            ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', '__wakeup', 'setAttributeId'],
             [],
             '',
             false
         );
-        $this->attributeBuilderMock->expects($this->once())
-            ->method('populate')
-            ->with($attributeMock)
-            ->willReturn($this->attributeBuilderMock);
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
-        $this->attributeBuilderMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
+        $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
         $labelMock = $this->getMock('Magento\Eav\Api\Data\AttributeFrontendLabelInterface', [], [], '', false);
         $attributeMock->expects($this->exactly(4))->method('getFrontendLabels')->willReturn([$labelMock]);
         $attributeMock->expects($this->exactly(2))->method('getDefaultFrontendLabel')->willReturn('test');

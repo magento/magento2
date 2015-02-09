@@ -28,6 +28,15 @@ use Magento\Framework\Api\AttributeValueFactory;
 class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Eav\Api\Data\AttributeSetInterface
 {
+    /**#@+
+     * Constants
+     */
+    const KEY_ATTRIBUTE_SET_ID = 'attribute_set_id';
+    const KEY_ATTRIBUTE_SET_NAME = 'attribute_set_name';
+    const KEY_SORT_ORDER = 'sort_order';
+    const KEY_ENTITY_TYPE_ID = 'entity_type_id';
+    /**#@-*/
+
     /**
      * Resource instance
      *
@@ -350,7 +359,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getAttributeSetId()
     {
-        return $this->getData('attribute_set_id');
+        return $this->getData(self::KEY_ATTRIBUTE_SET_ID);
     }
 
     /**
@@ -358,7 +367,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getAttributeSetName()
     {
-        return $this->getData('attribute_set_name');
+        return $this->getData(self::KEY_ATTRIBUTE_SET_NAME);
     }
 
     /**
@@ -366,7 +375,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getSortOrder()
     {
-        return $this->getData('sort_order');
+        return $this->getData(self::KEY_SORT_ORDER);
     }
 
     /**
@@ -374,7 +383,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getEntityTypeId()
     {
-        return $this->getData('entity_type_id');
+        return $this->getData(self::KEY_ENTITY_TYPE_ID);
     }
 
     /**
@@ -386,6 +395,50 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function setName($name)
     {
         $this->setData('attribute_set_name', $name);
+    }
+
+    /**
+     * Set attribute set ID
+     *
+     * @param int $attributeSetId
+     * @return $this
+     */
+    public function setAttributeSetId($attributeSetId)
+    {
+        return $this->setData(self::KEY_ATTRIBUTE_SET_ID, $attributeSetId);
+    }
+
+    /**
+     * Set attribute set name
+     *
+     * @param string $attributeSetName
+     * @return $this
+     */
+    public function setAttributeSetName($attributeSetName)
+    {
+        return $this->setData(self::KEY_ATTRIBUTE_SET_NAME, $attributeSetName);
+    }
+
+    /**
+     * Set attribute set sort order index
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::KEY_SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * Set attribute set entity type id
+     *
+     * @param int $entityTypeId
+     * @return $this
+     */
+    public function setEntityTypeId($entityTypeId)
+    {
+        return $this->setData(self::KEY_ENTITY_TYPE_ID, $entityTypeId);
     }
     //@codeCoverageIgnoreEnd
 }

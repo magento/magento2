@@ -19,9 +19,9 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductGroupPriceDataBuilder
+     * @var \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory
      */
-    protected $groupPriceBuilder;
+    protected $groupPriceFactory;
 
     /**
      * @var GroupRepositoryInterface
@@ -46,21 +46,21 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Api\Data\ProductGroupPriceDataBuilder $groupPriceBuilder
+     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory
      * @param GroupRepositoryInterface $groupRepository
      * @param PriceModifier $priceModifier
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Api\Data\ProductGroupPriceDataBuilder $groupPriceBuilder,
+        \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory,
         GroupRepositoryInterface $groupRepository,
         \Magento\Catalog\Model\Product\PriceModifier $priceModifier,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->productRepository = $productRepository;
-        $this->groupPriceBuilder = $groupPriceBuilder;
+        $this->groupPriceFactory = $groupPriceFactory;
         $this->groupRepository = $groupRepository;
         $this->priceModifier = $priceModifier;
         $this->config = $config;
@@ -148,13 +148,11 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
 
         $prices = [];
         foreach ($product->getData('group_price') as $price) {
-            $this->groupPriceBuilder->populateWithArray(
-                [
-                    'customer_group_id' => $price['all_groups'] ? 'all' : $price['cust_group'],
-                    'value' => $price[$priceKey],
-                ]
-            );
-            $prices[] = $this->groupPriceBuilder->create();
+            /** @var \Magento\Catalog\Api\Data\ProductGroupPriceInterface $groupPrice */
+            $groupPrice = $this->groupPriceFactory->create();
+            $groupPrice->setCustomerGroupId($price['all_groups'] ? 'all' : $price['cust_group'])
+                ->setValue($price[$priceKey]);
+            $prices[] = $groupPrice;
         }
         return $prices;
     }
