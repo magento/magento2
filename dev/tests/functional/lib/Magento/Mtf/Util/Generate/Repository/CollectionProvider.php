@@ -62,7 +62,7 @@ class CollectionProvider implements CollectionProviderInterface
     {
         $type = $fixture['type'];
         $method = $type . 'Collection';
-        if (!method_exists($this, $method)) {
+        if (!method_exists($this, $method) || empty($fixture['collection'])) {
             return [];
         }
 
