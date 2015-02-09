@@ -19,7 +19,7 @@ define([
         optionHandlers: {},
         optionTemplate: '<%= label %>' +
         '<% if (finalPrice.value) { %>' +
-        ' <%= finalPrice.formatted %>' +
+        ' +<%= finalPrice.formatted %>' +
         '<% } %>',
         controlContainer: 'dd', // should be eliminated
         priceFormat: {}
@@ -48,7 +48,9 @@ define([
                 qty = $(this.options.qtyFieldSelector, form);
 
             if (priceBox.data('magePriceBox') && priceBox.priceBox('option') && priceBox.priceBox('option').priceConfig) {
-                this._setOption('optionTemplate', priceBox.priceBox('option').priceConfig.optionTemplate);
+                if (priceBox.priceBox('option').priceConfig.optionTemplate) {
+                    this._setOption('optionTemplate', priceBox.priceBox('option').priceConfig.optionTemplate);
+                }
                 this._setOption('priceFormat', priceBox.priceBox('option').priceConfig.priceFormat);
                 priceBox.priceBox('setDefault', this.options.optionConfig.prices);
             }
