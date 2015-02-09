@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="CreateCatalogRuleTest">
     <variation name="CreateCatalogRuleTestVariation1" firstConstraint="assertCatalogPriceRuleInGrid" method="test">
       <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>

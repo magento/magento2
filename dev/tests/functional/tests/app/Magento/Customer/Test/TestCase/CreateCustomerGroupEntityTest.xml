@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="CreateCustomerGroupEntityTest">
     <variation name="CreateCustomerGroupEntityTestVariation1" firstConstraint="assertCustomerGroupSuccessSaveMessage" method="test">
       <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">Retail Customer</data>

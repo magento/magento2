@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="CreateSitemapEntityTest">
     <variation name="CreateSitemapEntityTestVariation1" firstConstraint="assertSitemapSuccessSaveMessage" method="test">
       <data name="sitemap/data/sitemap_filename" xsi:type="string">sitemap.xml</data>

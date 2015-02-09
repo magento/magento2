@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="DeleteWebsiteEntityTest">
     <variation name="DeleteWebsiteEntityTestVariation1" firstConstraint="assertWebsiteSuccessDeleteAndBackupMessages" method="test">
       <data name="website/dataSet" xsi:type="string">custom_website</data>

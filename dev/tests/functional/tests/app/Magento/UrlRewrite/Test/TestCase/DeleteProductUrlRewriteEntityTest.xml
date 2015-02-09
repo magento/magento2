@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="DeleteProductUrlRewriteEntityTest">
     <variation name="DeleteProductUrlRewriteEntityTestVariation1" firstConstraint="assertUrlRewriteDeletedMessage" method="test">
       <data name="productRedirect/dataSet" xsi:type="string">default_without_target</data>
