@@ -16,7 +16,6 @@ class DeleteStore extends \Magento\Backend\Controller\Adminhtml\System\Store
         $itemId = $this->getRequest()->getParam('item_id', null);
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Store')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
-            $this->_redirect('adminhtml/*/');
             /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
             $redirectResult = $this->resultRedirectFactory->create();
             return $redirectResult->setPath('adminhtml/*/');
