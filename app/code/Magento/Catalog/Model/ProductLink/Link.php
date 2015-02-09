@@ -23,21 +23,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**#@-*/
 
     /**
-     * @var array
-     */
-    protected $_data;
-
-    /**
-     * Initialize internal storage
-     *
-     * @param array $data
-     */
-    public function __construct(array $data = [])
-    {
-        $this->_data = $data;
-    }
-
-    /**
      * Retrieves a value from the data array if set, or null otherwise.
      *
      * @param string $key
