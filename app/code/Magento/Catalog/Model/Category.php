@@ -1292,9 +1292,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function setAvailableSortBy($availableSortBy)
     {
-        if (is_array($availableSortBy)) {
-            $availableSortBy = implode(',', $availableSortBy);
-        }
         return $this->setData(self::KEY_AVAILABLE_SORT_BY, $availableSortBy);
     }
 

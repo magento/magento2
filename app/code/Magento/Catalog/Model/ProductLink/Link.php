@@ -32,7 +32,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
         $this->_data = $data;
     }
@@ -136,7 +136,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function setProductSku($productSku)
     {
-        return $this->setProductSku(self::KEY_PRODUCT_SKU, $productSku);
+        return $this->setData(self::KEY_PRODUCT_SKU, $productSku);
     }
 
     /**
@@ -147,7 +147,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function setLinkType($linkType)
     {
-        return $this->setProductSku(self::KEY_LINK_TYPE, $linkType);
+        return $this->setData(self::KEY_LINK_TYPE, $linkType);
     }
 
     /**
@@ -158,7 +158,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function setLinkedProductSku($linkedProductSku)
     {
-        return $this->setProductSku(self::KEY_LINKED_PRODUCT_SKU, $linkedProductSku);
+        return $this->setData(self::KEY_LINKED_PRODUCT_SKU, $linkedProductSku);
     }
 
     /**
@@ -169,7 +169,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function setLinkedProductType($linkedProductType)
     {
-        return $this->setProductSku(self::KEY_LINKED_PRODUCT_TYPE, $linkedProductType);
+        return $this->setData(self::KEY_LINKED_PRODUCT_TYPE, $linkedProductType);
     }
 
     /**
@@ -180,6 +180,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function setPosition($position)
     {
-        return $this->setProductSku(self::KEY_POSITION, $position);
+        return $this->setData(self::KEY_POSITION, $position);
     }
 }
