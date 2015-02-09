@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -11,7 +15,7 @@
  */
 ?>
 <ol class="block multicheckout progress items" id="checkout-progress-state">
-    <?php foreach ($this->getSteps() as $_step): ?>
+    <?php foreach ($block->getSteps() as $_step): ?>
         <li title="<?php echo $_step->getLabel() ?>" class="item<?php echo($_step->getIsActive()) ? ' active' : ''?>"><span><?php echo $_step->getLabel() ?></span></li>
     <?php endforeach; ?>
 </ol>

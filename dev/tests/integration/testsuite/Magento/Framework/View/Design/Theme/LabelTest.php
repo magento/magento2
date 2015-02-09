@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Design\Theme;
 
@@ -23,7 +24,7 @@ class LabelTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLabelsCollection()
     {
-        /** @var $expectedCollection \Magento\Core\Model\Resource\Theme\Collection */
+        /** @var $expectedCollection \Magento\Theme\Model\Resource\Theme\Collection */
         $expectedCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\View\Design\Theme\Label\ListInterface'
         );

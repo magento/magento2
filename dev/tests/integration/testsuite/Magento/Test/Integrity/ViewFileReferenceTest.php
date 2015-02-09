@@ -2,7 +2,8 @@
 /**
  * Test constructions of layout files
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -42,7 +43,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     protected static $_checkThemeLocales = [];
 
     /**
-     * @var \Magento\Core\Model\Theme\Collection
+     * @var \Magento\Theme\Model\Theme\Collection
      */
     protected static $_themeCollection;
 
@@ -50,7 +51,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->configure(
-            ['preferences' => ['Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data']]
+            ['preferences' => ['Magento\Theme\Model\Theme' => 'Magento\Theme\Model\Theme\Data']]
         );
 
         /** @var $fallbackPool \Magento\Framework\View\Design\Fallback\RulePool */
@@ -65,7 +66,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
         self::$_filesFallback = $objectManager->get('Magento\Framework\View\Design\FileResolution\Fallback\File');
 
         // Themes to be checked
-        self::$_themeCollection = $objectManager->get('Magento\Core\Model\Theme\Collection');
+        self::$_themeCollection = $objectManager->get('Magento\Theme\Model\Theme\Collection');
         self::$_themeCollection->addDefaultPattern('*');
 
         // Compose list of locales, needed to be checked for themes

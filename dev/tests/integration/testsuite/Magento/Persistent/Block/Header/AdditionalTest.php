@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Persistent\Block\Header;
@@ -53,28 +54,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
     public function testToHtml()
     {
         $this->_customerSession->loginById(1);
-        /** @var \Magento\Customer\Helper\View $customerViewHelper */
-        $customerViewHelper = $this->_objectManager->create(
-            'Magento\Customer\Helper\View'
-        );
-
-        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $this->_objectManager->create(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
-        );
-        /** @var \Magento\Framework\Escaper $escaper */
-        $escaper = $this->_objectManager->create(
-            'Magento\Framework\Escaper'
-        );
-        $persistentName = $escaper->escapeHtml(
-            $customerViewHelper->getCustomerName(
-                $customerRepository->getById(
-                    $this->_persistentSessionHelper->getSession()->getCustomerId()
-                )
-            )
-        );
-
-        $translation = __('(Not %1?)', $persistentName);
+        $translation = __('Not you?');
 
         $this->assertStringMatchesFormat(
             '%A<span>%A<a%Ahref="' . $this->_block->getHref() . '"%A>' . $translation . '</a>%A</span>%A',

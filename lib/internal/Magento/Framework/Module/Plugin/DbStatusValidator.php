@@ -2,8 +2,12 @@
 /**
  * Validation of DB up to date state
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Module\Plugin;
 
 use Magento\Framework\Cache\FrontendInterface;
@@ -52,7 +56,7 @@ class DbStatusValidator
             if ($errors) {
                 $formattedErrors = $this->formatErrors($errors);
                 throw new \Magento\Framework\Module\Exception(
-                    'Please update your database: Run "php –f index.php update" from the Magento root/setup directory.'
+                    'Please update your database: Run "php -f index.php update" from the Magento root/setup directory.'
                     . PHP_EOL . 'The following modules are outdated:' . PHP_EOL . implode(PHP_EOL, $formattedErrors)
                 );
             } else {

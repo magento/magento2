@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../Magento/Widget/etc/widget.xsd">
     <widget id="cms_page_link" class="Magento\Cms\Block\Widget\Page\Link" is_email_compatible="true"
-            placeholder_image="Magento_Cms::images/widget_page_link.gif">
+            placeholder_image="Magento_Cms::images/widget_page_link.png">
         <label translate="true">CMS Page Link</label>
         <description translate="true">Link to a CMS Page</description>
         <parameters>
@@ -42,7 +43,7 @@
         </parameters>
     </widget>
     <widget id="cms_static_block" class="Magento\Cms\Block\Widget\Block"
-            placeholder_image="Magento_Cms::images/widget_block.gif">
+            placeholder_image="Magento_Cms::images/widget_block.png">
         <label translate="true">CMS Static Block</label>
         <description translate="true">Contents of a Static Block</description>
         <parameters>

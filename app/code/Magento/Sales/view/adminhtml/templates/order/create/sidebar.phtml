@@ -1,24 +1,27 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar */
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar */
 ?>
 <div class="customer-current-activity-inner">
     <h4><?php echo __('Customer\'s Activities') ?></h4>
     <div class="create-order-sidebar-container">
-    <?php echo $this->getChildHtml('top_button'); ?>
-    <?php foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $_alias => $_child): ?>
+    <?php echo $block->getChildHtml('top_button'); ?>
+    <?php foreach ($block->getLayout()->getChildBlocks($block->getNameInLayout()) as $_alias => $_child): ?>
         <?php if ($_alias != 'top_button' && $_alias != 'bottom_button'): ?>
-            <?php if ($this->canDisplay($_child)): ?>
+            <?php if ($block->canDisplay($_child)): ?>
                 <div id="order-sidebar_<?php echo $_alias ?>">
-                    <?php echo $this->getChildHtml($_alias) ?>
+                    <?php echo $block->getChildHtml($_alias) ?>
                 </div>
             <?php endif; ?>
         <?php endif; ?>
     <?php endforeach; ?>
-    <?php echo $this->getChildHtml('bottom_button'); ?>
+    <?php echo $block->getChildHtml('bottom_button'); ?>
     </div>
 </div>
 <script>
@@ -29,12 +32,12 @@ require([
 
     function addSidebarCompositeListType() {
         productConfigure.addListType('sidebar', {
-            urlFetch: '<?php echo $this->getUrl('sales/order_create/configureProductToAdd') ?>',
-            urlConfirm: '<?php echo $this->getUrl('sales/order_create/addConfigured') ?>'
+            urlFetch: '<?php echo $block->getUrl('sales/order_create/configureProductToAdd') ?>',
+            urlConfirm: '<?php echo $block->getUrl('sales/order_create/addConfigured') ?>'
         });
         productConfigure.addListType('sidebar_wishlist', {
-            urlFetch: '<?php echo $this->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
-            urlConfirm: '<?php echo $this->getUrl('sales/order_create/addConfigured') ?>'
+            urlFetch: '<?php echo $block->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
+            urlConfirm: '<?php echo $block->getUrl('sales/order_create/addConfigured') ?>'
         });
     }
 

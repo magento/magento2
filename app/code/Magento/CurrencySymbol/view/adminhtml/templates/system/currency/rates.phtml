@@ -1,23 +1,27 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
- * @var $this \Magento\CurrencySymbol\Block\Adminhtml\System\Currency
+ * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency
  */
 ?>
 <div class="grid-actions">
-    <form action="<?php echo $this->getImportFormAction() ?>" method="post" class="import-service">
-        <?php echo $this->getBlockHtml('formkey')?>
+    <form action="<?php echo $block->getImportFormAction() ?>" method="post" class="import-service">
+        <?php echo $block->getBlockHtml('formkey')?>
         <dix class="import">
-            <?php echo $this->getServicesHtml() ?>
-            <?php echo $this->getImportButtonHtml() ?>
+            <?php echo $block->getServicesHtml() ?>
+            <?php echo $block->getImportButtonHtml() ?>
         </dix>
     </form>
-    <?php echo $this->getResetButtonHtml() ?>
-    <?php echo $this->getSaveButtonHtml() ?>
+    <?php echo $block->getResetButtonHtml() ?>
+    <?php echo $block->getSaveButtonHtml() ?>
 </div>
 
-<?php echo $this->getRatesMatrixHtml() ?>
+<?php echo $block->getRatesMatrixHtml() ?>

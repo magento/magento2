@@ -1,16 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php /* @var $this \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Qty */ ?>
+<?php /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Qty */ ?>
 
-<fieldset id="product_composite_configure_fields_qty" class="fieldset <?php echo $this->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
+<fieldset id="product_composite_configure_fields_qty" class="fieldset <?php echo $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <div class="field">
         <label class="label"><?php echo __('Quantity') ?></label>
         <div class="control">
-        	<input id="product_composite_configure_input_qty" class="input-text" type="text" name="qty" value="<?php echo $this->getQtyValue() * 1 ?>">
+        	<input id="product_composite_configure_input_qty" class="input-text" type="text" name="qty" value="<?php echo $block->getQtyValue() * 1 ?>">
         </div>
     </div>
 </fieldset>

@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
@@ -26,7 +27,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->cartMock = $this->getMock('Magento\Checkout\Model\Cart', [], [], '', false);
         $this->quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             ['__wakeUp', 'setIsMultiShipping'],
             [],
             '',

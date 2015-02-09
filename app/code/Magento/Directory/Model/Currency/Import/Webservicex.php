@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Currency rate import model (From www.webservicex.net)
@@ -60,7 +63,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
                 [
                     'timeout' => $this->_scopeConfig->getValue(
                         'currency/webservicex/timeout',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     ),
                 ]
             )->request(

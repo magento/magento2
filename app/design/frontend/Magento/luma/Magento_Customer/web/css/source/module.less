@@ -1,16 +1,17 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
-@account-title-border-color: #c6c6c6;
-@account-table-border-bottom-color: #e4e4e4;
-@account-table-action-delete: #d10029;
+@account-title-border-color: @color-gray-middle2;
+@account-table-border-bottom-color: @color-gray-middle1;
+@account-table-action-delete: @color-red12;
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .login-container {
     .block {
@@ -67,8 +68,8 @@
     }
 }
 
-.box-address-billing,
-.box-address-shipping,
+.box-billing-address,
+.box-shipping-address,
 .box-information,
 .box-newsletter {
     .box-content {
@@ -112,7 +113,7 @@
             .action {
                 &:extend(.abs-account-actions all);
                 &.delete {
-                    color: @account-table-action-delete;
+                    .css(color, @account-table-action-delete);
                 }
             }
         }
@@ -180,7 +181,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .login-container {
         &:extend(.abs-add-clearfix-desktop all);
         .block {
@@ -280,8 +281,8 @@
         }
     }
 
-    .box-address-billing,
-    .box-address-shipping,
+    .box-billing-address,
+    .box-shipping-address,
     .box-information {
         .box-content {
             &:extend(.abs-account-block-font-size all);
@@ -298,7 +299,7 @@
 //
 //    Mobile @screen-s
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .account {
         .column.main,
         .sidebar-additional {
@@ -313,7 +314,7 @@
 //
 //    Mobile @screen-m
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .login-container {
         .fieldset {
             &:after {

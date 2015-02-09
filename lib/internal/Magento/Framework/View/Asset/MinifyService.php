@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset;
 
@@ -62,27 +63,18 @@ class MinifyService
      * Assets applicable for minification are wrapped with the minified asset
      *
      * @param array|\Iterator $assets
-     * @return \Magento\Framework\View\Asset\Minified[]
+     * @param bool $isDirectRequest
+     * @return Minified\AbstractAsset[]
      */
-    public function getAssets($assets)
+    public function getAssets($assets, $isDirectRequest = false)
     {
         $resultAssets = [];
         $strategy = $this->appMode == \Magento\Framework\App\State::MODE_PRODUCTION
-            ? Minified::FILE_EXISTS : Minified::MTIME;
+            ? Minified\AbstractAsset::FILE_EXISTS : Minified\AbstractAsset::MTIME;
         /** @var $asset AssetInterface */
         foreach ($assets as $asset) {
-            $contentType = $asset->getContentType();
-            if ($this->isEnabled($contentType)) {
-                /** @var \Magento\Framework\View\Asset\Minified $asset */
-                $asset = $this->objectManager
-                    ->create(
-                        'Magento\Framework\View\Asset\Minified',
-                        [
-                            'asset' => $asset,
-                            'strategy' => $strategy,
-                            'adapter' => $this->getAdapter($contentType),
-                        ]
-                    );
+            if ($this->isEnabled($asset->getContentType())) {
+                $asset = $this->getAssetDecorated($asset, $strategy, $isDirectRequest);
             }
             $resultAssets[] = $asset;
         }
@@ -129,5 +121,44 @@ class MinifyService
             $this->adapters[$contentType] = $adapter;
         }
         return $this->adapters[$contentType];
+    }
+
+    /**
+     * Returns asset decorated by corresponding minifier
+     *
+     * @param AssetInterface $asset
+     * @param string $strategy
+     * @param bool $isDirectRequest
+     * @return AssetInterface
+     * @throws \Magento\Framework\Exception
+     */
+    protected function getAssetDecorated(AssetInterface $asset, $strategy, $isDirectRequest)
+    {
+        return
+            $this->objectManager->create(
+                $this->getDecoratorClass($asset, $isDirectRequest),
+                [
+                    'asset' => $asset,
+                    'strategy' => $strategy,
+                    'adapter' => $this->getAdapter($asset->getContentType())
+                ]
+            );
+    }
+
+    /**
+     * Returns minifier decorator class name for given asset
+     *
+     * @param AssetInterface $asset
+     * @param bool $isDirectRequest
+     * @return string
+     */
+    protected function getDecoratorClass(AssetInterface $asset, $isDirectRequest)
+    {
+        if ($isDirectRequest || $asset->getContentType() == 'css') {
+            $result = 'Magento\Framework\View\Asset\Minified\ImmutablePathAsset';
+        } else {
+            $result = 'Magento\Framework\View\Asset\Minified\MutablePathAsset';
+        }
+        return $result;
     }
 }

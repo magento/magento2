@@ -1,15 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /**
- * @var $this \Magento\Tax\Block\Checkout\Tax
+ * @var $block \Magento\Tax\Block\Checkout\Tax
  * @see \Magento\Tax\Block\Checkout\Tax
  */
 ?>
 <?php
-    $_value = $this->getTotal()->getValue();
-    $_style = $this->getTotal()->getStyle();
+    $_value = $block->getTotal()->getValue();
+    $_style = $block->getTotal()->getStyle();
 ?>
 <?php global $taxIter; $taxIter++; ?>
 
@@ -21,21 +25,21 @@
 ?>
 
 <tr <?php echo $attributes; ?>>
-    <th style="<?php echo $_style ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
+    <th style="<?php echo $_style ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
-            <span class="detailed"><?php echo $this->getTotal()->getTitle() ?></span>
+            <span class="detailed"><?php echo $block->getTotal()->getTitle() ?></span>
         <?php else: ?>
-            <?php echo $this->getTotal()->getTitle() ?>
+            <?php echo $block->getTotal()->getTitle() ?>
         <?php endif;?>
     </th>
-    <td style="<?php echo $_style ?>" class="amount" data-th="<?php echo $this->escapeHtml($this->getTotal()->getTitle()); ?>">
+    <td style="<?php echo $_style ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
         <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_value) ?>
     </td>
 </tr>
 
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $_value != 0): ?>
     <?php $isTop = 1; ?>
-    <?php foreach ($this->getTotal()->getFullInfo() as $info): ?>
+    <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
         <?php if (isset($info['hidden']) && $info['hidden']) {
     continue;
 } ?>
@@ -46,15 +50,15 @@
 
         <?php foreach ($rates as $rate): ?>
             <tr class="totals-tax-details details-<?php echo $taxIter; ?>">
-                <th class="mark" style="<?php echo $_style ?>" colspan="<?php echo $this->getColspan(); ?>" scope="row">
-                    <?php echo $this->escapeHtml($rate['title']); ?>
+                <th class="mark" style="<?php echo $_style ?>" colspan="<?php echo $block->getColspan(); ?>" scope="row">
+                    <?php echo $block->escapeHtml($rate['title']); ?>
                     <?php if (!is_null($rate['percent'])): ?>
                         (<?php echo (float)$rate['percent']; ?>%)
                     <?php endif; ?>
                 </th>
                 <?php if ($isFirst): ?>
                     <td style="<?php echo $_style ?>" class="amount" rowspan="<?php echo count($rates); ?>"
-                       data-th="<?php echo $this->escapeHtml($rate['title']); ?><?php if (!is_null($rate['percent'])): ?>(<?php echo (float)$rate['percent']; ?>%)<?php endif; ?>">
+                       data-th="<?php echo $block->escapeHtml($rate['title']); ?><?php if (!is_null($rate['percent'])): ?>(<?php echo (float)$rate['percent']; ?>%)<?php endif; ?>">
                         <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount); ?>
                     </td>
                 <?php endif; ?>

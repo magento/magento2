@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -94,7 +95,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     protected $_resourceFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -121,7 +122,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Initialize base inline translation model
      *
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Translation\Model\Resource\StringFactory $resource
      * @param \Zend_Filter_Interface $inputFilter
      * @param \Magento\Framework\App\State $appState
@@ -130,7 +131,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      */
     public function __construct(
         \Magento\Translation\Model\Resource\StringFactory $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Zend_Filter_Interface $inputFilter,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\App\Cache\TypeListInterface $appCache,
@@ -271,6 +272,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * @param array $matches
      * @param array $options
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getAttributeLocation($matches, $options)
     {
@@ -284,6 +286,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * @param array $matches
      * @param array $options
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getTagLocation($matches, $options)
     {

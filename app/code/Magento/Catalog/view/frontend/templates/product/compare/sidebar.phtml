@@ -1,8 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Catalog\Block\Product\Compare\Sidebar */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Catalog\Block\Product\Compare\Sidebar */
 ?>
 <?php
 $_helper = $this->helper('Magento\Catalog\Helper\Product\Compare');
@@ -29,7 +33,7 @@ $count = $_helper->getItemCount();
             <li class="product-item">
                 <input type="hidden" class="compare-item-id" value="<?php echo $_item->getId() ?>"/>
                 <strong class="product-item-name">
-                    <a href="<?php echo $this->getProductUrl($_item) ?>" class="product-item-link">
+                    <a href="<?php echo $block->getProductUrl($_item) ?>" class="product-item-link">
                         <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_item, $_item->getName(), 'name') ?>
                     </a>
                 </strong>

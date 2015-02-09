@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<a href="#" data-role="remove" data-post-remove='<?php echo $this->getItemRemoveParams($this->getItem()); ?>' title="<?php echo __('Remove Item') ?>" class="btn-remove action delete">
+<a href="#" data-role="remove" data-post-remove='<?php echo $block->getItemRemoveParams($block->getItem()); ?>' title="<?php echo __('Remove Item') ?>" class="btn-remove action delete">
     <span><?php echo __('Remove item');?></span>
 </a>

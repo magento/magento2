@@ -1,5 +1,6 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 var config = {
@@ -10,10 +11,10 @@ var config = {
             categoryTree:       'Magento_Catalog/js/category-tree',
             productGallery:     'Magento_Catalog/js/product-gallery',
             baseImage:          'Magento_Catalog/catalog/base-image-uploader',
-            productAttributes:  'Magento_Catalog/catalog/product'
+            productAttributes:  'Magento_Catalog/catalog/product-attributes'
         }
     },
     deps: [
-        "Magento_Catalog/catalog/product"
+        'Magento_Catalog/catalog/product'
     ]
 };

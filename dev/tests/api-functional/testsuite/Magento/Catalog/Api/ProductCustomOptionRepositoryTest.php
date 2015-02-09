@@ -1,8 +1,11 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Api;
 
@@ -94,6 +97,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoAppIsolation enabled
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetList()
     {
@@ -135,6 +139,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoAppIsolation enabled
      * @dataProvider optionDataProvider
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testSave($optionData)
     {
@@ -262,12 +267,11 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $optionDataPost['option_id'] = $optionId;
             $updatedOption = $this->_webApiCall(
-                $serviceInfo, [ 'id' => $optionId, 'option' => $optionDataPost]
+                $serviceInfo,
+                ['id' => $optionId, 'option' => $optionDataPost]
             );
         } else {
-            $updatedOption = $this->_webApiCall(
-                $serviceInfo, ['option' => $optionDataPost]
-            );
+            $updatedOption = $this->_webApiCall($serviceInfo, ['option' => $optionDataPost]);
         }
 
         unset($updatedOption['values']);
@@ -281,6 +285,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoAppIsolation enabled
      * @dataProvider validOptionDataProvider
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testUpdateOptionAddingNewValue($optionType)
     {
@@ -307,13 +312,14 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
 
         $values = [];
         foreach ($option->getValues() as $key => $value) {
-            $values[] = [
-                'price' => $value->getPrice(),
-                'price_type' => $value->getPriceType(),
-                'sku' => $value->getSku(),
-                'title' => $value->getTitle(),
-                'sort_order' => $value->getSortOrder(),
-        ];
+            $values[] =
+                [
+                    'price' => $value->getPrice(),
+                    'price_type' => $value->getPriceType(),
+                    'sku' => $value->getSku(),
+                    'title' => $value->getTitle(),
+                    'sort_order' => $value->getSortOrder(),
+                ];
         }
         $values[] = $valueData;
         $data = [
@@ -339,12 +345,11 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $data['option_id'] = $fixtureOption->getId();
             $valueObject = $this->_webApiCall(
-                $serviceInfo, [ 'option_id' => $fixtureOption->getId(), 'option' => $data]
+                $serviceInfo,
+                [ 'option_id' => $fixtureOption->getId(), 'option' => $data]
             );
         } else {
-            $valueObject = $this->_webApiCall(
-                $serviceInfo, ['option' => $data]
-            );
+            $valueObject = $this->_webApiCall($serviceInfo, ['option' => $data]);
         }
 
         $values = end($valueObject['values']);

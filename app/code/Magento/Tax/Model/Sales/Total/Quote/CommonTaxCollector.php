@@ -1,16 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Customer\Api\Data\AddressDataBuilder as CustomerAddressBuilder;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 use Magento\Customer\Api\Data\RegionDataBuilder as CustomerAddressRegionBuilder;
 use Magento\Framework\Object;
-use Magento\Sales\Model\Quote\Address as QuoteAddress;
-use Magento\Sales\Model\Quote\Address\Total\AbstractTotal;
-use Magento\Sales\Model\Quote\Item\AbstractItem;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Store\Model\Store;
 use Magento\Tax\Api\Data\QuoteDetailsDataBuilder;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
@@ -19,6 +23,7 @@ use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 
 /**
  * Tax totals calculation model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CommonTaxCollector extends AbstractTotal
 {
@@ -708,6 +713,8 @@ class CommonTaxCollector extends AbstractTotal
      * @param float $baseAmount
      * @param float $rate
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _saveAppliedTaxes(
         QuoteAddress $address,

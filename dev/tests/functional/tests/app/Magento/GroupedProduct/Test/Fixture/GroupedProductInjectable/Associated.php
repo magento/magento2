@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class Associated
@@ -128,7 +129,7 @@ class Associated implements FixtureInterface
                 ],
                 'products' => [
                     'catalogProductSimple::default',
-                    'catalogProductSimple::100_dollar_product',
+                    'catalogProductSimple::product_100_dollar',
                 ],
             ],
             'defaultSimpleProduct_without_qty' => [
@@ -148,7 +149,7 @@ class Associated implements FixtureInterface
                 ],
                 'products' => [
                     'catalogProductSimple::default',
-                    'catalogProductSimple::100_dollar_product',
+                    'catalogProductSimple::product_100_dollar',
                 ],
             ],
             'defaultSimpleProduct_with_specialPrice' => [
@@ -188,7 +189,7 @@ class Associated implements FixtureInterface
                 ],
                 'products' => [
                     'catalogProductVirtual::default',
-                    'catalogProductVirtual::50_dollar_product',
+                    'catalogProductVirtual::product_50_dollar',
                 ],
             ],
             'three_simple_products' => [
@@ -214,8 +215,8 @@ class Associated implements FixtureInterface
                 ],
                 'products' => [
                     'catalogProductSimple::default',
-                    'catalogProductSimple::40_dollar_product',
-                    'catalogProductSimple::100_dollar_product',
+                    'catalogProductSimple::product_40_dollar',
+                    'catalogProductSimple::product_100_dollar',
                 ],
             ],
         ];

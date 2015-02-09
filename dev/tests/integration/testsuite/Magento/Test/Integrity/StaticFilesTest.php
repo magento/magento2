@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Test\Integrity;
@@ -30,6 +31,11 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
      */
     private $design;
 
+    /**
+     * @var \Magento\Framework\View\Design\ThemeInterface
+     */
+    private $baseTheme;
+
     protected function setUp()
     {
         $om = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager();
@@ -37,6 +43,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
         $this->explicitFallback = $om->get('Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple');
         $this->themeRepo = $om->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
         $this->design = $om->get('Magento\Framework\View\DesignInterface');
+        $this->baseTheme = $om->get('Magento\Framework\View\Design\ThemeInterface');
     }
 
     /**
@@ -125,6 +132,9 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
      */
     private function getStaticFile($area, $theme, $locale, $filePath, $module, $isExplicit = false)
     {
+        if ($area == 'base') {
+            $theme = $this->baseTheme;
+        }
         if (!is_object($theme)) {
             $themePath = $theme ?: $this->getDefaultThemePath($area);
             $theme = $this->themeRepo->create($themePath, $area);
@@ -218,7 +228,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Find invocations of $this->getViewFileUrl() and extract the first argument value
+     * Find invocations of $block->getViewFileUrl() and extract the first argument value
      *
      * @param string $file
      * @return array
@@ -226,7 +236,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
     private function collectGetViewFileUrl($file)
     {
         $result = [];
-        if (preg_match_all('/\$this->getViewFileUrl\(\'([^\']+?)\'\)/', file_get_contents($file), $matches)) {
+        if (preg_match_all('/\$block->getViewFileUrl\(\'([^\']+?)\'\)/', file_get_contents($file), $matches)) {
             foreach ($matches[1] as $fileId) {
                 $result[] = $fileId;
             }

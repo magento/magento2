@@ -1,12 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
-<script type="text/javascript">
-//<![CDATA[
+<script>
+require([
+    'prototype'
+], function () {
 
-function toggleValueElement(element) {
+window.toggleValueElement = function(element) {
     var disabled = false;
     if (element.value == 1) {
         // use default value
@@ -23,5 +26,5 @@ function toggleValueElement(element) {
     }
 }
 
-//]]>
+});
 </script>

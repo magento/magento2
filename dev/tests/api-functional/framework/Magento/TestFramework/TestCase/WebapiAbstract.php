@@ -2,7 +2,8 @@
 /**
  * Generic test case for Web API functional tests.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase;
 
@@ -10,6 +11,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Webapi\Model\Soap\Fault;
 
+/**
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ */
 abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
 {
     /** TODO: Reconsider implementation of fixture-management methods after implementing several tests */
@@ -154,15 +158,16 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      * @param array $serviceInfo
      * @param array $arguments
      * @param string|null $webApiAdapterCode
+     * @param string|null $storeCode
      * @return array|int|string|float|bool Web API call results
      */
-    protected function _webApiCall($serviceInfo, $arguments = [], $webApiAdapterCode = null)
+    protected function _webApiCall($serviceInfo, $arguments = [], $webApiAdapterCode = null, $storeCode = null)
     {
         if (is_null($webApiAdapterCode)) {
             /** Default adapter code is defined in PHPUnit configuration */
             $webApiAdapterCode = strtolower(TESTS_WEB_API_ADAPTER);
         }
-        return $this->_getWebApiAdapter($webApiAdapterCode)->call($serviceInfo, $arguments);
+        return $this->_getWebApiAdapter($webApiAdapterCode)->call($serviceInfo, $arguments, $storeCode);
     }
 
     /**
@@ -485,7 +490,7 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         if ($cleanAppCache) {
             if ($updateLocalConfig) {
                 $objectManager->get('Magento\Framework\App\Config\ReinitableConfigInterface')->reinit();
-                $objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();
+                $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->reinitStores();
             }
 
             if (!$this->_cleanAppConfigCache()) {

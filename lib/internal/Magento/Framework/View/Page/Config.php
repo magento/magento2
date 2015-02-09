@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Page;
@@ -233,7 +234,7 @@ class Config
         if (empty($this->metadata['media_type'])) {
             $this->metadata['media_type'] = $this->scopeConfig->getValue(
                 'design/head/default_media_type',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $this->metadata['media_type'];
@@ -259,7 +260,7 @@ class Config
         if (empty($this->metadata['charset'])) {
             $this->metadata['charset'] = $this->scopeConfig->getValue(
                 'design/head/default_charset',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $this->metadata['charset'];
@@ -285,7 +286,7 @@ class Config
         if (empty($this->metadata['description'])) {
             $this->metadata['description'] = $this->scopeConfig->getValue(
                 'design/head/default_description',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $this->metadata['description'];
@@ -311,7 +312,7 @@ class Config
         if (empty($this->metadata['keywords'])) {
             $this->metadata['keywords'] = $this->scopeConfig->getValue(
                 'design/head/default_keywords',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $this->metadata['keywords'];
@@ -337,7 +338,7 @@ class Config
         if (empty($this->metadata['robots'])) {
             $this->metadata['robots'] = $this->scopeConfig->getValue(
                 'design/search_engine_robots/default_robots',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $this->metadata['robots'];
@@ -515,7 +516,7 @@ class Config
         if (empty($this->includes)) {
             $this->includes = $this->scopeConfig->getValue(
                 'design/head/includes',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $this->includes;

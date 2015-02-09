@@ -1,13 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-$_element = $this->getElement();
+$_element = $block->getElement();
 $_note = $_element->getNote();
 $_class = $_element->getFieldsetHtmlClass();
-$_validateButton = $this->getValidateButton();
+$_validateButton = $block->getValidateButton();
 ?>
 <?php if (!$_element->getNoDisplay()): ?>
 <div class="field field-vat-number">

@@ -1,19 +1,23 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php
-/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $this */
+/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
 
-$productId = $this->getSaleableItem()->getId();
+$productId = $block->getSaleableItem()->getId();
 
 /** @var \Magento\Catalog\Pricing\Price\RegularPrice $priceModel */
-$priceModel = $this->getPriceType('regular_price');
+$priceModel = $block->getPriceType('regular_price');
 
-echo $this->renderAmount($priceModel->getAmount(), [
-    'price_id'          => $this->getPriceId('product-price-'),
+echo $block->renderAmount($priceModel->getAmount(), [
+    'price_id'          => $block->getPriceId('product-price-'),
     'include_container' => true
 ]);
 ?>

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Status\Grid\Column;
 
@@ -44,6 +45,7 @@ class State extends \Magento\Backend\Block\Widget\Grid\Column
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @param bool $isExport
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function decorateState($value, $row, $column, $isExport)
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
@@ -52,6 +53,10 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @var ObjectManager\ConfigLoader
      */
     private $configLoader;
+    /**
+     * @var \Magento\Framework\View\Asset\MinifyService
+     */
+    protected $minifyService;
 
     /**
      * @param State $state
@@ -62,6 +67,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @param \Magento\Framework\Module\ModuleList $moduleList
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ObjectManager\ConfigLoader $configLoader
+     * @param \Magento\Framework\View\Asset\MinifyService $minifyService
      */
     public function __construct(
         State $state,
@@ -71,7 +77,8 @@ class StaticResource implements \Magento\Framework\AppInterface
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Module\ModuleList $moduleList,
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        ObjectManager\ConfigLoader $configLoader
+        ObjectManager\ConfigLoader $configLoader,
+        \Magento\Framework\View\Asset\MinifyService $minifyService
     ) {
         $this->state = $state;
         $this->response = $response;
@@ -81,6 +88,7 @@ class StaticResource implements \Magento\Framework\AppInterface
         $this->moduleList = $moduleList;
         $this->objectManager = $objectManager;
         $this->configLoader = $configLoader;
+        $this->minifyService = $minifyService;
     }
 
     /**
@@ -102,6 +110,7 @@ class StaticResource implements \Magento\Framework\AppInterface
             $file = $params['file'];
             unset($params['file']);
             $asset = $this->assetRepo->createAsset($file, $params);
+            $asset = $this->minifyService->getAssets([$asset], true)[0];
             $this->response->setFilePath($asset->getSourceFile());
             $this->publisher->publish($asset);
         }

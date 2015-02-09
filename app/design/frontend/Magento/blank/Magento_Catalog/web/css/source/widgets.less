@@ -1,12 +1,13 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .block-product-link,
 .block-category-link {
@@ -50,7 +51,7 @@
 //    Mobile
 //--------------------------------------
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .block.widget .products-grid .product-item,
     .page-layout-1column .block.widget .products-grid .product-item,
     .page-layout-3columns .block.widget .products-grid .product-item { width: 100%/3 }
@@ -60,13 +61,13 @@
 //    Desktop
 //--------------------------------------
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .block.widget .products-grid .product-item{ width: 100%/3 }
     .page-layout-1column .block.widget .products-grid .product-item { width: 100%/4 }
     .page-layout-3columns .block.widget .products-grid .product-item { width: 100%/2 }
 }
 
-.responsive-min-l(@break) when (@break = @screen-l) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-l) {
     .block.widget .products-grid .product-item { width: 100%/5 }
     .page-layout-1column .block.widget .products-grid .product-item {
         width: 100%/6;
@@ -81,8 +82,8 @@
     .page-layout-3columns .block.widget .products-grid .product-item { width: 100%/4 }
     .block.widget .products-grid .product-items { margin: 0; }
     .block.widget .products-grid .product-item {
-        width: 24%;
-        margin-left: calc(~"(100% - 4 * 24%) / 3");
+        width: 24.439%;
+        margin-left: calc(~"(100% - 4 * 24.439%) / 3");
         padding: 0;
         &:nth-child(4n+1) {
             margin-left: 0;
@@ -90,7 +91,7 @@
     }
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .sidebar .block.widget .pager {
         .item:not(.pages-item-next):not(.pages-item-previous) {
             &:extend(.abs-no-display-desktop all);

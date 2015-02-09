@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 require __DIR__ . '/../../Customer/_files/customer.php';
 require __DIR__ . '/../../Customer/_files/customer_address.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_virtual.php';
 
-/** @var \Magento\Sales\Model\Quote\Address $quoteShippingAddress */
+/** @var \Magento\Quote\Model\Quote\Address $quoteShippingAddress */
 $quoteShippingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Sales\Model\Quote\Address'
+    'Magento\Quote\Model\Quote\Address'
 );
 /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
 $customerRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -20,8 +24,8 @@ $addressRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
 );
 $quoteShippingAddress->importCustomerAddressData($addressRepository->getById(1));
 
-/** @var \Magento\Sales\Model\Quote $quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+/** @var \Magento\Quote\Model\Quote $quote */
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
 $quote->setStoreId(
         1
     )->setIsActive(

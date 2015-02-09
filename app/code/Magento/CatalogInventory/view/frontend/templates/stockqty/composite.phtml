@@ -1,23 +1,26 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
- * @var $this \Magento\CatalogInventory\Block\Stockqty\Composite
+ * @var $block \Magento\CatalogInventory\Block\Stockqty\Composite
  */
 ?>
-<?php if ($this->isMsgVisible()): ?>
+<?php if ($block->isMsgVisible()): ?>
     <div class="availability only">
         <a href="#"
-           data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?php echo $this->getDetailsPlaceholderId() ?>"}}'
-           id="<?php echo $this->getPlaceholderId() ?>"
-           title="<?php echo __('Only %1 left', ($this->getStockQtyLeft())) ?>"
+           data-mage-init='{"toggleAdvanced": {"selectorsToggleClass": "active", "baseToggleClass": "expanded", "toggleContainers": "#<?php echo $block->getDetailsPlaceholderId() ?>"}}'
+           id="<?php echo $block->getPlaceholderId() ?>"
+           title="<?php echo __('Only %1 left', ($block->getStockQtyLeft())) ?>"
            class="action show">
-            <?php echo __('Only %1 left', "<strong>{$this->getStockQtyLeft()}</strong>") ?>
+            <?php echo __('Only %1 left', "<strong>{$block->getStockQtyLeft()}</strong>") ?>
         </a>
     </div>
-    <div class="availability only detailed" id="<?php echo $this->getDetailsPlaceholderId() ?>">
+    <div class="availability only detailed" id="<?php echo $block->getDetailsPlaceholderId() ?>">
         <div class="table-wrapper">
             <table class="data table">
                 <caption class="table-caption"><?php echo __('Product availability'); ?></caption>
@@ -28,12 +31,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($this->getChildProducts() as $childProduct) : ?>
-                    <?php $childProductStockQty = $this->getProductStockQty($childProduct); ?>
+                <?php foreach ($block->getChildProducts() as $childProduct) : ?>
+                    <?php $childProductStockQty = $block->getProductStockQty($childProduct); ?>
                     <?php if ($childProductStockQty > 0) : ?>
                         <tr>
-                            <td data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>" class="col item"><?php echo $childProduct->getName() ?></td>
-                            <td data-th="<?php echo $this->escapeHtml(__('Qty')); ?>" class="col qty"><?php echo $childProductStockQty ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>" class="col item"><?php echo $childProduct->getName() ?></td>
+                            <td data-th="<?php echo $block->escapeHtml(__('Qty')); ?>" class="col qty"><?php echo $childProductStockQty ?></td>
                         </tr>
                     <?php endif ?>
                 <?php endforeach ?>

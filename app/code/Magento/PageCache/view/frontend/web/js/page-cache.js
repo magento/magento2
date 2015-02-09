@@ -1,17 +1,112 @@
 /**
  * Handles additional ajax request for rendering user private content
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true expr:true*/
+
 define([
-    "jquery",
-    "jquery/ui",
-    "mage/cookies",
-    "Magento_PageCache/js/comments"
-], function($){
-    "use strict";
-    
+    'jquery',
+    'domReady',
+    'jquery/ui',
+    'mage/cookies'
+], function ($, domReady) {
+    'use strict';
+
+    /**
+     * Nodes tree to flat list converter
+     * @returns {Array}
+     */
+    $.fn.comments = function () {
+        var elements = [];
+
+        /**
+         * @param {jQuery} element - Comment holder
+         */
+        (function lookup(element) {
+            $(element).contents().each(function (index, el) {
+                switch (el.nodeType) {
+                    case 1: // ELEMENT_NODE
+                        lookup(el);
+                        break;
+
+                    case 8: // COMMENT_NODE
+                        elements.push(el);
+                        break;
+
+                    case 9: // DOCUMENT_NODE
+                        var hostName = window.location.hostname,
+                            iFrameHostName = $('<a>')
+                                .prop('href', element.prop('src'))
+                                .prop('hostname');
+
+                        if (hostName === iFrameHostName) {
+                            lookup($(el).find('body'));
+                        }
+                        break;
+                }
+            });
+        })(this);
+
+        return elements;
+    };
+
+    /**
+     * MsgBox Widget checks if message box is displayed and sets cookie
+     */
+    $.widget('mage.msgBox', {
+        options: {
+            msgBoxCookieName: 'message_box_display',
+            msgBoxSelector: '.main div.messages'
+        },
+
+        /**
+         * Creates widget 'mage.msgBox'
+         * @private
+         */
+        _create: function () {
+            if ($.mage.cookies.get(this.options.msgBoxCookieName)) {
+                $.mage.cookies.clear(this.options.msgBoxCookieName);
+            } else {
+                $(this.options.msgBoxSelector).hide();
+            }
+        }
+    });
+
+    /**
+     * FormKey Widget - this widget is generating from key, saves it to cookie and
+     */
+    $.widget('mage.formKey', {
+        options: {
+            inputSelector: 'input[name="form_key"]',
+            allowedCharacters: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            length: 16
+        },
+
+        /**
+         * Creates widget 'mage.formKey'
+         * @private
+         */
+        _create: function () {
+            var date,
+                formKey = $.mage.cookies.get('form_key');
+
+            if (!formKey) {
+                formKey = generateRandomString(this.options.allowedCharacters, this.options.length);
+                date = new Date();
+                date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
+                $.mage.cookies.set('form_key', formKey, {
+                    expires: date,
+                    path: '/'
+                });
+            }
+            $(this.options.inputSelector).val(formKey);
+        }
+    });
+
+    /**
+     * PageCache Widget
+     */
     $.widget('mage.pageCache', {
         options: {
             url: '/',
@@ -20,26 +115,46 @@ define([
             versionCookieName: 'private_content_version',
             handles: []
         },
+
+        /**
+         * Creates widget 'mage.pageCache'
+         * @private
+         */
         _create: function () {
-            var version = $.mage.cookies.get(this.options.versionCookieName);
+            var placeholders,
+                version = $.mage.cookies.get(this.options.versionCookieName);
+
             if (!version) {
-                return ;
+                return;
             }
-            var placeholders = this._searchPlaceholders(this.element.comments());
-            if (placeholders.length) {
+            placeholders = this._searchPlaceholders(this.element.comments());
+
+            if (placeholders && placeholders.length) {
                 this._ajax(placeholders, version);
             }
         },
+
+        /**
+         * Parse page for placeholders.
+         * @param {Array} elements
+         * @returns {Array}
+         * @private
+         */
         _searchPlaceholders: function (elements) {
             var placeholders = [],
-                tmp = {};
-            if (!elements.length) {
+                tmp = {},
+                ii,
+                len,
+                el, matches, name;
+
+            if (!(elements && elements.length)) {
                 return placeholders;
             }
-            for (var i = 0; i < elements.length; i++) {
-                var el = elements[i],
-                    matches = this.options.patternPlaceholderOpen.exec(el.nodeValue),
-                    name = null;
+
+            for (ii = 0, len = elements.length; ii < len; ii++) {
+                el = elements[ii];
+                matches = this.options.patternPlaceholderOpen.exec(el.nodeValue);
+                name = null;
 
                 if (matches) {
                     name = matches[1];
@@ -49,8 +164,10 @@ define([
                     };
                 } else {
                     matches = this.options.patternPlaceholderClose.exec(el.nodeValue);
+
                     if (matches) {
                         name = matches[1];
+
                         if (tmp[name]) {
                             tmp[name].closeElement = el;
                             placeholders.push(tmp[name]);
@@ -59,44 +176,74 @@ define([
                     }
                 }
             }
+
             return placeholders;
         },
-        _replacePlaceholder: function(placeholder, html) {
+
+        /**
+         * Parse for page and replace placeholders
+         * @param {Object} placeholder
+         * @param {Object} html
+         * @protected
+         */
+        _replacePlaceholder: function (placeholder, html) {
+            if (!placeholder || !html) {
+                return;
+            }
+
             var parent = $(placeholder.openElement).parent(),
                 contents = parent.contents(),
                 startReplacing = false,
-                prevSibling = null;
-            for (var y = 0; y < contents.length; y++) {
-                var element = contents[y];
+                prevSibling = null,
+                yy,
+                len,
+                element;
+
+            for (yy = 0, len = contents.length; yy < len; yy++) {
+                element = contents[yy];
+
                 if (element == placeholder.openElement) {
                     startReplacing = true;
                 }
+
                 if (startReplacing) {
                     $(element).remove();
                 } else if (element.nodeType != 8) {
                     //due to comment tag doesn't have siblings we try to find it manually
                     prevSibling = element;
                 }
+
                 if (element == placeholder.closeElement) {
                     break;
                 }
             }
+
             if (prevSibling) {
                 $(prevSibling).after(html);
             } else {
                 $(parent).prepend(html);
             }
+
             // trigger event to use mage-data-init attribute
             $(parent).trigger('contentUpdated');
         },
+
+        /**
+         * AJAX helper
+         * @param {Object} placeholders
+         * @param {String} version
+         * @private
+         */
         _ajax: function (placeholders, version) {
-            var data = {
-                blocks: [],
-                handles: this.options.handles,
-                version: version
-            };
-            for (var i = 0; i < placeholders.length; i++) {
-                data.blocks.push(placeholders[i].name);
+            var ii,
+                data = {
+                    blocks: [],
+                    handles: this.options.handles,
+                    version: version
+                };
+
+            for (ii = 0; ii < placeholders.length; ii++) {
+                data.blocks.push(placeholders[ii].name);
             }
             data.blocks = JSON.stringify(data.blocks.sort());
             data.handles = JSON.stringify(data.handles);
@@ -107,18 +254,53 @@ define([
                 cache: true,
                 dataType: 'json',
                 context: this,
+
+                /**
+                 * Response handler
+                 * @param {Object} response
+                 */
                 success: function (response) {
-                    for (var i = 0; i < placeholders.length; i++) {
-                        var placeholder = placeholders[i];
-                        if (!response.hasOwnProperty(placeholder.name)) {
-                            continue;
+                    var placeholder, i;
+
+                    for (i = 0; i < placeholders.length; i++) {
+                        placeholder = placeholders[i];
+
+                        if (response.hasOwnProperty(placeholder.name)) {
+                            this._replacePlaceholder(placeholder, response[placeholder.name]);
                         }
-                        this._replacePlaceholder(placeholder, response[placeholder.name]);
                     }
                 }
             });
         }
     });
-    
-    return $.mage.pageCache;
+
+    domReady(function () {
+        $('body')
+            .msgBox()
+            .formKey();
+    });
+
+    return {
+        'pageCache': $.mage.pageCache,
+        'formKey': $.mage.formKey,
+        'msgBox': $.mage.msgBox
+    };
+
+    /**
+     * Helper. Generate random string
+     * TODO: Merge with mage/utils
+     * @param {String} chars - list of symbols
+     * @param {Number} length - length for need string
+     * @returns {String}
+     */
+    function generateRandomString(chars, length) {
+        var result = '';
+        length = length > 0 ? length : 1;
+
+        while (length--) {
+            result += chars[Math.round(Math.random() * (chars.length - 1))];
+        }
+
+        return result;
+    }
 });

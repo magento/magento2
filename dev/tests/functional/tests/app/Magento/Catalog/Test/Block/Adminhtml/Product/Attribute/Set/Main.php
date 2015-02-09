@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Main
@@ -122,7 +123,7 @@ class Main extends Block
     public function addAttributeSetGroup($groupName)
     {
         $this->_rootElement->find($this->addGroupButton)->click();
-        $this->_rootElement->setAlertText($groupName);
-        $this->_rootElement->acceptAlert();
+        $this->browser->setAlertText($groupName);
+        $this->browser->acceptAlert();
     }
 }

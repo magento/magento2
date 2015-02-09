@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\DesignEditor\Model;
 
@@ -148,7 +149,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->equalTo(\Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID),
             $this->equalTo(self::THEME_ID),
-            $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            $this->equalTo(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
         )->will(
             $this->returnSelf()
         );
@@ -165,7 +166,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             $this->returnSelf()
         );
 
-        $this->_theme = $this->getMock('Magento\Core\Model\Theme', ['getId', '__wakeup'], [], '', false);
+        $this->_theme = $this->getMock('Magento\Theme\Model\Theme', ['getId', '__wakeup'], [], '', false);
         $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(self::THEME_ID));
 
         $this->_themeContext = $this->getMock(

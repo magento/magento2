@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset;
 
@@ -37,7 +38,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
         $this->storeManagerMock = $this->getMock(
-            '\Magento\Store\Model\StoreManagerInterface',
+            '\Magento\Framework\Store\StoreManagerInterface',
             [],
             [],
             '',

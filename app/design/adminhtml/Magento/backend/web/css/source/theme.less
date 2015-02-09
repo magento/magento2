@@ -1,12 +1,16 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
-// Override default variables
+//
+//  Override default variables
+//  _____________________________________________
+
 @font-family-base: 'Open Sans', @font-family-sans-serif;
 @col-layout-bg: #f6f3eb;
 
-// Introduce new theme specific variables
+//  Introduce new theme specific variables
 
 @layout-min-width: 960px;
 @layout-max-width: 1300px;
@@ -19,18 +23,18 @@
 
 @color-link: #026294;
 
-@page-main-action-color: #645D53;
+@page-main-action-color: #645d53;
 
 @dropdown-split-actions-padding: '';
 @dropdown-split-toggle-actions-padding: 6px 5px;
 @dropdown-split-toggle-icon-font-line-height: 14px;
 
-// Default = secondary button
+//  Default = secondary button
 @button-padding: 6px 13px;
 @button-font-weight: 500;
 @button-font-size: 13px;
 @button-line-height: @button-font-size + 1;
-@button-color: #645D53;
+@button-color: #645d53;
 @button-background: #f2ebde;
 @button-border: 1px solid #ada89e;
 @button-background-hover: #cac3b4;
@@ -40,10 +44,10 @@
 @button-color-active: '';
 @button-border-active: 1px solid #989287;
 
-// Primary button
+//  Primary button
 @button-primary-background: #007dbd;
 @button-primary-border: 1px solid #0a6c9f;
-@button-primary-color: #fff;
+@button-primary-color: @color-white;
 @button-primary-background-hover: #026294;
 @button-primary-border-hover: 1px solid #026294;
 @button-primary-color-hover: '';
@@ -53,23 +57,26 @@
 @responsive: false;
 
 //
-//    Form elements
-//--------------------------------------
-@form-element-bg: #fff;
+//  Form elements
+//  ---------------------------------------------
+
+@form-element-bg: @color-white;
 
 //
-//    Validation
-//--------------------------------------
+//  Validation
+//  ---------------------------------------------
+
 @validation-color: #e22626;
 @validation-color-rgba: rgba(226, 38, 38, .6);
 @validation-bg: #f9d4d4;
 @validation-border: 1px dashed @validation-color;
-@validation-color-light: #f9d4d4; // for asterisk on <th> elements of grid tables
+@validation-color-light: #f9d4d4; //  For asterisk on <th> elements of grid tables
 
 //
-//    Grid
-//--------------------------------------
-@grid-frame-bg: #fff;
+//  Grid
+//  ---------------------------------------------
+
+@grid-frame-bg: @color-white;
 @grid-controls-border: #989287;
 
 @grid-headings-color: #f7f3eb;
@@ -85,7 +92,7 @@
 @grid-massaction-border: 1px solid #f2ebde;
 
 @grid-td-color: @color-middle;
-@grid-td-light: #fff;
+@grid-td-light: @color-white;
 @grid-td-dark: #f7f3eb;
 @grid-td-border: @grid-headings-border;
 @grid-td-bg-hover: #f2ebde;
@@ -105,14 +112,13 @@
 @grid-severity-minor-bg: #feeee1;
 @grid-severity-minor-border: @grid-severity-minor-color;
 
-// Pager
+//  Pager
 @pager-actions-color: @primary3;
 @pager-actions-color-hover: @primary5;
 
-// Data-table
+//  Data-table
 @data-table-th-border-color: #c9c2b8;
 @data-table-td-border-color: #eae8e4;
 @data-table-td-bg: @grid-td-light;
 @data-table-td-bg-odd: #fbfaf6;
-
 @data-table-td-bg-hover: #f7f3eb;

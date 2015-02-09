@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $_option = $this->getOption(); ?>
-<?php $_fileInfo = $this->getFileInfo(); ?>
+<?php $_option = $block->getOption(); ?>
+<?php $_fileInfo = $block->getFileInfo(); ?>
 <?php $_fileExists = $_fileInfo->hasData() ? true : false; ?>
 <?php $_fileName = 'options_' . $_option->getId() . '_file'; ?>
 <?php $_fieldNameAction = $_fileName . '_action'; ?>
@@ -12,7 +16,7 @@
 <?php $_fileNamed = $_fileName . '_name'; ?>
 <?php $_rand = rand(); ?>
 
-<script type="text/javascript">
+<script>
 require(['prototype'], function(){
 
 //<![CDATA[
@@ -59,8 +63,8 @@ require(['prototype'], function(){
 
 <div class="field<?php if ($_option->getIsRequire()) echo ' required' ?>">
     <label class="label">
-        <?php echo  $this->escapeHtml($_option->getTitle()) ?>
-        <?php echo $this->getFormatedPrice() ?>
+        <?php echo  $block->escapeHtml($_option->getTitle()) ?>
+        <?php echo $block->getFormatedPrice() ?>
     </label>
     <div class="control">
         <?php if ($_fileExists): ?>
@@ -69,12 +73,12 @@ require(['prototype'], function(){
                 <?php echo __('Change') ?>
             </a>&nbsp;
             <?php if (!$_option->getIsRequire()): ?>
-                <input type="checkbox" onclick="opFile<?php echo $_rand; ?>.toggleFileDelete($(this), $(this).next('.input-box'))" price="<?php echo $this->getCurrencyPrice($_option->getPrice(true)) ?>"/>
+                <input type="checkbox" onclick="opFile<?php echo $_rand; ?>.toggleFileDelete($(this), $(this).next('.input-box'))" price="<?php echo $block->getCurrencyPrice($_option->getPrice(true)) ?>"/>
                 <span class="label"><?php echo __('Delete') ?></span>
             <?php endif; ?>
         <?php endif; ?>
         <div class="input-box" <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
-            <input type="file" name="<?php echo $_fileName; ?>" class="product-custom-option<?php echo $_option->getIsRequire() ? ' required-entry' : '' ?>" price="<?php echo $this->getCurrencyPrice($_option->getPrice(true)) ?>" <?php echo $_fileExists ? 'disabled="disabled"' : '' ?>/>
+            <input type="file" name="<?php echo $_fileName; ?>" class="product-custom-option<?php echo $_option->getIsRequire() ? ' required-entry' : '' ?>" price="<?php echo $block->getCurrencyPrice($_option->getPrice(true)) ?>" <?php echo $_fileExists ? 'disabled="disabled"' : '' ?>/>
             <input type="hidden" name="<?php echo $_fieldNameAction; ?>" value="<?php echo $_fieldValueAction; ?>" />
             <?php if ($_option->getFileExtension()): ?>
             <p class="no-margin"><?php echo __('Allowed file extensions to upload')?>: <strong><?php echo $_option->getFileExtension() ?></strong></p>

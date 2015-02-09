@@ -1,29 +1,33 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
- * @var $this \Magento\CheckoutAgreements\Block\Agreements
+ * @var $block \Magento\CheckoutAgreements\Block\Agreements
  */
 ?>
-<?php if (!$this->getAgreements()) {
+<?php if (!$block->getAgreements()) {
     return;
 } ?>
 <ol id="checkout-agreements" class="agreements checkout items">
-<?php foreach ($this->getAgreements() as $_a): ?>
+<?php foreach ($block->getAgreements() as $_a): ?>
     <li class="item">
         <div class="agreement content"<?php echo($_a->getContentHeight() ? ' style="height:' . $_a->getContentHeight() . '"' : '')?>>
             <?php if ($_a->getIsHtml()):?>
                 <?php echo $_a->getContent() ?>
             <?php else:?>
-                <?php echo nl2br($this->escapeHtml($_a->getContent())) ?>
+                <?php echo nl2br($block->escapeHtml($_a->getContent())) ?>
             <?php endif; ?>
         </div>
         <form id="checkout-agreements-form-<?php echo $_a->getId()?>" class="field choice agree required">
-            <input type="checkbox" id="agreement-<?php echo $_a->getId()?>" name="agreement[<?php echo $_a->getId()?>]" value="1" title="<?php echo $this->escapeHtml($_a->getCheckboxText()) ?>" class="checkbox" data-validate="{required:true}"/>
-            <label class="label" for="agreement-<?php echo $_a->getId()?>"><span><?php echo $_a->getIsHtml() ? $_a->getCheckboxText() : $this->escapeHtml($_a->getCheckboxText()) ?></span></label>
+            <input type="checkbox" id="agreement-<?php echo $_a->getId()?>" name="agreement[<?php echo $_a->getId()?>]" value="1" title="<?php echo $block->escapeHtml($_a->getCheckboxText()) ?>" class="checkbox" data-validate="{required:true}"/>
+            <label class="label" for="agreement-<?php echo $_a->getId()?>"><span><?php echo $_a->getIsHtml() ? $_a->getCheckboxText() : $block->escapeHtml($_a->getCheckboxText()) ?></span></label>
         </form>
     </li>
 <?php endforeach ?>

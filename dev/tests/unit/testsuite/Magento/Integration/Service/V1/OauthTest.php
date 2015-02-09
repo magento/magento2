@@ -2,7 +2,8 @@
 /**
  * Test for \Magento\Integration\Service\V1\Oauth
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Service\V1;
 
@@ -90,7 +91,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_service = new \Magento\Integration\Service\V1\Oauth(
-            $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false),
+            $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false),
             $this->_consumerFactory,
             $this->_tokenFactoryMock,
             $this->getMock('Magento\Integration\Helper\Oauth\Data', [], [], '', false),

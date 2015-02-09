@@ -2,7 +2,8 @@
 /**
  * Test Webapi Request model.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller\Rest;
 
@@ -176,7 +177,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         return [
             // Each element is: array(Accept HTTP header value, expected result))
-            ['', []],
+            ['', ['*/*']],
             [
                 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 ['text/html', 'application/xhtml+xml', 'application/xml', '*/*']

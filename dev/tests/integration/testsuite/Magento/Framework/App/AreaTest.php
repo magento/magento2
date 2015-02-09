@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
@@ -14,7 +15,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     public static function tearDownAfterClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\CacheInterface')
-            ->clean([\Magento\Core\Model\Design::CACHE_TAG]);
+            ->clean([\Magento\Theme\Model\Design::CACHE_TAG]);
     }
 
     protected function setUp()
@@ -81,7 +82,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"Magento/blank";}}
      * @magentoConfigFixture current_store design/package/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"Magento/blank";}}
-     * @magentoDataFixture Magento/Core/_files/design_change.php
+     * @magentoDataFixture Magento/Theme/_files/design_change.php
      * @magentoAppIsolation enabled
      */
     // @codingStandardsIgnoreEnd
@@ -99,7 +100,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
      * Test that non-frontend areas are not affected neither by user-agent reg expressions, nor by the "design change"
      *
      * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"Magento/blank";}}
-     * magentoDataFixture Magento/Core/_files/design_change.php
+     * magentoDataFixture Magento/Theme/_files/design_change.php
      * @magentoAppIsolation enabled
      */
     // @codingStandardsIgnoreEnd

@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js */ ?>
 <div id="vde-tab-js-messages-placeholder"></div>
 <div class="files-wrapper">
     <div class="files-list">
         <div class="files-list-header">
-            <h5 class="title" title="<?php echo $this->escapeHtml($this->getTitle()) ?>"><?php echo $this->getTitle() ?></h5>
+            <h5 class="title" title="<?php echo $block->escapeHtml($block->getTitle()) ?>"><?php echo $block->getTitle() ?></h5>
             <span class="action-add" title="<?php echo __('Add Files'); ?>">
                 <span><?php echo __('Add Files'); ?></span>
-                <?php echo $this->getFormHtml() ?>
+                <?php echo $block->getFormHtml() ?>
             </span>
         </div>
         <div>
@@ -46,7 +50,7 @@
     <span class="filename"><?php echo __('We found no javascript files.') ?></span>
 </li>
 
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "jquery/ui",
@@ -61,15 +65,15 @@ require([
         refreshFileListEvent : 'refreshJsList',
         prefixItemId: 'js-file-'
     });
-    $('body').trigger('refreshJsList', {jsList : <?php echo $this->getFiles() ?>});
+    $('body').trigger('refreshJsList', {jsList : <?php echo $block->getFiles() ?>});
 
     $(document).on('click', '#vde-tab-js .js-file .action-delete', function() {
-        if (!confirm('<?php echo $this->getConfirmMessageDelete() ?>')) {
+        if (!confirm('<?php echo $block->getConfirmMessageDelete() ?>')) {
             return false;
         }
 
         $.ajax({
-            url: '<?php echo $this->getJsDeleteUrl(); ?>',
+            url: '<?php echo $block->getJsDeleteUrl(); ?>',
             data: {js_removed_files: [$(this).data('id')]},
             dataType: 'json'
         }).done(function(data) {
@@ -91,7 +95,7 @@ require([
         dataType: 'json',
         replaceFileInput: false,
         sequentialUploads: true,
-        url : '<?php echo $this->getJsUploadUrl(); ?>',
+        url : '<?php echo $block->getJsUploadUrl(); ?>',
 
         /**
          * Add data
@@ -171,7 +175,7 @@ require([
         update: function( event, ui ) {
             var jsOrder = $(this).sortable('serialize', {key: 'js_order[]'});
             $.ajax({
-                url: '<?php echo $this->getJsReorderUrl(); ?>',
+                url: '<?php echo $block->getJsReorderUrl(); ?>',
                 type: 'POST',
                 dataType: 'json',
                 data: jsOrder,

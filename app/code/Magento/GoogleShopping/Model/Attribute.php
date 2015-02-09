@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GoogleShopping\Model;
 
@@ -108,6 +109,7 @@ class Attribute extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $setId attribute set id
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getAllowedAttributes($setId)
     {

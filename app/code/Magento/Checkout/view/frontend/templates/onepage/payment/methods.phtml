@@ -1,18 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * One page checkout payment methods
  *
- * @var $this \Magento\Checkout\Block\Onepage\Payment\Methods
+ * @var $block \Magento\Checkout\Block\Onepage\Payment\Methods
  */
 ?>
 <dl class="items methods-payment">
 <?php
-    $methods = $this->getMethods();
+    $methods = $block->getMethods();
     $oneMethod = count($methods) <= 1;
 ?>
 <?php if (empty($methods)): ?>
@@ -25,14 +29,14 @@
 ?>
     <dt class="item-title <?php echo $_code ?>">
     <?php if (!$oneMethod): ?>
-        <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" <?php if ($this->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?> class="radio" />
+        <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $block->escapeHtml($_method->getTitle()) ?>" <?php if ($block->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?> class="radio" />
     <?php else: ?>
         <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio no-display" />
         <?php $oneMethod = $_code; ?>
     <?php endif; ?>
-        <label for="p_method_<?php echo $_code ?>"><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?> <?php echo $this->getMethodLabelAfterHtml($_method) ?></label>
+        <label for="p_method_<?php echo $_code ?>"><?php echo $block->escapeHtml($block->getMethodTitle($_method)) ?> <?php echo $block->getMethodLabelAfterHtml($_method) ?></label>
     </dt>
-    <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+    <?php if ($html = $block->getPaymentMethodFormHtml($_method)): ?>
     <dd class="item-content <?php echo $_code ?>">
         <?php echo $html; ?>
     </dd>
@@ -41,5 +45,5 @@
     endif;
 ?>
 </dl>
-<div class="no-display" data-checkout-price="<?php echo (float)$this->getQuote()->getBaseGrandTotal(); ?>"></div>
-<?php echo $this->getChildChildHtml('additional'); ?>
+<div class="no-display" data-checkout-price="<?php echo (float)$block->getQuote()->getBaseGrandTotal(); ?>"></div>
+<?php echo $block->getChildChildHtml('additional'); ?>

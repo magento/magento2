@@ -2,7 +2,8 @@
 /**
  * Magento validator config factory
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model\PageLayout\Config;
 
@@ -22,19 +23,19 @@ class Builder
     protected $fileCollector;
 
     /**
-     * @var \Magento\Core\Model\Resource\Theme\Collection
+     * @var \Magento\Theme\Model\Resource\Theme\Collection
      */
     protected $themeCollection;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector
-     * @param \Magento\Core\Model\Resource\Theme\Collection $themeCollection
+     * @param \Magento\Theme\Model\Resource\Theme\Collection $themeCollection
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector,
-        \Magento\Core\Model\Resource\Theme\Collection $themeCollection
+        \Magento\Theme\Model\Resource\Theme\Collection $themeCollection
     ) {
         $this->objectManager = $objectManager;
         $this->fileCollector = $fileCollector;

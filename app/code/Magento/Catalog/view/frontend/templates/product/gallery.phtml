@@ -1,32 +1,36 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $_width = $this->getImageWidth(); ?>
+<?php $_width = $block->getImageWidth(); ?>
 <div class="product-image-popup" style="width:<?php echo $_width; ?>px;">
     <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php echo __('Close Window') ?></span></a></div>
-    <?php if ($this->getPreviousImageUrl() || $this->getNextImageUrl()): ?>
+    <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()): ?>
         <div class="nav">
-          <?php if ($_prevUrl = $this->getPreviousImageUrl()): ?>
+          <?php if ($_prevUrl = $block->getPreviousImageUrl()): ?>
               <a href="<?php echo $_prevUrl ?>" class="prev">&laquo; <?php echo __('Prev') ?></a>
           <?php endif; ?>
-          <?php if ($_nextUrl = $this->getNextImageUrl()): ?>
+          <?php if ($_nextUrl = $block->getNextImageUrl()): ?>
               <a href="<?php echo $_nextUrl ?>" class="next"><?php echo __('Next') ?> &raquo;</a>
           <?php endif; ?>
         </div>
     <?php endif; ?>
-    <?php if ($_imageTitle = $this->escapeHtml($this->getCurrentImage()->getLabel())): ?>
+    <?php if ($_imageTitle = $block->escapeHtml($block->getCurrentImage()->getLabel())): ?>
         <h1 class="image-label"><?php echo $_imageTitle ?></h1>
     <?php endif; ?>
-    <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($this->getProduct(), 'image', $this->getImageFile()); ?>"<?php if ($_width): ?> width="<?php echo $_width ?>"<?php endif; ?> alt="<?php echo $this->escapeHtml($this->getCurrentImage()->getLabel()) ?>" title="<?php echo $this->escapeHtml($this->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" data-mage-init='{"catalogGallery":{}}'/>
+    <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($block->getProduct(), 'image', $block->getImageFile()); ?>"<?php if ($_width): ?> width="<?php echo $_width ?>"<?php endif; ?> alt="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" title="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" data-mage-init='{"catalogGallery":{}}'/>
     <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php echo __('Close Window') ?></span></a></div>
-    <?php if ($this->getPreviousImageUrl() || $this->getNextImageUrl()): ?>
+    <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()): ?>
         <div class="nav">
-          <?php if ($_prevUrl = $this->getPreviousImageUrl()): ?>
+          <?php if ($_prevUrl = $block->getPreviousImageUrl()): ?>
               <a href="<?php echo $_prevUrl ?>" class="prev">&laquo; <?php echo __('Prev') ?></a>
           <?php endif; ?>
-          <?php if ($_nextUrl = $this->getNextImageUrl()): ?>
+          <?php if ($_nextUrl = $block->getNextImageUrl()): ?>
               <a href="<?php echo $_nextUrl ?>" class="next"><?php echo __('Next') ?> &raquo;</a>
           <?php endif; ?>
         </div>

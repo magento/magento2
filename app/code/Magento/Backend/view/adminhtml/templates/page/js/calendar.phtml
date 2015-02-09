@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 // no notice of license for now
 ?>
@@ -13,7 +14,7 @@
  */
 ?>
 
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "jquery/ui"
@@ -47,9 +48,9 @@ require([
             showTime: false,
             showHour: false,
             showMinute: false,
-            localTimezone: <?php echo $this->getTimezoneOffsetSeconds() ?>,
-            serverTimezoneSeconds:<?php echo $this->getStoreTimestamp() ?>,
-            yearRange: '<?php echo $this->getYearRange() ?>'
+            localTimezone: <?php echo $block->getTimezoneOffsetSeconds() ?>,
+            serverTimezoneSeconds:<?php echo $block->getStoreTimestamp() ?>,
+            yearRange: '<?php echo $block->getYearRange() ?>'
         }
     });
 

@@ -1,74 +1,77 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option */
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option */
 ?>
 <script id="bundle-option-template" type="text/x-jquery-tmpl">
-    <div id="<?php echo $this->getFieldId() ?>_{{index}}" class="option-box">
-        <div class="fieldset-wrapper collapsable-wrapper opened" id="<?php echo $this->getFieldId() ?>_{{index}}-wrapper">
+    <div id="<?php echo $block->getFieldId() ?>_{{index}}" class="option-box">
+        <div class="fieldset-wrapper collapsable-wrapper opened" id="<?php echo $block->getFieldId() ?>_{{index}}-wrapper">
             <div class="fieldset-wrapper-title">
-                <strong class="title" data-toggle="collapse" data-target="#<?php echo $this->getFieldId() ?>_{{index}}-content">
+                <strong class="title" data-toggle="collapse" data-target="#<?php echo $block->getFieldId() ?>_{{index}}-content">
                     <span>{{default_title}}</span>
                 </strong>
                 <div class="actions">
-                    <?php echo $this->getOptionDeleteButtonHtml() ?>
+                    <?php echo $block->getOptionDeleteButtonHtml() ?>
                 </div>
                 <div data-role="draggable-handle" class="draggable-handle"></div>
             </div>
-            <div class="fieldset-wrapper-content in collapse" id="<?php echo $this->getFieldId() ?>_{{index}}-content">
+            <div class="fieldset-wrapper-content in collapse" id="<?php echo $block->getFieldId() ?>_{{index}}-content">
                 <fieldset class="fieldset">
                     <fieldset class="fieldset-alt">
                         <div class="field field-option-title required">
-                            <label class="label" for="id_<?php echo $this->getFieldName() ?>_{{index}}_title">
+                            <label class="label" for="id_<?php echo $block->getFieldName() ?>_{{index}}_title">
                                 <?php echo __('Option Title') ?>
                             </label>
                             <div class="control">
-                                <?php if ($this->isDefaultStore()): ?>
+                                <?php if ($block->isDefaultStore()): ?>
                                 <input class="input-text required-entry"
                                        type="text"
-                                       name="<?php echo $this->getFieldName() ?>[{{index}}][title]"
-                                       id="id_<?php echo $this->getFieldName() ?>_{{index}}_title"
+                                       name="<?php echo $block->getFieldName() ?>[{{index}}][title]"
+                                       id="id_<?php echo $block->getFieldName() ?>_{{index}}_title"
                                        value="{{title}}"
                                        data-original-value="{{title}}" />
                                 <?php else: ?>
                                 <input class="input-text required-entry"
                                        type="text"
-                                       name="<?php echo $this->getFieldName() ?>[{{index}}][default_title]"
-                                       id="id_<?php echo $this->getFieldName() ?>_{{index}}_default_title"
+                                       name="<?php echo $block->getFieldName() ?>[{{index}}][default_title]"
+                                       id="id_<?php echo $block->getFieldName() ?>_{{index}}_default_title"
                                        value="{{default_title}}"
                                        data-original-value="{{default_title}}" />
                                 <?php endif; ?>
                                 <input type="hidden"
-                                       id="<?php echo $this->getFieldId() ?>_id_{{index}}"
-                                       name="<?php echo $this->getFieldName() ?>[{{index}}][option_id]"
+                                       id="<?php echo $block->getFieldId() ?>_id_{{index}}"
+                                       name="<?php echo $block->getFieldName() ?>[{{index}}][option_id]"
                                        value="{{option_id}}" />
                                 <input type="hidden"
-                                       name="<?php echo $this->getFieldName() ?>[{{index}}][delete]"
+                                       name="<?php echo $block->getFieldName() ?>[{{index}}][delete]"
                                        value=""
                                        data-state="deleted" />
                             </div>
                         </div>
-                        <?php if (!$this->isDefaultStore()): ?>
+                        <?php if (!$block->isDefaultStore()): ?>
                         <div class="field field-option-store-view required">
-                            <label class="label" for="id_<?php echo $this->getFieldName() ?>_{{index}}_title_store">
+                            <label class="label" for="id_<?php echo $block->getFieldName() ?>_{{index}}_title_store">
                                 <?php echo __('Store View Title') ?>
                             </label>
                             <div class="control">
                                 <input class="input-text required-entry" type="text"
-                                       name="<?php echo $this->getFieldName() ?>[{{index}}][title]"
-                                       id="id_<?php echo $this->getFieldName() ?>_{{index}}_title_store"
+                                       name="<?php echo $block->getFieldName() ?>[{{index}}][title]"
+                                       id="id_<?php echo $block->getFieldName() ?>_{{index}}_title_store"
                                        value="{{title}}" />
                             </div>
                         </div>
                         <?php endif; ?>
                         <div class="field field-option-input-type required">
-                            <label class="label" for="<?php echo $this->getFieldId() . '_{{index}}_type' ?>">
+                            <label class="label" for="<?php echo $block->getFieldId() . '_{{index}}_type' ?>">
                                 <?php echo __('Input Type') ?>
                             </label>
                             <div class="control">
-                                <?php echo $this->getTypeSelectHtml() ?>
+                                <?php echo $block->getTypeSelectHtml() ?>
                             </div>
                         </div>
                         <div class="field field-option-req">
@@ -80,7 +83,7 @@
                                 <label for="field-option-req">
                                     <?php echo __('Required')?>
                                 </label>
-                                <span style="display:none"><?php echo $this->getRequireSelectHtml() ?></span>
+                                <span style="display:none"><?php echo $block->getRequireSelectHtml() ?></span>
                             </div>
                         </div>
                         <div class="field field-option-position no-display">
@@ -90,7 +93,7 @@
                             <div class="control">
                                 <input class="input-text validate-zero-or-greater"
                                        type="text"
-                                       name="<?php echo $this->getFieldName() ?>[{{index}}][position]"
+                                       name="<?php echo $block->getFieldName() ?>[{{index}}][position]"
                                        value="{{position}}"
                                        id="field-option-position" />
                             </div>
@@ -100,21 +103,21 @@
                     <div class="no-products-message">
                         <?php echo __('There are no products in this option.')?>
                     </div>
-                    <?php echo $this->getAddSelectionButtonHtml() ?>
+                    <?php echo $block->getAddSelectionButtonHtml() ?>
                 </fieldset>
             </div>
         </div>
-        <div id="<?php echo $this->getFieldId() ?>_search_{{index}}" class="selection-search"></div>
+        <div id="<?php echo $block->getFieldId() ?>_search_{{index}}" class="selection-search"></div>
     </div>
 </script>
 
-<?php echo $this->getSelectionHtml() ?>
+<?php echo $block->getSelectionHtml() ?>
 
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "jquery/jquery.tabs",
-    "js/theme",
+    "collapsable",
     "Magento_Bundle/js/bundle-product",
     "prototype",
     "mage/adminhtml/form"
@@ -137,7 +140,7 @@ function changeInputType(oldObject, oType) {
 
 Bundle.Option = Class.create();
 Bundle.Option.prototype = {
-    idLabel : '<?php echo $this->getFieldId() ?>',
+    idLabel : '<?php echo $block->getFieldId() ?>',
     templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
     templateText : '',
     itemsCount : 0,
@@ -274,13 +277,13 @@ Bundle.Option.prototype = {
 var optionIndex = 0;
 bOption = new Bundle.Option(optionTemplate);
 <?php
-    foreach ($this->getOptions() as $_option) {
+    foreach ($block->getOptions() as $_option) {
         /** @var $_option \Magento\Bundle\Model\Option */
         echo 'optionIndex = bOption.add(', $_option->toJson(), ');', PHP_EOL;
         if ($_option->getSelections()) {
             foreach ($_option->getSelections() as $_selection) {
                 /** @var $_selection \Magento\Catalog\Model\Product */
-                $_selection->setName($this->escapeHtml($_selection->getName()));
+                $_selection->setName($block->escapeHtml($_selection->getName()));
                 echo 'bSelection.addRow(optionIndex,', $_selection->toJson(), ');', PHP_EOL;
             }
         }

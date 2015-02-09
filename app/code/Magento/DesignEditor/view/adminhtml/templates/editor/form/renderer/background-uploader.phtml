@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\BackgroundUploader */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\BackgroundUploader */ ?>
 <?php
 /** @var $element \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\BackgroundUploader */
-$element = $this->getElement();
+$element = $block->getElement();
 ?>
 
 <?php $imageUploader = $element->getImageUploaderElement(); ?>
@@ -33,7 +34,7 @@ $element = $this->getElement();
         </div>
     </div>
 
-    <script type="text/javascript">
+    <script>
 require([
     "jquery",
     "Magento_DesignEditor/js/quick-style-uploader"
@@ -43,8 +44,8 @@ require([
         uploader_id: '<?php echo $imageUploader->getHtmlId(); ?>',
         container:   '<?php echo $imageUploader->getHtmlId(); ?>-uploader',
         value:       '<?php echo $imageUploader->getValue(); ?>',
-        url:         '<?php echo $this->getImageUploadUrl(); ?>',
-        remove_url:  '<?php echo $this->getImageRemoveUrl(); ?>',
+        url:         '<?php echo $block->getImageUploadUrl(); ?>',
+        remove_url:  '<?php echo $block->getImageRemoveUrl(); ?>',
         tile_available:'<?php echo $element->isTileAvailable(); ?>'
     });
 

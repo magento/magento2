@@ -2,7 +2,8 @@
 /**
  * Compiler test. Check compilation of DI definitions and code generation
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Di;
 
@@ -102,6 +103,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->_validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
         $this->_validator->add(new \Magento\Framework\Code\Validator\TypeDuplication());
         $this->_validator->add(new \Magento\Framework\Code\Validator\ArgumentSequence());
+        $this->_validator->add(new \Magento\Framework\Code\Validator\ConstructorArgumentTypes());
         $this->pluginValidator = new \Magento\Framework\Interception\Code\InterfaceValidator();
     }
 
@@ -255,8 +257,15 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         }
         $class = new \ReflectionClass($className);
         $parent = $class->getParentClass();
+        $file = false;
+        if ($parent) {
+            $basePath = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
+            $file = str_replace('\\', DIRECTORY_SEPARATOR, $parent->getFileName());
+            $basePath = str_replace('\\', DIRECTORY_SEPARATOR, $basePath);
+            $file = str_replace($basePath . DIRECTORY_SEPARATOR, '', $file);
+        }
         /** Prevent analysis of non Magento classes  */
-        if ($parent && in_array($parent->getFileName(), $allowedFiles)) {
+        if ($parent && in_array($file, $allowedFiles)) {
             $output = array_merge(
                 $this->_buildInheritanceHierarchyTree($parent->getName(), $allowedFiles),
                 [$className],

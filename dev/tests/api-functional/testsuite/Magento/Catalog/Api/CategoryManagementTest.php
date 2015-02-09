@@ -1,8 +1,12 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -36,7 +40,7 @@ class CategoryManagementTest extends WebapiAbstract
         ];
         $result = $this->_webApiCall($serviceInfo, $requestData);
 
-        for($i = 0; $i < $expectedLevel; $i++) {
+        for ($i = 0; $i < $expectedLevel; $i++) {
             $result = $result['children_data'][0];
         }
         $this->assertEquals($expectedId, $result['id']);

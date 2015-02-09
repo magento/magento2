@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer;
 
@@ -140,7 +141,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
         foreach ($options as $option) {
             $formattedOption = $this->getFormattedOptionValue($option);
             $html .= '<dt>' . $this->escapeHtml($option['label']) . '</dt>';
-            $html .= '<dd>' . $this->escapeHtml($formattedOption['value']) . '</dd>';
+            $html .= '<dd>' . $formattedOption['value'] . '</dd>';
         }
         $html .= '</dl></div>';
 

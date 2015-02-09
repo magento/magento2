@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Product view template
@@ -11,13 +14,13 @@
 ?>
 <?php
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
-$_product = $this->getProduct();
-$_call = $this->getAtCall();
-$_code = $this->getAtCode();
-$_className = $this->getCssClass();
-$_attributeLabel = $this->getAtLabel();
-$_attributeType = $this->getAtType();
-$_attributeAddAttribute = $this->getAddAttribute();
+$_product = $block->getProduct();
+$_call = $block->getAtCall();
+$_code = $block->getAtCode();
+$_className = $block->getCssClass();
+$_attributeLabel = $block->getAtLabel();
+$_attributeType = $block->getAtType();
+$_attributeAddAttribute = $block->getAddAttribute();
 
 if ($_attributeLabel && $_attributeLabel == 'default') {
     $_attributeLabel = $_product->getResource()->getAttribute($_code)->getFrontendLabel();

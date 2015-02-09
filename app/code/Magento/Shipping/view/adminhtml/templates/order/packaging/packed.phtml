@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div id="popup-window-mask" style="display:none;"></div>
 <div id="packed_window" style="display:none;" class="packed-window">
@@ -11,7 +15,7 @@
         </div>
         <div class="packed-content">
             <div class="popup-window-content">
-            <?php foreach ($this->getPackages() as $packageId => $package): ?>
+            <?php foreach ($block->getPackages() as $packageId => $package): ?>
                 <div class="package">
                     <?php $package = new \Magento\Framework\Object($package) ?>
                     <?php $params = new \Magento\Framework\Object($package->getParams()) ?>
@@ -23,7 +27,7 @@
                             <tbody>
                                 <tr>
                                     <th><?php echo __('Type') ?></th>
-                                    <td><?php echo $this->getContainerTypeByCode($params->getContainer()) ?></td>
+                                    <td><?php echo $block->getContainerTypeByCode($params->getContainer()) ?></td>
                                     <th><?php echo __('Length') ?></th>
                                     <td>
                                         <?php if ($params->getLength() != null): ?>
@@ -34,16 +38,16 @@
                                     </td>
                                     <?php if ($params->getDeliveryConfirmation() != null): ?>
                                         <th><?php echo __('Signature Confirmation') ?></th>
-                                        <td><?php echo $this->getDeliveryConfirmationTypeByCode($params->getDeliveryConfirmation()) ?></td>
+                                        <td><?php echo $block->getDeliveryConfirmationTypeByCode($params->getDeliveryConfirmation()) ?></td>
                                     <?php else: ?>
                                         <th>&nbsp;</th>
                                         <td>&nbsp;</td>
                                     <?php endif; ?>
                                 </tr>
                                 <tr>
-                                    <?php if ($this->displayCustomsValue()): ?>
+                                    <?php if ($block->displayCustomsValue()): ?>
                                         <th><?php echo __('Customs Value') ?></th>
-                                        <td><?php echo $this->displayCustomsPrice($params->getCustomsValue()) ?></td>
+                                        <td><?php echo $block->displayCustomsPrice($params->getCustomsValue()) ?></td>
                                     <?php else: ?>
                                         <th><?php echo __('Total Weight') ?></th>
                                         <td><?php echo $params->getWeight() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureWeightName($params->getWeightUnits()) ?></td>
@@ -59,9 +63,9 @@
                                     <?php if ($params->getContentType() != null): ?>
                                         <th><?php echo __('Contents') ?></th>
                                         <?php if ($params->getContentType() == 'OTHER'): ?>
-                                            <td><?php echo $this->escapeHtml($params->getContentTypeOther()) ?></td>
+                                            <td><?php echo $block->escapeHtml($params->getContentTypeOther()) ?></td>
                                         <?php else: ?>
-                                            <td><?php echo $this->getContentTypeByCode($params->getContentType()) ?></td>
+                                            <td><?php echo $block->getContentTypeByCode($params->getContentType()) ?></td>
                                         <?php endif; ?>
                                     <?php else: ?>
                                         <th>&nbsp;</th>
@@ -69,7 +73,7 @@
                                     <?php endif; ?>
                                 </tr>
                                 <tr>
-                                    <?php if ($this->displayCustomsValue()): ?>
+                                    <?php if ($block->displayCustomsValue()): ?>
                                         <th><?php echo __('Total Weight') ?></th>
                                         <td><?php echo $params->getWeight() . ' ' . $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureWeightName($params->getWeightUnits()) ?></td>
                                     <?php else: ?>
@@ -117,7 +121,7 @@
                             <tr class="headings">
                                 <th class="col-product no-link"><span><?php echo __('Product') ?></span></th>
                                 <th class="col-weight no-link"><span><?php echo __('Weight') ?></span></th>
-                                <?php if ($this->displayCustomsValue()): ?>
+                                <?php if ($block->displayCustomsValue()): ?>
                                     <th class="col-custom no-link"><span><?php echo __('Customs Value') ?></span></th>
                                 <?php endif; ?>
                                 <th class="col-qty_ordered no-link"><span><?php echo __('Qty Ordered') ?></span></th>
@@ -134,11 +138,11 @@
                                     <td class="col-weight weight ">
                                         <?php echo $item->getWeight(); ?>
                                     </td>
-                                    <?php if ($this->displayCustomsValue()): ?>
-                                        <td class="col-custom "><?php echo $this->displayCustomsPrice($item->getCustomsValue()) ?></td>
+                                    <?php if ($block->displayCustomsValue()): ?>
+                                        <td class="col-custom "><?php echo $block->displayCustomsPrice($item->getCustomsValue()) ?></td>
                                     <?php endif; ?>
                                     <td class="col-qty_ordered">
-                                        <?php echo $this->getQtyOrderedItem($item->getOrderItemId()); ?>
+                                        <?php echo $block->getQtyOrderedItem($item->getOrderItemId()); ?>
                                     </td>
                                     <td class="col-qty last">
                                         <?php echo $item->getQty()*1; ?>
@@ -153,7 +157,7 @@
             </div>
         </div>
         <div class="popup-window-buttons-set">
-            <?php echo $this->getPrintButton() ?>
+            <?php echo $block->getPrintButton() ?>
             <button type="button" class="action-ok SavePackagesBtn save" onclick="hidePackedWindow();" title="<?php echo __('Products should be added to package(s)')?>">
                 <span><?php echo __('OK') ?></span>
             </button>
@@ -161,7 +165,7 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
 require(['prototype'], function(){
 
 //<![CDATA[

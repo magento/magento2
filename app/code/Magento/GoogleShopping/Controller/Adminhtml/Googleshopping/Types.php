@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
 
@@ -92,7 +93,7 @@ class Types extends \Magento\Backend\App\Action
     public function _getStore()
     {
         $storeId = (int)$this->getRequest()->getParam('store', 0);
-        $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface');
         if ($storeId == 0) {
             $defaultStore = $storeManager->getDefaultStoreView();
             if (!$defaultStore) {

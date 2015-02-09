@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Noroute;
 
@@ -19,10 +20,10 @@ class Index extends \Magento\Framework\App\Action\Action
 
         $pageId = $this->_objectManager->get(
             'Magento\Framework\App\Config\ScopeConfigInterface',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )->getValue(
             \Magento\Cms\Helper\Page::XML_PATH_NO_ROUTE_PAGE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         /** @var \Magento\Cms\Helper\Page $pageHelper */
         $pageHelper = $this->_objectManager->get('Magento\Cms\Helper\Page');

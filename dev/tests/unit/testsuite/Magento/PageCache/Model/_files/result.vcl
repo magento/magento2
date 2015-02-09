@@ -1,9 +1,11 @@
-// @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  Copyright © 2015 Magento. All rights reserved.
+//  See COPYING.txt for license details.
     example.com:8080
 
     by ips:
     "127.0.0.1";
     "192.168.0.1";
+    "127.0.0.2";
 
     if (req.http.user-agent ~ "(?pattern)?i") {
         hash_data("value_for_pattern");

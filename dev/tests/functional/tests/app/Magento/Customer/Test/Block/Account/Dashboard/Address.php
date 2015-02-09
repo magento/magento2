@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Account\Dashboard;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class Address
@@ -25,14 +26,14 @@ class Address extends Block
      *
      * @var string
      */
-    protected $shippingAddressBlock = '.box-address-shipping';
+    protected $shippingAddressBlock = '.box-shipping-address';
 
     /**
      * Billing address block selector
      *
      * @var string
      */
-    protected $billingAddressBlock = '.box-address-billing';
+    protected $billingAddressBlock = '.box-billing-address';
 
     /**
      * Edit Default Billing Address

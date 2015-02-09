@@ -1,14 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
-<script type="text/javascript">
-    var BLANK_URL = '<?php echo $this->getViewFileUrl('blank.html') ?>';
-    var BLANK_IMG = '<?php echo $this->getViewFileUrl('spacer.gif') ?>';
-    var BASE_URL = '<?php echo $this->getUrl('*') ?>';
-    var FORM_KEY = '<?php echo $this->getFormKey() ?>';
-    var require = {
-        "baseUrl": "<?php echo $this->getViewFileUrl('/') ?>"
-    };
+<script>
+    var BASE_URL = '<?php echo $block->getUrl('*') ?>';
+    var FORM_KEY = '<?php echo $block->getFormKey() ?>';
 </script>

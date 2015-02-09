@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
@@ -14,7 +15,7 @@ $category->setId(
 )->setParentId(
     2
 )->setPath(
-    '1/2/3'
+    '1/2/333'
 )->setLevel(
     2
 )->setAvailableSortBy(

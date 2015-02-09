@@ -1,15 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if (count($this->getStores())>1): ?>
+<?php if (count($block->getStores())>1): ?>
 <div class="form-language">
     <label for="select-language"><?php echo __('Your Language:') ?></label>
     <select id="select-language" title="<?php echo __('Your Language') ?>" onchange="window.location.href=this.value" class="flags">
-    <?php foreach ($this->getStores() as $_lang): ?>
-        <?php $_selected = ($_lang->getId() == $this->getCurrentStoreId()) ? ' selected="selected"' : '' ?>
-        <option value="<?php echo $_lang->getCurrentUrl() ?>" style="background-image:url('<?php echo $this->getViewFileUrl('images/flags/flag_' . $_lang->getCode() . '.gif') ?>');"<?php echo $_selected ?>><?php echo $this->escapeHtml($_lang->getName()) ?></option>
+    <?php foreach ($block->getStores() as $_lang): ?>
+        <?php $_selected = ($_lang->getId() == $block->getCurrentStoreId()) ? ' selected="selected"' : '' ?>
+        <option value="<?php echo $_lang->getCurrentUrl() ?>" style="background-image:url('<?php echo $block->getViewFileUrl('images/flags/flag_' . $_lang->getCode() . '.gif') ?>');"<?php echo $_selected ?>><?php echo $block->escapeHtml($_lang->getName()) ?></option>
     <?php endforeach; ?>
     </select>
 </div>

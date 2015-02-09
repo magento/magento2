@@ -1,12 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 /**
  * Test class for \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable.
  *
+ * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
@@ -35,6 +37,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->_block->setProduct($this->_product);
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testGetAllowAttributes()
     {
         $attributes = $this->_block->getAllowAttributes();
@@ -45,11 +50,17 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThanOrEqual(1, $attributes->getSize());
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testHasOptions()
     {
         $this->assertTrue($this->_block->hasOptions());
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testGetAllowProducts()
     {
         $products = $this->_block->getAllowProducts();
@@ -58,7 +69,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
         }
     }
-
+    
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testGetJsonConfig()
     {
         $config = json_decode($this->_block->getJsonConfig(), true);

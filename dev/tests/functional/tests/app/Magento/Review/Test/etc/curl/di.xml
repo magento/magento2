@@ -1,10 +1,11 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Review\Test\Handler\Rating\RatingInterface" type="\Magento\Review\Test\Handler\Rating\Curl"/>
-    <preference for="Magento\Review\Test\Handler\ReviewInjectable\ReviewInjectableInterface" type="\Magento\Review\Test\Handler\ReviewInjectable\Curl"/>
+    <preference for="Magento\Review\Test\Handler\Rating\RatingInterface" type="\Magento\Review\Test\Handler\Rating\Curl" />
+    <preference for="Magento\Review\Test\Handler\Review\ReviewInterface" type="\Magento\Review\Test\Handler\Review\Curl" />
 </config>

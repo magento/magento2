@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Model\Config\Backend;
 
@@ -45,6 +46,8 @@ class Tablerate extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        $this->_tablerateFactory->create()->uploadAndImport($this);
+        /** @var \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate $tableRate */
+        $tableRate = $this->_tablerateFactory->create();
+        $tableRate->uploadAndImport($this);
     }
 }

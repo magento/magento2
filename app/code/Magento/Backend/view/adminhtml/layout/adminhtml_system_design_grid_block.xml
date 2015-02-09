@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
@@ -10,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.system.design.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">designGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Core\Model\Resource\Design\Collection</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Theme\Model\Resource\Design\Collection</argument>
                     <argument name="use_ajax" xsi:type="string">1</argument>
                     <argument name="save_parameters_in_session" xsi:type="string">1</argument>
                     <argument name="grid_url" xsi:type="url" path="*/*/grid">

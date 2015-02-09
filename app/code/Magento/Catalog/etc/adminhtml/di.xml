@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
@@ -59,10 +60,10 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Indexer\Category\Product\AbstractAction">
-        <plugin name="invalidate_pagecache_after_rows_reindex" type="Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute" />
+    <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Full">
+        <plugin name="invalidate_pagecache_after_full_reindex" type="Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute" />
     </type>
     <type name="Magento\Catalog\Model\Resource\Attribute">
-        <plugin name="invalidate_cache_after_rows_reindex" type="Magento\Catalog\Plugin\Model\Resource\Attribute\Save" />
+        <plugin name="invalidate_pagecache_after_attribute_save" type="Magento\Catalog\Plugin\Model\Resource\Attribute\Save" />
     </type>
 </config>

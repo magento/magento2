@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
@@ -11,8 +12,7 @@ return [
     ],
     'module_listener_options' => [
         'module_paths' => [
-            __DIR__ . '/../module',
-            __DIR__ . '/../vendor',
+            __DIR__ . '/../src',
         ],
         'config_glob_paths' => [
             __DIR__ . '/autoload/{,*.}{global,local}.php',

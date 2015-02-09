@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Model\Resource;
 
@@ -9,7 +10,7 @@ use Magento\TestFramework\Helper\ObjectManager;
 class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -40,7 +41,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->select = $this->getMock('Zend_Db_Select', ['from', 'where'], [], '', false);
         $this->adapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',

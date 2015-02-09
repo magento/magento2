@@ -1,15 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Product\View;
 
-use Mtf\Block\Form;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class CustomOptions
@@ -135,7 +136,7 @@ class CustomOptions extends Form
                 throw new \Exception("Can't find option: \"{$title}\"");
             }
 
-            /** @var Element $optionElement */
+            /** @var SimpleElement $optionElement */
             $optionElement = $listCustomOptions[$title];
             $typeMethod = preg_replace('/[^a-zA-Z]/', '', $option['type']);
             $getTypeData = 'get' . ucfirst(strtolower($typeMethod)) . 'Data';
@@ -177,10 +178,10 @@ class CustomOptions extends Form
     /**
      * Get data of "Field" custom option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getFieldData(Element $option)
+    protected function getFieldData(SimpleElement $option)
     {
         $price = $this->getOptionPriceNotice($option);
         $maxCharacters = $option->find($this->maxCharacters, Locator::SELECTOR_XPATH);
@@ -198,10 +199,10 @@ class CustomOptions extends Form
     /**
      * Get data of "Area" custom option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getAreaData(Element $option)
+    protected function getAreaData(SimpleElement $option)
     {
         return $this->getFieldData($option);
     }
@@ -209,10 +210,10 @@ class CustomOptions extends Form
     /**
      * Get data of "File" custom option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getFileData(Element $option)
+    protected function getFileData(SimpleElement $option)
     {
         $price = $this->getOptionPriceNotice($option);
 
@@ -231,10 +232,10 @@ class CustomOptions extends Form
     /**
      * Get data of "Drop-down" custom option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getDropdownData(Element $option)
+    protected function getDropdownData(SimpleElement $option)
     {
         $select = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'select');
         // Skip "Choose option ..."(option #1)
@@ -244,10 +245,10 @@ class CustomOptions extends Form
     /**
      * Get data of "Multiple Select" custom option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getMultipleSelectData(Element $option)
+    protected function getMultipleSelectData(SimpleElement $option)
     {
         $multiselect = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'multiselect');
         return $this->getSelectOptionsData($multiselect, 1);
@@ -256,14 +257,15 @@ class CustomOptions extends Form
     /**
      * Get data of "Radio Buttons" custom option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getRadioButtonsData(Element $option)
+    protected function getRadioButtonsData(SimpleElement $option)
     {
         $listOptions = [];
 
         $count = 1;
+        /** @var SimpleElement $option */
         $option = $option->find(sprintf($this->optionLabel, $count), Locator::SELECTOR_XPATH);
         while ($option->isVisible()) {
             $listOptions[] = $this->parseOptionText($option->getText());
@@ -279,10 +281,10 @@ class CustomOptions extends Form
     /**
      * Get data of "Checkbox" custom option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getCheckboxData(Element $option)
+    protected function getCheckboxData(SimpleElement $option)
     {
         return $this->getRadioButtonsData($option);
     }
@@ -290,10 +292,10 @@ class CustomOptions extends Form
     /**
      * Get data of "Date" custom option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getDateData(Element $option)
+    protected function getDateData(SimpleElement $option)
     {
         $price = $this->getOptionPriceNotice($option);
 
@@ -309,10 +311,10 @@ class CustomOptions extends Form
     /**
      * Get data of "Date & Time" custom option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getDateTimeData(Element $option)
+    protected function getDateTimeData(SimpleElement $option)
     {
         return $this->getDateData($option);
     }
@@ -320,10 +322,10 @@ class CustomOptions extends Form
     /**
      * Get data of "Time" custom option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getTimeData(Element $option)
+    protected function getTimeData(SimpleElement $option)
     {
         return $this->getDateData($option);
     }
@@ -331,11 +333,11 @@ class CustomOptions extends Form
     /**
      * Get data from option of select and multiselect
      *
-     * @param Element $element
+     * @param SimpleElement $element
      * @param int $firstOption
      * @return array
      */
-    protected function getSelectOptionsData(Element $element, $firstOption = 1)
+    protected function getSelectOptionsData(SimpleElement $element, $firstOption = 1)
     {
         $listOptions = [];
 
@@ -355,10 +357,10 @@ class CustomOptions extends Form
     /**
      * Get price from price-notice of custom option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getOptionPriceNotice(Element $option)
+    protected function getOptionPriceNotice(SimpleElement $option)
     {
         $priceNotice = $option->find($this->priceNotice, Locator::SELECTOR_XPATH);
         if (!$priceNotice->isVisible()) {
@@ -370,11 +372,11 @@ class CustomOptions extends Form
     /**
      * Get notice of option by number
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @param int $number
      * @return mixed
      */
-    protected function getOptionNotice(Element $option, $number)
+    protected function getOptionNotice(SimpleElement $option, $number)
     {
         $note = $option->find(sprintf($this->noteByNumber, $number), Locator::SELECTOR_XPATH);
         return $note->isVisible() ? $note->getText() : null;

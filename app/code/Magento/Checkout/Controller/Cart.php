@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller;
 
@@ -23,7 +24,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -41,7 +42,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param CustomerCart $cart
      */
@@ -49,7 +50,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         CustomerCart $cart
     ) {
@@ -74,7 +75,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
             $this->getResponse()->setRedirect($returnUrl);
         } elseif (!$this->_scopeConfig->getValue(
             'checkout/cart/redirect_to_cart',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) && !$this->getRequest()->getParam(
             'in_cart'
         ) && ($backUrl = $this->_redirect->getRefererUrl())

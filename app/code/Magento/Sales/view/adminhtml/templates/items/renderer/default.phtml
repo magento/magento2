@@ -1,24 +1,28 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php echo $this->getItem()->getName() ?>
-<div><strong><?php echo __('SKU') ?>:</strong> <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($this->escapeHtml($this->getItem()->getSku()))); ?></div>
-<?php if ($this->getOrderOptions()): ?>
+<?php echo $block->getItem()->getName() ?>
+<div><strong><?php echo __('SKU') ?>:</strong> <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getItem()->getSku()))); ?></div>
+<?php if ($block->getOrderOptions()): ?>
     <ul class="item-options">
-    <?php foreach ($this->getOrderOptions() as $option): ?>
+    <?php foreach ($block->getOrderOptions() as $option): ?>
         <li><strong><?php echo $option['label'] ?>:</strong><br />
         <?php if (is_array($option['value'])): ?>
         <?php foreach ($option['value'] as $item): ?>
-            <?php echo $this->getValueHtml($item) ?><br />
+            <?php echo $block->getValueHtml($item) ?><br />
             <?php endforeach; ?>
         <?php else: ?>
-            <?php echo $this->escapeHtml($option['value']); ?>
+            <?php echo $block->escapeHtml($option['value']); ?>
         <?php endif; ?>
         </li>
     <?php endforeach; ?>
     </ul>
 <?php endif; ?>
-<?php echo $this->escapeHtml($this->getItem()->getDescription()) ?>
+<?php echo $block->escapeHtml($block->getItem()->getDescription()) ?>

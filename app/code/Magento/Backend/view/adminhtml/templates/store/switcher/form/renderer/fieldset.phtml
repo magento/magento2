@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $_element = $this->getElement() ?>
+<?php $_element = $block->getElement() ?>
 <?php if ($_element->getFieldsetContainerId()): ?>
     <div id="<?php echo $_element->getFieldsetContainerId(); ?>">789
 <?php endif; ?>
@@ -18,10 +22,10 @@
         </legend>
         <?php echo $_element->getHeaderBar() ?>
     <?php endif; ?>
-        <?php echo $this->getHintHtml() ?>
+        <?php echo $block->getHintHtml() ?>
         <div class="tree-store-scope">
             <?php if ($_element->getComment()): ?>
-            <p class="comment"><?php echo $this->escapeHtml($_element->getComment()) ?></p>
+            <p class="comment"><?php echo $block->escapeHtml($_element->getComment()) ?></p>
             <?php endif; ?>
             <?php if ($_element->hasHtmlContent()): ?>
                <?php echo $_element->getHtmlContent(); ?>

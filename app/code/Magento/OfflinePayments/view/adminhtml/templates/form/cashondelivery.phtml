@@ -1,17 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
- * @var $this \Magento\OfflinePayments\Block\Form\Cashondelivery
+ * @var $block \Magento\OfflinePayments\Block\Form\Cashondelivery
  */
 ?>
-<?php if ($this->getInstructions()): ?>
-    <ul class="form-list checkout-agreements" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
+<?php if ($block->getInstructions()): ?>
+    <ul class="form-list checkout-agreements" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none;">
         <li>
-            <div class="<?php echo $this->getMethodCode() ?>-instructions-content agreement-content">
-                <?php echo nl2br($this->getInstructions()) ?>
+            <div class="<?php echo $block->getMethodCode() ?>-instructions-content agreement-content">
+                <?php echo nl2br($block->getInstructions()) ?>
             </div>
         </li>
     </ul>

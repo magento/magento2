@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
 
@@ -31,12 +32,12 @@ class SenderResolver implements \Magento\Framework\Mail\Template\SenderResolverI
         if (!is_array($sender)) {
             $result['name'] = $this->_scopeConfig->getValue(
                 'trans_email/ident_' . $sender . '/name',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $scopeId
             );
             $result['email'] = $this->_scopeConfig->getValue(
                 'trans_email/ident_' . $sender . '/email',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $scopeId
             );
         } else {

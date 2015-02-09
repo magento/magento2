@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
@@ -15,7 +16,7 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
     {
         $helperManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = [];
-        $this->shipmentModel = $helperManager->getObject('Magento\Sales\Model\Order\shipment', $arguments);
+        $this->shipmentModel = $helperManager->getObject('Magento\Sales\Model\Order\Shipment', $arguments);
     }
 
     public function testGetIncrementId()

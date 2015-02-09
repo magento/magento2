@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
 
@@ -99,12 +100,12 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->method('getIdentities')
             ->will($this->returnValue($identities));
 
-        /** @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
+        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
 
-        /** @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quote */
-        $quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quote */
+        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $quote->expects($this->once())->method('getAllVisibleItems')->will($this->returnValue([$item]));
 
         $block->setData('custom_quote', $quote);

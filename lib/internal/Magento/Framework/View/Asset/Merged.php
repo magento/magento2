@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset;
 
@@ -168,6 +169,6 @@ class Merged implements \Iterator
      */
     public static function getRelativeDir()
     {
-        return Minified::CACHE_VIEW_REL . '/merged';
+        return Minified\AbstractAsset::CACHE_VIEW_REL . '/merged';
     }
 }

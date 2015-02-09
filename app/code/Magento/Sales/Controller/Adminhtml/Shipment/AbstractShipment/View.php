@@ -1,12 +1,33 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+
 abstract class View extends \Magento\Backend\App\Action
 {
+    /**
+     * @var ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
+     * @param Context $context
+     * @param ForwardFactory $resultForwardFactory
+     */
+    public function __construct(
+        Context $context,
+        ForwardFactory $resultForwardFactory
+    ) {
+        parent::__construct($context);
+        $this->resultForwardFactory = $resultForwardFactory;
+    }
+
     /**
      * @return bool
      */
@@ -18,14 +39,20 @@ abstract class View extends \Magento\Backend\App\Action
     /**
      * Shipment information page
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
-        if ($shipmentId = $this->getRequest()->getParam('shipment_id')) {
-            $this->_forward('view', 'order_shipment', 'admin', ['come_from' => 'shipment']);
+        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+        $resultForward = $this->resultForwardFactory->create();
+        if ($this->getRequest()->getParam('shipment_id')) {
+            $resultForward->setController('order_shipment')
+                ->setModule('admin')
+                ->setParams(['come_from' => 'shipment'])
+                ->forward('view');
+            return $resultForward;
         } else {
-            $this->_forward('noroute');
+            return $resultForward->forward('noroute');
         }
     }
 }

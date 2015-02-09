@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->getChildHtml()): ?>
+<?php if ($block->getChildHtml()): ?>
 <div class="fieldset-wrapper order-gift-options clearfix">
     <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Gift Options') ?></span></div>
-    <?php echo $this->getChildHtml() ?>
+    <?php echo $block->getChildHtml() ?>
 </div>
 <?php endif ?>

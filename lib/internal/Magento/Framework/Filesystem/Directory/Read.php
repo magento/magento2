@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
@@ -180,15 +181,13 @@ class Read implements ReadInterface
      * Open file in read mode
      *
      * @param string $path
-     * @param string|null $protocol
      *
      * @return \Magento\Framework\Filesystem\File\ReadInterface
      */
-    public function openFile($path, $protocol = null)
+    public function openFile($path)
     {
         return $this->fileFactory->create(
             $this->driver->getAbsolutePath($this->path, $path),
-            $protocol,
             $this->driver
         );
     }
@@ -199,21 +198,14 @@ class Read implements ReadInterface
      * @param string $path
      * @param string|null $flag
      * @param resource|null $context
-     * @param string|null $protocol
      * @return string
      * @throws FilesystemException
      */
-    public function readFile($path, $flag = null, $context = null, $protocol = null)
+    public function readFile($path, $flag = null, $context = null)
     {
-        $absolutePath = $this->driver->getAbsolutePath($this->path, $path, $protocol);
+        $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+        return $this->driver->fileGetContents($absolutePath, $flag, $context);
 
-        if (is_null($protocol)) {
-            return $this->driver->fileGetContents($absolutePath, $flag, $context);
-        }
-
-        /** @var \Magento\Framework\Filesystem\File\Read $fileReader */
-        $fileReader = $this->fileFactory->create($absolutePath, $protocol, $this->driver);
-        return $fileReader->readAll($flag, $context);
     }
 
     /**

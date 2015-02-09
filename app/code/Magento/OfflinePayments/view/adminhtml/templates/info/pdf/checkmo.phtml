@@ -1,20 +1,24 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?>
+<?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?>
     {{pdf_row_separator}}
-<?php if ($this->getInfo()->getAdditionalData()): ?>
+<?php if ($block->getInfo()->getAdditionalData()): ?>
     {{pdf_row_separator}}
-    <?php if ($this->getPayableTo()): ?>
-        <?php echo __('Make Check payable to: %1', $this->escapeHtml($this->getPayableTo())) ?>
+    <?php if ($block->getPayableTo()): ?>
+        <?php echo __('Make Check payable to: %1', $block->escapeHtml($block->getPayableTo())) ?>
         {{pdf_row_separator}}
     <?php endif; ?>
-    <?php if ($this->getMailingAddress()): ?>
+    <?php if ($block->getMailingAddress()): ?>
         <?php echo __('Send Check to:') ?>
         {{pdf_row_separator}}
-        <?php echo nl2br($this->escapeHtml($this->getMailingAddress())) ?>
+        <?php echo nl2br($block->escapeHtml($block->getMailingAddress())) ?>
         {{pdf_row_separator}}
     <?php endif; ?>
 <?php endif; ?>

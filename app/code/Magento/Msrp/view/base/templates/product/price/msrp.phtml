@@ -1,36 +1,39 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Template for displaying product price at product view page, gift registry and wish-list
  *
- * @var $this \Magento\Catalog\Pricing\Render\PriceBox
+ * @var $block \Magento\Catalog\Pricing\Render\PriceBox
  */
 ?>
 <?php
 
 /** @var Magento\Msrp\Pricing\Price\MsrpPriceInterface $priceType */
-$priceType = $this->getPrice();
+$priceType = $block->getPrice();
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $this->getSaleableItem();
+$product = $block->getSaleableItem();
 $productId = $product->getId();
-$msrpPrice = $this->renderAmount(
+$msrpPrice = $block->renderAmount(
     $priceType->getCustomAmount($product->getMsrp() ?: $product->getTypeInstance()->getChildrenMsrp($product)),
     [
-        'price_id' => $this->getPriceId() ? $this->getPriceId() : 'old-price-' . $productId,
+        'price_id' => $block->getPriceId() ? $block->getPriceId() : 'old-price-' . $productId,
         'include_container' => false,
         'skip_adjustments' => true
     ]
 );
-$priceElementIdPrefix = $this->getPriceElementIdPrefix() ? $this->getPriceElementIdPrefix() : 'product-price-';
+$priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElementIdPrefix() : 'product-price-';
 
 $addToCartUrl = '';
 if ($product->isSaleable()) {
     /** @var Magento\Catalog\Block\Product\AbstractProduct $addToCartUrlGenerator */
-    $addToCartUrlGenerator = $this->getLayout()->getBlockSingleton('Magento\Catalog\Block\Product\AbstractProduct');
+    $addToCartUrlGenerator = $block->getLayout()->getBlockSingleton('Magento\Catalog\Block\Product\AbstractProduct');
     $addToCartUrl = $addToCartUrlGenerator->getAddToCartUrl(
         $product,
         ['_query' => [
@@ -47,28 +50,28 @@ if ($product->isSaleable()) {
 
 <?php if ($priceType->isShowPriceOnGesture()): ?>
     <?php
-        $priceElementId = $priceElementIdPrefix . $productId . $this->getIdSuffix();
-        $popupId = 'msrp-popup-' . $productId . $this->getRandomString(20);
+        $priceElementId = $priceElementIdPrefix . $productId . $block->getIdSuffix();
+        $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
         $data = ['addToCart' => [
             'popupId' => '#' . $popupId,
             'productName' => $product->getName(),
-            'realPrice' => $this->getRealPriceHtml(),
+            'realPrice' => $block->getRealPriceHtml(),
             'msrpPrice' => $msrpPrice,
             'priceElementId' => $priceElementId,
             'closeButtonId' => '#map-popup-close',
             'popupCartButtonId' => '#map-popup-button',
             'addToCartUrl' => $addToCartUrl,
         ]];
-        if ($this->getRequest()->getFullActionName() === 'catalog_product_view') {
+        if ($block->getRequest()->getFullActionName() === 'catalog_product_view') {
             $data['addToCart']['addToCartButton'] = '#product_addtocart_form [type=submit]';
         } else {
             $data['addToCart']['cartForm'] = '#product_addtocart_form_from_popup';
         }
     ?>
-    <span id="<?php echo $this->getPriceId() ? $this->getPriceId() : $priceElementId ?>" style="display:none"></span>
+    <span id="<?php echo $block->getPriceId() ? $block->getPriceId() : $priceElementId ?>" style="display:none"></span>
     <a href="#"
        id="<?php echo($popupId);?>"
-       data-mage-init="<?=$this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($data))?>"><?php echo __('Click for price'); ?>
+       data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($data))?>"><?php echo __('Click for price'); ?>
     </a>
 <?php else: ?>
     <span class="msrp message">
@@ -77,7 +80,7 @@ if ($product->isSaleable()) {
 <?php endif; ?>
 
 <?php if ($block->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW): ?>
-    <?php $helpLinkId = 'msrp-help-' . $productId . $this->getRandomString(20); ?>
+    <?php $helpLinkId = 'msrp-help-' . $productId . $block->getRandomString(20); ?>
     <a href="#"
        id="<?php echo $helpLinkId;?>"
        class="action show map"

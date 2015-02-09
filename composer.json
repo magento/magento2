@@ -2,13 +2,13 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.42.0-beta2",
+    "version": "0.42.0-beta6",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.4.11|~5.5.0",
+        "php": "~5.5.0|~5.6.0",
         "zendframework/zend-stdlib": "2.3.1",
         "zendframework/zend-code": "2.3.1",
         "zendframework/zend-server": "2.3.1",
@@ -31,7 +31,8 @@
         "zendframework/zend-http": "2.3.1",
         "magento/zendframework1": "1.12.9-patch1",
         "composer/composer": "1.0.0-alpha8",
-        "monolog/monolog": "1.11.0"
+        "monolog/monolog": "1.11.0",
+        "tubalmartin/cssmin": "2.4.8-p4"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.0",
@@ -73,12 +74,14 @@
         "magento/module-configurable-import-export": "self.version",
         "magento/module-configurable-product": "self.version",
         "magento/module-contact": "self.version",
+        "magento/module-cookie": "self.version",
         "magento/module-core": "self.version",
         "magento/module-cron": "self.version",
         "magento/module-currency-symbol": "self.version",
         "magento/module-customer": "self.version",
         "magento/module-customer-import-export": "self.version",
         "magento/module-design-editor": "self.version",
+        "magento/module-developer": "self.version",
         "magento/module-dhl": "self.version",
         "magento/module-directory": "self.version",
         "magento/module-downloadable": "self.version",
@@ -106,6 +109,7 @@
         "magento/module-payment": "self.version",
         "magento/module-persistent": "self.version",
         "magento/module-product-alert": "self.version",
+        "magento/module-quote": "self.version",
         "magento/module-reports": "self.version",
         "magento/module-require-js": "self.version",
         "magento/module-review": "self.version",
@@ -142,9 +146,7 @@
         "magento/language-pt_br": "self.version",
         "magento/language-zh_cn": "self.version",
         "magento/framework": "self.version",
-        "magento/project-setup": "0.1.0",
         "oyejorge/less.php": "1.7.0",
-        "symfony/yaml": "2.3.x-dev",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "components/handlebars.js": "1.3.0",
         "colinmollenhour/cache-backend-redis": "dev-master#193d377b7fb2e88595578b282fa01a62d1185abc",
@@ -167,7 +169,7 @@
             "linkorb/jsmin-php": "lib/internal/JSMin",
             "phpseclib/phpseclib": "lib/internal/phpseclib",
             "components/jquery": [
-                "lib/web/jquery/jquery.js",
+                "lib/web/jquery.js",
                 "lib/web/jquery/jquery.min.js",
                 "lib/web/jquery/jquery-migrate.js",
                 "lib/web/jquery/jquery-migrate.min.js"
@@ -178,8 +180,7 @@
                 "lib/web/jquery/jquery-ui.min.js"
             ],
             "twbs/bootstrap": [
-                "lib/web/jquery/jquery.tabs.js",
-                "lib/web/jquery/jquery.popups.js"
+                "lib/web/jquery/jquery.tabs.js"
             ],
             "tinymce/tinymce": "lib/web/tiny_mce"
         }
@@ -200,7 +201,7 @@
             "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
             "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/",
             "Magento\\ToolkitFramework\\": "dev/tools/performance-toolkit/framework/Magento/ToolkitFramework/",
-            "Magento\\Setup\\": "setup/module/Magento/Setup/src/"
+            "Magento\\Setup\\": "setup/src/Magento/Setup/"
         }
     }
 }

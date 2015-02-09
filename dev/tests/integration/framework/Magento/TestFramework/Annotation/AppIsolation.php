@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -63,8 +64,9 @@ class AppIsolation
 
         /* Determine an isolation from doc comment */
         $annotations = $test->getAnnotations();
-        if (isset($annotations['method']['magentoAppIsolation'])) {
-            $isolation = $annotations['method']['magentoAppIsolation'];
+        $annotations = array_replace((array) $annotations['class'], (array) $annotations['method']);
+        if (isset($annotations['magentoAppIsolation'])) {
+            $isolation = $annotations['magentoAppIsolation'];
             if ($isolation !== ['enabled'] && $isolation !== ['disabled']) {
                 throw new \Magento\Framework\Exception(
                     'Invalid "@magentoAppIsolation" annotation, can be "enabled" or "disabled" only.'

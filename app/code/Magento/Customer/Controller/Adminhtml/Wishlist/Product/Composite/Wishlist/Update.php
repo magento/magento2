@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist;
 
@@ -10,9 +11,26 @@ use Exception;
 class Update extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist
 {
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context);
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
      * IFrame handler for submitted configuration for wishlist item.
      *
-     * @return false
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -32,8 +50,6 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Com
         }
         $updateResult->setJsVarName($this->getRequest()->getParam('as_js_varname'));
         $this->_objectManager->get('Magento\Backend\Model\Session')->setCompositeProductResult($updateResult);
-        $this->_redirect('catalog/product/showUpdateResult');
-
-        return false;
+        return $this->resultRedirectFactory->create()->setPath('catalog/product/showUpdateResult');
     }
 }

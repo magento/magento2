@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -66,7 +67,7 @@ class Translate extends \Magento\Framework\App\Config\Value
         $types = array_keys(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_INVALID_CACHES,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         );
         if ($this->isValueChanged()) {

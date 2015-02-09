@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -16,6 +17,16 @@ class Application
      * Area code
      */
     const AREA_CODE = 'adminhtml';
+
+    /**
+     * Fixtures directory
+     */
+    const FIXTURES_DIR = '/../../../fixtures';
+
+    /**
+     * Fixtures file name pattern
+     */
+    const FIXTURE_PATTERN = '*.php';
 
     /**
      * Application object
@@ -37,9 +48,16 @@ class Application
     /**
      * List of fixtures applied to the application
      *
-     * @var array
+     * @var \Magento\ToolkitFramework\Fixture[]
      */
     protected $_fixtures = [];
+
+    /**
+     * Parameters labels
+     *
+     * @var array
+     */
+    protected $_paramLabels = [];
 
     /**
      * @var string
@@ -47,13 +65,19 @@ class Application
     protected $_applicationBaseDir;
 
     /**
+     * @var array
+     */
+    protected $_initArguments;
+
+    /**
      * @param string $applicationBaseDir
      * @param \Magento\Framework\Shell $shell
      */
-    public function __construct($applicationBaseDir, \Magento\Framework\Shell $shell)
+    public function __construct($applicationBaseDir, \Magento\Framework\Shell $shell, array $initArguments)
     {
         $this->_applicationBaseDir = $applicationBaseDir;
         $this->_shell = $shell;
+        $this->_initArguments = $initArguments;
     }
 
     /**
@@ -107,41 +131,49 @@ class Application
     }
 
     /**
-     * Work on application, so that it has all and only $fixtures applied. May require reinstall, if
-     * excessive fixtures has been applied before.
+     * Load fixtures
      *
-     * @param array $fixtures
-     *
-     * @return void
+     * @return $this
+     * @throws \Exception
      */
-    public function applyFixtures(array $fixtures)
+    public function loadFixtures()
     {
-        // Apply fixtures
-        $fixturesToApply = array_diff($fixtures, $this->_fixtures);
-        if (!$fixturesToApply) {
-            return;
+        if (!is_readable(__DIR__ . self::FIXTURES_DIR)) {
+            throw new \Exception(
+                'Fixtures set directory `' . __DIR__ . self::FIXTURES_DIR . '` is not readable or does not exists.'
+            );
         }
-
-        $this->_bootstrap();
-        foreach ($fixturesToApply as $fixtureFile) {
-            $this->applyFixture($fixtureFile);
+        $files = glob(__DIR__ . self::FIXTURES_DIR . DIRECTORY_SEPARATOR . self::FIXTURE_PATTERN);
+        foreach ($files as $file) {
+            /** @var \Magento\ToolkitFramework\Fixture $fixture */
+            $fixture = require realpath($file);
+            $this->_fixtures[$fixture->getPriority()] = $fixture;
         }
-        $this->_fixtures = $fixtures;
-
-        $this->reindex()
-            ->_updateFilesystemPermissions();
+        ksort($this->_fixtures);
+        foreach ($this->_fixtures as $fixture) {
+            $this->_paramLabels = array_merge($this->_paramLabels, $fixture->introduceParamLabels());
+        }
+        return $this;
     }
 
     /**
-     * Apply fixture file
+     * Get param labels
      *
-     * @param string $fixtureFilename
-     *
-     * @return void
+     * @return array
      */
-    public function applyFixture($fixtureFilename)
+    public function getParamLabels()
     {
-        require $fixtureFilename;
+        return $this->_paramLabels;
+    }
+
+    /**
+     * Get fixtures
+     *
+     * @return Fixture[]
+     */
+    public function getFixtures()
+    {
+        return $this->_fixtures;
     }
 
     /**
@@ -152,8 +184,11 @@ class Application
     public function getObjectManager()
     {
         if (!$this->_objectManager) {
-            $objectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
-            $this->_objectManager = $objectManagerFactory->create($_SERVER);
+            $objectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(
+                BP,
+                $this->_initArguments
+            );
+            $this->_objectManager = $objectManagerFactory->create($this->_initArguments);
             $this->_objectManager->get('Magento\Framework\App\State')->setAreaCode(self::AREA_CODE);
         }
         return $this->_objectManager;

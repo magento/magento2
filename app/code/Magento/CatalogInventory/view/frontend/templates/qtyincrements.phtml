@@ -1,14 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
- * @var $this \Magento\CatalogInventory\Block\Qtyincrements
+ * @var $block \Magento\CatalogInventory\Block\Qtyincrements
  */
 ?>
-<?php if ($this->getProductQtyIncrements()) : ?>
+<?php if ($block->getProductQtyIncrements()) : ?>
     <div class="product pricing">
-        <?php echo __('%1 is available for purchase in increments of %2', $this->getProductName(), $this->getProductQtyIncrements()) ?>
+        <?php echo __('%1 is available for purchase in increments of %2', $block->getProductName(), $block->getProductQtyIncrements()) ?>
     </div>
 <?php endif ?>

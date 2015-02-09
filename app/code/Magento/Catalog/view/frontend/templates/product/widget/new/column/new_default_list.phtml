@@ -1,46 +1,50 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if (($_products = $this->getProductCollection()) && $_products->getSize()): ?>
-    <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');?>
+<?php if (($_products = $block->getProductCollection()) && $_products->getSize()): ?>
+    <?php $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');?>
     <div class="block widget block-new-products-list">
         <div class="block-title">
             <strong><?php echo __('New Products') ?></strong>
         </div>
         <div class="block-content">
-            <?php $suffix = $this->getNameInLayout(); ?>
+            <?php $suffix = $block->getNameInLayout(); ?>
             <?php $iterator = 1; ?>
             <ol class="product-items" id="widget-new-products-<?php echo $suffix; ?>">
                 <?php foreach ($_products->getItems() as $_product): ?>
                     <?php echo($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
                     <div class="product-item-info">
                         <a class="product-item-photo" href="<?php echo $_product->getProductUrl() ?>"
-                           title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
+                           title="<?php echo $block->stripTags($_product->getName(), null, true) ?>">
                             <?php echo $imageBlock->init($_product, 'side_column_widget_product_thumbnail')->toHtml() ?>
                         </a>
                         <div class="product-item-details">
                             <strong class="product-item-name">
                                 <a href="<?php echo $_product->getProductUrl() ?>"
-                                   title="<?php echo $this->stripTags($_product->getName(), null, true) ?>)" class="product-item-link">
+                                   title="<?php echo $block->stripTags($_product->getName(), null, true) ?>)" class="product-item-link">
                                     <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
                                 </a>
                             </strong>
-                            <?php echo $this->getProductPriceHtml($_product, '-widget-new-' . $suffix) ?>
+                            <?php echo $block->getProductPriceHtml($_product, '-widget-new-' . $suffix) ?>
                             <div class="product-item-actions">
                                 <div class="actions-primary">
                                     <?php if ($_product->isSaleable()): ?>
                                         <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
                                             <button type="button" title="<?php echo __('Add to Cart') ?>"
                                                     class="action tocart primary"
-                                                    data-mage-init='{"redirectUrl":{"url":"<?php echo $this->getAddToCartUrl($_product) ?>"}}'>
+                                                    data-mage-init='{"redirectUrl":{"url":"<?php echo $block->getAddToCartUrl($_product) ?>"}}'>
                                                 <span><?php echo __('Add to Cart') ?></span>
                                             </button>
                                         <?php else: ?>
                                             <?php
                                                 $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
-                                                $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
+                                                $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
                                         ?>
                                             <button type="button" title="<?php echo __('Add to Cart') ?>"
                                                     class="action tocart primary"
@@ -66,7 +70,7 @@
                     <?php echo($iterator == count($_products->getItems())+1) ? '</li>' : '' ?>
                 <?php endforeach; ?>
             </ol>
-            <?php echo $this->getPagerHtml() ?>
+            <?php echo $block->getPagerHtml() ?>
         </div>
     </div>
 <?php endif; ?>

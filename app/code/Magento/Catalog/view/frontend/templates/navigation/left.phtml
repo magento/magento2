@@ -1,18 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Category left navigation
  *
- * @var $this \Magento\Catalog\Block\Navigation
+ * @var $block \Magento\Catalog\Block\Navigation
  */
 ?>
-<?php if (!$this->getCategory()) {
+<?php if (!$block->getCategory()) {
     return;
 } ?>
-<?php $_categories = $this->getCurrentChildCategories(); ?>
+<?php $_categories = $block->getCurrentChildCategories(); ?>
 <?php $_count = is_array($_categories) ? count($_categories) : $_categories->count(); ?>
 <?php if ($_count): ?>
     <div class="block filter">
@@ -28,7 +31,7 @@
                         <?php foreach ($_categories as $_category): ?>
                             <?php if ($_category->getIsActive()): ?>
                                 <li class="item">
-                                    <a href="<?php echo $this->getCategoryUrl($_category) ?>"<?php if ($this->isCategoryActive($_category)): ?> class="current"<?php endif; ?>><?php echo $this->escapeHtml($_category->getName()) ?></a>
+                                    <a href="<?php echo $block->getCategoryUrl($_category) ?>"<?php if ($block->isCategoryActive($_category)): ?> class="current"<?php endif; ?>><?php echo $block->escapeHtml($_category->getName()) ?></a>
                                     <span class="count"><?php echo $_category->getProductCount() ?></span>
                                 </li>
                             <?php endif; ?>

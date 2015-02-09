@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
@@ -18,7 +19,7 @@
             </container>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Order\Invoice" name="sales.order.invoice" cacheable="false">
+            <block class="Magento\Sales\Block\Order\Invoice" name="sales.order.invoice" cacheable="false" after="sales.order.info.links">
                 <block class="Magento\Sales\Block\Order\Invoice\Items" name="invoice_items" template="order/invoice/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.invoice.renderers" as="renderer.list"/>
                     <block class="Magento\Sales\Block\Order\Invoice\Totals" name="invoice_totals" template="order/totals.phtml">

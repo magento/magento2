@@ -1,24 +1,27 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /* @var $this \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Select */ ?>
-<?php $_option      = $this->getOption(); ?>
+<?php /* @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Select */ ?>
+<?php $_option      = $block->getOption(); ?>
 <?php $_selections  = $_option->getSelections(); ?>
 <?php $_default     = $_option->getDefaultSelection(); ?>
 <?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
-<?php list($_defaultQty, $_canChangeQty) = $this->getDefaultValues(); ?>
+<?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
 <div class="field option<?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?><?php if ($_option->getRequired()) echo ' required' ?>">
-    <label class="label"><span><?php echo $this->escapeHtml($_option->getTitle()) ?></span></label>
+    <label class="label"><span><?php echo $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control">
-        <?php if ($this->showSingle()): ?>
-            <?php echo $this->getSelectionTitlePrice($_selections[0]) ?>
+        <?php if ($block->showSingle()): ?>
+            <?php echo $block->getSelectionTitlePrice($_selections[0]) ?>
             <input type="hidden" name="bundle_option[<?php echo $_option->getId() ?>]"
                    value="<?php echo $_selections[0]->getSelectionId() ?>"
-                   price="<?php echo $this->getSelectionPrice($_selections[0]) ?>" />
+                   price="<?php echo $block->getSelectionPrice($_selections[0]) ?>" />
         <?php else:?>
             <select id="bundle-option-<?php echo $_option->getId() ?>"
                     name="bundle_option[<?php echo $_option->getId() ?>]"
@@ -27,9 +30,9 @@
                 <option value=""><?php echo __('Choose a selection...') ?></option>
                 <?php foreach ($_selections as $_selection): ?>
                     <option
-                        value="<?php echo $_selection->getSelectionId() ?>"<?php if ($this->isSelected($_selection)) echo ' selected="selected"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?>
-                        price="<?php echo $this->getSelectionPrice($_selection) ?>"
-                        qtyId="bundle-option-<?php echo $_option->getId() ?>-qty-input"><?php echo $this->getSelectionTitlePrice($_selection, false) ?></option>
+                        value="<?php echo $_selection->getSelectionId() ?>"<?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?>
+                        price="<?php echo $block->getSelectionPrice($_selection) ?>"
+                        qtyId="bundle-option-<?php echo $_option->getId() ?>-qty-input"><?php echo $block->getSelectionTitlePrice($_selection, false) ?></option>
                 <?php endforeach; ?>
             </select>
         <?php endif; ?>

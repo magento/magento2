@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-$element = $this->getElement();
+$element = $block->getElement();
 $fieldId = ($element->getHtmlContainerId()) ? ' id="' . $element->getHtmlContainerId() . '"' : '';
 $fieldClass = "field field-{$element->getId()} {$element->getCssClass()}";
 $fieldClass .= ($element->getRequired()) ? ' required' : '';
-$fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $this->getUiId('form-field', $element->getId());
+$fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId('form-field', $element->getId());
 ?>
 
 <div<?php echo $fieldAttributes ?>>
@@ -16,18 +20,18 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $this->getUiId('
     <div class="control">
         <div class="rule-tree">
             <div class="rule-tree-wrapper">
-                <?php echo $this->getInputHtml() ?>
+                <?php echo $block->getInputHtml() ?>
             </div>
         </div>
     </div>
 </div>
 
 
-<script type="text/javascript">
+<script>
     require([
         "Magento_Rule/rules",
         "prototype"
     ], function(VarienRulesForm){
-        window.<?php echo $this->getHtmlId() ?> = new VarienRulesForm('<?php echo $this->getHtmlId() ?>', '<?php echo $this->getNewChildUrl() ?>');
+        window.<?php echo $block->getHtmlId() ?> = new VarienRulesForm('<?php echo $block->getHtmlId() ?>', '<?php echo $block->getNewChildUrl() ?>');
     });
 </script>

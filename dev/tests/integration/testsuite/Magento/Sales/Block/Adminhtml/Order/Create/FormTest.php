@@ -2,7 +2,8 @@
 /**
  * Test class for \Magento\Sales\Block\Adminhtml\Order\Create\Form
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
@@ -31,7 +32,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $sessionMock->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
 
-        $quote = $this->_objectManager->create('Magento\Sales\Model\Quote')->load(1);
+        $quote = $this->_objectManager->create('Magento\Quote\Model\Quote')->load(1);
         $sessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quote));
 
         $sessionMock->expects($this->any())->method('getStoreId')->will($this->returnValue(1));

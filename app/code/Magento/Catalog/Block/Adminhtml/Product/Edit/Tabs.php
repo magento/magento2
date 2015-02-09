@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -71,6 +72,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -117,6 +119,9 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareLayout()
     {

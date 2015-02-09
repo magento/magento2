@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Test class for \Magento\Framework\Session\Config
@@ -363,7 +366,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 true,
                 [
                     'session.save_handler' => 'files',
-                    'session.save_path' => null,
                     'session.cache_limiter' => 'files',
                     'session.cookie_lifetime' => 7200,
                     'session.cookie_path' => '/',
@@ -376,7 +378,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 false,
                 [
                     'session.save_handler' => 'files',
-                    'session.save_path' => null,
                     'session.cache_limiter' => 'files',
                     'session.cookie_httponly' => false,
                 ],
@@ -386,7 +387,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 true,
                 [
                     'session.save_handler' => 'files',
-                    'session.save_path' => null,
                     'session.cache_limiter' => 'files',
                     'session.cookie_lifetime' => 3600,
                     'session.cookie_path' => '/',
@@ -465,7 +465,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             [
                 'scopeConfig' => $this->configMock,
                 'validatorFactory' => $this->validatorFactoryMock,
-                'scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'scopeType' => \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 'cacheLimiter' => \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER,
                 'lifetimePath' => 'test_web/test_cookie/test_cookie_lifetime',
                 'request' => $this->requestMock,

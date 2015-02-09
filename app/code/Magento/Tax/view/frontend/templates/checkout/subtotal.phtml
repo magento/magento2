@@ -1,36 +1,40 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /**
- * @var $this \Magento\Tax\Block\Checkout\Subtotal
+ * @var $block \Magento\Tax\Block\Checkout\Subtotal
  * @see \Magento\Tax\Block\Checkout\Subtotal
  */
 ?>
-<?php if ($this->displayBoth()):?>
+<?php if ($block->displayBoth()):?>
 <tr class="totals sub excl">
-    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
+    <th style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
         <?php echo __('Subtotal (Excl. Tax)') ?>
     </th>
-    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml(__('Subtotal (Excl. Tax)')); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValueExclTax()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml(__('Subtotal (Excl. Tax)')); ?>">
+        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValueExclTax()) ?>
     </td>
 </tr>
 <tr class="totals sub incl">
-    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
+    <th style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
         <?php echo __('Subtotal (Incl. Tax)') ?>
     </th>
-    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml(__('Subtotal (Incl. Tax)')); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValueInclTax()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml(__('Subtotal (Incl. Tax)')); ?>">
+        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValueInclTax()) ?>
     </td>
 </tr>
 <?php else : ?>
 <tr class="totals sub">
-    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
-        <?php echo $this->getTotal()->getTitle() ?>
+    <th style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
+        <?php echo $block->getTotal()->getTitle() ?>
     </th>
-    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml($this->getTotal()->getTitle()); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValue()) ?>
+    <td style="<?php echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
+        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?>
     </td>
 </tr>
 <?php endif;?>

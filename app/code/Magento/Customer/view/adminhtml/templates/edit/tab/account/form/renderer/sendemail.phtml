@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-/** @var \Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Sendemail $this */
-$element = $this->getElement();
+/** @var \Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Sendemail $block */
+$element = $block->getElement();
 ?>
 
 <div class="field field-<?php echo $element->getId() ?>">
@@ -15,22 +19,22 @@ $element = $this->getElement();
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
 require(['prototype'], function(){
 
     document.observe('dom:loaded', function() {
-        $('<?php echo $this->getFormHtmlId() ?>website_id').disableSendemail = function() {
-            $('<?php echo $this->getFormHtmlId() ?>sendemail').disabled = ('' == this.value || '0' == this.value);
-        <?php if (!$this->isSingleStoreMode()): ?>
-            $('<?php echo $this->getFormHtmlId() ?>sendemail_store_id').disabled=(''==this.value || '0'==this.value);
+        $('<?php echo $block->getFormHtmlId() ?>website_id').disableSendemail = function() {
+            $('<?php echo $block->getFormHtmlId() ?>sendemail').disabled = ('' == this.value || '0' == this.value);
+        <?php if (!$block->isSingleStoreMode()): ?>
+            $('<?php echo $block->getFormHtmlId() ?>sendemail_store_id').disabled=(''==this.value || '0'==this.value);
         <?php endif; ?>
-        }.bind($('<?php echo $this->getFormHtmlId() ?>website_id'));
+        }.bind($('<?php echo $block->getFormHtmlId() ?>website_id'));
         Event.observe(
-            '<?php echo $this->getFormHtmlId() ?>website_id',
+            '<?php echo $block->getFormHtmlId() ?>website_id',
             'change',
-            $('<?php echo $this->getFormHtmlId() ?>website_id').disableSendemail
+            $('<?php echo $block->getFormHtmlId() ?>website_id').disableSendemail
         );
-        $('<?php echo $this->getFormHtmlId() ?>website_id').disableSendemail();
+        $('<?php echo $block->getFormHtmlId() ?>website_id').disableSendemail();
     });
 
 });

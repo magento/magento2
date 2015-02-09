@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
 
@@ -102,5 +103,25 @@ class GraphTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $model->dfs(1, 3, \Magento\Framework\Data\Graph::DIRECTIONAL));
         $this->assertEquals([], $model->dfs(3, 1, \Magento\Framework\Data\Graph::INVERSE));
         $this->assertEquals([1, 2, 3], $model->dfs(1, 3, \Magento\Framework\Data\Graph::NON_DIRECTIONAL));
+    }
+
+    public function testFindPathsToReachableNodes()
+    {
+        $model = new \Magento\Framework\Data\Graph([1, 2, 3, 4, 5], [[1, 2], [1, 3], [1, 4], [4, 5]]);
+
+        // directional
+        $paths = $model->findPathsToReachableNodes(1);
+        ksort($paths);
+        $this->assertEquals([1 => [1], 2 => [1, 2], 3 => [1, 3], 4 => [1, 4], 5 => [1, 4, 5]], $paths);
+
+        // inverse
+        $paths = $model->findPathsToReachableNodes(5, \Magento\Framework\Data\Graph::INVERSE);
+        ksort($paths);
+        $this->assertEquals([1 => [5, 4, 1], 4 => [5, 4], 5 => [5]], $paths);
+
+        // non-directional
+        $paths = $model->findPathsToReachableNodes(5, \Magento\Framework\Data\Graph::NON_DIRECTIONAL);
+        ksort($paths);
+        $this->assertEquals([1 => [5, 4, 1], 2 => [5, 4, 1, 2], 3 => [5, 4, 1, 3], 4 => [5, 4], 5 => [5]], $paths);
     }
 }

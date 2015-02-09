@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
@@ -14,6 +15,7 @@
                 <block class="Magento\Newsletter\Block\Adminhtml\Queue\Preview\Form" name="preview_form"/>
                 <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher" template="Magento_Backend::store/switcher.phtml"/>
             </block>
+            <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config"/>
         </referenceContainer>
     </body>
 </page>

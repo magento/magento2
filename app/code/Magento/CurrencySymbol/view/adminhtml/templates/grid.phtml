@@ -1,18 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
- * @var $this \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol
+ * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol
  */
 ?>
 
-<?php $this->getCurrencySymbolsData();?>
+<?php $block->getCurrencySymbolsData();?>
 
-<form id="currency-symbols-form" action="<?php echo $this->getFormActionUrl() ?>" method="post">
-    <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
+<form id="currency-symbols-form" action="<?php echo $block->getFormActionUrl() ?>" method="post">
+    <input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>" />
 
     <div class="grid">
         <table class="data">
@@ -23,16 +27,16 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($this->getCurrencySymbolsData() as $code => $data): ?>
+                <?php foreach ($block->getCurrencySymbolsData() as $code => $data): ?>
                 <tr>
                     <td class="col-currency">
                         <label class="label" for="custom_currency_symbol<?php echo $code; ?>"><?php echo $code; ?> (<?php echo $data['displayName']; ?>)</label>
                     </td>
                     <td class="col-symbol">
                         <div class="control">
-                            <input id="custom_currency_symbol<?php echo $code; ?>" class=" required-entry input-text" type="text" value="<?php echo $this->escapeQuote($data['displaySymbol']); ?>"<?php echo $data['inherited'] ? ' disabled="disabled"' : '';?> name="custom_currency_symbol[<?php echo $code; ?>]">
-                            <input id="custom_currency_symbol_inherit<?php echo $code; ?>" class="checkbox config-inherit" type="checkbox" onclick="toggleUseDefault(<?php echo '\'' . $code . '\',\'' . $this->escapeQuote($data['parentSymbol'], true) . '\''; ?>)"<?php echo $data['inherited'] ? ' checked="checked"' : ''; ?> value="1" name="inherit_custom_currency_symbol[<?php echo $code; ?>]">
-                            <label class="label" for="custom_currency_symbol_inherit<?php echo $code; ?>"><?php echo $this->getInheritText(); ?></label>
+                            <input id="custom_currency_symbol<?php echo $code; ?>" class=" required-entry input-text" type="text" value="<?php echo $block->escapeQuote($data['displaySymbol']); ?>"<?php echo $data['inherited'] ? ' disabled="disabled"' : '';?> name="custom_currency_symbol[<?php echo $code; ?>]">
+                            <input id="custom_currency_symbol_inherit<?php echo $code; ?>" class="checkbox config-inherit" type="checkbox" onclick="toggleUseDefault(<?php echo '\'' . $code . '\',\'' . $block->escapeQuote($data['parentSymbol'], true) . '\''; ?>)"<?php echo $data['inherited'] ? ' checked="checked"' : ''; ?> value="1" name="inherit_custom_currency_symbol[<?php echo $code; ?>]">
+                            <label class="label" for="custom_currency_symbol_inherit<?php echo $code; ?>"><?php echo $block->getInheritText(); ?></label>
                         </div>
                     </td>
                 </tr>
@@ -41,7 +45,7 @@
         </table>
     </div>
 </form>
-<script type="text/javascript">
+<script>
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('#currency-symbols-form').mage('form').mage('validation');

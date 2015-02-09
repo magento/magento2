@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php if ($websites = $this->getWebsites()): ?>
+<?php if ($websites = $block->getWebsites()): ?>
 <div class="field field-store-switcher">
     <label class="label" for="store_switcher"><?php echo __('Choose Store View:') ?></label>
     <div class="control">
@@ -13,7 +17,7 @@
                 <?php $showWebsite = false; ?>
                 <?php foreach ($website->getGroups() as $group): ?>
                     <?php $showGroup = false; ?>
-                    <?php foreach ($this->getStores($group) as $store): ?>
+                    <?php foreach ($block->getStores($group) as $store): ?>
                         <?php if ($showWebsite == false): ?>
                             <?php $showWebsite = true; ?>
                             <optgroup label="<?php echo $website->getName() ?>"></optgroup>
@@ -22,7 +26,7 @@
                             <?php $showGroup = true; ?>
                             <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $group->getName() ?>">
                         <?php endif; ?>
-                        <option value="<?php echo $store->getId() ?>"<?php if ($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $store->getName() ?></option>
+                        <option value="<?php echo $store->getId() ?>"<?php if ($block->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $store->getName() ?></option>
                     <?php endforeach; ?>
                     <?php if ($showGroup): ?>
                         </optgroup>
@@ -31,9 +35,9 @@
             <?php endforeach; ?>
         </select>
     </div>
-    <?php echo $this->getHintHtml() ?>
+    <?php echo $block->getHintHtml() ?>
 </div>
-<script type="text/javascript">
+<script>
 require(['prototype'], function(){
 
 //<![CDATA[

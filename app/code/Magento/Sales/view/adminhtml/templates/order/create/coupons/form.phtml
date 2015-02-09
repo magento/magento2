@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -14,15 +18,15 @@
     <fieldset>
         <div class="content">
             <input type="text" class="input-text" id="coupons:code" value="" name="coupon_code" />
-            <?php echo $this->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?>
-            <?php if ($this->getCouponCode()): ?>
-            <p><strong><?php echo $this->escapeHtml($this->getCouponCode()) ?></strong> [<a href="#" onclick="order.applyCoupon(''); return false;" title="<?php echo __('Remove Coupon Code') ?>"><?php echo __('Remove') ?></a>]</p>
+            <?php echo $block->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?>
+            <?php if ($block->getCouponCode()): ?>
+            <p><strong><?php echo $block->escapeHtml($block->getCouponCode()) ?></strong> [<a href="#" onclick="order.applyCoupon(''); return false;" title="<?php echo __('Remove Coupon Code') ?>"><?php echo __('Remove') ?></a>]</p>
             <?php endif; ?>
-            <script type="text/javascript">
+            <script>
             require(["Magento_Sales/order/create/form"], function(){
 
-                order.overlay('shipping-method-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
-                order.overlay('address-shipping-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
+                order.overlay('shipping-method-overlay', <?php if ($block->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
+                order.overlay('address-shipping-overlay', <?php if ($block->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
 
             });
 </script>

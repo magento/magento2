@@ -1,39 +1,43 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<!-- <?php if ($this->getTitle()): ?>
-    <h3><?php echo $this->getTitle() ?></h3>
+<!-- <?php if ($block->getTitle()): ?>
+    <h3><?php echo $block->getTitle() ?></h3>
 <?php endif ?> -->
 <?php if (!empty($tabs)): ?>
-<div id="<?php echo $this->getId() ?>">
+<div id="<?php echo $block->getId() ?>">
 <ul  class="tabs-horiz">
 <?php foreach ($tabs as $_tab): ?>
-    <?php $_tabClass = 'tab-item-link ' . $this->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
-    <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $this->getTabUrl($_tab) != '#') ? 'link' : '' ?>
-    <?php $_tabHref = $this->getTabUrl($_tab) == '#' ? '#' . $this->getTabId($_tab) . '_content' : $this->getTabUrl($_tab) ?>
+    <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
+    <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
+    <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
     <li>
-        <a href="<?php echo $_tabHref?>" id="<?php echo $this->getTabId($_tab) ?>" title="<?php echo $this->getTabTitle($_tab) ?>" class="<?php $_tabClass ?>" data-tab-type="<?php $_tabType ?>">
+        <a href="<?php echo $_tabHref?>" id="<?php echo $block->getTabId($_tab) ?>" title="<?php echo $block->getTabTitle($_tab) ?>" class="<?php $_tabClass ?>" data-tab-type="<?php $_tabType ?>">
             <span>
                 <span class="changed" title="<?php echo __('The information in this tab has been changed.') ?>"></span>
                 <span class="error" title="<?php echo __('This tab contains invalid data. Please solve the problem before saving.') ?>"></span>
                 <span class="loader" title="<?php echo __('Loading...') ?>"></span>
-                <?php echo $this->getTabLabel($_tab) ?>
+                <?php echo $block->getTabLabel($_tab) ?>
             </span>
         </a>
-        <div id="<?php echo $this->getTabId($_tab) ?>_content" style="display:none"><?php echo $this->getTabContent($_tab) ?></div>
+        <div id="<?php echo $block->getTabId($_tab) ?>_content" style="display:none"><?php echo $block->getTabContent($_tab) ?></div>
     </li>
 <?php endforeach; ?>
 </ul>
 </div>
-<script type="text/javascript">
+<script>
 require(["jquery","mage/backend/tabs"], function($){
     $(function() {
-        $('#<?php echo $this->getId() ?>').tabs({
-            active: '<?php echo $this->getActiveTabId() ?>',
-            destination: '#<?php echo $this->getDestElementId() ?>',
-            shadowTabs: <?php echo $this->getAllShadowTabs()?>
+        $('#<?php echo $block->getId() ?>').tabs({
+            active: '<?php echo $block->getActiveTabId() ?>',
+            destination: '#<?php echo $block->getDestElementId() ?>',
+            shadowTabs: <?php echo $block->getAllShadowTabs()?>
         });
     });
 });

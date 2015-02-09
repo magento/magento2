@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->isPossibleOnepageCheckout()):?>
+<?php if ($block->isPossibleOnepageCheckout()):?>
     <button type="button"
             title="<?php echo __('Proceed to Checkout') ?>"
-            class="action primary checkout<?php echo($this->isDisabled()) ? ' disabled' : ''; ?>"
-            <?php if ($this->isDisabled()):?>disabled="disabled"<?php endif; ?>
-            onclick="window.location='<?php echo $this->getCheckoutUrl() ?>';">
+            class="action primary checkout<?php echo($block->isDisabled()) ? ' disabled' : ''; ?>"
+            <?php if ($block->isDisabled()):?>disabled="disabled"<?php endif; ?>
+            onclick="window.location='<?php echo $block->getCheckoutUrl() ?>';">
                 <span><?php echo __('Proceed to Checkout') ?></span>
     </button>
 <?php endif?>

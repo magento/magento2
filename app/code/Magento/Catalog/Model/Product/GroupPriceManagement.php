@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model\Product;
@@ -38,13 +39,13 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     protected $config;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\Data\ProductGroupPriceDataBuilder $groupPriceBuilder
      * @param GroupRepositoryInterface $groupRepository
      * @param PriceModifier $priceModifier
@@ -56,7 +57,7 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
         GroupRepositoryInterface $groupRepository,
         \Magento\Catalog\Model\Product\PriceModifier $priceModifier,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->productRepository = $productRepository;
         $this->groupPriceBuilder = $groupPriceBuilder;
@@ -68,6 +69,8 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function add($productSku, $customerGroupId, $price)
     {
@@ -78,7 +81,8 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
         $product = $this->productRepository->get($productSku, true);
         $groupPrices = $product->getData('group_price');
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $found = false;
@@ -122,7 +126,8 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     {
         $product = $this->productRepository->get($productSku, true);
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $this->priceModifier->removeGroupPrice($product, $customerGroupId, $websiteIdentifier);
@@ -136,7 +141,8 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     {
         $product = $this->productRepository->get($productSku, true);
         $priceKey = 'website_price';
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) == 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        if ($value == 0) {
             $priceKey = 'price';
         }
 

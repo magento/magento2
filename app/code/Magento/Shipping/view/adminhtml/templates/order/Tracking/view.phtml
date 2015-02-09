@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this Magento\Shipping\Block\Adminhtml\Order\Tracking\View */ ?>
+<?php /** @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking\View */ ?>
 <table cellspacing="0" class="data-table" id="shipment_tracking_info">
     <thead>
         <tr class="headings">
@@ -17,37 +21,37 @@
         <tr>
             <td class="col-carrier">
                 <select name="carrier" class="select" onchange="selectCarrier(this)">
-                    <?php foreach ($this->getCarriers() as $_code => $_name): ?>
-                    <option value="<?php echo $_code ?>"><?php echo $this->escapeHtml($_name) ?></option>
+                    <?php foreach ($block->getCarriers() as $_code => $_name): ?>
+                    <option value="<?php echo $_code ?>"><?php echo $block->escapeHtml($_name) ?></option>
                     <?php endforeach; ?>
                 </select>
             </td>
             <td class="col-title"><input class="input-text" type="text" id="tracking_title" name="title" value="" /></td>
             <td class="col-number"><input class="input-text" type="text" id="tracking_number" name="number" value="" /></td>
-            <td class="col-delete last"><?php echo $this->getSaveButtonHtml() ?></td>
+            <td class="col-delete last"><?php echo $block->getSaveButtonHtml() ?></td>
         </tr>
     </tfoot>
-<?php if ($_tracks = $this->getShipment()->getAllTracks()): ?>
+<?php if ($_tracks = $block->getShipment()->getAllTracks()): ?>
     <tbody>
     <?php $i = 0; foreach ($_tracks as $_track):$i++ ?>
         <tr class="<?php echo($i%2 == 0) ? 'even' : 'odd' ?>">
-            <td class="col-carrier"><?php echo $this->escapeHtml($this->getCarrierTitle($_track->getCarrierCode())) ?></td>
-            <td class="col-title"><?php echo $this->escapeHtml($_track->getTitle()) ?></td>
+            <td class="col-carrier"><?php echo $block->escapeHtml($block->getCarrierTitle($_track->getCarrierCode())) ?></td>
+            <td class="col-title"><?php echo $block->escapeHtml($_track->getTitle()) ?></td>
             <td class="col-number">
                 <?php if ($_track->isCustom()): ?>
-                <?php echo $this->escapeHtml($_track->getNumber()) ?>
+                <?php echo $block->escapeHtml($_track->getNumber()) ?>
                 <?php else: ?>
-                <a href="#" onclick="popWin('<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_track) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?php echo $this->escapeHtml($_track->getNumber()) ?></a>
+                <a href="#" onclick="popWin('<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_track) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?php echo $block->escapeHtml($_track->getNumber()) ?></a>
                 <div id="shipment_tracking_info_response_<?php echo $_track->getId() ?>"></div>
                 <?php endif; ?>
             </td>
-            <td class="col-delete last"><a class="action- delete" href="#" onclick="deleteTrackingNumber('<?php echo $this->getRemoveUrl($_track) ?>'); return false;"><span><?php echo __('Delete') ?></span></a></td>
+            <td class="col-delete last"><a class="action- delete" href="#" onclick="deleteTrackingNumber('<?php echo $block->getRemoveUrl($_track) ?>'); return false;"><span><?php echo __('Delete') ?></span></a></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 <?php endif; ?>
 </table>
-<script type="text/javascript">
+<script>
 require(['prototype'], function(){
 
 //<![CDATA[

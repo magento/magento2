@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -38,12 +39,13 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
             } else {
                 $inputField = '<input value="%s" id="%s_hidden" type="hidden" class="required-entry" />';
                 $html .= sprintf($inputField, $this->getValue(), $this->getHtmlId());
-                $html .= '<script type="text/javascript">
+                $html .= '<script>require(["prototype"], function(){
                     syncOnchangeValue(\'' .
                     $this->getHtmlId() .
                     '\', \'' .
                     $this->getHtmlId() .
                     '_hidden\');
+                });
                 </script>';
             }
         } else {

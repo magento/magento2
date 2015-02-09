@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order;
 
@@ -103,6 +104,7 @@ class Statuses extends \Magento\Backend\Block\System\Config\Form\Fieldset
      * @param string $id
      * @param string $status
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getFieldHtml($fieldset, $id, $status)
     {

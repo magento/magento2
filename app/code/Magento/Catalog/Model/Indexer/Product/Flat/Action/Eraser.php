@@ -2,7 +2,8 @@
 /**
  * Flat item ereaser. Used to clear items from flat table
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
@@ -19,19 +20,19 @@ class Eraser
     protected $connection;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->productIndexerHelper = $productHelper;
         $this->connection = $resource->getConnection('default');

@@ -1,20 +1,24 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php /** @var \Magento\Tax\Pricing\Render\Adjustment $this */ ?>
+<?php /** @var \Magento\Tax\Pricing\Render\Adjustment $block */ ?>
 
 <?php
 //getAdjustmentCode
 ?>
 
-<?php if ($this->displayBothPrices()): ?>
-    <span id="<?php echo $this->buildIdWithPrefix('price-excluding-tax-') ?>"
-          data-label="<?php echo $this->escapeHtml(__('Excl. Tax')); ?>"
-          data-price-amount="<?php echo $this->getRawAmount() ?>"
+<?php if ($block->displayBothPrices()): ?>
+    <span id="<?php echo $block->buildIdWithPrefix('price-excluding-tax-') ?>"
+          data-label="<?php echo $block->escapeHtml(__('Excl. Tax')); ?>"
+          data-price-amount="<?php echo $block->getRawAmount() ?>"
           data-price-type="basePrice"
           class="price-wrapper price-excluding-tax">
-        <span class="price"><?php echo $this->getDisplayAmountExclTax() ?></span></span>
+        <span class="price"><?php echo $block->getDisplayAmountExclTax() ?></span></span>
 <?php endif; ?>

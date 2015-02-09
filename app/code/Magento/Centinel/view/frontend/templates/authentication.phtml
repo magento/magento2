@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->getAuthenticationStart()):?>
-    <div class="centinel" id="centinel-authenticate-block" data-mage-init='{"centinelAuthenticate": {"frameUrl": "<?php echo $this->getFrameUrl() ?>"}}'>
+<?php if ($block->getAuthenticationStart()):?>
+    <div class="centinel" id="centinel-authenticate-block" data-mage-init='{"centinelAuthenticate": {"frameUrl": "<?php echo $block->getFrameUrl() ?>"}}'>
         <h3><?php echo __('Card Verification')?></h3>
         <p><?php echo __('Please verify the card with the issuer bank:') ?></p>
         <div class="authentication">
@@ -12,7 +16,7 @@
         </div>
     </div>
 <?php else:?>
-    <script type="text/javascript">
+    <script>
 require(['jquery'], function(jQuery){
 
     jQuery('[data-container="body"]').trigger("paymentAuthentication", {state: "cancel"});

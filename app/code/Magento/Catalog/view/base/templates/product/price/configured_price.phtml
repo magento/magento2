@@ -1,21 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php
-/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $this */
+/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
 /** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
-$configuredPrice = $this->getPrice();
-$schema = ($this->getZone() == 'item_view') ? true : false;
-$priceLabel = ($this->getPriceLabel() !== null)
-    ? $this->getPriceLabel()
+$configuredPrice = $block->getPrice();
+$schema = ($block->getZone() == 'item_view') ? true : false;
+$priceLabel = ($block->getPriceLabel() !== null)
+    ? $block->getPriceLabel()
     : '';
 ?>
 <p class="price-as-configured">
-    <?php echo $this->renderAmount($configuredPrice->getAmount(), [
+    <?php echo $block->renderAmount($configuredPrice->getAmount(), [
         'display_label'     => $priceLabel,
-        'price_id'          => $this->getPriceId('product-price-'),
+        'price_id'          => $block->getPriceId('product-price-'),
         'price_type'        => 'finalPrice',
         'include_container' => true,
         'schema' => $schema

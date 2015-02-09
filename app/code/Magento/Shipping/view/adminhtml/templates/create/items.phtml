@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="fieldset-wrapper">
     <div class="fieldset-wrapper-title">
@@ -13,19 +17,19 @@
                 <tr class="headings">
                     <th class="col-product"><span><?php echo __('Product') ?></span></th>
                     <th class="col-ordered-qty"><span><?php echo __('Qty') ?></span></th>
-                    <th class="col-qty<?php if ($this->isShipmentRegular()): ?> last<?php endif; ?>">
+                    <th class="col-qty<?php if ($block->isShipmentRegular()): ?> last<?php endif; ?>">
                         <span><?php echo __('Qty to Ship') ?></span>
                     </th>
-                    <?php if (!$this->canShipPartiallyItem()): ?>
+                    <?php if (!$block->canShipPartiallyItem()): ?>
                     <th class="col-ship last"><span><?php echo __('Ship') ?></span></th>
                     <?php endif; ?>
                 </tr>
             </thead>
-            <?php $_items = $this->getShipment()->getAllItems() ?>
+            <?php $_items = $block->getShipment()->getAllItems() ?>
             <?php $_i = 0; foreach ($_items as $_item): if ($_item->getOrderItem()->getIsVirtual() || $_item->getOrderItem()->getParentItem()): continue; endif; $_i++ ?>
                 <tbody class="<?php echo $_i%2 ? 'odd' : 'even' ?>">
-                    <?php echo $this->getItemHtml($_item) ?>
-                    <?php echo $this->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                    <?php echo $block->getItemHtml($_item) ?>
+                    <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                 </tbody>
             <?php endforeach; ?>
         </table>
@@ -38,14 +42,14 @@
             <fieldset>
                 <div id="order-history_form">
                     <label class="normal" for="shipment_comment_text"><?php echo __('Shipment Comments') ?></label>
-                    <textarea id="shipment_comment_text" name="shipment[comment_text]" rows="3" cols="5"><?php echo $this->getShipment()->getCommentText(); ?></textarea>
+                    <textarea id="shipment_comment_text" name="shipment[comment_text]" rows="3" cols="5"><?php echo $block->getShipment()->getCommentText(); ?></textarea>
                 </div>
             </fieldset>
         </div>
     </div>
     <div class="order-totals">
         <div class="fieldset-wrapper">
-            <?php if ($this->canCreateShippingLabel()): ?>
+            <?php if ($block->canCreateShippingLabel()): ?>
                 <div class="field choice field-create">
                     <input id="create_shipping_label" name="shipment[create_shipping_label]" value="1" type="checkbox"
                            onclick="toggleCreateLabelCheckbox();"/>
@@ -56,19 +60,19 @@
                 <input id="notify_customer" name="shipment[comment_customer_notify]" value="1" type="checkbox"/>
                 <label class="normal" for="notify_customer"><?php echo __('Append Comments') ?></label>
             </div>
-            <?php if ($this->canSendShipmentEmail()): ?>
+            <?php if ($block->canSendShipmentEmail()): ?>
                 <div class="field choice field-email">
                     <input id="send_email" name="shipment[send_email]" value="1" type="checkbox"/>
                     <label class="normal" for="send_email"><?php echo __('Email Copy of Shipment') ?></label>
                 </div>
             <?php endif; ?>
             <div class="actions">
-                <?php echo $this->getChildHtml('submit_button') ?>
+                <?php echo $block->getChildHtml('submit_button') ?>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "prototype"

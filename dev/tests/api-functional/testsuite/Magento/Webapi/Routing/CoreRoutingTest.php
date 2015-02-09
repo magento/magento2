@@ -1,12 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
  * Class to test Core Web API routing
  */
 namespace Magento\Webapi\Routing;
+
+
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\Webapi\Adapter\Rest\CurlClient;
 
 class CoreRoutingTest extends \Magento\Webapi\Routing\BaseService
 {
@@ -71,5 +76,16 @@ class CoreRoutingTest extends \Magento\Webapi\Routing\BaseService
         ];
         $this->setExpectedException('SoapFault', 'Generic service exception');
         $this->_webApiCall($serviceInfo);
+    }
+
+    public function testRestNoAcceptHeader()
+    {
+        $this->_markTestAsRestOnly();
+        /** @var $curlClient CurlClient */
+        $curlClient = Bootstrap::getObjectManager()->get(
+            'Magento\TestFramework\TestCase\Webapi\Adapter\Rest\CurlClient'
+        );
+        $response = $curlClient->get('/V1/testmodule1/resource1/1', [], ['Accept:']);
+        $this->assertEquals('testProduct1', $response['name'], "Empty Accept header failed to return response.");
     }
 }

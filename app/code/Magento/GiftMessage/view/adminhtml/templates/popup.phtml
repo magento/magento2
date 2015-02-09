@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php if ($this->getChildHtml()) :?>
+<?php if ($block->getChildHtml()) :?>
 <div id="gift_options_configure_new" class="gift_options-popup product-configure-popup" style="display: none;">
     <div id="gift_options_form_contents">
         <div class="content">
-            <?php echo $this->getChildHtml();?>
+            <?php echo $block->getChildHtml();?>
         </div>
         <div class="ui-dialog-buttonset">
             <button type="button" class="scalable" id="gift_options_cancel_button"><span><span><span><?php echo __('Cancel'); ?></span></span></span></button>
@@ -20,7 +24,7 @@
     <div id="giftoptions_tooltip_window_content">&nbsp;</div>
 </div>
 
-<script type="text/javascript">
+<script>
 require([
     "Magento_Sales/order/create/giftmessage",
     "Magento_Sales/order/giftoptions_tooltip"

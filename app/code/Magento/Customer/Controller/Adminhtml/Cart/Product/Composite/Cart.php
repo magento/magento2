@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
 
@@ -24,29 +25,29 @@ class Cart extends \Magento\Backend\App\Action
     /**
      * Quote we're working with
      *
-     * @var \Magento\Sales\Model\Quote
+     * @var \Magento\Quote\Model\Quote
      */
     protected $_quote = null;
 
     /**
      * Quote item we're working with
      *
-     * @var \Magento\Sales\Model\Quote\Item
+     * @var \Magento\Quote\Model\Quote\Item
      */
     protected $_quoteItem = null;
 
     /**
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Sales\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         $this->quoteRepository = $quoteRepository;
         parent::__construct($context);
@@ -74,7 +75,7 @@ class Cart extends \Magento\Backend\App\Action
             $this->_quote = $this->quoteRepository->create();
         }
         $this->_quote->setWebsite(
-            $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getWebsite($websiteId)
+            $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getWebsite($websiteId)
         );
 
         $this->_quoteItem = $this->_quote->getItemById($quoteItemId);

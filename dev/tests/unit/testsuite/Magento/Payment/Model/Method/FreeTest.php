@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
 
@@ -17,17 +18,25 @@ class FreeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $paymentData  = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->currencyPrice = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
 
+        $context = $this->getMock('\Magento\Framework\Model\Context', ['getEventDispatcher'], [], '', false);
+        $eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');
+        $context->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
+
+        $registry = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
+        $metadataService = $this->getMock('\Magento\Framework\Api\MetadataServiceInterface');
+        $customAttributeBuilder = $this->getMock('\Magento\Framework\Api\AttributeDataBuilder', [], [], '', false);
+
         $this->methodFree = new \Magento\Payment\Model\Method\Free(
-            $eventManager,
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeBuilder,
             $paymentData,
             $this->scopeConfig,
-            $logger,
             $this->currencyPrice
         );
     }
@@ -63,7 +72,7 @@ class FreeTest extends \PHPUnit_Framework_TestCase
     {
         $quote = null;
         if ($notEmptyQuote) {
-            $quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+            $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
             $quote->expects($this->any())
                 ->method('__call')
                 ->with($this->equalTo('getGrandTotal'))

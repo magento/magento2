@@ -1,13 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-?>
-<form id="edit_form" method="post" action="<?php echo $this->getSaveUrl() ?>">
-    <?php echo $this->getBlockHtml('formkey')?>
-    <?php  $_order = $this->getCreditmemo()->getOrder() ?>
 
-    <?php echo $this->getChildHtml('order_info') ?>
+// @codingStandardsIgnoreFile
+
+?>
+<form id="edit_form" method="post" action="<?php echo $block->getSaveUrl() ?>">
+    <?php echo $block->getBlockHtml('formkey')?>
+    <?php  $_order = $block->getCreditmemo()->getOrder() ?>
+
+    <?php echo $block->getChildHtml('order_info') ?>
 
     <?php if (!$_order->getIsVirtual()): ?>
     <div class="clearfix">
@@ -24,9 +28,9 @@
                 <div class="fieldset-wrapper-title">
                     <span class="title"><?php echo __('Payment Information') ?></span>
                 </div>
-                <div><?php echo $this->getChildHtml('order_payment') ?></div>
+                <div><?php echo $block->getChildHtml('order_payment') ?></div>
                 <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
-                <div class="order-payment-additional"><?php echo $this->getChildHtml('order_payment_additional'); ?></div>
+                <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
             </div>
 
         </div>
@@ -39,19 +43,19 @@
                     <span class="title"><?php echo __('Shipping Information') ?></span>
                 </div>
                 <div class="shipping-description-wrapper">
-                    <div class="shipping-description-title"><?php echo $this->escapeHtml($_order->getShippingDescription()) ?></div>
+                    <div class="shipping-description-title"><?php echo $block->escapeHtml($_order->getShippingDescription()) ?></div>
                     <div class="shipping-description-content">
                         <?php echo __('Total Shipping Charges'); ?>:
 
-                        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesPriceInclTax($this->getSource()->getStoreId())): ?>
-                            <?php $_excl = $this->displayShippingPriceInclTax($_order); ?>
+                        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesPriceInclTax($block->getSource()->getStoreId())): ?>
+                            <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
                         <?php else: ?>
-                            <?php $_excl = $this->displayPriceAttribute('shipping_amount', false, ' '); ?>
+                            <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
                         <?php endif; ?>
-                        <?php $_incl = $this->displayShippingPriceInclTax($_order); ?>
+                        <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
 
                         <?php echo $_excl; ?>
-                        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices($this->getSource()->getStoreId()) && $_incl != $_excl): ?>
+                        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices($block->getSource()->getStoreId()) && $_incl != $_excl): ?>
                             (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
                         <?php endif; ?>
                     </div>
@@ -63,6 +67,6 @@
     </div><?php /* opening div can be in app\code\Magento\Sales\view\adminhtml\order\view\info.phtml or above */?>
 
     <div id="creditmemo_item_container">
-        <?php echo $this->getChildHtml('order_items') ?>
+        <?php echo $block->getChildHtml('order_items') ?>
     </div>
 </form>

@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Reports\Model\Resource\Order;
 
 use Magento\Framework\DB\Select;
@@ -10,6 +14,7 @@ use Magento\Framework\DB\Select;
  * Reports orders collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 {
@@ -35,7 +40,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -55,13 +60,13 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected $_reportOrderFactory;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\DB\Helper $coreResourceHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory
@@ -71,13 +76,13 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\DB\Helper $coreResourceHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory,
@@ -105,12 +110,13 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      *
      * @param string $range
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function checkIsLive($range)
     {
         $this->_isLive = (bool)(!$this->_scopeConfig->getValue(
             'sales/dashboard/use_aggregated_data',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ));
         return $this;
     }
@@ -361,6 +367,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param string $tzFrom
      * @param string $tzTo
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getTZRangeExpressionForAttribute($range, $attribute, $tzFrom = '+00:00', $tzTo = null)
     {
@@ -383,6 +390,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param string $customEnd
      * @param bool $returnObjects
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
@@ -416,7 +424,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
                 $dateStart->setDay(
                     $this->_scopeConfig->getValue(
                         'reports/dashboard/mtd_start',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     )
                 );
                 break;
@@ -432,7 +440,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
                     ',',
                     $this->_scopeConfig->getValue(
                         'reports/dashboard/ytd_start',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     )
                 );
                 $startMonth = isset($startMonthDay[0]) ? (int)$startMonthDay[0] : 1;
@@ -539,6 +547,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      *
      * @param int $isFilter
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _calculateTotalsAggregated($isFilter = 0)
     {
@@ -582,7 +591,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 
         if ($this->_scopeConfig->getValue(
             'sales/dashboard/use_aggregated_data',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             $this->setMainTable('sales_order_aggregated_created');

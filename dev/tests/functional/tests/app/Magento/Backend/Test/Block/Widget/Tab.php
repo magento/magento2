@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Block\Widget;
 
-use Mtf\Block\Form as AbstractForm;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Form as AbstractForm;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Tab
@@ -42,10 +43,10 @@ class Tab extends AbstractForm
      * Fill data to fields on tab
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
         $this->_fill($data, $element);
@@ -57,10 +58,10 @@ class Tab extends AbstractForm
      * Get data of tab
      *
      * @param array|null $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, Element $element = null)
+    public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
         return $this->_getData($data, $element);
@@ -70,9 +71,9 @@ class Tab extends AbstractForm
      * Update data to fields on tab
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      */
-    public function updateFormTab(array $fields, Element $element = null)
+    public function updateFormTab(array $fields, SimpleElement $element = null)
     {
         $this->fillFormTab($fields, $element);
     }
@@ -85,7 +86,7 @@ class Tab extends AbstractForm
     public function getJsErrors()
     {
         $data = [];
-        $elements = $this->_rootElement->find($this->mageErrorField, Locator::SELECTOR_XPATH)->getElements();
+        $elements = $this->_rootElement->getElements($this->mageErrorField, Locator::SELECTOR_XPATH);
         foreach ($elements as $element) {
             $error = $element->find($this->mageErrorText, Locator::SELECTOR_XPATH);
             if ($error->isVisible()) {

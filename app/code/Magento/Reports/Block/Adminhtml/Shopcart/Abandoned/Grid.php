@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
 
@@ -8,6 +9,7 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
  * Adminhtml abandoned shopping carts report grid block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
@@ -85,6 +87,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
     /**
      * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()
     {

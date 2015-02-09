@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php
 /**
- * @var $this \Magento\Theme\Block\Js\Translate
+ * @var $block \Magento\Theme\Block\Js\Translate
  */
 ?>
 <?php
@@ -41,7 +45,7 @@ $_data = [
     'Please wait, loading...' => __('Please wait, loading...'),
 ];
 ?>
-<script type="text/javascript">
+<script>
 require(["jquery","mage/translate"], function($){
     $.mage.translate.add(<?php echo Zend_Json::encode($_data) ?>)
 });

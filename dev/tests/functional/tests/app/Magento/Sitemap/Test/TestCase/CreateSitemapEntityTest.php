@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Sitemap\Test\TestCase;
@@ -8,7 +9,7 @@ namespace Magento\Sitemap\Test\TestCase;
 use Magento\Sitemap\Test\Fixture\Sitemap;
 use Magento\Sitemap\Test\Page\Adminhtml\SitemapIndex;
 use Magento\Sitemap\Test\Page\Adminhtml\SitemapNew;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Cover creating SitemapEntity
@@ -21,11 +22,16 @@ use Mtf\TestCase\Injectable;
  *  5. Click "Save" button.
  *  6. Perform all assertions.
  *
- * @group XML_Sitemap_(MX)
+ * @group XML_Sitemap_(PS)
  * @ZephyrId MAGETWO-23277
  */
 class CreateSitemapEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * @var SitemapIndex
      */

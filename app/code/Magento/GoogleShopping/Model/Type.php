@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GoogleShopping\Model;
 
@@ -63,6 +64,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\GoogleShopping\Model\Resource\Type $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -110,6 +112,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param CatalogModelProduct $product
      * @param Entry $entry
      * @return Entry
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function convertProductToEntry($product, $entry)
     {

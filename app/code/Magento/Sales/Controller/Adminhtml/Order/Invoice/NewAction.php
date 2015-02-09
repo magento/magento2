@@ -1,12 +1,15 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Backend\Model\View\Result\RedirectFactory;
 
 class NewAction extends \Magento\Backend\App\Action
 {
@@ -16,12 +19,30 @@ class NewAction extends \Magento\Backend\App\Action
     protected $registry;
 
     /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param Action\Context $context
      * @param Registry $registry
+     * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $resultRedirectFactory
      */
-    public function __construct(Action\Context $context, Registry $registry)
-    {
+    public function __construct(
+        Action\Context $context,
+        Registry $registry,
+        PageFactory $resultPageFactory,
+        RedirectFactory $resultRedirectFactory
+    ) {
         $this->registry = $registry;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -34,9 +55,23 @@ class NewAction extends \Magento\Backend\App\Action
     }
 
     /**
+     * Redirect to order view page
+     *
+     * @param int $orderId
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    protected function _redirectToOrder($orderId)
+    {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
+        return $resultRedirect;
+    }
+
+    /**
      * Invoice create page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -69,17 +104,18 @@ class NewAction extends \Magento\Backend\App\Action
                 $invoice->setCommentText($comment);
             }
 
-            $this->_view->loadLayout();
-            $this->_setActiveMenu('Magento_Sales::sales_order');
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Invoices'));
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('New Invoice'));
-            $this->_view->renderLayout();
+            /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->setActiveMenu('Magento_Sales::sales_order');
+            $resultPage->getConfig()->getTitle()->prepend(__('Invoices'));
+            $resultPage->getConfig()->getTitle()->prepend(__('New Invoice'));
+            return $resultPage;
         } catch (\Magento\Framework\Exception $exception) {
             $this->messageManager->addError($exception->getMessage());
-            $this->_redirect('sales/order/view', ['order_id' => $orderId]);
+            return $this->_redirectToOrder($orderId);
         } catch (\Exception $exception) {
             $this->messageManager->addException($exception, 'Cannot create an invoice.');
-            $this->_redirect('sales/order/view', ['order_id' => $orderId]);
+            return $this->_redirectToOrder($orderId);
         }
     }
 }

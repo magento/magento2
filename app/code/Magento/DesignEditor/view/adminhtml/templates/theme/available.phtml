@@ -1,18 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Theme */?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Theme */?>
 
-<li class="theme" id="theme-id-<?php echo $this->getTheme()->getId() ?>">
+<li class="theme" id="theme-id-<?php echo $block->getTheme()->getId() ?>">
     <div class="theme-content">
-        <img class="theme-preview-image" src="<?php echo $this->getTheme()->getThemeImage()->getPreviewImageUrl() ?>" alt="<?php echo $this->getTheme()->getThemeTitle() ?>" />
+        <img class="theme-preview-image" src="<?php echo $block->getTheme()->getThemeImage()->getPreviewImageUrl() ?>" alt="<?php echo $block->getTheme()->getThemeTitle() ?>" />
         <article class="theme-data">
-            <h4 class="theme-title" title="<?php echo $this->getTheme()->getThemeTitle() ?>"><?php echo $this->getTheme()->getThemeTitle() ?></h4>
+            <h4 class="theme-title" title="<?php echo $block->getTheme()->getThemeTitle() ?>"><?php echo $block->getTheme()->getThemeTitle() ?></h4>
             <div class="actions">
-                <?php echo $this->getButtonsHtml() ?>
+                <?php echo $block->getButtonsHtml() ?>
             </div>
         </article>
     </div>

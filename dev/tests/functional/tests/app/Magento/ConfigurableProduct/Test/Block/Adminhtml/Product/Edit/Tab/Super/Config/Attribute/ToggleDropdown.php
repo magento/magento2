@@ -1,18 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class ToggleDropdown
  * Class for toggle dropdown elements.
  */
-class ToggleDropdown extends Element
+class ToggleDropdown extends SimpleElement
 {
     /**
      * Selector for field value
@@ -43,7 +44,7 @@ class ToggleDropdown extends Element
      */
     public function setValue($value)
     {
-        $this->_eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
+        $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
         if ($value != $this->getValue()) {
             $value = ('Yes' == $value) ? '%' : '$';
@@ -61,7 +62,7 @@ class ToggleDropdown extends Element
      */
     public function getValue()
     {
-        $this->_eventManager->dispatchEvent(['get_value'], [(string)$this->_locator]);
+        $this->eventManager->dispatchEvent(['get_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
         $value = $this->find($this->field, Locator::SELECTOR_XPATH)->getText();
         return ('%' == $value) ? 'Yes' : 'No';

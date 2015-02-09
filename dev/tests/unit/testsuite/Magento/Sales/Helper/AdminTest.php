@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Helper;
 
@@ -14,7 +15,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
     protected $contextMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -48,7 +49,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesConfigMock = $this->getMockBuilder('Magento\Sales\Model\Config')
@@ -267,7 +268,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         $orderMock->expects($this->any())
             ->method('getProductType')
             ->will($this->returnValue($type));
-        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->any())

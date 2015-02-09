@@ -1,21 +1,25 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * Category view template
  *
- * @var $this \Magento\Catalog\Block\Category\View
+ * @var $block \Magento\Catalog\Block\Category\View
  */
 ?>
 <?php
     $_helper    = $this->helper('Magento\Catalog\Helper\Output');
-    $_category  = $this->getCurrentCategory();
+    $_category  = $block->getCurrentCategory();
     $_imgHtml   = '';
     if ($_imgUrl = $_category->getImageUrl()) {
-        $_imgHtml = '<div class="category image"><img src="' . $_imgUrl . '" alt="' . $this->escapeHtml($_category->getName()) . '" title="' . $this->escapeHtml($_category->getName()) . '" class="image" /></div>';
+        $_imgHtml = '<div class="category image"><img src="' . $_imgUrl . '" alt="' . $block->escapeHtml($_category->getName()) . '" title="' . $block->escapeHtml($_category->getName()) . '" class="image" /></div>';
         $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
     }
 ?>
@@ -24,20 +28,20 @@
         <?php echo $_imgHtml ?>
     <?php endif; ?>
 
-    <?php if ($_description = $this->getCurrentCategory()->getDescription()): ?>
+    <?php if ($_description = $block->getCurrentCategory()->getDescription()): ?>
         <div class="category description">
             <?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?>
         </div>
     <?php endif; ?>
 
-    <?php if ($this->isContentMode()): ?>
-        <?php echo $this->getCmsBlockHtml() ?>
+    <?php if ($block->isContentMode()): ?>
+        <?php echo $block->getCmsBlockHtml() ?>
 
-    <?php elseif ($this->isMixedMode()): ?>
-        <?php echo $this->getCmsBlockHtml() ?>
-        <?php echo $this->getProductListHtml() ?>
+    <?php elseif ($block->isMixedMode()): ?>
+        <?php echo $block->getCmsBlockHtml() ?>
+        <?php echo $block->getProductListHtml() ?>
 
     <?php else: ?>
-        <?php echo $this->getProductListHtml() ?>
+        <?php echo $block->getProductListHtml() ?>
     <?php endif; ?>
 </div>

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Email\Container;
 
@@ -20,7 +21,7 @@ class CreditmemoCommentIdentity extends Container implements IdentityInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_EMAIL_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStore()->getStoreId()
         );
     }

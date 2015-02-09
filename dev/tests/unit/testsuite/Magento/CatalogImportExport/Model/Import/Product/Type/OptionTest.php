@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
@@ -226,7 +227,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false),
             $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
             $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false),
-            $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false),
+            $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false),
             $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
             $this->getMock(
                 'Magento\Catalog\Model\Resource\Product\Option\CollectionFactory',
@@ -382,7 +383,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ['fetchAll']
         );
         $logger = $this->getMock('Psr\Log\LoggerInterface');
-        $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
+        $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
 
         $optionCollection = $this->getMock(
             'Magento\Framework\Data\Collection\Db',

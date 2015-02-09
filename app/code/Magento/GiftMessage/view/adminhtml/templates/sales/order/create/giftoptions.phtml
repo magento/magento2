@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php $_item = $this->getItem() ?>
+<?php $_item = $block->getItem() ?>
 <?php if ($_item): ?>
-    <?php $_childHtml = trim($this->getChildHtml('', false));?>
+    <?php $_childHtml = trim($block->getChildHtml('', false));?>
     <?php if ($_childHtml): ?>
         <tr class="border">
             <td colspan="8">
                 <a class="action-link" href="#" id="gift_options_link_<?php echo $_item->getId() ?>"><?php echo __('Gift Options') ?></a>
-                <script type="text/javascript">
+                <script>
 require([
     "Magento_Sales/order/giftoptions_tooltip"
 ], function(){

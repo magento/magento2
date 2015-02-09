@@ -1,19 +1,23 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->getMethod()->getMailingAddress() || $this->getMethod()->getPayableTo()): ?>
-    <dl class="items check payable" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
-        <?php if ($this->getMethod()->getPayableTo()): ?>
+<?php if ($block->getMethod()->getMailingAddress() || $block->getMethod()->getPayableTo()): ?>
+    <dl class="items check payable" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none;">
+        <?php if ($block->getMethod()->getPayableTo()): ?>
             <dt class="title"><?php echo __('Make Check payable to:') ?></dt>
-            <dd class="content"><?php echo $this->escapeHtml($this->getMethod()->getPayableTo()) ?></dd>
+            <dd class="content"><?php echo $block->escapeHtml($block->getMethod()->getPayableTo()) ?></dd>
         <?php endif; ?>
-        <?php if ($this->getMethod()->getMailingAddress()): ?>
+        <?php if ($block->getMethod()->getMailingAddress()): ?>
             <dt class="title"><?php echo __('Send Check to:') ?></dt>
             <dd class="content">
                 <address class="checkmo mailing address">
-                    <?php echo nl2br($this->escapeHtml($this->getMethod()->getMailingAddress())) ?>
+                    <?php echo nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
                 </address>
             </dd>
         <?php endif; ?>

@@ -1,25 +1,29 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $parentItem = $this->getItem() ?>
+<?php $parentItem = $block->getItem() ?>
 
 <?php $items = array_merge([$parentItem->getOrderItem()], $parentItem->getOrderItem()->getChildrenItems()) ?>
-<?php $shipItems = $this->getChilds($parentItem) ?>
+<?php $shipItems = $block->getChilds($parentItem) ?>
 
 <?php $_prevOptionId = '' ?>
 
 <?php foreach ($items as $_item): ?>
 
-<?php if ($this->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
+<?php if ($block->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
     <?php $_showlastRow = true ?>
 <?php else: ?>
     <?php $_showlastRow = false ?>
 <?php endif; ?>
 
 <?php if ($_item->getParentItem()): ?>
-    <?php $attributes = $this->getSelectionAttributes($_item) ?>
+    <?php $attributes = $block->getSelectionAttributes($_item) ?>
     <?php if ($_prevOptionId != $attributes['option_id']): ?>
     <tr>
         <td align="left" valign="top" style="padding:3px 9px"><strong><em><?php echo $attributes['option_label'] ?></em></strong></td>
@@ -31,13 +35,13 @@
 <?php endif; ?>
 <tr id="order-item-row-<?php echo $_item->getId() ?>">
     <?php if (!$_item->getParentItem()): ?>
-    <td align="left" valign="top" style="padding:3px 9px"><strong><?php echo $this->escapeHtml($_item->getName()) ?></strong></td>
+    <td align="left" valign="top" style="padding:3px 9px"><strong><?php echo $block->escapeHtml($_item->getName()) ?></strong></td>
     <?php else: ?>
-    <td align="left" valign="top" style="padding:3px 19px"><?php echo $this->getValueHtml($_item) ?></td>
+    <td align="left" valign="top" style="padding:3px 19px"><?php echo $block->getValueHtml($_item) ?></td>
     <?php endif; ?>
-    <td align="left" valign="top" style="padding:3px 9px"><?php echo $this->escapeHtml($_item->getSku()) ?></td>
+    <td align="left" valign="top" style="padding:3px 9px"><?php echo $block->escapeHtml($_item->getSku()) ?></td>
     <td align="center" valign="top" style="padding:3px 9px">
-        <?php if (($this->isShipmentSeparately() && $_item->getParentItem()) || (!$this->isShipmentSeparately() && !$_item->getParentItem())): ?>
+        <?php if (($block->isShipmentSeparately() && $_item->getParentItem()) || (!$block->isShipmentSeparately() && !$_item->getParentItem())): ?>
             <?php if (isset($shipItems[$_item->getId()])): ?>
                 <?php echo $shipItems[$_item->getId()]->getQty()*1 ?>
             <?php elseif ($_item->getIsVirtual()): ?>
@@ -55,15 +59,15 @@
 <?php if ($_showlastRow): ?>
 <tr>
     <td align="left" valign="top" style="padding:3px 9px">
-        <?php if ($this->getItemOptions()): ?>
+        <?php if ($block->getItemOptions()): ?>
         <dl style="margin:0; padding:0;">
-            <?php foreach ($this->getItemOptions() as $option): ?>
+            <?php foreach ($block->getItemOptions() as $option): ?>
             <dt><strong><em><?php echo $option['label'] ?></em></strong>
                         <dd style="margin:0; padding:0 0 0 9px;"><?php echo $option['value'] ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
-        <?php echo $this->escapeHtml($_item->getDescription()) ?>
+        <?php echo $block->escapeHtml($_item->getDescription()) ?>
     </td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>

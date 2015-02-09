@@ -1,24 +1,28 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * @see \Magento\Payment\Block\Info
  */
 ?>
-<?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?>
+<?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?>
 
-<?php if ($_specificInfo = $this->getSpecificInformation()):?>
+<?php if ($_specificInfo = $block->getSpecificInformation()):?>
 <table class="data-table" cellspacing="0">
 <?php foreach ($_specificInfo as $_label => $_value):?>
     <tr>
-        <th><?php echo $this->escapeHtml($_label)?>:</th>
-        <td><?php echo nl2br(implode($this->getValueAsArray($_value, true), "\n"))?></td>
+        <th><?php echo $block->escapeHtml($_label)?>:</th>
+        <td><?php echo nl2br(implode($block->getValueAsArray($_value, true), "\n"))?></td>
     </tr>
 <?php endforeach; ?>
 </table>
 <?php endif;?>
 
-<?php echo $this->getChildHtml()?>
+<?php echo $block->getChildHtml()?>

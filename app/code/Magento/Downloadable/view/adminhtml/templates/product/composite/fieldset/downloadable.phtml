@@ -1,38 +1,42 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-?>
-<?php /* @var $this \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Downloadable */ ?>
-<?php $_linksPurchasedSeparately = $this->getLinksPurchasedSeparately(); ?>
-<?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
-<?php if (($this->getProduct()->isSaleable() || $_skipSaleableCheck) && $this->hasLinks()):?>
 
-<fieldset id="catalog_product_composite_configure_fields_downloadable" class="fieldset downloadable information<?php echo $this->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
+// @codingStandardsIgnoreFile
+
+?>
+<?php /* @var $block \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Downloadable */ ?>
+<?php $_linksPurchasedSeparately = $block->getLinksPurchasedSeparately(); ?>
+<?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
+<?php if (($block->getProduct()->isSaleable() || $_skipSaleableCheck) && $block->hasLinks()):?>
+
+<fieldset id="catalog_product_composite_configure_fields_downloadable" class="fieldset downloadable information<?php echo $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
     <legend class="legend"><span><?php echo __('Downloadable Information') ?></span></legend><br />
-    <?php $_links = $this->getLinks(); ?>
-    <?php $_isRequired = $this->getLinkSelectionRequired(); ?>
+    <?php $_links = $block->getLinks(); ?>
+    <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
     <div class="field link<?php if ($_isRequired) echo ' required' ?>">
-        <label class="label"><span><?php echo $this->getLinksTitle() ?></span></label>
+        <label class="label"><span><?php echo $block->getLinksTitle() ?></span></label>
         <div class="control" id="downloadable-links-list">
             <?php foreach ($_links as $_link): ?>
                 <div class="nested">
                 <?php if ($_linksPurchasedSeparately): ?>
-                    <input type="checkbox" class="checkbox<?php if ($_isRequired):?> validate-one-required-by-name<?php endif; ?> product downloadable link" name="links[]" id="links_<?php echo $_link->getId() ?>" value="<?php echo $_link->getId(); ?>" <?php echo $this->getLinkCheckedValue($_link); ?> price="<?php echo $this->getCurrencyPrice($_link->getPrice()); ?>"/>
+                    <input type="checkbox" class="checkbox<?php if ($_isRequired):?> validate-one-required-by-name<?php endif; ?> product downloadable link" name="links[]" id="links_<?php echo $_link->getId() ?>" value="<?php echo $_link->getId(); ?>" <?php echo $block->getLinkCheckedValue($_link); ?> price="<?php echo $block->getCurrencyPrice($_link->getPrice()); ?>"/>
                     <?php endif; ?>
                     <label for="links_<?php echo $_link->getId() ?>" class="label">
-                    <?php echo $this->escapeHtml($_link->getTitle()) ?>
+                    <?php echo $block->escapeHtml($_link->getTitle()) ?>
                     <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
-                        &nbsp;(<a href="<?php echo $this->getLinkSampleUrl($_link) ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo __('sample') ?></a>)
+                        &nbsp;(<a href="<?php echo $block->getLinkSampleUrl($_link) ?>" <?php echo $block->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo __('sample') ?></a>)
                     <?php endif; ?>
                     <?php if ($_linksPurchasedSeparately): ?>
-                    <?php echo $this->getFormattedLinkPrice($_link); ?>
+                    <?php echo $block->getFormattedLinkPrice($_link); ?>
                         <br />
-                        <?php echo $this->getLinkPrice($_link); ?>
+                        <?php echo $block->getLinkPrice($_link); ?>
                     <?php endif; ?>
                     </label>
                 <?php if ($_isRequired): ?>
-                    <script type="text/javascript">
+                    <script>
 require(['prototype'], function(){
 
     //<![CDATA[
@@ -52,7 +56,7 @@ require(['prototype'], function(){
     </div>
 </fieldset>
 
-    <script type="text/javascript">
+    <script>
 require(['prototype'], function(){
 
 //<![CDATA[

@@ -1,33 +1,34 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 
-<?php echo $this->getCaptchaHtml() ?>
+<?php echo $block->getCaptchaHtml() ?>
 
 <div class="grid-title">
     <span class="title"><?php echo __('Google Content Items') ?></span>
 </div>
 <div data-mage-init='{"loader": {}}' data-container="googleContent">
-<?php echo $this->getChildHtml('item') ?>
+<?php echo $block->getChildHtml('item') ?>
 </div>
 
 <div class="grid-title">
-    <div class="page-actions"><?php echo $this->getAddButtonHtml() ?></div>
+    <div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?php echo $block->getAddButtonHtml() ?></div>
     <span class="title"><?php echo __('Available Products') ?></span>
 </div>
 <div data-mage-init='{"loader": {}}' data-container="products" class="available-products">
-<?php echo $this->getChildHtml('product') ?>
+<?php echo $block->getChildHtml('product') ?>
 </div>
 
-<script type="text/javascript">
+<script>
 require([
 	'Magento_GoogleShopping/googleshopping'
 ], function(){
 
-Mage.GoogleShopping.isProcessRunning = <?php echo $this->isProcessRunning() ? 'true' : 'false'; ?>;
-Mage.GoogleShopping.statusUrl = '<?php echo $this->getStatusUrl(); ?>';
+Mage.GoogleShopping.isProcessRunning = <?php echo $block->isProcessRunning() ? 'true' : 'false'; ?>;
+Mage.GoogleShopping.statusUrl = '<?php echo $block->getStatusUrl(); ?>';
 Mage.GoogleShopping.runningMessage = '<?php echo __('Google Shopping synchronization process is running');?>';
 
 });

@@ -1,27 +1,28 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php
-/** @var $this \Magento\GoogleAdwords\Block\Code */
+/** @var $block \Magento\GoogleAdwords\Block\Code */
 ?>
 <!-- Google Code for Sale Conversion Page -->
-<script type="text/javascript">
+<script>
     /* <![CDATA[ */
-    var google_conversion_id = <?php echo $this->getHelper()->getConversionId() ?>;
-    var google_conversion_language = "<?php echo $this->getHelper()->getConversionLanguage() ?>";
-    var google_conversion_format = "<?php echo $this->getHelper()->getConversionFormat() ?>";
-    var google_conversion_color = "<?php echo $this->getHelper()->getConversionColor() ?>";
-    var google_conversion_label = "<?php echo $this->getHelper()->getConversionLabel() ?>";
-    var google_conversion_value = <?php echo $this->getHelper()->getConversionValue() ?>;
+    var google_conversion_id = <?php echo $block->getHelper()->getConversionId() ?>;
+    var google_conversion_language = "<?php echo $block->getHelper()->getConversionLanguage() ?>";
+    var google_conversion_format = "<?php echo $block->getHelper()->getConversionFormat() ?>";
+    var google_conversion_color = "<?php echo $block->getHelper()->getConversionColor() ?>";
+    var google_conversion_label = "<?php echo $block->getHelper()->getConversionLabel() ?>";
+    var google_conversion_value = <?php echo $block->getHelper()->getConversionValue() ?>;
     /* ]]> */
 </script>
-<script type="text/javascript" src="<?php echo $this->getHelper()->getConversionJsSrc()?>"></script>
+<script type="text/javascript" src="<?php echo $block->getHelper()->getConversionJsSrc()?>"></script>
 <noscript>
     <div style="display:inline;">
         <img height="1" width="1" style="border-style:none;" alt=""
-             src="<?php echo $this->getHelper()->getConversionImgSrc() ?>"/>
+             src="<?php echo $block->getHelper()->getConversionImgSrc() ?>"/>
     </div>
 </noscript>
 <!-- END Google Code for Sale Conversion Page -->

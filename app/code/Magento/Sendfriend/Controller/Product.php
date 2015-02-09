@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sendfriend\Controller;
 
@@ -78,19 +79,9 @@ class Product extends \Magento\Framework\App\Action\Action
         if (!$helper->isAllowForGuest() && !$session->authenticate($this)) {
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             if ($this->getRequest()->getActionName() == 'sendemail') {
-                $session->setBeforeAuthUrl(
-                    $this->_objectManager->create(
-                        'Magento\Framework\UrlInterface'
-                    )->getUrl(
-                        '*/*/send',
-                        ['_current' => true]
-                    )
-                );
-                $this->_objectManager->get(
-                    'Magento\Catalog\Model\Session'
-                )->setSendfriendFormData(
-                    $request->getPost()
-                );
+                $session->setBeforeAuthUrl($this->_url->getUrl('sendfriend/product/send', ['_current' => true]));
+                $this->_objectManager->get('Magento\Catalog\Model\Session')
+                    ->setSendfriendFormData($request->getPost());
             }
         }
         return parent::dispatch($request);
@@ -118,16 +109,5 @@ class Product extends \Magento\Framework\App\Action\Action
 
         $this->_coreRegistry->register('product', $product);
         return $product;
-    }
-
-    /**
-     * Initialize send friend model
-     *
-     * @return \Magento\Sendfriend\Model\Sendfriend
-     */
-    protected function _initSendToFriendModel()
-    {
-        $this->sendFriend->register();
-        return $this->sendFriend;
     }
 }

@@ -2,8 +2,12 @@
 /**
  * Mysql PDO DB adapter
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\Cache\FrontendInterface;
@@ -17,6 +21,12 @@ use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\String;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
     const TIMESTAMP_FORMAT      = 'Y-m-d H:i:s';
@@ -399,6 +409,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param mixed $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Pdo|void
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function query($sql, $bind = [])
     {
@@ -650,6 +661,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string $sql
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _splitMultiQuery($sql)
     {
@@ -1129,6 +1142,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param array $tables
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function modifyTables($tables)
     {
@@ -1515,6 +1531,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param  array $columnData
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getColumnCreateByDescribe($columnData)
     {
@@ -1656,6 +1674,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param array $column
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getColumnTypeByDdl($column)
     {
@@ -1752,6 +1771,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $fields update fields pairs or values
      * @return int The number of affected rows.
      * @throws \Zend_Db_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function insertOnDuplicate($table, array $data, array $fields = [])
     {
@@ -1958,6 +1979,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param \Magento\Framework\DB\Ddl\Table $table
      * @throws \Zend_Db_Exception
      * @return \Zend_Db_Pdo_Statement
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function createTemporaryTable(\Magento\Framework\DB\Ddl\Table $table)
     {
@@ -2192,6 +2214,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Magento\Framework\Exception
      * @return string
      * @throws \Zend_Db_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     protected function _getColumnDefinition($options, $ddlType = null)
     {
@@ -2427,6 +2453,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return \Zend_Db_Statement_Interface
      * @throws \Zend_Db_Exception
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addIndex(
         $tableName,
@@ -2552,6 +2580,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $schemaName
      * @param string $refSchemaName
      * @return \Zend_Db_Statement_Interface
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function addForeignKey(
         $fkName,
@@ -2666,6 +2695,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $fieldName
      * @param integer|string|array $condition
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function prepareSqlCondition($fieldName, $condition)
     {
@@ -2772,6 +2802,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $column     the column describe array
      * @param mixed $value
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function prepareColumnValue(array $column, $value)
     {
@@ -3357,6 +3390,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string|array $table
      * @return string
      * @throws \Magento\Framework\DB\DBException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function updateFromSelect(Select $select, $table)
     {

@@ -2,7 +2,8 @@
 /**
  * Tests for \Magento\Webapi\Model\Soap\Wsdl\Generator.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
@@ -23,7 +24,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $_typeProcessor;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
 
     protected function setUp()
@@ -72,7 +73,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->storeManagerMock = $this->getMockBuilder(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\Store\StoreManagerInterface'
         )->setMethods(['getStore'])->disableOriginalConstructor()->getMockForAbstractClass();
 
         $storeMock = $this->getMockBuilder(

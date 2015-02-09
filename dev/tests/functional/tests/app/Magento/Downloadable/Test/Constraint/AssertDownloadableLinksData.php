@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Downloadable\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertDownloadableLinksData
@@ -47,13 +48,13 @@ class AssertDownloadableLinksData extends AbstractAssertForm
      *
      * @param CatalogProductView $catalogProductView
      * @param DownloadableProductInjectable $product
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         DownloadableProductInjectable $product,
-        Browser $browser
+        BrowserInterface $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 

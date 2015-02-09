@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<form id="edit_form" method="post" action="<?php echo $this->getSaveUrl() ?>">
-    <?php echo $this->getBlockHtml('formkey')?>
-    <?php  $_order = $this->getShipment()->getOrder() ?>
-    <?php echo $this->getChildHtml('order_info') ?>
+<form id="edit_form" method="post" action="<?php echo $block->getSaveUrl() ?>">
+    <?php echo $block->getBlockHtml('formkey')?>
+    <?php  $_order = $block->getShipment()->getOrder() ?>
+    <?php echo $block->getChildHtml('order_info') ?>
     <div class="clearfix">
         <div class="order-payment-method">
             <!--Billing Address-->
@@ -14,7 +18,7 @@
                 <div class="fieldset-wrapper-title">
                     <span class="title"><?php echo __('Payment Information') ?></span>
                 </div>
-                <div><?php echo $this->getPaymentHtml() ?></div>
+                <div><?php echo $block->getPaymentHtml() ?></div>
                 <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
             </div>
         </div>
@@ -25,31 +29,31 @@
                     <span class="title"><?php echo __('Shipping Information') ?></span>
                 </div>
                 <div class="shipping-description-wrapper">
-                    <div class="shipping-description-title"><?php echo $this->escapeHtml($_order->getShippingDescription()) ?></div>
+                    <div class="shipping-description-title"><?php echo $block->escapeHtml($_order->getShippingDescription()) ?></div>
                     <div class="shipping-description-content">
                         <?php echo __('Total Shipping Charges'); ?>:
 
                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
-                            <?php $_excl = $this->displayShippingPriceInclTax($_order); ?>
+                            <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
                         <?php else: ?>
-                            <?php $_excl = $this->displayPriceAttribute('shipping_amount', false, ' '); ?>
+                            <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
                         <?php endif; ?>
-                        <?php $_incl = $this->displayShippingPriceInclTax($_order); ?>
+                        <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
                         <?php echo $_excl; ?>
                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
                         (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
                         <?php endif; ?>
                     </div>
                 </div>
-                <div><?php echo $this->getChildHtml('shipment_tracking') ?></div>
+                <div><?php echo $block->getChildHtml('shipment_tracking') ?></div>
             </div>
         </div>
     </div>
     <div id="ship_items_container">
-        <?php echo $this->getItemsHtml() ?>
+        <?php echo $block->getItemsHtml() ?>
     </div>
 </form>
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "mage/mage",
@@ -62,9 +66,9 @@ require([
             packaging.sendCreateLabelRequest();
         });
         packaging.setLabelCreatedCallback(function(response){
-            setLocation("<?php echo $this->getUrl(
+            setLocation("<?php echo $block->getUrl(
                 'sales/order/view',
-                ['order_id' => $this->getShipment()->getOrderId()]
+                ['order_id' => $block->getShipment()->getOrderId()]
             ); ?>");
         });
         packaging.setCancelCallback(function() {
@@ -84,4 +88,4 @@ require([
 
 });
 </script>
-<?php echo $this->getChildHtml('shipment_packaging');
+<?php echo $block->getChildHtml('shipment_packaging');

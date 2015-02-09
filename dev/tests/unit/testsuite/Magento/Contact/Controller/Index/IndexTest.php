@@ -1,8 +1,12 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Contact\Controller\Index;
 
 class IndexTest extends \PHPUnit_Framework_TestCase
@@ -75,7 +79,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             $this->getMock('\Magento\Framework\Mail\Template\TransportBuilder', [], [], '', false),
             $this->getMockForAbstractClass('\Magento\Framework\Translate\Inline\StateInterface', [], '', false),
             $this->_scopeConfig,
-            $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface', [], '', false)
+            $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface', [], '', false)
         );
     }
 

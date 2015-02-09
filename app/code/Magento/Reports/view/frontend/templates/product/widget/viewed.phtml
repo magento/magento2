@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Reports\Block\Product\Widget\Viewed */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Reports\Block\Product\Widget\Viewed */
 ?>
 
 <?php
-$mode = $this->getViewMode();
-$type = $this->getType() . '-' . $mode;
+$mode = $block->getViewMode();
+$type = $block->getType() . '-' . $mode;
 $class = 'widget viewed' . ' ' . $mode;
 $title = __('Recently Viewed');
 ?>
-<div class="block <?php echo $class; ?>" id="recently_viewed_container" data-mage-init='{"recentlyViewedProducts":{}}' data-count="<?php echo $this->getCount(); ?>" style="display: none;">
+<div class="block <?php echo $class; ?>" id="recently_viewed_container" data-mage-init='{"recentlyViewedProducts":{}}' data-count="<?php echo $block->getCount(); ?>" style="display: none;">
     <div class="title">
         <strong><?php echo $title; ?></strong>
     </div>

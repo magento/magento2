@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 require __DIR__ . '/../../../Magento/Core/_files/store.php';
 
@@ -44,7 +47,7 @@ $order->setIncrementId(
 )->setShippingAddress(
     $shippingAddress
 )->setStoreId(
-    $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore('fixturestore')->getId()
+    $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore('fixturestore')->getId()
 )->addItem(
     $orderItem
 )->setPayment(

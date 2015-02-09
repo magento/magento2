@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\UrlRewrite\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertUrlRewriteCategoryNotInGrid
@@ -23,10 +24,10 @@ class AssertUrlRewriteCategoryNotInGrid extends AbstractConstraint
      * Assert that category url rewrite not in grid
      *
      * @param UrlRewriteIndex $urlRewriteIndex
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
-    public function processAssert(UrlRewriteIndex $urlRewriteIndex, CatalogCategory $category)
+    public function processAssert(UrlRewriteIndex $urlRewriteIndex, Category $category)
     {
         $urlRewriteIndex->open();
         $filter = ['request_path' => $category->getUrlKey()];

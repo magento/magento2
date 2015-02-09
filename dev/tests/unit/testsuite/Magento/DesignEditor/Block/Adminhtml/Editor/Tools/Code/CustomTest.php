@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code;
 
@@ -22,7 +23,7 @@ class CustomTest extends \PHPUnit_Framework_TestCase
     protected $_themeContext;
 
     /**
-     * @var \Magento\Core\Model\Theme|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_theme;
 
@@ -36,7 +37,7 @@ class CustomTest extends \PHPUnit_Framework_TestCase
         $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
         $this->_themeContext = $this->getMock('Magento\DesignEditor\Model\Theme\Context', [], [], '', false);
         $this->_theme = $this->getMock(
-            'Magento\Core\Model\Theme',
+            'Magento\Theme\Model\Theme',
             ['getId', 'getCustomization', '__wakeup'],
             [],
             '',

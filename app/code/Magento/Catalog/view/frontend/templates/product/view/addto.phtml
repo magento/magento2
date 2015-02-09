@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/** @var $this \Magento\Catalog\Block\Product\View*/
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Product\View*/
 ?>
 <?php
-$_product = $this->getProduct();
+$_product = $block->getProduct();
 $_wishlistSubmitParams = $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($_product);
 $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
 ?>
@@ -23,13 +27,13 @@ $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
        title="<?php echo __('Add to Compare') ?>"
        class="action tocompare"><span><?php echo __('Add to Compare') ?></span></a>
 </div>
-<script type="text/javascript">
+<script>
   require([
       "jquery",
       "mage/mage"
   ], function(jQuery){
       jQuery('body').mage('addToWishlist',
-          <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getWishlistOptions())?>
+          <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getWishlistOptions())?>
       );
   });
 </script>

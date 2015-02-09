@@ -1,14 +1,14 @@
 <?php
 /**
- * @spi
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Handler\Webapi;
 
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Handler\Webapi;
-use Mtf\Util\Protocol\SoapTransport;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Handler\Webapi;
+use Magento\Mtf\Util\Protocol\SoapTransport;
 
 /**
  * Class CreateCustomer

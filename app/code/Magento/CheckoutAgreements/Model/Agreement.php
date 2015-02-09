@@ -1,27 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Model;
 
-/**
- * @method \Magento\CheckoutAgreements\Model\Resource\Agreement _getResource()
- * @method \Magento\CheckoutAgreements\Model\Resource\Agreement getResource()
- * @method string getName()
- * @method \Magento\CheckoutAgreements\Model\Agreement setName(string $value)
- * @method string getContent()
- * @method \Magento\CheckoutAgreements\Model\Agreement setContent(string $value)
- * @method string getContentHeight()
- * @method \Magento\CheckoutAgreements\Model\Agreement setContentHeight(string $value)
- * @method string getCheckboxText()
- * @method \Magento\CheckoutAgreements\Model\Agreement setCheckboxText(string $value)
- * @method int getIsActive()
- * @method \Magento\CheckoutAgreements\Model\Agreement setIsActive(int $value)
- * @method int getIsHtml()
- * @method \Magento\CheckoutAgreements\Model\Agreement setIsHtml(int $value)
- *
- */
-class Agreement extends \Magento\Framework\Model\AbstractModel
+use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
+
+class Agreement extends AbstractExtensibleModel implements AgreementInterface
 {
     /**
      * Allowed CSS units for height field
@@ -76,4 +63,62 @@ class Agreement extends \Magento\Framework\Model\AbstractModel
 
         return parent::beforeSave();
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * @inheritdoc
+     */
+    public function getAgreementId()
+    {
+        return $this->getData('agreement_id');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->getData('name');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContent()
+    {
+        return $this->getData('content');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContentHeight()
+    {
+        return $this->getData('content_height');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCheckboxText()
+    {
+        return $this->getData('checkbox_text');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsActive()
+    {
+        return $this->getData('is_active');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsHtml()
+    {
+        return $this->getData('is_html');
+    }
+    //@codeCoverageIgnoreEnd
 }

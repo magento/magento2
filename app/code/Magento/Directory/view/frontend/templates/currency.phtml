@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -10,16 +14,16 @@
  * @see \Magento\Directory\Block\Currency
  */
 ?>
-<?php if ($this->getCurrencyCount() > 1): ?>
-<?php $currencies = $this->getCurrencies(); ?>
-<?php $currentCurrencyCode = $this->getCurrentCurrencyCode(); ?>
-<?php $id = $this->getIdModifier() ? '-' . $this->getIdModifier() : ''?>
+<?php if ($block->getCurrencyCount() > 1): ?>
+<?php $currencies = $block->getCurrencies(); ?>
+<?php $currentCurrencyCode = $block->getCurrentCurrencyCode(); ?>
+<?php $id = $block->getIdModifier() ? '-' . $block->getIdModifier() : ''?>
 <div class="switcher currency switcher-currency" id="switcher-currency<?php echo $id?>">
     <strong class="label switcher-label"><span><?php echo __('Currency') ?></span></strong>
     <div class="actions dropdown options switcher-options">
         <div class="action toggle switcher-trigger" id="switcher-currency-trigger<?php echo $id?>">
-            <strong class="language-<?php echo $this->escapeHtml($this->getCurrentCurrencyCode()) ?>">
-                <span><?php echo $this->escapeHtml($currentCurrencyCode) ?> - <?php echo @$this->escapeHtml($currencies[$currentCurrencyCode]) ?></span>
+            <strong class="language-<?php echo $block->escapeHtml($block->getCurrentCurrencyCode()) ?>">
+                <span><?php echo $block->escapeHtml($currentCurrencyCode) ?> - <?php echo @$block->escapeHtml($currencies[$currentCurrencyCode]) ?></span>
             </strong>
         </div>
         <ul class="dropdown switcher-dropdown" data-mage-init='{"dropdownDialog":{
@@ -32,7 +36,7 @@
             <?php foreach ($currencies as $_code => $_name): ?>
                 <?php if ($_code != $currentCurrencyCode): ?>
                     <li class="currency-<?php echo $_code ?> switcher-option">
-                        <a href="#" data-post='<?php echo $this->getSwitchCurrencyPostData($_code); ?>'><?php echo $_code ?> - <?php echo $_name ?></a>
+                        <a href="#" data-post='<?php echo $block->getSwitchCurrencyPostData($_code); ?>'><?php echo $_code ?> - <?php echo $_name ?></a>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>

@@ -1,23 +1,27 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * Product list toolbar
  *
- * @var $this \Magento\Catalog\Block\Product\ProductList\Toolbar
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
  */
-use \Magento\Catalog\Model\Product\ProductList\Toolbar;
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
 ?>
-<?php if ($this->isEnabledViewSwitcher()): ?>
+<?php if ($block->isEnabledViewSwitcher()): ?>
 <div class="modes">
-    <?php $_modes = $this->getModes(); ?>
+    <?php $_modes = $block->getModes(); ?>
     <?php if ($_modes && count($_modes) > 1): ?>
     <strong class="modes-label"><?php echo __('View as') ?></strong>
-    <?php foreach ($this->getModes() as $_code => $_label): ?>
-        <?php if ($this->isModeActive($_code)): ?>
+    <?php foreach ($block->getModes() as $_code => $_label): ?>
+        <?php if ($block->isModeActive($_code)): ?>
             <strong title="<?php echo $_label ?>"
                 class="modes-mode active mode-<?php echo strtolower($_code); ?>"
                 data-value="<?php echo strtolower($_code); ?>">

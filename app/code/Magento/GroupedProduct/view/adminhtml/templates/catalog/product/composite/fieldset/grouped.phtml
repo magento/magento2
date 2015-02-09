@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
  ?>
 
-<?php /* @var $this \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped */ ?>
+<?php /* @var $block \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped */ ?>
 <?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
-<div id="catalog_product_composite_configure_fields_grouped" class="<?php echo $this->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
+<div id="catalog_product_composite_configure_fields_grouped" class="<?php echo $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <h4><?php echo __('Associated Products') ?></h4>
     <div class="product-options">
-        <?php $_product = $this->getProduct(); ?>
-        <?php $this->setPreconfiguredValue(); ?>
-        <?php $_associatedProducts = $this->getAssociatedProducts(); ?>
+        <?php $_product = $block->getProduct(); ?>
+        <?php $block->setPreconfiguredValue(); ?>
+        <?php $_associatedProducts = $block->getAssociatedProducts(); ?>
         <?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
         <?php if ((!$_product->isAvailable() && !$_skipSaleableCheck) || !$_hasAssociatedProducts): ?>
             <p class="availability out-of-stock"><?php echo __('Availability:') ?> <span><?php echo __('Out of stock') ?></span></p>
@@ -22,7 +26,7 @@
                     <th class="col-id"><?php echo __('ID') ?></th>
                     <th class="col-sku"><?php echo __('SKU') ?></th>
                     <th class="col-name"><?php echo __('Product Name') ?></th>
-                    <?php if ($this->getCanShowProductPrice($_product)): ?>
+                    <?php if ($block->getCanShowProductPrice($_product)): ?>
                     <th class="col-price"><?php echo __('Price') ?></th>
                     <?php endif; ?>
                     <?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>
@@ -36,12 +40,12 @@
             <?php foreach ($_associatedProducts as $_item): ?>
                 <tr class="<?php echo(++$i % 2) ? 'even' : 'odd' ?>">
                     <td class="col-id"><?php echo $_item->getId() ?></td>
-                    <td class="col-sku"><?php echo $this->escapeHtml($_item->getSku()) ?></td>
-                    <td class="col-name"><?php echo $this->escapeHtml($_item->getName()) ?></td>
-                    <?php if ($this->getCanShowProductPrice($_product)): ?>
+                    <td class="col-sku"><?php echo $block->escapeHtml($_item->getSku()) ?></td>
+                    <td class="col-name"><?php echo $block->escapeHtml($_item->getName()) ?></td>
+                    <?php if ($block->getCanShowProductPrice($_product)): ?>
                     <td class="col-price">
-                        <?php if ($this->getCanShowProductPrice($_item)): ?>
-                        <?php echo $this->getProductPrice($_item) ?>
+                        <?php if ($block->getCanShowProductPrice($_item)): ?>
+                        <?php echo $block->getProductPrice($_item) ?>
                         <?php endif; ?>
                     </td>
                     <?php endif; ?>
@@ -49,7 +53,7 @@
                     <td class="col-qty">
                     <?php if ($_item->isSaleable() || $_skipSaleableCheck) : ?>
                         <input type="text" name="super_group[<?php echo $_item->getId() ?>]" id="super_group[<?php echo $_item->getId() ?>]" maxlength="12" value="<?php echo $_item->getQty()*1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" />
-                        <input type="hidden" value="1" price="<?php echo $this->getCurrencyPrice($_item->getPrice()) ?>" qtyId="super_group[<?php echo $_item->getId() ?>]" />
+                        <input type="hidden" value="1" price="<?php echo $block->getCurrencyPrice($_item->getPrice()) ?>" qtyId="super_group[<?php echo $_item->getId() ?>]" />
                     <?php else: ?>
                         <p class="availability out-of-stock"><span><?php echo __('Out of stock') ?></span></p>
                     <?php endif; ?>

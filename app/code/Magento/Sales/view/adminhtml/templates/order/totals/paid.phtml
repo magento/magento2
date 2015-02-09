@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->getCanDisplayTotalPaid()): ?>
+<?php if ($block->getCanDisplayTotalPaid()): ?>
 <tr>
     <td class="label"><strong><?php echo __('Total Paid') ?></strong></td>
-    <td class="emph"><?php echo $this->displayPriceAttribute('total_paid', true) ?>
+    <td class="emph"><?php echo $block->displayPriceAttribute('total_paid', true) ?>
     </td>
 </tr>
 <?php endif; ?>

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Block\Adminhtml\Integration\Edit\Tab;
 
@@ -22,13 +23,6 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $_rootResource;
 
     /**
-     * Rules collection factory
-     *
-     * @var \Magento\Authorization\Model\Resource\Rules\CollectionFactory
-     */
-    protected $_rulesCollectionFactory;
-
-    /**
      * Acl resource provider
      *
      * @var \Magento\Framework\Acl\Resource\ProviderInterface
@@ -48,13 +42,11 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Acl\RootResource $rootResource
-     * @param \Magento\Authorization\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
      * @param \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider
      * @param \Magento\Webapi\Helper\Data $webapiData
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param array $data
      *
-     * @todo Fix excessive number of arguments
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -62,14 +54,12 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Acl\RootResource $rootResource,
-        \Magento\Authorization\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory,
         \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider,
         \Magento\Webapi\Helper\Data $webapiData,
         \Magento\Integration\Helper\Data $integrationData,
         array $data = []
     ) {
         $this->_rootResource = $rootResource;
-        $this->_rulesCollectionFactory = $rulesCollectionFactory;
         $this->_aclResourceProvider = $aclResourceProvider;
         $this->_webapiData = $webapiData;
         $this->_integrationData = $integrationData;

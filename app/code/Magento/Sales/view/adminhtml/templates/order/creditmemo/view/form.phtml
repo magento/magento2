@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php  $_order = $this->getCreditmemo()->getOrder() ?>
-<?php echo $this->getChildHtml('order_info') ?>
+<?php  $_order = $block->getCreditmemo()->getOrder() ?>
+<?php echo $block->getChildHtml('order_info') ?>
 <div class="clearfix">
 <?php if (!$_order->getIsVirtual()): ?>
 <div class="order-payment-method">
@@ -16,9 +20,9 @@
         <div class="fieldset-wrapper-title">
             <span class="title"><?php echo __('Payment Information') ?></span>
         </div>
-        <div><?php echo $this->getChildHtml('order_payment') ?></div>
+        <div><?php echo $block->getChildHtml('order_payment') ?></div>
         <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
-        <div class="order-payment-additional"><?php echo $this->getChildHtml('order_payment_additional'); ?></div>
+        <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
     </div>
 </div>
 <?php if (!$_order->getIsVirtual()): ?>
@@ -29,16 +33,16 @@
             <span class="title"><?php echo __('Shipping Information') ?></span>
         </div>
         <div class="shipping-description-wrapper">
-            <div class="shipping-description-title"><?php echo $this->escapeHtml($_order->getShippingDescription()) ?></div>
+            <div class="shipping-description-title"><?php echo $block->escapeHtml($_order->getShippingDescription()) ?></div>
             <div class="shipping-description-content">
                 <?php echo __('Total Shipping Charges'); ?>:
 
                 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
-                    <?php $_excl = $this->displayShippingPriceInclTax($_order); ?>
+                    <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
                 <?php else: ?>
-                    <?php $_excl = $this->displayPriceAttribute('shipping_amount', false, ' '); ?>
+                    <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
                 <?php endif; ?>
-                <?php $_incl = $this->displayShippingPriceInclTax($_order); ?>
+                <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
 
                 <?php echo $_excl; ?>
                 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
@@ -50,11 +54,11 @@
 </div>
 <?php endif; ?>
 </div>
-<?php $_items = $this->getCreditmemo()->getAllItems() ?>
+<?php $_items = $block->getCreditmemo()->getAllItems() ?>
 
 <?php if (count($_items)): ?>
 <div id="creditmemo_items_container">
-    <?php echo $this->getChildHtml('creditmemo_items') ?>
+    <?php echo $block->getChildHtml('creditmemo_items') ?>
 </div>
 <?php else: ?>
 <div class="fieldset-wrapper">
@@ -68,13 +72,13 @@
     <div class="order-comments-history">
         <div class="fieldset-wrapper">
             <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Credit Memo History') ?></span></div>
-            <fieldset><?php echo $this->getChildHtml('order_comments') ?></fieldset>
+            <fieldset><?php echo $block->getChildHtml('order_comments') ?></fieldset>
         </div>
     </div>
     <div class="order-totals">
         <div class="fieldset-wrapper" id="history_form">
             <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Credit Memo Totals') ?></span></div>
-            <div><?php echo $this->getChildHtml('creditmemo_totals') ?></div>
+            <div><?php echo $block->getChildHtml('creditmemo_totals') ?></div>
         </div>
     </div>
 </div>

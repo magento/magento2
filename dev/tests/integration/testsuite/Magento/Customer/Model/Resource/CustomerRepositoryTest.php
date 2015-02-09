@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\Resource;
@@ -10,6 +11,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Checks Customer insert, update, search with repository
+ */
 class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /** @var AccountManagementInterface */
@@ -112,36 +116,56 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider updateCustomerDataProvider
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @param int|null $defaultBilling
+     * @param int|null $defaultShipping
      */
-    public function testUpdateCustomer()
+    public function testUpdateCustomer($defaultBilling, $defaultShipping)
     {
-        $existingCustId = 1;
+        $existingCustomerId = 1;
         $email = 'savecustomer@example.com';
         $firstName = 'Firstsave';
-        $lastname = 'Lastsave';
-        $customerBefore = $this->customerRepository->getById($existingCustId);
+        $lastName = 'Lastsave';
+        $customerBefore = $this->customerRepository->getById($existingCustomerId);
         $customerData = array_merge($customerBefore->__toArray(), [
                 'id' => 1,
                 'email' => $email,
                 'firstname' => $firstName,
-                'lastname' => $lastname,
+                'lastname' => $lastName,
                 'created_in' => 'Admin',
-                'password' => 'notsaved'
+                'password' => 'notsaved',
+                'default_billing' => $defaultBilling,
+                'default_shipping' => $defaultShipping
             ]);
         $this->customerBuilder->populateWithArray($customerData);
-        $customerDetails = $this->customerBuilder->setId($existingCustId)->create();
+        $customerDetails = $this->customerBuilder->create();
         $this->customerRepository->save($customerDetails);
-        $customerAfter = $this->customerRepository->getById($existingCustId);
+        $customerAfter = $this->customerRepository->getById($existingCustomerId);
         $this->assertEquals($email, $customerAfter->getEmail());
         $this->assertEquals($firstName, $customerAfter->getFirstname());
-        $this->assertEquals($lastname, $customerAfter->getLastname());
+        $this->assertEquals($lastName, $customerAfter->getLastname());
+        $this->assertEquals($defaultBilling, $customerAfter->getDefaultBilling());
+        $this->assertEquals($defaultShipping, $customerAfter->getDefaultShipping());
+        $this->expectedDefaultShippingsInCustomerModelAttributes(
+            $existingCustomerId,
+            $defaultBilling,
+            $defaultShipping
+        );
         $this->assertEquals('Admin', $customerAfter->getCreatedIn());
         $passwordFromFixture = 'password';
         $this->accountManagement->authenticate($customerAfter->getEmail(), $passwordFromFixture);
-        $attributesBefore = $this->converter->toFlatArray($customerBefore);
-        $attributesAfter = $this->converter->toFlatArray($customerAfter);
+        $attributesBefore = $this->converter->toFlatArray(
+            $customerBefore,
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
+        $attributesAfter = $this->converter->toFlatArray(
+            $customerAfter,
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         // ignore 'updated_at'
         unset($attributesBefore['updated_at']);
         unset($attributesAfter['updated_at']);
@@ -269,45 +293,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function searchCustomersDataProvider()
-    {
-        $builder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
-        return [
-            'Customer with specific email' => [
-                [$builder->setField('email')->setValue('customer@search.example.com')->create()],
-                null,
-                [1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname']],
-            ],
-            'Customer with specific first name' => [
-                [$builder->setField('firstname')->setValue('Firstname2')->create()],
-                null,
-                [2 => ['email' => 'customer2@search.example.com', 'firstname' => 'Firstname2']],
-            ],
-            'Customers with either email' => [
-                [],
-                [
-                    $builder->setField('firstname')->setValue('Firstname')->create(),
-                    $builder->setField('firstname')->setValue('Firstname2')->create()
-                ],
-                [
-                    1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname'],
-                    2 => ['email' => 'customer2@search.example.com', 'firstname' => 'Firstname2']
-                ],
-            ],
-            'Customers created since' => [
-                [
-                    $builder->setField('created_at')->setValue('2011-02-28 15:52:26')
-                        ->setConditionType('gt')->create(),
-                ],
-                [],
-                [
-                    1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname'],
-                    3 => ['email' => 'customer3@search.example.com', 'firstname' => 'Firstname3']
-                ],
-            ]
-        ];
-    }
-
     /**
      * Test ordering
      *
@@ -386,5 +371,93 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             'No such entity with email = customer@example.com, websiteId = 1'
         );
         $this->customerRepository->get($fixtureCustomerEmail);
+    }
+
+    /**
+     * DataProvider update customer
+     *
+     * @return array
+     */
+    public function updateCustomerDataProvider()
+    {
+        return [
+            'Customer remove default shipping and billing' => [
+                null,
+                null
+            ],
+            'Customer update default shipping and billing' => [
+                1,
+                1
+            ],
+        ];
+    }
+
+    public function searchCustomersDataProvider()
+    {
+        $builder = Bootstrap::getObjectManager()->create('\Magento\Framework\Api\FilterBuilder');
+        return [
+            'Customer with specific email' => [
+                [$builder->setField('email')->setValue('customer@search.example.com')->create()],
+                null,
+                [1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname']],
+            ],
+            'Customer with specific first name' => [
+                [$builder->setField('firstname')->setValue('Firstname2')->create()],
+                null,
+                [2 => ['email' => 'customer2@search.example.com', 'firstname' => 'Firstname2']],
+            ],
+            'Customers with either email' => [
+                [],
+                [
+                    $builder->setField('firstname')->setValue('Firstname')->create(),
+                    $builder->setField('firstname')->setValue('Firstname2')->create()
+                ],
+                [
+                    1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname'],
+                    2 => ['email' => 'customer2@search.example.com', 'firstname' => 'Firstname2']
+                ],
+            ],
+            'Customers created since' => [
+                [
+                    $builder->setField('created_at')->setValue('2011-02-28 15:52:26')
+                        ->setConditionType('gt')->create(),
+                ],
+                [],
+                [
+                    1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname'],
+                    3 => ['email' => 'customer3@search.example.com', 'firstname' => 'Firstname3']
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * Check defaults billing and shipping in customer model
+     *
+     * @param $customerId
+     * @param $defaultBilling
+     * @param $defaultShipping
+     */
+    protected function expectedDefaultShippingsInCustomerModelAttributes(
+        $customerId,
+        $defaultBilling,
+        $defaultShipping
+    ) {
+        /**
+         * @var \Magento\Customer\Model\Customer $customer
+         */
+        $customer = $this->objectManager->create('Magento\Customer\Model\Customer');
+        /** @var \Magento\Customer\Model\Customer $customer */
+        $customer->load($customerId);
+        $this->assertEquals(
+            $defaultBilling,
+            $customer->getDefaultBilling(),
+            'default_billing customer attribute did not updated'
+        );
+        $this->assertEquals(
+            $defaultShipping,
+            $customer->getDefaultShipping(),
+            'default_shipping customer attribute did not updated'
+        );
     }
 }

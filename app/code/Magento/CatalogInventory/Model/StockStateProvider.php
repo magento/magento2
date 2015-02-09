@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\CatalogInventory\Model;
 
 use Magento\Catalog\Model\ProductFactory;
@@ -92,6 +96,9 @@ class StockStateProvider implements StockStateProviderInterface
      * @param int|float $summaryQty
      * @param int|float $origQty
      * @return \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function checkQuoteItemQty(StockItemInterface $stockItem, $qty, $summaryQty, $origQty = 0)
     {
@@ -319,6 +326,8 @@ class StockStateProvider implements StockStateProviderInterface
      *
      * @param StockItemInterface $stockItem
      * @return float
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getStockQty(StockItemInterface $stockItem)
     {

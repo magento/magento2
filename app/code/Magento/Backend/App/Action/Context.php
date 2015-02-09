@@ -1,11 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App\Action;
 
 /**
  * Backend Controller context
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Context extends \Magento\Framework\App\Action\Context
 {
@@ -67,6 +69,7 @@ class Context extends \Magento\Framework\App\Action\Context
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param bool $canUseBaseUrl
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -135,6 +138,7 @@ class Context extends \Magento\Framework\App\Action\Context
 
     /**
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanUseBaseUrl()
     {

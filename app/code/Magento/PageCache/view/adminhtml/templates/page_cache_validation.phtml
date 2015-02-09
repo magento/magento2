@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 
-<?php /** @var \Magento\PageCache\Block\System\Config\Form\Field\Export $this */
+<?php /** @var \Magento\PageCache\Block\System\Config\Form\Field\Export $block */
 ?>
-<script type="text/javascript">
+<script>
 require(['jquery'], function($){
 
     //<![CDATA[
@@ -23,7 +24,10 @@ require(['jquery'], function($){
             var invalidFields = fields.filter(function () {
                 return ($(this).val().length == 0 || ($(this).val() != $(this).data('previous-value')));
             });
-            $('#system_full_page_cache_varnish_export_button').prop('disabled', (invalidFields.length > 0));
+            $('[id^=system_full_page_cache_varnish_export_button_version]').prop(
+                'disabled',
+                (invalidFields.length > 0)
+            );
         });
     //]]>
 

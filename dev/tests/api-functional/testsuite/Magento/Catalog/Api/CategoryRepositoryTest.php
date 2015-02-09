@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
 
@@ -23,7 +24,7 @@ class CategoryRepositoryTest extends WebapiAbstract
     {
         $expected = [
             'parent_id' => 2,
-            'path' => '1/2/3',
+            'path' => '1/2/333',
             'position' => 1,
             'level' => 2,
             'available_sort_by' => ['position', 'name'],

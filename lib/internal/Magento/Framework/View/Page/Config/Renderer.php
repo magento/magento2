@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Page\Config;
@@ -13,6 +14,11 @@ use Magento\Framework\View\Page\Config;
  */
 class Renderer
 {
+    /**
+     * @var array
+     */
+    protected $assetTypeOrder = ['css', 'ico', 'js'];
+
     /**
      * @var \Magento\Framework\View\Page\Config
      */
@@ -206,31 +212,48 @@ class Renderer
     }
 
     /**
+     * Returns rendered HTML for all Assets (CSS before)
+     *
      * @return string
      */
     public function renderAssets()
     {
-        $result = '';
+        $resultGroups = array_fill_keys($this->assetTypeOrder, '');
         /** @var $group \Magento\Framework\View\Asset\PropertyGroup */
         foreach ($this->pageConfig->getAssetCollection()->getGroups() as $group) {
-            $groupAssets = $this->assetMinifyService->getAssets($group->getAll());
-            $groupAssets = $this->processMerge($groupAssets, $group);
-
-            $attributes = $this->getGroupAttributes($group);
-            $attributes = $this->addDefaultAttributes(
-                $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
-                $attributes
-            );
-
-            $groupTemplate = $this->getAssetTemplate(
-                $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
-                $attributes
-            );
-            $groupHtml = $this->renderAssetHtml($groupTemplate, $groupAssets);
-            $groupHtml = $this->processIeCondition($groupHtml, $group);
-            $result .= $groupHtml;
+            $type = $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE);
+            if (!isset($resultGroups[$type])) {
+                $resultGroups[$type] = '';
+            }
+            $resultGroups[$type] .= $this->renderAssetGroup($group);
         }
-        return $result;
+        return implode('', $resultGroups);
+    }
+
+    /**
+     * Returns rendered HTML for an Asset Group
+     *
+     * @param \Magento\Framework\View\Asset\PropertyGroup $group
+     * @return string
+     */
+    protected function renderAssetGroup(\Magento\Framework\View\Asset\PropertyGroup $group)
+    {
+        $groupAssets = $this->assetMinifyService->getAssets($group->getAll());
+        $groupAssets = $this->processMerge($groupAssets, $group);
+
+        $attributes = $this->getGroupAttributes($group);
+        $attributes = $this->addDefaultAttributes(
+            $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
+            $attributes
+        );
+
+        $groupTemplate = $this->getAssetTemplate(
+            $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
+            $attributes
+        );
+        $groupHtml = $this->renderAssetHtml($groupTemplate, $groupAssets);
+        $groupHtml = $this->processIeCondition($groupHtml, $group);
+        return $groupHtml;
     }
 
     /**

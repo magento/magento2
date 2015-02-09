@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Composite */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Composite */ ?>
 <?php
 /** @var $element \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite|\Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Logo|\Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Background */
-$element = $this->getElement();
+$element = $block->getElement();
 
 $containerId = $element->getFieldsetContainerId();
 $id = $element->getHtmlId();
@@ -26,7 +30,7 @@ $titleActions = $element->getHeaderBar() ? '<div class="actions">' . $element->g
         <div class="fieldset-wrapper-content<?php echo($isCollapsable) ? ' collapse' : ''; ?>" id="<?php echo $id ?>-content">
 <?php endif; ?>
 
-<?php echo $this->getHtml() ?>
+<?php echo $block->getHtml() ?>
 
 <?php if ($isWrapped): ?>
         </div>

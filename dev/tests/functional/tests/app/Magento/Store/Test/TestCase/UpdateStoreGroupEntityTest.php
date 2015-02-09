@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\Test\TestCase;
@@ -8,7 +9,7 @@ namespace Magento\Store\Test\TestCase;
 use Magento\Backend\Test\Page\Adminhtml\EditGroup;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Store\Test\Fixture\StoreGroup;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Update StoreGroup (Store Management)
@@ -31,6 +32,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateStoreGroupEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Page StoreIndex
      *

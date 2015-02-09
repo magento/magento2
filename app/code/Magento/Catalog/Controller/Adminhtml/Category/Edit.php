@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
@@ -38,6 +39,8 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
      * Edit category page
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
@@ -46,7 +49,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         $categoryId = (int)$this->getRequest()->getParam('id');
 
         if ($storeId && !$categoryId && !$parentId) {
-            $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore($storeId);
+            $store = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore($storeId);
             $this->getRequest()->setParam('id', (int)$store->getRootCategoryId());
         }
 
@@ -97,6 +100,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
                     . $resultPage->getLayout()->getBlock('category.tree')
                         ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
                 'messages' => $resultPage->getLayout()->getMessagesBlock()->getGroupedHtml(),
+                'toolbar' => $resultPage->getLayout()->getBlock('page.actions.toolbar')->toHtml()
             ]);
             $this->_eventManager->dispatch(
                 'category_prepare_ajax_response',

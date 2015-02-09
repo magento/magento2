@@ -2,7 +2,8 @@
 /**
  * Config helper Unit tests.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -80,12 +81,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
+        /**
+         * @var $cacheMock \Magento\Webapi\Model\Cache\Type
+         */
+        $cacheMock = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_soapConfig = new \Magento\Webapi\Model\Soap\Config(
             $objectManagerMock,
             $fileSystemMock,
             $this->_configMock,
             $classReflection,
-            $this->_helperMock
+            $this->_helperMock,
+            $cacheMock
         );
         parent::setUp();
     }

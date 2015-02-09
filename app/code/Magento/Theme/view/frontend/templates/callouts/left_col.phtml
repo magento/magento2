@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="block block-banner">
     <div class="block-content">
-        <?php if (strtolower(substr($this->getLinkUrl(), 0, 4)) === 'http'): ?>
-            <a href="<?php echo $this->getLinkUrl() ?>" title="<?php echo __($this->getImgAlt()) ?>">
-        <?php elseif ($this->getLinkUrl()): ?>
-            <a href="<?php echo $this->getUrl($this->getLinkUrl()) ?>" title="<?php echo __($this->getImgAlt()) ?>">
+        <?php if (strtolower(substr($block->getLinkUrl(), 0, 4)) === 'http'): ?>
+            <a href="<?php echo $block->getLinkUrl() ?>" title="<?php echo __($block->getImgAlt()) ?>">
+        <?php elseif ($block->getLinkUrl()): ?>
+            <a href="<?php echo $block->getUrl($block->getLinkUrl()) ?>" title="<?php echo __($block->getImgAlt()) ?>">
         <?php endif; ?>
-            <img src="<?php echo $this->getViewFileUrl($this->getImgSrc()) ?>"<?php if (!$this->getLinkUrl()): ?> title="<?php echo __($this->getImgAlt()) ?>"<?php endif; ?> alt="<?php echo __($this->getImgAlt()) ?>" />
-        <?php if ($this->getLinkUrl()): ?>
+            <img src="<?php echo $block->getViewFileUrl($block->getImgSrc()) ?>"<?php if (!$block->getLinkUrl()): ?> title="<?php echo __($block->getImgAlt()) ?>"<?php endif; ?> alt="<?php echo __($block->getImgAlt()) ?>" />
+        <?php if ($block->getLinkUrl()): ?>
         </a>
         <?php endif ?>
     </div>

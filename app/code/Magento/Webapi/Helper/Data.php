@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Helper;
 
@@ -8,7 +9,6 @@ use Magento\Integration\Controller\Adminhtml\Integration as IntegrationControlle
 
 /**
  * Class Data
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -71,6 +71,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $preserveVersion Should version be preserved during class name conversion into service name
      * @return string[]
      * @throws \InvalidArgumentException When class is not valid API service.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getServiceNameParts($className, $preserveVersion = false)
     {

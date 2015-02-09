@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Api;
@@ -61,9 +62,6 @@ class ProductServiceTest extends WebapiAbstract
      */
     public function testCreateBundle()
     {
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->markTestIncomplete('MAGETWO-31016: incompatible with ZF 1.12.9');
-        }
         $bundleProductOptions = [
             "attribute_code" => "bundle_product_options",
             "value" => [

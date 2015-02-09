@@ -1,13 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons */ ?>
 
-<a href="<?php echo $this->getHomeLink() ?>" class="logo" title="<?php echo __('Magento Admin Panel') ?>"><span><?php echo __('Magento Admin Panel') ?></span></a>
+<a href="<?php echo $block->getHomeLink() ?>" class="logo" title="<?php echo __('Magento Admin Panel') ?>"><span><?php echo __('Magento Admin Panel') ?></span></a>
 
-<div id="vde_toolbar_button_save" class="vde_toolbar_buttons" <?php echo $this->getUiId()?>>
-    <?php echo $this->getChildBlock('design_editor_toolbar_buttons_save')->init()->toHtml(); ?>
+<div id="vde_toolbar_button_save" class="vde_toolbar_buttons" <?php echo $block->getUiId()?>>
+    <?php echo $block->getChildBlock('design_editor_toolbar_buttons_save')->init()->toHtml(); ?>
 </div>
-<?php echo $this->getChildBlock('design_editor_toolbar_buttons_edit')->init()->toHtml(); ?>
+<?php echo $block->getChildBlock('design_editor_toolbar_buttons_edit')->init()->toHtml(); ?>

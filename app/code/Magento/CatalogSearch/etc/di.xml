@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
@@ -73,7 +74,7 @@
             <argument name="intervals" xsi:type="array">
                 <item name="Magento\CatalogSearch\Model\Resource\Engine" xsi:type="string">Magento\CatalogSearch\Model\Price\Interval</item>
             </argument>
-            <argument name="scope" xsi:type="const">\Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scope" xsi:type="const">\Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
@@ -120,14 +121,11 @@
             <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\Resource\Advanced\Collection</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\CatalogSearch\Model\Resource\Product\CollectionFactory">
+    <virtualType name="Magento\CatalogSearch\Model\Resource\AdvancedFactory" type="Magento\Catalog\Model\Resource\Product\CollectionFactory">
         <arguments>
-            <argument name="productFactoryNames" xsi:type="array">
-                <item name="catalogSearchAdvancedCollection" xsi:type="string">Magento\CatalogSearch\Model\Resource\Advanced\Collection</item>
-                <item name="catalogSearchFulltextCollection" xsi:type="string">Magento\CatalogSearch\Model\Resource\Fulltext\Collection</item>
-            </argument>
+            <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\Resource\Advanced</argument>
         </arguments>
-    </type>
+    </virtualType>
     <type name="Magento\CatalogSearch\Model\Layer\Category\ItemCollectionProvider">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory</argument>
@@ -199,6 +197,19 @@
     <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor">
         <arguments>
             <argument name="attributePrefix" xsi:type="const">Magento\CatalogSearch\Model\Resource\Engine::ATTRIBUTE_PREFIX</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogSearch\Model\Resource\ResourceProvider">
+        <arguments>
+            <argument name="resourceFactoryNames" xsi:type="array">
+                <item name="Magento\CatalogSearch\Model\Resource\Engine" xsi:type="array">
+                    <item name="resource" xsi:type="string">Magento\CatalogSearch\Model\Resource\AdvancedFactory</item>
+                    <item name="resource_collection" xsi:type="string">Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory</item>
+                    <item name="result_collection" xsi:type="string">Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory</item>
+                    <item name="advanced_result_collection" xsi:type="string">Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory</item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

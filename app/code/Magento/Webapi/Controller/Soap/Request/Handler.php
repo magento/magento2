@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller\Soap\Request;
 
@@ -106,7 +107,6 @@ class Handler
         }
 
         if (!$isAllowed) {
-            // TODO: Consider passing Integration ID instead of Consumer ID
             throw new AuthorizationException(
                 AuthorizationException::NOT_AUTHORIZED,
                 ['resources' => implode(', ', $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])]

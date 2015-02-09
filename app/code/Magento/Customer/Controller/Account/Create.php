@@ -1,12 +1,15 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Model\Registration;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
 class Create extends \Magento\Customer\Controller\Account
@@ -17,31 +20,38 @@ class Create extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
+     * @param RedirectFactory $resultRedirectFactory
+     * @param PageFactory $resultPageFactory
      * @param Registration $registration
      */
     public function __construct(
         Context $context,
         Session $customerSession,
+        RedirectFactory $resultRedirectFactory,
+        PageFactory $resultPageFactory,
         Registration $registration
     ) {
         $this->registration = $registration;
-        parent::__construct($context, $customerSession);
+        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
     }
 
     /**
      * Customer register form page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
     public function execute()
     {
         if ($this->_getSession()->isLoggedIn() || !$this->registration->isAllowed()) {
-            $this->_redirect('*/*');
-            return;
+            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('*/*');
+            return $resultRedirect;
         }
 
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
-        $this->_view->renderLayout();
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getLayout()->initMessages();
+        return $resultPage;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Form\Element;
 
@@ -51,6 +52,7 @@ class Checkbox extends AbstractElement
 
     /**
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getElementHtml()
     {
@@ -78,6 +80,7 @@ class Checkbox extends AbstractElement
      * Return check status of checkbox
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsChecked()
     {

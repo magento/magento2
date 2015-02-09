@@ -1,8 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
+
+use Magento\Framework\Filesystem\DriverPool;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,9 +52,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->_filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->will($this->returnValueMap([
-                [\Magento\Framework\App\Filesystem\DirectoryList::THEMES, $themesDirMock],
-                [\Magento\Framework\App\Filesystem\DirectoryList::APP, $appDirMock],
-                [\Magento\Framework\App\Filesystem\DirectoryList::ROOT, $this->rootDirMock],
+                [\Magento\Framework\App\Filesystem\DirectoryList::THEMES, DriverPool::FILE, $themesDirMock],
+                [\Magento\Framework\App\Filesystem\DirectoryList::APP, DriverPool::FILE, $appDirMock],
+                [\Magento\Framework\App\Filesystem\DirectoryList::ROOT, DriverPool::FILE, $this->rootDirMock],
             ]));
 
         $this->_templateEngine = $this->getMock(

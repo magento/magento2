@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $_order = $this->getOrder() ?>
+<?php $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
-    <a href="<?php echo $this->getPrintAllInvoicesUrl($_order) ?>"
+    <a href="<?php echo $block->getPrintAllInvoicesUrl($_order) ?>"
        target="_blank"
        class="action print">
         <span><?php echo __('Print All Invoices') ?></span>
@@ -14,7 +18,7 @@
 <?php foreach ($_order->getInvoiceCollection() as $_invoice): ?>
 <div class="order-title">
     <strong><?php echo __('Invoice #') ?><?php echo $_invoice->getIncrementId(); ?></strong>
-    <a href="<?php echo $this->getPrintInvoiceUrl($_invoice) ?>"
+    <a href="<?php echo $block->getPrintInvoiceUrl($_invoice) ?>"
        onclick="this.target='_blank'"
        class="action print">
         <span><?php echo __('Print Invoice') ?></span>
@@ -39,13 +43,13 @@
     continue;
 } ?>
         <tbody>
-            <?php echo $this->getItemHtml($_item) ?>
+            <?php echo $block->getItemHtml($_item) ?>
         </tbody>
         <?php endforeach; ?>
         <tfoot>
-            <?php echo $this->getInvoiceTotalsHtml($_invoice)?>
+            <?php echo $block->getInvoiceTotalsHtml($_invoice)?>
         </tfoot>
     </table>
 </div>
-<?php echo $this->getInvoiceCommentsHtml($_invoice)?>
+<?php echo $block->getInvoiceCommentsHtml($_invoice)?>
 <?php endforeach; ?>

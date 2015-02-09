@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Asset\PreProcessor;
@@ -45,7 +46,9 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         return [
             'css => css' => [
                 'css', 'css',
-                ['Magento\Framework\View\Asset\PreProcessor\ModuleNotation'],
+                [
+                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'
+                ],
             ],
             'css => less (irrelevant)' => [
                 'css', 'less',
@@ -55,7 +58,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                 'less', 'css',
                 [
                     'Magento\Framework\Css\PreProcessor\Less',
-                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
+                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'
                 ],
             ],
             'less => less' => [

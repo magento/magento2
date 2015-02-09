@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
@@ -37,6 +38,7 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
  * @method Address setMiddlename(string $value)
  * @method Address setSuffix(string $value)
  * @method Address setCompany(string $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Address extends AbstractAddress implements OrderAddressInterface
 {
@@ -77,6 +79,7 @@ class Address extends AbstractAddress implements OrderAddressInterface
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

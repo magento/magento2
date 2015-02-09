@@ -1,15 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var  $this \Magento\Shipping\Block\Items */ ?>
-<?php  $_order = $this->getOrder() ?>
+<?php /** @var  $block \Magento\Shipping\Block\Items */ ?>
+<?php  $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
     <?php if ($_order->getTracksCollection()->count()) : ?>
-        <?php echo $this->getChildHtml('track-all-link') ?>
+        <?php echo $block->getChildHtml('track-all-link') ?>
     <?php endif; ?>
-    <a href="<?php echo $this->getPrintAllShipmentsUrl($_order) ?>"
+    <a href="<?php echo $block->getPrintAllShipmentsUrl($_order) ?>"
        onclick="this.target='_blank'"
        class="action print">
         <span><?php echo __('Print All Shipments') ?></span>
@@ -18,7 +22,7 @@
 <?php foreach ($_order->getShipmentsCollection() as $_shipment): ?>
 <div class="order-title">
     <strong><?php echo __('Shipment #') ?><?php echo $_shipment->getIncrementId(); ?></strong>
-    <a href="<?php echo $this->getPrintShipmentUrl($_shipment) ?>"
+    <a href="<?php echo $block->getPrintShipmentUrl($_shipment) ?>"
        onclick="this.target='_blank'"
        class="action print">
         <span><?php echo __('Print Shipment') ?></span
@@ -41,10 +45,10 @@
             $i = 1;
             $_size = $tracks->count();
             foreach ($tracks as $track): ?>
-                <?php if ($track->isCustom()): ?><?php echo $this->escapeHtml($track->getNumber()) ?><?php else: ?><a
+                <?php if ($track->isCustom()): ?><?php echo $block->escapeHtml($track->getNumber()) ?><?php else: ?><a
                     href="#"
                     data-mage-init='{"popupWindow": {"windowURL":"<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($track) ?>","windowName":"trackorder","width":800,"height":600,"left":0,"top":0,"resizable":1,"scrollbars":1}}'
-                    class="action track"><span><?php echo $this->escapeHtml($track->getNumber()) ?></span>
+                    class="action track"><span><?php echo $block->escapeHtml($track->getNumber()) ?></span>
                     </a><?php endif; ?><?php if ($i != $_size): ?>, <?php endif; ?>
                 <?php $i++;
             endforeach; ?>
@@ -68,10 +72,10 @@
     continue;
 } ?>
         <tbody>
-            <?php echo $this->getItemHtml($_item) ?>
+            <?php echo $block->getItemHtml($_item) ?>
         </tbody>
         <?php endforeach; ?>
     </table>
 </div>
-<?php echo $this->getCommentsHtml($_shipment)?>
+<?php echo $block->getCommentsHtml($_shipment)?>
 <?php endforeach; ?>

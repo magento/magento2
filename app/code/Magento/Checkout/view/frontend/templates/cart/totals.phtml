@@ -1,21 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php
 /**
  * Shopping cart totals template
- * @var $this \Magento\Checkout\Block\Cart\Totals
+ * @var $block \Magento\Checkout\Block\Cart\Totals
  */
 ?>
 <div class="cart-totals">
     <div class="table-wrapper">
         <table id="shopping-cart-totals-table" class="data table totals">
             <caption class="table-caption"><?php echo __('Total'); ?></caption>
-            <?php echo $this->renderTotals(); ?>
+            <?php echo $block->renderTotals(); ?>
             <tfoot>
-            <?php echo $this->renderTotals('footer'); ?>
+            <?php echo $block->renderTotals('footer'); ?>
             </tfoot>
         </table>
     </div>

@@ -74,7 +74,8 @@
  *  ));
  * </code>
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter;
 
@@ -205,6 +206,7 @@ class Input implements \Zend_Filter_Interface
      * @param bool $isFilterListSimple
      * @return array
      * @throws \Exception when filter is not found or not instance of defined instances
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _filter(array $data, &$filters = null, $isFilterListSimple = false)
     {

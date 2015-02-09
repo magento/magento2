@@ -1,21 +1,22 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 @collapsible-nav-background: @sidebar-background;
-@collapsible-nav-item-hover: #e8e8e8;
+@collapsible-nav-item-hover: @color-gray91;
 @collapsible-nav-color: false;
 @collapsible-nav-current-color: false;
 @collapsible-nav-current-font-weight: @font-weight-semibold;
 @collapsible-nav-current-border: 3px solid transparent;
-@collapsible-nav-current-border-color: #ff5501;
+@collapsible-nav-current-border-color: @color-orange-red1;
 
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Collapsible navigation
@@ -41,7 +42,7 @@
             text-decoration: none;
             &:hover {
                 .css(background, @collapsible-nav-item-hover);
-            } 
+            }
         }
         &.current {
             a,
@@ -63,7 +64,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .block-collapsible-nav {
         .title {
             &:extend(.abs-visually-hidden-desktop all);
@@ -74,7 +75,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .block-collapsible-nav {
         position: absolute;
         top: -21px;

@@ -1,35 +1,39 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\Downloadable\Block\Sales\Order\Email\Items\Downloadable */ ?>
-<?php $_item = $this->getItem() ?>
-<?php $_order = $this->getItem()->getOrder(); ?>
+<?php /** @var $block \Magento\Downloadable\Block\Sales\Order\Email\Items\Downloadable */ ?>
+<?php $_item = $block->getItem() ?>
+<?php $_order = $block->getItem()->getOrder(); ?>
 <tr>
     <td align="left" valign="top" style="padding:3px 9px">
-        <strong><?php echo $this->escapeHtml($_item->getName()) ?></strong>
-        <?php if ($this->getItemOptions()): ?>
+        <strong><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+        <?php if ($block->getItemOptions()): ?>
         <dl style="margin:0; padding:0;">
-            <?php foreach ($this->getItemOptions() as $option): ?>
+            <?php foreach ($block->getItemOptions() as $option): ?>
             <dt><strong><em><?php echo $option['label'] ?></em></strong></dt>
             <dd style="margin:0; padding:0 0 0 9px;"><?php echo $option['value'] ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
-        <?php if ($links = $this->getLinks()->getPurchasedItems()): ?>
+        <?php if ($links = $block->getLinks()->getPurchasedItems()): ?>
         <dl style="margin:0; padding:0;">
-            <dt><strong><em><?php echo $this->getLinksTitle() ?></em></strong></dt>
+            <dt><strong><em><?php echo $block->getLinksTitle() ?></em></strong></dt>
             <?php foreach ($links as $link): ?>
-                <dd style="margin:0; padding:0 0 0 9px;"><?php echo $this->escapeHtml($link->getLinkTitle()) ?></dd>
+                <dd style="margin:0; padding:0 0 0 9px;"><?php echo $block->escapeHtml($link->getLinkTitle()) ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
-        <?php echo $this->escapeHtml($_item->getDescription()) ?>
+        <?php echo $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td align="left" valign="top" style="padding:3px 9px"><?php echo $this->escapeHtml($this->getSku($_item)) ?></td>
+    <td align="left" valign="top" style="padding:3px 9px"><?php echo $block->escapeHtml($block->getSku($_item)) ?></td>
     <td align="center" valign="top" style="padding:3px 9px"><?php echo $_item->getQty()*1 ?></td>
     <td align="right" valign="top" style="padding:3px 9px">
-        <?php echo $this->getItemPrice($_item); ?>
+        <?php echo $block->getItemPrice($_item); ?>
     </td>
 </tr>

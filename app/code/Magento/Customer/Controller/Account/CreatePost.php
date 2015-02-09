@@ -1,17 +1,19 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\UrlFactory;
@@ -26,7 +28,7 @@ use Magento\Framework\Escaper;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -78,8 +80,10 @@ class CreatePost extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param StoreManagerInterface $storeManager
+     * @param RedirectFactory $resultRedirectFactory
+     * @param PageFactory $resultPageFactory
      * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $accountManagement
      * @param Address $addressHelper
      * @param UrlFactory $urlFactory
@@ -98,6 +102,8 @@ class CreatePost extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
+        RedirectFactory $resultRedirectFactory,
+        PageFactory $resultPageFactory,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         AccountManagementInterface $accountManagement,
@@ -127,7 +133,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
         $this->escaper = $escaper;
         $this->customerExtractor = $customerExtractor;
         $this->urlModel = $urlFactory->create();
-        parent::__construct($context, $customerSession);
+        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
     }
 
     /**
@@ -182,15 +188,17 @@ class CreatePost extends \Magento\Customer\Controller\Account
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($this->_getSession()->isLoggedIn() || !$this->registration->isAllowed()) {
-            $this->_redirect('*/*/');
-            return;
+            $resultRedirect->setPath('*/*/');
+            return $resultRedirect;
         }
 
         if (!$this->getRequest()->isPost()) {
             $url = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
-            $this->getResponse()->setRedirect($this->_redirect->error($url));
-            return;
+            $resultRedirect->setUrl($this->_redirect->error($url));
+            return $resultRedirect;
         }
 
         $this->_getSession()->regenerateId();
@@ -235,14 +243,14 @@ class CreatePost extends \Magento\Customer\Controller\Account
                 );
                 // @codingStandardsIgnoreEnd
                 $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
-                $this->getResponse()->setRedirect($this->_redirect->success($url));
+                $resultRedirect->setUrl($this->_redirect->success($url));
             } else {
                 $this->_getSession()->setCustomerDataAsLoggedIn($customer);
 
                 $this->messageManager->addSuccess($this->getSuccessMessage());
-                $this->getResponse()->setRedirect($this->getSuccessRedirect());
+                $resultRedirect->setUrl($this->getSuccessRedirect());
             }
-            return;
+            return $resultRedirect;
         } catch (StateException $e) {
             $url = $this->urlModel->getUrl('customer/account/forgotpassword');
             // @codingStandardsIgnoreStart
@@ -263,7 +271,8 @@ class CreatePost extends \Magento\Customer\Controller\Account
 
         $this->_getSession()->setCustomerFormData($this->getRequest()->getPost());
         $defaultUrl = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
-        $this->getResponse()->setRedirect($this->_redirect->error($defaultUrl));
+        $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
+        return $resultRedirect;
     }
 
     /**

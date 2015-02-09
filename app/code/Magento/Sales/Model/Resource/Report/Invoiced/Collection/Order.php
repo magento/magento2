@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Resource\Report\Invoiced\Collection;
 
@@ -26,7 +27,7 @@ class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractColl
     protected $_selectedColumns = [];
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -34,7 +35,7 @@ class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractColl
      * @param \Zend_Db_Adapter_Abstract $connection
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -89,11 +90,20 @@ class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractColl
      */
     protected function _initSelect()
     {
-        $this->getSelect()->from($this->getResource()->getMainTable(), $this->_getSelectedColumns());
+        $this->getSelect()->from($this->getResource()->getMainTable());
+        return parent::_initSelect();
+    }
+
+    /**
+     * @return $this
+     */
+    protected function _beforeLoad()
+    {
+        $this->getSelect()->columns($this->_getSelectedColumns());
         if (!$this->isTotals()) {
             $this->getSelect()->group($this->_periodFormat);
             $this->getSelect()->having('SUM(orders_count) > 0');
         }
-        return parent::_initSelect();
+        return parent::_beforeLoad();
     }
 }

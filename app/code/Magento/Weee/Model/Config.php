@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Model;
 
@@ -59,7 +60,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -74,7 +75,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_PRODUCT_LIST,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -89,7 +90,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_SALES,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -104,7 +105,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_EMAIL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -119,7 +120,7 @@ class Config
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_FPT_INCLUDE_IN_SUBTOTAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -134,7 +135,7 @@ class Config
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_FPT_TAXABLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -149,7 +150,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

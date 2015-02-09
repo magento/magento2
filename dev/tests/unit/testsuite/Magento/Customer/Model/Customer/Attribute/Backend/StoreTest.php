@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\Customer\Attribute\Backend;
@@ -13,15 +14,15 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected $testable;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
     public function setUp()
     {
-        $storeManager = $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->getMock();
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        /** @var \Magento\Framework\Store\StoreManagerInterface $storeManager */
         $this->testable = new Store($storeManager);
     }
 

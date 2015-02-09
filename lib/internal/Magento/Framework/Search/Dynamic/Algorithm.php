@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Dynamic;
 
@@ -162,6 +163,8 @@ class Algorithm
      *
      * @param IntervalInterface $interval
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function calculateSeparators(IntervalInterface $interval)
     {
@@ -258,6 +261,9 @@ class Algorithm
      * @param int $quantileNumber should be from 1 to n-1 where n is number of intervals
      * @param IntervalInterface $interval
      * @return array|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _findValueSeparator($quantileNumber, IntervalInterface $interval)
     {
@@ -418,6 +424,8 @@ class Algorithm
      * @param bool $returnEmpty whether empty result is acceptable
      * @param null|float $roundingFactor if given, checks for range to contain the factor
      * @return false|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _findRoundValue($lowerValue, $upperValue, $returnEmpty = true, $roundingFactor = null)
     {
@@ -547,6 +555,8 @@ class Algorithm
      * @param float $value
      * @param null|float[] $limits search [from, to]
      * @return int
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _binarySearch($value, $limits = null)
     {

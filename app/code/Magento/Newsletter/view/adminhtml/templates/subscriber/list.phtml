@@ -1,20 +1,24 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php echo $this->getChildHtml('grid') ?>
-<?php if (count($this->getQueueAsOptions())>0 && $this->getShowQueueAdd()): ?>
+<?php echo $block->getChildHtml('grid') ?>
+<?php if (count($block->getQueueAsOptions())>0 && $block->getShowQueueAdd()): ?>
 <div class="form-buttons">
     <select id="queueList" name="queue">
-    <?php foreach ($this->getQueueAsOptions() as $_queue): ?>
+    <?php foreach ($block->getQueueAsOptions() as $_queue): ?>
         <option value="<?php echo $_queue['value'] ?>"><?php echo $_queue['label'] ?> #<?php echo $_queue['value'] ?></option>
     <?php endforeach; ?>
     </select>
     <button class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?php echo __('Add to Queue'); ?></span></span></span></button>
 </div>
 <?php endif ?>
-<script type="text/javascript">
+<script>
 require(["prototype", "mage/adminhtml/events"], function(){
 
 <!--

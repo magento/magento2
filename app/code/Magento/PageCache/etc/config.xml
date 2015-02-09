@@ -1,16 +1,20 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <system>
             <full_page_cache>
-                <varnish>
-                    <path>Magento/PageCache/etc/varnish.vcl</path>
-                </varnish>
+                <varnish3>
+                    <path>Magento/PageCache/etc/varnish3.vcl</path>
+                </varnish3>
+                <varnish4>
+                    <path>Magento/PageCache/etc/varnish4.vcl</path>
+                </varnish4>
                 <ttl>120</ttl>
                 <caching_application>1</caching_application>
                 <default>

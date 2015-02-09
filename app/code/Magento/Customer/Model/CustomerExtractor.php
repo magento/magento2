@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
 
@@ -21,7 +22,7 @@ class CustomerExtractor
     protected $customerBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -33,13 +34,13 @@ class CustomerExtractor
     /**
      * @param Metadata\FormFactory $formFactory
      * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param GroupManagementInterface $customerGroupManagement
      */
     public function __construct(
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         GroupManagementInterface $customerGroupManagement
     ) {
         $this->formFactory = $formFactory;

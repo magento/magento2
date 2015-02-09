@@ -1,30 +1,17 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
         <title>Magento Admin</title>
-        <link src="prototype/prototype.js"/>
-        <link src="prototype/window.js"/>
-        <link src="scriptaculous/builder.js"/>
-        <link src="scriptaculous/effects.js"/>
-        <link src="lib/ccard.js"/>
-        <link src="prototype/validation.js"/>
-        <link src="varien/js.js"/>
-        <link src="mage/adminhtml/varienLoader.js"/>
-        <link src="mage/adminhtml/tools.js"/>
-        <link src="lib/ds-sleight.js" ie_condition="lt IE 7" defer="defer"/>
-        <css src="mage/calendar.css"/>
+        <link src="legacy-build.min.js"/>
         <link src="requirejs/require.js"/>
-        <link src="mage/requirejs/resolver.js"/>
-        <link src="jquery/jquery.js"/>
-        <link src="mage/jquery-no-conflict.js"/>
-        <link src="app-config.js"/>
-        <link src="extjs/ext-tree.js"/>
-        <link src="extjs/ext-tree-checkbox.js"/>
+        <link src="jquery.js"/>
+        <css src="mage/calendar.css"/>
         <css src="extjs/resources/css/ext-all.css"/>
         <css src="extjs/resources/css/ytheme-magento.css"/>
     </head>
@@ -75,7 +62,7 @@
                 <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
                 <block class="Magento\Backend\Block\Page\Footer" name="version" as="version">
                     <arguments>
-                        <argument name="bugreport_url" xsi:type="string">http://www.magentocommerce.com/bug-tracking</argument>
+                        <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
                     </arguments>
                 </block>
             </container>
@@ -86,7 +73,6 @@
         <referenceContainer name="after.body.start">
             <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config"/>
             <block class="Magento\Translation\Block\Js" name="translate" template="Magento_Translation::translate.phtml"/>
-            <block class="Magento\Framework\View\Element\Template" name="head.scripts" template="Magento_Backend::page/js/head_scripts.phtml"/>
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Backend::page/js/components.phtml"/>
             <block class="Magento\Framework\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Backend::page/js/calendar.phtml"/>
         </referenceContainer>

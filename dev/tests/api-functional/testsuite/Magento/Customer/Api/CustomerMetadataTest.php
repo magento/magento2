@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Api;
@@ -156,8 +157,6 @@ class CustomerMetadataTest extends WebapiAbstract
 
         $attributeMetadata = $this->_webApiCall($serviceInfo);
 
-        $this->assertCount(23, $attributeMetadata);
-
         $firstName = $this->getAttributeMetadataDataProvider()[Customer::FIRSTNAME][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($firstName, $attributeMetadata);
         list($firstName, $attributeMetadata) = $validationResult;
@@ -257,6 +256,7 @@ class CustomerMetadataTest extends WebapiAbstract
      * @param array $expectedResult
      * @param array $actualResult
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function checkValidationRules($expectedResult, $actualResult)
     {

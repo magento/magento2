@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div id="page-login" class="page-login">
     <div class="wrapper">
@@ -11,12 +15,12 @@
                     <div class="logo" title="<?php echo __('Magento Admin Panel') ?>"><span><?php echo __('Magento Admin Panel') ?></span></div>
                 </header>
                 <div id="messages" data-container-for="messages">
-                    <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+                    <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
                 </div>
-                <form method="post" action="" id="login-form" autocomplete="off">
+                <form method="post" action="" id="login-form" data-mage-init='{"form": {}, "validation": {}}' autocomplete="off">
                     <fieldset class="fieldset">
                         <legend class="legend"><span><?php echo __('Welcome') ?></span></legend><br/>
-                        <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
+                        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>" />
                         <div class="field field-username">
                             <label for="username" class="label"><span><?php echo __('User Name:') ?></span></label>
                             <div class="control">
@@ -31,41 +35,18 @@
                                 <input type="password" id="login" name="login[password]" class="required-entry input-text" value="" placeholder="<?php echo __('password') ?>" />
                             </div>
                         </div>
-                        <?php echo $this->getChildHtml('form.additional.info'); ?>
+                        <?php echo $block->getChildHtml('form.additional.info'); ?>
                         <div class="form-actions">
-                            <?php echo $this->getChildHtml('form.buttons'); ?>
+                            <?php echo $block->getChildHtml('form.buttons'); ?>
                         </div>
                     </fieldset>
                 </form>
-                <script type="text/javascript">
-                    function initForm($){
-                        $('#login-form').form().validation();
-                    }
-
-                    function focusInput(){
-                        var username            = document.getElementById('username'),
-                            autofocusSupport    = typeof username.autofocus !== 'undefined';
-
-                        if(!autofocusSupport){
-                            username.focus();
-                        }
-                    }
-
-                    require([
-                        "jquery",
-                        "mage/backend/form",
-                        "mage/backend/validation"
-                    ], initForm);
-
-                    focusInput();
-
-                </script>
             </div>
         </div>
     </div>
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-copyright"><?php echo $this->getChildHtml('copyright');?></div>
+            <div class="footer-copyright"><?php echo $block->getChildHtml('copyright');?></div>
         </div>
     </footer>
 </div>

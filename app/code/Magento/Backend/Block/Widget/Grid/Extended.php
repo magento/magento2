@@ -1,11 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ */
 class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {
     /**
@@ -777,6 +784,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      * Return visibility of column headers
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getHeadersVisibility()
     {
@@ -798,6 +806,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      * Return visibility of filter
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getFilterVisibility()
     {
@@ -864,6 +873,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      * Retrieve flag is collapsed
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsCollapsed()
     {
@@ -1242,6 +1252,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
      * Return count subtotals
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCountSubTotals()
     {

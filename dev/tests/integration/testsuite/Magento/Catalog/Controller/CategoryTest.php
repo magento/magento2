@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller;
 
@@ -23,7 +24,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         return [
             'category without children' => [
-                '$categoryId' => 5,
+                'categoryId' => 5,
                 ['catalog_category_view_type_default', 'catalog_category_view_type_default_without_children'],
                 [
                     '%acategorypath-category-1-category-1-1-category-1-1-1%a',
@@ -35,7 +36,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
                 ],
             ],
             'anchor category' => [
-                '$categoryId' => 4,
+                'categoryId' => 4,
                 ['catalog_category_view_type_layered'],
                 [
                     '%acategorypath-category-1-category-1-1%a',

@@ -1,18 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php if ($this->getAttributeSetSelected()): ?>
-<script type="text/javascript">
+<?php if ($block->getAttributeSetSelected()): ?>
+<script>
 require(['prototype'], function(){
 
 //<![CDATA[
 Gcontent = {};
 Gcontent.Attribute = Class.create();
 Gcontent.Attribute.prototype = {
-    idLabel : '<?php echo $this->getFieldId() ?>',
+    idLabel : '<?php echo $block->getFieldId() ?>',
     top : '',
     templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
     templateText : '',
@@ -59,13 +63,13 @@ Gcontent.Attribute.prototype = {
     }
 }
 
-var attributesSelectTemplate = '<tr id="<?php echo $this->getFieldId() ?>_{{index}}">' +
+var attributesSelectTemplate = '<tr id="<?php echo $block->getFieldId() ?>_{{index}}">' +
                 '<td>'+
-                    '<?php echo $this->getAttributesSelectHtml(true) ?>' +
-                    '<input type="hidden" name="<?php echo $this->getFieldName() ?>[{{index}}][delete]" class="delete" value="">' +
+                    '<?php echo $block->getAttributesSelectHtml(true) ?>' +
+                    '<input type="hidden" name="<?php echo $block->getFieldName() ?>[{{index}}][delete]" class="delete" value="">' +
                 '</td>' +
-                '<td><?php echo $this->getGcontentAttributesSelectHtml() ?></td>' +
-                '<td class="col-delete">' + <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getDeleteButtonHtml()) ?> + '</td>' +
+                '<td><?php echo $block->getGcontentAttributesSelectHtml() ?></td>' +
+                '<td class="col-delete">' + <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getDeleteButtonHtml()) ?> + '</td>' +
             '</tr>';
 
 optionIndex = 0;
@@ -90,20 +94,20 @@ gContentAttribute = new Gcontent.Attribute(attributesSelectTemplate);
         <tfoot>
             <tr>
                 <td colspan="3">
-                    <?php echo $this->getAddButtonHtml() ?>
+                    <?php echo $block->getAddButtonHtml() ?>
                 </td>
             </tr>
         </tfoot>
     </table>
 </div>
 
-<?php if ($this->getAttributesData()): ?>
-<script type="text/javascript">
+<?php if ($block->getAttributesData()): ?>
+<script>
 require(['prototype'], function(){
 
 //<![CDATA[
-    <?php foreach ($this->getAttributesData() as $data): ?>
-        gContentAttribute.add(<?php echo $this->jsonFormat($data) ?>);
+    <?php foreach ($block->getAttributesData() as $data): ?>
+        gContentAttribute.add(<?php echo $block->jsonFormat($data) ?>);
     <?php endforeach; ?>
 //]]>
 

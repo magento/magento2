@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Pricing\Price;
@@ -78,6 +79,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 $this->quantity
             )
             ->will($this->returnValue($this->priceMock));
+        $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
+        //Calling the get method again with the same code, cached copy should be used
         $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
     }
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <constraint>
@@ -56,6 +57,33 @@
     <assertTaxRuleIsApplied module="Magento_Tax">
         <severity>high</severity>
     </assertTaxRuleIsApplied>
+    <assertTaxRuleIsAppliedToAllPricesExcludingTax module="Magento_Tax">
+        <severeness>high</severeness>
+    </assertTaxRuleIsAppliedToAllPricesExcludingTax>
+    <assertTaxRuleIsAppliedToAllPricesIncludingTax module="Magento_Tax">
+        <severeness>high</severeness>
+    </assertTaxRuleIsAppliedToAllPricesIncludingTax>
+    <assertTaxRuleIsAppliedToAllPricesExcludingIncludingTax module="Magento_Tax">
+        <severeness>high</severeness>
+    </assertTaxRuleIsAppliedToAllPricesExcludingIncludingTax>
+    <assertTaxCalculationAfterCheckoutExcludingIncludingTax module="Magento_Tax">
+        <severeness>high</severeness>
+    </assertTaxCalculationAfterCheckoutExcludingIncludingTax>
+    <assertTaxCalculationAfterCheckoutExcludingTax module="Magento_Tax">
+        <severeness>high</severeness>
+    </assertTaxCalculationAfterCheckoutExcludingTax>
+    <assertTaxCalculationAfterCheckoutIncludingTax module="Magento_Tax">
+        <severeness>high</severeness>
+    </assertTaxCalculationAfterCheckoutIncludingTax>
+    <assertOrderTaxOnBackendExcludingIncludingTax module="Magento_Tax">
+        <severeness>high</severeness>
+    </assertOrderTaxOnBackendExcludingIncludingTax>
+    <assertOrderTaxOnBackendIncludingTax module="Magento_Tax">
+        <severeness>high</severeness>
+    </assertOrderTaxOnBackendIncludingTax>
+    <assertOrderTaxOnBackendExcludingTax module="Magento_Tax">
+        <severeness>high</severeness>
+    </assertOrderTaxOnBackendExcludingTax>
     <assertTaxRuleIsAppliedToAllPrices module="Magento_Tax">
         <severity>high</severity>
     </assertTaxRuleIsAppliedToAllPrices>

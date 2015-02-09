@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Helper;
 
@@ -45,7 +46,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $_filterManagerMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeManagerMock;
 
@@ -57,7 +58,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_escaperMock = $this->getMock('Magento\Framework\Escaper');
         $this->_filterManagerMock = $this->getMock('Magento\Framework\Filter\FilterManager', [], [], '', false);
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
 
         $this->_model = new \Magento\CatalogSearch\Helper\Data(
             $this->_contextMock,
@@ -87,7 +88,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Search\Model\Query::XML_PATH_MIN_QUERY_LENGTH,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 null
             )
             ->will($this->returnValue($return));
@@ -101,7 +102,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Search\Model\Query::XML_PATH_MAX_QUERY_LENGTH,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 null
             )
             ->will($this->returnValue($return));

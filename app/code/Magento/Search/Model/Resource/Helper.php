@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model\Resource;
 
@@ -24,6 +25,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * @param string $str The source string
      * @param int $maxWordLength
      * @return array (0 => words, 1 => terms)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function prepareTerms($str, $maxWordLength = 0)
     {

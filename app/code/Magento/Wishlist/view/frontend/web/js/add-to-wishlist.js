@@ -1,5 +1,6 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 define([
@@ -10,7 +11,7 @@ define([
     
     $.widget('mage.addToWishlist', {
         options: {
-            bundleInfo: '[id^=bundle-option-]',
+            bundleInfo: '[id^=bundle-option-]:checked',
             configurableInfo: '.super-attribute-select',
             groupedInfo: '#super-product-table input',
             downloadableInfo: '#downloadable-links-list input',

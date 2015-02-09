@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute;
 
@@ -17,7 +18,7 @@ class Sendemail extends Element
     protected $_template = 'edit/tab/account/form/renderer/sendemail.phtml';
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|null
+     * @var \Magento\Framework\Store\StoreManagerInterface|null
      */
     protected $_storeManager = null;
 

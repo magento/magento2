@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Translate\Locale\Resolver;
 
@@ -26,6 +27,7 @@ class Plugin
      * @param \Magento\Framework\Locale\ResolverInterface $subject
      * @param string|null $localeCode
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterEmulate(\Magento\Framework\Locale\ResolverInterface $subject, $localeCode)
     {
@@ -36,6 +38,7 @@ class Plugin
      * @param \Magento\Framework\Locale\ResolverInterface $subject
      * @param string|null $localeCode
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterRevert(\Magento\Framework\Locale\ResolverInterface $subject, $localeCode)
     {

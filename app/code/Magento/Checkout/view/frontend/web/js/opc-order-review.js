@@ -1,7 +1,8 @@
 /**
  * @category    one page checkout last step
  * @package     mage
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
@@ -36,8 +37,7 @@ define([
             var isAgreementValid = true;
             agreementFormsGroup.find('form').each(
                 function(){
-                    $(this).validation();
-                    isAgreementValid = isAgreementValid && $(this).validation && $(this).validation('isValid');
+                    isAgreementValid = $(this).validation() && $(this).validation('isValid') && isAgreementValid;
                 }
             );
 

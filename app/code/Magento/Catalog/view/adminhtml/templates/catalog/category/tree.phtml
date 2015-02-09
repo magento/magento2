@@ -1,39 +1,44 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="categories-side-col">
     <div class="sidebar-actions">
-        <?php if ($this->getRoot()): ?>
-            <?php echo $this->getAddRootButtonHtml() ?><br/>
-            <?php echo $this->getAddSubButtonHtml() ?>
+        <?php if ($block->getRoot()): ?>
+            <?php echo $block->getAddRootButtonHtml() ?><br/>
+            <?php echo $block->getAddSubButtonHtml() ?>
         <?php endif; ?>
     </div>
     <div class="tree-actions">
-        <?php if ($this->getRoot()): ?>
-        <?php //echo $this->getCollapseButtonHtml() ?>
-        <?php //echo $this->getExpandButtonHtml() ?>
+        <?php if ($block->getRoot()): ?>
+        <?php //echo $block->getCollapseButtonHtml() ?>
+        <?php //echo $block->getExpandButtonHtml() ?>
         <a href="#"
            onclick="tree.collapseTree(); return false;"><?php echo __('Collapse All'); ?></a>
         <span class="separator">|</span> <a href="#"
                                             onclick="tree.expandTree(); return false;"><?php echo __('Expand All'); ?></a>
         <?php endif; ?>
     </div>
-<?php if ($this->getRoot()): ?>
+<?php if ($block->getRoot()): ?>
     <div class="tree-holder">
-        <div id="tree-div" style="width:100%; overflow:auto;"></div>
+        <div id="tree-div" class="tree-wrapper"></div>
     </div>
 </div>
 <div data-id="information-dialog-tree" style="display: none;">
     <span class="messages"><?php echo __('This operation can take much time'); ?><span>
 </div>
-<script type="text/javascript">
+<script>
 var tree;
 require([
     "jquery",
     "jquery/ui",
     "prototype",
+    "extjs/ext-tree-checkbox",
     "mage/adminhtml/form",
     "mage/translate"
 ], function(jQuery){
@@ -143,7 +148,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 
         if (!this.collapsed) {
             this.collapsed = true;
-            this.loader.dataUrl = '<?php echo $this->getLoadTreeUrl(false) ?>';
+            this.loader.dataUrl = '<?php echo $block->getLoadTreeUrl(false) ?>';
             this.request(this.loader.dataUrl, false);
         }
     },
@@ -152,7 +157,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
         this.expandAll();
         if (this.collapsed) {
             this.collapsed = false;
-            this.loader.dataUrl = '<?php echo $this->getLoadTreeUrl(true) ?>';
+            this.loader.dataUrl = '<?php echo $block->getLoadTreeUrl(true) ?>';
             this.request(this.loader.dataUrl, false);
         }
     },
@@ -223,7 +228,7 @@ function reRenderTree(switcherParams) {
                 }
             });
         } else {
-            var baseUrl = '<?php echo $this->getEditUrl() ?>';
+            var baseUrl = '<?php echo $block->getEditUrl() ?>';
             var urlExt = switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
             url = parseSidUrl(baseUrl, urlExt);
             setLocation(url);
@@ -259,7 +264,7 @@ function _renderNewTree(config, scopeParams) {
     if (scopeParams) {
         url = url + scopeParams;
     }
-    <?php if ($this->isClearEdit()): ?>
+    <?php if ($block->isClearEdit()): ?>
         if (selectedNode) {
             url = url + 'id/' + config.parameters.category_id;
         }
@@ -269,7 +274,7 @@ function _renderNewTree(config, scopeParams) {
 
 Ext.onReady(function () {
     categoryLoader = new Ext.tree.TreeLoader({
-        dataUrl:'<?php echo $this->getLoadTreeUrl() ?>'
+        dataUrl:'<?php echo $block->getLoadTreeUrl() ?>'
     });
 
     categoryLoader.processResponse = function(response, parent, callback) {
@@ -351,25 +356,25 @@ Ext.onReady(function () {
         enableDD:true,
         containerScroll:true,
         selModel:new Ext.tree.CheckNodeMultiSelectionModel(),
-        rootVisible:'<?php echo $this->getRoot()->getIsVisible() ?>',
-        useAjax: <?php echo $this->getUseAjax() ?>,
-        switchTreeUrl:'<?php echo $this->getSwitchTreeUrl() ?>',
-        editUrl:'<?php echo $this->getEditUrl() ?>',
-        currentNodeId: <?php echo (int)$this->getCategoryId() ?>,
-        baseUrl: '<?php echo $this->getEditUrl() ?>'
+        rootVisible:'<?php echo $block->getRoot()->getIsVisible() ?>',
+        useAjax: <?php echo $block->getUseAjax() ?>,
+        switchTreeUrl:'<?php echo $block->getSwitchTreeUrl() ?>',
+        editUrl:'<?php echo $block->getEditUrl() ?>',
+        currentNodeId: <?php echo (int)$block->getCategoryId() ?>,
+        baseUrl: '<?php echo $block->getEditUrl() ?>'
     };
 
     defaultLoadTreeParams = {
         parameters:{
-            text:'<?php echo htmlentities($this->getRoot()->getName()) ?>',
+            text:'<?php echo htmlentities($block->getRoot()->getName()) ?>',
             draggable:false,
-        allowDrop   : <?php if ($this->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
-            id: <?php echo (int)$this->getRoot()->getId() ?>,
-            expanded: <?php echo (int)$this->getIsWasExpanded() ?>,
-            store_id: <?php echo (int)$this->getStore()->getId() ?>,
-            category_id: <?php echo (int)$this->getCategoryId() ?>
+        allowDrop   : <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
+            id: <?php echo (int)$block->getRoot()->getId() ?>,
+            expanded: <?php echo (int)$block->getIsWasExpanded() ?>,
+            store_id: <?php echo (int)$block->getStore()->getId() ?>,
+            category_id: <?php echo (int)$block->getCategoryId() ?>
         },
-        data: <?php echo $this->getTreeJson() ?>
+        data: <?php echo $block->getTreeJson() ?>
     };
 
     reRenderTree();
@@ -489,7 +494,7 @@ function categoryMove(obj) {
     mageDialog.onOk(function() {
         (function($){
             $.ajax({
-                url: '<?php echo $this->getMoveUrl() ?>',
+                url: '<?php echo $block->getMoveUrl() ?>',
                 method : 'POST',
                 data: pd.join(""),
                 showLoader: true

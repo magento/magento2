@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */ ?>
+<?php /** @var $block Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */ ?>
 <?php
-$product = $this->getProduct();
+$product = $block->getProduct();
 $helper = $this->helper('Magento\Catalog\Helper\Output');
 ?>
-<?php $options = $this->decorateArray($this->getOptions()); ?>
+<?php $options = $block->decorateArray($block->getOptions()); ?>
 <?php if ($product->isSaleable()):?>
     <?php if (count($options)): ?>
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'mage/mage',
@@ -19,7 +23,7 @@ require([
 ], function($){
     $(function() {
         $('#product_addtocart_form').priceBundle({
-            optionConfig:<?php echo $this->getJsonConfig()?>,
+            optionConfig:<?php echo $block->getJsonConfig()?>,
             controlContainer: '.field.option',
             qtyFieldSelector: '.input-text.qty'
         });
@@ -30,12 +34,12 @@ require([
             <legend id="customizeTitle" class="legend title">
                 <span><?php echo __('Customize %1', $helper->productAttribute($product, $product->getName(), 'name')) ?></span>
             </legend><br />
-            <?php echo $this->getChildHtml('product_info_bundle_options_top');?>
+            <?php echo $block->getChildHtml('product_info_bundle_options_top');?>
             <?php foreach ($options as $option): ?>
                 <?php if (!$option->getSelections()): ?>
                     <?php continue; ?>
                 <?php endif; ?>
-                <?php echo $this->getOptionHtml($option) ?>
+                <?php echo $block->getOptionHtml($option) ?>
             <?php endforeach; ?>
         </fieldset>
     <?php else: ?>

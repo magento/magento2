@@ -1,24 +1,28 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Catalog\Block\Product\AbstractProduct */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Catalog\Block\Product\AbstractProduct */
 ?>
 
 <?php
-switch ($type = $this->getType()) {
+switch ($type = $block->getType()) {
 
     case 'related-rule':
-        if ($exist = $this->hasItems()) {
+        if ($exist = $block->hasItems()) {
             $type = 'related';
             $class = $type;
 
-            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'related_products_list';
             $title = __('Related Products');
-            $items = $this->getAllItems();
-            $limit = $this->getPositionLimit();
-            $shuffle = (int) $this->isShuffled();
+            $items = $block->getAllItems();
+            $limit = $block->getPositionLimit();
+            $shuffle = (int) $block->isShuffled();
 
             $showWishlist = true;
             $showCompare = true;
@@ -29,15 +33,15 @@ switch ($type = $this->getType()) {
     break;
 
     case 'related':
-        /** @var \Magento\Catalog\Block\Product\ProductList\Related $this */
-        if ($exist = $this->getItems()->getSize()) {
+        /** @var \Magento\Catalog\Block\Product\ProductList\Related $block */
+        if ($exist = $block->getItems()->getSize()) {
             $type = 'related';
             $class = $type;
 
-            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'related_products_list';
             $title = __('Related Products');
-            $items = $this->getItems();
+            $items = $block->getItems();
             $limit = 0;
             $shuffle = 0;
 
@@ -50,16 +54,16 @@ switch ($type = $this->getType()) {
     break;
 
     case 'upsell-rule':
-        if ($exist = $this->hasItems()) {
+        if ($exist = $block->hasItems()) {
             $type = 'upsell';
             $class = $type;
 
-            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'upsell_products_list';
             $title = __('You may also be interested in the following product(s)');
-            $items = $this->getAllItems();
-            $limit = $this->getPositionLimit();
-            $shuffle = (int) $this->isShuffled();
+            $items = $block->getAllItems();
+            $limit = $block->getPositionLimit();
+            $shuffle = (int) $block->isShuffled();
 
             $showWishlist = false;
             $showCompare = false;
@@ -70,16 +74,16 @@ switch ($type = $this->getType()) {
     break;
 
     case 'upsell':
-        /** @var \Magento\Catalog\Block\Product\ProductList\Upsell $this */
-        if ($exist = count($this->getItemCollection()->getItems())) {
+        /** @var \Magento\Catalog\Block\Product\ProductList\Upsell $block */
+        if ($exist = count($block->getItemCollection()->getItems())) {
             $type = 'upsell';
             $class = $type;
 
-            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'upsell_products_list';
             $title = __('You may also be interested in the following product(s)');
-            $items = $this->getItemCollection()->getItems();
-            $limit = $this->getItemLimit('upsell');
+            $items = $block->getItemCollection()->getItems();
+            $limit = $block->getItemLimit('upsell');
             $shuffle = 0;
 
             $showWishlist = false;
@@ -91,15 +95,15 @@ switch ($type = $this->getType()) {
     break;
 
     case 'crosssell-rule':
-        /** @var \Magento\Catalog\Block\Product\ProductList\Crosssell $this */
-        if ($exist = $this->hasItems()) {
+        /** @var \Magento\Catalog\Block\Product\ProductList\Crosssell $block */
+        if ($exist = $block->hasItems()) {
             $type = 'crosssell';
             $class = $type;
 
-            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'cart_cross_sell_products';
             $title = __('More Choices:');
-            $items = $this->getItemCollection();
+            $items = $block->getItemCollection();
 
             $showWishlist = true;
             $showCompare = true;
@@ -110,15 +114,15 @@ switch ($type = $this->getType()) {
     break;
 
     case 'crosssell':
-        /** @var \Magento\Catalog\Block\Product\ProductList\Crosssell $this */
-        if ($exist = $this->getItemCount()) {
+        /** @var \Magento\Catalog\Block\Product\ProductList\Crosssell $block */
+        if ($exist = $block->getItemCount()) {
             $type = 'crosssell';
             $class = $type;
 
-            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'cart_cross_sell_products';
             $title = __('More Choices:');
-            $items = $this->getItems();
+            $items = $block->getItems();
 
             $showWishlist = true;
             $showCompare = true;
@@ -129,14 +133,14 @@ switch ($type = $this->getType()) {
     break;
 
     case 'new':
-        if ($exist = $this->getProductCollection()) {
+        if ($exist = $block->getProductCollection()) {
             $type = 'new';
             $mode = 'grid';
             $type = $type . ' ' . $mode;
 
             $class = 'widget' . ' ' . $type;
 
-            $imageBlock = $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $imageBlock = $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'new_products_content_widget_grid';
             $title = __('New Products');
             $items = $exist;
@@ -192,18 +196,18 @@ switch ($type = $this->getType()) {
                 <?php endif; ?>
                 <div class="product-item-info <?php echo $available; ?>">
                     <?php echo '<!-- ' . $image . '-->' ?>
-                    <a href="<?php echo $this->getProductUrl($_item) ?>" class="product photo product-item-photo">
+                    <a href="<?php echo $block->getProductUrl($_item) ?>" class="product photo product-item-photo">
                         <?php echo $imageBlock->init($_item, $image)->toHtml() ?>
                     </a>
                     <div class="product details product-item-details">
-                        <strong class="product name product-item-name"><a class="product-item-link" title="<?php echo $this->escapeHtml($_item->getName()) ?>" href="<?php echo $this->getProductUrl($_item) ?>">
-                            <?php echo $this->escapeHtml($_item->getName()) ?></a>
+                        <strong class="product name product-item-name"><a class="product-item-link" title="<?php echo $block->escapeHtml($_item->getName()) ?>" href="<?php echo $block->getProductUrl($_item) ?>">
+                            <?php echo $block->escapeHtml($_item->getName()) ?></a>
                         </strong>
 
-                        <?php echo $this->getProductPrice($_item); ?>
+                        <?php echo $block->getProductPrice($_item); ?>
 
                             <?php if ($templateType): ?>
-                                <?php echo $this->getReviewsSummaryHtml($_item, $templateType) ?>
+                                <?php echo $block->getReviewsSummaryHtml($_item, $templateType) ?>
                             <?php endif; ?>
 
                             <?php if (!$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>
@@ -221,12 +225,12 @@ switch ($type = $this->getType()) {
                                         <div class="actions-primary">
                                             <?php if ($_item->isSaleable()): ?>
                                                 <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)): ?>
-                                                    <button class="action tocart primary" data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_item) ?>"}}' type="button" title="<?php echo __('Add to Cart') ?>">
+                                                    <button class="action tocart primary" data-mage-init='{"redirectUrl": {"url": "<?php echo $block->getAddToCartUrl($_item) ?>"}}' type="button" title="<?php echo __('Add to Cart') ?>">
                                                         <span><?php echo __('Add to Cart') ?></span>
                                                     </button>
                                                 <?php else: ?>
                                                     <?php $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
-                                                    $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
+                                                    $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
                                                     ?>
                                                     <button class="action tocart primary"
                                                             data-post='<?php echo $postData; ?>'
@@ -247,11 +251,11 @@ switch ($type = $this->getType()) {
                                     <?php if ($showWishlist || $showCompare): ?>
                                         <div class="secondary-addto-links actions-secondary" data-role="add-to-links">
                                             <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow() && $showWishlist): ?>
-                                                <a href="#" data-post='<?php echo $this->getAddToWishlistParams($_item); ?>'  class="action towishlist" data-action="add-to-wishlist" title="<?php echo __('Add to Wishlist') ?>">
+                                                <a href="#" data-post='<?php echo $block->getAddToWishlistParams($_item); ?>'  class="action towishlist" data-action="add-to-wishlist" title="<?php echo __('Add to Wishlist') ?>">
                                                     <span><?php echo __('Add to Wishlist') ?></span>
                                                 </a>
                                             <?php endif; ?>
-                                            <?php if ($this->getAddToCompareUrl() && $showCompare): ?>
+                                            <?php if ($block->getAddToCompareUrl() && $showCompare): ?>
                                                 <?php
                                                 $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
                                                 ?>

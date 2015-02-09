@@ -1,13 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-/** @var \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn $this */
+/** @var \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn $block */
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 ?>
 <div class="price-excl-tax">
-<?php echo $this->displayPrices($_item->getBasePrice(), $_item->getPrice()) ?>
+<?php echo $block->displayPrices($_item->getBasePrice(), $_item->getPrice()) ?>
 </div>

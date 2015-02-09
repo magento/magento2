@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\Address;
@@ -26,6 +27,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method string getTelephone()
  * @method string getPostcode()
  * @method bool getShouldIgnoreValidation()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
 {
@@ -122,6 +124,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -471,6 +474,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
      * @return AddressInterface
      * @deprecated Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
      * the instance of Api/Data/AddressInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
@@ -526,6 +530,8 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
      * Validate address attribute values
      *
      * @return bool|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validate()
     {

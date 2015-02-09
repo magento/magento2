@@ -1,30 +1,34 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * Product list toolbar
  *
- * @var $this \Magento\Catalog\Block\Product\ProductList\Toolbar
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
  */
-use \Magento\Catalog\Model\Product\ProductList\Toolbar;
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
 ?>
 <div class="toolbar-sorter sorter">
     <label class="sorter-label" for="sorter"><?php echo __('Sort By') ?></label>
     <select id="sorter" data-role="sorter" class="sorter-options">
-        <?php foreach ($this->getAvailableOrders() as $_key => $_order): ?>
+        <?php foreach ($block->getAvailableOrders() as $_key => $_order): ?>
             <option value="<?php echo $_key; ?>"
-                <?php if ($this->isOrderCurrent($_key)): ?>
+                <?php if ($block->isOrderCurrent($_key)): ?>
                     selected="selected"
                 <?php endif; ?>
                 >
-                <?php echo $this->escapeHtml(__($_order)) ?>
+                <?php echo $block->escapeHtml(__($_order)) ?>
             </option>
         <?php endforeach; ?>
     </select>
-    <?php if ($this->getCurrentDirection() == 'desc'): ?>
+    <?php if ($block->getCurrentDirection() == 'desc'): ?>
         <a title="<?php echo __('Set Ascending Direction') ?>" href="#" class="action sorter-action sort-desc" data-role="direction-switcher" data-value="asc">
             <span><?php echo __('Set Ascending Direction') ?></span>
         </a>

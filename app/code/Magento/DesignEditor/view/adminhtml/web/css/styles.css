@@ -1,5 +1,6 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /*
@@ -115,7 +116,7 @@
 }
 
 .fade .popup .popup-title {
-    font: 20px/1 'CallunaSans', Arial, sans-serif;
+    font: 20px/1 Arial, sans-serif;
     font-weight: 300;
     padding-left: 0;
 }
@@ -306,7 +307,7 @@
 .theme-title {
     margin: 0;
     color: #f2ebde;
-    font-family: 'CallunaSans', Arial, sans-serif;
+    font-family: Arial, sans-serif;
     font-weight: 200;
     font-size: 24px;
 }
@@ -899,7 +900,7 @@
 }
 
 .vde-tab-content-title {
-    font: 20px/52px "CallunaSans", Arial, sans-serif;
+    font: 20px/52px Arial, sans-serif;
     font-weight: 400;
     color: #f2ebde;
     text-shadow: 0 -1px 1px #000;
@@ -921,7 +922,7 @@
 }
 
 .vde-tab-data .title {
-    font: 24px/1.333 "CallunaSans", Arial, sans-serif;
+    font: 24px/1.333 Arial, sans-serif;
     font-weight: 500;
     color: #f2ebde;
     margin: 0;
@@ -993,7 +994,7 @@
 
 .vde-tab-content-header .vde-tab-controls > .item > a {
     display: inline-block;
-    font: 13px "CallunaSans", Arial, sans-serif;
+    font: 13px Arial, sans-serif;
     font-weight: 600;
     line-height: 40px;
     text-align: center;
@@ -1207,7 +1208,7 @@
 -------------------------------------- */
 .vde-message {
     margin: -40px 0 46px;
-    background: url(Magento_DesignEditor::images/vde-message-bg.gif);
+    background: url(Magento_DesignEditor::images/vde-message-bg.jpg);
     border-bottom: 1px solid #43423D;
     border-radius: 5px;
     font: 14px/1.666 Helvetica, Arial, sans-serif;
@@ -2265,7 +2266,7 @@
     text-align: center;
     text-transform: uppercase;
     color: #a69a8f;
-    font: 18px/110px 'CallunaSans', Arial, sans-serif;
+    font: 18px/110px Arial, sans-serif;
     font-weight: 500;
     z-index: 1;
 }

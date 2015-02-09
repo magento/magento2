@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -9,20 +13,20 @@
  */
 ?>
 
-<?php if ($_item = $this->getItem()): ?>
-    <div id="order_item_<?php echo $_item->getId() ?>_title" class="product-title"><?php echo $this->escapeHtml($_item->getName()) ?></div>
-    <strong><?php echo __('SKU') ?>:</strong> <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($this->escapeHtml($this->getSku()))); ?>
-    <?php if ($this->getOrderOptions()): ?>
+<?php if ($_item = $block->getItem()): ?>
+    <div id="order_item_<?php echo $_item->getId() ?>_title" class="product-title"><?php echo $block->escapeHtml($_item->getName()) ?></div>
+    <strong><?php echo __('SKU') ?>:</strong> <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getSku()))); ?>
+    <?php if ($block->getOrderOptions()): ?>
         <dl class="item-options">
-        <?php foreach ($this->getOrderOptions() as $_option): ?>
+        <?php foreach ($block->getOrderOptions() as $_option): ?>
             <dt><?php echo $_option['label'] ?></dt>
             <dd>
             <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
-                <?php echo $this->getCustomizedOptionValue($_option); ?>
+                <?php echo $block->getCustomizedOptionValue($_option); ?>
             <?php else: ?>
-                <?php $_option = $this->getFormattedOption($_option['value']); ?>
+                <?php $_option = $block->getFormattedOption($_option['value']); ?>
                 <?php echo $_option['value']; ?><?php if (isset($_option['remainder']) && $_option['remainder']): ?><span id="<?php echo $_dots = 'dots' . uniqid()?>"> ...</span><span id="<?php echo $_id = 'id' . uniqid()?>"><?php echo $_option['remainder'] ?></span>
-                    <script type="text/javascript">
+                    <script>
 require(['prototype'], function(){
 
     $('<?php echo $_id ?>').hide();
@@ -39,5 +43,5 @@ require(['prototype'], function(){
         <?php endforeach; ?>
         </dl>
     <?php endif; ?>
-    <?php echo $this->escapeHtml($_item->getDescription()) ?>
+    <?php echo $block->escapeHtml($_item->getDescription()) ?>
 <?php endif; ?>

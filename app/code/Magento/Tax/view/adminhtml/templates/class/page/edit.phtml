@@ -1,19 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
-<div class="page-actions">
-    <?php echo $this->getBackButtonHtml(); ?>
-    <?php echo $this->getResetButtonHtml(); ?>
-    <?php echo $this->getDeleteButtonHtml(); ?>
-    <?php echo $this->getSaveButtonHtml(); ?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions">
+    <?php echo $block->getBackButtonHtml(); ?>
+    <?php echo $block->getResetButtonHtml(); ?>
+    <?php echo $block->getDeleteButtonHtml(); ?>
+    <?php echo $block->getSaveButtonHtml(); ?>
 </div>
-<?php echo $this->getRenameFormHtml(); ?>
-<script type="text/javascript">
+<?php echo $block->getRenameFormHtml(); ?>
+<script>
 require(['jquery', "mage/mage"], function(jQuery){
 
-    jQuery('#<?php echo $this->getRenameFormId() ?>').mage('form').mage('validation');
+    jQuery('#<?php echo $block->getRenameFormId() ?>').mage('form').mage('validation');
 
 });
 </script>

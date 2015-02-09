@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $_order = $this->getOrder() ?>
-<?php $_invoice = $this->getInvoice() ?>
+<?php $_order = $block->getOrder() ?>
+<?php $_invoice = $block->getInvoice() ?>
 <?php if ($_invoice): ?>
 <?php $_invoices = [$_invoice]; ?>
 <?php else: ?>
@@ -34,11 +38,11 @@
     continue;
 } ?>
             <tbody>
-                <?php echo $this->getItemHtml($_item) ?>
+                <?php echo $block->getItemHtml($_item) ?>
             </tbody>
             <?php endforeach; ?>
             <tfoot>
-                <?php echo $this->getInvoiceTotalsHtml($_invoice)?>
+                <?php echo $block->getInvoiceTotalsHtml($_invoice)?>
             </tfoot>
         </table>
     </div>
@@ -64,7 +68,7 @@
                 </div>
                 <div class="box-content">
                     <?php if ($_order->getShippingDescription()): ?>
-                        <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
+                        <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
                     <?php else: ?>
                         <?php echo __('No shipping information available'); ?>
                     <?php endif; ?>
@@ -86,7 +90,7 @@
                     <strong><?php echo __('Payment Method') ?></strong>
                 </div>
                 <div class="box-content">
-                    <?php echo $this->getPaymentInfoHtml() ?>
+                    <?php echo $block->getPaymentInfoHtml() ?>
                 </div>
             </div>
         </div>

@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $_invoice = $this->getInvoice() ?>
+<?php $_invoice = $block->getInvoice() ?>
 <?php $_order = $_invoice->getOrder() ?>
-<?php echo $this->getChildHtml('order_info') ?>
+<?php echo $block->getChildHtml('order_info') ?>
 
 <?php /* opening div is in app\code\Magento\Sales\view\adminhtml\order\view\info.phtml */?>
 
@@ -19,9 +23,9 @@
             <div class="fieldset-wrapper-title">
                 <span class="title"><?php echo __('Payment Information') ?></span>
             </div>
-            <div><?php echo $this->getChildHtml('order_payment') ?></div>
+            <div><?php echo $block->getChildHtml('order_payment') ?></div>
             <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
-            <div class="order-payment-additional"><?php echo $this->getChildHtml('order_payment_additional'); ?></div>
+            <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
         </div>
     </div>
 
@@ -33,22 +37,22 @@
                 <span class="title"><?php echo __('Shipping Information') ?></span>
             </div>
             <div class="shipping-description-wrapper">
-                <div class="shipping-description-title"><?php echo $this->escapeHtml($_order->getShippingDescription()) ?></div>
+                <div class="shipping-description-title"><?php echo $block->escapeHtml($_order->getShippingDescription()) ?></div>
                 <div class="shipping-description-content">
                     <?php echo __('Total Shipping Charges'); ?>:
 
                     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
-                        <?php $_excl = $this->displayShippingPriceInclTax($_order); ?>
+                        <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
                     <?php else: ?>
-                        <?php $_excl = $this->displayPriceAttribute('shipping_amount', false, ' '); ?>
+                        <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
                     <?php endif; ?>
-                    <?php $_incl = $this->displayShippingPriceInclTax($_order); ?>
+                    <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
 
                     <?php echo $_excl; ?>
                     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
                         (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
                     <?php endif; ?>
-                    <div><?php echo $this->getChildHtml('shipment_tracking') ?></div>
+                    <div><?php echo $block->getChildHtml('shipment_tracking') ?></div>
                 </div>
             </div>
         </div>
@@ -63,7 +67,7 @@
     </div>
 
     <div id="invoice_item_container">
-        <?php echo $this->getChildHtml('invoice_items') ?>
+        <?php echo $block->getChildHtml('invoice_items') ?>
     </div>
 </div>
 
@@ -74,7 +78,7 @@
                 <span class="title"><?php echo __('Invoice History') ?></span>
             </div>
             <fieldset>
-                <?php echo $this->getChildHtml('order_comments') ?>
+                <?php echo $block->getChildHtml('order_comments') ?>
             </fieldset>
         </div>
     </div>
@@ -84,7 +88,7 @@
             <div class="fieldset-wrapper-title">
                 <span class="title"><?php echo __('Invoice Totals') ?></span>
             </div>
-            <?php echo $this->getChildHtml('invoice_totals') ?>
+            <?php echo $block->getChildHtml('invoice_totals') ?>
         </div>
     </div>
 </div>

@@ -1,13 +1,15 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\Result\RedirectFactory;
 
 class OrderLoader implements OrderLoaderInterface
 {
@@ -32,36 +34,50 @@ class OrderLoader implements OrderLoaderInterface
     protected $url;
 
     /**
+     * @var ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
+     * @var Redirect
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param Registry $registry
      * @param \Magento\Framework\UrlInterface $url
+     * @param ForwardFactory $resultForwardFactory
+     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
         OrderViewAuthorizationInterface $orderAuthorization,
         Registry $registry,
-        \Magento\Framework\UrlInterface $url
+        \Magento\Framework\UrlInterface $url,
+        ForwardFactory $resultForwardFactory,
+        RedirectFactory $resultRedirectFactory
     ) {
         $this->orderFactory = $orderFactory;
         $this->orderAuthorization = $orderAuthorization;
         $this->registry = $registry;
         $this->url = $url;
+        $this->resultForwardFactory = $resultForwardFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
      * @param RequestInterface $request
-     * @param ResponseInterface $response
-     * @return bool
+     * @return bool|\Magento\Framework\Controller\Result\Forward|\Magento\Framework\Controller\Result\Redirect
      */
-    public function load(RequestInterface $request, ResponseInterface $response)
+    public function load(RequestInterface $request)
     {
         $orderId = (int)$request->getParam('order_id');
         if (!$orderId) {
-            $request->initForward();
-            $request->setActionName('noroute');
-            $request->setDispatched(false);
-            return false;
+            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+            $resultForward = $this->resultForwardFactory->create();
+            return $resultForward->forward('noroute');
         }
 
         $order = $this->orderFactory->create()->load($orderId);
@@ -70,7 +86,8 @@ class OrderLoader implements OrderLoaderInterface
             $this->registry->register('current_order', $order);
             return true;
         }
-        $response->setRedirect($this->url->getUrl('*/*/history'));
-        return false;
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setUrl($this->url->getUrl('*/*/history'));
     }
 }

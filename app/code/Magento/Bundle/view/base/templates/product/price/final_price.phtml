@@ -1,34 +1,38 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php
-$idSuffix = $this->getIdSuffix() ? $this->getIdSuffix() : '';
-/** @var \Magento\Bundle\Pricing\Render\FinalPriceBox $this */
-$productId = $this->getSaleableItem()->getId();
+$idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
+/** @var \Magento\Bundle\Pricing\Render\FinalPriceBox $block */
+$productId = $block->getSaleableItem()->getId();
 /** @var \Magento\Bundle\Pricing\Price\FinalPrice $finalPriceModel */
-$finalPriceModel = $this->getPrice();
+$finalPriceModel = $block->getPrice();
 $minimalPrice = $finalPriceModel->getMinimalPrice();
 $maximalPrice = $finalPriceModel->getMaximalPrice();
 /** @var \Magento\Bundle\Pricing\Price\BundleRegularPrice $regularPriceModel */
-$regularPriceModel = $this->getPriceType('regular_price');
+$regularPriceModel = $block->getPriceType('regular_price');
 $maximalRegularPrice = $regularPriceModel->getMaximalPrice();
 $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
 ?>
-<?php if ($this->getSaleableItem()->getPriceView()): ?>
+<?php if ($block->getSaleableItem()->getPriceView()): ?>
     <p class="minimal-price">
-        <?php echo $this->renderAmount($minimalPrice, [
+        <?php echo $block->renderAmount($minimalPrice, [
             'display_label'     => __('As low as'),
-            'price_id'          => $this->getPriceId('from-'),
+            'price_id'          => $block->getPriceId('from-'),
             'include_container' => true
         ]); ?>
         <?php if ($minimalPrice < $minimalRegularPrice): ?>
             <span class="old-price">
-                <?php echo $this->renderAmount($minimalRegularPrice, [
+                <?php echo $block->renderAmount($minimalRegularPrice, [
                     'display_label'     => __('Regular Price'),
-                    'price_id'          => $this->getPriceId('old-price-' . $idSuffix),
+                    'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
                     'include_container' => true,
                     'skip_adjustments'  => true
                 ]); ?>
@@ -36,19 +40,19 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
         <?php endif ?>
     </p>
 <?php else: ?>
-    <?php if ($this->showRangePrice()): ?>
+    <?php if ($block->showRangePrice()): ?>
         <p class="price-from">
-            <?php echo $this->renderAmount($minimalPrice, [
+            <?php echo $block->renderAmount($minimalPrice, [
                 'display_label'     => __('From'),
-                'price_id'          => $this->getPriceId('from-'),
+                'price_id'          => $block->getPriceId('from-'),
                 'price_type'        => 'minPrice',
                 'include_container' => true
             ]); ?>
             <?php if ($minimalPrice < $minimalRegularPrice): ?>
                 <span class="old-price">
-                    <?php echo $this->renderAmount($minimalRegularPrice, [
+                    <?php echo $block->renderAmount($minimalRegularPrice, [
                         'display_label'     => __('Regular Price'),
-                        'price_id'          => $this->getPriceId('old-price-' . $idSuffix),
+                        'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
                         'include_container' => true,
                         'skip_adjustments'  => true
                     ]); ?>
@@ -56,17 +60,17 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
             <?php endif ?>
         </p>
         <p class="price-to">
-            <?php echo $this->renderAmount($maximalPrice, [
+            <?php echo $block->renderAmount($maximalPrice, [
                 'display_label'     => __('To'),
-                'price_id'          => $this->getPriceId('to-'),
+                'price_id'          => $block->getPriceId('to-'),
                 'price_type'        => 'maxPrice',
                 'include_container' => true
             ]); ?>
             <?php if ($maximalPrice < $maximalRegularPrice): ?>
                 <span class="old-price">
-                    <?php echo $this->renderAmount($maximalRegularPrice, [
+                    <?php echo $block->renderAmount($maximalRegularPrice, [
                         'display_label'     => __('Regular Price'),
-                        'price_id'          => $this->getPriceId('old-price-' . $idSuffix),
+                        'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
                         'include_container' => true,
                         'skip_adjustments'  => true
                     ]); ?>
@@ -74,15 +78,15 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
             <?php endif ?>
         </p>
     <?php else: ?>
-        <?php echo $this->renderAmount($minimalPrice, [
-            'price_id'          => $this->getPriceId('product-price-'),
+        <?php echo $block->renderAmount($minimalPrice, [
+            'price_id'          => $block->getPriceId('product-price-'),
             'include_container' => true
         ]); ?>
         <?php if ($minimalPrice < $minimalRegularPrice): ?>
             <span class="old-price">
-                <?php echo $this->renderAmount($minimalRegularPrice, [
+                <?php echo $block->renderAmount($minimalRegularPrice, [
                     'display_label'     => __('Regular Price'),
-                    'price_id'          => $this->getPriceId('old-price-' . $idSuffix),
+                    'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
                     'include_container' => true,
                     'skip_adjustments'  => true
                 ]); ?>

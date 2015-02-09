@@ -1,25 +1,29 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * Template for \Magento\Backend\Block\Widget\Accordion
  */
-$items = $this->getItems();
+$items = $block->getItems();
 ?>
 <?php if (!empty($items)): ?>
-    <dl id="tab_content_<?php echo $this->getHtmlId() ?>" name="tab_content_<?php echo $this->getHtmlId() ?>" class="accordion">
+    <dl id="tab_content_<?php echo $block->getHtmlId() ?>" name="tab_content_<?php echo $block->getHtmlId() ?>" class="accordion">
     <?php foreach ($items as $_item): ?>
-        <?php echo $this->getChildHtml($_item->getId()) ?>
+        <?php echo $block->getChildHtml($_item->getId()) ?>
     <?php endforeach ?>
     </dl>
-    <script type="text/javascript">
+    <script>
         require([
             'mage/adminhtml/accordion'
         ], function(){
-        	tab_content_<?php echo $this->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?php echo $this->getHtmlId() ?>', '<?php echo $this->getShowOnlyOne() ?>');
+        	tab_content_<?php echo $block->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?php echo $block->getHtmlId() ?>', '<?php echo $block->getShowOnlyOne() ?>');
     	});
     </script>
 <?php endif; ?>

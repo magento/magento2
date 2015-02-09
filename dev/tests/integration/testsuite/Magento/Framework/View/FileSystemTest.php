@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View;
 
@@ -9,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Tests for the view layer fallback mechanism
- * @magentoDataFixture Magento/Core/Model/_files/design/themes.php
+ * @magentoDataFixture Magento/Theme/Model/_files/design/themes.php
  */
 class FileSystemTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +25,7 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
             [
                 Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
                     DirectoryList::THEMES => [
-                        'path' => dirname(dirname(__DIR__)) . '/Core/Model/_files/design',
+                        'path' => dirname(dirname(__DIR__)) . '/Theme/Model/_files/design',
                     ],
                 ],
             ]

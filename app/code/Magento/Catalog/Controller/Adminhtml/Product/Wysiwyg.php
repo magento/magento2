@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
@@ -43,7 +44,7 @@ class Wysiwyg extends \Magento\Catalog\Controller\Adminhtml\Product
     {
         $elementId = $this->getRequest()->getParam('element_id', md5(microtime()));
         $storeId = $this->getRequest()->getParam('store_id', 0);
-        $storeMediaUrl = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+        $storeMediaUrl = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')
             ->getStore($storeId)
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
 

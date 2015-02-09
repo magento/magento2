@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -10,59 +14,59 @@
  * @see \Magento\Theme\Block\Html\Pager
  */
 ?>
-<?php if ($this->getCollection()->getSize()): ?>
+<?php if ($block->getCollection()->getSize()): ?>
 
-    <?php if ($this->getUseContainer()): ?>
+    <?php if ($block->getUseContainer()): ?>
     <div class="pager">
     <?php endif ?>
 
-        <?php if ($this->getShowAmounts()): ?>
+        <?php if ($block->getShowAmounts()): ?>
         <p class="toolbar-amount">
             <span class="toolbar-number">
-            <?php if ($this->getLastPageNum()>1): ?>
-                <?php echo __('Items %1 to %2 of %3 total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
-            <?php elseif ($this->getTotalNum() == 1): ?>
-                <?php echo __('%1 Item', $this->getTotalNum()) ?>
+            <?php if ($block->getLastPageNum()>1): ?>
+                <?php echo __('Items %1 to %2 of %3 total', $block->getFirstNum(), $block->getLastNum(), $block->getTotalNum()) ?>
+            <?php elseif ($block->getTotalNum() == 1): ?>
+                <?php echo __('%1 Item', $block->getTotalNum()) ?>
             <?php else: ?>
-                <?php echo __('%1 Item(s)', $this->getTotalNum()) ?>
+                <?php echo __('%1 Item(s)', $block->getTotalNum()) ?>
             <?php endif; ?>
             </span>
         </p>
         <?php endif ?>
 
-        <?php if ($this->getLastPageNum()>1): ?>
+        <?php if ($block->getLastPageNum()>1): ?>
         <div class="pages">
             <strong class="label pages-label" id="paging-label"><?php echo __('Page') ?></strong>
             <ul class="items pages-items" aria-labelledby="paging-label">
-            <?php if (!$this->isFirstPage()): ?>
+            <?php if (!$block->isFirstPage()): ?>
                 <li class="item pages-item-previous">
-                    <?php $text = $this->getAnchorTextForPrevious() ? $this->getAnchorTextForPrevious() : '';?>
-                    <a class="<?php echo $text ? 'link ' : 'action '?> previous" href="<?php echo $this->getPreviousPageUrl() ?>" title="<?php echo $text ? $text : __('Previous') ?>">
+                    <?php $text = $block->getAnchorTextForPrevious() ? $block->getAnchorTextForPrevious() : '';?>
+                    <a class="<?php echo $text ? 'link ' : 'action '?> previous" href="<?php echo $block->getPreviousPageUrl() ?>" title="<?php echo $text ? $text : __('Previous') ?>">
                         <span class="label"><?php echo __('Page') ?></span>
                         <span><?php echo $text ? $text : __('Previous') ?></span>
                     </a>
                 </li>
             <?php endif;?>
 
-            <?php if ($this->canShowFirst()): ?>
+            <?php if ($block->canShowFirst()): ?>
                 <li class="item">
-                    <a class="page first" href="<?php echo $this->getFirstPageUrl() ?>">
+                    <a class="page first" href="<?php echo $block->getFirstPageUrl() ?>">
                         <span class="label"><?php echo __('Page') ?></span>
                         <span>1</span>
                     </a>
                 </li>
             <?php endif;?>
 
-            <?php if ($this->canShowPreviousJump()): ?>
+            <?php if ($block->canShowPreviousJump()): ?>
                 <li class="item">
-                    <a class="page previous jump" title="" href="<?php echo $this->getPreviousJumpUrl() ?>">
+                    <a class="page previous jump" title="" href="<?php echo $block->getPreviousJumpUrl() ?>">
                         <span>...</span>
                     </a>
                 </li>
             <?php endif;?>
 
-            <?php foreach ($this->getFramePages() as $_page): ?>
-                <?php if ($this->isPageCurrent($_page)): ?>
+            <?php foreach ($block->getFramePages() as $_page): ?>
+                <?php if ($block->isPageCurrent($_page)): ?>
                     <li class="item current">
                         <strong class="page">
                             <span class="label"><?php echo __('You\'re currently reading page') ?></span>
@@ -71,7 +75,7 @@
                     </li>
                 <?php else: ?>
                     <li class="item">
-                        <a href="<?php echo $this->getPageUrl($_page) ?>" class="page">
+                        <a href="<?php echo $block->getPageUrl($_page) ?>" class="page">
                             <span class="label"><?php echo __('Page') ?></span>
                             <span><?php echo $_page ?></span>
                         </a>
@@ -79,27 +83,27 @@
                 <?php endif;?>
             <?php endforeach;?>
 
-            <?php if ($this->canShowNextJump()): ?>
+            <?php if ($block->canShowNextJump()): ?>
                 <li class="item">
-                    <a class="page next jump" title="" href="<?php echo $this->getNextJumpUrl() ?>">
+                    <a class="page next jump" title="" href="<?php echo $block->getNextJumpUrl() ?>">
                         <span>...</span>
                     </a>
                 </li>
             <?php endif;?>
 
-            <?php if ($this->canShowLast()): ?>
+            <?php if ($block->canShowLast()): ?>
               <li class="item">
-                  <a class="page last" href="<?php echo $this->getLastPageUrl() ?>">
+                  <a class="page last" href="<?php echo $block->getLastPageUrl() ?>">
                       <span class="label"><?php echo __('Page') ?></span>
-                      <span><?php echo $this->getLastPageNum() ?></span>
+                      <span><?php echo $block->getLastPageNum() ?></span>
                   </a>
               </li>
             <?php endif;?>
 
-            <?php if (!$this->isLastPage()): ?>
+            <?php if (!$block->isLastPage()): ?>
                 <li class="item pages-item-next">
-                    <?php $text = $this->getAnchorTextForNext() ? $this->getAnchorTextForNext() : '';?>
-                    <a class="<?php echo $text ? 'link ' : 'action '?> next" href="<?php echo $this->getNextPageUrl() ?>" title="<?php echo $text ? $text : __('Next') ?>">
+                    <?php $text = $block->getAnchorTextForNext() ? $block->getAnchorTextForNext() : '';?>
+                    <a class="<?php echo $text ? 'link ' : 'action '?> next" href="<?php echo $block->getNextPageUrl() ?>" title="<?php echo $text ? $text : __('Next') ?>">
                         <span class="label"><?php echo __('Page') ?></span>
                         <span><?php echo $text ? $text : __('Next') ?></span>
                     </a>
@@ -109,12 +113,12 @@
         </div>
         <?php endif; ?>
 
-    <?php if ($this->isShowPerPage()): ?>
+    <?php if ($block->isShowPerPage()): ?>
         <div class="limiter">
             <strong class="limiter-label"><?php echo __('Show') ?></strong>
             <select id="limiter" data-mage-redirect="{'event':'change'}" class="limiter-options">
-                <?php foreach ($this->getAvailableLimit() as $_key => $_limit): ?>
-                    <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if ($this->isLimitCurrent($_key)): ?>
+                <?php foreach ($block->getAvailableLimit() as $_key => $_limit): ?>
+                    <option value="<?php echo $block->getLimitUrl($_key) ?>"<?php if ($block->isLimitCurrent($_key)): ?>
                         selected="selected"<?php endif ?>>
                         <?php echo $_limit ?>
                     </option>
@@ -124,7 +128,7 @@
         </div>
     <?php endif ?>
 
-    <?php if ($this->getUseContainer()): ?>
+    <?php if ($block->getUseContainer()): ?>
     </div>
     <?php endif ?>
 

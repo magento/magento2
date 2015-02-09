@@ -1,23 +1,27 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs\AbstractTabs */ ?>
 
-<div class="vde-tab-content tab-panel<?php echo $this->getIsActive() ? ' active' : '' ?>" id="<?php echo $this->getHtmlId(); ?>">
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs\AbstractTabs */ ?>
+
+<div class="vde-tab-content tab-panel<?php echo $block->getIsActive() ? ' active' : '' ?>" id="<?php echo $block->getHtmlId(); ?>">
     <div class="vde-tab-content-header">
-        <h4 class="vde-tab-content-title"><?php echo $this->getTitle(); ?></h4>
+        <h4 class="vde-tab-content-title"><?php echo $block->getTitle(); ?></h4>
 
         <div class="vde-tools-tabs">
             <ul class="vde-tab-controls">
-            <?php echo join('', $this->getTabHandles()) ?>
+            <?php echo join('', $block->getTabHandles()) ?>
             </ul>
         </div>
     </div>
     <div class="vde-tab-content-inner">
         <div class="vde-tab-data">
-            <?php echo join('', $this->getTabContents()) ?>
+            <?php echo join('', $block->getTabContents()) ?>
         </div>
     </div>
 </div>

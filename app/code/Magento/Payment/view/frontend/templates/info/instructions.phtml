@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -9,8 +13,8 @@
  */
 ?>
 <dl class="payment-method">
-    <dt class="title"><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></dt>
-<?php if ($this->getInstructions()): ?>
-    <dd class="content"><?php echo nl2br($this->getInstructions()) ?></dd>
+    <dt class="title"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
+<?php if ($block->getInstructions()): ?>
+    <dd class="content"><?php echo nl2br($block->getInstructions()) ?></dd>
 <?php endif; ?>
 </dl>

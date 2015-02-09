@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
@@ -10,12 +11,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
         <css src="mage/calendar.css"/>
         <script src="requirejs/require.js"/>
-        <!-- /**
-        TODO: remove jQuery. jQuery could be loaded through RequireJS. But only in case ALL MODULES ARE AMD MODULES.
-        Detail: http://requirejs.org/docs/jquery.html#noconflictmap
-        */ -->
-        <script src="jquery/jquery.js"/>
-        <script src="app-config.js"/>
     </head>
     <body>
         <referenceContainer name="after.body.start">

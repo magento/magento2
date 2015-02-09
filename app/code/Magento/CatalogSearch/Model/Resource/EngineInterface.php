@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -46,7 +47,7 @@ interface EngineInterface
     public function allowAdvancedIndex();
 
     /**
-     * Proepare attribute value to store in index
+     * Prepare attribute value to store in index
      *
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @param mixed $value
@@ -72,34 +73,6 @@ interface EngineInterface
      * @return string
      */
     public function prepareEntityIndex($index, $separator = ' ');
-
-    /**
-     * Return resource model for the full text search
-     *
-     * @return \Magento\Framework\Model\Resource\AbstractResource
-     */
-    public function getResource();
-
-    /**
-     * Return resource collection model for the full text search
-     *
-     * @return \Magento\Framework\Data\Collection\Db
-     */
-    public function getResourceCollection();
-
-    /**
-     * Retrieve fulltext search result data collection
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
-     */
-    public function getResultCollection();
-
-    /**
-     * Retrieve advanced search result data collection
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
-     */
-    public function getAdvancedResultCollection();
 
     /**
      * Define if Layered Navigation is allowed

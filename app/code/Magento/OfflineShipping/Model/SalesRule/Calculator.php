@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -17,10 +18,10 @@ class Calculator extends \Magento\SalesRule\Model\Validator
      * This process not affect information about applied rules, coupon code etc.
      * This information will be added during discount amounts processing
      *
-     * @param   \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  \Magento\OfflineShipping\Model\SalesRule\Calculator
      */
-    public function processFreeShipping(\Magento\Sales\Model\Quote\Item\AbstractItem $item)
+    public function processFreeShipping(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
         $address = $item->getAddress();
         $item->setFreeShipping(false);

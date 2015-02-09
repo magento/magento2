@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Catalog\Model\Category;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
@@ -13,7 +14,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -41,7 +42,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
             'isObjectNew'
         ];
         $this->category = $this->getMock('Magento\Catalog\Model\Category', $categoryMethods, [], '', false);
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
 
@@ -184,7 +185,11 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $passedStoreId = $storeId ? $storeId : $categoryStoreId;
         $this->scopeConfig->expects($this->once())->method('getValue')
-            ->with(CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $passedStoreId)
+            ->with(
+                CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                $passedStoreId
+            )
             ->will($this->returnValue($suffix));
 
         $this->assertEquals(
@@ -211,7 +216,11 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->once())->method('getId')->will($this->returnValue($currentStoreId));
         $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
         $this->scopeConfig->expects($this->once())->method('getValue')
-            ->with(CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $currentStoreId)
+            ->with(
+                CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                $currentStoreId
+            )
             ->will($this->returnValue($suffix));
 
         $this->assertEquals(

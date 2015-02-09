@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Layer\Advanced;
 
@@ -20,7 +21,7 @@ class CollectionFilter implements CollectionFilterInterface
     protected $helper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -32,14 +33,14 @@ class CollectionFilter implements CollectionFilterInterface
     /**
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\CatalogSearch\Helper\Data $helper
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\CatalogSearch\Helper\Data $helper,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Framework\Registry $registry
     ) {

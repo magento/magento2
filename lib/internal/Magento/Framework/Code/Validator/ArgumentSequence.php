@@ -2,7 +2,8 @@
 /**
  * Class constructor validator. Validates arguments sequence
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Validator;
 
@@ -39,6 +40,7 @@ class ArgumentSequence implements ValidatorInterface
      * @param string $className
      * @return bool
      * @throws ValidationException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate($className)
     {
@@ -134,6 +136,8 @@ class ArgumentSequence implements ValidatorInterface
      * @param array $classArguments
      * @param array $parentArguments
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _buildsSequence(array $classArguments, array $parentArguments = [])
     {

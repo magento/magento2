@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -11,7 +12,7 @@ namespace Magento\Theme\Model\Config;
 class CustomizationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -21,7 +22,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     protected $_designPackage;
 
     /**
-     * @var \Magento\Core\Model\Resource\Theme\Collection
+     * @var \Magento\Theme\Model\Resource\Theme\Collection
      */
     protected $_themeCollection;
 
@@ -31,14 +32,14 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockBuilder
+     * @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockBuilder
      */
     protected $themeProviderMock;
 
     protected function setUp()
     {
         $this->_storeManager = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            'Magento\Framework\Store\StoreManagerInterface',
             [],
             '',
             true,
@@ -56,7 +57,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
             ['getConfigurationDesignTheme']
         );
         $this->_themeCollection = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\Collection',
+            'Magento\Theme\Model\Resource\Theme\Collection',
             ['filterThemeCustomizations', 'load'],
             [],
             '',
@@ -64,7 +65,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
         );
 
         $collectionFactory = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\CollectionFactory',
+            'Magento\Theme\Model\Resource\Theme\CollectionFactory',
             ['create'],
             [],
             '',
@@ -74,9 +75,9 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
         $collectionFactory->expects($this->any())->method('create')->will($this->returnValue($this->_themeCollection));
 
         $this->themeProviderMock = $this->getMock(
-            '\Magento\Core\Model\Theme\ThemeProvider',
+            '\Magento\Theme\Model\Theme\ThemeProvider',
             ['getThemeCustomizations', 'getThemeByFullPath'],
-            [$collectionFactory, $this->getMock('\Magento\Core\Model\ThemeFactory', [], [], '', false)],
+            [$collectionFactory, $this->getMock('\Magento\Theme\Model\ThemeFactory', [], [], '', false)],
             '',
             false
         );

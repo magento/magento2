@@ -56,6 +56,7 @@ Magento/Core/Model/Store
 Magento/Store/Model
 Magento/Cron/Model/Config/Backend/Product
 Magento/Customer/Block/Account/Dashboard
+Magento/Customer/Controller/Adminhtml/Index
 Magento/Customer/Model/Config/Backend/Show
 Magento/Customer/Model/Metadata
 Magento/Customer/Model/Resource/Customer
@@ -85,7 +86,7 @@ Magento/Rule
 Magento/Sales/Block/Adminhtml/Order
 Magento/Shipping/Block/Adminhtml/View
 Magento/Sales/Model/Resource
-Magento/Sales/Model/Quote/Address/Total
+Magento/Quote/Model/Quote/Address/Total
 Magento/Sales/Model/Resource/Report/Order
 Magento/SalesRule/Block/Adminhtml/Promo/Quote/Edit/Tab
 Magento/Search/Block/Adminhtml/Dashboard
@@ -113,8 +114,6 @@ lib/internal/Magento/Framework/App/Config
 Magento/Cron/Model
 Magento/SalesRule/Model/Resource/Report/Rule
 Magento/SalesRule/Model/Resource/Rule
-Magento/SalesRule/Model/Quote/Nominal
-Magento/Tax/Model/Sales/Total/Quote/Nominal
 Magento/Theme/Block/Adminhtml/System/Design/Theme/Edit
 Magento/User/Block/User/Edit
 var/generation
@@ -145,3 +144,7 @@ Magento/Catalog/Model/ProductLink
 Magento/GroupedProduct/Model/Resource/Product/Type/Grouped
 lib/internal/Magento/Framework/Interception/ObjectManager/Config
 app/code/Magento/OfflinePayments/Model
+Magento/Weee/Model/Resource
+Magento/Theme/Model/Design/Backend
+Magento/Core/Model/Resource/Layout/Link
+Magento/Theme/Model/Resource/Design

@@ -1,30 +1,34 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /*$_source = $this->getSource(); ?>
-<?php $this->setPriceDataObject($_source) ?>
+<?php /*$_source = $block->getSource(); ?>
+<?php $block->setPriceDataObject($_source) ?>
 <?php if ($_source): ?>
 <table cellspacing="0" width="100%">
-    <?php echo $this->getChildHtml('main'); ?>
-    <?php echo $this->getChildHtml('footer'); ?>
+    <?php echo $block->getChildHtml('main'); ?>
+    <?php echo $block->getChildHtml('footer'); ?>
 </table>
 <?php endif;*/ ?>
 <table cellspacing="0" class="data-table order-subtotal">
-    <?php $_totals = $this->getTotals('footer')?>
+    <?php $_totals = $block->getTotals('footer')?>
     <?php if ($_totals):?>
     <tfoot>
-    <?php foreach ($this->getTotals('footer') as $_code => $_total): ?>
+    <?php foreach ($block->getTotals('footer') as $_code => $_total): ?>
         <?php if ($_total->getBlockName()): ?>
-            <?php echo $this->getChildHtml($_total->getBlockName(), false); ?>
+            <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
         <?php else:?>
         <tr class="col-<?php echo $_code?>">
-            <td <?php echo $this->getLabelProperties()?> class="label">
-                <strong><?php echo $this->escapeHtml($_total->getLabel()); ?></strong>
+            <td <?php echo $block->getLabelProperties()?> class="label">
+                <strong><?php echo $block->escapeHtml($_total->getLabel()); ?></strong>
             </td>
-            <td <?php echo $this->getValueProperties()?>>
-                <strong><?php echo $this->formatValue($_total) ?></strong>
+            <td <?php echo $block->getValueProperties()?>>
+                <strong><?php echo $block->formatValue($_total) ?></strong>
             </td>
         </tr>
         <?php endif?>
@@ -32,27 +36,27 @@
     </tfoot>
     <?php endif?>
 
-    <?php $_totals = $this->getTotals('')?>
+    <?php $_totals = $block->getTotals('')?>
     <?php if ($_totals):?>
     <tbody>
     <?php foreach ($_totals as $_code => $_total): ?>
         <?php if ($_total->getBlockName()): ?>
-            <?php echo $this->getChildHtml($_total->getBlockName(), false); ?>
+            <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
         <?php else:?>
         <tr class="col-<?php echo $_code?>">
-            <td <?php echo $this->getLabelProperties()?> class="label">
+            <td <?php echo $block->getLabelProperties()?> class="label">
                 <?php if ($_total->getStrong()):?>
-                <strong><?php echo $this->escapeHtml($_total->getLabel()); ?></strong>
+                <strong><?php echo $block->escapeHtml($_total->getLabel()); ?></strong>
                 <?php else:?>
-                <?php echo $this->escapeHtml($_total->getLabel()); ?>
+                <?php echo $block->escapeHtml($_total->getLabel()); ?>
                 <?php endif?>
             </td>
             <?php if ($_total->getStrong()):?>
-            <td <?php echo $this->getValueProperties()?>>
-                <strong><?php echo $this->formatValue($_total) ?></strong>
+            <td <?php echo $block->getValueProperties()?>>
+                <strong><?php echo $block->formatValue($_total) ?></strong>
             <?php else:?>
-            <td <?php echo $this->getValueProperties()?>>
-                <?php echo $this->formatValue($_total) ?>
+            <td <?php echo $block->getValueProperties()?>>
+                <?php echo $block->formatValue($_total) ?>
             <?php endif?>
             </td>
         </tr>

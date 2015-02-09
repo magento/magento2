@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -18,6 +19,8 @@ class SalePriceEffectiveDate extends \Magento\GoogleShopping\Model\Attribute\Def
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\Gdata\Gshopping\Entry $entry
      * @return \Magento\Framework\Gdata\Gshopping\Entry
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function convertAttribute($product, $entry)
     {

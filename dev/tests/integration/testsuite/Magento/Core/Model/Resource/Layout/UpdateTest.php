@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model\Resource\Layout;
 
@@ -32,7 +33,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
             'test_handle',
             $theme,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\Store\StoreManagerInterface'
             )->getStore()
         );
         $this->assertEquals('not_temporary', $result);

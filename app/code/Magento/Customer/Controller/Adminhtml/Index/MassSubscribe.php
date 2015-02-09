@@ -1,7 +1,7 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
@@ -10,7 +10,7 @@ class MassSubscribe extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customer mass subscribe action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -26,6 +26,8 @@ class MassSubscribe extends \Magento\Customer\Controller\Adminhtml\Index
         if ($customersUpdated) {
             $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', $customersUpdated));
         }
-        $this->_redirect('customer/*/index');
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('customer/*/index');
+        return $resultRedirect;
     }
 }

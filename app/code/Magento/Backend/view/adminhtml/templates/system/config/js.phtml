@@ -1,10 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<script type="text/javascript">
-//<![CDATA[
+<script>
+require([
+    'prototype'
+], function () {
+
 var freeModel = Class.create();
 freeModel.prototype = {
     initialize : function()
@@ -64,7 +71,7 @@ originModel.prototype = {
     {
         this.reload = false;
         this.loader = new varienLoader(true);
-        this.regionsUrl = "<?php echo $this->getUrl('directory/json/countryRegion') ?>";
+        this.regionsUrl = "<?php echo $block->getUrl('directory/json/countryRegion') ?>";
 
         this.bindCountryRegionRelation();
     },
@@ -232,8 +239,8 @@ function showHint() {
         });
     });
 }
-Event.observe(window, 'load', function(){
-    showHint();
+
+Event.observe(window, 'load', showHint);
+
 });
-//]]>
 </script>

@@ -1,16 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-/** @var $this \Magento\Checkout\Block\Cart */
+/** @var $block \Magento\Checkout\Block\Cart */
 ?>
-<?php if (!$this->hasError()): ?>
-<?php $methods = $this->getMethods('methods') ?: $this->getMethods('top_methods') ?>
+<?php if (!$block->hasError()): ?>
+<?php $methods = $block->getMethods('methods') ?: $block->getMethods('top_methods') ?>
 <ul class="checkout methods items checkout-methods-items">
 <?php foreach ($methods as $method): ?>
-    <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+    <?php if ($methodHtml = $block->getMethodHtml($method)): ?>
     <li class="item"><?php echo $methodHtml; ?></li>
     <?php endif; ?>
 <?php endforeach; ?>

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Pricing\Price;
@@ -43,6 +44,13 @@ class Collection implements \Iterator
     protected $excludes;
 
     /**
+     * Cached price models
+     *
+     * @var array
+     */
+    protected $priceModels;
+
+    /**
      * Constructor
      *
      * @param SaleableInterface $saleableItem
@@ -60,6 +68,7 @@ class Collection implements \Iterator
         $this->priceFactory = $priceFactory;
         $this->pool = $pool;
         $this->quantity = $quantity;
+        $this->priceModels = [];
     }
 
     /**
@@ -120,10 +129,13 @@ class Collection implements \Iterator
      */
     public function get($code)
     {
-        return $this->priceFactory->create(
-            $this->saleableItem,
-            $this->pool[$code],
-            $this->quantity
-        );
+        if (!isset($this->priceModels[$code])) {
+            $this->priceModels[$code] = $this->priceFactory->create(
+                $this->saleableItem,
+                $this->pool[$code],
+                $this->quantity
+            );
+        }
+        return $this->priceModels[$code];
     }
 }

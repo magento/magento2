@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Resource\Report\Order;
 
@@ -41,6 +42,8 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @param string|int|\Zend_Date|array|null $to
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _aggregateByField($aggregationField, $from, $to)
     {

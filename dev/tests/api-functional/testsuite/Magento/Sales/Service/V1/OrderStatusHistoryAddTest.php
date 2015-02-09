@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Service\V1;
 
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
@@ -32,6 +36,7 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/order.php
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testOrderCommentAdd()
     {
@@ -73,10 +78,12 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
             $this->assertEquals($commentData[OrderStatusHistoryInterface::COMMENT], $statusHistoryComment->getComment());
             $this->assertEquals($commentData[OrderStatusHistoryInterface::PARENT_ID], $statusHistoryComment->getParentId());
             $this->assertEquals(
-                $commentData[OrderStatusHistoryInterface::IS_CUSTOMER_NOTIFIED], $statusHistoryComment->getIsCustomerNotified()
+                $commentData[OrderStatusHistoryInterface::IS_CUSTOMER_NOTIFIED],
+                $statusHistoryComment->getIsCustomerNotified()
             );
             $this->assertEquals(
-                $commentData[OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT], $statusHistoryComment->getIsVisibleOnFront()
+                $commentData[OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT],
+                $statusHistoryComment->getIsVisibleOnFront()
             );
         }
     }

@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Test class for \Magento\Backend\Model\Url
@@ -158,7 +161,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'create'
         )->will(
             $this->returnValue(
-                $this->getMock('Magento\Core\Model\Url\RouteParamsResolver', [], [], '', false)
+                $this->getMock('Magento\Framework\Url\RouteParamsResolver', [], [], '', false)
             )
         );
         $this->_model = $helper->getObject(
@@ -180,7 +183,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'create'
         )->will(
             $this->returnValue(
-                $this->getMock('Magento\Core\Model\Url\RouteParamsResolver', [], [], '', false)
+                $this->getMock('Magento\Framework\Url\RouteParamsResolver', [], [], '', false)
             )
         );
         $this->_model = $helper->getObject(

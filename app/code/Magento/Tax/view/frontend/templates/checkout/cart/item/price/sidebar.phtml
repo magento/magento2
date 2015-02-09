@@ -1,19 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Tax\Block\Item\Price\Renderer */
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Tax\Block\Item\Price\Renderer */
 ?>
-<?php $_item = $this->getItem() ?>
+<?php $_item = $block->getItem() ?>
 <div class="price-container">
     <span class="price-label"><?php echo __('Price')?></span>
-    <?php if ($this->displayPriceInclTax() || $this->displayBothPrices()): ?>
+    <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
         <span class="price-wrapper price-including-tax" data-label="<?php echo __('Incl. Tax')?>">
             <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
         </span>
     <?php endif; ?>
-    <?php if ($this->displayPriceExclTax() || $this->displayBothPrices()): ?>
+    <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
         <span class="price-wrapper price-excluding-tax" data-label="<?php echo __('Excl. Tax')?>">
             <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>
         </span>

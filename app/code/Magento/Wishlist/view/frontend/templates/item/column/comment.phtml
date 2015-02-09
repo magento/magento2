@@ -1,11 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /* @var \Magento\Wishlist\Model\Item $item */
 
-$item = $this->getItem();
+$item = $block->getItem();
 ?>
 
 <div class="field comment-box">
@@ -13,6 +16,6 @@ $item = $this->getItem();
         <span><?php echo __('Comment') ?></span>
     </label>
     <div class="control">
-        <textarea id="product-item-comment-<?php echo $item->getWishlistItemId() ?>" placeholder="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->defaultCommentString() ?>" name="description[<?php echo $item->getWishlistItemId() ?>]" title="<?php echo __('Comment') ?>" class="product-item-comment"><?php echo($this->escapeHtml($item->getDescription())) ?></textarea>
+        <textarea id="product-item-comment-<?php echo $item->getWishlistItemId() ?>" placeholder="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->defaultCommentString() ?>" name="description[<?php echo $item->getWishlistItemId() ?>]" title="<?php echo __('Comment') ?>" class="product-item-comment"><?php echo($block->escapeHtml($item->getDescription())) ?></textarea>
     </div>
 </div>

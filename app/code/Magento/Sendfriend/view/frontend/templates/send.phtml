@@ -1,18 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /**
  * Send to friend form
  *
- * @var $this \Magento\Sendfriend\Block\Send
+ * @var $block \Magento\Sendfriend\Block\Send
  */
 ?>
 <script id="add-recipient-tmpl" type="text/x-jQuery-tmpl">
     <div class="actions-toolbar">
         <div class="secondary">
             <button type="button" id="btn-remove${_index_}" class="action remove"
-               title="<?php echo $this->escapeJsQuote(__('Remove')) ?>"><span><?php echo $this->escapeJsQuote(__('Remove')) ?></span></button>
+               title="<?php echo $block->escapeJsQuote(__('Remove')) ?>"><span><?php echo $block->escapeJsQuote(__('Remove')) ?></span></button>
         </div>
     </div>
     <fieldset class="fieldset">
@@ -35,7 +39,7 @@
     </fieldset>
 </script>
 
-<form action="<?php echo $this->getSendUrl() ?>" method="post" id="product-sendtofriend-form"
+<form action="<?php echo $block->getSendUrl() ?>" method="post" id="product-sendtofriend-form"
       data-mage-init='{
         "rowBuilder":{
             "rowTemplate":"#add-recipient-tmpl",
@@ -43,20 +47,20 @@
             "rowParentElem":"<div></div>",
             "remEventSelector":"button",
             "btnRemoveSelector":".action.remove",
-            "maxRows":"<?php echo $this->getMaxRecipients() ?>",
+            "maxRows":"<?php echo $block->getMaxRecipients() ?>",
             "maxRowsMsg":"#max-recipient-message",
             "addRowBtn":"#add-recipient-button",
             "additionalRowClass":"additional"},
         "validation":{}}'
       class="form send friend" data-hasRequired="<?php echo __('* Required Fields') ?>">
     <fieldset class="fieldset sender" id="sender_options">
-        <?php echo $this->getBlockHtml('formkey')?>
+        <?php echo $block->getBlockHtml('formkey')?>
         <legend class="legend"><span><?php echo __('Sender') ?></span></legend>
         <br>
         <div class="field sender required">
             <label for="sender-name" class="label"><span><?php echo __('Name') ?></span></label>
             <div class="control">
-                <input name="sender[name]" value="<?php echo $this->escapeHtml($this->getUserName()) ?>"
+                <input name="sender[name]" value="<?php echo $block->escapeHtml($block->getUserName()) ?>"
                        title="<?php echo __('Name') ?>" id="sender-name" type="text" class="input-text"
                        data-validate="{required:true}"/>
             </div>
@@ -65,7 +69,7 @@
         <div class="field email required">
             <label for="sender-email" class="label"><span><?php echo __('Email') ?></span></label>
             <div class="control">
-                <input name="sender[email]" value="<?php echo $this->escapeHtml($this->getEmail()) ?>"
+                <input name="sender[email]" value="<?php echo $block->escapeHtml($block->getEmail()) ?>"
                        title="<?php echo __('Email') ?>" id="sender-email" type="text" class="input-text"
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
@@ -75,24 +79,24 @@
             <label for="sender-message" class="label"><span><?php echo __('Message') ?></span></label>
             <div class="control">
                 <textarea name="sender[message]" class="input-text" id="sender-message" cols="3" rows="3"
-                          data-validate="{required:true}"><?php echo $this->escapeHtml($this->getMessage()) ?></textarea>
+                          data-validate="{required:true}"><?php echo $block->escapeHtml($block->getMessage()) ?></textarea>
             </div>
         </div>
     </fieldset>
 
     <fieldset class="fieldset recipients">
-        <?php echo $this->getBlockHtml('formkey')?>
+        <?php echo $block->getBlockHtml('formkey')?>
         <legend class="legend"><span><?php echo __('Recipient') ?></span></legend>
         <br />
         <div id="recipients-options"></div>
-        <?php if ($this->getMaxRecipients()): ?>
+        <?php if ($block->getMaxRecipients()): ?>
             <div id="max-recipient-message" style="display: none;" class="message notice limit">
-                <span><?php echo __('Maximum %1 email addresses allowed.', $this->getMaxRecipients()) ?></span>
+                <span><?php echo __('Maximum %1 email addresses allowed.', $block->getMaxRecipients()) ?></span>
             </div>
         <?php endif; ?>
         <div class="actions-toolbar">
             <div class="secondary">
-            <?php if (1 < $this->getMaxRecipients()): ?>
+            <?php if (1 < $block->getMaxRecipients()): ?>
                 <button type="button" id="add-recipient-button" class="action add">
                     <span><?php echo __('Add Recipient') ?></span></button>
             <?php endif; ?>
@@ -102,7 +106,7 @@
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit"
-                    class="action submit primary"<?php if (!$this->canSend()): ?> disabled="disabled"<?php endif ?>>
+                    class="action submit primary"<?php if (!$block->canSend()): ?> disabled="disabled"<?php endif ?>>
                 <span><?php echo __('Send Email') ?></span></button>
         </div>
         <div class="secondary">
@@ -110,7 +114,7 @@
         </div>
     </div>
 </form>
-<script type="text/javascript">
+<script>
 require(['jquery'], function(jQuery){
 
     //<![CDATA[

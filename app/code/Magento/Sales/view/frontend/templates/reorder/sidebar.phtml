@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -10,20 +14,20 @@
  * @see \Magento\Sale\Block\Reorder\Sidebar
  */
 ?>
-<?php $_items = $this->getItems()?>
+<?php $_items = $block->getItems()?>
 <?php if ($_items): ?>
 <div class="block block-reorder">
     <div class="block-title">
         <strong id="block-reorder-heading" role="heading" aria-level="2"><?php echo __('My Orders') ?></strong>
     </div>
     <div class="block-content" aria-labelledby="block-reorder-heading">
-        <form method="post" class="form reorder" action="<?php echo $this->getFormActionUrl() ?>" id="reorder-validate-detail">
+        <form method="post" class="form reorder" action="<?php echo $block->getFormActionUrl() ?>" id="reorder-validate-detail">
             <strong class="subtitle"><?php echo __('Last Ordered Items') ?></strong>
             <ol id="cart-sidebar-reorder" class="product-items product-items-names">
             <?php $_showAddButtonFlag = false ?>
             <?php foreach ($_items as $_item): ?>
                 <li class="product-item">
-                    <?php if ($this->isItemAvailableForReorder($_item)): ?>
+                    <?php if ($block->isItemAvailableForReorder($_item)): ?>
                         <?php $_showAddButtonFlag = true ?>
                         <div class="field item choice">
                             <label class="label" for="reorder-item-<?php echo $_item->getId() ?>"><span><?php echo __('Add to Cart') ?></span></label>
@@ -35,7 +39,7 @@
                     <?php endif; ?>
                     <strong class="product-item-name">
                         <a href="<?php echo $_item->getProduct()->getProductUrl() ?>"
-                           class="product-item-link"><?php echo $this->escapeHtml($_item->getName()) ?></a>
+                           class="product-item-link"><?php echo $block->escapeHtml($_item->getName()) ?></a>
                     </strong>
                 </li>
             <?php endforeach; ?>
@@ -50,15 +54,15 @@
                     </div>
                 <?php endif; ?>
                 <div class="secondary">
-                    <a class="action view" href="<?php echo $this->getUrl('customer/account') ?>">
+                    <a class="action view" href="<?php echo $block->getUrl('customer/account') ?>">
                         <span><?php echo __('View All'); ?></span>
                     </a>
                 </div>
             </div>
         </form>
     </div>
-    <?php echo $this->getPagerHtml(); ?>
-    <script type="text/javascript">
+    <?php echo $block->getPagerHtml(); ?>
+    <script>
 require(["jquery", "mage/mage"], function(jQuery){
 
 jQuery('#reorder-validate-detail').mage('validation', {

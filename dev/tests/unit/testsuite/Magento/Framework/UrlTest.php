@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 namespace Magento\Framework;
 
@@ -12,7 +15,7 @@ namespace Magento\Framework;
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Url\RouteParamsResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\RouteParamsResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $routeParamsResolverMock;
 
@@ -49,7 +52,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->routeParamsResolverMock = $this->getMock(
-            'Magento\Core\Model\Url\RouteParamsResolver',
+            'Magento\Framework\Url\RouteParamsResolver',
             ['getType', 'hasData', 'getData', 'getRouteParams'],
             [],
             '',
@@ -103,7 +106,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected function getUrlModel($arguments = [])
     {
-        $arguments = array_merge($arguments, ['scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE]);
+        $arguments = array_merge($arguments, ['scopeType' => Store\ScopeInterface::SCOPE_STORE]);
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         return $objectManager->getObject('Magento\Framework\Url', $arguments);
     }
@@ -496,7 +499,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->with($this->equalTo($configPath), \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->scopeMock)
+            ->with($this->equalTo($configPath), Store\ScopeInterface::SCOPE_STORE, $this->scopeMock)
             ->will($this->returnValue('http://localhost/'));
         $this->routeParamsResolverMock->expects($this->at(0))->method('hasData')->with('secure_is_forced')
             ->will($this->returnValue(false));
@@ -543,7 +546,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 'web/secure/base_url_secure_forced',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->scopeMock
+                Store\ScopeInterface::SCOPE_STORE, $this->scopeMock
             )
             ->will($this->returnValue('http://localhost/'));
         $this->routeParamsResolverMock->expects($this->once())->method('hasData')->with('secure_is_forced')

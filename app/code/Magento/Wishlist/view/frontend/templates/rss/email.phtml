@@ -1,13 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Wishlist\Block\Rss\EmailLink */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Wishlist\Block\Rss\EmailLink */
 ?>
-<?php if ($this->getLink()): ?>
+<?php if ($block->getLink()): ?>
 <p style="font-size:12px; line-height:16px; margin:0 0 16px;">
     <?php echo __("RSS link to %1's wishlist", $this->helper('Magento\Wishlist\Helper\Data')->getCustomerName()) ?>
     <br />
-    <a href="<?php echo $this->getLink(); ?>"><?php echo $this->getLink(); ?></a>
+    <a href="<?php echo $block->getLink(); ?>"><?php echo $block->getLink(); ?></a>
 </p>
 <?php endif; ?>

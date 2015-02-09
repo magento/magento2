@@ -1,17 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * Category view template
  *
- * @var $this \Magento\Catalog\Block\Category\View
+ * @var $block \Magento\Catalog\Block\Category\View
  */
 ?>
-<?php if ($this->isContentMode() || $this->isMixedMode()): ?>
+<?php if ($block->isContentMode() || $block->isMixedMode()): ?>
     <div class="category-cms">
-        <?php echo $this->getCmsBlockHtml(); ?>
+        <?php echo $block->getCmsBlockHtml(); ?>
     </div>
 <?php endif; ?>

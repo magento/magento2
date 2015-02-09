@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($detailedInfoGroup = $this->getGroupChildNames('detailed_info', 'getChildHtml')):?>
+<?php if ($detailedInfoGroup = $block->getGroupChildNames('detailed_info', 'getChildHtml')):?>
     <div class="product info detailed">
-        <?php $layout = $this->getLayout(); ?>
+        <?php $layout = $block->getLayout(); ?>
         <div role="tablist" class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}'>
             <?php foreach ($detailedInfoGroup as $name):?>
                 <?php
@@ -14,7 +18,7 @@
                         continue;
                     }
                     $alias = $layout->getElementAlias($name);
-                    $label = $this->getChildData($alias, 'title');
+                    $label = $block->getChildData($alias, 'title');
                 ?>
                 <div class="data item title" data-role="collapsible">
                     <a role="tab" class="data switch" data-toggle="switch" id="tab-label-<?php echo $alias;?>" href="#<?php echo $alias; ?>"><?php echo $label; ?></a>

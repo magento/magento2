@@ -1,13 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Report most viewed collection
  */
 namespace Magento\Reports\Model\Resource\Report\Product\Viewed;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Collection extends \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection
 {
     /**
@@ -25,7 +31,7 @@ class Collection extends \Magento\Reports\Model\Resource\Report\Collection\Abstr
     protected $_selectedColumns = [];
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -33,7 +39,7 @@ class Collection extends \Magento\Reports\Model\Resource\Report\Collection\Abstr
      * @param mixed $connection
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -218,6 +224,9 @@ class Collection extends \Magento\Reports\Model\Resource\Report\Collection\Abstr
      * totals
      *
      * @return $this|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _beforeLoad()
     {

@@ -1,20 +1,24 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php /* former part of \Magento\Framework\Data\Form\Element\AbstractElement::getElementHtml() */ ?>
 
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\ColorPicker|\Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Checkbox */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\ColorPicker|\Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Checkbox */ ?>
 <?php /** @var $element \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ColorPicker */ ?>
-<?php $element = $this->getElement(); ?>
+<?php $element = $block->getElement(); ?>
 
 <?php if ($element->getBeforeElementHtml()): ?>
     <label class="addbefore" for="<?php echo $element->getHtmlId() ?>"><?php echo $element->getBeforeElementHtml() ?></label>
 <?php endif; ?>
 
-<?php echo $this->getHtml() ?>
+<?php echo $block->getHtml() ?>
 
 <?php if ($element->getAfterElementHtml()): ?>
     <label class="addafter" for="<?php echo $element->getHtmlId() ?>"><?php echo $element->getAfterElementHtml() ?></label>

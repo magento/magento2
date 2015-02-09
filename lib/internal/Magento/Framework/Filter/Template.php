@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -95,6 +96,7 @@ class Template implements \Zend_Filter_Interface
      * @param string $value
      * @return string
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function filter($value)
     {
@@ -235,6 +237,7 @@ class Template implements \Zend_Filter_Interface
      * @param string $value raw parameters
      * @param string $default default value
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getVariable($value, $default = '{no_value_defined}')
     {

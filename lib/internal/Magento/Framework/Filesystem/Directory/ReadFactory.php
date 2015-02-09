@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
@@ -29,12 +30,12 @@ class ReadFactory
      * Create a readable directory
      *
      * @param string $path
-     * @param string $protocol
+     * @param string $driverCode
      * @return ReadInterface
      */
-    public function create($path, $protocol = DriverPool::FILE)
+    public function create($path, $driverCode = DriverPool::FILE)
     {
-        $driver = $this->driverPool->getDriver($protocol);
+        $driver = $this->driverPool->getDriver($driverCode);
         $factory = new \Magento\Framework\Filesystem\File\ReadFactory($this->driverPool);
         return new Read($factory, $driver, $path);
     }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -56,6 +57,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock implements \Magento\
      *
      * @deprecated after 1.6.2.0
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanDisplayWishlist()
     {

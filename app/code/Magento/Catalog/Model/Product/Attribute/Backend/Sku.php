@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Catalog product SKU backend attribute model
@@ -103,13 +106,11 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $adapter = $this->getAttribute()->getEntity()->getReadConnection();
         $select = $adapter->select();
         $value = $object->getData($attribute->getAttributeCode());
-        $bind = ['entity_type_id' => $attribute->getEntityTypeId(), 'attribute_code' => trim($value) . '-%'];
+        $bind = ['attribute_code' => trim($value) . '-%'];
 
         $select->from(
             $this->getTable(),
             $attribute->getAttributeCode()
-        )->where(
-            'entity_type_id = :entity_type_id'
         )->where(
             $attribute->getAttributeCode() . ' LIKE :attribute_code'
         )->order(

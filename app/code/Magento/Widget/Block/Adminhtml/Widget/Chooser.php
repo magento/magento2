@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -118,6 +119,7 @@ class Chooser extends \Magento\Backend\Block\Template
      * Flag to indicate include hidden field before chooser or not
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getHiddenEnabled()
     {
@@ -185,7 +187,7 @@ class Chooser extends \Magento\Backend\Block\Template
             <div id="' .
             $chooserId .
             'advice-container" class="hidden"></div>
-            <script type="text/javascript">
+            <script>
             require(["prototype", "mage/adminhtml/wysiwyg/widget"], function(){
             //<![CDATA[
                 (function() {

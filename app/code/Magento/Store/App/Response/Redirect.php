@@ -2,7 +2,8 @@
 /**
  * Response redirector
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\App\Response;
 
@@ -14,7 +15,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     protected $_request;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -47,7 +48,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * Constructor
      *
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Encryption\UrlCoder $urlCoder
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
@@ -56,7 +57,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Encryption\UrlCoder $urlCoder,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,

@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Model\Config\Structure\Element;
 
 class Group extends AbstractComposite
@@ -20,13 +24,13 @@ class Group extends AbstractComposite
     protected $_dependencyMapper;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\Structure\Element\Iterator\Field $childrenIterator
      * @param \Magento\Backend\Model\Config\BackendClone\Factory $cloneModelFactory
      * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\Structure\Element\Iterator\Field $childrenIterator,
         \Magento\Backend\Model\Config\BackendClone\Factory $cloneModelFactory,
         \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper

@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
-<?php echo $this->getFormHtml() ?>
-<script type="text/javascript">
+<?php echo $block->getFormHtml() ?>
+<script>
 require(['jquery', "mage/mage"], function(jQuery){
 
-    jQuery('#<?php echo $this->getFormId();?>').mage('form').mage('validation');
+    jQuery('#<?php echo $block->getFormId();?>').mage('form').mage('validation');
 
 });
 </script>

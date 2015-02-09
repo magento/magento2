@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor;
 
@@ -28,8 +29,8 @@ class Launch extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Ed
         /** @var $cssTabBlock \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css */
         $cssTabBlock = $this->_view->getLayout()->getBlock('design_editor_tools_code_css');
         if ($cssTabBlock) {
-            /** @var $helper \Magento\Core\Helper\Theme */
-            $helper = $this->_objectManager->get('Magento\Core\Helper\Theme');
+            /** @var $helper \Magento\Theme\Helper\Theme */
+            $helper = $this->_objectManager->get('Magento\Theme\Helper\Theme');
             $assets = $helper->getCssAssets($theme);
             $cssTabBlock->setAssets($assets)
                 ->setThemeId($theme->getId());

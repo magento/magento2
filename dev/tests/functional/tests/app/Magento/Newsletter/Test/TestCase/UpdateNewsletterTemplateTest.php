@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Newsletter\Test\TestCase;
@@ -8,7 +9,7 @@ namespace Magento\Newsletter\Test\TestCase;
 use Magento\Newsletter\Test\Fixture\Template;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateEdit;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for UpdateNewsletterTemplate
@@ -31,6 +32,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateNewsletterTemplateTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Newsletter template index page
      *

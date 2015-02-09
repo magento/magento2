@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
@@ -156,9 +157,9 @@
         <var name="customer_account_my_tags_tag_view:height">100</var>
 
         <var name="cart_cross_sell_products:type">thumbnail</var>
-        <var name="cart_cross_sell_products:width">235</var>
+        <var name="cart_cross_sell_products:width">200</var>
         <var name="cart_cross_sell_products:ratio">1</var>
-        <var name="cart_cross_sell_products:height">290</var>
+        <var name="cart_cross_sell_products:height">248</var>
 
         <var name="gift_messages_checkout_thumbnail:type">thumbnail</var>
         <var name="gift_messages_checkout_thumbnail:width">100</var>

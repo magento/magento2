@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
 
@@ -10,7 +11,7 @@ use Magento\Customer\Model\Context;
  * This test ensures that all blocks have the appropriate constructor arguments that allow
  * them to be instantiated via the objectManager.
  *
- * @magentoAppIsolation
+ * @magentoAppIsolation enabled
  */
 class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 {
@@ -56,7 +57,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         try {
             /** @var $website \Magento\Store\Model\Website */
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\Store\StoreManagerInterface'
             )->getStore()->setWebsiteId(
                 0
             );

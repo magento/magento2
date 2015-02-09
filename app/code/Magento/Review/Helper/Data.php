@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Review\Helper;
 
 /**
@@ -76,10 +80,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return an indicator of whether or not guest is allowed to write
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsGuestAllowToWrite()
     {
-        return $this->_scopeConfig->isSetFlag(self::XML_REVIEW_GUETS_ALLOW, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->isSetFlag(self::XML_REVIEW_GUETS_ALLOW, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**

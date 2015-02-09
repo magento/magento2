@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -47,14 +48,12 @@ class DataFixture
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         /* Start transaction before applying first fixture to be able to revert them all further */
-        if ($this->_getFixtures('method', $test)) {
-            /* Re-apply even the same fixtures to guarantee data consistency */
-            if ($this->_appliedFixtures) {
-                $param->requestTransactionRollback();
+        if ($this->_getFixtures($test)) {
+            if ($this->getDbIsolationState($test) !== ['disabled']) {
+                $param->requestTransactionStart();
+            } else {
+                $this->_applyFixtures($this->_getFixtures($test));
             }
-            $param->requestTransactionStart();
-        } elseif (!$this->_appliedFixtures && $this->_getFixtures('class', $test)) {
-            $param->requestTransactionStart();
         }
     }
 
@@ -69,8 +68,12 @@ class DataFixture
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         /* Isolate other tests from test-specific fixtures */
-        if ($this->_appliedFixtures && $this->_getFixtures('method', $test)) {
-            $param->requestTransactionRollback();
+        if ($this->_appliedFixtures && $this->_getFixtures($test)) {
+            if ($this->getDbIsolationState($test) !== ['disabled']) {
+                $param->requestTransactionRollback();
+            } else {
+                $this->_revertFixtures();
+            }
         }
     }
 
@@ -81,7 +84,7 @@ class DataFixture
      */
     public function startTransaction(\PHPUnit_Framework_TestCase $test)
     {
-        $this->_applyFixtures($this->_getFixtures('method', $test) ?: $this->_getFixtures('class', $test));
+        $this->_applyFixtures($this->_getFixtures($test));
     }
 
     /**
@@ -95,17 +98,21 @@ class DataFixture
     /**
      * Retrieve fixtures from annotation
      *
-     * @param string $scope 'class' or 'method'
      * @param \PHPUnit_Framework_TestCase $test
+     * @param string $scope
      * @return array
      * @throws \Magento\Framework\Exception
      */
-    protected function _getFixtures($scope, \PHPUnit_Framework_TestCase $test)
+    protected function _getFixtures(\PHPUnit_Framework_TestCase $test, $scope = null)
     {
-        $annotations = $test->getAnnotations();
+        if ($scope === null) {
+            $annotations = $this->getAnnotations($test);
+        } else {
+            $annotations = $test->getAnnotations()[$scope];
+        }
         $result = [];
-        if (!empty($annotations[$scope]['magentoDataFixture'])) {
-            foreach ($annotations[$scope]['magentoDataFixture'] as $fixture) {
+        if (!empty($annotations['magentoDataFixture'])) {
+            foreach ($annotations['magentoDataFixture'] as $fixture) {
                 if (strpos($fixture, '\\') !== false) {
                     // usage of a single directory separator symbol streamlines search across the source code
                     throw new \Magento\Framework\Exception(
@@ -121,6 +128,30 @@ class DataFixture
             }
         }
         return $result;
+    }
+
+    /**
+     * @param \PHPUnit_Framework_TestCase $test
+     * @return array
+     */
+    private function getAnnotations(\PHPUnit_Framework_TestCase $test)
+    {
+        $annotations = $test->getAnnotations();
+        return array_replace($annotations['class'], $annotations['method']);
+    }
+
+    /**
+     * Return is explicit set isolation state
+     *
+     * @param \PHPUnit_Framework_TestCase $test
+     * @return bool|null
+     */
+    protected function getDbIsolationState(\PHPUnit_Framework_TestCase $test)
+    {
+        $annotations = $this->getAnnotations($test);
+        return isset($annotations[DbIsolation::MAGENTO_DB_ISOLATION])
+            ? $annotations[DbIsolation::MAGENTO_DB_ISOLATION]
+            : null;
     }
 
     /**

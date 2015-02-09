@@ -1,24 +1,27 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Downloadable product links
  *
- * @var $this \Magento\Downloadable\Block\Catalog\Product\Samples
+ * @var $block \Magento\Downloadable\Block\Catalog\Product\Samples
  */
 ?>
 
-<?php if ($this->hasSamples()): ?>
+<?php if ($block->hasSamples()): ?>
     <dl class="items samples">
-        <dt class="item-title samples-item-title"><?php echo $this->getSamplesTitle() ?></dt>
-        <?php $_samples = $this->getSamples() ?>
+        <dt class="item-title samples-item-title"><?php echo $block->getSamplesTitle() ?></dt>
+        <?php $_samples = $block->getSamples() ?>
         <?php foreach ($_samples as $_sample): ?>
             <dd class="item samples-item">
-                <a href="<?php echo $this->getSampleUrl($_sample) ?>" <?php echo $this->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : ''; ?>
+                <a href="<?php echo $block->getSampleUrl($_sample) ?>" <?php echo $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : ''; ?>
                    class="item-link samples-item-link">
-                    <?php echo $this->escapeHtml($_sample->getTitle()) ?>
+                    <?php echo $block->escapeHtml($_sample->getTitle()) ?>
                 </a>
             </dd>
         <?php endforeach; ?>

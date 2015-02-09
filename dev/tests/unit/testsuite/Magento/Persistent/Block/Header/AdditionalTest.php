@@ -1,11 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Block\Header;
 
 /**
  * Class AdditionalTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdditionalTest extends \PHPUnit_Framework_TestCase
 {
@@ -85,6 +87,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
      * Set up
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
@@ -254,7 +257,6 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
         $cacheData = false;
         $idQueryParam = 'id-query-param';
         $sessionId = 'session-id';
-        $customerName = 'customer-name';
 
         $this->additional->setData('cache_lifetime', 789);
         $this->additional->setData('cache_key', 'cache-key');
@@ -266,7 +268,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 'advanced/modules_disable_output/Magento_Persistent',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )->willReturn(false);
 
         // get cache
@@ -309,33 +311,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerId);
 
         if ($customerId) {
-
-            $customerMock = $this->getMockForAbstractClass(
-                'Magento\Customer\Api\Data\CustomerInterface',
-                [],
-                '',
-                false,
-                true,
-                true,
-                []
-            );
-
-            $this->customerRepositoryMock->expects($this->once())
-                ->method('getById')
-                ->with($customerId)
-                ->willReturn($customerMock);
-
-            $this->customerViewHelperMock->expects($this->once())
-                ->method('getCustomerName')
-                ->with($customerMock)
-                ->willReturn($customerName);
-
-            $this->escaperMock->expects($this->at(0))
-                ->method('escapeHtml')
-                ->with($customerName)
-                ->willReturn($customerName);
-
-            $this->assertEquals('<span><a  >(Not customer-name?)</a></span>', $this->additional->toHtml());
+            $this->assertEquals('<span><a  >Not you?</a></span>', $this->additional->toHtml());
         } else {
             $this->assertEquals('', $this->additional->toHtml());
         }

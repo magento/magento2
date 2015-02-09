@@ -1,13 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-if ($exist = $this->getRecentlyComparedProducts()) {
+if ($exist = $block->getRecentlyComparedProducts()) {
     $type = 'widget-compared';
 
-    $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+    $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
     $image = 'recently_compared_products_images_only_widget';
     $title = __('Recently Compared');
     $items = $exist;
@@ -25,12 +29,12 @@ if ($exist = $this->getRecentlyComparedProducts()) {
         <strong><?php echo $title; ?></strong>
     </div>
     <div class="block-content">
-        <?php $suffix = $this->getNameInLayout(); ?>
+        <?php $suffix = $block->getNameInLayout(); ?>
         <ol id="widget-compared-<?php echo $suffix; ?>" class="product-items product-items-images">
         <?php $i = 0; foreach ($items as $_product): ?>
             <li class="product-item">
                 <a class="product-item-photo" href="<?php echo $_product->getProductUrl() ?>"
-                    title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
+                    title="<?php echo $block->stripTags($_product->getName(), null, true) ?>">
                     <?php echo $imageBlock->init($_product, $image)->toHtml() ?>
                 </a>
             </li>

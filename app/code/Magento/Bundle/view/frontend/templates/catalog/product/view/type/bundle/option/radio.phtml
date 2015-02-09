@@ -1,23 +1,26 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /* @var $this \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio */ ?>
-<?php $_option = $this->getOption(); ?>
+<?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio */ ?>
+<?php $_option = $block->getOption(); ?>
 <?php $_selections  = $_option->getSelections(); ?>
 <?php $_default     = $_option->getDefaultSelection(); ?>
-<?php list($_defaultQty, $_canChangeQty) = $this->getDefaultValues(); ?>
+<?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
 <div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
     <label class="label">
-        <span><?php echo $this->escapeHtml($_option->getTitle()) ?></span>
+        <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
         <div class="nested options-list">
-            <?php if ($this->showSingle()): ?>
-                <?php echo $this->getSelectionTitlePrice($_selections[0]) ?>
+            <?php if ($block->showSingle()): ?>
+                <?php echo $block->getSelectionTitlePrice($_selections[0]) ?>
                 <input type="hidden"
                        class="bundle-option-<?php echo $_option->getId() ?>  product bundle option"
                        name="bundle_option[<?php echo $_option->getId() ?>]"
@@ -43,12 +46,12 @@
                                id="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>"
                                <?php if ($_option->getRequired()) echo 'data-validate="{\'validate-one-required-by-name\':true}"'?>
                                name="bundle_option[<?php echo $_option->getId() ?>]"
-                               <?php if ($this->isSelected($_selection)) echo ' checked="checked"' ?>
+                               <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?>
                                <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>
                                value="<?php echo $_selection->getSelectionId() ?>"/>
                         <label class="label"
                                for="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>">
-                            <span><?php echo $this->getSelectionTitlePrice($_selection) ?></span>
+                            <span><?php echo $block->getSelectionTitlePrice($_selection) ?></span>
                         </label>
                     </div>
                 <?php endforeach; ?>

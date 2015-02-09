@@ -1,7 +1,7 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
@@ -21,17 +21,41 @@ class AddComment extends \Magento\Backend\App\Action
     protected $creditmemoSender;
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $pagePageFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param CreditmemoSender $creditmemoSender
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
-        CreditmemoSender $creditmemoSender
+        CreditmemoSender $creditmemoSender,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
         $this->creditmemoSender = $creditmemoSender;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->resultRawFactory = $resultRawFactory;
         parent::__construct($context);
     }
 
@@ -46,7 +70,7 @@ class AddComment extends \Magento\Backend\App\Action
     /**
      * Add comment to creditmemo history
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Raw|\Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {
@@ -69,20 +93,21 @@ class AddComment extends \Magento\Backend\App\Action
             $comment->save();
 
             $this->creditmemoSender->send($creditmemo, !empty($data['is_customer_notified']), $data['comment']);
-
-            $this->_view->loadLayout();
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Credit Memos'));
-            $response = $this->_view->getLayout()->getBlock('creditmemo_comments')->toHtml();
+            $resultPage = $this->resultPageFactory->create();
+            $response = $resultPage->getLayout()->getBlock('creditmemo_comments')->toHtml();
         } catch (\Magento\Framework\Model\Exception $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot add new comment.')];
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
-            $this->getResponse()->representJson($response);
+            $resultJson = $this->resultJsonFactory->create();
+            $resultJson->setData($response);
+            return $resultJson;
         } else {
-            $this->getResponse()->setBody($response);
+            $resultRaw = $this->resultRawFactory->create();
+            $resultRaw->setContents($response);
+            return $resultRaw;
         }
     }
 }

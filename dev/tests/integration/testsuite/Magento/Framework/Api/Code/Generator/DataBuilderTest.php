@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Code\Generator;
 
@@ -16,7 +17,8 @@ class DataBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\Framework\Filesystem\FileResolver::addIncludePath([__DIR__ . '/../../_files']);
+        $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
+        $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/../../_files/Magento/Wonderland'));
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_objectManager->configure(
             [
@@ -40,7 +42,7 @@ class DataBuilderTest extends \PHPUnit_Framework_TestCase
     public function getBuildersToTest()
     {
         return [
-            ['Magento\Checkout\Service\V1\Data\Cart\TotalsBuilder'],
+            ['Magento\Catalog\Api\Data\ProductDataBuilder'],
         ];
     }
 

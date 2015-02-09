@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/** @var $this \Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created */
+/** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created */
 ?>
-<script type="text/javascript">
+<script>
 (function ($) {
 
-    var data = <?php echo $this->getAttributesBlockJson() ?>;
+    var data = <?php echo $block->getAttributesBlockJson() ?>;
     var set = data.set || {id: $('#attribute_set_id').val()};
     if (data.tab == 'variations') {
         $('#configurable-attributes-container').trigger('add', data.attribute);
@@ -19,5 +20,5 @@
 })(window.parent.jQuery);
 </script>
 <div class="a-center">
-    <?php echo $this->getCloseButtonHtml() ?>
+    <?php echo $block->getCloseButtonHtml() ?>
 </div>

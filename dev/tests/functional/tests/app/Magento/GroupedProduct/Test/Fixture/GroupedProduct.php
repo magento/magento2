@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GroupedProduct\Test\Fixture;
 
 use Magento\Catalog\Test\Fixture\Product;
-use Mtf\Factory\Factory;
-use Mtf\System\Config;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\System\Config;
 
 /**
  * Class GroupedProduct

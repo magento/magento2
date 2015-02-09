@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Collection;
 
@@ -12,7 +13,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Core\Model\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreEntityFactoryMock;
 
@@ -58,7 +59,13 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->coreEntityFactoryMock = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
+        $this->coreEntityFactoryMock = $this->getMock(
+            'Magento\Framework\Data\Collection\EntityFactory',
+            [],
+            [],
+            '',
+            false
+        );
         $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->fetchStrategyMock = $this->getMock(
             'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',

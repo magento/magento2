@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
@@ -11,6 +12,8 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerDataBuilder;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
@@ -38,6 +41,8 @@ class EditPost extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
+     * @param RedirectFactory $resultRedirectFactory
+     * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerDataBuilder $customerDataBuilder
@@ -48,6 +53,8 @@ class EditPost extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
+        RedirectFactory $resultRedirectFactory,
+        PageFactory $resultPageFactory,
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         CustomerDataBuilder $customerDataBuilder,
@@ -59,20 +66,22 @@ class EditPost extends \Magento\Customer\Controller\Account
         $this->customerDataBuilder = $customerDataBuilder;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
-        parent::__construct($context, $customerSession);
+        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
     }
 
     /**
      * Change customer password action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         if (!$this->formKeyValidator->validate($this->getRequest())) {
-            $this->_redirect('*/*/edit');
-            return;
+            $resultRedirect->setPath('*/*/edit');
+            return $resultRedirect;
         }
 
         if ($this->getRequest()->isPost()) {
@@ -122,15 +131,16 @@ class EditPost extends \Magento\Customer\Controller\Account
 
             if ($this->messageManager->getMessages()->getCount() > 0) {
                 $this->_getSession()->setCustomerFormData($this->getRequest()->getPost());
-                $this->_redirect('*/*/edit');
-                return;
+                $resultRedirect->setPath('*/*/edit');
+                return $resultRedirect;
             }
 
             $this->messageManager->addSuccess(__('The account information has been saved.'));
-            $this->_redirect('customer/account');
-            return;
+            $resultRedirect->setPath('customer/account');
+            return $resultRedirect;
         }
 
-        $this->_redirect('*/*/edit');
+        $resultRedirect->setPath('*/*/edit');
+        return $resultRedirect;
     }
 }

@@ -1,5 +1,6 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /* Backend */
@@ -933,7 +934,7 @@ input.mage-error ~ .addafter {
     width: 8px;
     height: 14px;
     line-height: 14px;
-    background: url(Magento_Backend::images/draggable-handle-vertical.gif) no-repeat 0 0;
+    background: url(Magento_Backend::images/draggable-handle-vertical.png) no-repeat 0 0;
     cursor: ns-resize;
     color: #b2b0ad;
 }
@@ -1403,10 +1404,6 @@ address {
 
 .x-tree-node .system-leaf .x-tree-node-icon {
     background-image: url(../images/fam_application_form_delete.png);
-}
-
-.x-tree-node {
-    overflow: auto;
 }
 
 /*
@@ -2812,6 +2809,12 @@ address {
 .x-tree ul {
     margin: 0;
     padding: 0;
+}
+
+.tree-wrapper {
+    width: 100%;
+    overflow: auto;
+    float: left; // Fixed Chrome scroll issue
 }
 
 .page-actions.fixed .page-actions-inner:before {

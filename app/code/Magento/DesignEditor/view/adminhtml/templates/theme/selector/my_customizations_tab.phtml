@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\Backend\Block\Template */?>
+<?php /** @var $block \Magento\Backend\Block\Template */?>
 
-<div class="themes-assigned"><?php echo $this->getChildHtml('assigned.theme.list') ?></div>
-<div class="themes-unassigned"><?php echo $this->getChildHtml('unassigned.theme.list') ?></div>
+<div class="themes-assigned"><?php echo $block->getChildHtml('assigned.theme.list') ?></div>
+<div class="themes-unassigned"><?php echo $block->getChildHtml('unassigned.theme.list') ?></div>
 
-<script type="text/javascript">
+<script>
 require([
 	'jquery',
 	'Magento_DesignEditor/js/theme-delete'

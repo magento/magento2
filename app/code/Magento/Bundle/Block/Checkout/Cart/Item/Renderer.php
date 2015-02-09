@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Checkout\Cart\Item;
 
@@ -37,6 +38,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * @param Configuration $bundleProductConfiguration
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -82,6 +84,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      *
      * @param bool $useCache
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getBundleOptions($useCache = true)
     {

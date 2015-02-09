@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->getRating() && $this->getRating()->getSize()): ?>
+<?php if ($block->getRating() && $block->getRating()->getSize()): ?>
     <div class="ratings-container">
-        <?php foreach ($this->getRating() as $_rating): ?>
+        <?php foreach ($block->getRating() as $_rating): ?>
         <?php if ($_rating->getPercent()): ?>
             <div class="ratings">
-               <?php echo $this->escapeHtml($_rating->getRatingCode()) ?>
+               <?php echo $block->escapeHtml($_rating->getRatingCode()) ?>
                 <div class="rating-box">
                     <div class="rating" style="width:<?php echo ceil($_rating->getPercent()) ?>%;"></div>
                 </div>

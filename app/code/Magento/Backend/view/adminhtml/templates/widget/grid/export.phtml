@@ -1,15 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<label for="<?php echo $this->getId() ?>_export" class="label">
+<label for="<?php echo $block->getId() ?>_export" class="label">
     <?php echo __('Export to:') ?>
 </label>
-<select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export" class="select">
-    <?php foreach ($this->getExportTypes() as $_type): ?>
+<select name="<?php echo $block->getId() ?>_export" id="<?php echo $block->getId() ?>_export" class="select">
+    <?php foreach ($block->getExportTypes() as $_type): ?>
         <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
     <?php endforeach; ?>
 </select>
-<?php echo $this->getExportButtonHtml() ?>
+<?php echo $block->getExportButtonHtml() ?>

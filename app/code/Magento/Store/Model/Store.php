@@ -1,11 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Store model
@@ -18,6 +20,10 @@ use Magento\Framework\Model\AbstractModel;
  * @method int getStoreId()
  * @method \Magento\Store\Model\Store setSortOrder(int $value)
  * @method \Magento\Store\Model\Store setIsActive(int $value)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Store extends AbstractModel implements
     \Magento\Framework\App\ScopeInterface,
@@ -305,7 +311,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -316,6 +322,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -328,7 +335,7 @@ class Store extends AbstractModel implements
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -525,6 +532,8 @@ class Store extends AbstractModel implements
      * @param boolean|null $secure
      * @return string
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getBaseUrl($type = \Magento\Framework\UrlInterface::URL_TYPE_LINK, $secure = null)
     {
@@ -592,6 +601,26 @@ class Store extends AbstractModel implements
         }
 
         return $this->_baseUrlCache[$cacheKey];
+    }
+
+    /**
+     * Retrieve base media directory path
+     *
+     * @return string
+     */
+    public function getBaseMediaDir()
+    {
+        return $this->filesystem->getUri(DirectoryList::MEDIA);
+    }
+
+    /**
+     * Retrieve base static directory path
+     *
+     * @return string
+     */
+    public function getBaseStaticDir()
+    {
+        return $this->filesystem->getUri(DirectoryList::STATIC_VIEW);
     }
 
     /**
@@ -692,7 +721,7 @@ class Store extends AbstractModel implements
         if ($this->_isFrontSecure === null) {
             $this->_isFrontSecure = $this->_config->isSetFlag(
                 self::XML_PATH_SECURE_IN_FRONTEND,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this->getId()
             );
         }
@@ -720,7 +749,7 @@ class Store extends AbstractModel implements
 
         $secureBaseUrl = $this->_config->getValue(
             self::XML_PATH_SECURE_BASE_URL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         if (!$secureBaseUrl) {
@@ -1010,6 +1039,8 @@ class Store extends AbstractModel implements
      *
      * @param bool|string $fromStore
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getCurrentUrl($fromStore = true)
     {
@@ -1094,7 +1125,10 @@ class Store extends AbstractModel implements
      */
     public function beforeDelete()
     {
-        $this->_configDataResource->clearScopeData(\Magento\Store\Model\ScopeInterface::SCOPE_STORES, $this->getId());
+        $this->_configDataResource->clearScopeData(
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES,
+            $this->getId()
+        );
 
         return parent::beforeDelete();
     }
@@ -1150,7 +1184,7 @@ class Store extends AbstractModel implements
         if (null === $this->_frontendName) {
             $storeGroupName = (string)$this->_config->getValue(
                 'general/store_information/name',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this
             );
             $this->_frontendName = !empty($storeGroupName) ? $storeGroupName : $this->getGroup()->getName();

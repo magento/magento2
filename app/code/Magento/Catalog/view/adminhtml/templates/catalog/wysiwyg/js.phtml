@@ -1,14 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<script type="text/javascript">
+<script>
 require([
     "jquery",
+    "tinymce",
     "prototype",
     "mage/adminhtml/events"
-], function(jQuery){
+], function(jQuery, tinyMCE){
 
 //<![CDATA[
 
@@ -22,7 +27,7 @@ var catalogWysiwygEditor = {
                 url: editorUrl,
                 data: {
                     element_id: elementId + '_editor',
-                    store_id: '<?php echo $this->getStoreId() ?>'
+                    store_id: '<?php echo $block->getStoreId() ?>'
                 },
                 showLoader: true,
                 dataType: 'html',

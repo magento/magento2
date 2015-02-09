@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
@@ -50,14 +51,14 @@ class SaveTest extends \Magento\Theme\Controller\Adminhtml\System\Design\ThemeTe
         $this->_request->expects($this->once(5))->method('getPost')->will($this->returnValue(true));
 
         $themeMock = $this->getMock(
-            'Magento\Core\Model\Theme',
+            'Magento\Theme\Model\Theme',
             ['save', 'load', 'setCustomization', 'getThemeImage', '__wakeup'],
             [],
             '',
             false
         );
 
-        $themeImage = $this->getMock('Magento\Core\Model\Theme\Image', [], [], '', false);
+        $themeImage = $this->getMock('Magento\Theme\Model\Theme\Image', [], [], '', false);
         $themeMock->expects($this->any())->method('getThemeImage')->will($this->returnValue($themeImage));
 
         $themeFactory = $this->getMock(

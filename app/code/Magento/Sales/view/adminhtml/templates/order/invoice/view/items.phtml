@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="grid">
     <table cellspacing="0" class="data order-tables">
@@ -16,7 +20,7 @@
                 <th class="col-total last"><span><?php echo __('Row Total') ?></span></th>
             </tr>
         </thead>
-        <?php $_items = $this->getInvoice()->getAllItems() ?>
+        <?php $_items = $block->getInvoice()->getAllItems() ?>
         <?php $i = 0; foreach ($_items as $_item): ?>
             <?php if ($_item->getOrderItem()->getParentItem()) {
     continue;
@@ -24,8 +28,8 @@
     $i++;
 } ?>
             <tbody class="<?php echo $i%2 ? 'even' : 'odd' ?>">
-                <?php echo $this->getItemHtml($_item) ?>
-                <?php echo $this->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                <?php echo $block->getItemHtml($_item) ?>
+                <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
             </tbody>
         <?php endforeach; ?>
     </table>

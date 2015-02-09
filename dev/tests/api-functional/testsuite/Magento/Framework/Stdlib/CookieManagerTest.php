@@ -2,7 +2,8 @@
 namespace Magento\Framework\Stdlib;
 
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -151,6 +152,7 @@ class CookieManagerTest extends \Magento\TestFramework\TestCase\WebapiAbstract
      * @param string $cookieName
      * @param array $cookies
      * @return $cookie|null
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function findCookie($cookieName, $cookies)
     {

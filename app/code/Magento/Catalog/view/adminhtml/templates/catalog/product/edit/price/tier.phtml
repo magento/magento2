@@ -1,28 +1,32 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier */
-$element = $this->getElement();
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier */
+$element = $block->getElement();
 ?>
-<?php $_htmlId      = $this->getElement()->getHtmlId() ?>
-<?php $_htmlClass   = $this->getElement()->getClass() ?>
-<?php $_htmlName    = $this->getElement()->getName() ?>
-<?php $_readonly    = $this->getElement()->getReadonly() ?>
-<?php $_showWebsite = $this->isShowWebsiteColumn(); ?>
-<?php $_editWebsite = $this->isAllowChangeWebsite(); ?>
-<?php $_priceValueValidation = $this->getPriceValidation('validate-greater-than-zero'); ?>
+<?php $_htmlId      = $block->getElement()->getHtmlId() ?>
+<?php $_htmlClass   = $block->getElement()->getClass() ?>
+<?php $_htmlName    = $block->getElement()->getName() ?>
+<?php $_readonly    = $block->getElement()->getReadonly() ?>
+<?php $_showWebsite = $block->isShowWebsiteColumn(); ?>
+<?php $_editWebsite = $block->isAllowChangeWebsite(); ?>
+<?php $_priceValueValidation = $block->getPriceValidation('validate-greater-than-zero'); ?>
 
 
-<?php $_showWebsite = $this->isShowWebsiteColumn(); ?>
-<?php $_showWebsite = $this->isMultiWebsites(); ?>
+<?php $_showWebsite = $block->isShowWebsiteColumn(); ?>
+<?php $_showWebsite = $block->isMultiWebsites(); ?>
 <div class="field" id="attribute-<?php echo $_htmlId?>-container" data-attribute-code="<?php echo $_htmlId?>"
-     data-apply-to="<?php echo $this->escapeHtml(
+     data-apply-to="<?php echo $block->escapeHtml(
          $this->helper('Magento\Core\Helper\Data')->jsonEncode(
              $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
          )
      )?>">
-    <label class="label"><span><?php echo $this->getElement()->getLabel() ?></span></label>
+    <label class="label"><span><?php echo $block->getElement()->getLabel() ?></span></label>
     <div class="control">
         <table cellspacing="0" class="data-table tiers_table" id="tiers_table">
             <thead>
@@ -30,19 +34,19 @@ $element = $this->getElement();
                     <th class="col-websites" <?php if (!$_showWebsite): ?>style="display:none"<?php endif; ?>><?php echo __('Web Site') ?></th>
                     <th class="col-customer-group"><?php echo __('Customer Group') ?></th>
                     <th class="col-qty required"><?php echo __('Quantity') ?></th>
-                    <th class="col-price required"><?php echo $this->getPriceColumnHeader(__('Item Price')) ?></th>
+                    <th class="col-price required"><?php echo $block->getPriceColumnHeader(__('Item Price')) ?></th>
                     <th class="col-delete"><?php echo __('Action') ?></th>
                 </tr>
             </thead>
             <tbody id="<?php echo $_htmlId ?>_container"></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="<?php if (!$_showWebsite): ?>4<?php else: ?>5<?php endif; ?>" class="col-actions-add"><?php echo $this->getAddButtonHtml() ?></td>
+                    <td colspan="<?php if (!$_showWebsite): ?>4<?php else: ?>5<?php endif; ?>" class="col-actions-add"><?php echo $block->getAddButtonHtml() ?></td>
                 </tr>
             </tfoot>
         </table>
 
-<script type="text/javascript">
+<script>
 require([
     "prototype",
     "mage/adminhtml/form"
@@ -52,13 +56,13 @@ require([
 var tierPriceRowTemplate = '<tr>'
     + '<td class="col-websites"<?php if (!$_showWebsite): ?> style="display:none"<?php endif; ?>>'
     + '<select class="<?php echo $_htmlClass ?> required-entry" name="<?php echo $_htmlName ?>[{{index}}][website_id]" id="tier_price_row_{{index}}_website">'
-    <?php foreach ($this->getWebsites() as $_websiteId => $_info): ?>
-    + '<option value="<?php echo $_websiteId ?>"><?php echo $this->escapeJsQuote($this->escapeHtml($_info['name'])) ?><?php if (!empty($_info['currency'])): ?> [<?php echo $this->escapeHtml($_info['currency']) ?>]<?php endif; ?></option>'
+    <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
+    + '<option value="<?php echo $_websiteId ?>"><?php echo $block->escapeJsQuote($block->escapeHtml($_info['name'])) ?><?php if (!empty($_info['currency'])): ?> [<?php echo $block->escapeHtml($_info['currency']) ?>]<?php endif; ?></option>'
     <?php endforeach ?>
     + '</select></td>'
     + '<td class="col-customer-group"><select class="<?php echo $_htmlClass ?> custgroup required-entry" name="<?php echo $_htmlName ?>[{{index}}][cust_group]" id="tier_price_row_{{index}}_cust_group">'
-    <?php foreach ($this->getCustomerGroups() as $_groupId => $_groupName): ?>
-    + '<option value="<?php echo $_groupId ?>"><?php echo $this->escapeJsQuote($this->escapeHtml($_groupName)) ?></option>'
+    <?php foreach ($block->getCustomerGroups() as $_groupId => $_groupName): ?>
+    + '<option value="<?php echo $_groupId ?>"><?php echo $block->escapeJsQuote($block->escapeHtml($_groupName)) ?></option>'
     <?php endforeach ?>
     + '</select></td>'
     + '<td class="col-qty"><small class="nobr" title="<?php echo __("and above")?>"><?php echo __("and above")?></small><input class="<?php echo $_htmlClass ?> qty required-entry validate-greater-than-zero" type="text" name="<?php echo $_htmlName ?>[{{index}}][price_qty]" value="{{qty}}" id="tier_price_row_{{index}}_qty" />'
@@ -79,8 +83,8 @@ var tierPriceControl = {
         }
         <?php endif; ?>
         var data = {
-            website_id: '<?php echo $this->getDefaultWebsite() ?>',
-            group: '<?php echo $this->getDefaultCustomerGroup() ?>',
+            website_id: '<?php echo $block->getDefaultWebsite() ?>',
+            group: '<?php echo $block->getDefaultCustomerGroup() ?>',
             qty: '',
             price: '',
             readOnly: false,
@@ -104,7 +108,7 @@ var tierPriceControl = {
         $('tier_price_row_' + data.index + '_cust_group').value = data.group;
         $('tier_price_row_' + data.index + '_website').value    = data.website_id;
 
-        <?php if ($this->isShowWebsiteColumn() && !$this->isAllowChangeWebsite()):?>
+        <?php if ($block->isShowWebsiteColumn() && !$block->isAllowChangeWebsite()):?>
         var wss = $('tier_price_row_' + data.index + '_website');
         var txt = wss.options[wss.selectedIndex].text;
 
@@ -141,7 +145,7 @@ var tierPriceControl = {
         return false;
     }
 };
-<?php foreach ($this->getValues() as $_item): ?>
+<?php foreach ($block->getValues() as $_item): ?>
 tierPriceControl.addItem('<?php echo $_item['website_id'] ?>', '<?php echo $_item['cust_group'] ?>', '<?php echo $_item['price_qty']*1 ?>', '<?php echo sprintf('%.2f', $_item['price']) ?>', <?php echo (int)!empty($_item['readonly'])?>);
 <?php endforeach; ?>
 <?php if ($_readonly): ?>

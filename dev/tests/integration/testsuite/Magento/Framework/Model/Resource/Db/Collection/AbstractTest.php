@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\Resource\Db\Collection;
 
@@ -41,7 +42,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         );
 
         $entityFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\EntityFactory'
+            'Magento\Framework\Data\Collection\EntityFactory'
         );
         $logger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Psr\Log\LoggerInterface');
 

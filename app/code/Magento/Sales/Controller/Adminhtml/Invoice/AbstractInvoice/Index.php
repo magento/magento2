@@ -1,12 +1,30 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 
 abstract class Index extends \Magento\Backend\App\Action
 {
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+    ) {
+        parent::__construct($context);
+        $this->resultPageFactory = $resultPageFactory;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -18,32 +36,27 @@ abstract class Index extends \Magento\Backend\App\Action
     /**
      * Init layout, menu and breadcrumb
      *
-     * @return $this
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     protected function _initAction()
     {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu(
-            'Magento_Sales::sales_invoice'
-        )->_addBreadcrumb(
-            __('Sales'),
-            __('Sales')
-        )->_addBreadcrumb(
-            __('Invoices'),
-            __('Invoices')
-        );
-        return $this;
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Sales::sales_invoice')
+            ->addBreadcrumb(__('Sales'), __('Sales'))
+            ->addBreadcrumb(__('Invoices'), __('Invoices'));
+        return $resultPage;
     }
 
     /**
      * Invoices grid
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $this->_initAction();
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Invoices'));
-        $this->_view->renderLayout();
+        $resultPage = $this->_initAction();
+        $resultPage->getConfig()->getTitle()->prepend(__('Invoices'));
+        return $resultPage;
     }
 }

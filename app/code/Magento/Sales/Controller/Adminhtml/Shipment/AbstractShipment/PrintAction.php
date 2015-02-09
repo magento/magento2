@@ -1,29 +1,41 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 
 abstract class PrintAction extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @var ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
+     * @param Context $context
+     * @param FileFactory $fileFactory
+     * @param ForwardFactory $resultForwardFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        Context $context,
+        FileFactory $fileFactory,
+        ForwardFactory $resultForwardFactory
     ) {
         $this->_fileFactory = $fileFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
 
@@ -36,7 +48,7 @@ abstract class PrintAction extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return ResponseInterface|void
+     * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
@@ -58,7 +70,9 @@ abstract class PrintAction extends \Magento\Backend\App\Action
                 );
             }
         } else {
-            $this->_forward('noroute');
+            /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+            $resultForward = $this->resultForwardFactory->create();
+            return $resultForward->forward('noroute');
         }
     }
 }

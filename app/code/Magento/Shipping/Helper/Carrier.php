@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Helper;
 
@@ -54,7 +55,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
         $carriersCodes = [];
         foreach ($this->scopeConfig->getValue(
             self::XML_PATH_CARRIERS_ROOT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         ) as $carrierCode => $carrier) {
             if (isset($carrier['is_online']) && $carrier['is_online']) {
@@ -76,7 +77,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             sprintf('%s/%s/%s', self::XML_PATH_CARRIERS_ROOT, $carrierCode, $configPath),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

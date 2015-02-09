@@ -2,7 +2,8 @@
 /**
  * Test SOAP server model.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap;
 
@@ -27,7 +28,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\Store */
     protected $_storeMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var \Magento\Framework\Store\StoreManagerInterface */
     protected $_storeManagerMock;
 
     /** @var \Magento\Webapi\Model\Soap\Server\Factory */

@@ -2,7 +2,8 @@
 /**
  * Cache grid collection
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Cache\Resource\Grid;
 
@@ -14,11 +15,11 @@ class Collection extends \Magento\Framework\Data\Collection
     protected $_cacheTypeList;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
     ) {
         $this->_cacheTypeList = $cacheTypeList;

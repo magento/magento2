@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor;
 
@@ -25,8 +26,8 @@ class AssignThemeToStore extends \Magento\DesignEditor\Controller\Adminhtml\Syst
         $defaultStore = -1;
         $emptyStores = -2;
         if ($stores == $defaultStore) {
-            /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-            $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+            /** @var \Magento\Framework\Store\StoreManagerInterface $storeManager */
+            $storeManager = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface');
             $ids = array_keys($storeManager->getStores());
             $stores = [array_shift($ids)];
         } elseif ($stores == $emptyStores) {

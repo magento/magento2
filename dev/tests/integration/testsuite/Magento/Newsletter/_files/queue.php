@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 require __DIR__ . '/template.php';
@@ -13,8 +14,8 @@ $template = $objectManager->create('Magento\Newsletter\Model\Template');
 $template->load('fixture_tpl', 'template_code');
 $templateId = $template->getId();
 
-$currentStore = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId();
-$otherStore = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore('fixturestore')->getId();
+$currentStore = $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getId();
+$otherStore = $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore('fixturestore')->getId();
 
 /** @var $queue \Magento\Newsletter\Model\Queue */
 $queue = $objectManager->create('Magento\Newsletter\Model\Queue');

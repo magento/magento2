@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
- * @var $this \Magento\Theme\Block\Html\Notices
+ * @var $block \Magento\Theme\Block\Html\Notices
  */
 ?>
-<?php if ($this->displayNoscriptNotice()): ?>
+<?php if ($block->displayNoscriptNotice()): ?>
     <noscript>
         <div class="message global noscript">
             <div class="content">
@@ -20,7 +24,7 @@
         </div>
     </noscript>
 <?php endif; ?>
-<?php if ($this->displayNoLocalStorageNotice()): ?>
+<?php if ($block->displayNoLocalStorageNotice()): ?>
     <div class="notice global site local_storage" style="display: none;">
         <div class="content">
             <p>
@@ -29,7 +33,7 @@
             </p>
         </div>
     </div>
-    <script type="text/javascript">
+    <script>
 require(['jquery'], function(jQuery){
 
         // <![CDATA[
@@ -47,43 +51,10 @@ require(['jquery'], function(jQuery){
 });
 </script>
 <?php endif; ?>
-<?php if ($this->displayDemoNotice()): ?>
+<?php if ($block->displayDemoNotice()): ?>
     <div class="message global demo">
         <div class="content">
             <p><?php echo __('This is demo store. All orders will not be transferred.') ?></p>
         </div>
     </div>
-<?php endif; ?>
-<?php if ($this->helper('Magento\Store\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
-    <div class="message global cookie" id="notice-cookie-block" style="display: none">
-        <div class="content">
-            <p>
-                <strong><?php echo __('We use cookies to make your experience better.') ?></strong>
-                <span><?php echo __('To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.') ?></span>
-                <?php echo __('<a href="%1">Learn more</a>.', $this->getPrivacyPolicyLink()) ?></p>
-            <div class="actions">
-                <button id="btn-cookie-allow" class="action allow primary">
-                    <span><?php echo __('Allow Cookies');?></span>
-                </button>
-            </div>
-        </div>
-    </div>
-    <script type="text/javascript">
-require([
-    "jquery",
-    "mage/mage"
-], function($){
-
-// <![CDATA[
-    $('#notice-cookie-block').mage('cookieBlock', {
-        cookieAllowButtonSelector: '#btn-cookie-allow',
-        cookieName: '<?php echo \Magento\Store\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
-        cookieValue: '<?php echo $this->helper('Magento\Store\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
-        cookieLifetime: <?php echo $this->helper('Magento\Store\Helper\Cookie')->getCookieRestrictionLifetime()?>,
-        noCookiesUrl: '<?php echo $this->getUrl('cms/index/noCookies') ?>'
-    });
-// ]]>
-
-});
-</script>
 <?php endif; ?>

@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Directory\Model;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +26,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $transportBuilder;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     /** @var \Magento\Directory\Model\CurrencyFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -78,7 +79,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig
             ->expects($this->at(0))
             ->method('getValue')
-            ->with(Observer::IMPORT_ENABLE, ScopeInterface::SCOPE_STORE)
+            ->with(Observer::IMPORT_ENABLE, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(1));
         $this->scopeConfig
             ->expects($this->at(1))
@@ -88,7 +89,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig
             ->expects($this->at(2))
             ->method('getValue')
-            ->with(Observer::IMPORT_SERVICE, ScopeInterface::SCOPE_STORE)
+            ->with(Observer::IMPORT_SERVICE, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue('import-service'));
         $importInterfaceMock = $this->getMockBuilder('Magento\Directory\Model\Currency\Import\Webservicex')
             ->disableOriginalConstructor()

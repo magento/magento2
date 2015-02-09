@@ -1,19 +1,23 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php
-/** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content\Files */
+/** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content\Files */
 ?>
 
-<?php if ($this->getFilesCount() > 0): ?>
+<?php if ($block->getFilesCount() > 0): ?>
 
     <div name="css-editor">
-        <?php if ($this->getStorageType() == \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT): ?>
+        <?php if ($block->getStorageType() == \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT): ?>
             <div class="uploader">
-                <?php foreach ($this->getFiles() as $file): ?>
+                <?php foreach ($block->getFiles() as $file): ?>
                     <div class="file-row filecnt file-font" id="<?php echo $file['id'] ?>">
                         <span class="file-info-name">
                             <?php echo $file['text'] ?>
@@ -33,13 +37,13 @@
             </div>
         <?php else: ?>
             <div class="uploader-image">
-                <?php foreach ($this->getFiles() as $file): ?>
+                <?php foreach ($block->getFiles() as $file): ?>
                     <div class="image base-image asset-image css-editor-image filecnt file-row" id="<?php echo $file['id'] ?>">
                         <?php if (isset($file['thumbnailParams'])): ?>
-                            <img class="spacer" src="<?php echo $this->getViewFileUrl('images/spacer.gif') ?>"/>
-                            <img src="<?php echo $this->getUrl('*/*/previewImage', $file['thumbnailParams']) ?>">
+                            <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif') ?>"/>
+                            <img src="<?php echo $block->getUrl('*/*/previewImage', $file['thumbnailParams']) ?>">
                         <?php endif; ?>
-                        <img class="spacer" src="<?php echo $this->getViewFileUrl('images/spacer.gif') ?>"/>
+                        <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif') ?>"/>
                         <div>
                             <?php echo $file['width'] ?>x<?php echo $file['height'] ?> px.
                         </div>

@@ -1,7 +1,7 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
@@ -15,14 +15,30 @@ class Void extends \Magento\Backend\App\Action
     protected $creditmemoLoader;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
+        \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
 
@@ -37,7 +53,7 @@ class Void extends \Magento\Backend\App\Action
     /**
      * Void creditmemo action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
@@ -63,9 +79,13 @@ class Void extends \Magento\Backend\App\Action
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('We can\'t void the credit memo.'));
             }
-            $this->_redirect('sales/*/view', ['creditmemo_id' => $creditmemo->getId()]);
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('sales/*/view', ['creditmemo_id' => $creditmemo->getId()]);
+            return $resultRedirect;
         } else {
-            $this->_forward('noroute');
+            $resultForward = $this->resultForwardFactory->create();
+            $resultForward->forward('noroute');
+            return $resultForward;
         }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Model;
 
@@ -68,6 +69,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setWishlistItemCount', 'isLoggedIn', 'getCustomerId'])
             ->getMock();
         $this->wishlistFactory = $this->getMockBuilder('Magento\Wishlist\Model\WishlistFactory')
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->wishlist = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
@@ -146,7 +148,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getEvent')
             ->willReturn($event);
 
-        $quoteItem = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $quoteItem = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->setMethods(['getProductId', 'getBuyRequest', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -166,7 +168,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$itemId => ['qty' => $itemQty, 'wishlist' => true]]);
 
         $cart = $this->getMockBuilder('Magento\Checkout\Model\Cart')->disableOriginalConstructor()->getMock();
-        $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->setMethods(['getCustomerId', 'getItemById', 'removeItem', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();

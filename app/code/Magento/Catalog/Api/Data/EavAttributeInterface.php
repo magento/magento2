@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api\Data;
 
@@ -20,8 +21,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
     const POSITION = 'position';
 
     const APPLY_TO = 'apply_to';
-
-    const IS_CONFIGURABLE = 'is_configurable';
 
     const IS_SEARCHABLE = 'is_searchable';
 
@@ -94,12 +93,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
      */
     public function getApplyTo();
 
-    /**
-     * Whether the attribute can be used for configurable products
-     *
-     * @return string|null
-     */
-    public function getIsConfigurable();
     /**
      * Whether the attribute can be used in Quick Search
      *

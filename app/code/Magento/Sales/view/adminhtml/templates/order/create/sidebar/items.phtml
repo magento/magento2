@@ -1,39 +1,43 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /* @var $this \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */ ?>
-<div class="create-order-sidebar-block" id="sidebar_data_<?php echo $this->getDataId() ?>">
+<?php /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */ ?>
+<div class="create-order-sidebar-block" id="sidebar_data_<?php echo $block->getDataId() ?>">
     <div class="head">
-        <a href="#" class="action-refresh" title="<?php echo __('Refresh') ?>" onclick="order.loadArea('sidebar_<?php echo $this->getDataId() ?>', 'sidebar_data_<?php echo $this->getDataId() ?>');return false;">Refresh</a>
-        <h5><?php echo $this->getHeaderText() ?> <span class="normal">(<?php echo $this->getItemCount() ?>)</span></h5>
+        <a href="#" class="action-refresh" title="<?php echo __('Refresh') ?>" onclick="order.loadArea('sidebar_<?php echo $block->getDataId() ?>', 'sidebar_data_<?php echo $block->getDataId() ?>');return false;">Refresh</a>
+        <h5><?php echo $block->getHeaderText() ?> <span class="normal">(<?php echo $block->getItemCount() ?>)</span></h5>
     </div>
     <div class="content">
         <div class="auto-scroll">
-        <?php if ($this->getItemCount()): ?>
+        <?php if ($block->getItemCount()): ?>
         <table class="data-table" cellspacing="0">
             <col />
-            <?php if ($this->canDisplayItemQty()): ?>
+            <?php if ($block->canDisplayItemQty()): ?>
             <col width="20" />
             <?php endif; ?>
-            <?php if ($this->canDisplayPrice()): ?>
+            <?php if ($block->canDisplayPrice()): ?>
             <col width="60" />
             <?php endif; ?>
-            <?php if ($this->canRemoveItems()): ?>
+            <?php if ($block->canRemoveItems()): ?>
             <col width="16" />
             <?php endif; ?>
             <col width="16" />
             <thead>
                 <tr>
                     <th><?php echo __('Item') ?></th>
-                    <?php if ($this->canDisplayItemQty()): ?>
+                    <?php if ($block->canDisplayItemQty()): ?>
                     <th class="a-center"><?php echo __('Qty') ?></th>
                     <?php endif; ?>
-                    <?php if ($this->canDisplayPrice()): ?>
+                    <?php if ($block->canDisplayPrice()): ?>
                     <th><?php echo __('Price') ?></th>
                     <?php endif; ?>
-                    <?php if ($this->canRemoveItems()): ?>
+                    <?php if ($block->canRemoveItems()): ?>
                     <th class="a-center">
                         <span class="icon icon-remove"><?php echo __('Remove') ?></span>
                     </th>
@@ -44,27 +48,27 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($this->getItems() as $_item): ?>
+                <?php foreach ($block->getItems() as $_item): ?>
                 <tr>
-                    <td><?php echo $this->escapeHtml($_item->getName()) ?></td>
-                    <?php if ($this->canDisplayItemQty()): ?>
+                    <td><?php echo $block->escapeHtml($_item->getName()) ?></td>
+                    <?php if ($block->canDisplayItemQty()): ?>
                     <td class="a-center">
-                        <?php echo $this->getItemQty($_item); ?>
+                        <?php echo $block->getItemQty($_item); ?>
                     </td>
                     <?php endif; ?>
-                    <?php if ($this->canDisplayPrice()): ?>
-                    <td><?php echo $this->convertPrice($_item->getPrice()) ?></td>
+                    <?php if ($block->canDisplayPrice()): ?>
+                    <td><?php echo $block->convertPrice($_item->getPrice()) ?></td>
                     <?php endif; ?>
-                    <?php if ($this->canRemoveItems()): ?>
-                    <td class="a-center"><input type="checkbox" name="sidebar[remove][<?php echo $this->getItemId($_item) ?>]" value="<?php echo $this->getDataId() ?>" title="<?php echo __('Remove') ?>"/></td>
+                    <?php if ($block->canRemoveItems()): ?>
+                    <td class="a-center"><input type="checkbox" name="sidebar[remove][<?php echo $block->getItemId($_item) ?>]" value="<?php echo $block->getDataId() ?>" title="<?php echo __('Remove') ?>"/></td>
                     <?php endif; ?>
                     <td class="a-center">
-                        <?php if ($this->isConfigurationRequired($_item->getTypeId()) && $this->getDataId() == 'wishlist'): ?>
-                            <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar_wishlist' ?>', <?php echo $this->getProductId($_item) ?>, <?php echo $this->getItemId($_item) ?>); return false;"><img src="<?php echo $this->getViewFileUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo __('Configure and Add to Order') ?>" title="<?php echo __('Configure and Add to Order') ?>" width="16" height="16"/></a>
-                        <?php elseif ($this->isConfigurationRequired($_item->getTypeId())): ?>
-                            <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar' ?>', <?php echo $this->getProductId($_item) ?>); return false;"><img src="<?php echo $this->getViewFileUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo __('Configure and Add to Order') ?>" title="<?php echo __('Configure and Add to Order') ?>" width="16" height="16"/></a>
+                        <?php if ($block->isConfigurationRequired($_item->getTypeId()) && $block->getDataId() == 'wishlist'): ?>
+                            <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar_wishlist' ?>', <?php echo $block->getProductId($_item) ?>, <?php echo $block->getItemId($_item) ?>); return false;"><img src="<?php echo $block->getViewFileUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo __('Configure and Add to Order') ?>" title="<?php echo __('Configure and Add to Order') ?>" width="16" height="16"/></a>
+                        <?php elseif ($block->isConfigurationRequired($_item->getTypeId())): ?>
+                            <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar' ?>', <?php echo $block->getProductId($_item) ?>); return false;"><img src="<?php echo $block->getViewFileUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo __('Configure and Add to Order') ?>" title="<?php echo __('Configure and Add to Order') ?>" width="16" height="16"/></a>
                         <?php else: ?>
-                            <input type="checkbox" name="sidebar[<?php echo $this->getSidebarStorageAction() ?>][<?php echo $this->getIdentifierId($_item) ?>]" value="<?php echo $this->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>" title="<?php echo __('Add To Order') ?>"/>
+                            <input type="checkbox" name="sidebar[<?php echo $block->getSidebarStorageAction() ?>][<?php echo $block->getIdentifierId($_item) ?>]" value="<?php echo $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>" title="<?php echo __('Add To Order') ?>"/>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -75,8 +79,8 @@
             <span class="no-items"><?php echo __('No items') ?></span>
         <?php endif ?>
         </div>
-        <?php if ($this->getItemCount() && $this->canRemoveItems()): ?>
-        <?php echo $this->getChildHtml('empty_customer_cart_button'); ?>
+        <?php if ($block->getItemCount() && $block->canRemoveItems()): ?>
+        <?php echo $block->getChildHtml('empty_customer_cart_button'); ?>
         <?php endif; ?>
     </div>
 </div>

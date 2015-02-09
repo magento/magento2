@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales */ ?>
-<?php $singleStoreMode = $this->isSingleStoreMode(); ?>
+<?php /** @var $block \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales */ ?>
+<?php $singleStoreMode = $block->isSingleStoreMode(); ?>
 <div class="entry-edit fieldset-wrapper">
 
     <div class="fieldset-wrapper-title">
@@ -27,15 +31,15 @@
         <tfoot>
         <tr>
             <td colspan="3"><strong><?php echo __('All Store Views') ?></strong></td>
-            <td class="emph"><strong><?php echo $this->formatCurrency($this->getTotals()->getBaseLifetime()) ?></strong></td>
-            <td class="emph last"><strong><?php echo $this->formatCurrency($this->getTotals()->getAvgsale()) ?></strong></td>
+            <td class="emph"><strong><?php echo $block->formatCurrency($block->getTotals()->getBaseLifetime()) ?></strong></td>
+            <td class="emph last"><strong><?php echo $block->formatCurrency($block->getTotals()->getAvgsale()) ?></strong></td>
         </tr>
         </tfoot>
         <?php endif; ?>
-        <?php if ($this->getRows()): ?>
+        <?php if ($block->getRows()): ?>
         <tbody>
             <?php $_i = 0; ?>
-            <?php foreach ($this->getRows() as $_websiteId => $_groups): ?>
+            <?php foreach ($block->getRows() as $_websiteId => $_groups): ?>
             <?php $_websiteRow = false; ?>
             <?php foreach ($_groups as $_groupId => $_stores): ?>
                 <?php $_groupRow = false; ?>
@@ -46,7 +50,7 @@
                             <?php else: ?>
                     <tr<?php echo($_i++ % 2 ? ' class="even"' : '') ?>>
                             <?php if (!$_websiteRow): ?>
-                                <td rowspan="<?php echo $this->getWebsiteCount($_websiteId) ?>"><?php echo $_row->getWebsiteName() ?></td>
+                                <td rowspan="<?php echo $block->getWebsiteCount($_websiteId) ?>"><?php echo $_row->getWebsiteName() ?></td>
                                 <?php $_websiteRow = true; ?>
                                 <?php endif; ?>
                             <?php if (!$_groupRow): ?>
@@ -58,8 +62,8 @@
                         <?php else: ?>
                     <tr>
                         <?php endif; ?>
-                    <td><?php echo $this->formatCurrency($_row->getLifetime(), $_row->getWebsiteId()) ?></td>
-                    <td><?php echo $this->formatCurrency($_row->getAvgsale(), $_row->getWebsiteId()) ?></td>
+                    <td><?php echo $block->formatCurrency($_row->getLifetime(), $_row->getWebsiteId()) ?></td>
+                    <td><?php echo $block->formatCurrency($_row->getAvgsale(), $_row->getWebsiteId()) ?></td>
                     </tr>
                     <?php endforeach; ?>
                 <?php endforeach; ?>

@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->getResultCount()): ?>
-<?php echo $this->getChildHtml('tagged_product_list_rss_link'); ?>
+<?php if ($block->getResultCount()): ?>
+<?php echo $block->getChildHtml('tagged_product_list_rss_link'); ?>
 <div class="search results">
-    <?php if ($messages = $this->getNoteMessages()):?>
+    <?php if ($messages = $block->getNoteMessages()):?>
     <div class="message notice">
         <div>
             <?php foreach ($messages as $message):?>
@@ -15,15 +19,15 @@
         </div>
     </div>
     <?php endif; ?>
-    <?php echo $this->getProductListHtml() ?>
+    <?php echo $block->getProductListHtml() ?>
 </div>
 <?php else: ?>
 
 <div class="message notice">
     <div>
-        <?php echo($this->getNoResultText()) ? $this->getNoResultText() : __('Your search returns no results.') ?>
-        <?php echo $this->getAdditionalHtml() ?>
-        <?php if ($messages = $this->getNoteMessages()):?>
+        <?php echo($block->getNoResultText()) ? $block->getNoResultText() : __('Your search returns no results.') ?>
+        <?php echo $block->getAdditionalHtml() ?>
+        <?php if ($messages = $block->getNoteMessages()):?>
             <?php foreach ($messages as $message):?>
                 <br /><?php echo $message?>
             <?php endforeach;?>

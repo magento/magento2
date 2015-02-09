@@ -1,45 +1,52 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Adminhtml\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Customer\Test\Fixture\AddressInjectable;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Addresses
- * Customer addresses edit block
+ * Customer addresses edit block.
  */
 class Addresses extends Tab
 {
     /**
-     * "Add New Customer" button
+     * "Add New Customer" button.
      *
      * @var string
      */
     protected $addNewAddress = '.address-list-actions .add';
 
     /**
-     * Open customer address
+     * Open customer address.
      *
      * @var string
      */
     protected $customerAddress = '//*[contains(@class, "address-list-item")][%d]';
 
     /**
-     * Magento loader
+     * Active address tab.
+     *
+     * @var string
+     */
+    protected $addressTab = '.address-item-edit[data-bind="visible: element.active"]:not([style="display: none;"])';
+
+    /**
+     * Magento loader.
      *
      * @var string
      */
     protected $loader = '//ancestor::body/div[@data-role="loader"]';
 
     /**
-     * Fill customer addresses
+     * Fill customer addresses.
      *
      * @param FixtureInterface|FixtureInterface[] $address
      * @return $this
@@ -49,15 +56,6 @@ class Addresses extends Tab
         $addresses = is_array($address) ? $address : [$address];
         foreach ($addresses as $address) {
             $this->addNewAddress();
-
-            /* Fix switch between region_id and region */
-            /** @var AddressInjectable $address */
-            $countryId = $address->getCountryId();
-            if ($countryId && $this->mapping['country_id']) {
-                $this->_fill($this->dataMapping(['country_id' => $countryId]));
-                $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
-            }
-
             $this->fillFormTab($address->getData(), $this->_rootElement);
         }
 
@@ -65,7 +63,7 @@ class Addresses extends Tab
     }
 
     /**
-     * Update customer addresses
+     * Update customer addresses.
      *
      * @param FixtureInterface|FixtureInterface[] $address
      * @return $this
@@ -88,13 +86,6 @@ class Addresses extends Tab
             }
             $this->openCustomerAddress($addressNumber);
 
-            /* Fix switch between region_id and region */
-            /** @var AddressInjectable $address */
-            $countryId = $address->getCountryId();
-            if ($countryId && $this->mapping['country_id']) {
-                $this->_fill($this->dataMapping(['country_id' => $countryId]));
-                $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
-            }
             $defaultAddress = ['default_billing' => 'No', 'default_shipping' => 'No'];
             $addressData = $address->getData();
             foreach ($defaultAddress as $key => $value) {
@@ -111,7 +102,7 @@ class Addresses extends Tab
     }
 
     /**
-     * Get data of Customer addresses
+     * Get data of Customer addresses.
      *
      * @param FixtureInterface|FixtureInterface[]|null $address
      * @return array
@@ -142,30 +133,31 @@ class Addresses extends Tab
     }
 
     /**
-     * Get data to fields on tab
+     * Get data to fields on tab.
      *
      * @param array|null $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($fields = null, Element $element = null)
+    public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
         /* Skip get data for standard method. Use getDataAddresses. */
         return [];
     }
 
     /**
-     * Click "Add New Address" button
+     * Click "Add New Address" button.
      */
     protected function addNewAddress()
     {
         $this->_rootElement->find($this->addNewAddress)->click();
+        $this->waitForElementVisible($this->addressTab);
     }
 
     /**
-     * Open customer address
+     * Open customer address.
      *
      * @param int $addressNumber
      * @throws \Exception
@@ -184,7 +176,7 @@ class Addresses extends Tab
     }
 
     /**
-     * Check is visible customer address
+     * Check is visible customer address.
      *
      * @param int $addressNumber
      * @return bool
@@ -195,6 +187,7 @@ class Addresses extends Tab
             sprintf($this->customerAddress, $addressNumber),
             Locator::SELECTOR_XPATH
         );
+
         return $addressTab->isVisible();
     }
 }

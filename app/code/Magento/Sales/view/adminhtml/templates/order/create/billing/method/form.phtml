@@ -1,35 +1,39 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php if ($this->hasMethods()): ?>
+<?php if ($block->hasMethods()): ?>
 <div id="order-billing_method_form">
     <dl class="payment-methods">
     <?php
-        $_methods       = $this->getMethods();
+        $_methods       = $block->getMethods();
         $_methodsCount  = count($_methods);
         $_counter = 0;
     ?>
     <?php foreach ($_methods as $_method): $_code = $_method->getCode(); $_counter++; ?>
         <dt>
         <?php if ($_methodsCount > 1): ?>
-            <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" onclick="payment.switchMethod('<?php echo $_code ?>')"<?php if ($this->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?> <?php if ($_counter == $_methodsCount) : ?>class="validate-one-required-by-name"<?php endif;?>/>
+            <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $block->escapeHtml($_method->getTitle()) ?>" onclick="payment.switchMethod('<?php echo $_code ?>')"<?php if ($block->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?> <?php if ($_counter == $_methodsCount) : ?>class="validate-one-required-by-name"<?php endif;?>/>
         <?php else :?>
             <span class="no-display"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" /></span>
         <?php endif;?>
 
-            <label for="p_method_<?php echo $_code ?>"><?php echo $this->escapeHtml($_method->getTitle()) ?></label>
+            <label for="p_method_<?php echo $_code ?>"><?php echo $block->escapeHtml($_method->getTitle()) ?></label>
         </dt>
         <dd>
-            <?php echo $this->getChildHtml('payment.method.' . $_code) ?>
+            <?php echo $block->getChildHtml('payment.method.' . $_code) ?>
         </dd>
     <?php endforeach; ?>
     </dl>
 </div>
-<script type="text/javascript">
+<script>
     require(["Magento_Sales/order/create/form"], function(){
-        order.setPaymentMethod('<?php echo $this->getSelectedMethodCode() ?>')
+        order.setPaymentMethod('<?php echo $block->getSelectedMethodCode() ?>')
     });
 </script>
 <?php else: ?>

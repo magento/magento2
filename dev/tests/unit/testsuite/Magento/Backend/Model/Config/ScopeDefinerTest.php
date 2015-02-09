@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Config;
 
@@ -36,7 +37,7 @@ class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, 'someStore']])
         );
-        $this->assertEquals(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->_model->getScope());
+        $this->assertEquals(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $this->_model->getScope());
     }
 
     public function testGetScopeReturnsWebsiteScopeIfWebsiteIsSpecified()
@@ -48,6 +49,6 @@ class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, null]])
         );
-        $this->assertEquals(\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, $this->_model->getScope());
+        $this->assertEquals(\Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE, $this->_model->getScope());
     }
 }

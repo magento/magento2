@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 
@@ -16,13 +17,23 @@ abstract class View extends \Magento\Backend\App\Action
     protected $registry;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
      * @param Context $context
      * @param Registry $registry
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
-    public function __construct(Context $context, Registry $registry)
-    {
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+    ) {
         $this->registry = $registry;
         parent::__construct($context);
+        $this->resultForwardFactory = $resultForwardFactory;
     }
 
     /**
@@ -36,15 +47,19 @@ abstract class View extends \Magento\Backend\App\Action
     /**
      * Invoice information page
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
+        $resultForward = $this->resultForwardFactory->create();
         if ($this->getRequest()->getParam('invoice_id')) {
-            $this->_forward('view', 'order_invoice', null, ['come_from' => 'invoice']);
+            $resultForward->setController('order_invoice')
+                ->setParams(['come_from' => 'invoice'])
+                ->forward('view');
         } else {
-            $this->_forward('noroute');
+            $resultForward->forward('noroute');
         }
+        return $resultForward;
     }
 
     /**

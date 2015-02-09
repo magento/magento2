@@ -1,15 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Export;
 
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
+use Magento\ImportExport\Model\Export;
 
 /**
  * Export entity abstract model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractEntity
 {
@@ -30,7 +34,7 @@ abstract class AbstractEntity
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -154,15 +158,30 @@ abstract class AbstractEntity
     protected $_scopeConfig;
 
     /**
+     * Attribute code to its values. Only attributes with options and only default store values used
+     *
+     * @var array
+     */
+    protected $_attributeCodes = null;
+
+    /**
+     * Permanent entity columns
+     *
+     * @var string[]
+     */
+    protected $_permanentAttributes = [];
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
         array $data = []
@@ -178,7 +197,7 @@ abstract class AbstractEntity
             $data['page_size']
         ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int)$this->_scopeConfig->getValue(
             static::XML_PATH_PAGE_SIZE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) : 0);
         $this->_byPagesIterator = isset(
             $data['collection_by_pages_iterator']
@@ -273,6 +292,38 @@ abstract class AbstractEntity
     protected function _exportCollectionByPages(\Magento\Framework\Data\Collection\Db $collection)
     {
         $this->_byPagesIterator->iterate($collection, $this->_pageSize, [[$this, 'exportItem']]);
+    }
+
+    /**
+     * Get attributes codes which are appropriate for export
+     *
+     * @return array
+     */
+    protected function _getExportAttributeCodes()
+    {
+        if (null === $this->_attributeCodes) {
+            if (!empty($this->_parameters[Export::FILTER_ELEMENT_SKIP])
+                && is_array($this->_parameters[Export::FILTER_ELEMENT_SKIP])
+            ) {
+                $skippedAttributes = array_flip(
+                    $this->_parameters[Export::FILTER_ELEMENT_SKIP]
+                );
+            } else {
+                $skippedAttributes = [];
+            }
+            $attributeCodes = [];
+
+            /** @var $attribute AbstractAttribute */
+            foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
+                if (!isset($skippedAttributes[$attribute->getAttributeId()])
+                    || in_array($attribute->getAttributeCode(), $this->_permanentAttributes)
+                ) {
+                    $attributeCodes[] = $attribute->getAttributeCode();
+                }
+            }
+            $this->_attributeCodes = $attributeCodes;
+        }
+        return $this->_attributeCodes;
     }
 
     /**

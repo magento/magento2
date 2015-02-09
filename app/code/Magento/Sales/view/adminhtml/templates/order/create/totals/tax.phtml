@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php global $taxIter; $taxIter++; ?>
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
 <?php $isTop = 1; ?>
-            <?php foreach ($this->getTotal()->getFullInfo() as $info): ?>
+            <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
                 <?php if (isset($info['hidden']) && $info['hidden']) {
     continue;
 } ?>
@@ -17,16 +21,16 @@
 
                 <?php foreach ($rates as $rate): ?>
                 <tr class="summary-details-<?php echo $taxIter; ?> summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
-                    <td class="a-right" style="<?php echo $this->getTotal()->getStyle() ?>" colspan="<?php echo $this->getColspan(); ?>">
-                        <?php echo $this->escapeHtml($rate['title']); ?>
+                    <td class="a-right" style="<?php echo $block->getTotal()->getStyle() ?>" colspan="<?php echo $block->getColspan(); ?>">
+                        <?php echo $block->escapeHtml($rate['title']); ?>
                         <?php if (!is_null($rate['percent'])): ?>
                             (<?php echo (float)$rate['percent']; ?>%)
                         <?php endif; ?>
                         <br />
                     </td>
                     <?php if ($isFirst): ?>
-                        <td style="<?php echo $this->getTotal()->getStyle() ?>" class="a-right" rowspan="<?php echo count($rates); ?>">
-                            <?php echo $this->formatPrice($amount); ?>
+                        <td style="<?php echo $block->getTotal()->getStyle() ?>" class="a-right" rowspan="<?php echo count($rates); ?>">
+                            <?php echo $block->formatPrice($amount); ?>
                         </td>
                     <?php endif; ?>
                 </tr>
@@ -35,14 +39,14 @@
                 <?php endforeach; ?>
             <?php endforeach; ?>
 <?php endif;?>
-<?php $class = "{$this->getTotal()->getCode()} " . ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() ? 'summary-total' : ''); ?>
+<?php $class = "{$block->getTotal()->getCode()} " . ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() ? 'summary-total' : ''); ?>
 <tr<?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?> onclick="expandDetails(this, '.summary-details-<?php echo $taxIter;?>')"<?php endif; ?> class="<?php echo $class;?> row-totals">
-    <td style="<?php echo $this->getTotal()->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
+    <td style="<?php echo $block->getTotal()->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
-            <div class="summary-collapse"><?php echo $this->getTotal()->getTitle() ?></div>
+            <div class="summary-collapse"><?php echo $block->getTotal()->getTitle() ?></div>
         <?php else: ?>
-            <?php echo $this->getTotal()->getTitle() ?>
+            <?php echo $block->getTotal()->getTitle() ?>
         <?php endif;?>
     </td>
-    <td style="<?php echo $this->getTotal()->getStyle() ?>" class="a-right"><?php echo $this->formatPrice($this->getTotal()->getValue()) ?></td>
+    <td style="<?php echo $block->getTotal()->getStyle() ?>" class="a-right"><?php echo $block->formatPrice($block->getTotal()->getValue()) ?></td>
 </tr>

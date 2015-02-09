@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
@@ -23,7 +24,7 @@ class SuggestConfigurableAttributes extends Action
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -31,13 +32,13 @@ class SuggestConfigurableAttributes extends Action
      * @param Action\Context $context
      * @param SuggestedAttributeList $attributeList
      * @param \Magento\Core\Helper\Data $coreHelper
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         Action\Context $context,
         SuggestedAttributeList $attributeList,
         \Magento\Core\Helper\Data $coreHelper,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->attributeList = $attributeList;
         $this->coreHelper = $coreHelper;

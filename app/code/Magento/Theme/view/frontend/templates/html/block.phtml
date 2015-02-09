@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<div class="block <?php echo $this->getBlockCss(); ?>">
-    <div class="block-title <?php echo $this->getBlockCss(); ?>-title"><strong><?php echo $this->getBlockTitle(); ?></strong></div>
-    <div class="block-content <?php echo $this->getBlockCss(); ?>-content">
-        <?php echo $this->getChildHtml(); ?>
+<div class="block <?php echo $block->getBlockCss(); ?>">
+    <div class="block-title <?php echo $block->getBlockCss(); ?>-title"><strong><?php echo $block->getBlockTitle(); ?></strong></div>
+    <div class="block-content <?php echo $block->getBlockCss(); ?>-content">
+        <?php echo $block->getChildHtml(); ?>
     </div>
 </div>

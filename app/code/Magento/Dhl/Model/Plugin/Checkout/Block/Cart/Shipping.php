@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Dhl\Model\Plugin\Checkout\Block\Cart;
 
 /**
@@ -30,7 +34,7 @@ class Shipping
      */
     public function afterGetStateActive(\Magento\Checkout\Block\Cart\Shipping $subject, $result)
     {
-        return (bool)$result || (bool)$this->_scopeConfig->getValue('carriers/dhl/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$result || (bool)$this->_scopeConfig->getValue('carriers/dhl/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -41,6 +45,6 @@ class Shipping
      */
     public function afterGetCityActive(\Magento\Checkout\Block\Cart\Shipping $subject, $result)
     {
-        return (bool)$result || (bool)$this->_scopeConfig->getValue('carriers/dhl/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$result || (bool)$this->_scopeConfig->getValue('carriers/dhl/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 }

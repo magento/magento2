@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php if (!empty($links)): ?>
 <ul class="breadcrumbs">
@@ -10,12 +14,12 @@
     <li>
         <?php if (empty($_link['url'])): ?>
             <?php if ($_index != $_size-1): ?>
-                <span><?php echo $this->escapeHtml($_link['label']) ?></span>
+                <span><?php echo $block->escapeHtml($_link['label']) ?></span>
             <?php else: ?>
-                <strong><?php echo $this->escapeHtml($_link['label']) ?></strong>
+                <strong><?php echo $block->escapeHtml($_link['label']) ?></strong>
             <?php endif; ?>
         <?php else: ?>
-            <a href="<?php echo $_link['url'] ?>" title="<?php echo $this->escapeHtml($_link['title']) ?>"><?php echo $this->escapeHtml($_link['label']) ?></a>
+            <a href="<?php echo $_link['url'] ?>" title="<?php echo $block->escapeHtml($_link['title']) ?>"><?php echo $block->escapeHtml($_link['label']) ?></a>
         <?php endif; ?>
         <?php if ($_index != $_size-1): ?>
             &raquo;

@@ -1,28 +1,32 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="fieldset-wrapper">
     <ul class="note-list">
-    <?php foreach ($this->getFullHistory() as $_item): ?>
+    <?php foreach ($block->getFullHistory() as $_item): ?>
         <li>
-            <span class="note-list-date"><?php echo $this->getItemCreatedAt($_item) ?></span>
-            <span class="note-list-time"><?php echo $this->getItemCreatedAt($_item, 'time') ?></span>
-            <span class="note-list-status"><?php echo $this->getItemTitle($_item) ?></span>
-            <?php if ($this->isItemNotified($_item, false)): ?>
+            <span class="note-list-date"><?php echo $block->getItemCreatedAt($_item) ?></span>
+            <span class="note-list-time"><?php echo $block->getItemCreatedAt($_item, 'time') ?></span>
+            <span class="note-list-status"><?php echo $block->getItemTitle($_item) ?></span>
+            <?php if ($block->isItemNotified($_item, false)): ?>
                 <span class="note-list-customer">
                     <?php echo __('Customer') ?>
-                    <?php if ($this->isCustomerNotificationNotApplicable($_item)): ?>
+                    <?php if ($block->isCustomerNotificationNotApplicable($_item)): ?>
                         <span class="note-list-customer-notapplicable"><?php echo __('Notification Not Applicable') ?></span>
-                    <?php elseif ($this->isItemNotified($_item)): ?>
+                    <?php elseif ($block->isItemNotified($_item)): ?>
                         <span class="note-list-customer-notified"><?php echo __('Notified') ?></span>
                     <?php else: ?>
                         <span class="note-list-customer-not-notified"><?php echo __('Not Notified') ?></span>
                     <?php endif; ?>
                 </span>
             <?php endif; ?>
-            <?php if ($_comment = $this->getItemComment($_item)): ?>
+            <?php if ($_comment = $block->getItemComment($_item)): ?>
                 <div class="note-list-comment"><?php echo $_comment ?></div>
             <?php endif; ?>
         </li>

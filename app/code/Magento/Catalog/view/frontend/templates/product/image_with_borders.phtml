@@ -1,18 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\Catalog\Block\Product\Image */
+<?php /** @var $block \Magento\Catalog\Block\Product\Image */
 
-$ratio = $this->getProductImageView()->getHeight() / $this->getProductImageView()->getWidth() * 100;
+$ratio = $block->getProductImageView()->getHeight() / $block->getProductImageView()->getWidth() * 100;
 ?>
 <span class="product-image-container"
-      style="width:<?php echo $this->getProductImageView()->getWidth()?>px;">
+      style="width:<?php echo $block->getProductImageView()->getWidth()?>px;">
     <span class="product-image-wrapper"
           style="padding-bottom: <?php echo $ratio?>%;">
         <img class="product-image-photo"
-             <?php echo $this->getAddAttribute(); ?>
-             src="<?php echo $this->getProductImageView()->getUrl() ?>"
-             alt="<?php echo $this->stripTags($this->getProductImageView()->getLabel(), null, true) ?>"/></span>
+             <?php echo $block->getAddAttribute(); ?>
+             src="<?php echo $block->getProductImageView()->getUrl() ?>"
+             alt="<?php echo $block->stripTags($block->getProductImageView()->getLabel(), null, true) ?>"/></span>
 </span>

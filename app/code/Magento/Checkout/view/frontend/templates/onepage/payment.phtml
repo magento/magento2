@@ -1,18 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <form id="co-payment-form" class="form payments">
-    <?php echo $this->getBlockHtml('formkey') ?>
+    <?php echo $block->getBlockHtml('formkey') ?>
     <fieldset class="fieldset">
         <legend class="legend payments-title">
             <span><?php echo __('Payment Information') ?></span>
         </legend><br>
-        <?php echo $this->getChildChildHtml('methods_additional') ?>
+        <?php echo $block->getChildChildHtml('methods_additional') ?>
         <div id="checkout-payment-method-load" class="opc-payment"></div>
     </fieldset>
-    <?php echo $this->getChildChildHtml('additional') ?>
+    <?php echo $block->getChildChildHtml('additional') ?>
     <div class="actions-toolbar" id="payment-buttons-container">
         <div class="primary">
             <button data-role="opc-continue" type="button" class="button action continue primary"><span><?php echo __('Continue') ?></span></button>

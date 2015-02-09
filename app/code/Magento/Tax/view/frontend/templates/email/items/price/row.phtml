@@ -1,26 +1,30 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-/** @var \Magento\Tax\Block\Item\Price\Renderer $this */
+/** @var \Magento\Tax\Block\Item\Price\Renderer $block */
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 /** @var \Magento\Sales\Model\Order $_order */
 $_order = $_item->getOrder();
 ?>
 
-<?php if ($this->displayPriceExclTax() || $this->displayBothPrices()): ?>
-    <?php if ($this->displayBothPrices()): ?>
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices()): ?>
         <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
     <?php endif; ?>
     <?php echo $_order->formatPrice($_item->getRowTotal()) ?>
 <?php endif; ?>
 
 
-<?php if ($this->displayPriceInclTax() || $this->displayBothPrices()): ?>
-    <?php if ($this->displayBothPrices()): ?>
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices()): ?>
         <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
     <?php endif; ?>
     <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item); ?>

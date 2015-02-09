@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Weee\Model\Total\Quote;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Model\Quote\Address\Total\AbstractTotal;
+use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Store\Model\Store;
 use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
 
@@ -80,10 +84,10 @@ class Weee extends AbstractTotal
     /**
      * Collect Weee amounts for the quote / order
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address $address
      * @return  $this
      */
-    public function collect(\Magento\Sales\Model\Quote\Address $address)
+    public function collect(\Magento\Quote\Model\Quote\Address $address)
     {
         AbstractTotal::collect($address);
         $this->_store = $address->getQuote()->getStore();
@@ -122,11 +126,13 @@ class Weee extends AbstractTotal
     /**
      * Calculate item fixed tax and prepare information for discount and regular taxation
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
-     * @param   \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param   \Magento\Quote\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  void|$this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function _process(\Magento\Sales\Model\Quote\Address $address, $item)
+    protected function _process(\Magento\Quote\Model\Quote\Address $address, $item)
     {
         $attributes = $this->weeeData->getProductWeeeAttributes(
             $item->getProduct(),
@@ -234,7 +240,7 @@ class Weee extends AbstractTotal
     /**
      * Process row amount based on FPT total amount configuration setting
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address $address
      * @param   float $rowValueExclTax
      * @param   float $baseRowValueExclTax
      * @param   float $rowValueInclTax
@@ -273,19 +279,19 @@ class Weee extends AbstractTotal
     /**
      * Recalculate parent item amounts based on children results
      *
-     * @param   \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _recalculateParent(\Magento\Sales\Model\Quote\Item\AbstractItem $item)
+    protected function _recalculateParent(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
     }
 
     /**
      * Reset information about FPT for shopping cart item
      *
-     * @param   \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  void
      */
     protected function _resetItemData($item)
@@ -308,10 +314,11 @@ class Weee extends AbstractTotal
     /**
      * Delegate this to WeeeTax collector
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address $address
      * @return  $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fetch(\Magento\Sales\Model\Quote\Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address $address)
     {
         return $this;
     }

@@ -1,18 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
  * Customer "Remember Me" template
  *
- * @var $this \Magento\Persistent\Block\Form\Remember
+ * @var $block \Magento\Persistent\Block\Form\Remember
  */
 ?>
 <div id="remember-me-box" class="field choice persistent">
-    <?php $rememberMeId = 'remember_me' . $this->getRandomString(10); ?>
-    <input type="checkbox" name="persistent_remember_me" class="checkbox" id="<?php echo $rememberMeId; ?>"<?php if ($this->isRememberMeChecked()): ?> checked="checked"<?php endif; ?> title="<?php echo __('Remember Me') ?>" />
+    <?php $rememberMeId = 'remember_me' . $block->getRandomString(10); ?>
+    <input type="checkbox" name="persistent_remember_me" class="checkbox" id="<?php echo $rememberMeId; ?>"<?php if ($block->isRememberMeChecked()): ?> checked="checked"<?php endif; ?> title="<?php echo __('Remember Me') ?>" />
     <label for="<?php echo $rememberMeId; ?>" class="label"><span><?php echo __('Remember Me') ?></span></label>
     <span class="tooltip wrapper">
         <a class="link tooltip toggle" href="#"><?php echo __('What\'s this?') ?></a>

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -16,6 +17,6 @@ $objectManger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $objectManger->get('Magento\Framework\App\State')
     ->setAreaCode(\Magento\Framework\View\DesignInterface::DEFAULT_AREA);
 
-/** @var $registration \Magento\Core\Model\Theme\Registration */
-$registration = $objectManger->create('Magento\Core\Model\Theme\Registration');
+/** @var $registration \Magento\Theme\Model\Theme\Registration */
+$registration = $objectManger->create('Magento\Theme\Model\Theme\Registration');
 $registration->register('*/*/*/theme.xml');

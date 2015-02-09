@@ -1,30 +1,66 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
+
+use Magento\Framework\Registry;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Backend\Model\View\Result\RedirectFactory;
 
 class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        PageFactory $resultPageFactory,
+        RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context, $coreRegistry);
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
      * Editing existing status form
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $status = $this->_initStatus();
         if ($status) {
             $this->_coreRegistry->register('current_status', $status);
-            $this->_view->loadLayout();
-            $this->_setActiveMenu('Magento_Sales::system_order_statuses');
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Order Status'));
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Edit Order Status'));
-            $this->_view->renderLayout();
+            /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->setActiveMenu('Magento_Sales::system_order_statuses');
+            $resultPage->getConfig()->getTitle()->prepend(__('Order Status'));
+            $resultPage->getConfig()->getTitle()->prepend(__('Edit Order Status'));
+            return $resultPage;
         } else {
             $this->messageManager->addError(__('We can\'t find this order status.'));
-            $this->_redirect('sales/');
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('sales/');
         }
     }
 }

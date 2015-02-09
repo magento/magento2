@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
-<?php $_product = $this->getProduct() ?>
-<?php if ($_product->isSaleable() && $this->hasOptions()):?>
+<?php $_product = $block->getProduct() ?>
+<?php if ($_product->isSaleable() && $block->hasOptions()):?>
     <div class="bundle-actions">
         <button id="bundle-slide"
                 class="action primary customize"

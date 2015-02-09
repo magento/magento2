@@ -1,13 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\Order\Pdf;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Sales Order PDF abstract model
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractPdf extends \Magento\Framework\Object
 {
@@ -218,13 +224,14 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      * @param \Zend_Pdf_Page &$page
      * @param null $store
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function insertLogo(&$page, $store = null)
     {
         $this->y = $this->y ? $this->y : 815;
         $image = $this->_scopeConfig->getValue(
             'sales/identity/logo',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($image) {
@@ -284,7 +291,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
             "\n",
             $this->_scopeConfig->getValue(
                 'sales/identity/address',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             )
         ) as $value) {
@@ -329,6 +336,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      *
      * @param  array $address
      * @return int Height
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _calcAddressHeight($address)
     {
@@ -354,6 +362,9 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      * @param \Magento\Sales\Model\Order $obj
      * @param bool $putOrderId
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function insertOrder(&$page, $obj, $putOrderId = true)
     {
@@ -929,6 +940,9 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      * @param  array $pageSettings
      * @throws \Magento\Framework\Model\Exception
      * @return \Zend_Pdf_Page
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function drawLineBlocks(\Zend_Pdf_Page $page, array $draw, array $pageSettings = [])
     {

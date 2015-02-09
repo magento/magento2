@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Generator;
 
@@ -290,7 +291,7 @@ abstract class EntityAbstract
      */
     protected function _getClassDocBlock()
     {
-        $description = ucfirst(static::ENTITY_TYPE) . ' class for \\' . $this->_getSourceClassName();
+        $description = ucfirst(static::ENTITY_TYPE) . ' class for @see \\' . $this->_getSourceClassName();
         return ['shortDescription' => $description];
     }
 

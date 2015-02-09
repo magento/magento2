@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -24,11 +25,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
         $scopeConfigMock->expects($this->any())
             ->method('getValue')
-            ->with($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
+            ->with($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, null)
             ->will($this->returnValue($configValue));
         $scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
-            ->with($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
+            ->with($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, null)
             ->will($this->returnValue($configValue));
 
         $taxData = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);

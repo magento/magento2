@@ -1,21 +1,24 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
 USAGE:
 
 Simple:
 
-<?php echo $this->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
-   ->setDate($this->getCustomer()->getDob())
+<?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
+   ->setDate($block->getCustomer()->getDob())
    ->toHtml() ?>
 
 For checkout/onepage/billing.phtml:
 
-<?php echo $this->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
-   ->setDate($this->getCustomer()->getDob())
+<?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
+   ->setDate($block->getCustomer()->getDob())
    ->setFieldIdFormat('billing:%s')
    ->setFieldNameFormat('billing[%s]')
    ->toHtml() ?>
@@ -29,14 +32,14 @@ NOTE: Regarding styles - if we leave it this way, we'll move it to boxes.css
  */
 ?>
 <?php
-$fieldCssClass = 'field date field-' . $this->getHtmlId();
-$fieldCssClass .= $this->isRequired() ? ' required' : '';
+$fieldCssClass = 'field date field-' . $block->getHtmlId();
+$fieldCssClass .= $block->isRequired() ? ' required' : '';
 ?>
 <div class="<?php echo $fieldCssClass; ?>">
-    <label class="label" for="<?php echo $this->getHtmlId()?>"><span><?php echo $this->getLabel() ?></span></label>
+    <label class="label" for="<?php echo $block->getHtmlId()?>"><span><?php echo $block->getLabel() ?></span></label>
     <div class="control customer-dob">
-        <?php echo $this->getFieldHtml(); ?>
-        <?php if ($_message = $this->getAdditionalDescription()) : ?>
+        <?php echo $block->getFieldHtml(); ?>
+        <?php if ($_message = $block->getAdditionalDescription()) : ?>
             <div class="note"><?php echo $_message; ?></div>
         <?php endif; ?>
     </div>

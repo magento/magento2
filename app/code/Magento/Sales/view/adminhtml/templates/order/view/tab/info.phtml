@@ -1,16 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /** @var $this \Magento\Sales\Block\Adminhtml\Order\View\Tab\Info */ ?>
-<?php $_order = $this->getOrder() ?>
+<?php /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Tab\Info */ ?>
+<?php $_order = $block->getOrder() ?>
 
 <div id="order-messages">
-    <?php echo $this->getChildHtml('order_messages') ?>
+    <?php echo $block->getChildHtml('order_messages') ?>
 </div>
 
-<?php echo $this->getChildHtml('order_info') ?>
+<?php echo $block->getChildHtml('order_info') ?>
 <input type="hidden" name="order_id" value="<?php echo $_order->getId() ?>"/>
 
 <?php if (!$_order->getIsVirtual()): ?>
@@ -23,9 +27,9 @@
             <div class="fieldset-wrapper-title">
                 <span class="title"><?php echo __('Payment Information') ?></span>
             </div>
-            <div><?php echo $this->getPaymentHtml() ?></div>
+            <div><?php echo $block->getPaymentHtml() ?></div>
             <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
-            <div class="order-payment-additional"><?php echo $this->getChildHtml('order_payment_additional'); ?></div>
+            <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
         </div>
     </div>
 
@@ -33,19 +37,19 @@
 </div><?php /* opening div is in app\code\Magento\Sales\view\adminhtml\order\view\info.phtml */ ?>
 <?php endif; ?>
 
-<?php echo $this->getChildHtml('order_shipping_view') ?>
+<?php echo $block->getChildHtml('order_shipping_view') ?>
 
 <?php if (!$_order->getIsVirtual()): ?>
 </div>
 <?php endif; ?>
 
-<?php echo $this->getGiftOptionsHtml() ?>
+<?php echo $block->getGiftOptionsHtml() ?>
 
 <div class="fieldset-wrapper">
     <div class="fieldset-wrapper-title">
         <span class="title"><?php echo __('Items Ordered') ?></span>
     </div>
-    <?php echo $this->getItemsHtml() ?>
+    <?php echo $block->getItemsHtml() ?>
 </div>
 
 <div class="clearfix">
@@ -54,7 +58,7 @@
             <div class="fieldset-wrapper-title">
                 <span class="title"><?php echo __('Comments History') ?></span>
             </div>
-            <fieldset><?php echo $this->getChildHtml('order_history') ?></fieldset>
+            <fieldset><?php echo $block->getChildHtml('order_history') ?></fieldset>
         </div>
     </div>
 
@@ -63,14 +67,14 @@
             <div class="fieldset-wrapper-title">
                 <span class="title"><?php echo __('Order Totals') ?></span>
             </div>
-            <?php echo $this->getChildHtml('order_totals') ?>
+            <?php echo $block->getChildHtml('order_totals') ?>
         </div>
     </div>
 </div>
 
-<?php echo $this->getChildHtml('popup_window');?>
+<?php echo $block->getChildHtml('popup_window');?>
 
-<script type="text/javascript">
+<script>
 require([
     "prototype",
     "Magento_Sales/order/giftoptions_tooltip"

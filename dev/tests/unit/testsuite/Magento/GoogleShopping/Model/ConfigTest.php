@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GoogleShopping\Model;
@@ -46,7 +47,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 'google/googleshopping/' . $configPasswordKey,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             )->will($this->returnValue($password));
         $this->assertEquals($password, $this->model->getAccountPassword($storeId));

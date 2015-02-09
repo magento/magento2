@@ -1,15 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
-/* @var $this \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart */
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart */
 /* @var \Magento\Wishlist\Model\Item $item */
-$item = $this->getItem();
+$item = $block->getItem();
 $product = $item->getProduct();
 ?>
-<?php foreach ($this->getChildNames() as $childName): ?>
-    <?php echo $this->getLayout()->renderElement($childName, false); ?>
+<?php foreach ($block->getChildNames() as $childName): ?>
+    <?php echo $block->getLayout()->renderElement($childName, false); ?>
 <?php endforeach;?>
 <div class="box-tocart">
     <fieldset class="fieldset">
@@ -18,7 +21,7 @@ $product = $item->getProduct();
             <label class="label" for="qty[<?php echo $item->getId() ?>]"><span><?php echo __('Qty') ?></span></label>
             <div class="control">
                 <input type="number" data-role="qty" id="qty[<?php echo $item->getId() ?>]" class="input-text qty" data-validate="{'required-number':true,'validate-greater-than-zero':true}"
-               name="qty[<?php echo $item->getId() ?>]" value="<?php echo $this->getAddToCartQty($item) * 1 ?>">
+               name="qty[<?php echo $item->getId() ?>]" value="<?php echo $block->getAddToCartQty($item) * 1 ?>">
             </div>
         </div>
     <?php endif; ?>

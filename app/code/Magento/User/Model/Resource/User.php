@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\User\Model\Resource;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
@@ -11,6 +15,7 @@ use Magento\User\Model\User as ModelUser;
 
 /**
  * ACL user resource
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {

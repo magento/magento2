@@ -1,13 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Downloadable
@@ -34,11 +36,11 @@ class Downloadable extends Tab
      * Get Downloadable block
      *
      * @param string $type
-     * @param Element $element
+     * @param SimpleElement $element
      * @return \Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples |
      *         \Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links
      */
-    public function getDownloadableBlock($type, Element $element = null)
+    public function getDownloadableBlock($type, SimpleElement $element = null)
     {
         $element = $element ?: $this->_rootElement;
         return $this->blockFactory->create(
@@ -51,10 +53,10 @@ class Downloadable extends Tab
      * Get data to fields on downloadable tab
      *
      * @param array|null $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, Element $element = null)
+    public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
         $newFields = [];
         if (isset($fields['downloadable_sample']['value'])) {
@@ -75,10 +77,10 @@ class Downloadable extends Tab
      * Fill downloadable information
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         if (isset($fields['downloadable_sample']['value'])) {
             $this->getDownloadableBlock('Samples')->fillSamples($fields['downloadable_sample']['value']);

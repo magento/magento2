@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Admin product tax class add form
@@ -13,6 +16,9 @@ namespace Magento\Tax\Block\Adminhtml\Rate;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Controller\RegistryConstants;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     const FORM_ELEMENT_ID = 'rate-form';
@@ -70,6 +76,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
      * @param \Magento\Tax\Model\TaxRateCollection $taxRateCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -103,6 +110,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
@@ -133,14 +143,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if (!isset($formData['tax_country_id'])) {
             $formData['tax_country_id'] = $this->_scopeConfig->getValue(
                 \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
 
         if (!isset($formData['tax_region_id'])) {
             $formData['tax_region_id'] = $this->_scopeConfig->getValue(
                 \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
 
@@ -187,7 +197,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if (!isset($formData['tax_postcode'])) {
             $formData['tax_postcode'] = $this->_scopeConfig->getValue(
                 \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_POSTCODE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
 

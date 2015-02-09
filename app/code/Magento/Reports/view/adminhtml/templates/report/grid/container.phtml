@@ -1,16 +1,20 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <div class="reports-content">
-    <?php echo $this->getChildHtml('grid.filter.form') ?>
+    <?php echo $block->getChildHtml('grid.filter.form') ?>
 </div>
 
-<?php echo $this->getGridHtml() ?>
+<?php echo $block->getGridHtml() ?>
 
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'mage/backend/validation',
@@ -26,7 +30,7 @@ require([
             if(filters[i].value && filters[i].value.length && !filters[i].disabled) elements.push(filters[i]);
         }
         if (jQuery('#filter_form').valid()) {
-            setLocation('<?php echo $this->getFilterUrl(); ?>filter/'+Base64.encode(Form.serializeElements(elements))+'/');
+            setLocation('<?php echo $block->getFilterUrl(); ?>filter/'+Base64.encode(Form.serializeElements(elements))+'/');
         }
     }
 //]]>

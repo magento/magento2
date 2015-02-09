@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component;
 
@@ -18,6 +19,7 @@ use Magento\Ui\DataProvider\Manager;
 
 /**
  * Class Form
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Form extends AbstractView
 {
@@ -73,6 +75,7 @@ class Form extends AbstractView
      * @param ActionPool $actionPool
      * @param ButtonProviderFactory $buttonProviderFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         TemplateContext $context,
@@ -209,6 +212,7 @@ class Form extends AbstractView
      * @param array $itemA
      * @param array $itemB
      * @return int
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function sortButtons(array $itemA, array $itemB)
     {

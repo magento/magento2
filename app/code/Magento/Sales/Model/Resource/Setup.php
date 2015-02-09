@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Resource;
 
@@ -55,12 +56,6 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      * @var $_flatEntityTables array
      */
     protected $_flatEntityTables = [
-        'quote' => 'sales_quote',
-        'quote_item' => 'sales_quote_item',
-        'quote_address' => 'sales_quote_address',
-        'quote_address_item' => 'sales_quote_address_item',
-        'quote_address_rate' => 'sales_quote_shipping_rate',
-        'quote_payment' => 'sales_quote_payment',
         'order' => 'sales_order',
         'order_payment' => 'sales_order_payment',
         'order_item' => 'sales_order_item',
@@ -164,6 +159,8 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      * @param string $code
      * @param array $data
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getAttributeColumnDefinition($code, $data)
     {

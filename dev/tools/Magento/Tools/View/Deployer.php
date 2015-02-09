@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Tools\View;
@@ -46,11 +47,15 @@ class Deployer
     /** @var int */
     private $errorCount;
 
+    /** @var \Magento\Framework\View\Asset\MinifyService */
+    protected $minifyService;
+
     /**
      * @param Files $filesUtil
      * @param Deployer\Log $logger
      * @param Version\StorageInterface $versionStorage
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\View\Asset\MinifyService $minifyService
      * @param bool $isDryRun
      */
     public function __construct(
@@ -58,6 +63,7 @@ class Deployer
         Deployer\Log $logger,
         Version\StorageInterface $versionStorage,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\View\Asset\MinifyService $minifyService,
         $isDryRun = false
     ) {
         $this->filesUtil = $filesUtil;
@@ -65,6 +71,7 @@ class Deployer
         $this->versionStorage = $versionStorage;
         $this->dateTime = $dateTime;
         $this->isDryRun = $isDryRun;
+        $this->minifyService = $minifyService;
     }
 
     /**
@@ -192,6 +199,7 @@ class Deployer
                 $requestedPath,
                 ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module]
             );
+            $asset = $this->minifyService->getAssets([$asset], true)[0];
             $this->logger->logDebug("\tDeploying the file to '{$asset->getPath()}'", '.');
             if ($this->isDryRun) {
                 $asset->getContent();

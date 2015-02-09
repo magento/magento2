@@ -1,12 +1,13 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
         define([
             "jquery",
             "jquery/ui",
-            "mage/validation"
+            "mage/validation/validation"
         ], factory);
     } else {
         factory(jQuery);
@@ -16,7 +17,7 @@
     
     $.widget("mage.validation", $.mage.validation, {
         options: {
-            radioCheckboxClosest: 'ul',
+            radioCheckboxClosest: 'ul, ol',
             errorPlacement: function (error, element) {
                 if (element.attr('data-validate-message-box')) {
                     var messageBox = $(element.attr('data-validate-message-box'));

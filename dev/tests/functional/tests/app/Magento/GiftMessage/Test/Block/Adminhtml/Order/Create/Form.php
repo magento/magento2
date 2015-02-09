@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GiftMessage\Test\Block\Adminhtml\Order\Create;
 
-use Mtf\Block\Form as ParentForm;
-use Mtf\Client\Element;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Block\Form as ParentForm;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Form
@@ -26,10 +27,10 @@ class Form extends ParentForm
      * Fill backend GiftMessage item form.
      *
      * @param FixtureInterface $fixture
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fill(FixtureInterface $fixture, Element $element = null)
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         parent::fill($fixture, $element);
         $this->_rootElement->find($this->okButton)->click();

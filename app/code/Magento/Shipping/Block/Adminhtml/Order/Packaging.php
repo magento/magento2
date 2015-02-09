@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Block\Adminhtml\Order;
 
@@ -143,7 +144,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         $countryShipper = $this->_scopeConfig->getValue(
             \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if ($carrier) {
@@ -271,7 +272,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $address = $order->getShippingAddress();
         $shipperAddressCountryCode = $this->_scopeConfig->getValue(
             \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $recipientAddressCountryCode = $address->getCountryId();
@@ -349,7 +350,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         $countryShipper = $this->_scopeConfig->getValue(
             \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if ($carrier) {

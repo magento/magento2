@@ -2,7 +2,8 @@
 /**
  * Test client for REST API testing.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\TestFramework\TestCase\Webapi\Adapter;
@@ -52,18 +53,21 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             'Magento\TestFramework\TestCase\Webapi\Adapter\Rest\DocumentationGenerator'
         );
         $this->defaultStoreCode = Bootstrap::getObjectManager()
-            ->get('Magento\Store\Model\StoreManagerInterface')
+            ->get('Magento\Framework\Store\StoreManagerInterface')
             ->getStore()
             ->getCode();
     }
 
     /**
      * {@inheritdoc}
-     * @throws \Exception
+     * @throws \LogicException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function call($serviceInfo, $arguments = [])
+    public function call($serviceInfo, $arguments = [], $storeCode = null)
     {
-        $resourcePath = '/' . $this->defaultStoreCode . $this->_getRestResourcePath($serviceInfo);
+        $storeCode = !is_null($storeCode) ? (string)$storeCode : $this->defaultStoreCode;
+        $resourcePath = '/' . $storeCode . $this->_getRestResourcePath($serviceInfo);
         $httpMethod = $this->_getRestHttpMethod($serviceInfo);
         //Get a valid token
         $accessCredentials = \Magento\TestFramework\Authentication\OauthHelper::getApiAccessCredentials();

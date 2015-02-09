@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\Constraint;
 
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertSearchTermNotOnFrontend
@@ -25,10 +26,10 @@ class AssertSearchTermNotOnFrontend extends AbstractConstraint
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogSearchQuery $searchTerm
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
-    public function processAssert(CmsIndex $cmsIndex, Browser $browser, CatalogSearchQuery $searchTerm)
+    public function processAssert(CmsIndex $cmsIndex, BrowserInterface $browser, CatalogSearchQuery $searchTerm)
     {
         $queryText = $searchTerm->getQueryText();
         $cmsIndex->open()->getSearchBlock()->search($queryText);

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <!-- These are the settings for legacy testing of Magento 2 Community Edition -->
@@ -62,28 +63,8 @@
             <word>overriden</word>
         </item>
         <item>
-            <path>app/code/Magento/Bundle/view/adminhtml/templates/product/edit/bundle.phtml</path>
-            <word>head.js</word>
-        </item>
-        <item>
-            <path>app/code/Magento/Webapi/view/adminhtml/templates/integration/activate/permissions/tab/webapi.phtml</path>
-            <word>head.js</word>
-        </item>
-        <item>
-            <path>app/code/Magento/GiftCard/view/adminhtml/templates/catalog/product/composite/fieldset/giftcard.phtml</path>
-            <word>head.js</word>
-        </item>
-        <item>
-            <path>app/code/Magento/GiftRegistry/view/adminhtml/templates/edit/attributes.phtml</path>
-            <word>head.js</word>
-        </item>
-        <item>
-            <path>app/code/Magento/GiftRegistry/view/adminhtml/templates/edit/type/select.phtml</path>
-            <word>head.js</word>
-        </item>
-        <item>
-            <path>lib/web/mage/mage.js</path>
-            <word>head.js</word>
+            <path>dev/tests/api-functional/testsuite/Magento/Webapi/Routing/RequestIdOverrideTest.php</path>
+            <word>overriden</word>
         </item>
     </whitelist>
 </config>

@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
@@ -9,6 +10,8 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
 
 class ResetPasswordPost extends \Magento\Customer\Controller\Account
 {
@@ -21,18 +24,22 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
+     * @param RedirectFactory $resultRedirectFactory
+     * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $accountManagement
      * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         Context $context,
         Session $customerSession,
+        RedirectFactory $resultRedirectFactory,
+        PageFactory $resultPageFactory,
         AccountManagementInterface $accountManagement,
         CustomerRepositoryInterface $customerRepository
     ) {
         $this->accountManagement = $accountManagement;
         $this->customerRepository = $customerRepository;
-        parent::__construct($context, $customerSession);
+        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
     }
 
     /**
@@ -40,10 +47,12 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
      *
      * Used to handle data received from reset forgotten password form
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         $resetPasswordToken = (string)$this->getRequest()->getQuery('token');
         $customerId = (int)$this->getRequest()->getQuery('id');
         $password = (string)$this->getRequest()->getPost('password');
@@ -51,24 +60,25 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
 
         if ($password !== $passwordConfirmation) {
             $this->messageManager->addError(__("New Password and Confirm New Password values didn't match."));
-            return;
+            $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
+            return $resultRedirect;
         }
         if (iconv_strlen($password) <= 0) {
             $this->messageManager->addError(__('New password field cannot be empty.'));
-            $this->_redirect('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
-            return;
+            $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
+            return $resultRedirect;
         }
 
         try {
             $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
             $this->accountManagement->resetPassword($customerEmail, $resetPasswordToken, $password);
             $this->messageManager->addSuccess(__('Your password has been updated.'));
-            $this->_redirect('*/*/login');
-            return;
+            $resultRedirect->setPath('*/*/login');
+            return $resultRedirect;
         } catch (\Exception $exception) {
             $this->messageManager->addError(__('There was an error saving the new password.'));
-            $this->_redirect('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
-            return;
+            $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
+            return $resultRedirect;
         }
     }
 }

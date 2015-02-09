@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -28,12 +29,12 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_oldLogActive = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\Store\StoreManagerInterface'
         )->getStore()->getConfig(
             'dev/log/active'
         );
         $this->_oldExceptionFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\Store\StoreManagerInterface'
         )->getStore()->getConfig(
             'dev/log/exception_file'
         );
@@ -46,7 +47,7 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             'dev/log/active',
             $this->_oldLogActive,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         $this->_oldLogActive = null;
@@ -56,7 +57,7 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             'dev/log/exception_file',
             $this->_oldExceptionFile,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         $this->_oldExceptionFile = null;

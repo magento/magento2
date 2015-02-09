@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Validator;
 
@@ -325,6 +326,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      * @param bool $isValid
      * @internal param array $attributes
      * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function createProduct($index, $id, $isValid = true)
     {

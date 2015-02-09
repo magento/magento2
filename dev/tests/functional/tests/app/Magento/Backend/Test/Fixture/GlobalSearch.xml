@@ -1,16 +1,22 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Backend\Test\Fixture\Search">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
+         class="Magento\Backend\Test\Fixture\GlobalSearch">
     <module>Magento_Backend</module>
+    <dataset name="default">
+        <field name="query" xsi:type="string">catalogProductSimple::default::name</field>
+    </dataset>
     <fields>
-        <query>
+        <field name="query">
             <attribute_code>query</attribute_code>
             <backend_type>virtual</backend_type>
-            <fixture>Magento\Backend\Test\Fixture\Search\Query</fixture>
-        </query>
+            <source>Magento\Backend\Test\Fixture\GlobalSearch\Query</source>
+        </field>
     </fields>
 </fixture>

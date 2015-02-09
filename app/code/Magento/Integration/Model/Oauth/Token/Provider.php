@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Integration\Model\Oauth\Token;
@@ -22,31 +23,23 @@ class Provider implements TokenProviderInterface
     protected $_tokenFactory;
 
     /**
-     * @var  \Magento\Integration\Helper\Oauth\Data
+     * @var \Psr\Log\LoggerInterface
      */
-    protected $_dataHelper;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    protected $_date;
+    protected $logger;
 
     /**
      * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
      * @param \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
-     * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
         \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory,
-        \Magento\Integration\Helper\Oauth\Data $dataHelper,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->_consumerFactory = $consumerFactory;
         $this->_tokenFactory = $tokenFactory;
-        $this->_dataHelper = $dataHelper;
-        $this->_date = $date;
+        $this->logger = $logger;
     }
 
     /**
@@ -55,9 +48,7 @@ class Provider implements TokenProviderInterface
     public function validateConsumer($consumer)
     {
         // Must use consumer within expiration period.
-        $consumerTS = strtotime($consumer->getCreatedAt());
-        $expiry = $this->_dataHelper->getConsumerExpirationPeriod();
-        if ($this->_date->timestamp() - $consumerTS > $expiry) {
+        if (!$consumer->isValidForTokenExchange()) {
             throw new \Magento\Framework\Oauth\Exception(
                 'Consumer key has expired'
             );
@@ -111,14 +102,17 @@ class Provider implements TokenProviderInterface
      */
     public function getAccessToken($consumer)
     {
-        /** TODO: log the request token in dev mode since its not persisted. */
-        $token = $this->getIntegrationTokenByConsumerId($consumer->getId());
+        $consumerId = $consumer->getId();
+        $token = $this->getIntegrationTokenByConsumerId($consumerId);
         if (Token::TYPE_REQUEST != $token->getType()) {
             throw new \Magento\Framework\Oauth\Exception(
                 'Cannot get access token because consumer token is not a request token'
             );
         }
         $accessToken = $token->convertToAccess();
+        $this->logger->info(
+            'Request token ' . $token->getToken() . ' was exchanged to obtain access token for consumer ' . $consumerId
+        );
         return ['oauth_token' => $accessToken->getToken(), 'oauth_token_secret' => $accessToken->getSecret()];
     }
 

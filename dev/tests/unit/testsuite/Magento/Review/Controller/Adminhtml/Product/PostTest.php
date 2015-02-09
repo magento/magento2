@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 namespace Magento\Review\Controller\Adminhtml\Product;
 
@@ -132,7 +135,9 @@ class PostTest extends \PHPUnit_Framework_TestCase
         );
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_messageManagerMock = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
-        $this->_storeManagerInterfaceMock = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManagerInterfaceMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Store\StoreManagerInterface'
+        );
         $this->_storeModelMock = $this->getMock(
             'Magento\Store\Model\Store', ['__wakeup', 'getId'], [], '', false
         );
@@ -182,7 +187,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock->expects($this->once())->method('getPost')
             ->will($this->returnValue(['status_id' => 1]));
         $this->_objectManagerMock->expects($this->at(0))->method('get')
-            ->with('Magento\Store\Model\StoreManagerInterface')
+            ->with('Magento\Framework\Store\StoreManagerInterface')
             ->will($this->returnValue($this->_storeManagerInterfaceMock));
         $this->_reviewFactoryMock->expects($this->once())->method('create')
             ->will($this->returnValue($this->_reviewModelMock));

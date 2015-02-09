@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Config\Structure;
 
@@ -124,11 +125,11 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 ['showInDefault' => 0, 'showInStore' => 1, 'showInWebsite' => 0],
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             ],
             [
                 ['showInDefault' => 0, 'showInStore' => 0, 'showInWebsite' => 1],
-                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE
             ]
         ];
     }
@@ -153,11 +154,11 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 ['showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 1],
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             ],
             [
                 ['showInDefault' => 1, 'showInStore' => 1, 'showInWebsite' => 0],
-                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE
             ]
         ];
     }

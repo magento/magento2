@@ -2,7 +2,8 @@
 /**
  * Response redirector tests
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\App\Response;
 
@@ -57,7 +58,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
                 'getCookie'
             ]
         );
-        $this->_storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
         $this->_urlCoderMock = $this->getMock(
             '\Magento\Framework\Encryption\UrlCoder',
             [],

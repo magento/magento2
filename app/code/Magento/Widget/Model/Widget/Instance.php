@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\Widget;
 
@@ -17,6 +18,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @method \Magento\Widget\Model\Widget\Instance setSortOrder(int $value)
  * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
  * @method int getThemeId()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
 {
@@ -122,6 +124,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -186,6 +189,8 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Processing object before save data
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function beforeSave()
     {
@@ -407,6 +412,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Load widget XML config and merge with theme widget config
      *
      * @return array|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getWidgetConfigAsArray()
     {
@@ -531,6 +537,8 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @param string $container
      * @param string $templatePath
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function generateLayoutUpdateXml($container, $templatePath = '')
     {

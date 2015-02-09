@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
@@ -166,7 +167,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
         $address = $model;
-        if (!$address instanceof \Magento\Sales\Model\Quote\Address) {
+        if (!$address instanceof \Magento\Quote\Model\Quote\Address) {
             if ($model->getQuote()->isVirtual()) {
                 $address = $model->getQuote()->getBillingAddress();
             } else {
