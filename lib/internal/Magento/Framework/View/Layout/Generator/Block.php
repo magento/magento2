@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\View\Layout\Generator;
 
+use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Framework\View\Layout;
 
 class Block implements Layout\GeneratorInterface
@@ -227,7 +228,7 @@ class Block implements Layout\GeneratorInterface
     {
         $result = [];
         foreach ($arguments as $argumentName => $argumentData) {
-            if (!isset($argumentData[\Magento\Framework\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE])) {
+            if (!isset($argumentData[Dom::TYPE_ATTRIBUTE])) {
                 $result[$argumentName] = $argumentData;
                 continue;
             }
