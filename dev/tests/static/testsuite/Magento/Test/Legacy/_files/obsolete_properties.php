@@ -368,4 +368,5 @@ return [
     ['_catalogData', 'Magento\Catalog\Block\Product\AbstractProduct'],
     ['_env', 'Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection'],
     ['_catalogImage', 'Magento\Catalog\Model\Product'],
+    ['_view', 'Magento\Cms\Helper\Page'],
 ];
