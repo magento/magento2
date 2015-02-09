@@ -84,8 +84,8 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
         return trim($this->getMessage()) == '';
     }
 
+    //@codeCoverageIgnoreStart
     /**
-     * @codeCoverageIgnoreStart
      * {@inheritdoc}
      */
     public function getGiftMessageId()
@@ -164,5 +164,5 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     {
         return $this->setData(self::MESSAGE, $message);
     }
-    ////@codeCoverageIgnoreEnd
+    //@codeCoverageIgnoreEnd
 }
