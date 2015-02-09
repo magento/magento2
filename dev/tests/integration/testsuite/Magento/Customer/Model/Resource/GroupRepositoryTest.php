@@ -22,8 +22,8 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
-    /** @var \Magento\Customer\Model\Data\GroupBuilder */
-    private $groupBuilder;
+    /** @var \Magento\Customer\Model\Data\GroupInterfaceFactory */
+    private $groupFactory;
 
     /** @var  \Magento\Framework\Api\SearchCriteriaDataBuilder */
     private $searchCriteriaBuilder;
@@ -32,7 +32,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->groupRepository = $this->objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
-        $this->groupBuilder = $this->objectManager->create('Magento\Customer\Api\Data\GroupDataBuilder');
+        $this->groupFactory = $this->objectManager->create('Magento\Customer\Api\Data\GroupInterfaceFactory');
         $this->searchCriteriaBuilder = $this->objectManager->create('Magento\Framework\Api\SearchCriteriaDataBuilder');
     }
 
@@ -75,7 +75,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateGroup()
     {
-        $group = $this->groupBuilder->setId(null)->setCode('Create Group')->setTaxClassId(3)->create();
+        $group = $this->groupFactory->create()->setId(null)->setCode('Create Group')->setTaxClassId(3);
         $groupId = $this->groupRepository->save($group)->getId();
         $this->assertNotNull($groupId);
 
@@ -90,7 +90,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateGroupDefaultTaxClass()
     {
-        $group = $this->groupBuilder->setId(null)->setCode('Create Group')->setTaxClassId(null)->create();
+        $group = $this->groupFactory->create()->setId(null)->setCode('Create Group')->setTaxClassId(null);
         $groupId = $this->groupRepository->save($group)->getId();
         $this->assertNotNull($groupId);
 
@@ -105,7 +105,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateGroup()
     {
-        $group = $this->groupBuilder->setId(null)->setCode('New Group')->setTaxClassId(3)->create();
+        $group = $this->groupFactory->create()->setId(null)->setCode('New Group')->setTaxClassId(3);
         $groupId = $this->groupRepository->save($group)->getId();
         $this->assertNotNull($groupId);
 
@@ -114,7 +114,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($group->getCode(), $newGroup->getCode());
         $this->assertEquals($group->getTaxClassId(), $newGroup->getTaxClassId());
 
-        $updates = $this->groupBuilder->setId($groupId)->setCode('Updated Group')->setTaxClassId(3)->create();
+        $updates = $this->groupFactory->create()->setId($groupId)->setCode('Updated Group')->setTaxClassId(3);
         $this->assertNotNull($this->groupRepository->save($updates));
         $updatedGroup = $this->groupRepository->getById($groupId);
         $this->assertEquals($updates->getCode(), $updatedGroup->getCode(), 'Code not updated.');
@@ -128,7 +128,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateGroupException()
     {
-        $group = $this->groupBuilder->setId(null)->setCode('New Group')->setTaxClassId(3)->create();
+        $group = $this->groupFactory->create()->setId(null)->setCode('New Group')->setTaxClassId(3);
         $groupId = $this->groupRepository->save($group)->getId();
         $this->assertNotNull($groupId);
 
@@ -137,7 +137,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($group->getCode(), $newGroup->getCode());
         $this->assertEquals($group->getTaxClassId(), $newGroup->getTaxClassId());
 
-        $updates = $this->groupBuilder->setId($groupId)->setCode('Updated Group')->setTaxClassId(9999)->create();
+        $updates = $this->groupFactory->create()->setId($groupId)->setCode('Updated Group')->setTaxClassId(9999);
         $this->groupRepository->save($updates);
         $updatedGroup = $this->groupRepository->getById($groupId);
         $this->assertEquals($updates->getCode(), $updatedGroup->getCode());
@@ -149,7 +149,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $group = $this->groupBuilder->setId(null)->setCode('New Group')->setTaxClassId(3)->create();
+        $group = $this->groupFactory->create()->setId(null)->setCode('New Group')->setTaxClassId(3);
         $groupId = $this->groupRepository->save($group)->getId();
         $newGroup = $this->groupRepository->getById($groupId);
         $this->assertTrue($this->groupRepository->delete($newGroup));
@@ -160,7 +160,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteById()
     {
-        $group = $this->groupBuilder->setId(null)->setCode('New Group')->setTaxClassId(3)->create();
+        $group = $this->groupFactory->create()->setId(null)->setCode('New Group')->setTaxClassId(3);
         $groupId = $this->groupRepository->save($group)->getId();
         $this->assertTrue($this->groupRepository->deleteById($groupId));
     }
