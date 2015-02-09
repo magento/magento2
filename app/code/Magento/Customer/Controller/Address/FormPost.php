@@ -37,7 +37,7 @@ class FormPost extends \Magento\Customer\Controller\Address
         $addressData = $addressForm->extractData($this->getRequest());
         $attributeValues = $addressForm->compactData($addressData);
 
-        $region = [
+        $regionData = [
             RegionInterface::REGION_ID => $attributeValues['region_id'],
             RegionInterface::REGION => !empty($attributeValues['region']) ? $attributeValues['region'] : null,
             RegionInterface::REGION_CODE => !empty($attributeValues['region_code'])
@@ -45,20 +45,22 @@ class FormPost extends \Magento\Customer\Controller\Address
                 : null,
         ];
 
-        $region = $this->_regionDataBuilder
-            ->populateWithArray($region)
-            ->create();
+        $region = $this->regionDataFactory->create();
+        $this->dataObjectHelper->populateWithArray($region, $regionData);
 
         unset($attributeValues['region'], $attributeValues['region_id']);
         $attributeValues['region'] = $region;
 
-        return $this->_addressDataBuilder
-            ->populateWithArray(array_merge($existingAddressData, $attributeValues))
-            ->setCustomerId($this->_getSession()->getCustomerId())
+        $addressDataObject = $this->addressDataFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $addressDataObject,
+            array_merge($existingAddressData, $attributeValues)
+        );
+        $addressDataObject->setCustomerId($this->_getSession()->getCustomerId())
             ->setRegion($region)
-            ->setDefaultBilling($this->getRequest()->getParam('default_billing', false))
-            ->setDefaultShipping($this->getRequest()->getParam('default_shipping', false))
-            ->create();
+            ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
+            ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
+        return $addressDataObject;
     }
 
     /**
