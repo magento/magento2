@@ -24,9 +24,12 @@ class TransactionManager implements TransactionManagerInterface
     public function start(Connection $connection)
     {
         $key = $this->getConnectionKey($connection);
-        $this->participants[$key]['item'] = $connection;
-        $this->participants[$key]['state'] = self::STATE_IN_PROGRESS;
-        $connection->beginTransaction();
+        if (!isset($this->participants[$key])) {
+            $this->participants[$key]['item'] = $connection;
+            $this->participants[$key]['state'] = self::STATE_IN_PROGRESS;
+            $connection->beginTransaction();
+        }
+        return $connection;
     }
 
     /**
