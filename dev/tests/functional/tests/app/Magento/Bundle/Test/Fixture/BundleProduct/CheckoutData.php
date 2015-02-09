@@ -311,7 +311,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             'title' => 'Drop-down Option',
                             'type' => 'Drop-down',
                             'value' => [
-                                'name' => 'Simple Product',
+                                'name' => 'Test simple product',
                             ],
                         ],
                     ],
