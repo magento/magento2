@@ -836,12 +836,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function reindex()
     {
         if ($this->_catalogProduct->isDataForProductCategoryIndexerWasChanged($this) || $this->isDeleted()) {
-            $this->_productFlatIndexerProcessor->reindexRow($this->getEntityId());
-            $categoryIndexer = $this->indexerRegistry->get(Indexer\Product\Category::INDEXER_ID);
-            if (!$categoryIndexer->isScheduled()) {
-                $categoryIndexer->reindexRow($this->getId());
+            $productCategoryIndexer = $this->indexerRegistry->get(Indexer\Product\Category::INDEXER_ID);
+            if (!$productCategoryIndexer->isScheduled()) {
+                $productCategoryIndexer->reindexRow($this->getId());
             }
         }
+        $this->_productFlatIndexerProcessor->reindexRow($this->getEntityId());
     }
 
     /**
@@ -2010,6 +2010,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $identities = [self::CACHE_TAG . '_' . $this->getId()];
         if ($this->getIsChangedCategories()) {
             foreach ($this->getAffectedCategoryIds() as $categoryId) {
+                $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
+            }
+        }
+        if ($this->getOrigData('status') > $this->getData('status')) {
+            foreach ($this->getData('category_ids') as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
