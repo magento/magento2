@@ -108,11 +108,8 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     {
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
-            foreach ($headers as $header) {
-                if (strtolower($header->getFieldName()) == strtolower($name)) {
-                    $headers->removeHeader($header);
-                }
-            }
+            $header = $headers->get($name);
+            $headers->removeHeader($header);
         }
 
         return $this;
