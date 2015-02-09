@@ -31,4 +31,15 @@ class ObjectRelationProcessor
         $connection->delete($table, $condition);
         $transactionManager->end($connection);
     }
+
+    /**
+     * Validate integrity of the given data
+     *
+     * @param string $table
+     * @param array $involvedData
+     */
+    public function validateDataIntegrity($table, array $involvedData)
+    {
+        return;
+    }
 }

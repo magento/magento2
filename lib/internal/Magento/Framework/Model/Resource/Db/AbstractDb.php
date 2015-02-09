@@ -401,6 +401,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                 $this->_serializeFields($object);
                 $this->_beforeSave($object);
                 $this->_checkUnique($object);
+                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
                 if (!is_null($object->getId()) && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
                     $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
                     /**
