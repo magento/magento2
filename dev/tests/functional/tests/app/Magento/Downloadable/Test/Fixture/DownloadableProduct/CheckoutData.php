@@ -98,7 +98,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 ]
             ],
 
-            'one_dollar_product_with_one_separately_link' => [
+            'one_dollar_product_with_one_link' => [
                 'options' => [
                     'links' => [
                         [

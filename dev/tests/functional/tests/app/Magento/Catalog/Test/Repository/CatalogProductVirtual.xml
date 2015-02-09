@@ -48,6 +48,12 @@
             <field name="category_ids" xsi:type="array">
                 <item name="presets" xsi:type="string">default_subcategory</item>
             </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
         </dataset>
 
         <dataset name="virtual_big_qty">

@@ -118,9 +118,9 @@ class Links implements FixtureInterface
                     ],
                 ],
             ],
-            'one_separately_link' => [
+            'one_no_separately_link' => [
                 'title' => 'Links%isolation%',
-                'links_purchased_separately' => 'Yes',
+                'links_purchased_separately' => 'No',
                 'downloadable' => [
                     'link' => [
                         [

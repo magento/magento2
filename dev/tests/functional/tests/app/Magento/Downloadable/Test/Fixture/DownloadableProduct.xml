@@ -24,7 +24,7 @@
             <item name="value" xsi:type="string">100.00</item>
         </field>
         <field name="tax_class_id" xsi:type="array">
-            <item name="dataSet" xsi:type="string">Taxable Goods</item>
+            <item name="dataSet" xsi:type="string">taxable_goods</item>
         </field>
         <field name="description" xsi:type="string">This is description for downloadable product</field>
         <field name="short_description" xsi:type="string">This is short description for downloadable product</field>
