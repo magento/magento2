@@ -29,7 +29,6 @@ class ObjectRelationProcessor
         array $involvedData
     ) {
         $connection->delete($table, $condition);
-        $transactionManager->end($connection);
     }
 
     /**

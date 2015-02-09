@@ -10,11 +10,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface as Connection;
 
 class TransactionManager implements TransactionManagerInterface
 {
-    const STATE_IN_PROGRESS = 'in progress';
-    const STATE_FINISHED = 'finished';
-
     /**
-     * @var array
+     * @var Connection[]
      */
     protected $participants;
 
@@ -23,22 +20,9 @@ class TransactionManager implements TransactionManagerInterface
      */
     public function start(Connection $connection)
     {
-        $key = $this->getConnectionKey($connection);
-        if (!isset($this->participants[$key])) {
-            $this->participants[$key]['item'] = $connection;
-            $this->participants[$key]['state'] = self::STATE_IN_PROGRESS;
-            $connection->beginTransaction();
-        }
+        $this->participants[] = $connection;
+        $connection->beginTransaction();
         return $connection;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function end(Connection $connection)
-    {
-        $key = $this->getConnectionKey($connection);
-        $this->participants[$key]['state'] = self::STATE_FINISHED;
     }
 
     /**
@@ -46,15 +30,8 @@ class TransactionManager implements TransactionManagerInterface
      */
     public function commit()
     {
-        foreach ($this->participants as $item) {
-            if ($item['state'] != self::STATE_FINISHED) {
-                throw new \Exception('Incomplete transactions. Cannot update row: a foreign key constraint fails');
-            }
-        }
-
-        foreach ($this->participants as $item) {
-            /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
-            $connection = $item['item'];
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+        while ($connection = array_pop($this->participants)) {
             $connection->commit();
         }
     }
@@ -64,9 +41,8 @@ class TransactionManager implements TransactionManagerInterface
      */
     public function rollBack()
     {
-        foreach ($this->participants as $item) {
-            /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
-            $connection = $item['item'];
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+        while ($connection = array_pop($this->participants)) {
             $connection->rollBack();
         }
     }

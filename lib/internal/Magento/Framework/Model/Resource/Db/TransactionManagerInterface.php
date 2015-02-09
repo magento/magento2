@@ -19,14 +19,6 @@ interface TransactionManagerInterface
     public function start(Connection $connection);
 
     /**
-     * Vote that connection is ready to commit
-     *
-     * @param Connection $connection
-     * @return void
-     */
-    public function end(Connection $connection);
-
-    /**
      * Commit transaction
      *
      * @return void
