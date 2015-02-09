@@ -46,21 +46,21 @@ class Production extends \Magento\Framework\ObjectManager\Factory\AbstractFactor
     /**
      * Create instance with call time arguments
      *
-     * @param string $requestedType
+     * @param string $type
      * @param array $arguments
      *
      * @return object
      *
      * @throws \Exception
      */
-    public function create($requestedType, array $arguments = [])
+    public function create($type, array $arguments = [])
     {
-        $type = $this->config->getInstanceType($requestedType);
+        $type = $this->config->getInstanceType($type);
         $parameters = $this->definitions->getParameters($type);
         if ($parameters == null) {
             return new $type();
         }
-        $args = $this->_resolveArguments($requestedType, $parameters, $arguments);
+        $args = $this->_resolveArguments($type, $parameters, $arguments);
 
         return $this->createObject($type, $args);
     }

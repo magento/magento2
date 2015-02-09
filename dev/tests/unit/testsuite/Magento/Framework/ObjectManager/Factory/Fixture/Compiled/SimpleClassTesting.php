@@ -9,12 +9,12 @@ namespace Magento\Framework\ObjectManager\Factory\Fixture\Compiled;
 class SimpleClassTesting
 {
     /**
-     * @var \StdClass
+     * @var DependencyTesting
      */
     private $nonSharedDependency;
 
     /**
-     * @var \StdClass
+     * @var DependencySharedTesting
      */
     private $sharedDependency;
 
@@ -39,16 +39,16 @@ class SimpleClassTesting
     private $nullValue;
 
     /**
-     * @param \StdClass $nonSharedDependency
-     * @param \StdClass $sharedDependency
+     * @param DependencyTesting $nonSharedDependency
+     * @param DependencySharedTesting $sharedDependency
      * @param string $value
      * @param array $valueArray
      * @param string $globalValue
      * @param null $nullValue
      */
     public function __construct(
-        \StdClass $nonSharedDependency,
-        \StdClass $sharedDependency,
+        DependencyTesting $nonSharedDependency,
+        DependencySharedTesting $sharedDependency,
         $value = 'value',
         array $valueArray = [
         'default_value1',
@@ -83,7 +83,7 @@ class SimpleClassTesting
     }
 
     /**
-     * @return \StdClass
+     * @return DependencyTesting
      */
     public function getNonSharedDependency()
     {
@@ -91,7 +91,7 @@ class SimpleClassTesting
     }
 
     /**
-     * @return \StdClass
+     * @return DependencySharedTesting
      */
     public function getSharedDependency()
     {

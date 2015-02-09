@@ -10,11 +10,11 @@ interface FactoryInterface
     /**
      * Create instance with call time arguments
      *
-     * @param string $requestedType
+     * @param string $type
      * @param array $arguments
      * @return object
      * @throws \LogicException
      * @throws \BadMethodCallException
      */
-    public function create($requestedType, array $arguments = []);
+    public function create($type, array $arguments = []);
 }

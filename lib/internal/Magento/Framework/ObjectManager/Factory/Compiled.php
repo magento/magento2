@@ -9,20 +9,52 @@ namespace Magento\Framework\ObjectManager\Factory;
 class Compiled extends AbstractFactory
 {
     /**
+     * Object manager config
+     *
+     * @var \Magento\Framework\ObjectManager\ConfigInterface
+     */
+    protected $config;
+
+    /**
+     * Global arguments
+     *
+     * @var array
+     */
+    protected $globalArguments;
+
+    /**
+     * @var array
+     */
+    private $sharedInstances;
+
+    /**
+     * @param \Magento\Framework\ObjectManager\ConfigInterface $config
+     * @param array $sharedInstances
+     * @param array $globalArguments
+     */
+    public function __construct(
+        \Magento\Framework\ObjectManager\ConfigInterface $config,
+        &$sharedInstances = [],
+        $globalArguments = []
+    ) {
+        $this->config = $config;
+        $this->globalArguments = $globalArguments;
+        $this->sharedInstances = &$sharedInstances;
+    }
+
+    /**
      * Create instance with call time arguments
      *
-     * @param string $requestedType
+     * @param string $type
      * @param array $arguments
      * @return object
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function create($requestedType, array $arguments = [])
+    public function create($type, array $arguments = [])
     {
         /** @TODO get rid of ltrim() usage and place it to client code */
-        $requestedType = ltrim($requestedType, '\\');
-        $type = $this->config->getInstanceType($requestedType);
-        $args = $this->config->getArguments($requestedType);
+        $args = $this->config->getArguments($type);
         if ($args === null) {
             return new $type();
         }
@@ -31,9 +63,9 @@ class Compiled extends AbstractFactory
             if (isset($arguments[$key])) {
                 $argument = $arguments[$key];
             } elseif (isset($argument['_i_'])) {
-                $argument = $this->objectManager->get($argument['_i_']);
+                $argument = $this->get($argument['_i_']);
             } elseif (isset($argument['_ins_'])) {
-                $argument = $this->objectManager->create($argument['_ins_']);
+                $argument = $this->create($argument['_ins_']);
             } elseif (isset($argument['_v_'])) {
                 $argument = $argument['_v_'];
             } elseif (isset($argument['_vac_'])) {
@@ -53,8 +85,9 @@ class Compiled extends AbstractFactory
         $args = array_values($args);
         if (substr($type, -12) == '\Interceptor') {
             $args = array_merge([
-                $this->objectManager, $this->objectManager->get('Magento\Framework\Interception\PluginListInterface'),
-                $this->objectManager->get('Magento\Framework\Interception\ChainInterface'),
+                $this->objectManager,
+                $this->get($this->config->getPreference('Magento\Framework\Interception\PluginListInterface')),
+                $this->get($this->config->getPreference('Magento\Framework\Interception\ChainInterface')),
             ], $args);
         }
 
@@ -75,9 +108,9 @@ class Compiled extends AbstractFactory
         foreach ($array as $key => &$argument) {
             if ($argument === (array)$argument) {
                 if (isset($argument['_i_'])) {
-                    $argument = $this->objectManager->get($argument['_i_']);
+                    $argument = $this->get($argument['_i_']);
                 } elseif (isset($argument['_ins_'])) {
-                    $argument = $this->objectManager->create($argument['_ins_']);
+                    $argument = $this->create($argument['_ins_']);
                 } elseif (isset($argument['_a_'])) {
                     if (isset($this->globalArguments[$argument['_a_']])) {
                         $argument = $this->globalArguments[$argument['_a_']];
@@ -89,5 +122,19 @@ class Compiled extends AbstractFactory
                 }
             }
         }
+    }
+
+    /**
+     * Retrieve cached object instance
+     *
+     * @param string $type
+     * @return mixed
+     */
+    protected function get($type)
+    {
+        if (!isset($this->sharedInstances[$type])) {
+            $this->sharedInstances[$type] = $this->create($type);
+        }
+        return $this->sharedInstances[$type];
     }
 }

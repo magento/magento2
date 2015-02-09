@@ -25,12 +25,12 @@ class FactoryStub implements \Magento\Framework\ObjectManager\FactoryInterface
     /**
      * Create instance with call time arguments
      *
-     * @param string $requestedType
+     * @param string $type
      * @param array $arguments
      * @return object
      * @throws \BadMethodCallException
      */
-    public function create($requestedType, array $arguments = [])
+    public function create($type, array $arguments = [])
     {
         throw new \BadMethodCallException(__METHOD__);
     }

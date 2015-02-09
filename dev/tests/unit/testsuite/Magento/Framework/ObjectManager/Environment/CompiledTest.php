@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\ObjectManager\Environment;
 
+require '_files/CompiledTesting.php';
+
 class CompiledTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,7 +17,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $envFactoryMock = $this->getMock('Magento\Framework\ObjectManager\EnvironmentFactory', [], [], '', false);
-        $this->_compiled = new \Magento\Framework\ObjectManager\Environment\Compiled($envFactoryMock);
+        $this->_compiled = new \Magento\Framework\ObjectManager\Environment\CompiledTesting($envFactoryMock);
     }
 
     public function testGetFilePath()
@@ -26,5 +28,13 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     public function testGetMode()
     {
         $this->assertEquals(Compiled::MODE, $this->_compiled->getMode());
+    }
+
+    public function testGetObjectManagerFactory()
+    {
+        $this->assertInstanceOf(
+            'Magento\Framework\ObjectManager\Factory\Compiled',
+            $this->_compiled->getObjectManagerFactory(['shared_instances' => []])
+        );
     }
 }

@@ -7,6 +7,7 @@
 namespace Magento\Framework\ObjectManager\Environment;
 
 use Magento\Framework\ObjectManager\EnvironmentInterface;
+use Magento\Framework\ObjectManager\FactoryInterface;
 
 class Compiled extends AbstractEnvironment implements EnvironmentInterface
 {
@@ -24,6 +25,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
      * Mode name
      */
     const MODE = 'compiled';
+
     protected $mode = self::MODE;
     /**#@- */
 
@@ -38,6 +40,23 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
      * @var string
      */
     protected $configPreference = 'Magento\Framework\ObjectManager\Factory\Compiled';
+
+    /**
+     * Creates factory
+     *
+     * @param $arguments
+     * @param $factoryClass
+     *
+     * @return FactoryInterface
+     */
+    protected function createFactory($arguments, $factoryClass)
+    {
+        return new $factoryClass(
+            $this->getDiConfig(),
+            $arguments['shared_instances'],
+            $arguments
+        );
+    }
 
     /**
      * Returns initialized compiled config
@@ -60,7 +79,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
      *
      * @return array
      */
-    private function getConfigData()
+    protected function getConfigData()
     {
         if (empty($this->globalConfig)) {
             $this->globalConfig = \unserialize(\file_get_contents(self::getFilePath()));

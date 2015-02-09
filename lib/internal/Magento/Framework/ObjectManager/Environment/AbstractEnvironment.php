@@ -8,8 +8,8 @@ namespace Magento\Framework\ObjectManager\Environment;
 
 use Magento\Framework\ObjectManager\EnvironmentFactory;
 use Magento\Framework\ObjectManager\EnvironmentInterface;
-use Magento\Framework\ObjectManager\Factory\Compiled as FactoryCompiled;
 use Magento\Framework\ObjectManager\Profiler\FactoryDecorator;
+use Magento\Framework\ObjectManager\FactoryInterface;
 
 abstract class AbstractEnvironment implements EnvironmentInterface
 {
@@ -29,9 +29,9 @@ abstract class AbstractEnvironment implements EnvironmentInterface
     protected $configPreference = 'Magento\Framework\ObjectManager\Factory\Dynamic\Developer';
 
     /**
-     * @var \Magento\Framework\ObjectManager\FactoryInterface
+     * @var FactoryInterface
      */
-    private $factory;
+    protected $factory;
 
     /**
      * @var EnvironmentFactory
@@ -50,24 +50,14 @@ abstract class AbstractEnvironment implements EnvironmentInterface
      * Returns object manager factory
      *
      * @param array $arguments
-     * @return FactoryDecorator | FactoryCompiled
+     * @return \Magento\Framework\ObjectManager\Factory\AbstractFactory
      */
     public function getObjectManagerFactory($arguments)
     {
         $factoryClass = $this->getDiConfig()->getPreference($this->configPreference);
-        $this->factory = new $factoryClass(
-            $this->getDiConfig(),
-            null,
-            $this->envFactory->getDefinitions(),
-            $arguments
-        );
 
-        if (isset($arguments['MAGE_PROFILER']) && $arguments['MAGE_PROFILER'] == 2) {
-            $this->factory = new FactoryDecorator(
-                $this->factory,
-                \Magento\Framework\ObjectManager\Profiler\Log::getInstance()
-            );
-        }
+        $this->factory = $this->createFactory($arguments, $factoryClass);
+        $this->decorate($arguments);
 
         return $this->factory;
     }
@@ -80,5 +70,38 @@ abstract class AbstractEnvironment implements EnvironmentInterface
     public function getMode()
     {
         return $this->mode;
+    }
+
+    /**
+     * Decorate factory
+     *
+     * @param $arguments
+     */
+    protected function decorate($arguments)
+    {
+        if (isset($arguments['MAGE_PROFILER']) && $arguments['MAGE_PROFILER'] == 2) {
+            $this->factory = new FactoryDecorator(
+                $this->factory,
+                \Magento\Framework\ObjectManager\Profiler\Log::getInstance()
+            );
+        }
+    }
+
+    /**
+     * Creates factory
+     *
+     * @param $arguments
+     * @param $factoryClass
+     *
+     * @return FactoryInterface
+     */
+    protected function createFactory($arguments, $factoryClass)
+    {
+        return new $factoryClass(
+            $this->getDiConfig(),
+            null,
+            $this->envFactory->getDefinitions(),
+            $arguments
+        );
     }
 }
