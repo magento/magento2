@@ -106,7 +106,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         ];
         $incrementId = $post['oar_order_id'];
         $requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $requestMock->expects($this->once())->method('getPost')->will($this->returnValue($post));
+        $requestMock->expects($this->once())->method('getPostValue')->will($this->returnValue($post));
 
         $orderMock = $this->getMock(
             'Magento\Sales\Model\Order',

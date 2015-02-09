@@ -1065,7 +1065,7 @@ class Store extends AbstractModel implements
             parse_str($storeParsedUrl['query'], $storeParsedQuery);
         }
 
-        $currQuery = $this->_request->getQuery();
+        $currQuery = $this->_request->getQueryValue();
         if (isset(
             $currQuery[$sidQueryParam]
         ) && !empty($currQuery[$sidQueryParam]) && $this->_getSession()->getSessionIdForHost(

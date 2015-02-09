@@ -45,7 +45,7 @@ class Authentication
      */
     public function getCredentials()
     {
-        $server = $this->request->getServer();
+        $server = $this->request->getServerValue();
         $user = '';
         $pass = '';
 

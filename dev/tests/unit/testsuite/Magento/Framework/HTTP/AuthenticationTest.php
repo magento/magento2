@@ -16,7 +16,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     public function testGetCredentials($server, $expectedLogin, $expectedPass)
     {
         $request = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
-        $request->expects($this->once())->method('getServer')->will($this->returnValue($server));
+        $request->expects($this->once())->method('getServerValue')->will($this->returnValue($server));
         $response = $this->getMock('\Magento\Framework\App\Response\Http', [], [], '', false);
         $authentication = new \Magento\Framework\HTTP\Authentication($request, $response);
         $this->assertSame([$expectedLogin, $expectedPass], $authentication->getCredentials());

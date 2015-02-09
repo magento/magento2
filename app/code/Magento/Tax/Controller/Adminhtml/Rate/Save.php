@@ -17,7 +17,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rate
      */
     public function execute()
     {
-        $ratePost = $this->getRequest()->getPost();
+        $ratePost = $this->getRequest()->getPostValue();
         if ($ratePost) {
             $rateId = $this->getRequest()->getParam('tax_calculation_rate_id');
             if ($rateId) {

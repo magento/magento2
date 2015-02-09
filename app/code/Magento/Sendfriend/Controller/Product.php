@@ -90,7 +90,7 @@ class Product extends \Magento\Framework\App\Action\Action
                 $this->_objectManager->get(
                     'Magento\Catalog\Model\Session'
                 )->setSendfriendFormData(
-                    $request->getPost()
+                    $request->getPostValue()
                 );
             }
         }

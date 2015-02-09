@@ -7,6 +7,7 @@ namespace Magento\Framework\HTTP\PhpEnvironment;
 
 use Zend\Http\Header\HeaderInterface;
 use Zend\Stdlib\Parameters;
+use Zend\Stdlib\ParametersInterface;
 use Zend\Uri\UriFactory;
 use Zend\Uri\UriInterface;
 
@@ -313,11 +314,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     public function setParams(array $array)
     {
-        $this->params = $this->params + (array) $array;
         foreach ($array as $key => $value) {
-            if (null === $value) {
-                unset($this->params[$key]);
-            }
+            $this->setParam($key, $value);
         }
         return $this;
     }
@@ -374,6 +372,55 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         return ($this->getScheme() == self::SCHEME_HTTPS);
     }
+
+    /**
+     * Retrieve SERVER parameters
+     *
+     * @param string $name
+     * @param mixed $default
+     * @return mixed|ParametersInterface
+     */
+    public function getServerValue($name = null, $default = null)
+    {
+        $server = parent::getServer($name, $default);
+        if ($server instanceof ParametersInterface) {
+            return $server->toArray();
+        }
+        return $server;
+    }
+
+    /**
+     * Retrieve GET parameters
+     *
+     * @param string $name
+     * @param mixed $default
+     * @return mixed|ParametersInterface
+     */
+    public function getQueryValue($name = null, $default = null)
+    {
+        $query = parent::getQuery($name, $default);
+        if ($query instanceof ParametersInterface) {
+            return $query->toArray();
+        }
+        return $query;
+    }
+
+    /**
+     * Retrieve POST parameters
+     *
+     * @param string $name
+     * @param mixed $default
+     * @return mixed|ParametersInterface
+     */
+    public function getPostValue($name = null, $default = null)
+    {
+        $post = parent::getPost($name, $default);
+        if ($post instanceof ParametersInterface) {
+            return $post->toArray();
+        }
+        return $post;
+    }
+
 
     /**
      * Set POST parameters

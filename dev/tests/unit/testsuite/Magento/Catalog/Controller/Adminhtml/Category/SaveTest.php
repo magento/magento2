@@ -135,7 +135,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getParam', 'getPost']
+            ['getParam', 'getPost', 'getPostValue']
         );
         $this->objectManagerMock = $this->getMock(
             'Magento\Framework\ObjectManager',
@@ -441,13 +441,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     [
-                        [$postData],
                         ['use_config', ['attribute']],
                         ['use_default', ['default-attribute']],
                         ['return_session_messages_only', true],
                     ]
                 )
             );
+        $this->requestMock->expects($this->atLeastOnce())
+            ->method('getPostValue')
+            ->willReturn($postData);
         $categoryMock->expects($this->once())
             ->method('addData')
             ->with($postData['general']);

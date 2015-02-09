@@ -40,7 +40,7 @@ class Save extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             $data = $this->dataProcessor->filter($data);
             $model = $this->_objectManager->create('Magento\Cms\Model\Page');

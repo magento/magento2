@@ -96,7 +96,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost()->toArray();
+        $data = $this->getRequest()->getPostValue();
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $setId = $this->getRequest()->getParam('set');

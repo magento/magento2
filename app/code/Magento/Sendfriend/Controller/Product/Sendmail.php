@@ -50,7 +50,7 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
 
         $product = $this->_initProduct();
         $model = $this->_initSendToFriendModel();
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
 
         if (!$product || !$data) {
             $this->_forward('noroute');

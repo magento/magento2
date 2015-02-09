@@ -57,7 +57,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'getActionName',
             'setActionName',
             'getParam',
-            'getQuery',
+            'getQueryValue',
             'getCookie',
             'getDistroBaseUrl',
             'isSecure',
@@ -343,7 +343,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
 
         $this->requestMock->expects($this->atLeastOnce())->method('getRequestString')->will($this->returnValue(''));
-        $this->requestMock->expects($this->atLeastOnce())->method('getQuery')->will($this->returnValue([
+        $this->requestMock->expects($this->atLeastOnce())->method('getQueryValue')->will($this->returnValue([
             'SID' => 'sid'
         ]));
 
