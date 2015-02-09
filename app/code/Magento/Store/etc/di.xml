@@ -65,6 +65,7 @@
     <type name="Magento\Framework\App\Config\ScopePool">
         <arguments>
             <argument name="readerPool" xsi:type="object">Magento\Store\Model\Config\Reader\ReaderPool\Proxy</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Config\Reader\Website">
@@ -101,7 +102,6 @@
     </type>
     <preference for="Magento\Framework\App\Config\Scope\ReaderPoolInterface" type="Magento\Store\Model\Config\Reader\ReaderPool"/>
     <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
-    <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
     <type name="Magento\Framework\App\Action\Action">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
     </type>
@@ -184,11 +184,6 @@
         </arguments>
     </type>
     <type name="Magento\Framework\Session\SidResolver">
-        <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Session\Validator">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
@@ -479,11 +474,6 @@
             <argument name="uploader" xsi:type="object">Magento\Framework\View\Design\Theme\Image\Uploader\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Config\ScopePool">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\App\Config\Initial">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\App\Config\Initial\Reader\Proxy</argument>
@@ -505,6 +495,7 @@
                 <item name="flash" xsi:type="string">Shockwave Flash</item>
                 <item name="flash_mac" xsi:type="string"><![CDATA[Adobe Flash Player\s{1,}\w{1,10}]]></item>
             </argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Object\Copy\Config\Reader">
@@ -562,9 +553,6 @@
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\App\Action\Action">
-        <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
     </type>
     <virtualType name="Magento\Framework\Message\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
@@ -663,13 +651,6 @@
                 <item name="wiki" xsi:type="string"><![CDATA[/{{(block|widget).*?(class|type)=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?}}/sui]]></item>
                 <item name="xml" xsi:type="string"><![CDATA[/<block.*?class=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?>/sui]]></item>
                 <item name="serialized" xsi:type="string"><![CDATA[#(?P<string>s:\d+:"(?P<alias>[a-z]+[_a-z\d]*?/[a-z]+[_a-z\d]*?)")#sui]]></item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="core_setup" xsi:type="string">Magento\Framework\Module\DataSetup</item>
             </argument>
         </arguments>
     </type>
