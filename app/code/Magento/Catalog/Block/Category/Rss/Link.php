@@ -47,7 +47,7 @@ class Link extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'rss/catalog/category',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

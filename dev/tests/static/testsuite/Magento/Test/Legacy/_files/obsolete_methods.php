@@ -1625,9 +1625,9 @@ return [
         'getRatingSummary',
         'Magento\Catalog\Model\Product'
     ],
-    ['getCurrentStore', 'Magento\Framework\Store\StoreManagerInterface'],
-    ['getAnyStoreView', 'Magento\Framework\Store\StoreManagerInterface'],
-    ['throwStoreException', 'Magento\Framework\Store\StoreManagerInterface'],
+    ['getCurrentStore', 'Magento\Store\Model\StoreManagerInterface'],
+    ['getAnyStoreView', 'Magento\Store\Model\StoreManagerInterface'],
+    ['throwStoreException', 'Magento\Store\Model\StoreManagerInterface'],
     ['getCustomer', 'Magento\ProductAlert\Helper\Data'],
     ['addCustomerFilter', 'Magento\ProductAlert\Model\Resource\Stock\Collection'],
     ['addCustomerFilter', 'Magento\ProductAlert\Model\Resource\Price\Collection'],

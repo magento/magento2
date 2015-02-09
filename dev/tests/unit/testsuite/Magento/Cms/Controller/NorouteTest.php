@@ -54,7 +54,7 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             [
                 'Magento\Framework\App\Config\ScopeConfigInterface',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $scopeConfigMock,
             ],
             ['Magento\Cms\Helper\Page', $this->_cmsHelperMock],

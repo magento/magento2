@@ -17,7 +17,7 @@ use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\Calculation\CalculatorFactory;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Calculation\AbstractCalculator;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
 
 /**
@@ -61,7 +61,7 @@ class TaxCalculation implements TaxCalculationInterface
     protected $taxDetailsItemBuilder;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -99,7 +99,7 @@ class TaxCalculation implements TaxCalculationInterface
      * @param Config $config
      * @param TaxDetailsDataBuilder $taxDetailsBuilder
      * @param TaxDetailsItemDataBuilder $taxDetailsItemBuilder
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param TaxClassManagementInterface $taxClassManagement
      */
     public function __construct(
@@ -108,7 +108,7 @@ class TaxCalculation implements TaxCalculationInterface
         Config $config,
         TaxDetailsDataBuilder $taxDetailsBuilder,
         TaxDetailsItemDataBuilder $taxDetailsItemBuilder,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager,
         TaxClassManagementInterface $taxClassManagement
     ) {
         $this->calculationTool = $calculation;

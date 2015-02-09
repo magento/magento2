@@ -122,7 +122,7 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
         $session = $this->getMockBuilder('Magento\Checkout\Model\Session')
             ->disableOriginalConstructor()
             ->getMock();
-        $storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $formKeyValidator = $this->getMockBuilder('Magento\Core\App\Action\FormKeyValidator')

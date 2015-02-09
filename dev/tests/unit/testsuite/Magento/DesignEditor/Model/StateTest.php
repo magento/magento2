@@ -149,7 +149,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->equalTo(\Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID),
             $this->equalTo(self::THEME_ID),
-            $this->equalTo(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
         )->will(
             $this->returnSelf()
         );

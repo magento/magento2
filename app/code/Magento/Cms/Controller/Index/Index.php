@@ -21,7 +21,7 @@ class Index extends \Magento\Framework\App\Action\Action
             'Magento\Framework\App\Config\ScopeConfigInterface'
         )->getValue(
             \Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (!$this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId)) {
             $this->_forward('defaultIndex');
