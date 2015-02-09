@@ -639,7 +639,7 @@ class BundleSelections implements FixtureInterface
                 ],
             ],
 
-            'bundle_required' => [
+            'required_two_fixed_options' => [
                 'bundle_options' => [
                     [
                         'title' => 'Drop-down Option',
@@ -672,7 +672,7 @@ class BundleSelections implements FixtureInterface
                 'products' => [
                     [
                         'catalogProductSimple::simple',
-                        'catalogProductVirtual::for_bundle_required',
+                        'catalogProductVirtual::for_bundle_fixed',
                     ],
                 ],
             ],

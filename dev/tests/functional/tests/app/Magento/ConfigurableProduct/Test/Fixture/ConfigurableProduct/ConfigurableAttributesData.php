@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+namespace Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
@@ -675,7 +675,7 @@ class ConfigurableAttributesData implements FixtureInterface
             ],
         ],
 
-        'configurable_required' => [
+        'two_options_by_one_dollar' => [
             'attributes_data' => [
                 'attribute_key_0' => [
                     'options' => [

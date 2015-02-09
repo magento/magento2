@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\Handler\ConfigurableProductInjectable;
+namespace Magento\ConfigurableProduct\Test\Handler\ConfigurableProduct;
 
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable\ConfigurableAttributesData;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct\ConfigurableAttributesData;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\System\Config;
 
@@ -16,7 +16,7 @@ use Magento\Mtf\System\Config;
  * Class Curl
  * Create new configurable product via curl
  */
-class Curl extends ProductCurl implements ConfigurableProductInjectableInterface
+class Curl extends ProductCurl implements ConfigurableProductInterface
 {
     /**
      * Constructor

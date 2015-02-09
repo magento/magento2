@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+namespace Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 
 /**
  * Data for fill product form on frontend.
@@ -177,7 +177,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 ],
                 'qty' => 1,
             ],
-            'configurable_required' => [
+            'two_options_by_one_dollar' => [
                 'options' => [
                     'configurable_options' => [
                         [

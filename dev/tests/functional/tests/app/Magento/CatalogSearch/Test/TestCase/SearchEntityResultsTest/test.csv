@@ -2,7 +2,7 @@
 "MAGETWO-12420: Use Quick Search to Find the Product";"catalogProductSimple::default::sku";"assertProductCanBeOpenedFromSearchResult";"test_type:acceptance_test"
 "Search simple product";"catalogProductSimple::default::simple";"assertCatalogSearchResult";""
 "Search virtual product";"catalogProductVirtual::default::virtual";"assertCatalogSearchResult";""
-"Search configurable product";"configurableProductInjectable::default::configurable";"assertCatalogSearchResult";""
+"Search configurable product";"configurableProduct::default::configurable";"assertCatalogSearchResult";""
 "Search downloadable product";"downloadableProductInjectable::default::downloadable";"assertCatalogSearchResult";""
 "Search grouped product";"groupedProductInjectable::default::grouped";"assertCatalogSearchResult";""
 "Search bundle dynamic product";"bundleProduct::bundle_dynamic_product::bundle";"assertCatalogSearchResult";""

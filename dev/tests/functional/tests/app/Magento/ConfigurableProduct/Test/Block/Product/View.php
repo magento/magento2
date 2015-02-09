@@ -7,7 +7,7 @@
 namespace Magento\ConfigurableProduct\Test\Block\Product;
 
 use Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
@@ -38,7 +38,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
      */
     public function fillOptions(FixtureInterface $product)
     {
-        /** @var ConfigurableProductInjectable $product */
+        /** @var ConfigurableProduct $product */
         $attributesData = $product->getConfigurableAttributesData()['attributes_data'];
         $checkoutData = $product->getCheckoutData();
 

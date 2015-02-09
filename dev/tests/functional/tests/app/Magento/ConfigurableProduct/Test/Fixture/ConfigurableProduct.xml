@@ -7,15 +7,15 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
-         class="Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable">
+         class="Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct">
     <module>Magento_ConfigurableProduct</module>
     <type>eav</type>
     <entity_type>catalog_product</entity_type>
     <product_type>configurable</product_type>
     <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
     <identifier>sku</identifier>
-    <repository_class>Magento\ConfigurableProduct\Test\Repository\ConfigurableProductInjectable</repository_class>
-    <handler_interface>Magento\ConfigurableProduct\Test\Handler\ConfigurableProductInjectable\ConfigurableProductInjectableInterface</handler_interface>
+    <repository_class>Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct</repository_class>
+    <handler_interface>Magento\ConfigurableProduct\Test\Handler\ConfigurableProduct\ConfigurableProductInterface</handler_interface>
     <dataset name="default">
         <field name="name" xsi:type="string">Configurable Product %isolation%</field>
         <field name="sku" xsi:type="string">sku_configurable_product_%isolation%</field>
@@ -468,7 +468,7 @@
             <is_required>0</is_required>
             <input>variations</input>
             <group>variations</group>
-            <source>Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable\ConfigurableAttributesData</source>
+            <source>Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct\ConfigurableAttributesData</source>
             <default_value xsi:type="array">
                 <item name="preset" xsi:type="string">default</item>
             </default_value>
@@ -485,7 +485,7 @@
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
             <group>null</group>
-            <source>Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable\CheckoutData</source>
+            <source>Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct\CheckoutData</source>
         </field>
         <field name="cross_sell_products">
             <attribute_code>cross_sell_products</attribute_code>

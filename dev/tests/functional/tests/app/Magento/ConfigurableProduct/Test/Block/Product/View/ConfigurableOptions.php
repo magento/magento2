@@ -7,7 +7,7 @@
 namespace Magento\ConfigurableProduct\Test\Block\Product\View;
 
 use Magento\Catalog\Test\Block\Product\View\CustomOptions;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
@@ -36,7 +36,7 @@ class ConfigurableOptions extends CustomOptions
      */
     public function getOptions(FixtureInterface $product)
     {
-        /** @var ConfigurableProductInjectable $product */
+        /** @var ConfigurableProduct $product */
         $attributesData = $product->hasData('configurable_attributes_data')
             ? $product->getConfigurableAttributesData()['attributes_data']
             : [];

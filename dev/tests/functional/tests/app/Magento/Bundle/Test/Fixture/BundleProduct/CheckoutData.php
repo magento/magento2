@@ -304,7 +304,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     ],
                 ],
             ],
-            'bundle_required' => [
+            'required_two_fixed_options' => [
                 'options' => [
                     'bundle_options' => [
                         [

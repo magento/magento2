@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites>
-  <testsuite name="Magento\Catalog\Test\TestCase\Product\AddToCartCrossSellTest" file="C:\magento\m2dev2\magento2ce\dev\tests\functional\tests\app\Magento\Catalog\Test\TestCase\Product\AddToCartCrossSellTest.php" tests="0" errors="0" failures="0" time="0.000000" assertions="3">
-    <testcase name="test with data set #1" assertions="3" time="248.065799"/>
-  </testsuite>
-</testsuites>

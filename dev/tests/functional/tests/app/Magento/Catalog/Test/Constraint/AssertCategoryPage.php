@@ -9,7 +9,6 @@ namespace Magento\Catalog\Test\Constraint;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\Category\LandingPage;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Magento\Mtf\Client\Browser;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -43,7 +42,7 @@ class AssertCategoryPage extends AbstractConstraint
     /**
      * Browser instance
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 

@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View;
 
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\InjectableFixture;
@@ -64,7 +64,7 @@ class Items extends Block
     {
         $productName = $product->getName();
 
-        if ($product instanceof ConfigurableProductInjectable) {
+        if ($product instanceof ConfigurableProduct) {
             // Find the price for the specific configurable product that was purchased
             $attributesData = $product->getConfigurableAttributesData()['attributes_data'];
             $matrix = $product->getConfigurableAttributesData()['matrix'];
