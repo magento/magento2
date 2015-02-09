@@ -116,7 +116,7 @@ class Wishlist implements DataProviderInterface
     {
         return (bool)$this->scopeConfig->getValue(
             'rss/wishlist/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 

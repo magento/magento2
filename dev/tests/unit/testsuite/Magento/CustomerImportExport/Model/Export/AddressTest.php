@@ -115,7 +115,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $translator = $this->getMock('stdClass');
 
-        $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
+        $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
 
         /** @var $attributeCollection \Magento\Framework\Data\Collection|PHPUnit_Framework_TestCase */
         $attributeCollection = $this->getMock(

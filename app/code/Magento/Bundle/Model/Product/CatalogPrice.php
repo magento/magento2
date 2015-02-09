@@ -11,7 +11,7 @@ namespace Magento\Bundle\Model\Product;
 class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -26,12 +26,12 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
     protected $coreRegistry;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\CatalogPrice $commonPriceModel
      * @param \Magento\Framework\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\CatalogPrice $commonPriceModel,
         \Magento\Framework\Registry $coreRegistry
     ) {
@@ -80,6 +80,7 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCatalogRegularPrice(\Magento\Catalog\Model\Product $product)
     {

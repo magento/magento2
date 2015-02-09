@@ -29,7 +29,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     /** @var  CustomerRepositoryInterface */
     private $_customerRepository;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var \Magento\Framework\Store\StoreManagerInterface */
     private $_storeManager;
 
     /** @var \Magento\Framework\ObjectManagerInterface */

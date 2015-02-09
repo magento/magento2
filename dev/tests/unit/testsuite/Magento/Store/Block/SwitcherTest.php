@@ -19,12 +19,12 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Core\Helper\PostData|\PHPUnit_Framework_MockObject_MockObject */
     protected $corePostDataHelper;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
+        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')->getMock();
         $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->context->expects($this->any())->method('getStoreManager')->will($this->returnValue($this->storeManager));
         $this->corePostDataHelper = $this->getMock('Magento\Core\Helper\PostData', [], [], '', false);

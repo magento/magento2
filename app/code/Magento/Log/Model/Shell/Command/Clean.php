@@ -54,7 +54,7 @@ class Clean implements \Magento\Log\Model\Shell\CommandInterface
             $this->_mutableConfig->setValue(
                 \Magento\Log\Model\Log::XML_LOG_CLEAN_DAYS,
                 $this->_days,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         /** @var $model \Magento\Log\Model\Log */
