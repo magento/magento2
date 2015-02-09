@@ -136,7 +136,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Theme\Helper\Storage::getShortFilename
+     * cover \Magento\Theme\Helper\Storage::getShortFilename
      */
     public function testGetShortFilename()
     {

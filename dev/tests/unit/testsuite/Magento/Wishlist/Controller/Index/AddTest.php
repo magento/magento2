@@ -35,10 +35,50 @@ class AddTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->context = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
-        $this->wishlistProvider = $this->getMock('Magento\Wishlist\Controller\WishlistProvider', [], [], '', false);
-        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->productRepository = $this->getMock(' Magento\Catalog\Model\ProductRepository', [], [], '', false);
+        $this->context = $this->getMock(
+            'Magento\Framework\App\Action\Context',
+            [
+                'getRequest',
+                'getResponse',
+                'getObjectManager',
+                'getEventManager',
+                'getUrl',
+                'getActionFlag',
+                'getRedirect',
+                'getView',
+                'getMessageManager'
+            ],
+            [],
+            '',
+            false
+        );
+        $this->wishlistProvider = $this->getMock(
+            'Magento\Wishlist\Controller\WishlistProvider',
+            ['getWishlist'],
+            [],
+            '',
+            false
+        );
+        $this->customerSession = $this->getMock(
+            'Magento\Customer\Model\Session',
+            [
+                'getBeforeWishlistRequest',
+                'unsBeforeWishlistRequest',
+                'getBeforeWishlistUrl',
+                'setAddActionReferer',
+                'setBeforeWishlistUrl',
+            ],
+            [],
+            '',
+            false
+        );
+        $this->productRepository = $this->getMock(
+            '\Magento\Catalog\Model\ProductRepository',
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     /**
@@ -46,15 +86,69 @@ class AddTest extends \PHPUnit_Framework_TestCase
      */
     public function configureContext()
     {
-        $om = $this->getMock('Magento\Framework\App\ObjectManager', null, [], '', false);
-        $request = $this->getMock('Magento\Framework\App\Request\Http', null, [], '', false);
-        $response = $this->getMock('Magento\Framework\App\Response\Http', null, [], '', false);
-        $eventManager = $this->getMock('Magento\Framework\Event\Manager', null, [], '', false);
-        $url = $this->getMock('Magento\Framework\Url', null, [], '', false);
-        $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', null, [], '', false);
-        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', null, [], '', false);
-        $view = $this->getMock('Magento\Framework\App\View', null, [], '', false);
-        $messageManager = $this->getMock('Magento\Framework\Message\Manager', null, [], '', false);
+        $om = $this->getMock(
+            'Magento\Framework\App\ObjectManager',
+            null,
+            [],
+            '',
+            false
+        );
+        $request = $this->getMock(
+            'Magento\Framework\App\Request\Http',
+            null,
+            [],
+            '',
+            false
+        );
+        $response = $this->getMock(
+            'Magento\Framework\App\Response\Http',
+            null,
+            [],
+            '',
+            false
+        );
+        $eventManager = $this->getMock(
+            'Magento\Framework\Event\Manager',
+            null,
+            [],
+            '',
+            false
+        );
+        $url = $this->getMock(
+            'Magento\Framework\Url',
+            null,
+            [],
+            '',
+            false
+        );
+        $actionFlag = $this->getMock(
+            'Magento\Framework\App\ActionFlag',
+            null,
+            [],
+            '',
+            false
+        );
+        $redirect = $this->getMock(
+            '\Magento\Store\App\Response\Redirect',
+            null,
+            [],
+            '',
+            false
+        );
+        $view = $this->getMock(
+            'Magento\Framework\App\View',
+            null,
+            [],
+            '',
+            false
+        );
+        $messageManager = $this->getMock(
+            'Magento\Framework\Message\Manager',
+            null,
+            [],
+            '',
+            false
+        );
 
         $this->context
             ->expects($this->any())
@@ -97,29 +191,24 @@ class AddTest extends \PHPUnit_Framework_TestCase
     public function configureCustomerSession()
     {
         $this->customerSession
-            ->expects($this->at(0))
-            ->method('__call')
-            ->with('getBeforeWishlistRequest')
+            ->expects($this->exactly(2))
+            ->method('getBeforeWishlistRequest')
             ->will($this->returnValue(false));
         $this->customerSession
-            ->expects($this->at(1))
-            ->method('__call')
-            ->with('unsBeforeWishlistRequest')
+            ->expects($this->once())
+            ->method('unsBeforeWishlistRequest')
             ->will($this->returnValue(null));
         $this->customerSession
-            ->expects($this->at(2))
-            ->method('__call')
-            ->with('getBeforeWishlistUrl')
+            ->expects($this->once())
+            ->method('getBeforeWishlistUrl')
             ->will($this->returnValue(null));
         $this->customerSession
-            ->expects($this->at(3))
-            ->method('__call')
-            ->with('setAddActionReferer')
+            ->expects($this->once())
+            ->method('setAddActionReferer')
             ->will($this->returnValue(null));
         $this->customerSession
-            ->expects($this->at(4))
-            ->method('__call')
-            ->with('setBeforeWishlistUrl')
+            ->expects($this->once())
+            ->method('setBeforeWishlistUrl')
             ->will($this->returnValue(null));
     }
 
@@ -153,13 +242,14 @@ class AddTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithoutProductId()
     {
-        $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', [], [], '', false);
+        $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', ['addNewItem', 'save', 'getId'], [], '', false);
         $this->wishlistProvider
             ->expects($this->once())
             ->method('getWishlist')
             ->will($this->returnValue($wishlist));
 
-        $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+
+        $request = $this->getMock('Magento\Framework\App\Request\Http', ['getParams'], [], '', false);
         $request
             ->expects($this->once())
             ->method('getParams')
@@ -170,7 +260,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Framework\Event\Manager', null, [], '', false);
         $url = $this->getMock('Magento\Framework\Url', null, [], '', false);
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', null, [], '', false);
-        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', [], [], '', false);
+        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', ['redirect'], [], '', false);
         $redirect
             ->expects($this->once())
             ->method('redirect')
@@ -217,19 +307,24 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($messageManager));
 
         $this->customerSession
-            ->expects($this->at(0))
-            ->method('__call')
-            ->with('getBeforeWishlistRequest')
+            ->expects($this->exactly(2))
+            ->method('getBeforeWishlistRequest')
             ->will($this->returnValue(true));
         $this->customerSession
-            ->expects($this->at(1))
-            ->method('__call')
-            ->with('getBeforeWishlistRequest')
-            ->will($this->returnValue(true));
+            ->expects($this->once())
+            ->method('unsBeforeWishlistRequest')
+            ->will($this->returnValue(null));
         $this->customerSession
-            ->expects($this->at(2))
-            ->method('__call')
-            ->with('unsBeforeWishlistRequest')
+            ->expects($this->never())
+            ->method('getBeforeWishlistUrl')
+            ->will($this->returnValue(null));
+        $this->customerSession
+            ->expects($this->never())
+            ->method('setAddActionReferer')
+            ->will($this->returnValue(null));
+        $this->customerSession
+            ->expects($this->never())
+            ->method('setBeforeWishlistUrl')
             ->will($this->returnValue(null));
 
         $this->createController();
@@ -242,13 +337,14 @@ class AddTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithProductIdAndWithoutProduct()
     {
-        $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', [], [], '', false);
+        $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', ['addNewItem', 'save', 'getId'], [], '', false);
         $this->wishlistProvider
             ->expects($this->once())
             ->method('getWishlist')
             ->will($this->returnValue($wishlist));
 
-        $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+
+        $request = $this->getMock('Magento\Framework\App\Request\Http', ['getParams'], [], '', false);
         $request
             ->expects($this->once())
             ->method('getParams')
@@ -259,14 +355,14 @@ class AddTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Framework\Event\Manager', null, [], '', false );
         $url = $this->getMock('Magento\Framework\Url', null, [], '', false);
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', null, [], '', false);
-        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', [], [], '', false);
+        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', ['redirect'], [], '', false);
         $redirect
             ->expects($this->once())
             ->method('redirect')
             ->with($response, '*/', [])
             ->will($this->returnValue(null));
         $view = $this->getMock('Magento\Framework\App\View', null, [], '', false);
-        $messageManager = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
+        $messageManager = $this->getMock('Magento\Framework\Message\Manager', ['addError'], [], '', false);
         $messageManager
             ->expects($this->once())
             ->method('addError')
@@ -312,9 +408,24 @@ class AddTest extends \PHPUnit_Framework_TestCase
 
         $this->customerSession
             ->expects($this->exactly(1))
-            ->method('__call')
-            ->with('getBeforeWishlistRequest')
+            ->method('getBeforeWishlistRequest')
             ->will($this->returnValue(false));
+        $this->customerSession
+            ->expects($this->never())
+            ->method('unsBeforeWishlistRequest')
+            ->will($this->returnValue(null));
+        $this->customerSession
+            ->expects($this->never())
+            ->method('getBeforeWishlistUrl')
+            ->will($this->returnValue(null));
+        $this->customerSession
+            ->expects($this->never())
+            ->method('setAddActionReferer')
+            ->will($this->returnValue(null));
+        $this->customerSession
+            ->expects($this->never())
+            ->method('setBeforeWishlistUrl')
+            ->will($this->returnValue(null));
 
         $this->createController();
 
@@ -326,7 +437,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithProductAndCantAddProductToWishlist()
     {
-        $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', [], [], '', false);
+        $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', ['addNewItem', 'save', 'getId'], [], '', false);
         $wishlist
             ->expects($this->once())
             ->method('addNewItem')
@@ -342,7 +453,8 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->method('getWishlist')
             ->will($this->returnValue($wishlist));
 
-        $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+
+        $request = $this->getMock('Magento\Framework\App\Request\Http', ['getParams'], [], '', false);
         $request
             ->expects($this->once())
             ->method('getParams')
@@ -353,7 +465,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Framework\Event\Manager', null, [], '', false );
         $url = $this->getMock('Magento\Framework\Url', null, [], '', false);
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', null, [], '', false);
-        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', [], [], '', false);
+        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', ['redirect'], [], '', false);
         $redirect
             ->expects($this->once())
             ->method('redirect')
@@ -361,7 +473,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(null));
 
         $view = $this->getMock('Magento\Framework\App\View', null, [], '', false);
-        $messageManager = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
+        $messageManager = $this->getMock('Magento\Framework\Message\Manager', ['addError'], [], '', false);
         $messageManager
             ->expects($this->once())
             ->method('addError')
@@ -407,11 +519,32 @@ class AddTest extends \PHPUnit_Framework_TestCase
 
         $this->customerSession
             ->expects($this->exactly(1))
-            ->method('__call')
-            ->with('getBeforeWishlistRequest')
+            ->method('getBeforeWishlistRequest')
             ->will($this->returnValue(false));
+        $this->customerSession
+            ->expects($this->never())
+            ->method('unsBeforeWishlistRequest')
+            ->will($this->returnValue(null));
+        $this->customerSession
+            ->expects($this->never())
+            ->method('getBeforeWishlistUrl')
+            ->will($this->returnValue(null));
+        $this->customerSession
+            ->expects($this->never())
+            ->method('setAddActionReferer')
+            ->will($this->returnValue(null));
+        $this->customerSession
+            ->expects($this->never())
+            ->method('setBeforeWishlistUrl')
+            ->will($this->returnValue(null));
 
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $product = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            ['isVisibleInCatalog'],
+            [],
+            '',
+            false
+        );
         $product
             ->expects($this->once())
             ->method('isVisibleInCatalog')
@@ -433,7 +566,13 @@ class AddTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteProductAddedToWishlistAfterObjectManagerThrowException()
     {
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $product = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            ['isVisibleInCatalog', 'getName'],
+            [],
+            '',
+            false
+        );
         $product
             ->expects($this->once())
             ->method('isVisibleInCatalog')
@@ -452,7 +591,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
         $exception = new \Exception('Exception');
         $wishListItem  = new \stdClass();
 
-        $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', [], [], '', false);
+        $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', ['addNewItem', 'save', 'getId'], [], '', false);
         $wishlist
             ->expects($this->once())
             ->method('addNewItem')
@@ -474,19 +613,19 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($wishlist));
 
 
-        $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $request = $this->getMock('Magento\Framework\App\Request\Http', ['getParams'], [], '', false);
         $request
             ->expects($this->once())
             ->method('getParams')
             ->will($this->returnValue(['product' => 2]));
 
-        $wishlistHelper = $this->getMock('Magento\Wishlist\Helper\Data', [], [], '', false);
+        $wishlistHelper = $this->getMock('Magento\Wishlist\Helper\Data', ['calculate'], [], '', false);
         $wishlistHelper
             ->expects($this->once())
             ->method('calculate')
             ->will($this->returnSelf());
 
-        $escaper = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
+        $escaper = $this->getMock('Magento\Framework\Escaper', ['escapeHtml', 'escapeUrl'], [], '', false);
         $escaper
             ->expects($this->once())
             ->method('escapeHtml')
@@ -498,14 +637,20 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->with('http://test-url.com')
             ->will($this->returnValue('http://test-url.com'));
 
-        $logger = $this->getMock('Magento\Framework\Logger\Monolog', [], [], '', false);
+        $logger = $this->getMock(
+            'Magento\Framework\Logger\Monolog',
+            ['critical'],
+            [],
+            '',
+            false
+        );
         $logger
             ->expects($this->once())
             ->method('critical')
             ->with($exception)
             ->will($this->returnValue(true));
         
-        $om = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false );
+        $om = $this->getMock('Magento\Framework\App\ObjectManager', ['get'], [], '', false );
         $om
             ->expects($this->at(0))
             ->method('get')
@@ -528,7 +673,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($logger));
         
         $response = $this->getMock('Magento\Framework\App\Response\Http', null, [], '', false);
-        $eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false );
+        $eventManager = $this->getMock('Magento\Framework\Event\Manager', ['dispatch'], [], '', false );
         $eventManager
             ->expects($this->once())
             ->method('dispatch')
@@ -537,7 +682,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
 
         $url = $this->getMock('Magento\Framework\Url', null, [], '', false);
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', null, [], '', false);
-        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', [], [], '', false);
+        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', ['redirect'], [], '', false);
         $redirect
             ->expects($this->once())
             ->method('redirect')
@@ -546,7 +691,13 @@ class AddTest extends \PHPUnit_Framework_TestCase
 
         $view = $this->getMock('Magento\Framework\App\View', null, [], '', false);
 
-        $messageManager = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
+        $messageManager = $this->getMock(
+            'Magento\Framework\Message\Manager',
+            ['addError', 'addSuccess'],
+            [],
+            '',
+            false
+        );
         $messageManager
             ->expects($this->once())
             ->method('addError')
@@ -595,26 +746,26 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($messageManager));
 
         $this->customerSession
-            ->expects($this->at(0))
-            ->method('__call')
-            ->with('getBeforeWishlistRequest')
+            ->expects($this->exactly(1))
+            ->method('getBeforeWishlistRequest')
             ->will($this->returnValue(false));
         $this->customerSession
-            ->expects($this->at(1))
-            ->method('__call')
-            ->with('getBeforeWishlistUrl')
-            ->will($this->returnValue('http://test-url.com'));
-
-        $this->customerSession
-            ->expects($this->at(2))
-            ->method('__call')
-            ->with('setBeforeWishlistUrl', [null])
+            ->expects($this->never())
+            ->method('unsBeforeWishlistRequest')
             ->will($this->returnValue(null));
-
         $this->customerSession
-            ->expects($this->at(3))
-            ->method('__call')
-            ->with('setAddActionReferer', ['http://test-url.com'])
+            ->expects($this->once())
+            ->method('getBeforeWishlistUrl')
+            ->will($this->returnValue('http://test-url.com'));
+        $this->customerSession
+            ->expects($this->once())
+            ->method('setAddActionReferer')
+            ->with('http://test-url.com')
+            ->will($this->returnValue(null));
+        $this->customerSession
+            ->expects($this->once())
+            ->method('setBeforeWishlistUrl')
+            ->with(null)
             ->will($this->returnValue(null));
 
         $this->createController();

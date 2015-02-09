@@ -8,7 +8,7 @@ namespace Magento\Theme\Block\Html\Header;
 class LogoTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * covers \Magento\Theme\Block\Html\Header\Logo::getLogoSrc
+     * cover \Magento\Theme\Block\Html\Header\Logo::getLogoSrc
      */
     public function testGetLogoSrc()
     {
