@@ -168,7 +168,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->objectMock
             ->expects($this->any())
             ->method('setPath')
-            ->with('cms/index/noCookies')
+            ->with('cookie/index/noCookies')
             ->willReturnSelf();
         $this->objectMock
             ->expects($this->any())
