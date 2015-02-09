@@ -280,6 +280,9 @@ class Block implements Layout\ReaderInterface
     {
         $arguments = $this->getArguments($blockElement);
         foreach ($arguments as $argumentName => $argumentData) {
+            if (isset($argumentData['updater'])) {
+                continue;
+            }
             $result = $this->argumentInterpreter->evaluate($argumentData);
             if (is_array($result)) {
                 $data['arguments'][$argumentName] = isset($data['arguments'][$argumentName])
