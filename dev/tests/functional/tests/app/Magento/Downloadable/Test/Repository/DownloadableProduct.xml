@@ -193,7 +193,7 @@
             </field>
         </dataset>
 
-        <dataset name="one_dollar_product_with_one_link">
+        <dataset name="one_dollar_product_with_no_separated_link">
             <field name="name" xsi:type="string">Downloadable product %isolation%</field>
             <field name="sku" xsi:type="string">downloadable_product_%isolation%</field>
             <field name="url_key" xsi:type="string">downloadable-product-%isolation%</field>
@@ -218,7 +218,7 @@
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="checkout_data" xsi:type="array">
-                <item name="preset" xsi:type="string">one_dollar_product_with_one_link</item>
+                <item name="preset" xsi:type="string">one_dollar_product_with_no_separated_link</item>
             </field>
         </dataset>
     </storage>

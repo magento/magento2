@@ -98,7 +98,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 ]
             ],
 
-            'one_dollar_product_with_one_link' => [
+            'one_dollar_product_with_separated_link' => [
                 'options' => [
                     'links' => [
                         [
@@ -110,6 +110,13 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 'cartItem' => [
                     'price' => 3,
                     'subtotal' => 3,
+                ],
+            ],
+
+            'one_dollar_product_with_no_separated_link' => [
+                'cartItem' => [
+                    'price' => 1,
+                    'subtotal' => 1,
                 ],
             ],
         ];
