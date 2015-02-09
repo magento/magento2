@@ -819,4 +819,18 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         }
         return $abstraction['design_abstraction'] === self::DESIGN_ABSTRACTION_PAGE_LAYOUT;
     }
+
+    /**
+     * @return \Magento\Framework\View\Design\ThemeInterface
+     */
+    public function getTheme() {
+        return $this->theme;
+    }
+
+    /**
+     * @return \Magento\Framework\App\ScopeInterface|\Magento\Store\Model\Store
+     */
+    public function getStore() {
+        return $this->store;
+    }
 }

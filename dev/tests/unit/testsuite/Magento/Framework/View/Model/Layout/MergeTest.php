@@ -10,7 +10,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     /**
      * Fixture XML instruction(s) to be used in tests
      */
-    const FIXTURE_LAYOUT_XML = '<block class="Magento\Framework\View\Element\Template" template="fixture.phtml"/>';
+    const FIXTURE_LAYOUT_XML = '<block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>';
 
     /**
      * @var \Magento\Framework\View\Model\Layout\Merge
@@ -274,7 +274,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     public function testLoadDbApp()
     {
         $this->_resource->expects(
-            $this->once()
+            $this->any()
         )->method(
             'fetchUpdatesByHandle'
         )->with(
@@ -286,10 +286,10 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEmpty($this->_model->getHandles());
         $this->assertEmpty($this->_model->asString());
-        $handles = ['fixture_handle'];
+        $handles = ['fixture_handle_one'];
         $this->_model->load($handles);
         $this->assertEquals($handles, $this->_model->getHandles());
-        $this->assertXmlStringEqualsXmlString(self::FIXTURE_LAYOUT_XML, $this->_model->asString());
+        $this->assertXmlStringEqualsXmlString('<body>' . self::FIXTURE_LAYOUT_XML . '</body>', $this->_model->asString());
     }
 
     public function testGetFileLayoutUpdatesXml()

@@ -29,17 +29,11 @@ class Plugin
 
     /**
      * @param \Magento\Widget\Model\Resource\Layout\Update $update
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Widget\Model\Resource\Layout\Update $update,
-        \Magento\Framework\View\Design\ThemeInterface $theme,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Widget\Model\Resource\Layout\Update $update
     ) {
         $this->update = $update;
-        $this->theme = $theme;
-        $this->store = $storeManager->getStore();
     }
 
     /**
@@ -56,6 +50,6 @@ class Plugin
         \Closure $proceed,
         $handle
     ) {
-        return $this->update->fetchUpdatesByHandle($handle, $this->theme, $this->store);
+        return $this->update->fetchUpdatesByHandle($handle, $subject->getTheme(), $subject->getStore());
     }
 } 
