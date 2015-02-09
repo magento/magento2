@@ -28,13 +28,13 @@ class FreeTest extends \PHPUnit_Framework_TestCase
 
         $registry = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
         $metadataService = $this->getMock('\Magento\Framework\Api\MetadataServiceInterface');
-        $customAttributeBuilder = $this->getMock('\Magento\Framework\Api\AttributeDataBuilder', [], [], '', false);
+        $customAttributeFactory = $this->getMock('\Magento\Framework\Api\AttributeValueFactory', [], [], '', false);
 
         $this->methodFree = new \Magento\Payment\Model\Method\Free(
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $paymentData,
             $this->scopeConfig,
             $this->currencyPrice
