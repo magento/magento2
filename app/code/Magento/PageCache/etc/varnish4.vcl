@@ -39,7 +39,19 @@ sub vcl_recv {
     if (req.method != "GET" && req.method != "HEAD") {
         return (pass);
     }
- 
+
+    # normalize url in case of leading HTTP scheme and domain
+    set req.url = regsub(req.url, "^http[s]?://[^/]+", "");
+
+    # collect all cookies
+    std.collect(req.http.Cookie);
+
+    # static files are always cacheable. remove SSL flag and cookie
+    if (req.url ~ "^/(pub/)?(media|static)/.*\.(png|jpg|jpeg|gif|css|js|swf|ico|woff|svg)$") {
+        unset req.http.Https;
+        unset req.http.Cookie;
+    }
+
     return (hash);
 }
 
