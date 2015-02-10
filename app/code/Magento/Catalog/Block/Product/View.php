@@ -148,6 +148,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
         if ($this->_productHelper->canUseCanonicalTag()) {
             $this->pageConfig->addRemotePageAsset(
                 $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]),
+                'canonical',
                 ['attributes' => ['rel' => 'canonical']]
             );
         }

@@ -76,6 +76,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
             if ($this->_categoryHelper->canUseCanonicalTag()) {
                 $this->pageConfig->addRemotePageAsset(
                     $category->getUrl(),
+                    'canonical',
                     ['attributes' => ['rel' => 'canonical']]
                 );
             }
