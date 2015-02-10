@@ -25,9 +25,27 @@ interface ExtensibleDataInterface
     public function getCustomAttribute($attributeCode);
 
     /**
+     * Set an attribute value for a given attribute code
+     *
+     * @param string $attributeCode
+     * @param mixed $attributeValue
+     * @return $this
+     */
+    public function setCustomAttribute($attributeCode, $attributeValue);
+
+    /**
      * Retrieve custom attributes values.
      *
      * @return \Magento\Framework\Api\AttributeInterface[]|null
      */
     public function getCustomAttributes();
+
+    /**
+     * Set array of custom attributes
+     *
+     * @param \Magento\Framework\Api\AttributeInterface[] $attributes
+     * @return $this
+     * @throws \LogicException
+     */
+    public function setCustomAttributes(array $attributes);
 }

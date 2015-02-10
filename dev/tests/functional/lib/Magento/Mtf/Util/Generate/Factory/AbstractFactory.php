@@ -171,7 +171,11 @@ abstract class AbstractFactory
                     );
                     foreach ($dirIterator as $info) {
                         /** @var $info \SplFileInfo */
-                        $this->_processItem($items, $rewrites, $info->getRealPath(), $location, $path);
+                        $realPath = $info->getPathname();
+                        if (is_link($realPath)) {
+                            $realPath = readlink($realPath);
+                        }
+                        $this->_processItem($items, $rewrites, $realPath, $location, $path);
                     }
                 }
             }

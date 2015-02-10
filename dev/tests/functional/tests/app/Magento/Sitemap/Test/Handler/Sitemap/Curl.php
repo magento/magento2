@@ -10,7 +10,7 @@ use Magento\Backend\Test\Handler\Extractor;
 use Magento\Sitemap\Test\Handler\Sitemap;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\System\Config;
+use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -39,7 +39,7 @@ class Curl extends AbstractCurl implements SitemapInterface
     {
         $url = $_ENV['app_backend_url'] . 'admin/sitemap/save/generate/';
         $data = array_merge($this->defaultAttributeValues, $fixture->getData());
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
