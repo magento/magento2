@@ -6,7 +6,7 @@
 namespace Magento\Framework\Setup;
 
 /**
- * DB schema resource interface for a module
+ * DB resource interface
  */
 interface ResourceInterface
 {
