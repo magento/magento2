@@ -8,10 +8,11 @@ namespace Magento\Setup\Module;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\Resource;
 use Magento\Framework\Module\Updater\SetupInterface;
+use Magento\Framework\Setup\ModuleResourceInterface;
 use Magento\Setup\Model\LoggerInterface;
 use Magento\Setup\Module\Setup\FileResolver as SetupFileResolver;
 
-class SetupModule extends Setup
+class SetupModule extends Setup implements ModuleResourceInterface
 {
     const TYPE_DB_INSTALL = 'install';
 
@@ -23,28 +24,28 @@ class SetupModule extends Setup
      * Setup resource name
      * @var string
      */
-    protected $resourceName;
+    private $resourceName;
 
     /**
      * Setup module configuration object
      *
      * @var array
      */
-    protected $moduleConfig;
+    private $moduleConfig;
 
     /**
      * Setup File Resolver
      *
      * @var SetupFileResolver
      */
-    protected $fileResolver;
+    private $fileResolver;
 
     /**
      * Resource
      *
      * @var Resource
      */
-    protected $resource;
+    private $resource;
 
     /**
      * @var LoggerInterface
@@ -104,7 +105,7 @@ class SetupModule extends Setup
      * @param string $toVersion
      * @return array
      */
-    protected function getAvailableDbFiles($actionType, $fromVersion, $toVersion)
+    private function getAvailableDbFiles($actionType, $fromVersion, $toVersion)
     {
         $moduleName = (string)$this->moduleConfig['name'];
         $dbFiles = [];
@@ -166,7 +167,7 @@ class SetupModule extends Setup
      * @return false|string
      * @throws \Exception
      */
-    protected function applySchemaUpdates($actionType, $fromVersion, $toVersion)
+    private function applySchemaUpdates($actionType, $fromVersion, $toVersion)
     {
         $files = $this->getAvailableDbFiles($actionType, $fromVersion, $toVersion);
 
@@ -211,7 +212,7 @@ class SetupModule extends Setup
      * @param array $arrFiles
      * @return array
      */
-    protected function prepareUpgradeFileCollection($actionType, $fromVersion, $toVersion, $arrFiles)
+    private function prepareUpgradeFileCollection($actionType, $fromVersion, $toVersion, $arrFiles)
     {
         $arrRes = [];
         switch ($actionType) {

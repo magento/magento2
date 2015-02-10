@@ -5,7 +5,7 @@
  */
 
 $installer = $this;
-/** @var $installer \Magento\Setup\Module\SetupModule */
+/** @var $installer \Magento\Framework\Setup\ModuleResourceInterface */
 $installer->startSetup();
 $connection = $installer->getConnection();
 

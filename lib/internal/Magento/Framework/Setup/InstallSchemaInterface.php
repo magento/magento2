@@ -15,8 +15,8 @@ interface InstallSchemaInterface
     /**
      * Installs DB schema for a module
      *
-     * @param SetupModule $setup
+     * @param ModuleResourceInterface $setup
      * @param ModuleContextInterface $context
      */
-    public function install(SetupModule $setup, ModuleContextInterface $context);
+    public function install(ModuleResourceInterface $setup, ModuleContextInterface $context);
 }

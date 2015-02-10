@@ -1,12 +1,13 @@
 <?php
 /**
- * Module setup. Used to install/upgrade module schema.
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Updater;
 
+/**
+ * Module setup. Used to install/upgrade module DB data
+ */
 interface SetupInterface
 {
     const DEFAULT_SETUP_CONNECTION = 'core_setup';

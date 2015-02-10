@@ -15,21 +15,21 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
      * Setup resource name
      * @var string
      */
-    protected $_resourceName;
+    private $_resourceName;
 
     /**
      * Setup module configuration object
      *
      * @var array
      */
-    protected $_moduleConfig;
+    private $_moduleConfig;
 
     /**
      * Call afterApplyAllUpdates method flag
      *
      * @var boolean
      */
-    protected $_callAfterApplyAllUpdates = false;
+    private $_callAfterApplyAllUpdates = false;
 
     /**
      * Tables data cache array
@@ -43,39 +43,39 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
      *
      * @var \Magento\Framework\Module\Dir\Reader
      */
-    protected $_modulesReader;
+    private $_modulesReader;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager;
+    private $_eventManager;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $_logger;
+    private $_logger;
 
     /**
      * @var \Magento\Framework\Module\ResourceInterface
      */
-    protected $_resource;
+    private $_resource;
 
     /**
      * @var \Magento\Framework\Module\Setup\MigrationFactory
      */
-    protected $_migrationFactory;
+    private $_migrationFactory;
 
     /**
      * Filesystem instance
      *
      * @var \Magento\Framework\Filesystem
      */
-    protected $filesystem;
+    private $filesystem;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
-    protected $modulesDir;
+    private $modulesDir;
 
     /**
      * @param \Magento\Framework\Module\Setup\Context $context
@@ -127,7 +127,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
      * @param string $newVersion
      * @return $this
      */
-    protected function _installData($newVersion)
+    private function _installData($newVersion)
     {
         $oldVersion = $this->_modifyResourceDb(self::TYPE_DATA_INSTALL, '', $newVersion);
         $this->_modifyResourceDb(self::TYPE_DATA_UPGRADE, $oldVersion, $newVersion);
@@ -143,7 +143,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
      * @param string $newVersion
      * @return $this
      */
-    protected function _upgradeData($oldVersion, $newVersion)
+    private function _upgradeData($oldVersion, $newVersion)
     {
         $this->_modifyResourceDb('data-upgrade', $oldVersion, $newVersion);
         $this->_resource->setDataVersion($this->_resourceName, $newVersion);
@@ -159,7 +159,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
      * @param string $toVersion
      * @return array
      */
-    protected function _getAvailableDataFiles($actionType, $fromVersion, $toVersion)
+    private function _getAvailableDataFiles($actionType, $fromVersion, $toVersion)
     {
         $modName = (string)$this->_moduleConfig['name'];
         $files = [];
@@ -191,7 +191,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
      * @return false|string
      * @throws \Magento\Framework\Exception
      */
-    protected function _modifyResourceDb($actionType, $fromVersion, $toVersion)
+    private function _modifyResourceDb($actionType, $fromVersion, $toVersion)
     {
         $files = $this->_getAvailableDataFiles($actionType, $fromVersion, $toVersion);
         if (empty($files) || !$this->getConnection()) {
@@ -250,7 +250,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
      * @param string $fileName
      * @return mixed
      */
-    protected function _includeFile($fileName)
+    private function _includeFile($fileName)
     {
         return include $fileName;
     }
@@ -265,7 +265,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _getModifySqlFiles($actionType, $fromVersion, $toVersion, $arrFiles)
+    private function _getModifySqlFiles($actionType, $fromVersion, $toVersion, $arrFiles)
     {
         $arrRes = [];
         switch ($actionType) {

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Setup\Module\SetupModule */
+/** @var $this \Magento\Framework\Setup\ModuleResourceInterface */
 $this->startSetup();
 /**
  * Create table 'weee_tax'

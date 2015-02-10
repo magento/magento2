@@ -10,7 +10,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 
-/** @var $installer \Magento\Setup\Module\SetupModule */
+/** @var $installer \Magento\Framework\Setup\ModuleResourceInterface */
 $installer = $this;
 
 $installer->startSetup();

@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Module;
 
+use Magento\Framework\Setup\ModuleResourceInterface;
 use Magento\Setup\Model\LoggerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -50,7 +51,7 @@ class SetupFactory
      *
      * @param LoggerInterface $log
      * @param string $moduleName
-     * @return SetupModule
+     * @return ModuleResourceInterface
      */
     public function createSetupModule(LoggerInterface $log, $moduleName)
     {

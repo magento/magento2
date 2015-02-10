@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/* @var $installer \Magento\Setup\Module\SetupModule */
+/* @var $installer \Magento\Framework\Setup\ModuleResourceInterface */
 $installer = $this;
 
 /**
