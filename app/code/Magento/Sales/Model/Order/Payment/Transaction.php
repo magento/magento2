@@ -8,7 +8,7 @@
 
 namespace Magento\Sales\Model\Order\Payment;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Sales\Api\Data\TransactionInterface;
 
@@ -158,7 +158,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\Order\PaymentFactory $paymentFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
@@ -172,7 +172,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\PaymentFactory $paymentFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
@@ -189,7 +189,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data

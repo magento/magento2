@@ -8,7 +8,7 @@
 
 ?>
 <?php /** @var $block \Magento\GoogleAnalytics\Block\Ga */ ?>
-<?php if (!$this->helper('Magento\Store\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
+<?php if (!$this->helper('Magento\Cookie\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
 <?php $accountId = $block->getConfig(\Magento\GoogleAnalytics\Helper\Data::XML_PATH_ACCOUNT) ?>
 <!-- BEGIN GOOGLE ANALYTICS CODE -->
 <script>

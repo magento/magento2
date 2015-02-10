@@ -8,7 +8,7 @@ namespace Magento\Core\Test\Handler\ConfigData;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\System\Config;
+use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -78,7 +78,7 @@ class Curl extends AbstractCurl implements ConfigDataInterface
     protected function applyConfigSettings(array $data, $section)
     {
         $url = $this->getUrl($section);
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
@@ -97,6 +97,7 @@ class Curl extends AbstractCurl implements ConfigDataInterface
      */
     protected function getUrl($section)
     {
-        return $_ENV['app_backend_url'] . 'admin/system_config/save/section/' . $section;
+        return $_ENV['app_backend_url'] .
+        'admin/system_config/save/section/' . $section;
     }
 }

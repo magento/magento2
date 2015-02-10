@@ -1,3 +1,0 @@
-"integration/data/name";"integration/data/email";"integration/data/endpoint";"integration/data/identity_link_url";"integration/data/resource_access";"integration/data/resources";"constraint"
-"Integration_%isolation%";"-";"https://endpoint.com";"https://testlink.com";"-";"-";"assertIntegrationSuccessSaveMessage, assertIntegrationForm, assertIntegrationInGrid"
-"Integration_%isolation%";"-";"-";"-";"Custom";"Sales";"assertIntegrationSuccessSaveMessage, assertIntegrationForm, assertIntegrationInGrid"
