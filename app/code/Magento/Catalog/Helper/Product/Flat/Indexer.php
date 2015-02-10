@@ -466,7 +466,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve loaded attribute by code
      *
      * @param string $attributeCode
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Eav\Model\Entity\Attribute
      */
     public function getAttribute($attributeCode)
@@ -476,7 +476,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
             $attribute = $this->_attributeFactory->create();
             $attribute->loadByCode($this->getEntityTypeId(), $attributeCode);
             if (!$attribute->getId()) {
-                throw new \Magento\Framework\Model\Exception(__('Invalid attribute %1', $attributeCode));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid attribute %1', $attributeCode));
             }
             $entity = $this->_eavConfig->getEntityType($this->getEntityType())->getEntity();
             $attribute->setEntity($entity);

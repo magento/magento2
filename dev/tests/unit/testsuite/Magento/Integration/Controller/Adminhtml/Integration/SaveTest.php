@@ -75,7 +75,7 @@ class SaveTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
             )->with(
                 self::INTEGRATION_ID
             )->will(
-                $this->throwException(new \Magento\Framework\Model\Exception($exceptionMessage))
+                $this->throwException(new \Magento\Framework\Exception\LocalizedException($exceptionMessage))
             );
         // Verify error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));

@@ -154,7 +154,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      *
      * @param  Category $category
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validateCategory(Category $category)
     {
@@ -170,9 +170,9 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             foreach ($validate as $code => $error) {
                 if ($error === true) {
                     $attribute = $this->categoryResource->getAttribute($code)->getFrontend()->getLabel();
-                    throw new \Magento\Framework\Model\Exception(__('Attribute "%1" is required.', $attribute));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Attribute "%1" is required.', $attribute));
                 } else {
-                    throw new \Magento\Framework\Model\Exception($error);
+                    throw new \Magento\Framework\Exception\LocalizedException($error);
                 }
             }
         }

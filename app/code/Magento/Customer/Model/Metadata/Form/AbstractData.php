@@ -114,12 +114,12 @@ abstract class AbstractData
      * Return Attribute instance
      *
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttribute()
     {
         if (!$this->_attribute) {
-            throw new \Magento\Framework\Model\Exception(__('Attribute object is undefined'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Attribute object is undefined'));
         }
         return $this->_attribute;
     }
@@ -504,7 +504,7 @@ abstract class AbstractData
      *
      * @param array|string|null $value
      * @return array|bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     abstract public function validateValue($value);
 

@@ -590,7 +590,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param \Magento\Quote\Model\Quote\Item\Option|\Magento\Framework\Object $option
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addOption($option)
     {
@@ -610,7 +610,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         } elseif ($option instanceof \Magento\Quote\Model\Quote\Item\Option) {
             $option->setItem($this);
         } else {
-            throw new \Magento\Framework\Model\Exception(__('We found an invalid item option format.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We found an invalid item option format.'));
         }
 
         $exOption = $this->getOptionByCode($option->getCode());
@@ -671,14 +671,14 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param \Magento\Quote\Model\Quote\Item\Option $option
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _addOptionCode($option)
     {
         if (!isset($this->_optionsByCode[$option->getCode()])) {
             $this->_optionsByCode[$option->getCode()] = $option;
         } else {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('An item option with code %1 already exists.', $option->getCode())
             );
         }

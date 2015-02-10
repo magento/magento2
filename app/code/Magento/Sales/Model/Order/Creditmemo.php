@@ -9,7 +9,7 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\AbstractModel;
@@ -456,7 +456,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
 
     /**
      * @return $this
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function refund()
     {
@@ -471,7 +471,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         if ($baseOrderRefund > $this->priceCurrency->round($this->getOrder()->getBaseTotalPaid())) {
             $baseAvailableRefund = $this->getOrder()->getBaseTotalPaid() - $this->getOrder()->getBaseTotalRefunded();
 
-            throw new Exception(
+            throw new LocalizedException(
                 __(
                     'The most money available to refund is %1.',
                     $this->getOrder()->formatBasePrice($baseAvailableRefund)
@@ -573,12 +573,12 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * Apply to order, order items etc.
      *
      * @return $this
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function register()
     {
         if ($this->getId()) {
-            throw new Exception(__('We cannot register an existing credit memo.'));
+            throw new LocalizedException(__('We cannot register an existing credit memo.'));
         }
 
         foreach ($this->getAllItems() as $item) {

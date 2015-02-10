@@ -51,7 +51,7 @@ class Job extends \Magento\Framework\Object
         try {
             $this->ruleProcessor->markIndexerAsInvalid();
             $this->setSuccess(__('Updated rules applied.'));
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->setError($e->getMessage());
         }
         return $this;

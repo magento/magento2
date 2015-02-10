@@ -229,7 +229,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      *
      * @param string $entityType
      * @return array
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getAssociatedEntityInfo($entityType)
     {
@@ -237,7 +237,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
             return $this->_associatedEntitiesMap[$entityType];
         }
 
-        throw new \Magento\Framework\Model\Exception(
+        throw new \Magento\Framework\Exception\LocalizedException(
             __('There is no information about associated entity type "%1".', $entityType),
             0
         );

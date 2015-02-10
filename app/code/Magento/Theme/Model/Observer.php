@@ -7,7 +7,6 @@
 namespace Magento\Theme\Model;
 
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Framework\Model\Exception;
 use Magento\Theme\Model\Theme;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -102,7 +101,7 @@ class Observer
      *
      * @param EventObserver $observer
      * @return void
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function cleanThemeRelatedContent(EventObserver $observer)
     {
@@ -112,7 +111,7 @@ class Observer
         }
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         if ($this->themeConfig->isThemeAssignedToStore($theme)) {
-            throw new Exception(__('Theme isn\'t deletable.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Theme isn\'t deletable.'));
         }
         $this->themeImageFactory->create(['theme' => $theme])->removePreviewImage();
         $this->updateCollection->addThemeFilter($theme->getId())->delete();
@@ -146,7 +145,7 @@ class Observer
         $pathPattern = $observer->getEvent()->getPathPattern();
         try {
             $this->registration->register($pathPattern);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->logger->critical($e);
         }
         return $this;

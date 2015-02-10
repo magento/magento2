@@ -64,7 +64,7 @@ class Result extends \Magento\Framework\App\Action\Action
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQuery());
             $this->_view->loadLayout();
             $this->_view->renderLayout();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $defaultUrl = $this->_urlFactory->create()
                 ->addQueryParams($this->getRequest()->getQuery())

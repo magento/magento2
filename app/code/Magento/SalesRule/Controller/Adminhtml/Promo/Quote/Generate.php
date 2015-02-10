@@ -47,7 +47,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                     $this->_view->getLayout()->initMessages();
                     $result['messages'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
                 }
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $result['error'] = $e->getMessage();
             } catch (\Exception $e) {
                 $result['error'] = __(

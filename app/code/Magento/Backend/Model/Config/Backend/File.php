@@ -75,7 +75,7 @@ class File extends \Magento\Framework\App\Config\Value
      * Save uploaded file before saving config value
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
@@ -98,7 +98,7 @@ class File extends \Magento\Framework\App\Config\Value
                 $uploader->addValidateCallback('size', $this, 'validateMaxSize');
                 $result = $uploader->save($uploadDir);
             } catch (\Exception $e) {
-                throw new \Magento\Framework\Model\Exception($e->getMessage());
+                throw new \Magento\Framework\Exception\LocalizedException($e->getMessage());
             }
 
             $filename = $result['file'];
@@ -124,7 +124,7 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @param  string $filePath Path to temporary uploaded file
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateMaxSize($filePath)
     {
@@ -133,7 +133,7 @@ class File extends \Magento\Framework\App\Config\Value
             $directory->getRelativePath($filePath)
         )['size'] > $this->_maxFileSize * 1024
         ) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('The file you\'re uploading exceeds the server size limit of %1 kilobytes.', $this->_maxFileSize)
             );
         }
@@ -155,7 +155,7 @@ class File extends \Magento\Framework\App\Config\Value
      * Return path to directory for upload file
      *
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getUploadDir()
     {
@@ -163,7 +163,7 @@ class File extends \Magento\Framework\App\Config\Value
         /* @var $fieldConfig \Magento\Framework\Simplexml\Element */
 
         if (!array_key_exists('upload_dir', $fieldConfig)) {
-            throw new \Magento\Framework\Model\Exception(__('The base directory to upload file is not specified.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The base directory to upload file is not specified.'));
         }
 
         if (is_array($fieldConfig['upload_dir'])) {

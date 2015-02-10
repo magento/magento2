@@ -405,7 +405,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param Product\CategoryProcessor $categoryProcessor
      * @param Product\Validator $validator
      * @param array $data
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -582,7 +582,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Initialize product type models.
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _initTypeModels()
     {
@@ -591,12 +591,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $params = [$this, $productTypeName];
             if (!($model = $this->_productTypeFactory->create($productTypeConfig['model'], ['params' => $params]))
             ) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     sprintf("Entity type model '%s' is not found", $productTypeConfig['model'])
                 );
             }
             if (!$model instanceof \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'Entity type model must be an instance of ' .
                         'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType'
@@ -1195,7 +1195,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Returns an object for upload a media files
      *
      * @return \Magento\CatalogImportExport\Model\Import\Uploader
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getUploader()
     {
@@ -1206,14 +1206,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             $tmpPath = $this->_mediaDirectory->getAbsolutePath('import');
             if (!$this->_fileUploader->setTmpDir($tmpPath)) {
-                throw new \Magento\Framework\Model\Exception(sprintf("File directory '%s' is not readable.", $tmpPath));
+                throw new \Magento\Framework\Exception\LocalizedException(sprintf("File directory '%s' is not readable.", $tmpPath));
             }
             $destinationDir = "catalog/product";
             $destinationPath = $this->_mediaDirectory->getAbsolutePath($destinationDir);
 
             $this->_mediaDirectory->create($destinationDir);
             if (!$this->_fileUploader->setDestDir($destinationPath)) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     sprintf("File directory '%s' is not writable.", $destinationPath)
                 );
             }

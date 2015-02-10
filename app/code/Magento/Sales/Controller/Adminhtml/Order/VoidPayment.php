@@ -21,7 +21,7 @@ class VoidPayment extends \Magento\Sales\Controller\Adminhtml\Order
                 $order->getPayment()->void(new \Magento\Framework\Object()); // workaround for backwards compatibility
                 $order->save();
                 $this->messageManager->addSuccess(__('The payment has been voided.'));
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('We couldn\'t void the payment.'));

@@ -108,12 +108,12 @@ class Uploader extends \Magento\Core\Model\File\Uploader
      *
      * @param string $filePath
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _setUploadFile($filePath)
     {
         if (!$this->_directory->isReadable($filePath)) {
-            throw new \Magento\Framework\Model\Exception("File '{$filePath}' was not found or has read restriction.");
+            throw new \Magento\Framework\Exception\LocalizedException("File '{$filePath}' was not found or has read restriction.");
         }
         $this->_file = $this->_readFileInfo($filePath);
 

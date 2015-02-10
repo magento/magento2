@@ -789,7 +789,7 @@ class AccountManagement implements AccountManagementInterface
      * @param string $storeId
      * @param string $sendemailStoreId
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function sendNewAccountEmail(
         $customer,
@@ -801,7 +801,7 @@ class AccountManagement implements AccountManagementInterface
         $types = $this->getTemplateTypes();
 
         if (!isset($types[$type])) {
-            throw new \Magento\Framework\Model\Exception(__('Wrong transactional account email type'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Wrong transactional account email type'));
         }
 
         if (!$storeId) {

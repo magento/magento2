@@ -117,13 +117,13 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * @param string $totalCode
      * @param array $totalConfig
      * @return \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _initModelInstance($class, $totalCode, $totalConfig)
     {
         $model = $this->_totalFactory->create($class);
         if (!$model instanceof \Magento\Quote\Model\Quote\Address\Total\AbstractTotal) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'The address total model should be extended from \Magento\Quote\Model\Quote\Address\Total\AbstractTotal.'
                 )

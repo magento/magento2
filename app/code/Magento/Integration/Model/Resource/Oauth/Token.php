@@ -41,13 +41,13 @@ class Token extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Clean up old authorized tokens for specified consumer-user pairs
      *
      * @param \Magento\Integration\Model\Oauth\Token $exceptToken Token just created to exclude from delete
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return int The number of affected rows
      */
     public function cleanOldAuthorizedTokensExcept(\Magento\Integration\Model\Oauth\Token $exceptToken)
     {
         if (!$exceptToken->getId() || !$exceptToken->getAuthorized()) {
-            throw new \Magento\Framework\Model\Exception('Invalid token to except');
+            throw new \Magento\Framework\Exception\LocalizedException('Invalid token to except');
         }
         $adapter = $this->_getWriteAdapter();
         $where = $adapter->quoteInto(
@@ -62,7 +62,7 @@ class Token extends \Magento\Framework\Model\Resource\Db\AbstractDb
         } elseif ($exceptToken->getAdminId()) {
             $where .= $adapter->quoteInto(' AND admin_id = ?', $exceptToken->getAdminId(), \Zend_Db::INT_TYPE);
         } else {
-            throw new \Magento\Framework\Model\Exception('Invalid token to except');
+            throw new \Magento\Framework\Exception\LocalizedException('Invalid token to except');
         }
         return $adapter->delete($this->getMainTable(), $where);
     }

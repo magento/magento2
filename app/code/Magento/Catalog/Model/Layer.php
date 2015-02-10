@@ -209,7 +209,7 @@ class Layer extends \Magento\Framework\Object
      *
      * @param mixed $category
      * @return \Magento\Catalog\Model\Layer
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setCurrentCategory($category)
     {
@@ -217,14 +217,14 @@ class Layer extends \Magento\Framework\Object
             try {
                 $category = $this->categoryRepository->get($category);
             } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Model\Exception(__('Please correct the category.'), 0, $e);
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the category.'), 0, $e);
             }
         } elseif ($category instanceof \Magento\Catalog\Model\Category) {
             if (!$category->getId()) {
-                throw new \Magento\Framework\Model\Exception(__('Please correct the category.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the category.'));
             }
         } else {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Must be category model instance or its id.')
             );
         }

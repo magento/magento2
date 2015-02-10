@@ -48,7 +48,7 @@ class Shipping extends AbstractTotal
     /**
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -98,7 +98,7 @@ class Shipping extends AbstractTotal
                 }
             } else {
                 $baseAllowedAmount = $order->getBaseCurrency()->format($baseAllowedAmount, null, false);
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('Maximum shipping amount allowed to refund is: %1', $baseAllowedAmount)
                 );
             }

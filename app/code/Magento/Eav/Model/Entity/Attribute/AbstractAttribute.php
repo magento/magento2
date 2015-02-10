@@ -442,7 +442,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Retrieve backend instance
      *
      * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getBackend()
     {
@@ -481,7 +481,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Retrieve source instance
      *
      * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSource()
     {

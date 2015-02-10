@@ -102,7 +102,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
             } else {
                 $this->messageManager->addSuccess(__('The coupon code was canceled.'));
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We cannot apply the coupon code.'));

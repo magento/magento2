@@ -49,7 +49,7 @@ class StockItem
      * @param int $qty
      *
      * @return \Magento\Framework\Object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

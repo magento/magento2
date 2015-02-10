@@ -102,7 +102,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * test _beforeSaveMethod via save()
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Cannot save comment:
      */
     public function testValidate()

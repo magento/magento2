@@ -210,7 +210,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateUniqueException()
     {
@@ -288,7 +288,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
      * @param $attributeCode
      * @param $data
      * @dataProvider validateDefaultSortException
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDefaultSortException($attributeCode, $data)
     {

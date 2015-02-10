@@ -84,7 +84,7 @@ class AdminTokenService implements AdminTokenServiceInterface
             }
         } catch (\Magento\Backend\Model\Auth\Exception $e) {
             throw new AuthenticationException($e->getMessage(), [], $e);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             throw new LocalizedException($e->getMessage(), [], $e);
         }
         return $this->tokenModelFactory->create()->createAdminToken($this->userModel->getId())->getToken();

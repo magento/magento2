@@ -103,7 +103,7 @@ class Oauth implements OauthInterface
             $consumer = $this->_consumerFactory->create($consumerData);
             $consumer->save();
             return $consumer;
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
@@ -160,7 +160,7 @@ class Oauth implements OauthInterface
     {
         try {
             return $this->_consumerFactory->create()->load($consumerId);
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
@@ -176,7 +176,7 @@ class Oauth implements OauthInterface
     {
         try {
             return $this->_consumerFactory->create()->load($key, 'key');
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
@@ -215,7 +215,7 @@ class Oauth implements OauthInterface
             $this->_httpClient->setConfig(['maxredirects' => $maxredirects, 'timeout' => $timeout]);
             $this->_httpClient->request(\Magento\Framework\HTTP\ZendClient::POST);
             return $verifier->getVerifier();
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw $exception;
         } catch (\Magento\Framework\Oauth\Exception $exception) {
             throw $exception;

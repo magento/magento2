@@ -137,7 +137,7 @@ class Save extends \Magento\Backend\App\Action
                 $isNeedCreateLabel ? $shipmentCreatedMessage . ' ' . $labelCreatedMessage : $shipmentCreatedMessage
             );
             $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($isNeedCreateLabel) {
                 $responseAjax->setError(true);
                 $responseAjax->setMessage($e->getMessage());

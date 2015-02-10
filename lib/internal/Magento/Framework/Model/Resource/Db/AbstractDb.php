@@ -7,7 +7,7 @@
 namespace Magento\Framework\Model\Resource\Db;
 
 use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Exception\LocalizedException as ModelException;
 
 /**
  * Abstract resource model class

@@ -46,7 +46,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * Test getUniqueColumnData() in case when in data stored in requested column is NOT unique
      *
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetUniqueColumnDataException()
     {

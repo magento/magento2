@@ -69,7 +69,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage The PDF total model TEST must be or extend
      * \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal.
      */

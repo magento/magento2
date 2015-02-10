@@ -269,7 +269,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Get data for build price filter items
      * @return array
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getItemsData()
     {

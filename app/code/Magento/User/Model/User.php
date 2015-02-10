@@ -538,7 +538,7 @@ class User extends AbstractModel implements StorageInterface
      * @param string $username
      * @param string $password
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Backend\Model\Auth\Exception
      * @throws \Magento\Backend\Model\Auth\Plugin\Exception
      */
@@ -562,7 +562,7 @@ class User extends AbstractModel implements StorageInterface
                 'admin_user_authenticate_after',
                 ['username' => $username, 'password' => $password, 'user' => $this, 'result' => $result]
             );
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->unsetData();
             throw $e;
         }
@@ -667,12 +667,12 @@ class User extends AbstractModel implements StorageInterface
      *
      * @param string $newToken
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function changeResetPasswordLinkToken($newToken)
     {
         if (!is_string($newToken) || empty($newToken)) {
-            throw new \Magento\Framework\Model\Exception(__('Please correct the password reset token.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the password reset token.'));
         }
         $this->setRpToken($newToken);
         $this->setRpTokenCreatedAt($this->dateTime->now());

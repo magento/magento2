@@ -275,7 +275,7 @@ class Cart extends Object implements CartInterface
      *
      * @param   Product|int|string $productInfo
      * @return  Product
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getProduct($productInfo)
     {
@@ -283,21 +283,21 @@ class Cart extends Object implements CartInterface
         if ($productInfo instanceof Product) {
             $product = $productInfo;
             if (!$product->getId()) {
-                throw new \Magento\Framework\Model\Exception(__('We can\'t find the product.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'));
             }
         } elseif (is_int($productInfo) || is_string($productInfo)) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {
                 $product = $this->productRepository->getById($productInfo, false, $storeId);
             } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Model\Exception(__('We can\'t find the product.'), 0, $e);
+                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'), 0, $e);
             }
         } else {
-            throw new \Magento\Framework\Model\Exception(__('We can\'t find the product.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'));
         }
         $currentWebsiteId = $this->_storeManager->getStore()->getWebsiteId();
         if (!is_array($product->getWebsiteIds()) || !in_array($currentWebsiteId, $product->getWebsiteIds())) {
-            throw new \Magento\Framework\Model\Exception(__('We can\'t find the product.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'));
         }
         return $product;
     }
@@ -331,7 +331,7 @@ class Cart extends Object implements CartInterface
      * @param int|Product $productInfo
      * @param \Magento\Framework\Object|int|array $requestInfo
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addProduct($productInfo, $requestInfo = null)
@@ -356,7 +356,7 @@ class Cart extends Object implements CartInterface
         if ($productId) {
             try {
                 $result = $this->getQuote()->addProduct($product, $request);
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_checkoutSession->setUseNotice(false);
                 $result = $e->getMessage();
             }
@@ -376,10 +376,10 @@ class Cart extends Object implements CartInterface
                 if ($this->_checkoutSession->getUseNotice() === null) {
                     $this->_checkoutSession->setUseNotice(true);
                 }
-                throw new \Magento\Framework\Model\Exception($result);
+                throw new \Magento\Framework\Exception\LocalizedException($result);
             }
         } else {
-            throw new \Magento\Framework\Model\Exception(__('The product does not exist.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The product does not exist.'));
         }
 
         $this->_eventManager->dispatch(
@@ -475,7 +475,7 @@ class Cart extends Object implements CartInterface
      *
      * @param  array $data
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -506,7 +506,7 @@ class Cart extends Object implements CartInterface
                 $itemInQuote = $this->getQuote()->getItemById($item->getId());
 
                 if (!$itemInQuote && $item->getHasError()) {
-                    throw new \Magento\Framework\Model\Exception($item->getMessage());
+                    throw new \Magento\Framework\Exception\LocalizedException($item->getMessage());
                 }
 
                 if (isset($itemInfo['before_suggest_qty']) && $itemInfo['before_suggest_qty'] != $qty) {
@@ -659,7 +659,7 @@ class Cart extends Object implements CartInterface
      * @param int|array|\Magento\Framework\Object $requestInfo
      * @param null|array|\Magento\Framework\Object $updatingParams
      * @return \Magento\Quote\Model\Quote\Item|string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see \Magento\Quote\Model\Quote::updateItem()
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -669,7 +669,7 @@ class Cart extends Object implements CartInterface
         try {
             $item = $this->getQuote()->getItemById($itemId);
             if (!$item) {
-                throw new \Magento\Framework\Model\Exception(__('This quote item does not exist.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('This quote item does not exist.'));
             }
             $productId = $item->getProduct()->getId();
             $product = $this->_getProduct($productId);
@@ -689,7 +689,7 @@ class Cart extends Object implements CartInterface
             }
 
             $result = $this->getQuote()->updateItem($itemId, $request, $updatingParams);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_checkoutSession->setUseNotice(false);
             $result = $e->getMessage();
         }
@@ -701,7 +701,7 @@ class Cart extends Object implements CartInterface
             if ($this->_checkoutSession->getUseNotice() === null) {
                 $this->_checkoutSession->setUseNotice(true);
             }
-            throw new \Magento\Framework\Model\Exception($result);
+            throw new \Magento\Framework\Exception\LocalizedException($result);
         }
 
         $this->_eventManager->dispatch(

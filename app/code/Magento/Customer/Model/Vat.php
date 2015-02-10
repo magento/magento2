@@ -173,7 +173,7 @@ class Vat
         );
 
         if (!extension_loaded('soap')) {
-            $this->logger->critical(new \Magento\Framework\Model\Exception(__('PHP SOAP extension is required.')));
+            $this->logger->critical(new \Magento\Framework\Exception\LocalizedException(__('PHP SOAP extension is required.')));
             return $gatewayResponse;
         }
 

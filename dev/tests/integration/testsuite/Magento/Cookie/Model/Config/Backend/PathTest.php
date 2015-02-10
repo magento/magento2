@@ -12,7 +12,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     /**
      * Method is not publicly accessible, so it must be called through parent
      *
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid cookie path
      */
     public function testBeforeSaveException()

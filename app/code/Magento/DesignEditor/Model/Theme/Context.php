@@ -5,7 +5,7 @@
  */
 namespace Magento\DesignEditor\Model\Theme;
 
-use Magento\Framework\Model\Exception as CoreException;
+use Magento\Framework\Exception\LocalizedException as CoreException;
 
 /**
  * Design editor theme context

@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Framework\App\Resource;
 use Psr\Log\LoggerInterface as LogWriter;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Order status resource model
@@ -173,7 +173,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string $status
      * @param string $state
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function unassignState($status, $state)
     {
@@ -203,7 +203,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $this->_getWriteAdapter()->commit();
         } catch (\Exception $e) {
             $this->_getWriteAdapter()->rollBack();
-            throw new Exception('Cannot unassing status from state');
+            throw new LocalizedException('Cannot unassing status from state');
         }
 
         return $this;

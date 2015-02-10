@@ -141,7 +141,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     {
         try {
             $this->attrLockValidator->validate($this);
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw new \Magento\Eav\Exception($exception->getMessage());
         }
 

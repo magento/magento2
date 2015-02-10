@@ -324,7 +324,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup a core exception to return
-        $exception = new \Magento\Framework\Model\Exception();
+        $exception = new \Magento\Framework\Exception\LocalizedException();
         $error = new \Magento\Framework\Message\Error('Something Bad happened');
         $exception->addMessage($error);
 
@@ -361,7 +361,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup a core exception to return
-        $exception = new \Magento\Framework\Model\Exception($warningText);
+        $exception = new \Magento\Framework\Exception\LocalizedException($warningText);
         $error = new \Magento\Framework\Message\Warning('Something Not So Bad happened');
         $exception->addMessage($error);
 

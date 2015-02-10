@@ -58,7 +58,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements IdentityIn
      * Prevent blocks recursion
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
@@ -66,7 +66,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements IdentityIn
         if (false == strstr($this->getContent(), $needle)) {
             return parent::beforeSave();
         }
-        throw new \Magento\Framework\Model\Exception(
+        throw new \Magento\Framework\Exception\LocalizedException(
             __('Make sure that static block content does not reference the block itself.')
         );
     }

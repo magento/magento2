@@ -36,15 +36,15 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
 
             $quoteItem = $this->cart->getQuote()->getItemById($id);
             if (!$quoteItem) {
-                throw new \Magento\Framework\Model\Exception(__("We can't find the quote item."));
+                throw new \Magento\Framework\Exception\LocalizedException(__("We can't find the quote item."));
             }
 
             $item = $this->cart->updateItem($id, new \Magento\Framework\Object($params));
             if (is_string($item)) {
-                throw new \Magento\Framework\Model\Exception($item);
+                throw new \Magento\Framework\Exception\LocalizedException($item);
             }
             if ($item->getHasError()) {
-                throw new \Magento\Framework\Model\Exception($item->getMessage());
+                throw new \Magento\Framework\Exception\LocalizedException($item->getMessage());
             }
 
             $related = $this->getRequest()->getParam('related_product');
@@ -70,7 +70,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                 }
                 $this->_goBack();
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
                 $this->messageManager->addNotice($e->getMessage());
             } else {

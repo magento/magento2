@@ -58,7 +58,7 @@ class NotificationServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Wrong notification ID specified.
      */
     public function testMarkAsReadThrowsExceptionWhenNotificationIdIsInvalid()

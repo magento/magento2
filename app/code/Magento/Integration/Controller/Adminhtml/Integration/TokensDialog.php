@@ -49,7 +49,7 @@ class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
                 self::REGISTRY_KEY_CURRENT_INTEGRATION,
                 $this->_integrationService->get($integrationId)->getData()
             );
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*');
             return;

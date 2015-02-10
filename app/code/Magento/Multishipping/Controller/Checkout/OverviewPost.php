@@ -96,7 +96,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             $this->_getCheckout()->getCheckoutSession()->clearQuote();
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/cart');
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_objectManager->get(
                 'Magento\Checkout\Helper\Data'
             )->sendPaymentFailedEmail(

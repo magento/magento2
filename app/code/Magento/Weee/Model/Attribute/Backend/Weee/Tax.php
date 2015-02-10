@@ -5,7 +5,7 @@
  */
 namespace Magento\Weee\Model\Attribute\Backend\Weee;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
 {
@@ -59,7 +59,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      *
      * @param   \Magento\Catalog\Model\Product $object
      * @return  $this
-     * @throws  Exception
+     * @throws  \Magento\Framework\Exception\LocalizedException
      */
     public function validate($object)
     {
@@ -78,7 +78,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
             $key1 = implode('-', [$tax['website_id'], $tax['country'], $state]);
 
             if (!empty($dup[$key1])) {
-                throw new Exception(
+                throw new LocalizedException(
                     __('We found a duplicate of website, country and state fields for a fixed product tax')
                 );
             }

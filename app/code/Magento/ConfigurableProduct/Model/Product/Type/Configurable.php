@@ -817,7 +817,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param  \Magento\Catalog\Model\Product $product
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function checkProductBuyState($product)
     {
@@ -834,7 +834,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
             }
             if (empty($attributes)) {
-                throw new \Magento\Framework\Model\Exception($this->getSpecifyOptionMessage());
+                throw new \Magento\Framework\Exception\LocalizedException($this->getSpecifyOptionMessage());
             }
         }
         return $this;

@@ -121,12 +121,12 @@ abstract class AbstractTotal
      * Get quote address object
      *
      * @return  \Magento\Quote\Model\Quote\Address
-     * @throws   \Magento\Framework\Model\Exception if address not declared
+     * @throws   \Magento\Framework\Exception\LocalizedException if address not declared
      */
     protected function _getAddress()
     {
         if ($this->_address === null) {
-            throw new \Magento\Framework\Model\Exception(__('The address model is not defined.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The address model is not defined.'));
         }
         return $this->_address;
     }

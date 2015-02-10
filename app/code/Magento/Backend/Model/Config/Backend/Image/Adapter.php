@@ -43,7 +43,7 @@ class Adapter extends \Magento\Framework\App\Config\Value
     /**
      * Checks if chosen image adapter available
      *
-     * @throws \Magento\Framework\Model\Exception If some of adapter dependencies was not loaded
+     * @throws \Magento\Framework\Exception\LocalizedException If some of adapter dependencies was not loaded
      * @return \Magento\Backend\Model\Config\Backend\File
      */
     public function beforeSave()
@@ -52,7 +52,7 @@ class Adapter extends \Magento\Framework\App\Config\Value
             $this->_imageFactory->create($this->getValue());
         } catch (\Exception $e) {
             $message = __('The specified image adapter cannot be used because of: ' . $e->getMessage());
-            throw new \Magento\Framework\Model\Exception($message);
+            throw new \Magento\Framework\Exception\LocalizedException($message);
         }
 
         return $this;

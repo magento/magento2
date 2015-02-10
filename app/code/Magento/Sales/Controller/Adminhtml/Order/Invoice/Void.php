@@ -6,7 +6,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 
@@ -57,7 +57,7 @@ class Void extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\V
                 $invoice->getOrder()
             )->save();
             $this->messageManager->addSuccess(__('The invoice has been voided.'));
-        } catch (Exception $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('Invoice voiding error'));

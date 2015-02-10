@@ -201,7 +201,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             ) {
                 $this->_productPriceIndexerProcessor->reindexList($this->attributeHelper->getProductIds());
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException(

@@ -28,7 +28,7 @@ class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer
                 $this->messageManager->addSuccess(
                     __('A total of %1 indexer(s) have been turned Update on Save mode on.', count($indexerIds))
                 );
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(

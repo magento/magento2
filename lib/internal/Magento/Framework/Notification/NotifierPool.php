@@ -34,7 +34,7 @@ class NotifierPool implements NotifierInterface
      * @param string|string[] $description
      * @param string $url
      * @param bool $isInternal
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function add($severity, $title, $description, $url = '', $isInternal = true)

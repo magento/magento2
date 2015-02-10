@@ -253,7 +253,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $user
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function delete(\Magento\Framework\Model\AbstractModel $user)
     {
@@ -267,7 +267,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             $adapter->delete($this->getMainTable(), $conditions);
             $adapter->delete($this->getTable('authorization_role'), $conditions);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             throw $e;
             return false;
         } catch (\Exception $e) {

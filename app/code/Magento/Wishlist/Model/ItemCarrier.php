@@ -138,7 +138,7 @@ class ItemCarrier
                 if ($item->addToCart($cart, $isOwner)) {
                     $addedItems[] = $item->getProduct();
                 }
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 if ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_NOT_SALABLE) {
                     $notSalable[] = $item;
                 } elseif ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_HAS_REQUIRED_OPTIONS) {

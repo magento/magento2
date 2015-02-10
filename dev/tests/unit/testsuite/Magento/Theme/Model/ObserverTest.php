@@ -215,7 +215,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->themeConfig->expects($this->any())->method('isThemeAssignedToStore')->with($themeMock)->willReturn(true);
 
 
-        $this->setExpectedException('Magento\Framework\Model\Exception', 'Theme isn\'t deletable.');
+        $this->setExpectedException('Magento\Framework\Exception\LocalizedException', 'Theme isn\'t deletable.');
         $this->themeObserver->cleanThemeRelatedContent($observerMock);
     }
 

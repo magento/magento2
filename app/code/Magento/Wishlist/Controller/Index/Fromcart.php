@@ -51,7 +51,7 @@ class Fromcart extends Action\Action implements IndexInterface
         try {
             $item = $cart->getQuote()->getItemById($itemId);
             if (!$item) {
-                throw new \Magento\Framework\Model\Exception(__("The requested cart item doesn't exist."));
+                throw new \Magento\Framework\Exception\LocalizedException(__("The requested cart item doesn't exist."));
             }
 
             $productId = $item->getProductId();
@@ -69,7 +69,7 @@ class Fromcart extends Action\Action implements IndexInterface
                 ->escapeHtml($wishlist->getName());
             $this->messageManager->addSuccess(__("%1 has been moved to wish list %2", $productName, $wishlistName));
             $wishlist->save();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t move the item to the wish list.'));

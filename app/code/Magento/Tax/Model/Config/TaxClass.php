@@ -57,7 +57,7 @@ class TaxClass extends \Magento\Framework\App\Config\Value
         $attribute = $this->attributeFactory->create();
         $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
         if (!$attribute->getId()) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid attribute %1', $attributeCode));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid attribute %1', $attributeCode));
         }
         $attribute->setData("default_value", $this->getData('value'));
         $attribute->save();

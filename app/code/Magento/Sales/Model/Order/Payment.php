@@ -409,7 +409,7 @@ class Payment extends Info implements OrderPaymentInterface
      * TODO: eliminate logic duplication with registerCaptureNotification()
      *
      * @param null|Invoice $invoice
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function capture($invoice)
@@ -486,7 +486,7 @@ class Payment extends Info implements OrderPaymentInterface
             $this->getMethodInstance()->processInvoice($invoice, $this);
             return $this;
         }
-        throw new \Magento\Framework\Model\Exception(
+        throw new \Magento\Framework\Exception\LocalizedException(
             __('The transaction "%1" cannot be captured yet.', $invoice->getTransactionId())
         );
     }
@@ -700,7 +700,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param Creditmemo $creditmemo
      * @return $this
      * @throws \Exception
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -739,7 +739,7 @@ class Payment extends Info implements OrderPaymentInterface
                         $creditmemo,
                         $this
                     );
-                } catch (\Magento\Framework\Model\Exception $e) {
+                } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     if (!$captureTxn) {
                         $e->setMessage(
                             ' ' . __('If the invoice was created offline, try creating an offline credit memo.'),

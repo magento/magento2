@@ -5,7 +5,7 @@
  */
 namespace Magento\Cookie\Model\Config\Backend;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Session\Config\Validator\CookieDomainValidator;
 
 /**
@@ -96,7 +96,7 @@ class DomainTest extends \PHPUnit_Framework_TestCase
             if ($callGetMessages) {
                 $this->fail('Failed to throw exception');
             }
-        } catch (Exception $e) {
+        } catch (LocalizedException $e) {
             $this->assertEquals('Invalid domain name: message', $e->getMessage());
         }
     }

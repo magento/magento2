@@ -315,13 +315,13 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * Validate theme data
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _validate()
     {
         if (!$this->_validator->validate($this)) {
             $messages = $this->_validator->getErrorMessages();
-            throw new \Magento\Framework\Model\Exception(implode(PHP_EOL, reset($messages)));
+            throw new \Magento\Framework\Exception\LocalizedException(implode(PHP_EOL, reset($messages)));
         }
         return $this;
     }

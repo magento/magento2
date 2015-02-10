@@ -248,7 +248,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->_addSessionErrorMessages($exception->getMessages());
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
-            } catch (\Magento\Framework\Model\Exception $exception) {
+            } catch (\Magento\Framework\Exception\LocalizedException $exception) {
                 $messages = $exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR);
                 if (!count($messages)) {
                     $messages = $exception->getMessage();

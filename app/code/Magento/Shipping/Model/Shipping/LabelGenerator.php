@@ -64,22 +64,22 @@ class LabelGenerator
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @param RequestInterface $request
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create(\Magento\Sales\Model\Order\Shipment $shipment, RequestInterface $request)
     {
         $order = $shipment->getOrder();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         if (!$carrier->isShippingLabelsAvailable()) {
-            throw new \Magento\Framework\Model\Exception(__('Shipping labels is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Shipping labels is not available.'));
         }
         $shipment->setPackages($request->getParam('packages'));
         $response = $this->labelFactory->create()->requestToShipment($shipment);
         if ($response->hasErrors()) {
-            throw new \Magento\Framework\Model\Exception($response->getErrors());
+            throw new \Magento\Framework\Exception\LocalizedException($response->getErrors());
         }
         if (!$response->hasInfo()) {
-            throw new \Magento\Framework\Model\Exception(__('Response info is not exist.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Response info is not exist.'));
         }
         $labelsContent = [];
         $trackingNumbers = [];

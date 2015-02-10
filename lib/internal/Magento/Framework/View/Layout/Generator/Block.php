@@ -164,7 +164,7 @@ class Block implements Layout\GeneratorInterface
      *
      * @param string|\Magento\Framework\View\Element\AbstractBlock $block
      * @param array $arguments
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function getBlockInstance($block, array $arguments = [])
@@ -177,7 +177,7 @@ class Block implements Layout\GeneratorInterface
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid block type: %1', $block));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid block type: %1', $block));
         }
         return $block;
     }

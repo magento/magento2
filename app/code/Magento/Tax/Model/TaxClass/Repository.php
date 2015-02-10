@@ -14,7 +14,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Exception\LocalizedException as ModelException;
 use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\ClassModelRegistry;

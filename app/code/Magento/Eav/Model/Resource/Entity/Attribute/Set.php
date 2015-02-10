@@ -88,7 +88,7 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\StateException
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $object)
     {

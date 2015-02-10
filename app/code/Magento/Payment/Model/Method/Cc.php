@@ -143,7 +143,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * Validate payment method information object
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -236,7 +236,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         }
 
         if ($errorMsg) {
-            throw new \Magento\Framework\Model\Exception($errorMsg);
+            throw new \Magento\Framework\Exception\LocalizedException($errorMsg);
         }
 
         //This must be after all validation conditions

@@ -66,12 +66,12 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param  \Magento\Framework\Model\AbstractModel $group
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $group)
     {
         if ($group->usesAsDefault()) {
-            throw new \Magento\Framework\Model\Exception(__('The group "%1" cannot be deleted', $group->getCode()));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The group "%1" cannot be deleted', $group->getCode()));
         }
         return parent::_beforeDelete($group);
     }

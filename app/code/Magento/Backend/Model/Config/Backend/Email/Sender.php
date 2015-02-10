@@ -17,19 +17,19 @@ class Sender extends \Magento\Framework\App\Config\Value
      * Check sender name validity
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
         $value = $this->getValue();
         if (!preg_match("/^[\S ]+$/", $value)) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('The sender name "%1" is not valid. Please use only visible characters and spaces.', $value)
             );
         }
 
         if (strlen($value) > 255) {
-            throw new \Magento\Framework\Model\Exception(__('Maximum sender name length is 255. Please correct your settings.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Maximum sender name length is 255. Please correct your settings.'));
         }
         return $this;
     }

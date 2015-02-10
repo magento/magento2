@@ -38,7 +38,7 @@ interface StockStateProviderInterface
      *
      * @param StockItemInterface $stockItem
      * @param int|float $qty
-     * @exception \Magento\Framework\Model\Exception
+     * @exception \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
     public function checkQty(StockItemInterface $stockItem, $qty);

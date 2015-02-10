@@ -14,7 +14,7 @@ use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -332,7 +332,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * Retrieve current entity config
      *
      * @return Type
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getEntityType()
     {
@@ -370,7 +370,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @param array|string|null $attributes
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function unsetAttributes($attributes = null)
     {

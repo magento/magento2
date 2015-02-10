@@ -681,7 +681,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         try {
             if (is_string($result)) {
-                throw new \Magento\Framework\Model\Exception($result);
+                throw new \Magento\Framework\Exception\LocalizedException($result);
             }
 
             $selections = [];
@@ -696,7 +696,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $optionIds = array_keys($options);
 
                 if (empty($optionIds) && $isStrictProcessMode) {
-                    throw new \Magento\Framework\Model\Exception(__('Please specify product option(s).'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Please specify product option(s).'));
                 }
 
                 $product->getTypeInstance()
@@ -805,7 +805,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                 return $result;
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             return $e->getMessage();
         }
 
@@ -1088,7 +1088,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function checkProductBuyState($product)
     {
@@ -1102,7 +1102,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $bundleOption = $buyRequest->getBundleOption();
 
         if (empty($bundleOption)) {
-            throw new \Magento\Framework\Model\Exception($this->getSpecifyOptionMessage());
+            throw new \Magento\Framework\Exception\LocalizedException($this->getSpecifyOptionMessage());
         }
 
         $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
@@ -1110,7 +1110,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             /* @var $selection \Magento\Bundle\Model\Selection */
             $selection = $productSelections->getItemById($selectionId);
             if (!$selection || !$selection->isSalable() && !$skipSaleableCheck) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('The required options you selected are not available.')
                 );
             }
@@ -1121,7 +1121,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $optionsCollection = $this->getOptionsCollection($product);
         foreach ($optionsCollection->getItems() as $option) {
             if ($option->getRequired() && empty($bundleOption[$option->getId()])) {
-                throw new \Magento\Framework\Model\Exception(__('Please select all required options.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please select all required options.'));
             }
         }
 
@@ -1266,14 +1266,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection
      * @param int[] $options
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function checkIsAllRequiredOptions($product, $isStrictProcessMode, $optionsCollection, $options)
     {
         if (!$product->getSkipCheckRequiredOption() && $isStrictProcessMode) {
             foreach ($optionsCollection->getItems() as $option) {
                 if ($option->getRequired() && !isset($options[$option->getId()])) {
-                    throw new \Magento\Framework\Model\Exception(__('Please select all required options.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Please select all required options.'));
                 }
             }
         }
@@ -1285,7 +1285,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection
      * @param int[] $options
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function checkSelectionsIsSale($selections, $skipSaleableCheck, $optionsCollection, $options)
     {
@@ -1301,7 +1301,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $isMultiSelection = $_option->isMultiSelection();
                 if ($_option->getRequired() && (!$isMultiSelection || !$moreSelections)
                 ) {
-                    throw new \Magento\Framework\Model\Exception(
+                    throw new \Magento\Framework\Exception\LocalizedException(
                         __('The required options you selected are not available.')
                     );
                 }
@@ -1312,16 +1312,16 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * @param array $_result
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function checkIsResult($_result)
     {
         if (is_string($_result)) {
-            throw new \Magento\Framework\Model\Exception($_result);
+            throw new \Magento\Framework\Exception\LocalizedException($_result);
         }
 
         if (!isset($_result[0])) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot add this item to your shopping cart.')
             );
         }

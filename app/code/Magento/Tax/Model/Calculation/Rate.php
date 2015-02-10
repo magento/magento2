@@ -101,7 +101,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
      * Prepare location settings and tax postcode before save rate
      *
      * @return \Magento\Tax\Model\Calculation\Rate
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -115,11 +115,11 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
             ($this->getTaxPostcode() === '' && !$this->getZipIsRange());
 
         if ($isEmptyValues || $isWrongRange) {
-            throw new \Magento\Framework\Model\Exception(__('Please fill all required fields with valid information.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please fill all required fields with valid information.'));
         }
 
         if (!is_numeric($this->getRate()) || $this->getRate() < 0) {
-            throw new \Magento\Framework\Model\Exception(__('Rate Percent should be a positive number.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Rate Percent should be a positive number.'));
         }
 
         if ($this->getZipIsRange()) {
@@ -127,15 +127,15 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
             $zipTo = $this->getZipTo();
 
             if (strlen($zipFrom) > 9 || strlen($zipTo) > 9) {
-                throw new \Magento\Framework\Model\Exception(__('Maximum zip code length is 9.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Maximum zip code length is 9.'));
             }
 
             if (!is_numeric($zipFrom) || !is_numeric($zipTo) || $zipFrom < 0 || $zipTo < 0) {
-                throw new \Magento\Framework\Model\Exception(__('Zip code should not contain characters other than digits.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Zip code should not contain characters other than digits.'));
             }
 
             if ($zipFrom > $zipTo) {
-                throw new \Magento\Framework\Model\Exception(__('Range To should be equal or greater than Range From.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Range To should be equal or greater than Range From.'));
             }
 
             $this->setTaxPostcode($zipFrom . '-' . $zipTo);
@@ -177,7 +177,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
      * Processing object before delete data
      *
      * @return \Magento\Tax\Model\Calculation\Rate
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeDelete()
     {

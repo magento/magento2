@@ -102,7 +102,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @exectedExceptionMessage Please set resource file and link type.
      */
     public function testGetFileSizeNoResource()
@@ -111,7 +111,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid download link type.
      */
     public function testGetFileSizeInvalidLinkType()
@@ -133,7 +133,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid download link type.
      */
     public function testGetFileSizeNoFile()

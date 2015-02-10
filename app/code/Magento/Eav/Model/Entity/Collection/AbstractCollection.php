@@ -321,7 +321,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
      * @param null|string|array $condition
      * @param string $joinType
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see self::_getConditionSql for $condition
      */
@@ -354,7 +354,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
         if (!empty($conditionSql)) {
             $this->getSelect()->where($conditionSql, null, \Magento\Framework\DB\Select::TYPE_CONDITION);
         } else {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Invalid attribute identifier for filter (%1)', get_class($attribute))
             );
         }

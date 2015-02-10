@@ -5,7 +5,7 @@
  */
 namespace Magento\Shipping\Model\Carrier;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
@@ -424,13 +424,13 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param Request $request
      * @return \Magento\Framework\Object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function requestToShipment($request)
     {
         $packages = $request->getPackages();
         if (!is_array($packages) || !$packages) {
-            throw new Exception(__('No packages for request'));
+            throw new LocalizedException(__('No packages for request'));
         }
         if ($request->getStoreId() != null) {
             $this->setStore($request->getStoreId());
@@ -471,14 +471,14 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param Request $request
      * @return \Magento\Framework\Object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function returnOfShipment($request)
     {
         $request->setIsReturn(true);
         $packages = $request->getPackages();
         if (!is_array($packages) || !$packages) {
-            throw new Exception(__('No packages for request'));
+            throw new LocalizedException(__('No packages for request'));
         }
         if ($request->getStoreId() != null) {
             $this->setStore($request->getStoreId());

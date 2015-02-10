@@ -770,7 +770,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
      *
      * @param array $option
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addAttributeOption($option)
@@ -805,7 +805,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
 
                 // Default value
                 if (!isset($values[0])) {
-                    throw new \Magento\Framework\Model\Exception(__('Default option value is not defined'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Default option value is not defined'));
                 }
                 $condition = ['option_id =?' => $intOptionId];
                 $this->_connection->delete($optionValueTable, $condition);

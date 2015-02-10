@@ -69,7 +69,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
                 $model->setId(null);
                 $model->save();
                 $this->fail('A validation failure is expected.');
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
             }
 
             $this->_model->delete();

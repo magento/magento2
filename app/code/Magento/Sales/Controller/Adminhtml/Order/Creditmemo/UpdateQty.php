@@ -73,7 +73,7 @@ class UpdateQty extends \Magento\Backend\App\Action
             $this->creditmemoLoader->load();
             $resultPage = $this->resultPageFactory->create();
             $response = $resultPage->getLayout()->getBlock('order_items')->toHtml();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot update the item\'s quantity.')];

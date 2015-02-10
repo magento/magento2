@@ -79,7 +79,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
                 $user->sendPasswordResetNotificationEmail();
             }
             $this->messageManager->addSuccess(__('The account has been saved.'));
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {
                 $this->messageManager->addError($e->getMessage());

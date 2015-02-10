@@ -143,7 +143,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      *
      * @param array $data
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function importData(array $data)
     {
@@ -165,7 +165,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
 
         $methodSpecification = $this->methodSpecificationFactory->create($data->getChecks());
         if (!$method->isAvailable($quote) || !$methodSpecification->isApplicable($method, $quote)) {
-            throw new \Magento\Framework\Model\Exception(__('The requested Payment Method is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The requested Payment Method is not available.'));
         }
 
         $method->assignData($data);
@@ -188,7 +188,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         }
         try {
             $method = $this->getMethodInstance();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             return parent::beforeSave();
         }
         $method->prepareSave();

@@ -11,8 +11,6 @@
  */
 namespace Magento\Rule\Model;
 
-use Magento\Framework\Model\Exception;
-
 abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -101,7 +99,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      * Prepare data before saving
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave()
@@ -109,7 +107,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         // Check if discount amount not negative
         if ($this->hasDiscountAmount()) {
             if ((int)$this->getDiscountAmount() < 0) {
-                throw new \Magento\Framework\Model\Exception(__('Invalid discount amount.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid discount amount.'));
             }
         }
 

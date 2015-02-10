@@ -78,7 +78,7 @@ class AddComment extends \Magento\Backend\App\Action
             $this->getRequest()->setParam('creditmemo_id', $this->getRequest()->getParam('id'));
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
-                throw new \Magento\Framework\Model\Exception(__('The Comment Text field cannot be empty.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('The Comment Text field cannot be empty.'));
             }
             $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
@@ -95,7 +95,7 @@ class AddComment extends \Magento\Backend\App\Action
             $this->creditmemoSender->send($creditmemo, !empty($data['is_customer_notified']), $data['comment']);
             $resultPage = $this->resultPageFactory->create();
             $response = $resultPage->getLayout()->getBlock('creditmemo_comments')->toHtml();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot add new comment.')];

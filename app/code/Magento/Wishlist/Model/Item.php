@@ -220,14 +220,14 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @param   Option $option
      * @return  $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _addOptionCode($option)
     {
         if (!isset($this->_optionsByCode[$option->getCode()])) {
             $this->_optionsByCode[$option->getCode()] = $option;
         } else {
-            throw new \Magento\Framework\Model\Exception(__('An item option with code %1 already exists.', $option->getCode()));
+            throw new \Magento\Framework\Exception\LocalizedException(__('An item option with code %1 already exists.', $option->getCode()));
         }
         return $this;
     }
@@ -306,15 +306,15 @@ class Item extends AbstractModel implements ItemInterface
      * Validate wish list item data
      *
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validate()
     {
         if (!$this->getWishlistId()) {
-            throw new \Magento\Framework\Model\Exception(__('We can\'t specify a wish list.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t specify a wish list.'));
         }
         if (!$this->getProductId()) {
-            throw new \Magento\Framework\Model\Exception(__('Cannot specify product.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'));
         }
 
         return true;
@@ -365,7 +365,7 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Retrieve item product instance
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\Product
      */
     public function getProduct()
@@ -373,12 +373,12 @@ class Item extends AbstractModel implements ItemInterface
         $product = $this->_getData('product');
         if (is_null($product)) {
             if (!$this->getProductId()) {
-                throw new \Magento\Framework\Model\Exception(__('Cannot specify product.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'));
             }
             try {
                 $product = $this->productRepository->getById($this->getProductId(), false, $this->getStoreId());
             } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Model\Exception(__('Cannot specify product.'), 0, $e);
+                throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'), 0, $e);
             }
             $this->setData('product', $product);
         }
@@ -653,7 +653,7 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @param   Option|\Magento\Framework\Object|array $option
      * @return  $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addOption($option)
     {
@@ -666,7 +666,7 @@ class Item extends AbstractModel implements ItemInterface
                ->setProduct($option->getProduct())
                ->setItem($this);
         } else {
-            throw new \Magento\Framework\Model\Exception(__('Invalid item option format.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid item option format.'));
         }
 
         $exOption = $this->getOptionByCode($option->getCode());

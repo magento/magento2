@@ -48,7 +48,7 @@ class Option
      * @param \Magento\Quote\Model\Quote\Item $quoteItem
      *
      * @return \Magento\CatalogInventory\Model\Stock\Item
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getStockItem(
         \Magento\Quote\Model\Quote\Item\Option $option,
@@ -59,7 +59,7 @@ class Option
             $quoteItem->getStore()->getWebsiteId()
         );
         if (!$stockItem->getItemId()) {
-            throw new \Magento\Framework\Model\Exception(__('The stock item for Product in option is not valid.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The stock item for Product in option is not valid.'));
         }
         /**
          * define that stock item is child for composite product
@@ -81,7 +81,7 @@ class Option
      * @param int $qty
      *
      * @return \Magento\Framework\Object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function initialize(
         \Magento\Quote\Model\Quote\Item\Option $option,

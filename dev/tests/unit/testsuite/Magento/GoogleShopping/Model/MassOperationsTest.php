@@ -125,7 +125,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
             ['\Magento\Framework\Exception\NoSuchEntityException'],
             ['\Zend_Gdata_App_Exception'],
             ['\Zend_Db_Statement_Exception'],
-            ['\Magento\Framework\Model\Exception'],
+            ['\Magento\Framework\Exception\LocalizedException'],
             ['\Exception']
         ];
     }

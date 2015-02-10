@@ -7,7 +7,7 @@
 namespace Magento\Tax\Model\TaxClass;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Exception\LocalizedException as ModelException;
 use Magento\Framework\Api\SearchCriteria;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase
@@ -221,7 +221,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Something went wrong
      */
     public function testSaveWithModelException()

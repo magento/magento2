@@ -97,7 +97,7 @@ class Sample extends AbstractTypeHandler
      * @param ComponentInterface $model
      * @param array $files
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function setFiles(ComponentInterface $model, array $files)
     {

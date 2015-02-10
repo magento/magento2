@@ -105,7 +105,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $code
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return MethodInterface
      */
     public function getMethodInstance($code)

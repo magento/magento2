@@ -1394,7 +1394,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      *
      * @param   \Magento\Quote\Model\Quote\Item $item
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addItem(\Magento\Quote\Model\Quote\Item $item)
     {
@@ -1414,7 +1414,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param null|float|\Magento\Framework\Object $request
      * @param null|string $processMode
      * @return \Magento\Quote\Model\Quote\Item|string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -1430,7 +1430,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $request = $this->objectFactory->create(['qty' => $request]);
         }
         if (!$request instanceof \Magento\Framework\Object) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('We found an invalid request for adding product to quote.')
             );
         }
@@ -1490,7 +1490,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             }
         }
         if (!empty($errors)) {
-            throw new \Magento\Framework\Model\Exception(implode("\n", $errors));
+            throw new \Magento\Framework\Exception\LocalizedException(implode("\n", $errors));
         }
 
         $this->_eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
@@ -1556,7 +1556,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Object $buyRequest
      * @param null|array|\Magento\Framework\Object $params
      * @return \Magento\Quote\Model\Quote\Item
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see \Magento\Catalog\Helper\Product::addParamsToBuyRequest()
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -1565,7 +1565,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $item = $this->getItemById($itemId);
         if (!$item) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('This is the wrong quote item id to update configuration.')
             );
         }
@@ -1587,7 +1587,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $resultItem = $this->addProduct($product, $buyRequest);
 
         if (is_string($resultItem)) {
-            throw new \Magento\Framework\Model\Exception($resultItem);
+            throw new \Magento\Framework\Exception\LocalizedException($resultItem);
         }
 
         if ($resultItem->getParentItem()) {

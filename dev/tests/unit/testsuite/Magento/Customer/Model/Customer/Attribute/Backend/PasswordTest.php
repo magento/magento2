@@ -47,7 +47,7 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider passwordNegativeDataProvider
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testBeforeSaveNegative($password)
     {

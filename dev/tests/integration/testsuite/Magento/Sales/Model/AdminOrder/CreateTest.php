@@ -234,7 +234,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         try {
             $this->_model->createOrder();
             $this->fail('Validation errors are expected to lead to exception during createOrder() call.');
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             /** createOrder is expected to throw exception with empty message when validation error occurs */
         }
         $errorMessages = [];

@@ -23,7 +23,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
             try {
                 $data = $this->getRequest()->getPost('history');
                 if (empty($data['comment']) && $data['status'] == $order->getDataByKey('status')) {
-                    throw new \Magento\Framework\Model\Exception(__('Comment text cannot be empty.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Comment text cannot be empty.'));
                 }
 
                 $notify = isset($data['is_customer_notified']) ? $data['is_customer_notified'] : false;
@@ -44,7 +44,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
                 $orderCommentSender->send($order, $notify, $comment);
 
                 return $this->resultPageFactory->create();
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $response = ['error' => true, 'message' => $e->getMessage()];
             } catch (\Exception $e) {
                 $response = ['error' => true, 'message' => __('We cannot add order history.')];

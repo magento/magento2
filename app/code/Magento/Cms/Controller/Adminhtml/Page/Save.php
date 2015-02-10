@@ -72,7 +72,7 @@ class Save extends \Magento\Backend\App\Action
                 }
                 $this->_redirect('*/*/');
                 return;
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\RuntimeException $e) {
                 $this->messageManager->addError($e->getMessage());

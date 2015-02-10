@@ -66,7 +66,7 @@ class ValidatorInfo extends Validator
      * @param array $optionValue
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validate($optionValue, $option)
     {
@@ -98,10 +98,10 @@ class ValidatorInfo extends Validator
             $errors = $this->getValidatorErrors($validatorChain->getErrors(), $optionValue, $option);
 
             if (count($errors) > 0) {
-                throw new \Magento\Framework\Model\Exception(implode("\n", $errors));
+                throw new \Magento\Framework\Exception\LocalizedException(implode("\n", $errors));
             }
         } else {
-            throw new \Magento\Framework\Model\Exception(__('Please specify the product\'s required option(s).'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify the product\'s required option(s).'));
         }
         return $result;
     }

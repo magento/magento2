@@ -9,7 +9,7 @@
 namespace Magento\Catalog\Model\Layer\Filter\Dynamic;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Store\ScopeInterface;
 
@@ -60,21 +60,21 @@ class AlgorithmFactory
      *
      * @param array $data
      * @return AlgorithmInterface
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create(array $data = [])
     {
         $calculationType = $this->scopeConfig->getValue(self::XML_PATH_RANGE_CALCULATION, ScopeInterface::SCOPE_STORE);
 
         if (!isset($this->algorithms[$calculationType])) {
-            throw new Exception($calculationType . ' was not found in algorithms');
+            throw new LocalizedException($calculationType . ' was not found in algorithms');
         }
 
         $className = $this->algorithms[$calculationType];
         $model = $this->objectManager->create($className, $data);
 
         if (!$model instanceof AlgorithmInterface) {
-            throw new Exception(
+            throw new LocalizedException(
                 $className . ' doesn\'t extends \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmInterface'
             );
         }

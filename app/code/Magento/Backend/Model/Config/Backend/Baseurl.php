@@ -38,7 +38,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * Validate a base URL field value
      *
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
@@ -47,11 +47,11 @@ class Baseurl extends \Magento\Framework\App\Config\Value
             if (!$this->_validateUnsecure($value) && !$this->_validateSecure($value)) {
                 $this->_validateFullyQualifiedUrl($value);
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $field = $this->getFieldConfig();
             $label = $field && is_array($field) ? $field['label'] : 'value';
             $msg = __('Invalid %1. %2', $label, $e->getMessage());
-            $error = new \Magento\Framework\Model\Exception($msg, 0, $e);
+            $error = new \Magento\Framework\Exception\LocalizedException($msg, 0, $e);
             throw $error;
         }
     }
@@ -114,12 +114,12 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @param array $values
      * @param string $value
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function _assertValuesOrUrl(array $values, $value)
     {
         if (!in_array($value, $values) && !$this->_isFullyQualifiedUrl($value)) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Value must be a URL or one of placeholders: %1', implode(',', $values))
             );
         }
@@ -131,14 +131,14 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @param array $values
      * @param string $value
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function _assertStartsWithValuesOrUrl(array $values, $value)
     {
         $quoted = array_map('preg_quote', $values, array_fill(0, count($values), '/'));
         if (!preg_match('/^(' . implode('|', $quoted) . ')(.+\/)?$/', $value) && !$this->_isFullyQualifiedUrl($value)
         ) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Specify a URL or path that starts with placeholder(s): %1, and ends with "/".',
                     implode(', ', $values)
@@ -153,7 +153,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @param array $values
      * @param string $value
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function _assertStartsWithValuesOrUrlOrEmpty(array $values, $value)
     {
@@ -162,9 +162,9 @@ class Baseurl extends \Magento\Framework\App\Config\Value
         }
         try {
             $this->_assertStartsWithValuesOrUrl($values, $value);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $msg = __('%1 An empty value is allowed as well.', $e->getMessage());
-            $error = new \Magento\Framework\Model\Exception($msg, 0, $e);
+            $error = new \Magento\Framework\Exception\LocalizedException($msg, 0, $e);
             throw $error;
         }
     }
@@ -174,12 +174,12 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      *
      * @param string $value
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function _validateFullyQualifiedUrl($value)
     {
         if (!$this->_isFullyQualifiedUrl($value)) {
-            throw new \Magento\Framework\Model\Exception(__('Specify a fully qualified URL.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Specify a fully qualified URL.'));
         }
     }
 

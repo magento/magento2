@@ -89,7 +89,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                     $model->load($attributeSetId);
                 }
                 if (!$model->getId()) {
-                    throw new \Magento\Framework\Model\Exception(__('This attribute set no longer exists.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('This attribute set no longer exists.'));
                 }
                 $data = $this->_objectManager->get('Magento\Core\Helper\Data')
                     ->jsonDecode($this->getRequest()->getPost('data'));
@@ -107,7 +107,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
             }
             $model->save();
             $this->messageManager->addSuccess(__('You saved the attribute set.'));
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $hasError = true;
         } catch (\Exception $e) {

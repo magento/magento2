@@ -236,7 +236,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCheckProductBuyStateException()
     {

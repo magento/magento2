@@ -28,7 +28,7 @@ class MassVisibleIn extends \Magento\Review\Controller\Adminhtml\Product
                 $this->messageManager->addSuccess(
                     __('A total of %1 record(s) have been updated.', count($reviewsIds))
                 );
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(

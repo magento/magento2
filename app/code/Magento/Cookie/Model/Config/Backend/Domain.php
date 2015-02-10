@@ -39,7 +39,7 @@ class Domain extends \Magento\Framework\App\Config\Value
      * Validate a domain name value
      *
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
@@ -48,7 +48,7 @@ class Domain extends \Magento\Framework\App\Config\Value
         // Empty value is treated valid and will be handled when read the value out
         if (!empty($value) && !$this->configValidator->isValid($value)) {
             $msg = __('Invalid domain name: ' . join('; ', $this->configValidator->getMessages()));
-            throw new \Magento\Framework\Model\Exception($msg);
+            throw new \Magento\Framework\Exception\LocalizedException($msg);
         }
     }
 }

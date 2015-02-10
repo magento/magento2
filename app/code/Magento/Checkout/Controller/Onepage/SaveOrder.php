@@ -66,7 +66,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             }
             $result['goto_section'] = 'payment';
             $result['update_section'] = ['name' => 'payment-method', 'html' => $this->_getPaymentMethodsHtml()];
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_objectManager->get(
                 'Magento\Checkout\Helper\Data'

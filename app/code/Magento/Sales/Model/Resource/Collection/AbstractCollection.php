@@ -47,7 +47,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
      *
      * @param string|\Magento\Eav\Model\Entity\Attribute $attribute
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _attributeToField($attribute)
     {
@@ -58,7 +58,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
             $field = $attribute->getAttributeCode();
         }
         if (!$field) {
-            throw new \Magento\Framework\Model\Exception(__('We cannot determine the field name.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot determine the field name.'));
         }
         return $field;
     }

@@ -481,7 +481,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Get allowed shipping methods
      *
      * @return string[]
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAllowedMethods()
     {
@@ -501,7 +501,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                     $allowedMethods = explode(',', $this->getConfigData('nondoc_methods'));
                     break;
                 default:
-                    throw new \Magento\Framework\Model\Exception(__('Wrong Content Type'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Wrong Content Type'));
             }
         }
         $methods = [];
@@ -1021,7 +1021,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param string $response
      * @return bool|\Magento\Framework\Object|Result|Error
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -1052,7 +1052,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                                     break;
                                 }
                             }
-                            throw new \Magento\Framework\Model\Exception(
+                            throw new \Magento\Framework\Exception\LocalizedException(
                                 __('Error #%1 : %2', trim($code), trim($data))
                             );
                         }
@@ -1098,7 +1098,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         } else {
             if (!empty($this->_errors)) {
                 if ($this->_isShippingLabelFlag) {
-                    throw new \Magento\Framework\Model\Exception($responseError);
+                    throw new \Magento\Framework\Exception\LocalizedException($responseError);
                 }
                 return $this->_showError();
             }
@@ -1184,14 +1184,14 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Returns dimension unit (cm or inch)
      *
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getDimensionUnit()
     {
         $countryId = $this->_rawRequest->getOrigCountryId();
         $measureUnit = $this->getCountryParams($countryId)->getMeasureUnit();
         if (empty($measureUnit)) {
-            throw new \Magento\Framework\Model\Exception(__("Cannot identify measure unit for %1", $countryId));
+            throw new \Magento\Framework\Exception\LocalizedException(__("Cannot identify measure unit for %1", $countryId));
         }
         return $measureUnit;
     }
@@ -1200,14 +1200,14 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Returns weight unit (kg or pound)
      *
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getWeightUnit()
     {
         $countryId = $this->_rawRequest->getOrigCountryId();
         $weightUnit = $this->getCountryParams($countryId)->getWeightUnit();
         if (empty($weightUnit)) {
-            throw new \Magento\Framework\Model\Exception(__("Cannot identify weight unit for %1", $countryId));
+            throw new \Magento\Framework\Exception\LocalizedException(__("Cannot identify weight unit for %1", $countryId));
         }
         return $weightUnit;
     }
@@ -1322,7 +1322,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Framework\Object $request
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _mapRequestToShipment(\Magento\Framework\Object $request)
     {
@@ -1337,7 +1337,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $minValue = $this->_getMinDimension($params['dimension_units']);
                 if ($params['width'] < $minValue || $params['length'] < $minValue || $params['height'] < $minValue) {
                     $message = __('Height, width and length should be equal or greater than %1', $minValue);
-                    throw new \Magento\Framework\Model\Exception($message);
+                    throw new \Magento\Framework\Exception\LocalizedException($message);
                 }
             }
 
@@ -1376,7 +1376,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Do rate request and handle errors
      *
      * @return Result|\Magento\Framework\Object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -1394,7 +1394,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         )->getRegion();
 
         if (!$originRegion) {
-            throw new \Magento\Framework\Model\Exception(__('Wrong Region'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Wrong Region'));
         }
 
         if ($originRegion == 'AM') {
@@ -1872,13 +1872,13 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Shipping\Model\Shipment\Request $request
      * @return array|\Magento\Framework\Object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function requestToShipment($request)
     {
         $packages = $request->getPackages();
         if (!is_array($packages) || !$packages) {
-            throw new \Magento\Framework\Model\Exception(__('No packages for request'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('No packages for request'));
         }
         $result = $this->_doShipmentRequest($request);
 
@@ -1925,20 +1925,20 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \SimpleXMLElement $xml
      * @return \Magento\Framework\Object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareShippingLabelContent(\SimpleXMLElement $xml)
     {
         $result = new \Magento\Framework\Object();
         try {
             if (!isset($xml->AirwayBillNumber) || !isset($xml->LabelImage->OutputImage)) {
-                throw new \Magento\Framework\Model\Exception('Unable to retrieve shipping label');
+                throw new \Magento\Framework\Exception\LocalizedException('Unable to retrieve shipping label');
             }
             $result->setTrackingNumber((string)$xml->AirwayBillNumber);
             $labelContent = (string)$xml->LabelImage->OutputImage;
             $result->setShippingLabelContent(base64_decode($labelContent));
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Model\Exception(__($e->getMessage()));
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
         }
         return $result;
     }

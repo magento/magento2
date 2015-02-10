@@ -117,7 +117,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                     $this->messageManager->addError(__('Attribute Set with name \'%1\' already exists.', $name));
                     $this->messageManager->setAttributeData($data);
                     return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
-                } catch (\Magento\Framework\Model\Exception $e) {
+                } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     $this->messageManager->addError($e->getMessage());
                 } catch (\Exception $e) {
                     $this->messageManager->addException($e, __('Something went wrong saving the attribute.'));

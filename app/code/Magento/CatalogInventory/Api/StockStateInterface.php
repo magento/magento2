@@ -40,7 +40,7 @@ interface StockStateInterface
      * @param int $productId
      * @param float $qty
      * @param int $websiteId
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
     public function checkQty($productId, $qty, $websiteId = null);

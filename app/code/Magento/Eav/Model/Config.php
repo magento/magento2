@@ -308,7 +308,7 @@ class Config
      *
      * @param int|string $code
      * @return Type
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getEntityType($code)
     {
@@ -336,7 +336,7 @@ class Config
             ['data' => isset($this->_entityTypeData[$code]) ? $this->_entityTypeData[$code] : []]
         );
         if (!$entityType->getId()) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid entity_type specified: %1', $code));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid entity_type specified: %1', $code));
         }
         $this->_addEntityTypeReference($entityType->getId(), $entityType->getEntityTypeCode());
         $this->_save($entityType, $entityKey);
@@ -407,7 +407,7 @@ class Config
      * @param   mixed $entityType
      * @param   mixed $code
      * @return  \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|false
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttribute($entityType, $code)
     {

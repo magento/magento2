@@ -44,7 +44,7 @@ class Usecustom extends \Magento\Framework\App\Config\Value
      * Validate custom url
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
@@ -52,7 +52,7 @@ class Usecustom extends \Magento\Framework\App\Config\Value
         if ($value == 1) {
             $customUrl = $this->getData('groups/url/fields/custom/value');
             if (empty($customUrl)) {
-                throw new \Magento\Framework\Model\Exception(__('Please specify the admin custom URL.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please specify the admin custom URL.'));
             }
         }
 

@@ -89,7 +89,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_getSession()->setIntegrationData($integrationData);
             $this->_redirectOnSaveError();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
         } catch (\Exception $e) {

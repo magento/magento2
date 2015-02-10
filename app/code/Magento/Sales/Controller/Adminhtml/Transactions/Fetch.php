@@ -28,7 +28,7 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
             $txn->getOrderPaymentObject()->setOrder($txn->getOrder())->importTransactionInfo($txn);
             $txn->save();
             $this->messageManager->addSuccess(__('The transaction details have been updated.'));
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t update the transaction details.'));

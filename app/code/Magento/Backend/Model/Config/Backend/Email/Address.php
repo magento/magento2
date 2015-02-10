@@ -9,19 +9,19 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Email;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 class Address extends \Magento\Framework\App\Config\Value
 {
     /**
      * @return $this
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
         $value = $this->getValue();
         if (!\Zend_Validate::is($value, 'EmailAddress')) {
-            throw new Exception(__('Please correct the email address: "%1".', $value));
+            throw new LocalizedException(__('Please correct the email address: "%1".', $value));
         }
         return $this;
     }

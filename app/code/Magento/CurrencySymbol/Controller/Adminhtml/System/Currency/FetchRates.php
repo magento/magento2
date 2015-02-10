@@ -12,7 +12,7 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
      * Fetch rates action
      *
      * @return void
-     * @throws \Exception|\Magento\Framework\Model\Exception
+     * @throws \Exception|\Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
@@ -32,7 +32,7 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
                     $service
                 );
             } catch (\Exception $e) {
-                throw new \Magento\Framework\Model\Exception(__('We can\'t initialize the import model.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t initialize the import model.'));
             }
             $rates = $importModel->fetchRates();
             $errors = $importModel->getMessages();

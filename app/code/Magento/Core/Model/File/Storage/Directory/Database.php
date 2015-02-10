@@ -177,7 +177,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * Import directories to storage
      *
      * @param  array $dirs
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function importDirectories($dirs)
@@ -203,7 +203,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
                     $directory->setUploadTime($dateSingleton->date());
                     $directory->save();
                 } else {
-                    throw new \Magento\Framework\Model\Exception(__('Parent directory does not exist: %1', $dir['path']));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Parent directory does not exist: %1', $dir['path']));
                 }
             } catch (\Exception $e) {
                 $this->_logger->critical($e);

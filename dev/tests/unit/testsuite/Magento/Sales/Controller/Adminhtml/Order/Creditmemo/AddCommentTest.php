@@ -147,7 +147,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     public function testExecuteModelException()
     {
         $message = 'Model exception';
-        $e = new \Magento\Framework\Model\Exception($message);
+        $e = new \Magento\Framework\Exception\LocalizedException($message);
         $response = ['error' => true, 'message' => $message];
 
         $this->requestMock->expects($this->any())

@@ -367,20 +367,20 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param  string $login
      * @param  string $password
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @deprecated Use \Magento\Customer\Api\AccountManagementInterface::authenticate
      */
     public function authenticate($login, $password)
     {
         $this->loadByEmail($login);
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('This account is not confirmed.'),
                 self::EXCEPTION_EMAIL_NOT_CONFIRMED
             );
         }
         if (!$this->validatePassword($password)) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Invalid login or password.'),
                 self::EXCEPTION_INVALID_EMAIL_OR_PASSWORD
             );
@@ -777,14 +777,14 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param string $backUrl
      * @param string $storeId
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function sendNewAccountEmail($type = 'registered', $backUrl = '', $storeId = '0')
     {
         $types = $this->getTemplateTypes();
 
         if (!isset($types[$type])) {
-            throw new \Magento\Framework\Model\Exception(__('Wrong transactional account email type'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Wrong transactional account email type'));
         }
 
         if (!$storeId) {
@@ -1258,12 +1258,12 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      *
      * @param string $passwordLinkToken
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function changeResetPasswordLinkToken($passwordLinkToken)
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Invalid password reset token.'),
                 self::EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN
             );

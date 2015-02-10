@@ -113,7 +113,7 @@ class Data extends \Magento\Core\Helper\Url
      *
      * @param string|\Magento\Framework\View\Element\AbstractBlock $block
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createBlock($block)
     {
@@ -123,7 +123,7 @@ class Data extends \Magento\Core\Helper\Url
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid block type: %1', $block));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid block type: %1', $block));
         }
         return $block;
     }

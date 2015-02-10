@@ -96,7 +96,7 @@ class UpdateItemOptions extends Action\Action implements IndexInterface
 
             $message = __('%1 has been updated in your wish list.', $product->getName());
             $this->messageManager->addSuccess($message);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('An error occurred while updating wish list.'));

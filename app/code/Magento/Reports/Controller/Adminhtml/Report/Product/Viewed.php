@@ -44,7 +44,7 @@ class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product
             $this->_initReportAction([$gridBlock, $filterFormBlock]);
 
             $this->_view->renderLayout();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(

@@ -65,7 +65,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
     /**
      * Test method '_getEntityAdapter' in case when entity is invalid
      *
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @covers \Magento\ImportExport\Model\Export::_getEntityAdapter
      */
     public function testGetEntityAdapterWithInvalidEntity()

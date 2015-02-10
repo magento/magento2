@@ -29,7 +29,7 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
                 $this->messageManager->addSuccess(
                     __('The sitemap "%1" has been generated.', $sitemap->getSitemapFilename())
                 );
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong generating the sitemap.'));

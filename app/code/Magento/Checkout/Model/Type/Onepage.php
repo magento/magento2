@@ -772,18 +772,18 @@ class Onepage
      * Validate quote state to be integrated with one page checkout process
      *
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validate()
     {
         $quote = $this->getQuote();
 
         if ($quote->isMultipleShippingAddresses()) {
-            throw new \Magento\Framework\Model\Exception(__('There are more than one shipping address.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('There are more than one shipping address.'));
         }
 
         if ($quote->getCheckoutMethod() == self::METHOD_GUEST && !$this->_helper->isAllowedGuestCheckout($quote)) {
-            throw new \Magento\Framework\Model\Exception(__('Sorry, guest checkout is not enabled.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Sorry, guest checkout is not enabled.'));
         }
     }
 

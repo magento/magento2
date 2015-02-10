@@ -102,7 +102,7 @@ class Config
      * Get persistent XML config xpath
      *
      * @return \DOMXPath
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getConfigDomXPath()
     {
@@ -111,7 +111,7 @@ class Config
             $isFile = $this->_modulesDirectory->isFile($filePath);
             $isReadable = $this->_modulesDirectory->isReadable($filePath);
             if (!$isFile || !$isReadable) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('We cannot load the configuration from file %1.', $this->_configFilePath)
                 );
             }
@@ -212,7 +212,7 @@ class Config
      * @param array $info
      * @param bool $instance
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function fireOne($info, $instance = false)
     {
@@ -232,7 +232,7 @@ class Config
         if (method_exists($object, $method)) {
             $object->{$method}($instance);
         } elseif ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 'Method "' . $method . '" is not defined in "' . get_class($object) . '"'
             );
         }

@@ -119,7 +119,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
         try {
             $this->groupResourceModel->save($groupModel);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             /**
              * Would like a better way to determine this error condition but
              *  difficult to do without imposing more database calls

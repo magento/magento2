@@ -114,7 +114,7 @@ class DefaultAttribute extends \Magento\GoogleShopping\Model\Attribute
     protected function _setAttribute($entry, $name, $type = self::ATTRIBUTE_TYPE_TEXT, $value = '', $unit = null)
     {
         if (is_object($value) || (string)$value != $value) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Please correct the attribute "%1" type for Google Shopping. The product with this attribute hasn\'t been updated in Google Content.',
                     $name

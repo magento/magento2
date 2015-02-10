@@ -184,7 +184,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
      * @param int|\Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $itemId
      * @param \Magento\Framework\Object $buyRequest
      * @param null|array|\Magento\Framework\Object $param
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @dataProvider updateItemDataProvider
      */

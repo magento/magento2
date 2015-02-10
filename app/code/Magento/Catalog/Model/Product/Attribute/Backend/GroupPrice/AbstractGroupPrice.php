@@ -134,7 +134,7 @@ abstract class AbstractGroupPrice extends Price
      * Validate group price data
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -161,7 +161,7 @@ abstract class AbstractGroupPrice extends Price
                 )
             );
             if (isset($duplicates[$compare])) {
-                throw new \Magento\Framework\Model\Exception($this->_getDuplicateErrorMessage());
+                throw new \Magento\Framework\Exception\LocalizedException($this->_getDuplicateErrorMessage());
             }
 
             if (!preg_match('/^\d*(\.|,)?\d{0,4}$/i', $priceRow['price']) || $priceRow['price'] < 0) {
@@ -209,7 +209,7 @@ abstract class AbstractGroupPrice extends Price
             $websiteCurrency = $rates[$priceRow['website_id']]['code'];
 
             if ($baseCurrency == $websiteCurrency && isset($duplicates[$globalCompare])) {
-                throw new \Magento\Framework\Model\Exception($this->_getDuplicateErrorMessage());
+                throw new \Magento\Framework\Exception\LocalizedException($this->_getDuplicateErrorMessage());
             }
         }
 

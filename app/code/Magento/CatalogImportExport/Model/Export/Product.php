@@ -310,7 +310,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Initialize product type models.
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     protected function initTypeModels()
@@ -318,12 +318,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $productTypes = $this->_exportConfig->getEntityTypes($this->getEntityTypeCode());
         foreach ($productTypes as $productTypeName => $productTypeConfig) {
             if (!($model = $this->_typeFactory->create($productTypeConfig['model']))) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     "Entity type model '{$productTypeConfig['model']}' is not found"
                 );
             }
             if (!$model instanceof \Magento\CatalogImportExport\Model\Export\Product\Type\AbstractType) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'Entity type model must be an instance of'
                         . ' \Magento\CatalogImportExport\Model\Export\Product\Type\AbstractType'
@@ -340,7 +340,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
         if (!$this->_productTypeModels) {
-            throw new \Magento\Framework\Model\Exception(__('There are no product types available for export'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('There are no product types available for export'));
         }
         $this->_disabledAttrs = array_unique($this->_disabledAttrs);
 

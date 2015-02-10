@@ -111,7 +111,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param array $fields
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addFieldsToFilter($fields)
     {

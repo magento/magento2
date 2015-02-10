@@ -7,7 +7,7 @@ namespace Magento\Theme\Model\Theme;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Design\ThemeInterface;
 
 /**
@@ -99,7 +99,7 @@ class Registration
      * @param ThemeInterface &$theme
      * @param array $inheritanceChain
      * @return $this
-     * @throws Exception
+     * @throws LocalizedException
      */
     protected function _registerThemeRecursively(&$theme, $inheritanceChain = [])
     {
@@ -114,7 +114,7 @@ class Registration
 
         $tempId = $theme->getFullPath();
         if (in_array($tempId, $inheritanceChain)) {
-            throw new Exception(__('Circular-reference in theme inheritance detected for "%1"', $tempId));
+            throw new LocalizedException(__('Circular-reference in theme inheritance detected for "%1"', $tempId));
         }
         $inheritanceChain[] = $tempId;
         $parentTheme = $theme->getParentTheme();

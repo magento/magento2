@@ -39,14 +39,14 @@ class Path extends \Magento\Framework\App\Config\Value
      * Validate a domain name value
      *
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
         $value = $this->getValue();
 
         if (!empty($value) && !$this->configValidator->isValid($value)) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid cookie path'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid cookie path'));
         }
     }
 }

@@ -88,7 +88,7 @@ class ValidatorFile extends Validator
      * @param \Magento\Framework\Object $processingParams
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return array
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_File_Transfer_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */

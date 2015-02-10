@@ -124,6 +124,6 @@ class SaveTest extends \Magento\Catalog\Controller\Adminhtml\ProductTest
      */
     public function exceptionTypeDataProvider()
     {
-        return [['Magento\Framework\Model\Exception'], ['Exception']];
+        return [['Magento\Framework\Exception\LocalizedException'], ['Exception']];
     }
 }

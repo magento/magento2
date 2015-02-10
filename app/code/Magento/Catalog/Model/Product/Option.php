@@ -15,7 +15,7 @@ use Magento\Catalog\Model\Resource\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog product option model
@@ -301,7 +301,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      *
      * @param string $type Option type
      * @return \Magento\Catalog\Model\Product\Option\Type\DefaultType
-     * @throws Exception
+     * @throws LocalizedException
      */
     public function groupFactory($type)
     {
@@ -311,7 +311,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
                 'Magento\Catalog\Model\Product\Option\Type\\' . $this->string->upperCaseWords($group)
             );
         }
-        throw new Exception(__('The option type to get group instance is incorrect.'));
+        throw new LocalizedException(__('The option type to get group instance is incorrect.'));
     }
 
     /**
@@ -396,7 +396,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
 
     /**
      * @return AbstractModel
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSave()
     {
@@ -408,7 +408,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
 
             $this->getValueInstance()->setOption($this)->saveValues();
         } elseif ($this->getGroupByType($this->getType()) == self::OPTION_GROUP_SELECT) {
-            throw new Exception(__('Select type options required values rows.'));
+            throw new LocalizedException(__('Select type options required values rows.'));
         }
 
         return parent::afterSave();

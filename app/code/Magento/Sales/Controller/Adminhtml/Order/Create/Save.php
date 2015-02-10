@@ -60,7 +60,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
                 $this->messageManager->addError($message);
             }
             $resultRedirect->setPath('sales/*/');
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {
                 $this->messageManager->addError($message);

@@ -85,7 +85,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Empty identifier field name
      */
     public function testGetIdFieldNameException()
@@ -105,7 +105,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Empty main table name
      */
     public function testGetMainTableException()

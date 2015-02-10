@@ -5,7 +5,7 @@
  */
 namespace Magento\Sendfriend\Model;
 
-use Magento\Framework\Model\Exception as CoreException;
+use Magento\Framework\Exception\LocalizedException as CoreException;
 
 /**
  * SendFriend Log
@@ -167,7 +167,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     public function send()
     {
         if ($this->isExceedLimit()) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('You\'ve met your limit of %1 sends in an hour.', $this->getMaxSendsToFriend())
             );
         }
@@ -340,14 +340,14 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Product instance
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\Product
      */
     public function getProduct()
     {
         $product = $this->_getData('_product');
         if (!$product instanceof \Magento\Catalog\Model\Product) {
-            throw new \Magento\Framework\Model\Exception(__('Please define a correct Product instance.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please define a correct Product instance.'));
         }
         return $product;
     }
@@ -370,14 +370,14 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Sender Information Object
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Object
      */
     public function getSender()
     {
         $sender = $this->_getData('_sender');
         if (!$sender instanceof \Magento\Framework\Object) {
-            throw new \Magento\Framework\Model\Exception(__('Please define the correct Sender information.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please define the correct Sender information.'));
         }
         return $sender;
     }

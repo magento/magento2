@@ -84,7 +84,7 @@ class Save extends \Magento\Backend\App\Action
             $creditmemo = $this->creditmemoLoader->load();
             if ($creditmemo) {
                 if (!$creditmemo->isValidGrandTotal()) {
-                    throw new \Magento\Framework\Model\Exception(__('Credit memo\'s total must be positive.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Credit memo\'s total must be positive.'));
                 }
 
                 $comment = '';
@@ -105,7 +105,7 @@ class Save extends \Magento\Backend\App\Action
                 if (isset($data['do_offline'])) {
                     //do not allow online refund for Refund to Store Credit
                     if (!$data['do_offline'] && !empty($data['refund_customerbalance_return_enable'])) {
-                        throw new \Magento\Framework\Model\Exception(
+                        throw new \Magento\Framework\Exception\LocalizedException(
                             __('Cannot create online refund for Refund to Store Credit.')
                         );
                     }
@@ -140,7 +140,7 @@ class Save extends \Magento\Backend\App\Action
                 $resultForward->forward('noroute');
                 return $resultForward;
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_getSession()->setFormData($data);
         } catch (\Exception $e) {
