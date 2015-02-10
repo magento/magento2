@@ -11,7 +11,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">100</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">1</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -41,7 +41,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">1</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -71,7 +71,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">33</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -101,7 +101,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">55</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -134,7 +134,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">100</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">50</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -162,7 +162,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">9999</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -218,7 +218,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">57</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -249,7 +249,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">65</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">11</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -280,7 +280,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">65</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">11</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -310,7 +310,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">100</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -338,7 +338,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">10</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -367,7 +367,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">365</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">23</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
@@ -396,7 +396,7 @@
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">250</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">65</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>

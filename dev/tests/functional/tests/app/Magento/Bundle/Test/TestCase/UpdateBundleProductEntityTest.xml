@@ -9,9 +9,9 @@
   <testCase name="UpdateBundleProductEntityTest">
     <variation name="UpdateBundleProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
       <data name="originalProduct/dataSet" xsi:type="string">bundle_dynamic_product</data>
-      <data name="product/data/name" xsi:type="string">bundle_dynamic_%isolation%</data>
+      <data name="product/data/name" xsi:type="string">bundle_fixed_%isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
-      <data name="product/data/sku" xsi:type="string">bundle_dynamic_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">bundle_fixed_%isolation%</data>
       <data name="product/data/price/preset" xsi:type="string">dynamic-100</data>
       <data name="product/data/weight_type" xsi:type="string">Fixed</data>
       <data name="product/data/weight" xsi:type="string">1</data>
@@ -21,6 +21,7 @@
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">bundle-fixed-url-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertBundleItemsOnProductPage" prev="assertProductSaveMessage"/>
       <constraint name="assertBundleItemsOnProductPage" next="assertBundleProductForm" prev="assertProductInGrid"/>
@@ -44,6 +45,7 @@
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_fixed</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+      <data name="product/data/url_key" xsi:type="string">bundle-dynamic-url-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertBundleItemsOnProductPage" prev="assertProductSaveMessage"/>
       <constraint name="assertBundleItemsOnProductPage" next="assertBundleProductForm" prev="assertProductInGrid"/>

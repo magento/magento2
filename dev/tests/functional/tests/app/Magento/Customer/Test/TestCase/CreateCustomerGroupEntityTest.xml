@@ -8,14 +8,14 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="CreateCustomerGroupEntityTest">
     <variation name="CreateCustomerGroupEntityTestVariation1" firstConstraint="assertCustomerGroupSuccessSaveMessage" method="test">
-      <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">Retail Customer</data>
+      <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">retail_customer</data>
       <data name="customerGroup/data/customer_group_code" xsi:type="string">GroupName%isolation%</data>
       <constraint name="assertCustomerGroupSuccessSaveMessage" next="assertCustomerGroupInGrid"/>
       <constraint name="assertCustomerGroupInGrid" next="assertCustomerGroupOnCustomerForm" prev="assertCustomerGroupSuccessSaveMessage"/>
       <constraint name="assertCustomerGroupOnCustomerForm" prev="assertCustomerGroupInGrid"/>
     </variation>
     <variation name="CreateCustomerGroupEntityTestVariation2" firstConstraint="assertCustomerGroupAlreadyExists" method="test">
-      <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">Retail Customer</data>
+      <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">retail_customer</data>
       <data name="customerGroup/data/customer_group_code" xsi:type="string">General</data>
       <constraint name="assertCustomerGroupAlreadyExists"/>
     </variation>

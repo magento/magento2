@@ -18,6 +18,7 @@
       <data name="product/data/weight" xsi:type="string">120.0000</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductSaveMessage"/>
       <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
@@ -35,6 +36,7 @@
       <data name="product/data/weight" xsi:type="string">129.0000</data>
       <data name="product/data/visibility" xsi:type="string">Not Visible Individually</data>
       <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertProductIsNotDisplayingOnFrontend" prev="assertProductSaveMessage"/>
       <constraint name="assertProductIsNotDisplayingOnFrontend" prev="assertProductForm"/>
@@ -50,6 +52,7 @@
       <data name="product/data/weight" xsi:type="string">25.0000</data>
       <data name="product/data/visibility" xsi:type="string">Catalog</data>
       <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInStock"/>
       <constraint name="assertProductInStock" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductSearchableBySku" prev="assertProductInStock"/>
@@ -68,6 +71,7 @@
       <data name="product/data/weight" xsi:type="string">89.0000</data>
       <data name="product/data/visibility" xsi:type="string">Search</data>
       <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInStock"/>
       <constraint name="assertProductInStock" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductVisibleInCategory" prev="assertProductInStock"/>
@@ -87,6 +91,7 @@
       <data name="product/data/weight" xsi:type="string">125.0000</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertProductOutOfStock" prev="assertProductSaveMessage"/>
       <constraint name="assertProductOutOfStock" next="assertProductPage" prev="assertProductForm"/>
@@ -105,6 +110,7 @@
       <data name="product/data/weight" xsi:type="string">333.0000</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/status" xsi:type="string">Product offline</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertProductIsNotDisplayingOnFrontend" prev="assertProductSaveMessage"/>
       <constraint name="assertProductIsNotDisplayingOnFrontend" prev="assertProductForm"/>
@@ -120,6 +126,7 @@
       <data name="product/data/weight" xsi:type="string">333.0000</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertUrlRewriteUpdatedProductInGrid" prev="assertProductSaveMessage"/>
       <constraint name="assertUrlRewriteUpdatedProductInGrid" next="assertProductVisibleInCategory" prev="assertProductForm"/>

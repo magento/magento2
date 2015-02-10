@@ -17,7 +17,7 @@
       <data name="user/data/is_active" xsi:type="string">Active</data>
       <data name="user/data/role_id/dataSet" xsi:type="string">Administrators</data>
       <data name="isDuplicated" xsi:type="string">-</data>
-      <data name="user/data/current_password" xsi:type="string">123123q</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
       <constraint name="assertUserSuccessSaveMessage" next="assertUserInGrid"/>
       <constraint name="assertUserInGrid" next="assertUserSuccessLogOut" prev="assertUserSuccessSaveMessage"/>
       <constraint name="assertUserSuccessLogOut" next="assertUserSuccessLogin" prev="assertUserInGrid"/>
@@ -33,7 +33,7 @@
       <data name="user/data/is_active" xsi:type="string">Inactive</data>
       <data name="user/data/role_id/dataSet" xsi:type="string">Administrators</data>
       <data name="isDuplicated" xsi:type="string">-</data>
-      <data name="user/data/current_password" xsi:type="string">123123q</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
       <constraint name="assertUserSuccessSaveMessage" next="assertUserInGrid"/>
       <constraint name="assertUserInGrid" next="assertUserSuccessLogOut" prev="assertUserSuccessSaveMessage"/>
       <constraint name="assertUserSuccessLogOut" next="assertUserWrongCredentialsMessage" prev="assertUserInGrid"/>
@@ -49,7 +49,7 @@
       <data name="user/data/is_active" xsi:type="string">Active</data>
       <data name="user/data/role_id/dataSet" xsi:type="string">Administrators</data>
       <data name="isDuplicated" xsi:type="string">username</data>
-      <data name="user/data/current_password" xsi:type="string">123123q</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
       <constraint name="assertUserDuplicateMessage"/>
     </variation>
     <variation name="CreateAdminUserEntityTestVariation4" firstConstraint="assertUserDuplicateMessage" method="test">
@@ -62,7 +62,7 @@
       <data name="user/data/is_active" xsi:type="string">Active</data>
       <data name="user/data/role_id/dataSet" xsi:type="string">Administrators</data>
       <data name="isDuplicated" xsi:type="string">email</data>
-      <data name="user/data/current_password" xsi:type="string">123123q</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
       <constraint name="assertUserDuplicateMessage"/>
     </variation>
     <variation name="CreateAdminUserEntityTestVariation5" firstConstraint="assertUserSuccessSaveMessage" method="test">
@@ -75,7 +75,7 @@
       <data name="user/data/is_active" xsi:type="string">Active</data>
       <data name="user/data/role_id/dataSet" xsi:type="string">-</data>
       <data name="isDuplicated" xsi:type="string">-</data>
-      <data name="user/data/current_password" xsi:type="string">123123q</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
       <constraint name="assertUserSuccessSaveMessage" next="assertUserInGrid"/>
       <constraint name="assertUserInGrid" next="assertUserSuccessLogOut" prev="assertUserSuccessSaveMessage"/>
       <constraint name="assertUserSuccessLogOut" next="assertUserWrongCredentialsMessage" prev="assertUserInGrid"/>
@@ -91,7 +91,7 @@
       <data name="user/data/is_active" xsi:type="string">Active</data>
       <data name="user/data/role_id/dataSet" xsi:type="string">-</data>
       <data name="isDuplicated" xsi:type="string">-</data>
-      <data name="user/data/current_password" xsi:type="string">123123q</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
       <constraint name="assertUserInvalidEmailMessage"/>
     </variation>
   </testCase>

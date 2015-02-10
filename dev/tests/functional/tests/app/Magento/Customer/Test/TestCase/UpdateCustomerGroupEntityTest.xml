@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="UpdateCustomerGroupEntityTest">
     <variation name="UpdateCustomerGroupEntityTestVariation1" firstConstraint="assertCustomerGroupSuccessSaveMessage" method="test">
-      <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">Retail Customer</data>
+      <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">retail_customer</data>
       <data name="customerGroup/data/customer_group_code" xsi:type="string">GroupName%isolation%</data>
       <constraint name="assertCustomerGroupSuccessSaveMessage" next="assertCustomerGroupInGrid"/>
       <constraint name="assertCustomerGroupInGrid" next="assertCustomerGroupOnCustomerForm" prev="assertCustomerGroupSuccessSaveMessage"/>

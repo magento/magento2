@@ -51,6 +51,7 @@
       <data name="address/data/region_id" xsi:type="string">-</data>
       <data name="address/data/postcode" xsi:type="string">-</data>
       <data name="address/data/telephone" xsi:type="string">-</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-31689</data>
       <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerInGrid"/>
       <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessSaveMessage"/>
       <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>

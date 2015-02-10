@@ -21,6 +21,7 @@
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog</data>
+      <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
@@ -34,7 +35,7 @@
       <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">120.00</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
@@ -44,6 +45,7 @@
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+      <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
@@ -68,6 +70,7 @@
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+      <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
@@ -82,7 +85,7 @@
       <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">99.99</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
@@ -92,6 +95,7 @@
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Search</data>
+      <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
@@ -113,6 +117,7 @@
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog</data>
+      <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
@@ -124,7 +129,7 @@
       <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">145.00</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
       <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
@@ -134,6 +139,7 @@
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+      <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
@@ -157,6 +163,7 @@
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+      <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
@@ -168,7 +175,7 @@
       <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">5.00</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
@@ -178,6 +185,7 @@
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Search</data>
+      <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
@@ -199,6 +207,7 @@
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">options-suite</data>
       <data name="product/data/visibility" xsi:type="string">Search</data>
+      <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
@@ -211,7 +220,7 @@
       <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">99.99</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
       <data name="product/data/is_virtual" xsi:type="string">Yes</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
@@ -221,6 +230,7 @@
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+      <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
@@ -241,7 +251,8 @@
       <data name="product/data/tier_price/preset" xsi:type="string">MAGETWO-23002</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
-      <data name="product/data/visibility" xsi:type="string">Catalog</data>
+      <data name="product/data/visibility" xsi:type="string">virtual-product-%isolation%</data>
+      <data name="product/data/url_key" xsi:type="string">Catalog</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>

@@ -13,7 +13,6 @@
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation2" firstConstraint="assertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">bundleProduct::bundle_fixed_product</data>
-      <data name="issue" xsi:type="string">Bug: MAGETWO-28350</data>
       <constraint name="assertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation3" firstConstraint="assertCartIsEmpty" method="test">
@@ -21,7 +20,7 @@
       <constraint name="assertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation4" firstConstraint="assertCartIsEmpty" method="test">
-      <data name="productsData" xsi:type="string">catalogProductVirtual::50_dollar_product</data>
+      <data name="productsData" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
       <constraint name="assertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation5" firstConstraint="assertCartIsEmpty" method="test">
@@ -37,8 +36,7 @@
       <constraint name="assertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation8" firstConstraint="assertCartIsEmpty" method="test">
-      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::50_dollar_product, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
-      <data name="issue" xsi:type="string">Bug: MAGETWO-28350</data>
+      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
       <constraint name="assertCartIsEmpty"/>
     </variation>
   </testCase>

@@ -17,6 +17,7 @@
       <data name="product/data/associated/preset" xsi:type="string">-</data>
       <data name="product/data/description" xsi:type="string">This is edited description for grouped product</data>
       <data name="product/data/short_description" xsi:type="string">This is edited short description for grouped product</data>
+      <data name="product/data/url_key" xsi:type="string">updated-grouped-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInStock"/>
       <constraint name="assertProductInStock" next="assertProductPage" prev="assertProductSaveMessage"/>
       <constraint name="assertProductPage" prev="assertProductInStock"/>
@@ -27,10 +28,11 @@
       <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
-      <data name="product/data/associated/products" xsi:type="string">catalogProductVirtual::default,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/associated/products" xsi:type="string">catalogProductVirtual::default,catalogProductVirtual::product_50_dollar</data>
       <data name="product/data/associated/preset" xsi:type="string">defaultVirtualProduct</data>
       <data name="product/data/description" xsi:type="string">-</data>
       <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">updated-grouped-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertGroupedProductForm"/>
       <constraint name="assertGroupedProductForm" prev="assertProductSaveMessage"/>
     </variation>
@@ -44,6 +46,7 @@
       <data name="product/data/associated/preset" xsi:type="string">defaultSimpleProduct_without_qty</data>
       <data name="product/data/description" xsi:type="string">-</data>
       <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">updated-grouped-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertGroupedProductsDefaultQty"/>
       <constraint name="assertGroupedProductsDefaultQty" next="assertGroupedProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertGroupedProductForm" prev="assertGroupedProductsDefaultQty"/>
@@ -58,10 +61,11 @@
       <data name="product/data/associated/preset" xsi:type="string">defaultSimpleProduct_with_specialPrice</data>
       <data name="product/data/description" xsi:type="string">-</data>
       <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">updated-grouped-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertSpecialPriceOnGroupedProductPage"/>
       <constraint name="assertSpecialPriceOnGroupedProductPage" prev="assertProductSaveMessage"/>
     </variation>
-    <variation name="UpdateGroupedProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateGroupedProductEntityTestVariation5">
       <data name="originalProduct/dataSet" xsi:type="string">default</data>
       <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
       <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
@@ -71,8 +75,7 @@
       <data name="product/data/associated/preset" xsi:type="string">-</data>
       <data name="product/data/description" xsi:type="string">-</data>
       <data name="product/data/short_description" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductOutOfStock"/>
-      <constraint name="assertProductOutOfStock" prev="assertProductSaveMessage"/>
+      <data name="product/data/url_key" xsi:type="string">assertProductSaveMessage, assertProductOutOfStock</data>
     </variation>
   </testCase>
 </config>

@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="EditSearchTermEntityTest">
     <variation name="EditSearchTermEntityTestVariation1" firstConstraint="assertSearchTermSuccessSaveMessage" method="test">
-      <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::getSku</data>
+      <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::sku</data>
       <data name="searchTerm/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
       <data name="searchTerm/data/num_results" xsi:type="string">1</data>
       <data name="searchTerm/data/popularity" xsi:type="string">20</data>

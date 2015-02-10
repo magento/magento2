@@ -21,6 +21,7 @@
       <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
       <data name="updatedProduct/data/weight" xsi:type="string">3</data>
       <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
       <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
@@ -45,6 +46,7 @@
       <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
       <data name="updatedProduct/data/weight" xsi:type="string">3</data>
       <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
       <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertConfigurableProductForm" prev="assertProductSaveMessage"/>
@@ -67,6 +69,7 @@
       <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
       <data name="updatedProduct/data/weight" xsi:type="string">3</data>
       <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
       <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertConfigurableProductForm" prev="assertProductSaveMessage"/>
@@ -89,6 +92,7 @@
       <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
       <data name="updatedProduct/data/weight" xsi:type="string">3</data>
       <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
       <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertConfigurableProductForm" prev="assertProductSaveMessage"/>

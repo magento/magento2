@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="ConfigureProductInCustomerWishlistOnFrontendTest">
+    <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation1" firstConstraint="assertProductIsPresentInWishlist" method="test">
+      <data name="product" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
+      <constraint name="assertProductIsPresentInWishlist" next="assertProductDetailsInWishlist"/>
+      <constraint name="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation2" firstConstraint="assertProductIsPresentInWishlist" method="test">
+      <data name="product" xsi:type="string">configurableProductInjectable::default</data>
+      <constraint name="assertProductIsPresentInWishlist" next="assertProductDetailsInWishlist"/>
+      <constraint name="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation3" firstConstraint="assertProductIsPresentInWishlist" method="test">
+      <data name="product" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+      <constraint name="assertProductIsPresentInWishlist" next="assertProductDetailsInWishlist"/>
+      <constraint name="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation4" firstConstraint="assertProductIsPresentInWishlist" method="test">
+      <data name="product" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
+      <constraint name="assertProductIsPresentInWishlist" next="assertProductDetailsInWishlist"/>
+      <constraint name="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation5" firstConstraint="assertProductIsPresentInWishlist" method="test">
+      <data name="product" xsi:type="string">groupedProductInjectable::three_simple_products</data>
+      <constraint name="assertProductIsPresentInWishlist" next="assertProductDetailsInWishlist"/>
+      <constraint name="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+  </testCase>
+</config>
