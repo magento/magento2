@@ -236,7 +236,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_model->setPostValue($post);
         $this->assertEquals($post, $this->_model->getPost()->toArray());
 
-        $this->_model->setPostValue([]);
+        $this->_model->setPost(new \Zend\Stdlib\Parameters([]));
         $this->assertEmpty($this->_model->getPost()->toArray());
 
         $post = ['post_var' => 'post_value'];
