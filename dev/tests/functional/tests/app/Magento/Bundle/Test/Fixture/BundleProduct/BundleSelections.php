@@ -672,7 +672,7 @@ class BundleSelections implements FixtureInterface
                 'products' => [
                     [
                         'catalogProductSimple::simple',
-                        'catalogProductVirtual::for_bundle_fixed',
+                        'catalogProductVirtual::product_15_dollar',
                     ],
                 ],
             ],

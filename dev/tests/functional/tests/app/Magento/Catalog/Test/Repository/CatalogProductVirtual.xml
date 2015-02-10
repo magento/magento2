@@ -143,7 +143,7 @@
             </field>
         </dataset>
 
-        <dataset name="for_bundle_fixed">
+        <dataset name="product_15_dollar">
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">taxable_goods</item>
             </field>

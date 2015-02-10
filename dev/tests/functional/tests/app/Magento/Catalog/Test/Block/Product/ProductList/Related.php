@@ -19,7 +19,7 @@ class Related extends PromotedSection
      * Return product item block.
      *
      * @param FixtureInterface $product
-     * @return ProductItem
+     * @return RelatedProductItem
      */
     public function getProductItem(FixtureInterface $product)
     {

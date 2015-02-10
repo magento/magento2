@@ -59,7 +59,7 @@ class SuggestElement extends SimpleElement
 
         $this->clear();
 
-        if ($value == ''){
+        if ($value == '') {
             return;
         }
         foreach (str_split($value) as $symbol) {
