@@ -1569,7 +1569,7 @@ return [
     ['Magento\Adminhtml\Block\System\Store\Store', 'Magento\Backend\Block\System\Store\Store'],
     ['Magento\Adminhtml\Block\System\Variable\Edit\Form', 'Magento\Backend\Block\System\Variable\Edit\Form'],
     ['Magento\Adminhtml\Block\System\Variable\Edit', 'Magento\Backend\Block\System\Variable\Edit'],
-    ['Magento\Adminhtml\Block\System\Variable', 'Magento\Backend\Block\System\Variable'],
+    ['Magento\Adminhtml\Block\System\Variable', 'Magento\Variable\Block\System\Variable'],
     [
         'Magento\Adminhtml\Block\Checkout\Agreement\Edit\Form',
         'Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit\Form'
@@ -1584,6 +1584,7 @@ return [
     ],
     ['Magento\Adminhtml\Block\Checkout\Agreement', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement'],
     ['Magento\Adminhtml\Controller\Checkout\Agreement', 'Magento\Checkout\Controller\Adminhtml\Agreement'],
+    ['Magento\Backend\Block\System\Variable', 'Magento\Variable\Block\System\Variable'],
     ['Magento\Core\Model\View\PublicFilesManagerInterface', 'Magento\Framework\View\Asset\SourceFileInterface'],
     ['Magento\Core\Model\View\DeployedFilesManager', 'Magento\Framework\View\AssetInterface'],
     ['Magento\Framework\View\DeployedFilesManager', 'Magento\Framework\View\AssetInterface'],

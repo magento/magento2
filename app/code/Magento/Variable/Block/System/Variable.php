@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Block\System;
+namespace Magento\Variable\Block\System;
 
 /**
  * Custom Variable Block
@@ -19,7 +19,7 @@ class Variable extends \Magento\Backend\Block\Widget\Grid\Container
      */
     protected function _construct()
     {
-        $this->_blockGroup = 'Magento_Backend';
+        $this->_blockGroup = 'Magento_Variable';
         $this->_controller = 'system_variable';
         $this->_headerText = __('Custom Variables');
         parent::_construct();

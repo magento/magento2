@@ -9,7 +9,7 @@
     <update handle="adminhtml_system_variable_grid_block"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Backend\Block\System\Variable" name="adminhtml.system.variable.grid.container"/>
+            <block class="Magento\Variable\Block\System\Variable" name="adminhtml.system.variable.grid.container"/>
         </referenceContainer>
     </body>
 </page>
