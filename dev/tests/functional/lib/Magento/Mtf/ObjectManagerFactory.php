@@ -65,26 +65,6 @@ class ObjectManagerFactory
     }
 
     /**
-     * Create instance of application deployment config
-     *
-     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
-     * @param array $arguments
-     * @return \Magento\Framework\App\DeploymentConfig
-     */
-    protected function createDeploymentConfig(
-        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
-        array $arguments
-    ) {
-        $data = isset($arguments[\Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE])
-            ? $arguments[\Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE]
-            : null;
-        return new \Magento\Framework\App\DeploymentConfig(
-            new \Magento\Framework\App\DeploymentConfig\Reader($directoryList),
-            $data
-        );
-    }
-
-    /**
      * Return newly created instance on an argument interpreter, suitable for processing DI arguments
      *
      * @param \Magento\Mtf\Stdlib\BooleanUtils $booleanUtils

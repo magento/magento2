@@ -137,6 +137,7 @@ class CustomerForm extends FormTabs
     {
         $this->waitForElementNotVisible($this->spinner);
         $this->waitForElementVisible($this->activeFormTab);
+        sleep(10); //@todo MAGETWO-33615
     }
 
     /**
