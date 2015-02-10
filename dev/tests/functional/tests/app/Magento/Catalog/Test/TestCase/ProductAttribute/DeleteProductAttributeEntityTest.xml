@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="DeleteProductAttributeEntityTest">
     <variation name="DeleteProductAttributeEntityTestVariation1" firstConstraint="assertProductAttributeSuccessDeleteMessage" method="test">
       <data name="attribute/dataSet" xsi:type="string">attribute_type_text_field</data>

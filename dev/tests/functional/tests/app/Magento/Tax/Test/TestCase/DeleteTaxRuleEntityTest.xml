@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="DeleteTaxRuleEntityTest">
     <variation name="DeleteTaxRuleEntityTestVariation1" firstConstraint="assertTaxRuleSuccessDeleteMessage" method="test">
       <data name="taxRule/dataSet" xsi:type="string">tax_rule_with_custom_tax_classes</data>

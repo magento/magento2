@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="SuggestSearchingResultEntityTest">
     <variation name="SuggestSearchingResultEntityTestVariation1" firstConstraint="assertSuggestSearchingResult" method="test">
       <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::name</data>

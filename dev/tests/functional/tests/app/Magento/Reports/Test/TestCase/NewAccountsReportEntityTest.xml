@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="NewAccountsReportEntityTest">
     <variation name="NewAccountsReportEntityTestVariation1" firstConstraint="assertNewAccountsReportTotalResult" method="test">
       <data name="customer/dataSet" xsi:type="string">default</data>

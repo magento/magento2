@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="CreateAdminUserRoleEntityTest">
     <variation name="CreateAdminUserRoleEntityTestVariation1" firstConstraint="assertRoleSuccessSaveMessage" method="test">
       <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>

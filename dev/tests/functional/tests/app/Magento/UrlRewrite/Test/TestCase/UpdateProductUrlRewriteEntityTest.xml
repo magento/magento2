@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/variations.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="UpdateProductUrlRewriteEntityTest">
     <variation name="UpdateProductUrlRewriteEntityTestVariation1" firstConstraint="assertUrlRewriteSaveMessage" method="test">
       <data name="urlRewrite/data/target_path/entity" xsi:type="string">product/%catalogProductSimple::100_dollar_product%</data>
