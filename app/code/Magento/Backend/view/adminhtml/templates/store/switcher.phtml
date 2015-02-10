@@ -113,7 +113,7 @@
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             <?php endforeach; ?>
-            <?php if ($block->getShowManageStoresLink() && $block->getAuthorization()->isAllowed('Magento_Adminhtml::store')): ?>
+            <?php if ($block->getShowManageStoresLink() && $block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
                 <li class="dropdown-toolbar">
                     <a href="<?php echo $block->getUrl('*/system_store') ?>"><?php echo __('Stores Configuration') ?></a>
                 </li>

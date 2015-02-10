@@ -68,7 +68,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                 }
 
                 $area = 'frontend';
-                if ($module == 'Magento_Adminhtml' || strpos(
+                if ($module == 'Magento_Backend' || strpos(
                     $blockClass,
                     '\\Adminhtml\\'
                 ) || strpos(

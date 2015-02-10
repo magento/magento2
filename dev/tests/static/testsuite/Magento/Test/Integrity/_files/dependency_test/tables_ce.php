@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 return [
-    'admin_assert' => 'Magento_Adminhtml',
+    'admin_assert' => 'Magento_Backend',
     'authorization_role' => 'Magento_Authorization',
     'authorization_rule' => 'Magento_Authorization',
-    'admin_user' => 'Magento_Adminhtml',
+    'admin_user' => 'Magento_Backend',
     'adminnotification_inbox' => 'Magento_AdminNotification',
     'catalog_category_entity_datetime' => 'Magento_Catalog',
     'catalog_category_entity_decimal' => 'Magento_Catalog',
