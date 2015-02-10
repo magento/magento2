@@ -29,7 +29,7 @@ interface AgreementInterface
     /**
      * Sets the agreement ID.
      *
-     * @param int id
+     * @param int $id
      * @return $this
      */
     public function setAgreementId($id);
@@ -44,7 +44,7 @@ interface AgreementInterface
     /**
      * Sets the agreement name.
      *
-     * @param string name
+     * @param string $name
      * @return $this
      */
     public function setName($name);
@@ -59,7 +59,7 @@ interface AgreementInterface
     /**
      * Sets the agreement content.
      *
-     * @param string content
+     * @param string $content
      * @return $this
      */
     public function setContent($content);
@@ -74,7 +74,7 @@ interface AgreementInterface
     /**
      * Sets the agreement content height, which is an optional CSS property.
      *
-     * @param string|null height
+     * @param string|null $height
      * @return $this
      */
     public function setContentHeight($height);
@@ -89,7 +89,7 @@ interface AgreementInterface
     /**
      * Sets the agreement checkbox text.
      *
-     * @param string text
+     * @param string $text
      * @return $this
      */
     public function setCheckboxText($text);
@@ -105,7 +105,7 @@ interface AgreementInterface
     /**
      * Sets the agreement status.
      *
-     * @param bool status
+     * @param bool $status
      * @return $this
      */
     public function setIsActive($status);
@@ -124,7 +124,7 @@ interface AgreementInterface
      * * true - HTML
      * * false - plain text
      *
-     * @param bool isHtml
+     * @param bool $isHtml
      * @return $this
      */
     public function setIsHtml($isHtml);
