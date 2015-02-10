@@ -38,6 +38,33 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Test', $result[1]);
     }
 
+    public function testNonExistentPropertiesWithDefaultArgumentValue()
+    {
+        $data = [];
+        $result = $this->serializer->getInputData(
+            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'simpleDefaultValue',
+            $data
+        );
+        $this->assertNotNull($result);
+        $this->assertEquals(\Magento\Webapi\Service\Entity\TestService::DEFAULT_VALUE, $result[0]);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage \Magento\Framework\Exception\InputException::DEFAULT_MESSAGE
+     */
+    public function testNonExistentPropertiesWithoutDefaultArgumentValue()
+    {
+        $data = [];
+        $result = $this->serializer->getInputData(
+            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'simple',
+            $data
+        );
+        $this->assertNull($result);
+    }
+
     public function testNestedDataProperties()
     {
         $data = ['nested' => ['details' => ['entityId' => 15, 'name' => 'Test']]];
