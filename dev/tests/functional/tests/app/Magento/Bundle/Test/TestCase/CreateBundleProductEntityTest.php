@@ -29,6 +29,7 @@ use Magento\Mtf\TestCase\Injectable;
 class CreateBundleProductEntityTest extends Injectable
 {
     /* tags */
+    const TEST_TYPE = 'acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */

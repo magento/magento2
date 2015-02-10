@@ -140,7 +140,7 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
     }
 
     /**
-     * Open product in related products section and verify her promoted products.
+     * Open product in related products section and verify its promoted products.
      *
      * @param string $productShortName
      * @return void

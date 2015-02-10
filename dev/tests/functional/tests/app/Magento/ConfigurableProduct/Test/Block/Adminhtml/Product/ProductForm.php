@@ -6,8 +6,6 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
-use Magento\Mtf\Client\Element;
-use Magento\Mtf\Fixture\DataFixture;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Backend\Test\Block\Widget\FormTabs;
@@ -32,8 +30,8 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
         $tabs = $this->getFieldsByTabs($product);
         ksort($tabs);
 
-        if ($product instanceof DataFixture) {
-            $tabs = $this->normalizeDeprecateData($tabs);
+        if ($category) {
+            $tabs['product-details']['category_ids']['value'] = $category->getName();
         }
 
         $this->showAdvancedSettings();

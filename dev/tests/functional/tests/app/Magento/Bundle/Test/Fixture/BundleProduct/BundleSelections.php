@@ -614,6 +614,68 @@ class BundleSelections implements FixtureInterface
                     ],
                 ],
             ],
+
+            'one_options_assigned_simple_big_qty' => [
+                'bundle_options' => [
+                    [
+                        'title' => 'Drop-down Option',
+                        'type' => 'Drop-down',
+                        'assigned_products' => [
+                            [
+                                'search_data' => [
+                                    'name' => '%product_name%',
+                                ],
+                                'data' => [
+                                    'selection_qty' => 1,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'products' => [
+                    [
+                        'catalogProductSimple::simple_big_qty',
+                    ],
+                ],
+            ],
+
+            'required_two_fixed_options' => [
+                'bundle_options' => [
+                    [
+                        'title' => 'Drop-down Option',
+                        'type' => 'Drop-down',
+                        'required' => 'Yes',
+                        'assigned_products' => [
+                            [
+                                'search_data' => [
+                                    'name' => '%product_name%',
+                                ],
+                                'data' => [
+                                    'selection_price_value' => 10.00,
+                                    'selection_price_type' => 'Fixed',
+                                    'selection_qty' => 1,
+                                ],
+                            ],
+                            [
+                                'search_data' => [
+                                    'name' => '%product_name%',
+                                ],
+                                'data' => [
+                                    'selection_price_value' => 20.00,
+                                    'selection_price_type' => 'Fixed',
+                                    'selection_qty' => 1,
+                                ]
+                            ],
+                        ],
+                    ],
+                ],
+                'products' => [
+                    [
+                        'catalogProductSimple::simple',
+                        'catalogProductVirtual::product_15_dollar',
+                    ],
+                ],
+            ],
         ];
         if (!isset($presets[$name])) {
             throw new \InvalidArgumentException(

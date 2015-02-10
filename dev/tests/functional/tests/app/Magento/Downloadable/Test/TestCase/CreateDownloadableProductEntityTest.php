@@ -9,7 +9,7 @@ namespace Magento\Downloadable\Test\TestCase;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
+use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -30,6 +30,7 @@ use Magento\Mtf\TestCase\Injectable;
 class CreateDownloadableProductEntityTest extends Injectable
 {
     /* tags */
+    const TEST_TYPE = 'acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
@@ -90,11 +91,11 @@ class CreateDownloadableProductEntityTest extends Injectable
     /**
      * Test create downloadable product
      *
-     * @param DownloadableProductInjectable $product
+     * @param DownloadableProduct $product
      * @param Category $category
      * @return void
      */
-    public function test(DownloadableProductInjectable $product, Category $category)
+    public function test(DownloadableProduct $product, Category $category)
     {
         // Steps
         $this->catalogProductIndex->open();

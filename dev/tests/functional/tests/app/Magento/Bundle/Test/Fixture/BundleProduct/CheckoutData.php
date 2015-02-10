@@ -304,6 +304,19 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     ],
                 ],
             ],
+            'required_two_fixed_options' => [
+                'options' => [
+                    'bundle_options' => [
+                        [
+                            'title' => 'Drop-down Option',
+                            'type' => 'Drop-down',
+                            'value' => [
+                                'name' => 'Test simple product',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
         return isset($presets[$name]) ? $presets[$name] : null;
     }

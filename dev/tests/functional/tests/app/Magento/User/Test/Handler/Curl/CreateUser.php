@@ -85,7 +85,7 @@ class CreateUser extends Curl
         $curl = new BackendDecorator(new CurlTransport(), new Config());
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
-        $response = $curl->read();
+        $curl->read();
         $curl->close();
         $data['id'] = $this->_getUserId($data);
         return $data;
