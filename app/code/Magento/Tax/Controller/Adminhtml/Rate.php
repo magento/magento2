@@ -24,33 +24,33 @@ class Rate extends \Magento\Backend\App\Action
     protected $_taxRateRepository;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxRateDataBuilder
+     * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory
      */
-    protected $_taxRateBuilder;
+    protected $_taxRateDataObjectFactory;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxRateTitleDataBuilder
+     * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory
      */
-    protected $_taxRateTitleBuilder;
+    protected $_taxRateTitleDataObjectFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
-     * @param \Magento\Tax\Api\Data\TaxRateDataBuilder $taxRateBuilder
-     * @param \Magento\Tax\Api\Data\TaxRateTitleDataBuilder $taxRateTitleBuilder
+     * @param \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory
+     * @param \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository,
-        \Magento\Tax\Api\Data\TaxRateDataBuilder $taxRateBuilder,
-        \Magento\Tax\Api\Data\TaxRateTitleDataBuilder $taxRateTitleBuilder
+        \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory,
+        \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_taxRateRepository = $taxRateRepository;
-        $this->_taxRateBuilder = $taxRateBuilder;
-        $this->_taxRateTitleBuilder = $taxRateTitleBuilder;
+        $this->_taxRateDataObjectFactory = $taxRateDataObjectFactory;
+        $this->_taxRateTitleDataObjectFactory = $taxRateTitleDataObjectFactory;
         parent::__construct($context);
     }
 
@@ -109,26 +109,27 @@ class Rate extends \Magento\Backend\App\Action
      */
     protected function populateTaxRateData($formData)
     {
-        $this->_taxRateBuilder->setId($this->extractFormData($formData, 'tax_calculation_rate_id'))
+        $taxRate = $this->_taxRateDataObjectFactory->create();
+        $taxRate->setId($this->extractFormData($formData, 'tax_calculation_rate_id'))
             ->setTaxCountryId($this->extractFormData($formData, 'tax_country_id'))
             ->setTaxRegionId($this->extractFormData($formData, 'tax_region_id'))
             ->setTaxPostcode($this->extractFormData($formData, 'tax_postcode'))
             ->setCode($this->extractFormData($formData, 'code'))
             ->setRate($this->extractFormData($formData, 'rate'));
         if (isset($formData['zip_is_range']) && $formData['zip_is_range']) {
-            $this->_taxRateBuilder->setZipFrom($this->extractFormData($formData, 'zip_from'))
+            $taxRate->setZipFrom($this->extractFormData($formData, 'zip_from'))
                 ->setZipTo($this->extractFormData($formData, 'zip_to'))->setZipIsRange(1);
         }
 
         if (isset($formData['title'])) {
             $titles = [];
             foreach ($formData['title'] as $storeId => $value) {
-                $titles[] = $this->_taxRateTitleBuilder->setStoreId($storeId)->setValue($value)->create();
+                $titles[] = $this->_taxRateTitleDataObjectFactory->create()->setStoreId($storeId)->setValue($value);
             }
-            $this->_taxRateBuilder->setTitles($titles);
+            $taxRate->setTitles($titles);
         }
 
-        return $this->_taxRateBuilder->create();
+        return $taxRate;
     }
 
     /**

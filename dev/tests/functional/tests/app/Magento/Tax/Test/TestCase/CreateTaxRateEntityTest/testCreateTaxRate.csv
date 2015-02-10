@@ -1,6 +1,0 @@
-"taxRate/data/code";"taxRate/data/zip_is_range";"taxRate/data/zip_from";"taxRate/data/zip_to";"taxRate/data/tax_postcode";"taxRate/data/tax_country_id";"taxRate/data/tax_region_id";"taxRate/data/rate";"constraint"
-"TaxIdentifier%isolation%";"No";"-";"-";"*";"Australia";"*";"20";"assertTaxRateSuccessSaveMessage, assertTaxRateInGrid, assertTaxRateForm, assertTaxRateInTaxRule"
-"TaxIdentifier%isolation%";"Yes";"90001";"96162";"-";"United States";"California";"15.5";"assertTaxRateSuccessSaveMessage, assertTaxRateInGrid, assertTaxRateForm, assertTaxRateInTaxRule"
-"TaxIdentifier%isolation%";"No";"-";"-";"180";"Canada";"*";"25";"assertTaxRateSuccessSaveMessage, assertTaxRateInGrid, assertTaxRateForm, assertTaxRateInTaxRule"
-"TaxIdentifier%isolation%";"Yes";"0";"7800935";"-";"United Kingdom";"*";"0";"assertTaxRateIsInCorrectRange"
-"TaxIdentifier%isolation%";"No";"-";"-";"*";"France";"Val-d'Oise";"999";"assertTaxRateIsInCorrectRange"
