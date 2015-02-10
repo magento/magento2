@@ -9,6 +9,7 @@
         "magento/module-backend": "0.42.0-beta6",
         "magento/module-cms": "0.42.0-beta6",
         "magento/module-eav": "0.42.0-beta6",
+        "magento/module-widget": "0.42.0-beta6",
         "magento/framework": "0.42.0-beta6",
         "magento/module-widget": "0.42.0-beta6",
         "magento/module-require-js": "0.42.0-beta6",

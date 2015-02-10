@@ -7,6 +7,7 @@
         "magento/module-core": "0.42.0-beta6",
         "magento/module-cms": "0.42.0-beta6",
         "magento/module-backend": "0.42.0-beta6",
+        "magento/module-theme": "0.42.0-beta6",
         "magento/framework": "0.42.0-beta6",
         "magento/magento-composer-installer": "*"
     },

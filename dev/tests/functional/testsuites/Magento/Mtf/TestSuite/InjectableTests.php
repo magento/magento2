@@ -8,7 +8,6 @@ namespace Magento\Mtf\TestSuite;
 
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\ObjectManagerFactory;
-use Magento\Mtf\TestRunner\Configuration;
 
 /**
  * Class InjectableTests
@@ -93,20 +92,17 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
     {
         if (!isset($this->objectManager)) {
             $objectManagerFactory = new ObjectManagerFactory();
-            $configurationFileName = isset($_ENV['testsuite_rule'])
-                ? $_ENV['testsuite_rule']
-                : 'basic';
-            $confFilePath = realpath(
-                MTF_BP . '/testsuites/' . $_ENV['testsuite_rule_path']  . '/' . $configurationFileName . '.xml'
-            );
-            /** @var \Magento\Mtf\TestRunner\Configuration $testRunnerConfiguration */
-            $testRunnerConfiguration = $objectManagerFactory->getObjectManager()
-                ->get('\Magento\Mtf\TestRunner\Configuration');
-            $testRunnerConfiguration->load($confFilePath);
-            $testRunnerConfiguration->loadEnvConfig();
 
-            $shared = ['Magento\Mtf\TestRunner\Configuration' => $testRunnerConfiguration];
-            $this->objectManager = $objectManagerFactory->create($shared);
+            $configFileName = isset($_ENV['testsuite_rule']) ? $_ENV['testsuite_rule'] : 'basic';
+            $configFilePath = realpath(MTF_BP . '/testsuites/' . $_ENV['testsuite_rule_path']);
+
+            /** @var \Magento\Mtf\Config\DataInterface $configData */
+            $configData = $objectManagerFactory->getObjectManager()->create('Magento\Mtf\Config\TestRunner');
+            $configData->setFileName($configFileName . '.xml')->load($configFilePath);
+
+            $this->objectManager = $objectManagerFactory->create(
+                ['Magento\Mtf\Config\TestRunner' => $configData]
+            );
         }
     }
 }

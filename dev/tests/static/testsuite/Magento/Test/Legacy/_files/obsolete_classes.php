@@ -2910,6 +2910,13 @@ return [
         'Magento\Core\Model\TemplateEngine\Plugin\DebugHints',
         'Magento\Developer\Model\TemplateEngine\Plugin\DebugHints'
     ],
+    ['Magento\Backend\Model\Config\Backend\Cookie', 'Magento\Cookie\Model\Config\Backend\Cookie'],
+    ['Magento\Backend\Model\Config\Backend\Cookie\Domain', 'Magento\Cookie\Model\Config\Backend\Domain'],
+    ['Magento\Backend\Model\Config\Backend\Cookie\Lifetime', 'Magento\Cookie\Model\Config\Backend\Lifetime'],
+    ['Magento\Backend\Model\Config\Backend\Cookie\Path', 'Magento\Cookie\Model\Config\Backend\Path'],
+    ['Magento\Core\Block\RequireCookie', 'Magento\Cookie\Block\RequireCookie'],
+    ['Magento\Core\Controller\Index\NoCookies', 'Magento\Cookie\Controller\Index\NoCookies'],
+    ['Magento\Core\Model\Asset\Config', 'Magento\Framework\View\Asset\Config'],
     ['Magento\Core\Model\Layout\Merge', 'Magento\Framework\View\Model\Layout\Merge'],
     ['Magento\Core\Model\Layout\Translator', 'Magento\Framework\View\Model\Layout\Translator'],
     ['Magento\Core\Model\Layout\Update\Validator', 'Magento\Framework\View\Model\Layout\Update\Validator'],
