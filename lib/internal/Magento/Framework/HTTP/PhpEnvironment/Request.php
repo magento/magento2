@@ -338,7 +338,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     public function getScheme()
     {
-        return $this->getUri()->getScheme();
+        return ($this->getServer('HTTPS') == 'on') ? self::SCHEME_HTTPS : self::SCHEME_HTTP;
     }
 
     /**
@@ -432,7 +432,9 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     public function setPostValue($name, $value = null)
     {
         if (is_array($name)) {
-            parent::setPost(new Parameters($name));
+            foreach ($name as $key => $value) {
+                $this->getPost()->set($key, $value);
+            }
             return $this;
         }
         $this->getPost()->set($name, $value);
