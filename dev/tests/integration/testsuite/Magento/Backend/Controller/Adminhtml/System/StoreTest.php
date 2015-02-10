@@ -41,7 +41,7 @@ class StoreTest extends \Magento\Backend\Utility\Controller
             'store_type' => 'website',
             'store_action' => 'add',
         ];
-        $this->getRequest()->setServer(new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST']));
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/admin/system_store/save');
         //Check that errors was generated and set to session

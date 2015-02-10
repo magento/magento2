@@ -132,7 +132,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         // Setting data for request
         $this->getRequest()
-            ->setServer(new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST']))
+            ->setMethod('POST')
             ->setParam('firstname', 'firstname1')
             ->setParam('lastname', 'lastname1')
             ->setParam('company', '')
@@ -169,7 +169,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         // Setting data for request
         $email = 'test2@email.com';
         $this->getRequest()
-            ->setServer(new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST']))
+            ->setMethod('POST')
             ->setParam('firstname', 'firstname2')
             ->setParam('lastname', 'lastname2')
             ->setParam('company', '')
@@ -208,7 +208,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         // Setting data for request
         $this->getRequest()
-            ->setServer(new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST']))
+            ->setMethod('POST')
             ->setParam('firstname', 'firstname')
             ->setParam('lastname', 'lastname')
             ->setParam('company', '')
@@ -274,7 +274,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testInactiveUserConfirmationAction()
     {
         $this->getRequest()
-            ->setServer(new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST']))
+            ->setMethod('POST')
             ->setPostValue(['email' => 'customer@needAconfirmation.com']);
 
         $this->dispatch('customer/account/confirmation');
@@ -291,7 +291,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testActiveUserConfirmationAction()
     {
         $this->getRequest()
-            ->setServer(new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST']))
+            ->setMethod('POST')
             ->setPostValue([
                 'email' => 'customer@example.com',
             ]);
@@ -431,7 +431,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->login(1);
         $this->getRequest()
-            ->setServer(new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST']))
+            ->setMethod('POST')
             ->setPostValue([
                 'form_key'  => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname' => 'John',
@@ -468,7 +468,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->login(1);
         $this->getRequest()
-            ->setServer(new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST']))
+            ->setMethod('POST')
             ->setPostValue([
                 'form_key'         => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname'        => 'John',
@@ -501,7 +501,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->login(1);
         $this->getRequest()
-            ->setServer(new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST']))
+            ->setMethod('POST')
             ->setPostValue([
                 'form_key'  => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname' => 'John',
@@ -525,7 +525,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->login(1);
         $this->getRequest()
-            ->setServer(new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST']))
+            ->setMethod('POST')
             ->setPostValue([
                 'form_key'         => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname'        => 'John',
@@ -554,7 +554,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->login(1);
         $this->getRequest()
-            ->setServer(new \Zend\Stdlib\Parameters(['REQUEST_METHOD' => 'POST']))
+            ->setMethod('POST')
             ->setPostValue([
                 'form_key'         => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname'        => 'John',
