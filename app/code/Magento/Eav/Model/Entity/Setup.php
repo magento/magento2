@@ -6,6 +6,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -41,7 +42,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
         $moduleName = 'Magento_Eav',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_cache = $cache;
         $this->_attrGroupCollectionFactory = $attrGroupCollectionFactory;

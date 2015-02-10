@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Resource;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
 
 /**
  * Cms resource setup
@@ -38,7 +39,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         \Magento\Cms\Model\BlockFactory $blockFactory,
         \Magento\Cms\Model\PageFactory $pageFactory,
         $moduleName = 'Magento_Cms',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_blockFactory = $blockFactory;
         $this->_pageFactory = $pageFactory;

@@ -7,6 +7,8 @@
  */
 namespace Magento\Checkout\Model\Resource;
 
+use Magento\Framework\Setup\ModuleDataResourceInterface;
+
 class Setup extends \Magento\Eav\Model\Entity\Setup
 {
     /**
@@ -30,7 +32,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
         \Magento\Customer\Helper\Address $customerAddress,
         $moduleName = 'Magento_Checkout',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_customerAddress = $customerAddress;
         parent::__construct(

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/* @var $installer \Magento\Framework\Module\DataSetup */
+/* @var $installer \Magento\Framework\Setup\ModuleDataResourceInterface */
 $installer = $this;
 
 $data = [

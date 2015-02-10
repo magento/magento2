@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-/* @var $installer \Magento\Framework\Setup\ModuleResourceInterface */
+/* @var $installer \Magento\Framework\Setup\ModuleSchemaResourceInterface */
 $installer = $this;
 
 $installer->startSetup();

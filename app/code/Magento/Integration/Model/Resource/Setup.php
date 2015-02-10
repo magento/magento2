@@ -5,6 +5,7 @@
  */
 namespace Magento\Integration\Model\Resource;
 
+use Magento\Framework\Setup\ModuleDataResourceInterface;
 use Magento\Integration\Model\Manager;
 
 /**
@@ -32,7 +33,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         $resourceName,
         Manager $integrationManager,
         $moduleName = 'Magento_Integration',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_integrationManager = $integrationManager;
         parent::__construct($context, $resourceName, $moduleName, $connectionName);

@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\Module;
 
+use Magento\Framework\Setup\ModuleDataResourceInterface;
+
 class DataSetupTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Module\DataSetup
+     * @var ModuleDataResourceInterface
      */
     protected $_model;
 

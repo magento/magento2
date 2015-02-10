@@ -9,6 +9,8 @@
  */
 namespace Magento\Reports\Model\Resource;
 
+use Magento\Framework\Setup\ModuleDataResourceInterface;
+
 class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
@@ -28,7 +30,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         $resourceName,
         \Magento\Cms\Model\PageFactory $pageFactory,
         $moduleName = 'Magento_Reports',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         parent::__construct($context, $resourceName, $moduleName, $connectionName);
         $this->_pageFactory = $pageFactory;

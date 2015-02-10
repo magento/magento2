@@ -27,7 +27,7 @@ class SetupFactoryTest extends \PHPUnit_Framework_TestCase
         $moduleName = 'module';
         $this->objectManagerMock->expects($this->once())->method('create')
             ->with(
-                'Magento\Framework\Module\Updater\SetupInterface',
+                'Magento\Framework\Setup\ModuleDataResourceInterface',
                 [
                     'resourceName' => $resourceName,
                     'moduleName' => $moduleName,
@@ -38,7 +38,7 @@ class SetupFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage \Not\Valid\Setup\Model is not a \Magento\Framework\Module\Updater\SetupInterface
+     * @expectedExceptionMessage \Not\Valid\Setup\Model must implement \Magento\Framework\Setup\ModuleDataResourceInterface
      */
     public function testCreateThrowsExceptionIfSetupModelIsNotValid()
     {

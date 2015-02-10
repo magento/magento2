@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Setup;
 
-use Magento\Setup\Module\SetupModule;
-
 /**
  * Interface for DB schema installs of a module
  */
@@ -15,8 +13,8 @@ interface InstallSchemaInterface
     /**
      * Installs DB schema for a module
      *
-     * @param ModuleResourceInterface $setup
+     * @param ModuleSchemaResourceInterface $setup
      * @param ModuleContextInterface $context
      */
-    public function install(ModuleResourceInterface $setup, ModuleContextInterface $context);
+    public function install(ModuleSchemaResourceInterface $setup, ModuleContextInterface $context);
 }

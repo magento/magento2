@@ -5,6 +5,8 @@
  */
 namespace Magento\GoogleShopping\Model\Resource;
 
+use Magento\Framework\Setup\ModuleDataResourceInterface;
+
 class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
@@ -31,7 +33,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         \Magento\GoogleShopping\Model\ConfigFactory $configFactory,
         \Magento\Framework\Module\Manager $moduleManager,
         $moduleName = 'Magento_GoogleShopping',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_configFactory = $configFactory;
         $this->moduleManager = $moduleManager;

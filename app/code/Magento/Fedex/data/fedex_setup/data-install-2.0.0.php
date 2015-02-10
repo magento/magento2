@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Framework\Module\DataSetup */
+/** @var $this \Magento\Framework\Setup\ModuleDataResourceInterface */
 $codes = [
     'method' => [
         'EUROPEFIRSTINTERNATIONALPRIORITY' => 'EUROPE_FIRST_INTERNATIONAL_PRIORITY',
@@ -46,7 +46,7 @@ $codes = [
     ],
 ];
 
-/* @var $installer \Magento\Framework\Module\DataSetup */
+/* @var $installer \Magento\Framework\Setup\ModuleDataResourceInterface */
 $installer = $this;
 $configDataTable = $installer->getTable('core_config_data');
 $conn = $installer->getConnection();

@@ -8,8 +8,9 @@
 namespace Magento\Framework\Module;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
 
-class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Framework\Module\Updater\SetupInterface
+class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataResourceInterface
 {
     /**
      * Setup resource name
@@ -87,7 +88,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
         \Magento\Framework\Module\Setup\Context $context,
         $resourceName,
         $moduleName,
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         parent::__construct($context->getResourceModel(), $connectionName);
         $this->_eventManager = $context->getEventManager();

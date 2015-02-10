@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Framework\Module\DataSetup */
+/** @var $this \Magento\Framework\Setup\ModuleDataResourceInterface */
 $installer = $this->createMigrationSetup();
 $installer->startSetup();
 

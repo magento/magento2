@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Resource;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
 
 /**
  * Core resource setup
@@ -34,7 +35,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeResourceFactory,
         \Magento\Theme\Model\Theme\CollectionFactory $themeFactory,
         $moduleName = 'Magento_Core',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_themeResourceFactory = $themeResourceFactory;
         $this->_themeFactory = $themeFactory;

@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorization\Model\Resource;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
 
 /**
  * Resource Setup Model
@@ -59,7 +60,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Authorization\Model\RulesFactory $rulesFactory,
         $moduleName = 'Magento_Authorization',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_roleCollectionFactory = $roleCollectionFactory;
         $this->_rulesCollectionFactory = $rulesCollectionFactory;

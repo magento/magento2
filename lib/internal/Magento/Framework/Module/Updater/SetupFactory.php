@@ -8,10 +8,11 @@
 namespace Magento\Framework\Module\Updater;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
 
 class SetupFactory
 {
-    const INSTANCE_TYPE = 'Magento\Framework\Module\Updater\SetupInterface';
+    const INSTANCE_TYPE = 'Magento\Framework\Setup\ModuleDataResourceInterface';
 
     /**
      * @var ObjectManagerInterface
@@ -36,17 +37,17 @@ class SetupFactory
     /**
      * @param string $resourceName
      * @param string $moduleName
-     * @return SetupInterface
+     * @return ModuleDataResourceInterface
      * @throws \LogicException
      */
     public function create($resourceName, $moduleName)
     {
         $className = isset(
             $this->_resourceTypes[$resourceName]
-        ) ? $this->_resourceTypes[$resourceName] : 'Magento\Framework\Module\Updater\SetupInterface';
+        ) ? $this->_resourceTypes[$resourceName] : self::INSTANCE_TYPE;
 
         if (false == is_subclass_of($className, self::INSTANCE_TYPE) && $className !== self::INSTANCE_TYPE) {
-            throw new \LogicException($className . ' is not a \Magento\Framework\Module\Updater\SetupInterface');
+            throw new \LogicException($className . ' must implement \\' . self::INSTANCE_TYPE);
         }
 
         return $this->_objectManager->create(

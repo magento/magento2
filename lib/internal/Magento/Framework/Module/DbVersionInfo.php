@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\Module\Updater\SetupInterface;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
 
 /**
  * Class DbVersionInfo
@@ -158,6 +158,6 @@ class DbVersionInfo
         $configVer = $module['schema_version'];
 
         return ($version !== false
-            && version_compare($configVer, $version) === SetupInterface::VERSION_COMPARE_EQUAL);
+            && version_compare($configVer, $version) === ModuleDataResourceInterface::VERSION_COMPARE_EQUAL);
     }
 }

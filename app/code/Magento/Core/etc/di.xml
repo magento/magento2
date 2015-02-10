@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Acl\CacheInterface" type="Magento\Framework\Acl\Cache" />
     <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area" />
-    <preference for="Magento\Framework\Module\Updater\SetupInterface" type="Magento\Framework\Module\DataSetup" />
+    <preference for="Magento\Framework\Setup\ModuleDataResourceInterface" type="Magento\Framework\Module\DataSetup" />
     <preference for="Magento\Framework\Module\ResourceResolverInterface" type="Magento\Framework\Module\ResourceResolver" />
     <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />
     <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\DefaultPolicy" />
@@ -434,7 +434,7 @@
             <argument name="confPathToMapFile" xsi:type="string">app/etc/aliases_to_classes_map.json</argument>
             <argument name="resourceName" xsi:type="string">core_setup</argument>
             <argument name="moduleName" xsi:type="string">Magento_Core</argument>
-            <argument name="connectionName" xsi:type="string">\Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION</argument>
+            <argument name="connectionName" xsi:type="string">\Magento\Framework\Setup\ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Helper\Context">

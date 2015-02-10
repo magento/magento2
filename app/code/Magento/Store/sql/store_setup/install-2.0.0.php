@@ -6,7 +6,7 @@
 
 use Magento\Framework\DB\Ddl\Table;
 
-/* @var $installer \Magento\Framework\Setup\ModuleResourceInterface */
+/* @var $installer \Magento\Framework\Setup\ModuleSchemaResourceInterface */
 $installer = $this;
 
 $installer->startSetup();

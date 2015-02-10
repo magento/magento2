@@ -7,12 +7,12 @@ namespace Magento\Setup\Module;
 
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\Resource;
-use Magento\Framework\Module\Updater\SetupInterface;
-use Magento\Framework\Setup\ModuleResourceInterface;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleSchemaResourceInterface;
 use Magento\Setup\Model\LoggerInterface;
 use Magento\Setup\Module\Setup\FileResolver as SetupFileResolver;
 
-class SetupModule extends Setup implements ModuleResourceInterface
+class SetupModule extends Setup implements ModuleSchemaResourceInterface
 {
     const TYPE_DB_INSTALL = 'install';
 
@@ -68,7 +68,7 @@ class SetupModule extends Setup implements ModuleResourceInterface
         SetupFileResolver $fileResolver,
         $moduleName,
         \Magento\Framework\App\Resource $resource,
-        $connectionName = SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         parent::__construct($resource, $connectionName);
         $this->logger = $log;

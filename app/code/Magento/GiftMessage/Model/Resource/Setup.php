@@ -7,6 +7,8 @@
  */
 namespace Magento\GiftMessage\Model\Resource;
 
+use Magento\Framework\Setup\ModuleDataResourceInterface;
+
 class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
@@ -40,7 +42,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         \Magento\Quote\Model\Resource\SetupFactory $quoteSetupFactory,
         \Magento\Sales\Model\Resource\SetupFactory $salesSetupFactory,
         $moduleName = 'Magento_GiftMessage',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->catalogSetupFactory = $catalogSetupFactory;
         $this->quoteSetupFactory = $quoteSetupFactory;

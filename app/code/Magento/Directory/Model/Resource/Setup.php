@@ -11,6 +11,8 @@
  */
 namespace Magento\Directory\Model\Resource;
 
+use Magento\Framework\Setup\ModuleDataResourceInterface;
+
 class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
@@ -30,7 +32,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         $resourceName,
         \Magento\Directory\Helper\Data $directoryData,
         $moduleName = 'Magento_Directory',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_directoryData = $directoryData;
         parent::__construct($context, $resourceName, $moduleName, $connectionName);

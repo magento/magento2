@@ -15,9 +15,9 @@ interface UpgradeDataInterface
     /**
      * Upgrades data for a module
      *
-     * @param DataSetup $setup
+     * @param ModuleDataResourceInterface $setup
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function update(DataSetup $setup, ModuleContextInterface $context);
+    public function update(ModuleDataResourceInterface $setup, ModuleContextInterface $context);
 }

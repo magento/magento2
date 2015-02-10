@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Resource;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
 
 /**
  * Setup Model of Sales Module
@@ -36,7 +37,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         $moduleName = 'Magento_Quote',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_config = $config;
         $this->_encryptor = $context->getEncryptor();

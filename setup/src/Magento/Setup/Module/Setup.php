@@ -5,7 +5,9 @@
  */
 namespace Magento\Setup\Module;
 
-class Setup extends \Magento\Framework\Module\Setup
+use Magento\Framework\Setup\SchemaResourceInterface;
+
+class Setup extends \Magento\Framework\Module\Setup implements SchemaResourceInterface
 {
     /**
      * Retrieve 32bit UNIQUE HASH for a Table index

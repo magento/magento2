@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Setup;
 
-use Magento\Setup\Module\SetupModule;
-
 /**
  * Interface for DB schema upgrades of a module
  */
@@ -15,9 +13,9 @@ interface UpgradeSchemaInterface
     /**
      * Upgrades DB schema for a module
      *
-     * @param ModuleResourceInterface $setup
+     * @param ModuleSchemaResourceInterface $setup
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function update(ModuleResourceInterface $setup, ModuleContextInterface $context);
+    public function update(ModuleSchemaResourceInterface $setup, ModuleContextInterface $context);
 }

@@ -15,9 +15,9 @@ interface InstallDataInterface
     /**
      * Installs data for a module
      *
-     * @param DataSetup $setup
+     * @param ModuleDataResourceInterface $setup
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function install(DataSetup $setup, ModuleContextInterface $context);
+    public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context);
 }

@@ -7,6 +7,8 @@
  */
 namespace Magento\Catalog\Model\Resource;
 
+use Magento\Framework\Setup\ModuleDataResourceInterface;
+
 class Setup extends \Magento\Eav\Model\Entity\Setup
 {
     /**
@@ -41,7 +43,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Eav\AttributeFactory $eavAttributeResourceFactory,
         $moduleName = 'Magento_Catalog',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_eavAttributeResourceFactory = $eavAttributeResourceFactory;

@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Model\Resource;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
 
 /**
  * Setup Model of Weee Module
@@ -34,7 +35,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         \Magento\Sales\Model\Resource\SetupFactory $salesSetupFactory,
         \Magento\Quote\Model\Resource\SetupFactory $quoteSetupFactory,
         $moduleName = 'Magento_Weee',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
         $this->quoteSetupFactory = $quoteSetupFactory;
