@@ -66,10 +66,10 @@ class Compiler implements \Magento\Framework\AppInterface
                 'Magento\Tools\Di\Compiler\Config\Chain\ModificationChain' => [
                     'arguments' => [
                         'modificationsList' => [
-                            'ArgumentsSerialization' =>
-                                ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization'],
                             'PreferencesResolving' =>
                                 ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
+                            'ArgumentsSerialization' =>
+                                ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization'],
                         ]
                     ]
                 ]
