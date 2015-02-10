@@ -2928,11 +2928,4 @@ return [
     ['Magento\Core\Model\Resource\Layout\Link\Collection', 'Magento\Widget\Model\Resource\Layout\Link\Collection'],
     ['Magento\Core\Model\Resource\Layout\Update', 'Magento\Widget\Model\Resource\Layout\Update'],
     ['Magento\Core\Model\Resource\Layout\Update\Collection', 'Magento\Widget\Model\Resource\Layout\Update\Collection'],
-    ['Magento\Backend\Model\Config\Backend\Cookie', 'Magento\Cookie\Model\Config\Backend\Cookie'],
-    ['Magento\Backend\Model\Config\Backend\Cookie\Domain', 'Magento\Cookie\Model\Config\Backend\Domain'],
-    ['Magento\Backend\Model\Config\Backend\Cookie\Lifetime', 'Magento\Cookie\Model\Config\Backend\Lifetime'],
-    ['Magento\Backend\Model\Config\Backend\Cookie\Path', 'Magento\Cookie\Model\Config\Backend\Path'],
-    ['Magento\Core\Block\RequireCookie', 'Magento\Cookie\Block\RequireCookie'],
-    ['Magento\Core\Controller\Index\NoCookies', 'Magento\Cookie\Controller\Index\NoCookies'],
-    ['Magento\Core\Model\Asset\Config', 'Magento\Framework\View\Asset\Config'],
 ];
