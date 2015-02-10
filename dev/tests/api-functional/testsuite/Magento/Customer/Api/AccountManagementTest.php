@@ -38,16 +38,6 @@ class AccountManagementTest extends WebapiAbstract
     private $accountManagement;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressDataBuilder
-     */
-    private $addressBuilder;
-
-    /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
-     */
-    private $customerBuilder;
-
-    /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -84,12 +74,6 @@ class AccountManagementTest extends WebapiAbstract
     {
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             'Magento\Customer\Api\AccountManagementInterface'
-        );
-        $this->addressBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\AddressDataBuilder'
-        );
-        $this->customerBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\CustomerDataBuilder'
         );
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(
             'Magento\Framework\Api\SearchCriteriaBuilder'
@@ -530,9 +514,8 @@ class AccountManagementTest extends WebapiAbstract
     public function testValidateCustomerData()
     {
         $customerData = $this->customerHelper->createSampleCustomerDataObject();
-        $customerData = $this->customerBuilder->populate($customerData)
-            ->setFirstname(null)->setLastname(null)->create();
-
+        $customerData->setFirstname(null);
+        $customerData->setLastname(null);
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/validate',
@@ -636,21 +619,10 @@ class AccountManagementTest extends WebapiAbstract
         $customerCustomAttributeValue = 'value3';
 
         $addresses = $customerData->getAddresses();
-        $address1 = $this->addressBuilder
-            ->populate($addresses[0])
-            ->setCustomAttribute($fixtureAddressAttributeCode, $address1CustomAttributeValue)
-            ->create();
-        $address2 = $this->addressBuilder
-            ->populate($addresses[1])
-            ->setCustomAttribute($fixtureAddressAttributeCode, $address2CustomAttributeValue)
-            ->create();
-
-        $customer = $this->customerBuilder
-            ->populate($customerData)
-            ->setAddresses([$address1, $address2])
-            ->setCustomAttribute($fixtureCustomerAttributeCode, $customerCustomAttributeValue)
-            ->create();
-
+        $addresses[0]->setCustomAttribute($fixtureAddressAttributeCode, $address1CustomAttributeValue);
+        $addresses[1]->setCustomAttribute($fixtureAddressAttributeCode, $address2CustomAttributeValue);
+        $customerData->setAddresses($addresses);
+        $customerData->setCustomAttribute($fixtureCustomerAttributeCode, $customerCustomAttributeValue);
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
@@ -664,7 +636,7 @@ class AccountManagementTest extends WebapiAbstract
         ];
 
         $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
-            $customer,
+            $customerData,
             '\Magento\Customer\Api\Data\CustomerInterface'
         );
         $requestData = ['customer' => $customerDataArray, 'password' => CustomerHelper::PASSWORD];

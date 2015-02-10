@@ -64,16 +64,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $customer->expects($this->any())->method('getId')->will($this->returnValue(1));
         $customer->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
 
-        $customerData = ['account' => ['id' => 1, 'store_id' => 1]];
-        $customerBuilder = $this->getMockBuilder('\Magento\Customer\Api\Data\CustomerDataBuilder')
-            ->setMethods(['populateWithArray', 'create'])
+        $customerFactory = $this->getMockBuilder('\Magento\Customer\Api\Data\CustomerInterfaceFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $customerBuilder->expects($this->any())->method('populateWithArray')
-            ->will($this->returnSelf());
-        $customerBuilder->expects($this->any())->method('create')
+        $customerFactory->expects($this->any())->method('create')
             ->will($this->returnValue($customer));
 
+        $customerData = ['account' => ['id' => 1, 'store_id' => 1]];
         $backendSession = $this->getMockBuilder('\Magento\Backend\Model\Session')
             ->setMethods(['getCustomerData'])->disableOriginalConstructor()->getMock();
         $backendSession->expects($this->any())->method('getCustomerData')->will($this->returnValue($customerData));
@@ -97,7 +95,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
                 'scopeConfig' => $this->scopeConfig,
                 'modelLog' => $log,
                 'dateTime' => $dateTime,
-                'customerBuilder' => $customerBuilder,
+                'customerFactory' => $customerFactory,
                 'backendSession' => $backendSession
             ]
         );

@@ -495,10 +495,10 @@ class SetupUtil
     {
         /** @var \Magento\Customer\Api\GroupRepositoryInterface $groupRepository */
         $groupRepository = $this->objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
-        $customerGroupBuilder = $this->objectManager->create('Magento\Customer\Api\Data\GroupDataBuilder');
-        $customerGroupBuilder->setCode('custom_group')
+        $customerGroupFactory = $this->objectManager->create('Magento\Customer\Api\Data\GroupInterfaceFactory');
+        $customerGroup = $customerGroupFactory->create()
+            ->setCode('custom_group')
             ->setTaxClassId($customerTaxClassId);
-        $customerGroup = $customerGroupBuilder->create();
         $customerGroupId = $groupRepository->save($customerGroup)->getId();
         return $customerGroupId;
     }

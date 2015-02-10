@@ -495,6 +495,11 @@ module.exports = function (grunt) {
                     areaDir: 'frontend',
                     theme: 'blank'
                 }
+            },
+            lib: {
+                options: {
+                    port: 8080
+                }
             }
         },
 
@@ -503,6 +508,8 @@ module.exports = function (grunt) {
                 template: require('grunt-template-jasmine-requirejs'),
                 ignoreEmpty: true
             },
+            'lib-unit':               specRunner.configure('unit', 'lib', 8080),
+            'lib-integration':        specRunner.configure('integration', 'lib', 8080),
             'backend-unit':           specRunner.configure('unit', 'adminhtml', 8000),
             'backend-integration':    specRunner.configure('integration', 'adminhtml', 8000),
             'frontend-unit':          specRunner.configure('unit', 'frontend', 3000),
@@ -566,16 +573,19 @@ module.exports = function (grunt) {
     //  ---------------------------------------------
     
     grunt.registerTask('spec', [
+        'specRunner:lib',
         'specRunner:backend',
         'specRunner:frontend'
     ]);
 
     grunt.registerTask('unit', [
+        'jasmine:lib-unit',
         'jasmine:backend-unit',
         'jasmine:frontend-unit'
     ]);
 
     grunt.registerTask('integration', [
+        'jasmine:lib-integration',
         'jasmine:backend-integration',
         'jasmine:frontend-integration'
     ]);
