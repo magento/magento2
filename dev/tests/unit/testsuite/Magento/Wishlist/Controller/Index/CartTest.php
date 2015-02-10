@@ -625,9 +625,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->once())
             ->method('addToCart')
             ->with($this->checkoutCartMock, true)
-            ->willThrowException(
-                new \Magento\Framework\Model\Exception(null, \Magento\Wishlist\Model\Item::EXCEPTION_CODE_NOT_SALABLE)
-            );
+            ->willThrowException(new \Magento\Framework\Exception\Product\NotSalableException(null));
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
@@ -788,12 +786,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->once())
             ->method('addToCart')
             ->with($this->checkoutCartMock, true)
-            ->willThrowException(
-                new \Magento\Framework\Model\Exception(
-                    'message',
-                    \Magento\Wishlist\Model\Item::EXCEPTION_CODE_HAS_REQUIRED_OPTIONS
-                )
-            );
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException('message'));
 
         $this->messageManagerMock->expects($this->once())
             ->method('addNotice')

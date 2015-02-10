@@ -400,7 +400,7 @@ class Item extends AbstractModel implements ItemInterface
      * @param \Magento\Checkout\Model\Cart $cart
      * @param bool $delete  delete the item after successful add to cart
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\Product\NotSalableException
      */
     public function addToCart(\Magento\Checkout\Model\Cart $cart, $delete = false)
     {
@@ -428,7 +428,7 @@ class Item extends AbstractModel implements ItemInterface
         }
 
         if (!$product->isSalable()) {
-            throw new \Magento\Framework\Model\Exception(null, self::EXCEPTION_CODE_NOT_SALABLE);
+            throw new \Magento\Framework\Exception\Product\NotSalableException(null);
         }
 
         $buyRequest = $this->getBuyRequest();

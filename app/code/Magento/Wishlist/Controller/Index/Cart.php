@@ -166,16 +166,11 @@ class Cart extends Action\Action implements IndexInterface
                     $redirectUrl = $refererUrl;
                 }
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
-            if ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_NOT_SALABLE) {
-                $this->messageManager->addError(__('This product(s) is out of stock.'));
-            } elseif ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_HAS_REQUIRED_OPTIONS) {
-                $this->messageManager->addNotice($e->getMessage());
-                $redirectUrl = $configureUrl;
-            } else {
-                $this->messageManager->addNotice($e->getMessage());
-                $redirectUrl = $configureUrl;
-            }
+        } catch (\Magento\Framework\Exception\Product\NotSalableException $e) {
+            $this->messageManager->addError(__('This product(s) is out of stock.'));
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addNotice($e->getMessage());
+            $redirectUrl = $configureUrl;
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Cannot add item to shopping cart'));
         }
