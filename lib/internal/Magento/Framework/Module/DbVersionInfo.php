@@ -59,7 +59,7 @@ class DbVersionInfo
      * @param string $resourceName
      * @return bool
      */
-    public function isSchemaUpToDate($moduleName, $resourceName)
+    public function isSchemaUpToDate($moduleName)
     {
         $dbVer = $this->moduleResource->getDbVersion($moduleName);
         return $this->isModuleVersionEqual($moduleName, $dbVer);
@@ -70,7 +70,7 @@ class DbVersionInfo
      * @param string $resourceName
      * @return bool
      */
-    public function isDataUpToDate($moduleName, $resourceName)
+    public function isDataUpToDate($moduleName)
     {
         $dataVer = $this->moduleResource->getDataVersion($moduleName);
         return $this->isModuleVersionEqual($moduleName, $dataVer);
@@ -87,11 +87,11 @@ class DbVersionInfo
         $errors = [];
         foreach ($this->moduleList->getNames() as $moduleName) {
             foreach ($this->resourceResolver->getResourceList($moduleName) as $resourceName) {
-                if (!$this->isSchemaUpToDate($moduleName, $resourceName)) {
+                if (!$this->isSchemaUpToDate($moduleName)) {
                     $errors[] = $this->getSchemaInfo($moduleName, $resourceName);
                 }
 
-                if (!$this->isDataUpToDate($moduleName, $resourceName)) {
+                if (!$this->isDataUpToDate($moduleName)) {
                     $errors[] = $this->getDataInfo($moduleName, $resourceName);
                 }
             }
