@@ -26,8 +26,6 @@ class SecureUrl implements \Magento\Framework\App\Router\SecureUrlInterface
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Framework\App\ResponseFactory $responseFactory,
-        \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         StoreManagerInterface $storeManager
@@ -46,7 +44,7 @@ class SecureUrl implements \Magento\Framework\App\Router\SecureUrlInterface
      */
     public function getCurrentSecureUrl(\Magento\Framework\App\RequestInterface $request)
     {
-        $alias = $request->getAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS) || $request->getPathInfo();
+        $alias = $request->getAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS) ?: $request->getPathInfo();
         return $this->storeManager->getStore()->getBaseUrl('link', true) . ltrim($alias, '/');
     }
 
