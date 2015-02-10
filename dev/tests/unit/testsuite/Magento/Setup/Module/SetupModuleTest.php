@@ -39,7 +39,7 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getOne')
             ->with($this->moduleName)
-            ->will($this->returnValue(['name' => 'SampleModule', 'schema_version' => '2.0.0']));
+            ->will($this->returnValue(['name' => 'SampleModule', 'setup_version' => '2.0.0']));
         $this->resourceModelMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
     }
 

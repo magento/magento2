@@ -61,7 +61,7 @@ class DbVersionInfo
      */
     public function isSchemaUpToDate($moduleName, $resourceName)
     {
-        $dbVer = $this->moduleResource->getDbVersion($resourceName);
+        $dbVer = $this->moduleResource->getDbVersion($moduleName);
         return $this->isModuleVersionEqual($moduleName, $dbVer);
     }
 
@@ -72,7 +72,7 @@ class DbVersionInfo
      */
     public function isDataUpToDate($moduleName, $resourceName)
     {
-        $dataVer = $this->moduleResource->getDataVersion($resourceName);
+        $dataVer = $this->moduleResource->getDataVersion($moduleName);
         return $this->isModuleVersionEqual($moduleName, $dataVer);
     }
 
@@ -110,7 +110,7 @@ class DbVersionInfo
     {
         $dbVer = $this->moduleResource->getDbVersion($resourceName); // version saved in DB
         $module = $this->moduleList->getOne($moduleName);
-        $configVer = $module['schema_version'];
+        $configVer = $module['setup_version'];
         $dbVer = $dbVer ?: 'none';
         return [
             self::KEY_CURRENT => $dbVer,
@@ -131,7 +131,7 @@ class DbVersionInfo
     {
         $dataVer = $this->moduleResource->getDataVersion($resourceName);
         $module = $this->moduleList->getOne($moduleName);
-        $configVer = $module['schema_version'];
+        $configVer = $module['setup_version'];
         $dataVer = $dataVer ?: 'none';
         return [
             self::KEY_CURRENT => $dataVer,
@@ -152,10 +152,10 @@ class DbVersionInfo
     private function isModuleVersionEqual($moduleName, $version)
     {
         $module = $this->moduleList->getOne($moduleName);
-        if (empty($module['schema_version'])) {
-            throw new \UnexpectedValueException("Schema version for module '$moduleName' is not specified");
+        if (empty($module['setup_version'])) {
+            throw new \UnexpectedValueException("Setup version for module '$moduleName' is not specified");
         }
-        $configVer = $module['schema_version'];
+        $configVer = $module['setup_version'];
 
         return ($version !== false
             && version_compare($configVer, $version) === ModuleDataResourceInterface::VERSION_COMPARE_EQUAL);

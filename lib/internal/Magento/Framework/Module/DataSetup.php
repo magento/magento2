@@ -19,6 +19,12 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
     private $_resourceName;
 
     /**
+     * Setup module name
+     * @var string
+     */
+    protected $moduleName;
+
+    /**
      * Setup module configuration object
      *
      * @var array
@@ -95,6 +101,8 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
         $this->_logger = $context->getLogger();
         $this->_modulesReader = $context->getModulesReader();
         $this->_resourceName = $resourceName;
+        $this->moduleName = $moduleName;
+
         $this->_resource = $context->getResource();
         $this->_migrationFactory = $context->getMigrationFactory();
         $this->_moduleConfig = $context->getModuleList()->getOne($moduleName);
@@ -109,8 +117,8 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
      */
     public function applyDataUpdates()
     {
-        $dataVer = $this->_resource->getDataVersion($this->_resourceName);
-        $configVer = $this->_moduleConfig['schema_version'];
+        $dataVer = $this->_resource->getDataVersion($this->moduleName);
+        $configVer = $this->_moduleConfig['setup_version'];
         if ($dataVer !== false) {
             $status = version_compare($configVer, $dataVer);
             if ($status == self::VERSION_COMPARE_GREATER) {
@@ -132,7 +140,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
     {
         $oldVersion = $this->_modifyResourceDb(self::TYPE_DATA_INSTALL, '', $newVersion);
         $this->_modifyResourceDb(self::TYPE_DATA_UPGRADE, $oldVersion, $newVersion);
-        $this->_resource->setDataVersion($this->_resourceName, $newVersion);
+        $this->_resource->setDataVersion($this->moduleName, $newVersion);
 
         return $this;
     }
@@ -147,7 +155,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
     private function _upgradeData($oldVersion, $newVersion)
     {
         $this->_modifyResourceDb('data-upgrade', $oldVersion, $newVersion);
-        $this->_resource->setDataVersion($this->_resourceName, $newVersion);
+        $this->_resource->setDataVersion($this->moduleName, $newVersion);
 
         return $this;
     }
@@ -224,7 +232,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
                 }
 
                 if ($result) {
-                    $this->_resource->setDataVersion($this->_resourceName, $file['toVersion']);
+                    $this->_resource->setDataVersion($this->moduleName, $file['toVersion']);
                     $this->_logger->debug($fileName);
                 } else {
                     $this->_logger->debug("Failed resource setup: {$fileName}");

@@ -24,7 +24,7 @@ $table = $connection->newTable(
     ['nullable' => false, 'primary' => true],
     'Resource Code'
 )->addColumn(
-    'version',
+    'setup_version',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     50,
     [],

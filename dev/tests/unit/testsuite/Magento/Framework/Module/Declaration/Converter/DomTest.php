@@ -43,7 +43,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
         return [
             'Module node without "name" attribute' => ['<?xml version="1.0"?><config><module /></config>'],
             'Sequence module node without "name" attribute' => [
-                '<?xml dbversion="1.0"?><config><module name="Module_One" schema_version="1.0.0.0">' .
+                '<?xml dbversion="1.0"?><config><module name="Module_One" setup_version="1.0.0.0">' .
                 '<sequence><module/></sequence></module></config>',
             ],
         ];

@@ -34,8 +34,8 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
         $this->moduleList->expects($this->any())
             ->method('getOne')
             ->will($this->returnValueMap([
-                        ['Module_One', ['name' => 'Module_One', 'schema_version' => '1']],
-                        ['Module_Two', ['name' => 'Module_Two', 'schema_version' => '2']],
+                        ['Module_One', ['name' => 'Module_One', 'setup_version' => '1']],
+                        ['Module_Two', ['name' => 'Module_Two', 'setup_version' => '2']],
                         ['Module_No_Schema', []],
                     ]));
         $this->moduleList->expects($this->any())
@@ -132,8 +132,8 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(2));
 
         $this->resourceResolver->expects($this->any())->method('getResourceList')->will($this->returnValueMap([
-                    ['Module_One', ['resource_one']],
-                    ['Module_Two', ['resource_two']],
+                    ['Module_One', ['Module_One']],
+                    ['Module_Two', ['Module_Two']],
                 ]));
 
         $expectedErrors = [

@@ -27,11 +27,11 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
             }
             $moduleData['name'] = $nameNode->nodeValue;
             $name = $moduleData['name'];
-            $versionNode = $moduleAttributes->getNamedItem('schema_version');
+            $versionNode = $moduleAttributes->getNamedItem('setup_version');
             if (is_null($versionNode)) {
                 throw new \Exception("Attribute 'schema_version' is missing for module '{$name}'.");
             }
-            $moduleData['schema_version'] = $versionNode->nodeValue;
+            $moduleData['setup_version'] = $versionNode->nodeValue;
             $moduleData['sequence'] = [];
             /** @var $childNode \DOMNode */
             foreach ($moduleNode->childNodes as $childNode) {

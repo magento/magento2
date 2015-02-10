@@ -27,6 +27,12 @@ class SetupModule extends Setup implements ModuleSchemaResourceInterface
     private $resourceName;
 
     /**
+     * Setup module name
+     * @var string
+     */
+    protected $moduleName;
+
+    /**
      * Setup module configuration object
      *
      * @var array
@@ -76,6 +82,7 @@ class SetupModule extends Setup implements ModuleSchemaResourceInterface
         $this->moduleConfig = $moduleList->getOne($moduleName);
         $this->resource = new Resource($resource);
         $this->resourceName = $this->fileResolver->getResourceCode($moduleName);
+        $this->moduleName = $moduleName;
     }
 
     /**
@@ -142,19 +149,19 @@ class SetupModule extends Setup implements ModuleSchemaResourceInterface
         if (!$this->resourceName) {
             return $this;
         }
-        $dbVer = $this->resource->getDbVersion($this->resourceName);
-        $configVer = $this->moduleConfig['schema_version'];
+        $dbVer = $this->resource->getDbVersion($this->moduleName);
+        $configVer = $this->moduleConfig['setup_version'];
 
         // Module is installed
         if ($dbVer !== false) {
             if (version_compare($configVer, $dbVer, '>')) {
                 $this->applySchemaUpdates(self::TYPE_DB_UPGRADE, $dbVer, $configVer);
-                $this->resource->setDbVersion($this->resourceName, $configVer);
+                $this->resource->setDbVersion($this->moduleName, $configVer);
             }
         } elseif ($configVer) {
             $oldVersion = $this->applySchemaUpdates(self::TYPE_DB_INSTALL, '', $configVer);
             $this->applySchemaUpdates(self::TYPE_DB_UPGRADE, $oldVersion, $configVer);
-            $this->resource->setDbVersion($this->resourceName, $configVer);
+            $this->resource->setDbVersion($this->moduleName, $configVer);
         }
         return $this;
     }
@@ -190,7 +197,7 @@ class SetupModule extends Setup implements ModuleSchemaResourceInterface
                 }
 
                 if ($result) {
-                    $this->resource->setDbVersion($this->resourceName, $file['toVersion']);
+                    $this->resource->setDbVersion($this->moduleName, $file['toVersion']);
                     //@todo log
                 } else {
                     //@todo log "Failed resource setup: {$fileName}";
