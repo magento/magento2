@@ -8,7 +8,7 @@
 
 namespace Magento\Weee\Model;
 
-use Magento\Customer\Api\Data\CustomerDataBuilder;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -56,15 +56,16 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $customerMetadataService = Bootstrap::getObjectManager()->create(
             'Magento\Customer\Api\CustomerMetadataInterface'
         );
-        $customerBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\CustomerDataBuilder',
+        $customerFactory = Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
             ['metadataService' => $customerMetadataService]
         );
+        $dataObjectHelper = Bootstrap::getObjectManager()->create('Magento\Framework\Api\DataObjectHelper');
         $expected = $this->_extensibleDataObjectConverter->toFlatArray(
             $customerRepository->getById(1), [], '\Magento\Customer\Api\Data\CustomerInterface'
         );
-        $customerBuilder->populateWithArray($expected);
-        $customerDataSet = $customerBuilder->create();
+        $customerDataSet = $customerFactory->create();
+        $dataObjectHelper->populateWithArray($customerDataSet, $expected);
         $fixtureGroupCode = 'custom_group';
         $fixtureTaxClassId = 3;
         /** @var \Magento\Customer\Model\Group $group */

@@ -9,7 +9,7 @@ namespace Magento\Review\Test\Handler\Rating;
 use Magento\Backend\Test\Handler\Extractor;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\System\Config;
+use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -51,7 +51,7 @@ class Curl extends AbstractCurl implements RatingInterface
     public function persist(FixtureInterface $rating = null)
     {
         $url = $_ENV['app_backend_url'] . 'review/rating/save/';
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $data = $this->replaceMappingData($this->prepareData($rating->getData()));
 
         $data['stores'] = is_array($data['stores']) ? $data['stores'] : [$data['stores']];
