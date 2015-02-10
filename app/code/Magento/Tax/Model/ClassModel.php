@@ -6,15 +6,15 @@
 
 namespace Magento\Tax\Model;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Tax\Api\Data\TaxClassInterface;
 
 /**
  * Tax class model
  *
  * @method \Magento\Tax\Model\Resource\TaxClass _getResource()
  * @method \Magento\Tax\Model\Resource\TaxClass getResource()
- * @method \Magento\Tax\Model\ClassModel setClassType(string $value)
  */
 class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\TaxClassInterface
@@ -38,7 +38,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param TaxClass\Factory $classFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -48,7 +48,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Tax\Model\TaxClass\Factory $classFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -58,7 +58,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -123,7 +123,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function getClassId()
     {
-        return $this->getData('class_id');
+        return $this->getData(self::KEY_ID);
     }
 
     /**
@@ -131,7 +131,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function getClassName()
     {
-        return $this->getData('class_name');
+        return $this->getData(self::KEY_NAME);
     }
 
     /**
@@ -139,7 +139,39 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      */
     public function getClassType()
     {
-        return $this->getData('class_type');
+        return $this->getData(self::KEY_TYPE);
+    }
+    /**
+     * Set tax class ID.
+     *
+     * @param int $classId
+     * @return $this
+     */
+    public function setClassId($classId)
+    {
+        return $this->setData(self::KEY_ID, $classId);
+    }
+
+    /**
+     * Set tax class name.
+     *
+     * @param string $className
+     * @return $this
+     */
+    public function setClassName($className)
+    {
+        return $this->setData(self::KEY_NAME, $className);
+    }
+
+    /**
+     * Set tax class type.
+     *
+     * @param string $classType
+     * @return $this
+     */
+    public function setClassType($classType)
+    {
+        return $this->setData(self::KEY_TYPE, $classType);
     }
     //@codeCoverageIgnoreEnd
 }
