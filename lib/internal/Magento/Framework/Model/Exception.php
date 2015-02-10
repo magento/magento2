@@ -11,7 +11,7 @@ namespace Magento\Framework\Model;
  * This class will be extended by other modules
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Exception extends \Exception
+class Exception extends \Magento\Framework\Exception\LocalizedException
 {
     const ERROR_CODE_ENTITY_ALREADY_EXISTS = 456;
 
@@ -19,6 +19,16 @@ class Exception extends \Exception
      * @var array
      */
     protected $messages = [];
+
+    /**
+     * @param string $message
+     * @param int $code
+     * @param Exception $previous
+     */
+    public function __construct($message = "", $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message);
+    }
 
     /**
      * @param \Magento\Framework\Message\AbstractMessage $message
