@@ -406,6 +406,25 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     }
 
     /**
+     * Retrieve GET parameters
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return $this
+     */
+    public function setQueryValue($name, $value = null)
+    {
+        if (is_array($name)) {
+            foreach ($name as $key => $value) {
+                $this->getQuery()->set($key, $value);
+            }
+            return $this;
+        }
+        $this->getQuery()->set($name, $value);
+        return $this;
+    }
+
+    /**
      * Retrieve POST parameters
      *
      * @param string $name

@@ -367,8 +367,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testResetPasswordPostAction()
     {
         $this->getRequest()
-            ->setQuery('id', 1)
-            ->setQuery('token', '8ed8677e6c79e68b94e61658bd756ea5')
+            ->setQueryValue('id', 1)
+            ->setQueryValue('token', '8ed8677e6c79e68b94e61658bd756ea5')
             ->setPostValue([
                 'password' => 'new-password',
                 'password_confirmation' => 'new-password',
