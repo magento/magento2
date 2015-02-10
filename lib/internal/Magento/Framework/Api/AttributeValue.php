@@ -12,16 +12,6 @@ namespace Magento\Framework\Api;
 class AttributeValue extends AbstractSimpleObject implements AttributeInterface
 {
     /**
-     * Initialize internal storage
-     *
-     * @param AttributeDataBuilder $builder
-     */
-    public function __construct(AttributeDataBuilder $builder)
-    {
-        $this->_data = $builder->getData();
-    }
-
-    /**
      * Get attribute code
      *
      * @return string
@@ -39,5 +29,29 @@ class AttributeValue extends AbstractSimpleObject implements AttributeInterface
     public function getValue()
     {
         return $this->_get(self::VALUE);
+    }
+
+    /**
+     * Set attribute code
+     *
+     * @param string $attributeCode
+     * @return $this
+     */
+    public function setAttributeCode($attributeCode)
+    {
+        $this->_data[self::ATTRIBUTE_CODE] = $attributeCode;
+        return $this;
+    }
+
+    /**
+     * Set attribute value
+     *
+     * @param mixed $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        $this->_data[self::VALUE] = $value;
+        return $this;
     }
 }
