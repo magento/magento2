@@ -40,15 +40,17 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Type $eavEntityType
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        Type $eavEntityType
+        Type $eavEntityType,
+        $resourcePrefix = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavEntityType = $eavEntityType;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

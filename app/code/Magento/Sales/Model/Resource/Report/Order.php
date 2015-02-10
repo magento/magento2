@@ -29,6 +29,7 @@ class Order extends AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Sales\Model\Resource\Report\Order\CreatedatFactory $createDatFactory
      * @param \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -38,7 +39,8 @@ class Order extends AbstractReport
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Sales\Model\Resource\Report\Order\CreatedatFactory $createDatFactory,
-        \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory
+        \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory,
+        $resourcePrefix = null
     ) {
         parent::__construct(
             $context,
@@ -46,7 +48,8 @@ class Order extends AbstractReport
             $localeDate,
             $reportsFlagFactory,
             $dateTime,
-            $timezoneValidator
+            $timezoneValidator,
+            $resourcePrefix
         );
         $this->_createDatFactory = $createDatFactory;
         $this->_updateDatFactory = $updateDatFactory;

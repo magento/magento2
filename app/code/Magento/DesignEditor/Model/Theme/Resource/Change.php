@@ -18,14 +18,15 @@ class Change extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @return void
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        $resourcePrefix = null
     ) {
         $this->dateTime = $dateTime;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

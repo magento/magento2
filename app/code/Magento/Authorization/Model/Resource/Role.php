@@ -35,14 +35,16 @@ class Role extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        $resourcePrefix = null
     ) {
         $this->dateTime = $dateTime;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
         $this->_cache = $cache->getFrontend();
     }
 

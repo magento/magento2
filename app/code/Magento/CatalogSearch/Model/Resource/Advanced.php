@@ -32,15 +32,17 @@ class Advanced extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        $resourcePrefix = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eventManager = $eventManager;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

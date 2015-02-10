@@ -40,13 +40,15 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param LogWriter $logger
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        LogWriter $logger
+        LogWriter $logger,
+        $resourcePrefix = null
     ) {
         $this->logger = $logger;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

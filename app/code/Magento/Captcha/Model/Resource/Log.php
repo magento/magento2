@@ -38,15 +38,17 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
-        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
+        $resourcePrefix = null
     ) {
         $this->_coreDate = $coreDate;
         $this->_remoteAddress = $remoteAddress;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

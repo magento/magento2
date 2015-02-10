@@ -52,19 +52,21 @@ class Engine extends AbstractDb implements EngineInterface
      * @param Advanced $searchResource
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\Search\Model\Resource\Helper $resourceHelper
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogSearch\Model\Resource\Advanced $searchResource,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
-        \Magento\Search\Model\Resource\Helper $resourceHelper
+        \Magento\Search\Model\Resource\Helper $resourceHelper,
+        $resourcePrefix = null
     ) {
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_searchResource = $searchResource;
         $this->_catalogSearchData = $catalogSearchData;
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**
@@ -85,6 +87,7 @@ class Engine extends AbstractDb implements EngineInterface
      * @param array $index
      * @param string $entity 'product'|'cms'
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function saveEntityIndex($entityId, $storeId, $index, $entity = 'product')
     {
@@ -104,6 +107,7 @@ class Engine extends AbstractDb implements EngineInterface
      * @param array $entityIndexes
      * @param string $entity 'product'|'cms'
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function saveEntityIndexes($storeId, $entityIndexes, $entity = 'product')
     {
@@ -187,6 +191,7 @@ class Engine extends AbstractDb implements EngineInterface
      * @param int $entityId
      * @param string $entity 'product'|'cms'
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cleanIndex($storeId = null, $entityId = null, $entity = 'product')
     {

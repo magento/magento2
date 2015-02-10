@@ -43,19 +43,21 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Customer\Model\Session $session
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Customer\Model\Session $session,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        $resourcePrefix = null
     ) {
         $this->layer = $layerResolver->get();
         $this->session = $session;
         $this->storeManager = $storeManager;
         $this->_eventManager = $eventManager;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

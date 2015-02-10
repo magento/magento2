@@ -40,17 +40,19 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        $resourcePrefix = null
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

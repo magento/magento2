@@ -24,13 +24,15 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param DateTime $dateTime
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        DateTime $dateTime
+        DateTime $dateTime,
+        $resourcePrefix = null
     ) {
         $this->dateTime = $dateTime;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

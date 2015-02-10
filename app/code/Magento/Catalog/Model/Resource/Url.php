@@ -94,6 +94,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param Product $productResource
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -101,14 +102,15 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Eav\Model\Config $eavConfig,
         Product $productResource,
         \Magento\Catalog\Model\Category $catalogCategory,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        $resourcePrefix = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
         $this->productResource = $productResource;
         $this->_catalogCategory = $catalogCategory;
         $this->_logger = $logger;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

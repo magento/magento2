@@ -58,15 +58,17 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Math\Random $mathRandom
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Math\Random $mathRandom
+        \Magento\Framework\Math\Random $mathRandom,
+        $resourcePrefix = null
     ) {
         $this->_date = $date;
         $this->mathRandom = $mathRandom;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

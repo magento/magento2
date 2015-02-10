@@ -38,14 +38,16 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        $resourcePrefix = null
     ) {
         $this->_scopeConfig = $scopeConfig;
-        parent::__construct($context, $eavConfig);
+        parent::__construct($context, $eavConfig, $resourcePrefix);
     }
 
     /**

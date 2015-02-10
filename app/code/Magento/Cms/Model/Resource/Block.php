@@ -28,13 +28,15 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        $resourcePrefix = null
     ) {
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
         $this->_storeManager = $storeManager;
         $this->_date = $date;
     }

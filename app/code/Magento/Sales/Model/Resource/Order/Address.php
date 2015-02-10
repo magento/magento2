@@ -36,6 +36,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridPool $gridPool
+     * @param string|null $resourcePrefix
      * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      */
     public function __construct(
@@ -44,11 +45,12 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         \Magento\Sales\Model\Increment $salesIncrement,
         \Magento\Sales\Model\Order\Address\Validator $validator,
         \Magento\Sales\Model\Resource\GridPool $gridPool,
+        $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->_validator = $validator;
         $this->gridPool = $gridPool;
-        parent::__construct($context, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
     }
 
     /**

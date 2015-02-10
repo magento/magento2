@@ -29,13 +29,15 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Relation $catalogProductRelation
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        Relation $catalogProductRelation
+        Relation $catalogProductRelation,
+        $resourcePrefix = null
     ) {
         $this->_catalogProductRelation = $catalogProductRelation;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

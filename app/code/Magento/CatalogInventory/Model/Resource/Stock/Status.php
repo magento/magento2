@@ -36,14 +36,16 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
-        \Magento\Eav\Model\Config $eavConfig
+        \Magento\Eav\Model\Config $eavConfig,
+        $resourcePrefix = null
     ) {
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
 
         $this->_storeManager = $storeManager;
         $this->_websiteFactory = $websiteFactory;

@@ -44,14 +44,16 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        $resourcePrefix = null
     ) {
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
         $this->_date = $date;
         $this->_storeManager = $storeManager;
         $this->dateTime = $dateTime;

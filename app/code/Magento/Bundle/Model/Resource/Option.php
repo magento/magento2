@@ -20,12 +20,14 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Bundle\Model\Option\Validator $validator
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Bundle\Model\Option\Validator $validator
+        \Magento\Bundle\Model\Option\Validator $validator,
+        $resourcePrefix = null
     ) {
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
         $this->validator = $validator;
     }
 

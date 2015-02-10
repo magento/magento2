@@ -35,16 +35,18 @@ class Comment extends Entity implements InvoiceCommentResourceInterface
      * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\Sales\Model\Increment $salesIncrement,
         \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator,
+        $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
     }
 
     /**

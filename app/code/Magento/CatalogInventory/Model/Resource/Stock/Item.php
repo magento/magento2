@@ -31,13 +31,15 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Processor $processor
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        Processor $processor
+        Processor $processor,
+        $resourcePrefix = nul
     ) {
         $this->stockIndexerProcessor = $processor;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

@@ -23,10 +23,10 @@ class History extends Entity implements OrderStatusHistoryResourceInterface
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
      * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param Validator $validator
+     * @param string|null $resourcePrefix
      * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      */
     public function __construct(
@@ -34,10 +34,11 @@ class History extends Entity implements OrderStatusHistoryResourceInterface
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\Sales\Model\Increment $salesIncrement,
         Validator $validator,
+        $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
     }
 
     /**

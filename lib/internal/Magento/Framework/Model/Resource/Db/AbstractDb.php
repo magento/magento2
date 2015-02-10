@@ -126,13 +126,19 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     protected $objectRelationProcessor;
 
     /**
-     * @param Context $context
+     * Class constructor
+     *
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param string|null $resourcePrefix
      */
-    public function __construct(\Magento\Framework\Model\Resource\Db\Context $context)
+    public function __construct(\Magento\Framework\Model\Resource\Db\Context $context, $resourcePrefix = null)
     {
         $this->transactionManager = $context->getTransactionManager();
         $this->_resources = $context->getResources();
         $this->objectRelationProcessor = $context->getObjectRelationProcessor();
+        if (!is_null($resourcePrefix)) {
+            $this->_resourcePrefix = $resourcePrefix;
+        }
         parent::__construct();
     }
 
@@ -270,7 +276,8 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
         }
 
         if (!isset($this->_tables[$cacheName])) {
-            $this->_tables[$cacheName] = $this->_resources->getTableName($tableName);
+            $connectionName = $this->_resourcePrefix . '_read';
+            $this->_tables[$cacheName] = $this->_resources->getTableName($tableName, $connectionName);
         }
         return $this->_tables[$cacheName];
     }

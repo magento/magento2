@@ -28,15 +28,17 @@ class Source extends AbstractEav
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Catalog\Model\Resource\Helper $resourceHelper
+        \Magento\Catalog\Model\Resource\Helper $resourceHelper,
+        $resourcePrefix = null
     ) {
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($context, $eavConfig, $eventManager);
+        parent::__construct($context, $eavConfig, $eventManager, $resourcePrefix);
     }
 
     /**
@@ -315,6 +317,7 @@ class Source extends AbstractEav
      *
      * @param string|null $table
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getIdxTable($table = null)
     {

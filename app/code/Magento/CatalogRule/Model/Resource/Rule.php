@@ -103,6 +103,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param PriceCurrencyInterface $priceCurrency
+     * @param string|null $resourcePrefix
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -115,7 +116,8 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         \Magento\CatalogRule\Helper\Data $catalogRuleData,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        PriceCurrencyInterface $priceCurrency
+        PriceCurrencyInterface $priceCurrency,
+        $resourcePrefix = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_conditionFactory = $conditionFactory;
@@ -126,7 +128,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         $this->_logger = $logger;
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

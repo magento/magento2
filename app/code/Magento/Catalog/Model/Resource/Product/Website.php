@@ -20,13 +20,15 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        $resourcePrefix = null
     ) {
         $this->_storeManager = $storeManager;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

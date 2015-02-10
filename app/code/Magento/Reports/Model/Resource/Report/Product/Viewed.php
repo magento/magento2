@@ -49,6 +49,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -58,7 +59,8 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Reports\Model\Resource\Helper $resourceHelper
+        \Magento\Reports\Model\Resource\Helper $resourceHelper,
+        $resourcePrefix = null
     ) {
         parent::__construct(
             $context,
@@ -66,7 +68,8 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
             $localeDate,
             $reportsFlagFactory,
             $dateTime,
-            $timezoneValidator
+            $timezoneValidator,
+            $resourcePrefix
         );
         $this->_productResource = $productResource;
         $this->_resourceHelper = $resourceHelper;

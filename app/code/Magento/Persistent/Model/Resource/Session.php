@@ -29,13 +29,15 @@ class Session extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Persistent\Model\SessionFactory $sessionFactory
+        \Magento\Persistent\Model\SessionFactory $sessionFactory,
+        $resourcePrefix = null
     ) {
         $this->_sessionFactory = $sessionFactory;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

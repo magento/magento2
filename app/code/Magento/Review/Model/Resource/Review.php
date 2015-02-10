@@ -95,20 +95,22 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Review\Model\Resource\Rating\Option $ratingOptions
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Review\Model\RatingFactory $ratingFactory,
-        Rating\Option $ratingOptions
+        Rating\Option $ratingOptions,
+        $resourcePrefix = null
     ) {
         $this->_date = $date;
         $this->_storeManager = $storeManager;
         $this->_ratingFactory = $ratingFactory;
         $this->_ratingOptions = $ratingOptions;
 
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

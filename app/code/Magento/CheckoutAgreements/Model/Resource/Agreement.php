@@ -21,13 +21,15 @@ class Agreement extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Framework\Filter\FilterManager $filterManager
+        \Magento\Framework\Filter\FilterManager $filterManager,
+        $resourcePrefix = null
     ) {
         $this->filterManager = $filterManager;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

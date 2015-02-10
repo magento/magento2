@@ -92,6 +92,8 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute
      * @param \Magento\Eav\Model\ConfigFactory $eavConfigFactory
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
+     * @param string|null $resourcePrefix
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -102,7 +104,8 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute,
         \Magento\Eav\Model\ConfigFactory $eavConfigFactory,
-        \Magento\Catalog\Model\Product\Media\Config $mediaConfig
+        \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
+        $resourcePrefix = null
     ) {
         $this->_productResource = $productResource;
         $this->_storeManager = $storeManager;
@@ -112,7 +115,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $this->_eavConfigFactory = $eavConfigFactory;
         $this->_mediaConfig = $mediaConfig;
         $this->_sitemapData = $sitemapData;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

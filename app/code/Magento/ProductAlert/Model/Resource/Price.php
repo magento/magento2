@@ -21,13 +21,15 @@ class Price extends \Magento\ProductAlert\Model\Resource\AbstractResource
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
+        \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
+        $resourcePrefix = null
     ) {
         $this->_dateFactory = $dateFactory;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

@@ -34,7 +34,7 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      */
     protected $addressTableName = 'sales_order_address';
 
-     /**
+    /**
      * Resource initialization
      *
      * @return void

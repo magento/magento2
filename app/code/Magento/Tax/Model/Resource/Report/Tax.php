@@ -30,6 +30,7 @@ class Tax extends \Magento\Reports\Model\Resource\Report\AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Tax\Model\Resource\Report\Tax\CreatedatFactory $createdAtFactory
      * @param \Magento\Tax\Model\Resource\Report\Tax\UpdatedatFactory $updatedAtFactory
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -39,7 +40,8 @@ class Tax extends \Magento\Reports\Model\Resource\Report\AbstractReport
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Tax\Model\Resource\Report\Tax\CreatedatFactory $createdAtFactory,
-        \Magento\Tax\Model\Resource\Report\Tax\UpdatedatFactory $updatedAtFactory
+        \Magento\Tax\Model\Resource\Report\Tax\UpdatedatFactory $updatedAtFactory,
+        $resourcePrefix = null
     ) {
         $this->_createdAtFactory = $createdAtFactory;
         $this->_updatedAtFactory = $updatedAtFactory;
@@ -49,7 +51,8 @@ class Tax extends \Magento\Reports\Model\Resource\Report\AbstractReport
             $localeDate,
             $reportsFlagFactory,
             $dateTime,
-            $timezoneValidator
+            $timezoneValidator,
+            $resourcePrefix
         );
     }
 

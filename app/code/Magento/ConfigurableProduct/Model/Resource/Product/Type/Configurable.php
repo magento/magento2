@@ -19,13 +19,15 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Catalog\Model\Resource\Product\Relation $catalogProductRelation
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Catalog\Model\Resource\Product\Relation $catalogProductRelation
+        \Magento\Catalog\Model\Resource\Product\Relation $catalogProductRelation,
+        $resourcePrefix = null
     ) {
         $this->_catalogProductRelation = $catalogProductRelation;
-        parent::__construct($context);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**
