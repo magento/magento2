@@ -15,7 +15,7 @@ define([
             processStop: null,
             bindSubmit: true,
             minicartSelector: '[data-block="minicart"]',
-            messagesSelector: '.messages',
+            messagesSelector: '[data-placeholder="messages"]',
             productStatusSelector: '.stock.available'
         },
 
