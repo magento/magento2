@@ -1,3 +1,0 @@
-"productRating/data/rating_code";"productRating/data/stores";"productRating/data/is_active";"constraint"
-"productRating_%isolation%";"Main Website/Main Website Store/Default Store View";"Yes";"assertProductRatingSuccessSaveMessage, assertProductRatingInGrid, assertProductRatingInProductPage"
-"productRating_%isolation%";"Main Website/Main Website Store/Default Store View";"No";"assertProductRatingSuccessSaveMessage, assertProductRatingInGrid, assertProductRatingNotInProductPage"

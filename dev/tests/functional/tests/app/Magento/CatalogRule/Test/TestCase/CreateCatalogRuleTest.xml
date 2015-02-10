@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="CreateCatalogRuleTest">
+        <variation name="CreateCatalogRuleTestVariation1">
+            <data name="catalogPriceRule/data/name">rule_name%isolation%</data>
+            <data name="catalogPriceRule/data/is_active">Active</data>
+            <data name="catalogPriceRule/data/website_ids">Main Website</data>
+            <data name="catalogPriceRule/data/customer_group_ids">NOT LOGGED IN</data>
+            <data name="catalogPriceRule/data/conditions">[Category|is|%category_1%]</data>
+            <data name="catalogPriceRule/data/simple_action">To Percentage of the Original Price</data>
+            <data name="catalogPriceRule/data/discount_amount">90</data>
+            <data name="price/sub_total">100</data>
+            <data name="price/grand_total">90</data>
+            <data name="price/discount_amount">10</data>
+            <data name="price/special">90</data>
+            <data name="price/regular">100</data>
+            <data name="constraint">assertCatalogPriceRuleInGrid, assertCatalogPriceRuleAppliedCatalogPage, assertCatalogPriceRuleAppliedProductPage, assertCatalogPriceRuleAppliedShoppingCart</data>
+        </variation>
+    </testCase>
+</config>
