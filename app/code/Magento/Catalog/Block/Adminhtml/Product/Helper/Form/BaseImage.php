@@ -114,10 +114,10 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
                 data-position="<%= data.position %>"
                 alt="<%= data.label %>" />
             <div class="actions">
-                <button class="action-delete" data-role="delete-button" title="{$deleteImageText}">
+                <button type="button" class="action-delete" data-role="delete-button" title="{$deleteImageText}">
                     <span>{$deleteImageText}</span>
                 </button>
-                <button class="action-make-base" data-role="make-base-button" title="{$makeBaseText}">
+                <button type="button" class="action-make-base" data-role="make-base-button" title="{$makeBaseText}">
                     <span>{$makeBaseText}</span>
                 </button>
                 <div class="draggable-handle"></div>
