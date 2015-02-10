@@ -14,8 +14,6 @@ use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test CreateTaxWithFptTest.
- *
  * Test Flow:
  *
  * Preconditions:
@@ -71,6 +69,7 @@ class CreateTaxWithFptTest extends Injectable
     public function __prepare(
         FixtureFactory $fixtureFactory
     ) {
+        $this->markTestIncomplete("Epic: MAGETWO-30073. FPC issue.");
         $this->fixtureFactory = $fixtureFactory;
         $customer = $fixtureFactory->createByCode('customer', ['dataSet' => 'johndoe_with_addresses']);
         $customer->persist();
