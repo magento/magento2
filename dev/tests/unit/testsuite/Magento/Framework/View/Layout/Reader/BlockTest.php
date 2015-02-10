@@ -93,61 +93,134 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $literal
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $scheduleStructureCount
-     * @dataProvider processDataProvider
+     * @param string $ifconfigValue
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $ifconfigCondition
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getCondition
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setCondition
+     * @dataProvider processBlockDataProvider
      */
     public function testProcessBlock(
         $literal,
-        $scheduleStructureCount
+        $scheduleStructureCount,
+        $ifconfigValue,
+        $ifconfigCondition,
+        $getCondition,
+        $setCondition
     ) {
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->will($this->returnValue($this->scheduledStructure));
 
-        $testValue = 'some_value';
+        $this->scheduledStructure->expects($ifconfigCondition)
+            ->method('setElementToIfconfigList')
+            ->with($literal, $ifconfigValue, 'scope');
+        $this->scheduledStructure->expects($getCondition)
+            ->method('getStructureElementData')
+            ->with($literal, [])
+            ->willReturn([]);
+        $this->scheduledStructure->expects($setCondition)
+            ->method('setStructureElementData')
+            ->with(
+                $literal,
+                [
+                    'attributes' => [
+                        'group' => '',
+                        'class' => '',
+                        'template' => '',
+                        'ttl' => '',
+                    ],
+                    'actions' => [
+                        ['someMethod', [], 'action_config_path', 'scope'],
+                    ],
+                    'arguments' => [],
+                ]
+            );
 
         $helper = $this->getMock('Magento\Framework\View\Layout\ScheduledStructure\Helper', [], [], '', false);
         $helper->expects($scheduleStructureCount)->method('scheduleStructure')->will($this->returnValue($literal));
 
-        $this->prepareReaderPool('<' . $literal . ' ifconfig="' . $testValue . '"/>');
+        $this->prepareReaderPool(
+            '<' . $literal . ' ifconfig="' . $ifconfigValue . '">'
+                . '<action method="someMethod" ifconfig="action_config_path" />'
+                . '</' . $literal . '>'
+        );
 
         /** @var \Magento\Framework\View\Layout\Reader\Block $block */
         $block = $this->getBlock(
             [
                 'helper' => $helper,
                 'readerPool' => $this->readerPool,
+                'scopeType' => 'scope',
             ]
         );
         $block->interpret($this->context, $this->currentElement);
     }
 
     /**
-     * @covers Magento\Framework\View\Layout\Reader\Block::interpret()
+     * @return array
      */
-    public function testProcessReference()
+    public function processBlockDataProvider()
     {
-        $testName = 'test_value';
-        $literal = 'referenceBlock';
+        return [
+            ['block', $this->once(), '', $this->never(), $this->once(), $this->once()],
+            ['block', $this->once(), 'config_path', $this->once(), $this->once(), $this->once()],
+            ['page', $this->never(), '', $this->never(), $this->never(), $this->never()]
+        ];
+    }
+
+    /**
+     * @param string $literal
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getCondition
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setCondition
+     * @dataProvider processReferenceDataProvider
+     */
+    public function testProcessReference(
+        $literal,
+        $getCondition,
+        $setCondition
+    ) {
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->will($this->returnValue($this->scheduledStructure));
-        $this->scheduledStructure->expects($this->once())->method('getStructureElementData')->with($testName, [])
-            ->will($this->returnValue([]));
-        $this->scheduledStructure->expects($this->once())->method('setStructureElementData')
-            ->with($testName, ['actions' => [], 'arguments' => []]);
 
-        $this->prepareReaderPool('<' . $literal . ' name="' . $testName . '"/>');
+        $this->scheduledStructure->expects($getCondition)
+            ->method('getStructureElementData')
+            ->with($literal, [])
+            ->willReturn([]);
+        $this->scheduledStructure->expects($setCondition)
+            ->method('setStructureElementData')
+            ->with(
+                $literal,
+                [
+                    'actions' => [
+                        ['someMethod', [], 'action_config_path', 'scope'],
+                    ],
+                    'arguments' => [],
+                ]
+            );
+
+        $this->prepareReaderPool(
+            '<' . $literal . ' name="' . $literal . '">'
+                . '<action method="someMethod" ifconfig="action_config_path" />'
+                . '</' . $literal . '>'
+        );
 
         /** @var \Magento\Framework\View\Layout\Reader\Block $block */
-        $block = $this->getBlock(['readerPool' => $this->readerPool]);
+        $block = $this->getBlock(
+            [
+                'readerPool' => $this->readerPool,
+                'scopeType' => 'scope',
+            ]
+        );
         $block->interpret($this->context, $this->currentElement);
     }
 
     /**
      * @return array
      */
-    public function processDataProvider()
+    public function processReferenceDataProvider()
     {
         return [
-            ['block', $this->once()],
-            ['page', $this->never()]
+            ['referenceBlock', $this->once(), $this->once()],
+            ['page', $this->never(), $this->never()]
         ];
     }
 }

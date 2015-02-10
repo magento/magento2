@@ -41,8 +41,6 @@ class Acl
             if (isset($data['attributes']['acl']) && $data['attributes']['acl']) {
                 if (!$this->authorization->isAllowed($data['attributes']['acl'])) {
                     $this->removeElement($scheduledStructure, $structure, $name);
-                } else {
-                    unset($data['attributes']['acl']);
                 }
             }
         }

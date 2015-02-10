@@ -33,10 +33,10 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->context = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
-            ->setMethods(['getScheduledStructure'])
+            ->setMethods(['getScheduledStructure', 'setElementToIfconfigList'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = new UiComponent($this->helper, null);
+        $this->model = new UiComponent($this->helper, 'scope');
     }
 
     public function testGetSupportedNodes()
@@ -67,6 +67,9 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
             $element->getAttribute('name'),
             ['attributes' => ['group' => '', 'component' => 'listing']]
         );
+        $scheduleStructure->expects($this->once())->method('setElementToIfconfigList')->with(
+            $element->getAttribute('name'), 'config_path', 'scope'
+        );
         $this->model->interpret($this->context, $element);
     }
 
@@ -74,7 +77,9 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                $this->getElement('<ui_component name="cms_block_listing" component="listing" ifconfig="test"/>'),
+                $this->getElement(
+                    '<ui_component name="cms_block_listing" component="listing" ifconfig="config_path"/>'
+                ),
             ]
         ];
     }

@@ -17,10 +17,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      * @param string $testTemplate
      * @param string $testTtl
      * @param array $testArgumentData
+     * @param bool $testIsFlag
      * @param bool $isNeedEvaluate
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $addToParentGroupCount
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setTemplateCount
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setTtlCount
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setIsFlag
      * @dataProvider provider
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -30,10 +32,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $testTemplate,
         $testTtl,
         $testArgumentData,
+        $testIsFlag,
         $isNeedEvaluate,
         $addToParentGroupCount,
         $setTemplateCount,
-        $setTtlCount
+        $setTtlCount,
+        $setIsFlag
     ) {
         $elementName = 'test_block';
         $methodName = 'setTest';
@@ -108,7 +112,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $blockInstance->expects($setTemplateCount)->method('setTemplate')->with($testTemplate);
         $blockInstance->expects($setTtlCount)->method('setTtl')->with(0);
         $blockInstance->expects($this->once())->method('setLayout')->with($layout);
-        $blockInstance->expects($this->once())->method($methodName)->with($argumentData);
+        $blockInstance->expects($setIsFlag)->method($methodName)->with($argumentData);
 
         $layout->expects($this->once())->method('setBlock')->with($elementName, $blockInstance);
 
@@ -157,7 +161,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
         $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
         $scopeConfigMock->expects($this->once())->method('isSetFlag')
-            ->with('config_path', 'scope', 'default')->willReturn(true);
+            ->with('config_path', 'scope', 'default')->willReturn($testIsFlag);
 
         $scopeResolverMock = $this->getMock('Magento\Framework\App\ScopeResolverInterface', [], [], '', false);
         $scopeResolverMock->expects($this->once())->method('getScope')
@@ -190,9 +194,11 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 'testTtl',
                 ['argument' => ['name' => 'argument', 'xsi:type' => 'type', 'value' => 'value']],
                 true,
+                true,
                 $this->once(),
                 $this->never(),
-                $this->once()
+                $this->once(),
+                $this->once(),
             ],
             [
                 '',
@@ -200,10 +206,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 '',
                 ['argument' => 'value'],
                 false,
+                false,
                 $this->never(),
                 $this->once(),
-                $this->never()
-            ]
+                $this->never(),
+                $this->never(),
+            ],
         ];
     }
 }

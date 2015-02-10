@@ -48,6 +48,12 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
                 'element6' => ['data', 'of', 'element', 'to', 'remove', '6'],
                 'element7' => ['data', 'of', 'element', 'to', 'remove', '7'],
             ],
+            'scheduledIfconfig' => [
+                'element1' => ['data', 'of', 'ifconfig', 'element', '1'],
+                'element4' => ['data', 'of', 'ifconfig', 'element', '4'],
+                'element6' => ['data', 'of', 'ifconfig', 'element', '6'],
+                'element8' => ['data', 'of', 'ifconfig', 'element', '8'],
+            ],
             'scheduledPaths' => [
                 'path1' => 'path 1',
                 'path2' => 'path 2',
@@ -70,9 +76,6 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->_model->getListToMove());
     }
 
-    /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getListToRemove
-     */
     public function testGetListToRemove()
     {
         /**
@@ -80,6 +83,12 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
          */
         $expected = ['element2', 'element3'];
         $this->assertEquals($expected, $this->_model->getListToRemove());
+    }
+
+    public function testGetIfconfigList()
+    {
+        $expected = ['element1', 'element4'];
+        $this->assertEquals($expected, $this->_model->getIfconfigList());
     }
 
     /**
@@ -162,6 +171,16 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($default, $this->_model->getElementToMove('not_existing_element', $default));
     }
 
+    public function getIfconfigElement()
+    {
+        $this->assertEquals(
+            $this->_scheduledData['scheduledIfconfig']['element1'],
+            $this->_model->getIfconfigElement('element1')
+        );
+        $default = ['some', 'data'];
+        $this->assertEquals($default, $this->_model->getIfconfigElement('not_existing_element', $default));
+    }
+
     /**
      * @covers \Magento\Framework\View\Layout\ScheduledStructure::setElementToMove
      */
@@ -198,6 +217,20 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('element1', $this->_model->getListToRemove());
         $this->_model->setElementToRemoveList('element1');
         $this->assertContains('element1', $this->_model->getListToRemove());
+    }
+
+    public function testUnsetElementFromIfconfigList()
+    {
+        $this->assertContains('element4', $this->_model->getIfconfigList());
+        $this->_model->unsetElementFromIfconfigList('element4');
+        $this->assertNotContains('element4', $this->_model->getIfconfigList());
+    }
+
+    public function testSetElementToIfconfigList()
+    {
+        $this->assertNotContains('element5', $this->_model->getIfconfigList());
+        $this->_model->setElementToIfconfigList('element5', 'config_path', 'scope');
+        $this->assertContains('element5', $this->_model->getIfconfigList());
     }
 
     /**
