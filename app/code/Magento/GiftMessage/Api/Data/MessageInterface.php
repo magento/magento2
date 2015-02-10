@@ -27,7 +27,7 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the gift message ID.
      *
-     * @param int|null id
+     * @param int|null $id
      * @return $this
      */
     public function setGiftMessageId($id);
@@ -42,7 +42,7 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the customer ID.
      *
-     * @param int|null id
+     * @param int|null $id
      * @return $this
      */
     public function setCustomerId($id);
@@ -57,7 +57,7 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the sender name.
      *
-     * @param string sender
+     * @param string $sender
      * @return $this
      */
     public function setSender($sender);
@@ -72,7 +72,7 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Gets the recipient name.
      *
-     * @param string recipient
+     * @param string $recipient
      * @return $this
      */
     public function setRecipient($recipient);
@@ -87,7 +87,7 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the message text.
      *
-     * @param string message
+     * @param string $message
      * @return $this
      */
     public function setMessage($message);
