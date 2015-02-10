@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Block\System\Variable;
+namespace Magento\Variable\Block\System\Variable;
 
 /**
  * @magentoAppArea adminhtml
@@ -31,7 +31,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $block = $objectManager->get(
             'Magento\Framework\View\LayoutInterface'
         )->createBlock(
-            'Magento\Backend\Block\System\Variable\Edit',
+            'Magento\Variable\Block\System\Variable\Edit',
             'variable'
         );
         $this->assertArrayHasKey('variable-delete_button', $block->getLayout()->getAllBlocks());

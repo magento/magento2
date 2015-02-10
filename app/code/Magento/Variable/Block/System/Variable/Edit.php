@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Block\System\Variable;
+namespace Magento\Variable\Block\System\Variable;
 
 /**
  * Custom Variable Edit Container
@@ -39,7 +39,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected function _construct()
     {
         $this->_objectId = 'variable_id';
-        $this->_blockGroup = 'Magento_Backend';
+        $this->_blockGroup = 'Magento_Variable';
         $this->_controller = 'system_variable';
 
         parent::_construct();

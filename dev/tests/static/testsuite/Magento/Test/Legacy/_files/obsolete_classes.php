@@ -1568,7 +1568,8 @@ return [
     ],
     ['Magento\Adminhtml\Block\System\Store\Store', 'Magento\Backend\Block\System\Store\Store'],
     ['Magento\Adminhtml\Block\System\Variable\Edit\Form', 'Magento\Backend\Block\System\Variable\Edit\Form'],
-    ['Magento\Adminhtml\Block\System\Variable\Edit', 'Magento\Backend\Block\System\Variable\Edit'],
+    ['Magento\Adminhtml\Block\System\Variable\Edit', 'Magento\Variable\Block\System\Variable\Edit'],
+    ['Magento\Backend\Block\System\Variable\Edit', 'Magento\Variable\Block\System\Variable\Edit'],
     ['Magento\Adminhtml\Block\System\Variable', 'Magento\Variable\Block\System\Variable'],
     [
         'Magento\Adminhtml\Block\Checkout\Agreement\Edit\Form',
