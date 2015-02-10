@@ -36,10 +36,10 @@ class CurrentPassword implements FixtureInterface
     public function __construct(array $params, $data = '')
     {
         $this->params = $params;
-        /** @var \Magento\Mtf\System\Config $systemConfig */
+        /** @var \Magento\Mtf\Config $systemConfig */
         if ($data == '%current_password%') {
-            $systemConfig = ObjectManager::getInstance()->create('Magento\Mtf\System\Config');
-            $data = $systemConfig->getConfigParam('application/backend_user_credentials/password');
+            $systemConfig = ObjectManager::getInstance()->create('Magento\Mtf\Config');
+            $data = $systemConfig->getParameter('application/backendPassword');
         }
         $this->data = $data;
     }
