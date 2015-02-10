@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\System\Variable\Edit;
+namespace Magento\Variable\Block\System\Variable\Edit;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -26,7 +26,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare form before rendering HTML
      *
-     * @return \Magento\Backend\Block\System\Variable\Edit\Form
+     * @return \Magento\Variable\Block\System\Variable\Edit\Form
      */
     protected function _prepareForm()
     {
