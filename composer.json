@@ -74,6 +74,7 @@
         "magento/module-configurable-import-export": "self.version",
         "magento/module-configurable-product": "self.version",
         "magento/module-contact": "self.version",
+        "magento/module-cookie": "self.version",
         "magento/module-core": "self.version",
         "magento/module-cron": "self.version",
         "magento/module-currency-symbol": "self.version",
