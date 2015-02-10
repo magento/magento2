@@ -25,27 +25,31 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
-    /** @var \Magento\Customer\Api\Data\CustomerDataBuilder */
-    private $customerBuilder;
+    /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory */
+    private $customerFactory;
 
-    /** @var \Magento\Customer\Api\Data\AddressDataBuilder */
-    private $addressBuilder;
+    /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory */
+    private $addressFactory;
 
-    /** @var \Magento\Customer\Api\Data\RegionDataBuilder */
-    private $regionBuilder;
+    /** @var \Magento\Customer\Api\Data\RegionInterfaceFactory */
+    private $regionFactory;
 
     /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter */
     private $converter;
+
+    /** @var \Magento\Framework\Api\DataObjectHelper  */
+    protected $dataObjectHelper;
 
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerRepository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
-        $this->customerBuilder = $this->objectManager->create('Magento\Customer\Api\Data\CustomerDataBuilder');
-        $this->addressBuilder = $this->objectManager->create('Magento\Customer\Api\Data\AddressDataBuilder');
-        $this->regionBuilder = $this->objectManager->create('Magento\Customer\Api\Data\RegionDataBuilder');
+        $this->customerFactory = $this->objectManager->create('Magento\Customer\Api\Data\CustomerInterfaceFactory');
+        $this->addressFactory = $this->objectManager->create('Magento\Customer\Api\Data\AddressInterfaceFactory');
+        $this->regionFactory = $this->objectManager->create('Magento\Customer\Api\Data\RegionInterfaceFactory');
         $this->accountManagement = $this->objectManager->create('Magento\Customer\Api\AccountManagementInterface');
         $this->converter = $this->objectManager->create('Magento\Framework\Api\ExtensibleDataObjectConverter');
+        $this->dataObjectHelper = $this->objectManager->create('Magento\Framework\Api\DataObjectHelper');
     }
 
     protected function tearDown()
@@ -67,19 +71,22 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $firstname = 'Tester';
         $lastname = 'McTest';
         $groupId = 1;
-        $this->customerBuilder
+        $newCustomerEntity = $this->customerFactory->create()
             ->setStoreId($storeId)
             ->setEmail($email)
             ->setFirstname($firstname)
             ->setLastname($lastname)
             ->setGroupId($groupId);
-        $newCustomerEntity = $this->customerBuilder->create();
         $customer = $this->customerRepository->save($newCustomerEntity);
         /** Update customer */
-        $this->customerBuilder->populate($customer);
         $newCustomerFirstname = 'New First Name';
-        $this->customerBuilder->setFirstname($newCustomerFirstname);
-        $updatedCustomer = $this->customerBuilder->create();
+        $updatedCustomer = $this->customerFactory->create();
+        $this->dataObjectHelper->mergeDataObjects(
+            '\Magento\Customer\Api\Data\CustomerInterface',
+            $updatedCustomer,
+            $customer
+        );
+        $updatedCustomer->setFirstname($newCustomerFirstname);
         $this->customerRepository->save($updatedCustomer);
         /** Check if update was successful */
         $customer = $this->customerRepository->get($customer->getEmail());
@@ -98,13 +105,12 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $lastname = 'McTest';
         $groupId = 1;
 
-        $this->customerBuilder
+        $newCustomerEntity = $this->customerFactory->create()
             ->setStoreId($storeId)
             ->setEmail($email)
             ->setFirstname($firstname)
             ->setLastname($lastname)
             ->setGroupId($groupId);
-        $newCustomerEntity = $this->customerBuilder->create();
         $savedCustomer = $this->customerRepository->save($newCustomerEntity);
         $this->assertNotNull($savedCustomer->getId());
         $this->assertEquals($email, $savedCustomer->getEmail());
@@ -139,8 +145,8 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'default_billing' => $defaultBilling,
                 'default_shipping' => $defaultShipping
             ]);
-        $this->customerBuilder->populateWithArray($customerData);
-        $customerDetails = $this->customerBuilder->create();
+        $customerDetails = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray($customerDetails, $customerData);
         $this->customerRepository->save($customerDetails);
         $customerAfter = $this->customerRepository->getById($existingCustomerId);
         $this->assertEquals($email, $customerAfter->getEmail());
@@ -201,12 +207,13 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $addresses = $customer->getAddresses();
         $addressId = $addresses[0]->getId();
         $newAddress = array_merge($addresses[0]->__toArray(), ['city' => $city]);
-        $this->addressBuilder->populateWithArray($newAddress)->setRegion($addresses[0]->getRegion());
-        $newAddress = $this->addressBuilder->create();
-        $this->customerBuilder->populateWithArray($customerDetails)
-            ->setId($customerId)
-            ->setAddresses([$newAddress, $addresses[1]]);
-        $newCustomerEntity = $this->customerBuilder->create();
+        $newAddressDataObject = $this->addressFactory->create();
+        $this->dataObjectHelper->populateWithArray($newAddressDataObject, $newAddress);
+        $newAddressDataObject->setRegion($addresses[0]->getRegion());
+        $newCustomerEntity = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray($newCustomerEntity, $customerDetails);
+        $newCustomerEntity->setId($customerId)
+            ->setAddresses([$newAddressDataObject, $addresses[1]]);
         $this->customerRepository->save($newCustomerEntity);
         $newCustomer = $this->customerRepository->get($email);
         $this->assertEquals(2, count($newCustomer->getAddresses()));
@@ -228,10 +235,10 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         $customer = $this->customerRepository->getById($customerId);
         $customerDetails = $customer->__toArray();
-        $this->customerBuilder->populateWithArray($customerDetails)
-            ->setId($customer->getId())
+        $newCustomerEntity = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray($newCustomerEntity, $customerDetails);
+        $newCustomerEntity->setId($customer->getId())
             ->setAddresses(null);
-        $newCustomerEntity = $this->customerBuilder->create();
         $this->customerRepository->save($newCustomerEntity);
 
         $newCustomerDetails = $this->customerRepository->getById($customerId);
@@ -249,10 +256,10 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         $customer = $this->customerRepository->getById($customerId);
         $customerDetails = $customer->__toArray();
-        $this->customerBuilder->populateWithArray($customerDetails)
-            ->setId($customer->getId())
+        $newCustomerEntity = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray($newCustomerEntity, $customerDetails);
+        $newCustomerEntity->setId($customer->getId())
             ->setAddresses([]);
-        $newCustomerEntity = $this->customerBuilder->create();
         $this->customerRepository->save($newCustomerEntity);
 
         $newCustomerDetails = $this->customerRepository->getById($customerId);
