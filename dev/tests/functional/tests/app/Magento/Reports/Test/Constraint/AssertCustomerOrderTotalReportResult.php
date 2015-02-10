@@ -15,10 +15,6 @@ use Magento\Reports\Test\Page\Adminhtml\CustomerTotalsReport;
  */
 class AssertCustomerOrderTotalReportResult extends AbstractAssertCustomerOrderReportResult
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert OrderTotalReport grid for all params
      *

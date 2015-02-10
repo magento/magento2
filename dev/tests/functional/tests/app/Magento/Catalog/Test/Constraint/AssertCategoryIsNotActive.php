@@ -17,10 +17,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCategoryIsNotActive extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     const NOT_FOUND_MESSAGE = 'Whoops, our bad...';
 
     /**

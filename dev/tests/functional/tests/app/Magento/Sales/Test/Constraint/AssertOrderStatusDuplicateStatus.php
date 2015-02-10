@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertOrderStatusDuplicateStatus extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     const DUPLICATE_MESSAGE = 'We found another order status with the same order status code.';
 
     /**

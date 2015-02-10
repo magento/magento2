@@ -16,10 +16,6 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
  */
 class AssertAttributeForm extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that displayed attribute data on edit page equals passed from fixture.
      *

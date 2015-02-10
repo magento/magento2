@@ -19,10 +19,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertSitemapContent extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that sitemap.xml file contains correct content according to dataset:
      *  - product url

@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertSitemapSuccessSaveAndGenerateMessages extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     const SUCCESS_GENERATE_MESSAGE = 'The sitemap "%s" has been generated.';
 
     const SUCCESS_SAVE_MESSAGE = 'The sitemap has been saved.';

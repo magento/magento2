@@ -16,10 +16,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertDownloadableDuplicateForm extends AssertProductDuplicateForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert form data equals duplicate product downloadable data
      *

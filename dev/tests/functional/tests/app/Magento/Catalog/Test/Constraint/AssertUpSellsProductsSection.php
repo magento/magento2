@@ -18,10 +18,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class AssertUpSellsProductsSection extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     /**
      * Assert that product is displayed in up-sell section
      *

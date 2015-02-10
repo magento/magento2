@@ -14,10 +14,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertImpossibleDeleteYourOwnRole extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     const ERROR_MESSAGE = 'You cannot delete self-assigned roles.';
 
     /**

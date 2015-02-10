@@ -20,10 +20,6 @@ use Magento\Mtf\ObjectManager;
  */
 class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Add this attribute to Default attribute Template. Create product and Assert that created attribute
      * is displayed on product form (Products > Inventory > Catalog).

@@ -16,10 +16,6 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
  */
 class AssertNewsletterQueue extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Skipped fields for verify data
      *

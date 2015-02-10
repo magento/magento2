@@ -16,10 +16,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertAbandonedCartCustomerInfoResult extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert customer info in Abandoned Carts report (Reports > Abandoned carts):
      * – name and email

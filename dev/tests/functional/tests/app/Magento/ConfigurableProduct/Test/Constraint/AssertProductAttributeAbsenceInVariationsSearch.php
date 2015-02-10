@@ -19,10 +19,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductAttributeAbsenceInVariationsSearch extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Label "Variations" tab
      */

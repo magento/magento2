@@ -18,10 +18,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
  */
 class AssertCustomVariableInPage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Add created variable to page and assert that Custom Variable is displayed on frontend page and has
      * correct data according to dataset.

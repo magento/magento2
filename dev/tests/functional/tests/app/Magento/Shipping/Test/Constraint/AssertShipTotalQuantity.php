@@ -18,10 +18,6 @@ use Magento\Shipping\Test\Page\ShipmentView;
  */
 class AssertShipTotalQuantity extends AbstractAssertOrderOnFrontend
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that shipped items quantity in 'Total Quantity' is equal to data from fixture on My Account page
      *

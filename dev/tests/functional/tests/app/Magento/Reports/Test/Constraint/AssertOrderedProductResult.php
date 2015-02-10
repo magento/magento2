@@ -19,10 +19,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertOrderedProductResult extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert product name and qty in Ordered Products report
      *

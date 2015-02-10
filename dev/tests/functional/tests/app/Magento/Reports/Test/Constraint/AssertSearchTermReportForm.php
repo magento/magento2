@@ -16,10 +16,6 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
  */
 class AssertSearchTermReportForm extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that Search Term Report form data equals to passed from dataSet
      *

@@ -17,10 +17,6 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
  */
 class AssertBundleItemsOnProductPage extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that displayed product bundle items data on product page equals passed from fixture preset
      *

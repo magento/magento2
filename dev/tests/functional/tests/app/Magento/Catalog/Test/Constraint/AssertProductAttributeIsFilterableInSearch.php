@@ -17,10 +17,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class AssertProductAttributeIsFilterableInSearch extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Check out if the attribute in the navigation bar on the search results page in Layered navigation.
      *

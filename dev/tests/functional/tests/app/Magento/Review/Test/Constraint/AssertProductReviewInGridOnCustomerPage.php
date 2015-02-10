@@ -19,10 +19,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductReviewInGridOnCustomerPage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Asserts all Product Review variables in the reviews grid on customer page
      *

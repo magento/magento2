@@ -16,10 +16,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Assert that Catalog Price Rule is applied for product(s) in Catalog
      * according to Priority(Priority/Stop Further Rules Processing)

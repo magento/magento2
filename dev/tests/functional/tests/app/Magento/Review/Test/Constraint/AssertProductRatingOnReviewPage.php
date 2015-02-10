@@ -16,10 +16,6 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
  */
 class AssertProductRatingOnReviewPage extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     /**
      * Assert that product rating is displayed on product review(backend)
      *
