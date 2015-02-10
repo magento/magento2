@@ -1,3 +1,0 @@
-"store/dataSet";"createBackup";"constraint"
-"custom";"Yes";"assertStoreSuccessDeleteAndBackupMessages, assertStoreNotInGrid, assertBackupInGrid, assertStoreNotOnFrontend"
-"custom";"No";"assertStoreSuccessDeleteMessage, assertStoreNotInGrid, assertStoreNotOnFrontend"

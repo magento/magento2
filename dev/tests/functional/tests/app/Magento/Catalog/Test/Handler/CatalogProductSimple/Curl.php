@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Handler\CatalogProductSimple;
 
-use Magento\Mtf\System\Config;
+use Magento\Mtf\Config;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
@@ -398,7 +398,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     protected function createProduct(array $data, array $config)
     {
         $url = $this->getUrl($config);
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
@@ -437,7 +437,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         foreach ($requestParams as $key => $value) {
             $params .= $key . '/' . $value . '/';
         }
-
         return $_ENV['app_backend_url'] . 'catalog/product/save/' . $params . 'popup/1/back/edit';
     }
 }
