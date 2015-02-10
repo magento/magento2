@@ -40,7 +40,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_store;
+    protected $scope;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -71,10 +71,10 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $design = $this->getMockForAbstractClass('Magento\Framework\View\DesignInterface');
 
-        $this->_store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->_store->expects($this->any())->method('getId')->will($this->returnValue(20));
-        $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
-        $storeManager->expects($this->once())->method('getStore')->with(null)->will($this->returnValue($this->_store));
+        $this->scope = $this->getMock('Magento\Framework\Url\ScopeInterface', [], [], '', false);
+        $this->scope->expects($this->any())->method('getId')->will($this->returnValue(20));
+        $scopeResolver = $this->getMockForAbstractClass('Magento\Framework\Url\ScopeResolverInterface');
+        $scopeResolver->expects($this->once())->method('getScope')->with(null)->will($this->returnValue($this->scope));
 
         $this->_resource = $this->getMock('Magento\Widget\Model\Resource\Layout\Update', [], [], '', false);
 
@@ -121,7 +121,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Model\Layout\Merge',
             [
                 'design' => $design,
-                'storeManager' => $storeManager,
+                'scopeResolver' => $scopeResolver,
                 'fileSource' => $fileSource,
                 'pageLayoutFileSource' => $pageLayoutFileSource,
                 'resource' => $this->_resource,
@@ -280,7 +280,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         )->with(
             'fixture_handle',
             $this->_theme,
-            $this->_store
+            $this->scope
         )->will(
             $this->returnValue(self::FIXTURE_LAYOUT_XML)
         );
@@ -399,7 +399,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->_layoutValidator->expects($this->any())->method('isValid')->will($this->returnValue(false));
 
         $suffix = md5(implode('|', $this->_model->getHandles()));
-        $cacheId = "LAYOUT_{$this->_theme->getArea()}_STORE{$this->_store->getId()}_{$this->_theme->getId()}{$suffix}";
+        $cacheId = "LAYOUT_{$this->_theme->getArea()}_STORE{$this->scope->getId()}_{$this->_theme->getId()}{$suffix}";
         $messages = $this->_layoutValidator->getMessages();
 
         // Testing error message is logged with logger

@@ -50,6 +50,6 @@ class Plugin
         \Closure $proceed,
         $handle
     ) {
-        return $this->update->fetchUpdatesByHandle($handle, $subject->getTheme(), $subject->getStore());
+        return $this->update->fetchUpdatesByHandle($handle, $subject->getTheme(), $subject->getScope());
     }
 } 

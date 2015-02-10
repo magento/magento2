@@ -46,9 +46,9 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private $theme;
 
     /**
-     * @var \Magento\Framework\App\ScopeInterface
+     * @var \Magento\Framework\Url\ScopeInterface
      */
-    private $store;
+    private $scope;
 
     /**
      * In-memory cache for loaded layout updates
@@ -155,7 +155,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Init merge model
      *
      * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Url\ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\View\File\CollectorInterface $fileSource
      * @param \Magento\Framework\View\File\CollectorInterface $pageLayoutFileSource
      * @param \Magento\Framework\App\State $appState
@@ -169,7 +169,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     public function __construct(
         \Magento\Framework\View\DesignInterface $design,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Url\ScopeResolverInterface $scopeResolver,
         \Magento\Framework\View\File\CollectorInterface $fileSource,
         \Magento\Framework\View\File\CollectorInterface $pageLayoutFileSource,
         \Magento\Framework\App\State $appState,
@@ -181,7 +181,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $cacheSuffix = ''
     ) {
         $this->theme = $theme ?: $design->getDesignTheme();
-        $this->store = $storeManager->getStore();
+        $this->scope = $scopeResolver->getScope();
         $this->fileSource = $fileSource;
         $this->pageLayoutFileSource = $pageLayoutFileSource;
         $this->appState = $appState;
@@ -563,8 +563,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     {
         if ($this->subst === null) {
             $placeholders = [
-                'baseUrl' => $this->store->getBaseUrl(),
-                'baseSecureUrl' => $this->store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true),
+                'baseUrl' => $this->scope->getBaseUrl(),
+                'baseSecureUrl' => $this->scope->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true),
             ];
             $this->subst = [];
             foreach ($placeholders as $key => $value) {
@@ -635,7 +635,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     protected function _getCacheId($suffix = '')
     {
-        return "LAYOUT_{$this->theme->getArea()}_STORE{$this->store->getId()}_{$this->theme->getId()}{$suffix}";
+        return "LAYOUT_{$this->theme->getArea()}_STORE{$this->scope->getId()}_{$this->theme->getId()}{$suffix}";
     }
 
     /**
@@ -821,16 +821,22 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     }
 
     /**
+     * Retrieve theme
+     *
      * @return \Magento\Framework\View\Design\ThemeInterface
      */
-    public function getTheme() {
+    public function getTheme()
+    {
         return $this->theme;
     }
 
     /**
-     * @return \Magento\Framework\App\ScopeInterface|\Magento\Store\Model\Store
+     * Retrieve current scope
+     *
+     * @return \Magento\Framework\Url\ScopeInterface
      */
-    public function getStore() {
-        return $this->store;
+    public function getScope()
+    {
+        return $this->scope;
     }
 }
