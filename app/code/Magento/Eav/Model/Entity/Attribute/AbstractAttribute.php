@@ -102,14 +102,19 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $_universalFactory;
 
     /**
-     * @var \Magento\Eav\Api\Data\AttributeOptionDataBuilder
+     * @var \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory
      */
-    protected $optionDataBuilder;
+    protected $optionDataFactory;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
      */
     protected $dataObjectProcessor;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -122,8 +127,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -140,8 +146,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder,
+        \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -161,8 +168,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->_storeManager = $storeManager;
         $this->_resourceHelper = $resourceHelper;
         $this->_universalFactory = $universalFactory;
-        $this->optionDataBuilder = $optionDataBuilder;
+        $this->optionDataFactory = $optionDataFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -1051,7 +1059,14 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         $dataObjects = [];
         foreach ($options as $option) {
-            $dataObjects[] = $this->optionDataBuilder->populateWithArray($option)->create();
+            /** @var \Magento\Eav\Api\Data\AttributeOptionInterface $optionDataObject */
+            $optionDataObject = $this->optionDataFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $optionDataObject,
+                $option,
+                '\Magento\Eav\Api\Data\AttributeOptionInterface'
+            );
+            $dataObjects[] = $optionDataObject;
         }
         return $dataObjects;
     }
