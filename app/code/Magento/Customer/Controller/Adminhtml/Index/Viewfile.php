@@ -21,6 +21,11 @@ use Magento\Framework\ObjectFactory;
 class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
      * @var \Magento\Framework\Url\DecoderInterface
      */
     protected $urlDecoder;
@@ -51,6 +56,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -81,6 +87,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Url\DecoderInterface $urlDecoder
     ) {
         parent::__construct(
@@ -110,6 +117,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $resultForwardFactory,
             $resultJsonFactory
         );
+        $this->resultRawFactory = $resultRawFactory;
         $this->urlDecoder  = $urlDecoder;
     }
 
@@ -151,6 +159,8 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             throw new NotFoundException();
         }
 
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
         if ($plain) {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
             switch (strtolower($extension)) {
@@ -180,12 +190,15 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
                 ->clearBody();
             $this->getResponse()->sendHeaders();
 
-            echo $directory->readFile($fileName);
+            $resultRaw->setContents($directory->readFile($fileName));
         } else {
             $name = pathinfo($path, PATHINFO_BASENAME);
-            $this->_fileFactory->create($name, ['type' => 'filename', 'value' => $fileName], DirectoryList::MEDIA)
-                ->sendResponse();
+            $this->_response = $this->_fileFactory->create(
+                $name,
+                ['type' => 'filename', 'value' => $fileName],
+                DirectoryList::MEDIA
+            );
         }
-        exit;
+        return $resultRaw;
     }
 }
