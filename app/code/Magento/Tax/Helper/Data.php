@@ -12,9 +12,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Customer\Model\Address;
 use Magento\Tax\Model\Config;
-use Magento\Tax\Api\Data\QuoteDetailsDataBuilder;
-use Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder;
-use Magento\Tax\Api\Data\TaxClassKeyDataBuilder;
 use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Tax\Api\OrderTaxManagementInterface;
@@ -99,20 +96,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_localeResolver;
 
     /**
-     * Quote details builder
-     *
-     * @var QuoteDetailsBuilder
-     */
-    protected $quoteDetailsBuilder;
-
-    /**
-     * Quote details item builder
-     *
-     * @var QuoteDetailsItemDataBuilder
-     */
-    protected $quoteDetailsItemBuilder;
-
-    /**
      * Tax calculation service
      *
      * @var TaxCalculationInterface
@@ -123,13 +106,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var CustomerSession
      */
     protected $customerSession;
-
-    /**
-     * TaxClassKey builder
-     *
-     * @var TaxClassKeyDataBuilder
-     */
-    protected $taxClassKeyBuilder;
 
     /**
      * \Magento\Catalog\Helper\Data
@@ -159,9 +135,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory       $taxItemFactory
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory
      * @param \Magento\Framework\Locale\ResolverInterface                   $localeResolver
-     * @param QuoteDetailsDataBuilder                                       $quoteDetailsBuilder
-     * @param QuoteDetailsItemDataBuilder                                   $quoteDetailsItemBuilder
-     * @param TaxClassKeyDataBuilder                                        $taxClassKeyBuilder
      * @param TaxCalculationInterface                                       $taxCalculation
      * @param CustomerSession                                               $customerSession
      * @param \Magento\Catalog\Helper\Data                                  $catalogHelper
@@ -180,9 +153,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $taxItemFactory,
         \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        QuoteDetailsDataBuilder $quoteDetailsBuilder,
-        QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder,
-        TaxClassKeyDataBuilder $taxClassKeyBuilder,
         TaxCalculationInterface $taxCalculation,
         CustomerSession $customerSession,
         \Magento\Catalog\Helper\Data $catalogHelper,
@@ -200,9 +170,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_taxItemFactory = $taxItemFactory;
         $this->_orderTaxCollectionFactory = $orderTaxCollectionFactory;
         $this->_localeResolver = $localeResolver;
-        $this->quoteDetailsBuilder = $quoteDetailsBuilder;
-        $this->quoteDetailsItemBuilder = $quoteDetailsItemBuilder;
-        $this->taxClassKeyBuilder = $taxClassKeyBuilder;
         $this->taxCalculation = $taxCalculation;
         $this->customerSession = $customerSession;
         $this->catalogHelper = $catalogHelper;

@@ -37,14 +37,14 @@ class CustomerRepositoryTest extends WebapiAbstract
     private $customerRepository;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressDataBuilder
+     * @var \Magento\Framework\Api\DataObjectHelper
      */
-    private $addressBuilder;
+    private $dataObjectHelper;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
-    private $customerBuilder;
+    private $customerDataFactory;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
@@ -94,11 +94,11 @@ class CustomerRepositoryTest extends WebapiAbstract
             'Magento\Customer\Api\CustomerRepositoryInterface',
             ['customerRegistry' => $this->customerRegistry]
         );
-        $this->addressBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\AddressDataBuilder'
+        $this->dataObjectHelper = Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Api\DataObjectHelper'
         );
-        $this->customerBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\CustomerDataBuilder'
+        $this->customerDataFactory = Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Api\Data\CustomerInterfaceFactory'
         );
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(
             'Magento\Framework\Api\SearchCriteriaBuilder'
@@ -213,7 +213,8 @@ class CustomerRepositoryTest extends WebapiAbstract
         $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
         $lastName = $existingCustomerDataObject->getLastname();
         $customerData[Customer::LASTNAME] = $lastName . 'Updated';
-        $newCustomerDataObject = $this->customerBuilder->populateWithArray($customerData)->create();
+        $newCustomerDataObject = $this->customerDataFactory->create();
+        $this->dataObjectHelper->populateWithArray($newCustomerDataObject, $customerData);
 
         $serviceInfo = [
             'rest' => [
@@ -248,7 +249,8 @@ class CustomerRepositoryTest extends WebapiAbstract
         $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
         $lastName = $existingCustomerDataObject->getLastname();
         $customerData[Customer::LASTNAME] = $lastName . 'Updated';
-        $newCustomerDataObject = $this->customerBuilder->populateWithArray($customerData)->create();
+        $newCustomerDataObject = $this->customerDataFactory->create();
+        $this->dataObjectHelper->populateWithArray($newCustomerDataObject, $customerData);
 
         $serviceInfo = [
             'rest' => [
@@ -294,8 +296,8 @@ class CustomerRepositoryTest extends WebapiAbstract
         //Set non-existent id = -1
         $customerData[Customer::LASTNAME] = $lastName . 'Updated';
         $customerData[Customer::ID] = -1;
-
-        $newCustomerDataObject = $this->customerBuilder->populateWithArray($customerData)->create();
+        $newCustomerDataObject = $this->customerDataFactory->create();
+        $this->dataObjectHelper->populateWithArray($newCustomerDataObject, $customerData);
 
         $serviceInfo = [
             'rest' => [

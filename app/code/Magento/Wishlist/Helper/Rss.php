@@ -17,9 +17,9 @@ class Rss extends \Magento\Wishlist\Helper\Data
     protected $_customer;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
-    protected $_customerBuilder;
+    protected $_customerFactory;
 
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
@@ -35,7 +35,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      * @param \Magento\Core\Helper\PostData $postDataHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
-     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
+     * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -48,10 +48,10 @@ class Rss extends \Magento\Wishlist\Helper\Data
         \Magento\Core\Helper\PostData $postDataHelper,
         \Magento\Customer\Helper\View $customerViewHelper,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
+        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
     ) {
-        $this->_customerBuilder = $customerBuilder;
+        $this->_customerFactory = $customerFactory;
         $this->_customerRepository = $customerRepository;
 
         parent::__construct(
@@ -102,7 +102,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
             if ($customerId && ($customerId == $this->_customerSession->getCustomerId())) {
                 $this->_customer = $this->_customerRepository->getById($customerId);
             } else {
-                $this->_customer = $this->_customerBuilder->create();
+                $this->_customer = $this->_customerFactory->create();
             }
         }
 

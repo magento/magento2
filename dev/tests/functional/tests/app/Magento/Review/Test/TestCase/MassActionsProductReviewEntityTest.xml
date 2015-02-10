@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="MassActionsProductReviewEntityTest">
+        <variation name="MassActionsProductReviewEntityTestVariation1">
+            <data name="gridActions">Update Status</data>
+            <data name="gridStatus">Approved</data>
+            <data name="constraint">assertProductReviewMassActionSuccessMessage, assertProductReviewInGrid, assertProductRatingInProductPage</data>
+        </variation>
+        <variation name="MassActionsProductReviewEntityTestVariation2">
+            <data name="gridActions">Update Status</data>
+            <data name="gridStatus">Pending</data>
+            <data name="constraint">assertProductReviewMassActionSuccessMessage, assertProductReviewInGrid, assertProductRatingNotInProductPage</data>
+        </variation>
+        <variation name="MassActionsProductReviewEntityTestVariation3">
+            <data name="gridActions">Update Status</data>
+            <data name="gridStatus">Not Approved</data>
+            <data name="constraint">assertProductReviewMassActionSuccessMessage, assertProductReviewInGrid, assertProductRatingNotInProductPage</data>
+        </variation>
+        <variation name="MassActionsProductReviewEntityTestVariation4">
+            <data name="gridActions">Delete</data>
+            <data name="gridStatus">-</data>
+            <data name="constraint">assertProductReviewMassActionSuccessDeleteMessage, assertProductRatingNotInProductPage</data>
+        </variation>
+    </testCase>
+</config>

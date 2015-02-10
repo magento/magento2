@@ -125,19 +125,15 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testSameAsBillingWhenCustomerHasNoDefaultShippingAddress($unsetId)
     {
-        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerDataBuilder*/
-        $customerDataBuilder = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\Data\CustomerDataBuilder');
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()
             ->create('Magento\Customer\Api\AddressRepositoryInterface');
-        $this->_customer = $customerDataBuilder->populate($this->_customer)
-            ->setDefaultShipping(-1)
+        $this->_customer->setDefaultShipping(-1)
             ->setAddresses(
                 [
                     $addressRepository->getById($this->_address->getId()),
                 ]
-            )->create();
+            );
 
         $this->_customer = $this->customerRepository->save($this->_customer);
         // we should save the customer data in order to be able to use it
@@ -168,16 +164,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testSameAsBillingWhenCustomerHasDefaultShippingAddress()
     {
-        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerDataBuilder*/
-        $customerDataBuilder = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\Data\CustomerDataBuilder');
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()
             ->create('Magento\Customer\Api\AddressRepositoryInterface');
-        $this->_customer = $customerDataBuilder->populate($this->_customer)
-            ->setDefaultShipping(2)
-            ->setAddresses([$addressRepository->getById($this->_address->getId())])
-            ->create();
+        $this->_customer->setDefaultShipping(2)
+            ->setAddresses([$addressRepository->getById($this->_address->getId())]);
         $this->_customer = $this->customerRepository->save($this->_customer);
         // we should save the customer data in order to be able to use it
         $this->_quote->setCustomer($this->_customer);
@@ -220,19 +211,19 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $city = 'TestCity';
         $street = 'Street1';
 
-        /** @var \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder */
-        $addressBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\AddressDataBuilder');
+        /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory */
+        $addressFactory = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\AddressInterfaceFactory');
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()->create('Magento\Customer\Api\AddressRepositoryInterface');
-        $addressData = $addressBuilder->setCustomerId($customerIdFromFixture)
+        $addressData = $addressFactory->create()
+            ->setCustomerId($customerIdFromFixture)
             ->setFirstname('John')
             ->setLastname('Doe')
             ->setTelephone('123456')
             ->setPostcode('12345')
             ->setCountryId(1)
             ->setCity($city)
-            ->setStreet([$street])
-            ->create();
+            ->setStreet([$street]);
         $addressData = $addressRepository->save($addressData);
         $this->_address->setQuote($this->_quote);
         $this->_address->importCustomerAddressData($addressData);
@@ -278,9 +269,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             "Precondition failed: Customer address ID was not set."
         );
 
-        /** @var \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder */
-        $addressBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\AddressDataBuilder');
-        $customerAddressData = $addressBuilder->setId($customerAddressId)->create();
+        /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory */
+        $addressFactory = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\AddressInterfaceFactory');
+        $customerAddressData = $addressFactory->create()->setId($customerAddressId);
         $this->_address->setCustomerAddressData($customerAddressData);
         $this->_address->save();
 
