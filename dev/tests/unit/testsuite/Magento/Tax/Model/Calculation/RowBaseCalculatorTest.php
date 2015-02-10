@@ -23,7 +23,7 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
             ->method('deltaRound')->will($this->returnValue(0));
 
         $this->assertSame(
-            self::EXPECTED_VALUE,
+            $this->taxDetailsItem,
             $this->calculate($this->rowBaseCalculator)
         );
     }
@@ -36,7 +36,7 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
             ->method('deltaRound');
 
         $this->assertSame(
-            self::EXPECTED_VALUE,
+            $this->taxDetailsItem,
             $this->calculate($this->rowBaseCalculator)
         );
     }
@@ -49,9 +49,9 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
             ['deltaRound'],
             [
                 'taxClassService' => $taxClassService,
-                'taxDetailsItemBuilder' => $this->taxItemDetailsBuilder,
-                'appliedTaxBuilder' => $this->appliedTaxBuilder,
-                'appliedRateBuilder' => $this->appliedTaxRateBuilder,
+                'taxDetailsItemDataObjectFactory' => $this->taxItemDetailsDataObjectFactory,
+                'appliedTaxDataObjectFactory' => $this->appliedTaxDataObjectFactory,
+                'appliedTaxRateDataObjectFactory' => $this->appliedTaxRateDataObjectFactory,
                 'calculationTool' => $this->mockCalculationTool,
                 'config' => $this->mockConfig,
                 'storeId' => self::STORE_ID,

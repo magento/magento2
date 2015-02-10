@@ -19,11 +19,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $rateBuilderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $rateConverterMock;
 
     /**
@@ -58,13 +53,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->rateBuilderMock = $this->getMock(
-            'Magento\Tax\Api\Data\TaxRateDataBuilder',
-            [],
-            [],
-            '',
-            false
-        );
         $this->rateConverterMock = $this->getMock(
             'Magento\Tax\Model\Calculation\Rate\Converter',
             [],
@@ -115,7 +103,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->model = new RateRepository(
-            $this->rateBuilderMock,
             $this->rateConverterMock,
             $this->rateRegistryMock,
             $this->searchResultBuilder,

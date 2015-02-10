@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="ReAuthorizeTokensIntegrationEntityTest">
+        <variation name="ReAuthorizeTokensIntegrationEntityTestVariation1">
+            <data name="description">Re-authorize integration</data>
+            <data name="constraint">assertIntegrationSuccessReauthorizeMessage, assertIntegrationForm, assertIntegrationTokensAfterReauthorize</data>
+        </variation>
+    </testCase>
+</config>

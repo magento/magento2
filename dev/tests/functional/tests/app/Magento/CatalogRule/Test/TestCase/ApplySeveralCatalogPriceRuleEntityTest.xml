@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="ApplySeveralCatalogPriceRuleEntityTest">
+        <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation1">
+            <data name="catalogRulesOriginal/priority_0">catalog_price_rule_priority_0</data>
+            <data name="catalogRulesOriginal/priority_1">-</data>
+            <data name="catalogRulesOriginal/priority_2">catalog_price_rule_priority_2</data>
+            <data name="price/sub_total">100</data>
+            <data name="price/grand_total">40</data>
+            <data name="price/discount_amount">60</data>
+            <data name="price/special">40</data>
+            <data name="price/regular">100</data>
+            <data name="constraint">assertCatalogPriceRuleAppliedCatalogPage, assertCatalogPriceRuleAppliedProductPage, assertCatalogPriceRuleAppliedShoppingCart</data>
+        </variation>
+        <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation2">
+            <data name="catalogRulesOriginal/priority_0">catalog_price_rule_priority_0</data>
+            <data name="catalogRulesOriginal/priority_1">catalog_price_rule_priority_1_stop_further_rules</data>
+            <data name="catalogRulesOriginal/priority_2">catalog_price_rule_priority_2</data>
+            <data name="price/sub_total">100</data>
+            <data name="price/grand_total">45</data>
+            <data name="price/discount_amount">55</data>
+            <data name="price/special">45</data>
+            <data name="price/regular">100</data>
+            <data name="constraint">assertCatalogPriceRuleAppliedCatalogPage, assertCatalogPriceRuleAppliedProductPage, assertCatalogPriceRuleAppliedShoppingCart</data>
+        </variation>
+    </testCase>
+</config>
