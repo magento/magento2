@@ -89,7 +89,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey
      * @return $this
      */
-    public function setCustomerTaxClassKey($customerTaxClassKey)
+    public function setCustomerTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey = null)
     {
         return $this->setData(QuoteDetailsInterface::KEY_CUSTOMER_TAX_CLASS_KEY, $customerTaxClassKey);
     }
