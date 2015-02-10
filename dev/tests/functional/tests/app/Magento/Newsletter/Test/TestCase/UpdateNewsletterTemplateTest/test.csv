@@ -1,2 +1,0 @@
-"template/data/code";"template/data/subject";"template/data/sender_name";"template/data/sender_email";"template/data/text";"constraint"
-"TemplateName%isolation%";"TemplateSubject%isolation%";"SenderName%isolation%";"SenderName%isolation%@example.com";"Some content %isolation%";"assertNewsletterSuccessCreateMessage, assertNewsletterInGrid, assertNewsletterForm"
