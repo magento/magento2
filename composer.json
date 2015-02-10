@@ -131,6 +131,7 @@
         "magento/module-url-rewrite": "self.version",
         "magento/module-user": "self.version",
         "magento/module-usps": "self.version",
+        "magento/module-version": "self.version",
         "magento/module-webapi": "self.version",
         "magento/module-weee": "self.version",
         "magento/module-widget": "self.version",
