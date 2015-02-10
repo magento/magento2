@@ -81,11 +81,23 @@ class TrackTest extends \PHPUnit_Framework_TestCase
         $this->trackModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
         $this->trackModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
 
+        $relationProcessorMock = $this->getMock(
+            '\Magento\Framework\Model\Resource\Db\ObjectRelationProcessor',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($this->appResourceMock);
+        $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
+
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->trackResource = $objectManager->getObject(
             'Magento\Sales\Model\Resource\Order\Shipment\Track',
             [
-                'resource' => $this->appResourceMock,
+                'context' => $contextMock,
                 'validator' => $this->validatorMock
             ]
         );
@@ -100,6 +112,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->equalTo($this->trackModelMock))
             ->will($this->returnValue([]));
+        $this->trackModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->trackResource->save($this->trackModelMock);
         $this->assertTrue(true);
     }
@@ -116,6 +129,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->equalTo($this->trackModelMock))
             ->will($this->returnValue(['warning message']));
+        $this->trackModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->trackResource->save($this->trackModelMock);
         $this->assertTrue(true);
     }

@@ -70,10 +70,23 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             ->method('insert');
         $this->adapterMock->expects($this->any())
             ->method('lastInsertId');
+
+        $relationProcessorMock = $this->getMock(
+            '\Magento\Framework\Model\Resource\Db\ObjectRelationProcessor',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($this->appResourceMock);
+        $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
+
         $this->historyResource = $objectManager->getObject(
             'Magento\Sales\Model\Resource\Order\Status\History',
             [
-                'resource' => $this->appResourceMock,
+                'context' => $contextMock,
                 'validator' => $this->validatorMock
             ]
         );
@@ -97,6 +110,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($historyMock)
             ->will($this->returnValue([]));
+        $historyMock->expects($this->any())->method('getData')->willReturn([]);
         $this->historyResource->save($historyMock);
     }
 

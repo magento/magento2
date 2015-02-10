@@ -144,8 +144,11 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
+
         $this->resource = new Order(
-            $this->resourceMock,
+            $contextMock,
             $this->attributeMock,
             $this->salesIncrementMock,
             $this->addressHandlerMock,

@@ -30,6 +30,9 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $groupManagement;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $relationProcessorMock;
+
     protected function setUp()
     {
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
@@ -50,10 +53,32 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
         $this->groupModel = $this->getMock('Magento\Customer\Model\Group', [], [], '', false);
 
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($this->resource);
+
+        $this->relationProcessorMock = $this->getMock(
+            '\Magento\Framework\Model\Resource\Db\ObjectRelationProcessor',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $transactionManagerMock = $this->getMock('\Magento\Framework\Model\Resource\Db\TransactionManagerInterface');
+        $transactionManagerMock->expects($this->once())
+            ->method('start')
+            ->willReturn($this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface'));
+        $contextMock->expects($this->once())
+            ->method('getTransactionManager')
+            ->willReturn($transactionManagerMock);
+        $contextMock->expects($this->once())
+            ->method('getObjectRelationProcessor')
+            ->willReturn($this->relationProcessorMock);
+
         $this->groupResourceModel = (new ObjectManagerHelper($this))->getObject(
             'Magento\Customer\Model\Resource\Group',
             [
-                'resource' => $this->resource,
+                'context' => $contextMock,
                 'groupManagement' => $this->groupManagement,
                 'customersFactory' => $this->customersFactory,
             ]
@@ -93,6 +118,8 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $this->customersFactory->expects($this->once())->method('create')
             ->will($this->returnValue($customerCollection));
 
+        $this->relationProcessorMock->expects($this->once())->method('delete');
+        $this->groupModel->expects($this->any())->method('getData')->willReturn(['data' => 'value']);
         $this->groupResourceModel->delete($this->groupModel);
     }
 }

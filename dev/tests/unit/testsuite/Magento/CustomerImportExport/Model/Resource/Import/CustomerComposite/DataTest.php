@@ -15,11 +15,6 @@ use Magento\CustomerImportExport\Model\Import\CustomerComposite;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
      * Array of customer attributes
      *
      * @var array
@@ -104,14 +99,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $coreHelper = $this->getMock('Magento\Core\Helper\Data', ['__construct'], [], '', false);
         unset($dependencies['resource'], $dependencies['json_helper']);
 
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $object = $this->objectManager->getObject(
-            '\Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\Data',
-            [
-                'resource' => $resource,
-                'coreHelper' => $coreHelper,
-                'arguments' => $dependencies,
-            ]
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($resource);
+
+        $object = new Data(
+            $contextMock,
+            $coreHelper,
+            $dependencies
         );
         $this->assertEquals($expectedData, $object->getNextBunch());
     }
