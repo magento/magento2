@@ -207,7 +207,7 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
             ->method('toHtml')
             ->willReturn('some_html');
 
-        $update = $this->getMock('Magento\Core\Model\Layout\Merge', ['load'], [], '', false);
+        $update = $this->getMock('Magento\Framework\View\Model\Layout\Merge', ['load'], [], '', false);
         $layout->expects($this->any())
             ->method('getUpdate')
             ->willReturn($update);

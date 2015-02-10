@@ -70,7 +70,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_viewMock;
 
-    /** @var \Magento\Core\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject */
     protected $_layoutMergeMock;
 
     /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -174,7 +174,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->_layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface');
         $this->_layoutMergeMock = $this->getMockBuilder(
-            'Magento\Core\Model\Layout\Merge'
+            'Magento\Framework\View\Model\Layout\Merge'
         )->disableOriginalConstructor()->getMock();
         $this->_layoutMock->expects(
             $this->any()
@@ -263,7 +263,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $map = [
             ['Magento\Framework\App\Config\ScopeConfigInterface', $this->_configMock],
-            ['Magento\Core\Model\Layout\Filter\Acl', $this->_layoutFilterMock],
+            ['Magento\Backend\Model\Layout\Filter\Acl', $this->_layoutFilterMock],
             ['Magento\Backend\Model\Session', $this->_backendSessionMock],
             ['Magento\Framework\TranslateInterface', $this->_translateModelMock],
             ['Magento\Framework\Config\ScopeInterface', $this->_configScopeMock],
