@@ -162,8 +162,11 @@
             <div ng-show="testConnection.result.success === false && testConnection.result !== undefined" class="error-container animate-show text-danger">
                 <span class="glyphicon glyphicon-remove-sign">&nbsp;{{testConnection.result.error}}</span>
             </div>
-            <div ng-show="testConnection.result.success === undefined && testConnection.result !== undefined" class="error-container animate-show text-danger">
+            <div ng-show="testConnection.result.success === undefined && testConnection.result !== undefined && testConnection.failed === undefined" class="error-container animate-show text-danger">
                 <span class="glyphicon glyphicon-remove-sign">&nbsp;Unknown Database Server Host.</span>
+            </div>
+            <div ng-show="testConnection.failed !== undefined" class="error-container animate-show text-danger">
+                <span class="glyphicon glyphicon-remove-sign">&nbsp;{{testConnection.failed}}</span>
             </div>
         </div>
     </div>

@@ -25,6 +25,9 @@ angular.module('add-database', ['ngStorage'])
                     if (!(($scope.testConnection.result !== undefined) && (!$scope.testConnection.result.success))) {
                         $scope.nextState();
                     }
+                })
+                .error(function (data) {
+                    $scope.testConnection.failed = data;
                 });
         };
 
