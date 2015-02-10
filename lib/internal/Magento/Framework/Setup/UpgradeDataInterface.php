@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Setup;
 
-use Magento\Framework\Module\DataSetup;
-
 /**
  * Interface for data upgrades of a module
  */
@@ -19,5 +17,5 @@ interface UpgradeDataInterface
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function update(ModuleDataResourceInterface $setup, ModuleContextInterface $context);
+    public function upgrade(ModuleDataResourceInterface $setup, ModuleContextInterface $context);
 }

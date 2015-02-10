@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Setup;
 
-use Magento\Framework\Module\DataSetup;
-
 /**
  * Interface for data installs of a module
  */
