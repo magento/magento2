@@ -7,6 +7,7 @@ namespace Magento\Store\Helper;
 
 use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\Store;
 
 class SecureUrl implements \Magento\Framework\App\Router\SecureUrlInterface
 {
@@ -59,17 +60,17 @@ class SecureUrl implements \Magento\Framework\App\Router\SecureUrlInterface
     {
         return parse_url(
             $this->scopeConfig->getValue(
-                StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL,
+                Store::XML_PATH_UNSECURE_BASE_URL,
                 ScopeInterface::SCOPE_STORE
             ),
             PHP_URL_SCHEME
         ) === 'https'
         || $this->scopeConfig->isSetFlag(
-            StoreManagerInterface::XML_PATH_SECURE_IN_FRONTEND,
+            Store::XML_PATH_SECURE_IN_FRONTEND,
             ScopeInterface::SCOPE_STORE
         ) && parse_url(
             $this->scopeConfig->getValue(
-                StoreManagerInterface::XML_PATH_SECURE_BASE_URL,
+                Store::XML_PATH_SECURE_BASE_URL,
                 ScopeInterface::SCOPE_STORE
             ),
             PHP_URL_SCHEME

@@ -11,6 +11,7 @@ use Magento\Core\Helper\Data;
 use Magento\Directory\Model\Currency;
 use Magento\Setup\Module\Setup;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
 
 class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +27,7 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * return array
+     * @return array
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

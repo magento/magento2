@@ -52,6 +52,12 @@ class Store extends AbstractModel implements
 
     const XML_PATH_USE_REWRITES = 'web/seo/use_rewrites';
 
+    const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
+
+    const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
+    
+    const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
+
     const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
 
     const XML_PATH_SECURE_BASE_LINK_URL = 'web/secure/base_link_url';
@@ -538,8 +544,8 @@ class Store extends AbstractModel implements
             switch ($type) {
                 case \Magento\Framework\UrlInterface::URL_TYPE_WEB:
                     $path = $secure
-                        ? StoreManagerInterface::XML_PATH_SECURE_BASE_URL
-                        : StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL;
+                        ? self::XML_PATH_SECURE_BASE_URL
+                        : self::XML_PATH_UNSECURE_BASE_URL;
                     $url = $this->_getConfig($path);
                     break;
 
@@ -717,7 +723,7 @@ class Store extends AbstractModel implements
     {
         if ($this->_isFrontSecure === null) {
             $this->_isFrontSecure = $this->_config->isSetFlag(
-                StoreManagerInterface::XML_PATH_SECURE_IN_FRONTEND,
+                self::XML_PATH_SECURE_IN_FRONTEND,
                 \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this->getId()
             );
@@ -745,7 +751,7 @@ class Store extends AbstractModel implements
         }
 
         $secureBaseUrl = $this->_config->getValue(
-            StoreManagerInterface::XML_PATH_SECURE_BASE_URL,
+            self::XML_PATH_SECURE_BASE_URL,
             \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 

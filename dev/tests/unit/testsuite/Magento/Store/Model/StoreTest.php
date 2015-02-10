@@ -11,6 +11,7 @@ namespace Magento\Store\Model;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\Store\ScopeInterface;
 use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -559,7 +560,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->will($this->returnValueMap([
                         [
-                            StoreManagerInterface::XML_PATH_SECURE_BASE_URL,
+                            Store::XML_PATH_SECURE_BASE_URL,
                             ScopeInterface::SCOPE_STORE,
                             null,
                             $secureBaseUrl

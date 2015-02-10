@@ -9,6 +9,7 @@
 namespace Magento\AdminNotification\Model\System\Message;
 
 use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\Store;
 
 class Security implements \Magento\Framework\Notification\MessageInterface
 {
@@ -95,7 +96,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      */
     private function _isFileAccessible()
     {
-        $unsecureBaseURL = $this->_config->getValue(StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL, 'default');
+        $unsecureBaseURL = $this->_config->getValue(Store::XML_PATH_UNSECURE_BASE_URL, 'default');
 
         /** @var $http \Magento\Framework\HTTP\Adapter\Curl */
         $http = $this->_curlFactory->create();

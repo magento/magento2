@@ -6,6 +6,7 @@
 namespace Magento\AdminNotification\Model\System\Message;
 
 use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\Store;
 
 class BaseurlTest extends \PHPUnit_Framework_TestCase
 {
@@ -113,13 +114,13 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
     {
         $map = [
             [
-                StoreManagerInterface::XML_PATH_UNSECURE_BASE_URL,
+                Store::XML_PATH_UNSECURE_BASE_URL,
                 'default',
                 null,
                 \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER,
             ],
             [
-                StoreManagerInterface::XML_PATH_SECURE_BASE_URL,
+                Store::XML_PATH_SECURE_BASE_URL,
                 'default',
                 null,
                 \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER
