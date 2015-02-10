@@ -26,9 +26,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $type;
 
     /**
-     * @var \Magento\Bundle\Api\Data\OptionDataBuilder
+     * @var \Magento\Bundle\Api\Data\OptionInterfaceFactory
      */
-    protected $optionBuilder;
+    protected $optionFactory;
 
     /**
      * @var Resource\Option
@@ -56,33 +56,41 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $linkList;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Product\Type $type
-     * @param \Magento\Bundle\Api\Data\OptionDataBuilder $optionBuilder
+     * @param \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory
      * @param Resource\Option $optionResource
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement
      * @param Product\OptionList $productOptionList
      * @param Product\LinksList $linkList
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Bundle\Model\Product\Type $type,
-        \Magento\Bundle\Api\Data\OptionDataBuilder $optionBuilder,
+        \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory,
         \Magento\Bundle\Model\Resource\Option $optionResource,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement,
         \Magento\Bundle\Model\Product\OptionList $productOptionList,
-        \Magento\Bundle\Model\Product\LinksList $linkList
+        \Magento\Bundle\Model\Product\LinksList $linkList,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->productRepository = $productRepository;
         $this->type = $type;
-        $this->optionBuilder = $optionBuilder;
+        $this->optionFactory = $optionFactory;
         $this->optionResource = $optionResource;
         $this->storeManager = $storeManager;
         $this->linkManagement = $linkManagement;
         $this->productOptionList = $productOptionList;
         $this->linkList = $linkList;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -100,13 +108,19 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
         $productLinks = $this->linkList->getItems($product, $optionId);
 
-        $this->optionBuilder->populateWithArray($option->getData())
-            ->setOptionId($option->getId())
+        /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
+        $optionDataObject = $this->optionFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $optionDataObject,
+            $option->getData(),
+            '\Magento\Bundle\Api\Data\OptionInterface'
+        );
+        $optionDataObject->setOptionId($option->getId())
             ->setTitle(is_null($option->getTitle()) ? $option->getDefaultTitle() : $option->getTitle())
             ->setSku($product->getSku())
             ->setProductLinks($productLinks);
 
-        return $this->optionBuilder->create();
+        return $optionDataObject;
     }
 
     /**

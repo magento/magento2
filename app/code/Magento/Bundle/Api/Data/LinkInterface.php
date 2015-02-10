@@ -17,11 +17,27 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getSku();
 
     /**
+     * Set linked product sku
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku);
+
+    /**
      * Get option id
      *
      * @return int|null
      */
     public function getOptionId();
+
+    /**
+     * set option id
+     *
+     * @param int $optionId
+     * @return $this
+     */
+    public function setOptionId($optionId);
 
     /**
      * Get qty
@@ -31,6 +47,14 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getQty();
 
     /**
+     * Set qty
+     *
+     * @param float $qty
+     * @return $this
+     */
+    public function setQty($qty);
+
+    /**
      * Get position
      *
      * @return int|null
@@ -38,11 +62,27 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getPosition();
 
     /**
+     * Get position
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position);
+
+    /**
      * Get is defined
      *
      * @return bool|null
      */
     public function getIsDefined();
+
+    /**
+     * Set is defined
+     *
+     * @param bool $isDefined
+     * @return $this
+     */
+    public function setIsDefined($isDefined);
 
     /**
      * Get is default
@@ -53,11 +93,27 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getIsDefault();
 
     /**
+     * Get is default
+     *
+     * @param bool $isDefault
+     * @return $this
+     */
+    public function setIsDefault($isDefault);
+
+    /**
      * Get price
      *
      * @return float
      */
     public function getPrice();
+
+    /**
+     * Set price
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price);
 
     /**
      * Get price type
@@ -67,9 +123,25 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getPriceType();
 
     /**
+     * Set price type
+     *
+     * @param int $priceType
+     * @return $this
+     */
+    public function setPriceType($priceType);
+
+    /**
      * Get whether quantity could be changed
      *
      * @return int|null
      */
     public function getCanChangeQuantity();
+
+    /**
+     * Set whether quantity could be changed
+     *
+     * @param int $canChangeQuantity
+     * @return $this
+     */
+    public function setCanChangeQuantity($canChangeQuantity);
 }

@@ -1213,6 +1213,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         return ConvertArray::toFlatArray($dataArray);
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * Set parent category ID
      *
@@ -1323,4 +1324,5 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         return $this->setData(self::KEY_CHILDREN_DATA, $childrenData);
     }
+    //@codeCoverageIgnoreEnd
 }

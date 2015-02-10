@@ -21,21 +21,21 @@ class OptionTypeListTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $typeBuilderMock;
+    protected $typeFactoryMock;
 
     protected function setUp()
     {
         $this->typeMock = $this->getMock('\Magento\Bundle\Model\Source\Option\Type', [], [], '', false);
-        $this->typeBuilderMock = $this->getMock(
-            '\Magento\Bundle\Api\Data\OptionTypeDataBuilder',
-            ['setCode', 'setLabel', 'create'],
+        $this->typeFactoryMock = $this->getMock(
+            '\Magento\Bundle\Api\Data\OptionTypeInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
         $this->model = new \Magento\Bundle\Model\OptionTypeList(
             $this->typeMock,
-            $this->typeBuilderMock
+            $this->typeFactoryMock
         );
     }
 
@@ -46,9 +46,9 @@ class OptionTypeListTest extends \PHPUnit_Framework_TestCase
             ->willReturn([['value' => 'value', 'label' => 'label']]);
 
         $typeMock = $this->getMock('\Magento\Bundle\Api\Data\OptionTypeInterface');
-        $this->typeBuilderMock->expects($this->once())->method('setCode')->with('value')->willReturnSelf();
-        $this->typeBuilderMock->expects($this->once())->method('setLabel')->with('label')->willReturnSelf();
-        $this->typeBuilderMock->expects($this->once())->method('create')->willReturn($typeMock);
+        $typeMock->expects($this->once())->method('setCode')->with('value')->willReturnSelf();
+        $typeMock->expects($this->once())->method('setLabel')->with('label')->willReturnSelf();
+        $this->typeFactoryMock->expects($this->once())->method('create')->willReturn($typeMock);
         $this->assertEquals([$typeMock], $this->model->getItems());
     }
 }

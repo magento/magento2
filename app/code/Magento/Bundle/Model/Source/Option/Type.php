@@ -15,6 +15,13 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\Option\ArrayInterface,
     \Magento\Bundle\Api\Data\OptionTypeInterface
 {
+    /**#@+
+     * Constants
+     */
+    const KEY_LABEL = 'label';
+    const KEY_CODE = 'code';
+    /**#@-*/
+
     /**
      * @var array
      */
@@ -66,12 +73,13 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
         return $types;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
     public function getLabel()
     {
-        return $this->getData('label');
+        return $this->getData(self::KEY_LABEL);
     }
 
     /**
@@ -79,6 +87,29 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getCode()
     {
-        return $this->getData('code');
+        return $this->getData(self::KEY_CODE);
     }
+
+    /**
+     * Set type label
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label)
+    {
+        return $this->setData(self::KEY_LABEL, $label);
+    }
+
+    /**
+     * Set type code
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setCode($code)
+    {
+        return $this->setData(self::KEY_CODE, $code);
+    }
+    //@codeCoverageIgnoreEnd
 }

@@ -31,7 +31,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $linkBuilder;
+    protected $linkFactory;
 
     /**
      * @var \Magento\Bundle\Model\Product\Type\Interceptor|\PHPUnit_Framework_MockObject_MockObject
@@ -88,6 +88,11 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $optionIds = [1, 2, 3];
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataObjectHelperMock;
+
     protected function setUp()
     {
         $helper = new ObjectManager($this);
@@ -118,18 +123,8 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $this->link = $this->getMockBuilder('\Magento\Bundle\Api\Data\LinkInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->linkBuilder = $this->getMockBuilder('\Magento\Bundle\Api\Data\LinkDataBuilder')
-            ->setMethods(
-                [
-                    'populateWithArray',
-                    'setIsDefault',
-                    'setQty',
-                    'setIsDefined',
-                    'setPrice',
-                    'setPriceType',
-                    'create',
-                ]
-            )
+        $this->linkFactory = $this->getMockBuilder('\Magento\Bundle\Api\Data\LinkInterfaceFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->bundleSelectionMock = $this->getMock(
@@ -143,15 +138,19 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         );
         $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
 
+        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $helper->getObject(
             '\Magento\Bundle\Model\LinkManagement',
             [
                 'productRepository' => $this->productRepository,
-                'linkBuilder' => $this->linkBuilder,
+                'linkFactory' => $this->linkFactory,
                 'bundleFactory' => $this->bundleFactoryMock,
                 'bundleSelection' => $this->bundleSelectionMock,
                 'optionCollection' => $this->optionCollectionFactoryMock,
                 'storeManager' => $this->storeManagerMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
             ]
         );
     }
@@ -183,13 +182,16 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->option->expects($this->any())->method('getSelections')->will($this->returnValue([$this->product]));
 
-        $this->linkBuilder->expects($this->once())->method('populateWithArray')->willReturnSelf();
-        $this->linkBuilder->expects($this->once())->method('setIsDefault')->willReturnSelf();
-        $this->linkBuilder->expects($this->once())->method('setQty')->willReturnSelf();
-        $this->linkBuilder->expects($this->once())->method('setIsDefined')->willReturnSelf();
-        $this->linkBuilder->expects($this->once())->method('setPrice')->willReturnSelf();
-        $this->linkBuilder->expects($this->once())->method('setPriceType')->willReturnSelf();
-        $this->linkBuilder->expects($this->once())->method('create')->willReturn($this->link);
+        $this->dataObjectHelperMock->expects($this->once())
+            ->method('populateWithArray')
+            ->with($this->link, $this->anything(), '\Magento\Bundle\Api\Data\LinkInterface')
+            ->willReturnSelf();
+        $this->link->expects($this->once())->method('setIsDefault')->willReturnSelf();
+        $this->link->expects($this->once())->method('setQty')->willReturnSelf();
+        $this->link->expects($this->once())->method('setIsDefined')->willReturnSelf();
+        $this->link->expects($this->once())->method('setPrice')->willReturnSelf();
+        $this->link->expects($this->once())->method('setPriceType')->willReturnSelf();
+        $this->linkFactory->expects($this->once())->method('create')->willReturn($this->link);
 
         $this->assertEquals([$this->link], $this->model->getChildren($productSku));
     }
