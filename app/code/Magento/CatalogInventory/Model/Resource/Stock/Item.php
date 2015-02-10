@@ -36,7 +36,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Processor $processor,
-        $resourcePrefix = nul
+        $resourcePrefix = null
     ) {
         $this->stockIndexerProcessor = $processor;
         parent::__construct($context, $resourcePrefix);
