@@ -86,7 +86,7 @@
     <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Null"/>
     <preference for="Magento\Framework\App\Resource\ConnectionAdapterInterface" type="Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
-    <type name="Magento\Framework\Logger\Handler\System">
+    <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
@@ -95,15 +95,9 @@
         <arguments>
             <argument name="name" xsi:type="string">main</argument>
             <argument name="handlers"  xsi:type="array">
-                <item name="exception" xsi:type="object">Magento\Framework\Logger\Handler\Critical</item>
                 <item name="system" xsi:type="object">Magento\Framework\Logger\Handler\System</item>
                 <item name="debug" xsi:type="object">Magento\Framework\Logger\Handler\Debug</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Monolog\Handler\StreamHandler">
-        <arguments>
-            <argument name="stream" xsi:type="string">var/log/system.log</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Model\Context">
@@ -559,6 +553,11 @@
                 <item name="manual" xsi:type="string">Magento\Framework\Search\Dynamic\Algorithm\Manual</item>
                 <item name="improved" xsi:type="string">Magento\Framework\Search\Dynamic\Algorithm\Improved</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="CSSmin">
+        <arguments>
+            <argument name="raise_php_limits" xsi:type="boolean">false</argument>
         </arguments>
     </type>
 </config>

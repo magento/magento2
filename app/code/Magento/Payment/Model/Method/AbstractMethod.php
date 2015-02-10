@@ -223,7 +223,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -234,7 +234,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -245,7 +245,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -823,7 +823,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->logger->debug($debugData);
+            $this->logger->debug(var_export($debugData, true));
         }
     }
 

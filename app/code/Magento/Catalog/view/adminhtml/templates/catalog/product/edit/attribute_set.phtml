@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
- /* @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet */
+ /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet */
 ?>
 <script id="product-template-selector-template" type="text/x-jquery-tmpl">
 {{if !term && items.length && !$data.allShown()}}
@@ -32,7 +32,7 @@
             }
         });
         $suggest
-            .mage('suggest',<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getSelectorOptions())?>)
+            .mage('suggest',<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
             .on('suggestselect', function (e, ui) {
                 if (ui.item.id) {
                     $('[data-form=edit-product]').trigger('changeAttributeSet', ui.item);

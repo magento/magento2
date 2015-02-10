@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model;
 
 use Magento\Directory\Model\Currency;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface as ApiOrderInterface;
@@ -392,7 +392,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
@@ -422,7 +422,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
@@ -470,7 +470,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $localeDate,
             $dateTime,
             $resource,

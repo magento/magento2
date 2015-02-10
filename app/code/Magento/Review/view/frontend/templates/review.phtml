@@ -5,8 +5,8 @@
  */
 ?>
 
-<div id="product-review-container"></div>
-<?php echo $this->getChildHtml(); ?>
+<div id="product-review-container" data-role="product-review"></div>
+<?php echo $block->getChildHtml(); ?>
 
 <script>
     require([
@@ -19,7 +19,7 @@
                 dataType: 'html'
             }).done(function (data) {
                 $('#product-review-container').html(data);
-                $('.pages a').each(function (index, element) {
+                $('[data-role="product-review"] .pages a').each(function (index, element) {
                     $(element).click(function (event) {
                         processReviews($(element).attr('href'), true);
                         event.preventDefault();
@@ -34,7 +34,7 @@
             });
         }
 
-        processReviews('<?php echo $this->getProductReviewUrl();?>');
+        processReviews('<?php echo $block->getProductReviewUrl();?>');
 
         $(function () {
             $('.product-info-main .reviews-actions a').click(function (event) {

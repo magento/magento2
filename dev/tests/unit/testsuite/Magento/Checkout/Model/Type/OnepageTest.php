@@ -70,11 +70,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $formFactoryMock;
 
-    /** @var \Magento\Customer\Api\Data\CustomerDataBuilder|\PHPUnit_Framework_MockObject_MockObject */
-    protected $customerBuilderMock;
-
-    /** @var \Magento\Customer\Api\Data\AddressDataBuilder|\PHPUnit_Framework_MockObject_MockObject */
-    protected $addressBuilderMock;
+    /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $customerDataFactoryMock;
 
     /** @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject */
     protected $randomMock;
@@ -164,16 +161,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->customerBuilderMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerDataBuilder',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->addressBuilderMock = $this->getMock(
-            'Magento\Customer\Api\Data\AddressDataBuilder',
+        $this->customerDataFactoryMock = $this->getMock(
+            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
             [],
             [],
             '',
@@ -233,8 +222,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
                 'objectCopyService' => $this->copyMock,
                 'messageManager' => $this->messageManagerMock,
                 'formFactory' => $this->formFactoryMock,
-                'customerBuilder' => $this->customerBuilderMock,
-                'addressBuilder' => $this->addressBuilderMock,
+                'customerDataFactory' => $this->customerDataFactoryMock,
                 'mathRandom' => $this->randomMock,
                 'encryptor' => $this->encryptorMock,
                 'addressRepository' => $this->addressRepositoryMock,
@@ -580,7 +568,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
         $customerDataMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
 
-        $this->customerBuilderMock
+        $this->customerDataFactoryMock
             ->expects($this->any())
             ->method('create')
             ->will($this->returnValue($customerDataMock));

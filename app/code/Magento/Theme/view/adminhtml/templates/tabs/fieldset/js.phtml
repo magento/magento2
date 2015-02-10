@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\Backend\Block\Widget\Form\Renderer\Fieldset */ ?>
+<?php /** @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset */ ?>
 
 <div id="js-file-uploader" class="uploader">
 </div>
@@ -57,7 +57,7 @@ jQuery(function($) {
     });
     $('body').trigger(
         'refreshJsList',
-        {jsList: <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getJsFiles()) ?>}
+        {jsList: <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getJsFiles()) ?>}
     );
 });
 
