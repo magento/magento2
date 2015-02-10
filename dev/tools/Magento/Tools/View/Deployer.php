@@ -38,6 +38,9 @@ class Deployer
     /** @var \Magento\Framework\App\View\Asset\Publisher */
     private $assetPublisher;
 
+    /** @var \Magento\Framework\App\View\Asset\BundleService */
+    private $bundleService;
+
     /** @var bool */
     private $isDryRun;
 
@@ -63,6 +66,7 @@ class Deployer
         Deployer\Log $logger,
         Version\StorageInterface $versionStorage,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\App\View\Asset\BundleService $bundleService,
         \Magento\Framework\View\Asset\MinifyService $minifyService,
         $isDryRun = false
     ) {
@@ -70,6 +74,7 @@ class Deployer
         $this->logger = $logger;
         $this->versionStorage = $versionStorage;
         $this->dateTime = $dateTime;
+        $this->bundleService = $bundleService;
         $this->isDryRun = $isDryRun;
         $this->minifyService = $minifyService;
     }
@@ -109,6 +114,7 @@ class Deployer
                 }
             }
         }
+        $this->bundleService->saveBundles();
         $version = $this->dateTime->toTimestamp(true);
         $this->logger->logMessage("New version of deployed files: {$version}");
         if (!$this->isDryRun) {
@@ -195,9 +201,10 @@ class Deployer
         }
         $this->logger->logDebug($logMessage);
         try {
+            $context = ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module];
             $asset = $this->assetRepo->createAsset(
                 $requestedPath,
-                ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module]
+                $context
             );
             $asset = $this->minifyService->getAssets([$asset], true)[0];
             $this->logger->logDebug("\tDeploying the file to '{$asset->getPath()}'", '.');
@@ -205,6 +212,7 @@ class Deployer
                 $asset->getContent();
             } else {
                 $this->assetPublisher->publish($asset);
+                $this->bundleService->collect($asset, $context);
             }
             $this->count++;
         } catch (\Magento\Framework\View\Asset\File\NotFoundException $e) {
