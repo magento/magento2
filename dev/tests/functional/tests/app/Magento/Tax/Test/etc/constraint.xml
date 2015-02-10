@@ -42,7 +42,6 @@
     <constraint name="assertOrderTaxOnBackendExcludingIncludingTax" module="Magento_Tax" severity="low"/>
     <constraint name="assertOrderTaxOnBackendIncludingTax" module="Magento_Tax" severity="low"/>
     <constraint name="assertOrderTaxOnBackendExcludingTax" module="Magento_Tax" severity="low"/>
-    <constraint name="assertTaxRuleIsAppliedToAllPrices" module="Magento_Tax" severity="high"/>
     <constraint name="assertTaxWithCrossBorderApplied" module="Magento_Tax" severity="high"/>
     <constraint name="assertTaxRuleIsNotApplied" module="Magento_Tax" severity="high"/>
     <constraint name="assertTaxWithCrossBorderNotApplied" module="Magento_Tax" severity="high"/>

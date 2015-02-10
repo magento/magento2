@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid">
+        <arguments>
+            <argument name="urlRewriteIndex" xsi:type="object">Magento\UrlRewrite\Test\Fixture\UrlRewriteCategory</argument>
+            <argument name="urlRewriteCategory" xsi:type="object">Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductRedirect">
+        <arguments>
+            <argument name="urlRewrite" xsi:type="object">Magento\UrlRewrite\Test\Fixture\UrlRewrite</argument>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+            <argument name="browser" xsi:type="object">Magento\Mtf\Client\Browser</argument>
+        </arguments>
+    </type>
+    <type name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage">
+        <arguments>
+            <argument name="index" xsi:type="object">Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteNotInGrid">
+        <arguments>
+            <argument name="urlRewriteIndex" xsi:type="object">Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex</argument>
+            <argument name="productRedirect" xsi:type="object">Magento\UrlRewrite\Test\Fixture\UrlRewrite</argument>
+        </arguments>
+    </type>
+    <type name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound">
+        <arguments>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="productRedirect" xsi:type="object">Magento\UrlRewrite\Test\Fixture\UrlRewrite</argument>
+            <argument name="browser" xsi:type="object">Magento\Mtf\Client\Browser</argument>
+        </arguments>
+    </type>
+    <type name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSuccessOutsideRedirect">
+        <arguments>
+            <argument name="urlRewrite" xsi:type="object">Magento\UrlRewrite\Test\Fixture\UrlRewrite</argument>
+            <argument name="browser" xsi:type="object">Magento\Mtf\Client\Browser</argument>
+        </arguments>
+    </type>
+    <type name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCustomSearchRedirect">
+        <arguments>
+            <argument name="urlRewrite" xsi:type="object">Magento\UrlRewrite\Test\Fixture\UrlRewrite</argument>
+            <argument name="browser" xsi:type="object">Magento\Mtf\Client\Browser</argument>
+            <argument name="categoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+        </arguments>
+    </type>
+</config>

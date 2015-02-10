@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Test\Constraint\AssertProductInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="productGrid" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage">
+        <arguments>
+            <argument name="productPage" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock">
+        <arguments>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductInStock">
+        <arguments>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory">
+        <arguments>
+            <argument name="catalogCategoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+            <argument name="cmsIndex" xsi:type="object">Magento\Cms\Test\Page\CmsIndex</argument>
+            <argument name="category" xsi:type="object">Magento\Catalog\Test\Fixture\Category</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory">
+        <arguments>
+            <argument name="catalogCategoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+            <argument name="cmsIndex" xsi:type="object">Magento\Cms\Test\Page\CmsIndex</argument>
+            <argument name="category" xsi:type="object">Magento\Catalog\Test\Fixture\Category</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku">
+        <arguments>
+            <argument name="catalogSearchResult" xsi:type="object">Magento\CatalogSearch\Test\Page\CatalogsearchResult</argument>
+            <argument name="cmsIndex" xsi:type="object">Magento\Cms\Test\Page\CmsIndex</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductInCategory">
+        <arguments>
+            <argument name="catalogCategoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+            <argument name="cmsIndex" xsi:type="object">Magento\Cms\Test\Page\CmsIndex</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+            <argument name="category" xsi:type="object">Magento\Catalog\Test\Fixture\Category</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductInCart">
+        <arguments>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+            <argument name="checkoutCart" xsi:type="object">Magento\Checkout\Test\Page\CheckoutCart</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductPage">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage">
+        <arguments>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage">
+        <arguments>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage">
+        <arguments>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage">
+        <arguments>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="catalogCategoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+            <argument name="cmsIndex" xsi:type="object">Magento\Cms\Test\Page\CmsIndex</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+            <argument name="category" xsi:type="object">Magento\Catalog\Test\Fixture\Category</argument>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="catalogSearchResult" xsi:type="object">Magento\CatalogSearch\Test\Page\CatalogsearchResult</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductSkuAutoGenerated">
+        <arguments>
+            <argument name="productGrid" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex</argument>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="attributeIndex" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm">
+        <arguments>
+            <argument name="productTemplate" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductTemplate</argument>
+            <argument name="attribute" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductAttribute</argument>
+            <argument name="productAttribute" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductAttribute</argument>
+            <argument name="productEdit" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit</argument>
+            <argument name="productGrid" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex</argument>
+            <argument name="productSetEdit" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetEdit</argument>
+            <argument name="productSet" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex</argument>
+            <argument name="fixtureFactory" xsi:type="object">Magento\Mtf\Fixture\FixtureFactory</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertCrossSellsProductsSection">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+            <argument name="product1" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+            <argument name="product2" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+            <argument name="cmsIndex" xsi:type="object">Magento\Cms\Test\Page\CmsIndex</argument>
+            <argument name="catalogCategoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="checkoutCart" xsi:type="object">Magento\Checkout\Test\Page\CheckoutCart</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeSuccessDeleteMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertNoCrossSellsProductsSection">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertRelatedProductsSection">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+            <argument name="product1" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+            <argument name="product2" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+            <argument name="cmsIndex" xsi:type="object">Magento\Cms\Test\Page\CmsIndex</argument>
+            <argument name="catalogCategoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertNoRelatedProductsSection">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertUpSellsProductsSection">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+            <argument name="product1" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+            <argument name="product2" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+            <argument name="cmsIndex" xsi:type="object">Magento\Cms\Test\Page\CmsIndex</argument>
+            <argument name="catalogCategoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+            <argument name="catalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInSearchOnProductForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertNoUpSellsProductsSection">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertCategorySuccessDeleteMessage">
+        <arguments>
+            <argument name="categoryEdit" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnFrontend">
+        <arguments>
+            <argument name="browser" xsi:type="object">Magento\Mtf\Client\Browser</argument>
+            <argument name="categoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+            <argument name="category" xsi:type="object">Magento\Catalog\Test\Fixture\Category</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnBackend">
+        <arguments>
+            <argument name="category" xsi:type="object">Magento\Catalog\Test\Fixture\Category</argument>
+            <argument name="catalogCategoryIndex" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateSuccessSaveMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="productSetIndex" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="productSet" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex</argument>
+            <argument name="productSetEdit" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetEdit</argument>
+            <argument name="attributeSet" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogAttributeSet</argument>
+            <argument name="productAttribute" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductAttribute</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="productSet" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex</argument>
+            <argument name="attributeSet" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogAttributeSet</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateOnProductForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="fixtureFactory" xsi:type="object">Magento\Mtf\Fixture\FixtureFactory</argument>
+            <argument name="attributeSet" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogAttributeSet</argument>
+            <argument name="productEdit" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit</argument>
+            <argument name="productGrid" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex</argument>
+            <argument name="newProductPage" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew</argument>
+            <argument name="productAttribute" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductAttribute</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertAbsenceDeleteAttributeButton">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="attributeNew" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductCompareSuccessAddMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductCompareSuccessRemoveAllProductsMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductDuplicateMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="productPage" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductDuplicatedInGrid">
+        <arguments>
+            <argument name="product" xsi:type="object">Magento\Mtf\Fixture\FixtureInterface</argument>
+            <argument name="productGrid" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductDuplicateIsNotDisplayingOnFrontend">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductDuplicateForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateGroupOnProductForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertUsedSuperAttributeImpossibleDeleteMessages">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="newPage" xsi:type="object">Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertProductTemplateSuccessDeleteMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+</config>

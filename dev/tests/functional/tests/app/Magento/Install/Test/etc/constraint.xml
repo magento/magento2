@@ -7,7 +7,6 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/constraints.xsd">
     <constraint name="assertAgreementTextPresent" module="Magento_Install" severity="low"/>
-    <constraint name="assertSuccessDbConnection" module="Magento_Install" severity="low"/>
     <constraint name="assertSuccessfulReadinessCheck" module="Magento_Install" severity="low"/>
     <constraint name="assertSuccessInstall" module="Magento_Install" severity="low"/>
     <constraint name="assertKeyCreated" module="Magento_Install" severity="low"/>

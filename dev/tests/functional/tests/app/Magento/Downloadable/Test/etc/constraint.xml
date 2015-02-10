@@ -21,7 +21,4 @@
     <constraint name="assertTaxCalculationAfterCheckoutDownloadableExcludingTax" module="Magento_Downloadable" severity="low"/>
     <constraint name="assertTaxCalculationAfterCheckoutDownloadableIncludingTax" module="Magento_Downloadable" severity="low"/>
     <constraint name="assertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax" module="Magento_Downloadable" severity="low"/>
-    <constraint name="assertOrderTaxOnBackendDownloadableExcludingTax" module="Magento_Downloadable" severity="low"/>
-    <constraint name="assertOrderTaxOnBackendDownloadableIncludingTax" module="Magento_Downloadable" severity="low"/>
-    <constraint name="assertOrderTaxOnBackendDownloadableExcludingIncludingTax" module="Magento_Downloadable" severity="low"/>
 </config>

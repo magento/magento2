@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessSaveMessage">
+        <arguments>
+            <argument name="pageCatalogRuleIndex" xsi:type="object">Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleForm">
+        <arguments>
+            <argument name="catalogPriceRule" xsi:type="object">Magento\CatalogRule\Test\Fixture\CatalogRule</argument>
+            <argument name="pageCatalogRuleIndex" xsi:type="object">Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex</argument>
+            <argument name="pageCatalogRuleNew" xsi:type="object">Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid">
+        <arguments>
+            <argument name="catalogPriceRule" xsi:type="object">Magento\CatalogRule\Test\Fixture\CatalogRule</argument>
+            <argument name="pageCatalogRuleIndex" xsi:type="object">Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNoticeMessage">
+        <arguments>
+            <argument name="pageCatalogRuleIndex" xsi:type="object">Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="cmsIndex" xsi:type="object">Magento\Cms\Test\Page\CmsIndex</argument>
+            <argument name="product" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+            <argument name="pageCatalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="catalogCategoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessDeleteMessage">
+        <arguments>
+            <argument name="pageCatalogRuleIndex" xsi:type="object">Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotInGrid">
+        <arguments>
+            <argument name="catalogPriceRule" xsi:type="object">Magento\CatalogRule\Test\Fixture\CatalogRule</argument>
+            <argument name="pageCatalogRuleIndex" xsi:type="object">Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="cmsIndex" xsi:type="object">Magento\Cms\Test\Page\CmsIndex</argument>
+            <argument name="product" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+            <argument name="catalogCategoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+            <argument name="cmsIndex" xsi:type="object">Magento\Cms\Test\Page\CmsIndex</argument>
+            <argument name="product" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+            <argument name="pageCatalogProductView" xsi:type="object">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+            <argument name="catalogCategoryView" xsi:type="object">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+            <argument name="pageCheckoutCart" xsi:type="object">Magento\Checkout\Test\Page\CheckoutCart</argument>
+        </arguments>
+    </type>
+</config>

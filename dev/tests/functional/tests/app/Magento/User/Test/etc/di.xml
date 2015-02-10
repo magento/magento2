@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\User\Test\Constraint\AssertUserSuccessLogin">
+        <arguments>
+            <argument name="dashboard" xsi:type="object">Magento\Backend\Test\Page\Adminhtml\Dashboard</argument>
+            <argument name="adminAuth" xsi:type="object">Magento\Backend\Test\Page\AdminAuthLogin</argument>
+            <argument name="user" xsi:type="object">Magento\User\Test\Fixture\User</argument>
+            <argument name="customAdmin" xsi:type="object">Magento\User\Test\Fixture\User</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertUserSuccessLogOut">
+        <arguments>
+            <argument name="adminAuth" xsi:type="object">Magento\Backend\Test\Page\AdminAuthLogin</argument>
+            <argument name="dashboard" xsi:type="object">Magento\Backend\Test\Page\Adminhtml\Dashboard</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertUserWrongCredentialsMessage">
+        <arguments>
+            <argument name="adminAuth" xsi:type="object">Magento\Backend\Test\Page\AdminAuthLogin</argument>
+            <argument name="customAdmin" xsi:type="object">Magento\User\Test\Fixture\User</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertUserRoleSalesRestrictedAccess">
+        <arguments>
+            <argument name="userIndex" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserIndex</argument>
+            <argument name="dashboard" xsi:type="object">Magento\Backend\Test\Page\Adminhtml\Dashboard</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertRoleSuccessSaveMessage">
+        <arguments>
+            <argument name="rolePage" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserRoleIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertRoleInGrid">
+        <arguments>
+            <argument name="rolePage" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserRoleIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertUserInGrid">
+        <arguments>
+            <argument name="userIndex" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserIndex</argument>
+            <argument name="user" xsi:type="object">Magento\User\Test\Fixture\User</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage">
+        <arguments>
+            <argument name="userIndex" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertImpossibleDeleteYourOwnRole">
+        <arguments>
+            <argument name="rolePage" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserRoleEditRole</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertRoleSuccessDeleteMessage">
+        <arguments>
+            <argument name="rolePage" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserRoleIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertRoleNotInGrid">
+        <arguments>
+            <argument name="rolePage" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserRoleIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertImpossibleDeleteYourOwnAccount">
+        <arguments>
+            <argument name="userEdit" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserEdit</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertUserSuccessDeleteMessage">
+        <arguments>
+            <argument name="userIndex" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertUserNotInGrid">
+        <arguments>
+            <argument name="userIndex" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserIndex</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertUserDuplicateMessage">
+        <arguments>
+            <argument name="userEdit" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserEdit</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertUserInvalidEmailMessage">
+        <arguments>
+            <argument name="userEdit" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserEdit</argument>
+            <argument name="user" xsi:type="object">Magento\User\Test\Fixture\User</argument>
+        </arguments>
+    </type>
+    <type name="Magento\User\Test\Constraint\AssertAccessTokensErrorRevokeMessage">
+        <arguments>
+            <argument name="userEdit" xsi:type="object">Magento\User\Test\Page\Adminhtml\UserEdit</argument>
+        </arguments>
+    </type>
+</config>
