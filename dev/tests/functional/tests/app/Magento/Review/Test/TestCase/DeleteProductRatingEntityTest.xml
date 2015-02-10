@@ -9,9 +9,9 @@
   <testCase name="DeleteProductRatingEntityTest">
     <variation name="DeleteProductRatingEntityTestVariation1" firstConstraint="assertProductRatingSuccessDeleteMessage" method="test">
       <data name="productRating/dataSet" xsi:type="string">default</data>
-      <constraint name="assertProductRatingSuccessDeleteMessage" next="assertProductRatingNotInGrid"/>
-      <constraint name="assertProductRatingNotInGrid" next="assertProductRatingNotInProductPage" prev="assertProductRatingSuccessDeleteMessage"/>
-      <constraint name="assertProductRatingNotInProductPage" prev="assertProductRatingNotInGrid"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductRatingSuccessDeleteMessage"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInGrid"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductRatingNotInProductPage"/>
     </variation>
   </testCase>
 </config>

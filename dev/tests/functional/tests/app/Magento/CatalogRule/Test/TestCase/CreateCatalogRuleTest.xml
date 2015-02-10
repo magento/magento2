@@ -20,10 +20,10 @@
       <data name="price/discount_amount" xsi:type="string">10</data>
       <data name="price/special" xsi:type="string">90</data>
       <data name="price/regular" xsi:type="string">100</data>
-      <constraint name="assertCatalogPriceRuleInGrid" next="assertCatalogPriceRuleAppliedCatalogPage"/>
-      <constraint name="assertCatalogPriceRuleAppliedCatalogPage" next="assertCatalogPriceRuleAppliedProductPage" prev="assertCatalogPriceRuleInGrid"/>
-      <constraint name="assertCatalogPriceRuleAppliedProductPage" next="assertCatalogPriceRuleAppliedShoppingCart" prev="assertCatalogPriceRuleAppliedCatalogPage"/>
-      <constraint name="assertCatalogPriceRuleAppliedShoppingCart" prev="assertCatalogPriceRuleAppliedProductPage"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
     </variation>
   </testCase>
 </config>

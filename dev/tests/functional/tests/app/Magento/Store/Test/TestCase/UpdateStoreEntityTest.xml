@@ -13,11 +13,11 @@
       <data name="store/data/name" xsi:type="string">storename_updated%isolation%</data>
       <data name="store/data/code" xsi:type="string">storecode_updated%isolation%</data>
       <data name="store/data/is_active" xsi:type="string">Enabled</data>
-      <constraint name="assertStoreSuccessSaveMessage" next="assertStoreInGrid"/>
-      <constraint name="assertStoreInGrid" next="assertStoreForm" prev="assertStoreSuccessSaveMessage"/>
-      <constraint name="assertStoreForm" next="assertStoreBackend" prev="assertStoreInGrid"/>
-      <constraint name="assertStoreBackend" next="assertStoreFrontend" prev="assertStoreForm"/>
-      <constraint name="assertStoreFrontend" prev="assertStoreBackend"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreInGrid"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreForm"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreBackend"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreFrontend"/>
     </variation>
   </testCase>
 </config>

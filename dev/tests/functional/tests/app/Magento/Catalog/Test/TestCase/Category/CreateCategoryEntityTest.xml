@@ -30,8 +30,8 @@
       <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
       <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
       <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
-      <constraint name="assertCategoryForm" prev="assertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
     </variation>
     <variation name="CreateCategoryEntityTestVariation2" firstConstraint="assertCategorySaveMessage" method="test">
       <data name="description" xsi:type="string">Create root category with all fields</data>
@@ -56,8 +56,8 @@
       <data name="category/data/layered_navigation_price_step" xsi:type="string">50</data>
       <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
       <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
-      <constraint name="assertCategoryForm" prev="assertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
     </variation>
     <variation name="CreateCategoryEntityTestVariation3" firstConstraint="assertCategorySaveMessage" method="test">
       <data name="description" xsi:type="string">Create subcategory with required fields</data>
@@ -82,9 +82,9 @@
       <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
       <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
       <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
-      <constraint name="assertCategoryForm" next="assertCategoryPage" prev="assertCategorySaveMessage"/>
-      <constraint name="assertCategoryPage" prev="assertCategoryForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
     </variation>
     <variation name="CreateCategoryEntityTestVariation4" firstConstraint="assertCategorySaveMessage" method="test">
       <data name="description" xsi:type="string">Create not anchor subcategory with required fields</data>
@@ -109,10 +109,10 @@
       <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
       <data name="category/data/category_products_data/preset" xsi:type="string">default</data>
       <data name="category/data/category_products/dataSet" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
-      <constraint name="assertCategoryForm" next="assertCategoryPage" prev="assertCategorySaveMessage"/>
-      <constraint name="assertCategoryPage" next="assertCategoryForAssignedProducts" prev="assertCategoryForm"/>
-      <constraint name="assertCategoryForAssignedProducts" prev="assertCategoryPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
     </variation>
     <variation name="CreateCategoryEntityTestVariation5" firstConstraint="assertCategorySaveMessage" method="test">
       <data name="description" xsi:type="string">Create anchor subcategory with all fields</data>
@@ -137,10 +137,10 @@
       <data name="category/data/layered_navigation_price_step" xsi:type="string">50</data>
       <data name="category/data/category_products_data/preset" xsi:type="string">default</data>
       <data name="category/data/category_products/dataSet" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
-      <constraint name="assertCategoryForm" next="assertCategoryPage" prev="assertCategorySaveMessage"/>
-      <constraint name="assertCategoryPage" next="assertCategoryForAssignedProducts" prev="assertCategoryForm"/>
-      <constraint name="assertCategoryForAssignedProducts" prev="assertCategoryPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
     </variation>
     <variation name="CreateCategoryEntityTestVariation6" firstConstraint="assertCategorySaveMessage" method="test">
       <data name="description" xsi:type="string">Create not active subcategory</data>
@@ -165,8 +165,8 @@
       <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
       <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
       <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
-      <constraint name="assertCategoryForm" prev="assertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
     </variation>
     <variation name="CreateCategoryEntityTestVariation7" firstConstraint="assertCategorySaveMessage" method="test">
       <data name="description" xsi:type="string">Create not included in menu subcategory</data>
@@ -191,8 +191,8 @@
       <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
       <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
       <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
-      <constraint name="assertCategoryForm" prev="assertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
     </variation>
     <variation name="CreateCategoryEntityTestVariation8" firstConstraint="assertCategorySaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-12513: Create Category from Category page with Required Fields Only</data>
@@ -218,9 +218,9 @@
       <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
       <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
       <data name="tag" xsi:type="string">bamboo_plan:BAT,test_type:acceptance_test</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
-      <constraint name="assertCategoryForm" next="assertCategoryPage" prev="assertCategorySaveMessage"/>
-      <constraint name="assertCategoryPage" prev="assertCategoryForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
     </variation>
     <variation name="CreateCategoryEntityTestVariation9" firstConstraint="assertCategorySaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-16351: Assign Products at the Category Level</data>
@@ -246,8 +246,8 @@
       <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
       <data name="category/data/category_products/dataSet" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default, bundleProduct::bundle_fixed_product</data>
       <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForAssignedProducts"/>
-      <constraint name="assertCategoryForAssignedProducts" prev="assertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
     </variation>
   </testCase>
 </config>

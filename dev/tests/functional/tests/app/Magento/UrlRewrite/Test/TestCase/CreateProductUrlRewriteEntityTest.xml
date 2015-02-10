@@ -16,8 +16,8 @@
       <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
       <data name="urlRewrite/data/description" xsi:type="string">description_%isolation%</data>
       <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
-      <constraint name="assertUrlRewriteSaveMessage" next="assertUrlRewriteProductRedirect"/>
-      <constraint name="assertUrlRewriteProductRedirect" prev="assertUrlRewriteSaveMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductRedirect"/>
     </variation>
     <variation name="CreateProductUrlRewriteEntityTestVariation2" firstConstraint="assertUrlRewriteSaveMessage" method="test">
       <data name="description" xsi:type="string">Create Product URL Rewrites with no redirect</data>
@@ -27,7 +27,7 @@
       <data name="urlRewrite/data/request_path" xsi:type="string">test_%isolation%.html</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">No</data>
       <data name="urlRewrite/data/description" xsi:type="string">description_%isolation%</data>
-      <constraint name="assertUrlRewriteSaveMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
     </variation>
     <variation name="CreateProductUrlRewriteEntityTestVariation3" firstConstraint="assertUrlRewriteSaveMessage" method="test">
       <data name="description" xsi:type="string">Create Product URL Rewrites with Temporary redirect</data>
@@ -37,8 +37,8 @@
       <data name="urlRewrite/data/request_path" xsi:type="string">test_%isolation%.html</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
       <data name="urlRewrite/data/description" xsi:type="string">description_%isolation%</data>
-      <constraint name="assertUrlRewriteSaveMessage" next="assertUrlRewriteProductRedirect"/>
-      <constraint name="assertUrlRewriteProductRedirect" prev="assertUrlRewriteSaveMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductRedirect"/>
     </variation>
     <variation name="CreateProductUrlRewriteEntityTestVariation4" firstConstraint="assertUrlRewriteSaveMessage" method="test">
       <data name="description" xsi:type="string">Create Product URL Rewrites with Permanent redirect</data>
@@ -48,8 +48,8 @@
       <data name="urlRewrite/data/request_path" xsi:type="string">test_%isolation%.html</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">Permanent (301)</data>
       <data name="urlRewrite/data/description" xsi:type="string">description_%isolation%</data>
-      <constraint name="assertUrlRewriteSaveMessage" next="assertUrlRewriteProductRedirect"/>
-      <constraint name="assertUrlRewriteProductRedirect" prev="assertUrlRewriteSaveMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductRedirect"/>
     </variation>
   </testCase>
 </config>

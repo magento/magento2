@@ -17,9 +17,9 @@
       <data name="review/data/nickname" xsi:type="string">John</data>
       <data name="review/data/title" xsi:type="string">title %isolation%</data>
       <data name="review/data/detail" xsi:type="string">review detail %isolation%</data>
-      <constraint name="assertProductReviewBackendSuccessSaveMessage" next="assertProductReviewInGrid"/>
-      <constraint name="assertProductReviewInGrid" next="assertProductRatingInProductPage" prev="assertProductReviewBackendSuccessSaveMessage"/>
-      <constraint name="assertProductRatingInProductPage" prev="assertProductReviewInGrid"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage"/>
     </variation>
     <variation name="CreateProductReviewBackendEntityTestVariation2" firstConstraint="assertProductReviewBackendSuccessSaveMessage" method="test">
       <data name="review/data/type" xsi:type="string">Administrator</data>
@@ -31,9 +31,9 @@
       <data name="review/data/nickname" xsi:type="string">Britney</data>
       <data name="review/data/title" xsi:type="string">title %isolation%</data>
       <data name="review/data/detail" xsi:type="string">review detail %isolation%</data>
-      <constraint name="assertProductReviewBackendSuccessSaveMessage" next="assertProductReviewInGrid"/>
-      <constraint name="assertProductReviewInGrid" next="assertProductRatingInProductPage" prev="assertProductReviewBackendSuccessSaveMessage"/>
-      <constraint name="assertProductRatingInProductPage" prev="assertProductReviewInGrid"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage"/>
     </variation>
     <variation name="CreateProductReviewBackendEntityTestVariation3" firstConstraint="assertProductReviewBackendSuccessSaveMessage" method="test">
       <data name="review/data/type" xsi:type="string">Administrator</data>
@@ -45,9 +45,9 @@
       <data name="review/data/nickname" xsi:type="string">Michael</data>
       <data name="review/data/title" xsi:type="string">title %isolation%</data>
       <data name="review/data/detail" xsi:type="string">review detail %isolation%</data>
-      <constraint name="assertProductReviewBackendSuccessSaveMessage" next="assertProductReviewInGrid"/>
-      <constraint name="assertProductReviewInGrid" next="assertProductRatingInProductPage" prev="assertProductReviewBackendSuccessSaveMessage"/>
-      <constraint name="assertProductRatingInProductPage" prev="assertProductReviewInGrid"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage"/>
     </variation>
   </testCase>
 </config>

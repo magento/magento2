@@ -15,10 +15,10 @@
       <data name="searchTerm/data/synonym_for" xsi:type="string">simple%isolation%</data>
       <data name="searchTerm/data/redirect" xsi:type="string">http://example.com/</data>
       <data name="searchTerm/data/display_in_terms" xsi:type="string">No</data>
-      <constraint name="assertSearchTermSuccessSaveMessage" next="assertSearchTermForm"/>
-      <constraint name="assertSearchTermForm" next="assertSearchTermInGrid" prev="assertSearchTermSuccessSaveMessage"/>
-      <constraint name="assertSearchTermInGrid" next="assertSearchTermOnFrontend" prev="assertSearchTermForm"/>
-      <constraint name="assertSearchTermOnFrontend" prev="assertSearchTermInGrid"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessSaveMessage"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermForm"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermInGrid"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermOnFrontend"/>
     </variation>
   </testCase>
 </config>

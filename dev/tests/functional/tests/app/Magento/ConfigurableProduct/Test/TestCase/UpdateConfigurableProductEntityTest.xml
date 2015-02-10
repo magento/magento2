@@ -22,15 +22,15 @@
       <data name="updatedProduct/data/weight" xsi:type="string">3</data>
       <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
-      <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
-      <constraint name="assertConfigurableProductForm" next="assertProductInCategory" prev="assertChildProductsInGrid"/>
-      <constraint name="assertProductInCategory" next="assertConfigurableProductPage" prev="assertConfigurableProductForm"/>
-      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertProductInCategory"/>
-      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
-      <constraint name="assertConfigurableProductInCart" next="assertChildProductIsNotDisplayedSeparately" prev="assertProductInStock"/>
-      <constraint name="assertChildProductIsNotDisplayedSeparately" prev="assertConfigurableProductInCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
     </variation>
     <variation name="UpdateConfigurableProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Add new variations</data>
@@ -46,12 +46,12 @@
       <data name="updatedProduct/data/weight" xsi:type="string">3</data>
       <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertConfigurableProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertConfigurableProductForm" next="assertConfigurableProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertConfigurableProductForm"/>
-      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
-      <constraint name="assertConfigurableProductInCart" prev="assertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
     </variation>
     <variation name="UpdateConfigurableProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Delete one attribute and add another</data>
@@ -68,13 +68,13 @@
       <data name="updatedProduct/data/weight" xsi:type="string">3</data>
       <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertConfigurableProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertConfigurableProductForm" next="assertProductInCategory" prev="assertProductInGrid"/>
-      <constraint name="assertProductInCategory" next="assertProductInStock" prev="assertConfigurableProductForm"/>
-      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertProductInCategory"/>
-      <constraint name="assertConfigurableProductInCart" next="assertConfigurableAttributesAbsentOnProductPage" prev="assertProductInStock"/>
-      <constraint name="assertConfigurableAttributesAbsentOnProductPage" prev="assertConfigurableProductInCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesAbsentOnProductPage"/>
     </variation>
     <variation name="UpdateConfigurableProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Delete attribute and add another with products qty = 0</data>
@@ -90,11 +90,11 @@
       <data name="updatedProduct/data/weight" xsi:type="string">3</data>
       <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertConfigurableProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertConfigurableProductForm" next="assertConfigurableAttributesBlockIsAbsentOnProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertConfigurableAttributesBlockIsAbsentOnProductPage" next="assertProductOutOfStock" prev="assertConfigurableProductForm"/>
-      <constraint name="assertProductOutOfStock" prev="assertConfigurableAttributesBlockIsAbsentOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
     </variation>
   </testCase>
 </config>

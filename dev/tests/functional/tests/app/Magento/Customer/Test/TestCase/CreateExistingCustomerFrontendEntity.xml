@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="CreateExistingCustomerFrontendEntity">
     <variation name="CreateExistingCustomerFrontendEntityVariation1" firstConstraint="assertCustomerFailRegisterMessage" method="test">
-      <constraint name="assertCustomerFailRegisterMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerFailRegisterMessage"/>
     </variation>
   </testCase>
 </config>

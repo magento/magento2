@@ -14,9 +14,9 @@
       <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
       <data name="integration/data/resource_access" xsi:type="string">-</data>
       <data name="integration/data/resources" xsi:type="string">-</data>
-      <constraint name="assertIntegrationSuccessSaveMessage" next="assertIntegrationForm"/>
-      <constraint name="assertIntegrationForm" next="assertIntegrationInGrid" prev="assertIntegrationSuccessSaveMessage"/>
-      <constraint name="assertIntegrationInGrid" prev="assertIntegrationForm"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid"/>
     </variation>
     <variation name="UpdateIntegrationEntityTestVariation2" firstConstraint="assertIntegrationSuccessSaveMessage" method="test">
       <data name="integration/data/name" xsi:type="string">Integration_%isolation%</data>
@@ -25,9 +25,9 @@
       <data name="integration/data/identity_link_url" xsi:type="string">-</data>
       <data name="integration/data/resource_access" xsi:type="string">Custom</data>
       <data name="integration/data/resources" xsi:type="string">Sales</data>
-      <constraint name="assertIntegrationSuccessSaveMessage" next="assertIntegrationForm"/>
-      <constraint name="assertIntegrationForm" next="assertIntegrationInGrid" prev="assertIntegrationSuccessSaveMessage"/>
-      <constraint name="assertIntegrationInGrid" prev="assertIntegrationForm"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid"/>
     </variation>
   </testCase>
 </config>

@@ -29,16 +29,16 @@
       <data name="attribute/data/is_visible_on_front" xsi:type="string">Yes</data>
       <data name="attribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="attribute/data/used_for_sort_by" xsi:type="string">Yes</data>
-      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
-      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" next="assertProductAttributeDisplayingOnSearchForm" prev="assertAttributeForm"/>
-      <constraint name="assertProductAttributeDisplayingOnSearchForm" next="assertProductAttributeIsGlobal" prev="assertAddedProductAttributeOnProductForm"/>
-      <constraint name="assertProductAttributeIsGlobal" next="assertProductAttributeDisplayingOnFrontend" prev="assertProductAttributeDisplayingOnSearchForm"/>
-      <constraint name="assertProductAttributeDisplayingOnFrontend" next="assertProductAttributeDisplayingOnSearchForm" prev="assertProductAttributeIsGlobal"/>
-      <constraint name="assertProductAttributeDisplayingOnSearchForm" next="assertProductAttributeIsComparable" prev="assertProductAttributeDisplayingOnFrontend"/>
-      <constraint name="assertProductAttributeIsComparable" next="assertProductAttributeIsHtmlAllowed" prev="assertProductAttributeDisplayingOnSearchForm"/>
-      <constraint name="assertProductAttributeIsHtmlAllowed" next="assertProductAttributeIsUsedInSortOnFrontend" prev="assertProductAttributeIsComparable"/>
-      <constraint name="assertProductAttributeIsUsedInSortOnFrontend" prev="assertProductAttributeIsHtmlAllowed"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsGlobal"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnFrontend"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsComparable"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsHtmlAllowed"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend"/>
     </variation>
     <variation name="CreateProductAttributeEntityFromProductPageTestVariation2" firstConstraint="assertProductAttributeIsFilterable" method="test">
       <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
@@ -62,9 +62,9 @@
       <data name="attribute/data/is_visible_on_front" xsi:type="string">-</data>
       <data name="attribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="attribute/data/used_for_sort_by" xsi:type="string">-</data>
-      <constraint name="assertProductAttributeIsFilterable" next="assertProductAttributeIsFilterableInSearch"/>
-      <constraint name="assertProductAttributeIsFilterableInSearch" next="assertProductAttributeIsConfigurable" prev="assertProductAttributeIsFilterable"/>
-      <constraint name="assertProductAttributeIsConfigurable" prev="assertProductAttributeIsFilterableInSearch"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductAttributeIsConfigurable"/>
     </variation>
     <variation name="CreateProductAttributeEntityFromProductPageTestVariation3" firstConstraint="assertProductAttributeIsRequired" method="test">
       <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
@@ -88,7 +88,7 @@
       <data name="attribute/data/is_visible_on_front" xsi:type="string">-</data>
       <data name="attribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="attribute/data/used_for_sort_by" xsi:type="string">-</data>
-      <constraint name="assertProductAttributeIsRequired"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired"/>
     </variation>
     <variation name="CreateProductAttributeEntityFromProductPageTestVariation4" firstConstraint="assertProductAttributeIsUnique" method="test">
       <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
@@ -112,7 +112,7 @@
       <data name="attribute/data/is_visible_on_front" xsi:type="string">-</data>
       <data name="attribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="attribute/data/used_for_sort_by" xsi:type="string">-</data>
-      <constraint name="assertProductAttributeIsUnique"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUnique"/>
     </variation>
   </testCase>
 </config>

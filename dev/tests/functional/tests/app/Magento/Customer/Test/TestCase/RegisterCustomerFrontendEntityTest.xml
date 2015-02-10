@@ -15,8 +15,8 @@
       <data name="customer/data/is_subscribed" xsi:type="string">No</data>
       <data name="customer/data/password" xsi:type="string">123123q</data>
       <data name="customer/data/password_confirmation" xsi:type="string">123123q</data>
-      <constraint name="assertCustomerSuccessRegisterMessage" next="assertCustomerInGrid"/>
-      <constraint name="assertCustomerInGrid" prev="assertCustomerSuccessRegisterMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
     </variation>
     <variation name="RegisterCustomerFrontendEntityTestVariation2" firstConstraint="assertCustomerSuccessRegisterMessage" method="test">
       <data name="description" xsi:type="string">Register new customer with subscribing</data>
@@ -26,10 +26,10 @@
       <data name="customer/data/is_subscribed" xsi:type="string">Yes</data>
       <data name="customer/data/password" xsi:type="string">123123q</data>
       <data name="customer/data/password_confirmation" xsi:type="string">123123q</data>
-      <constraint name="assertCustomerSuccessRegisterMessage" next="assertCustomerInGrid"/>
-      <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessRegisterMessage"/>
-      <constraint name="assertCustomerForm" next="assertCustomerIsSubscribedToNewsletter" prev="assertCustomerInGrid"/>
-      <constraint name="assertCustomerIsSubscribedToNewsletter" prev="assertCustomerForm"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+      <constraint name="Magento\Newsletter\Test\Constraint\AssertCustomerIsSubscribedToNewsletter"/>
     </variation>
     <variation name="RegisterCustomerFrontendEntityTestVariation3" firstConstraint="assertCustomerSuccessRegisterMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-12394: Register Customer</data>
@@ -40,8 +40,8 @@
       <data name="customer/data/password" xsi:type="string">123123q</data>
       <data name="customer/data/password_confirmation" xsi:type="string">123123q</data>
       <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
-      <constraint name="assertCustomerSuccessRegisterMessage" next="assertCustomerRedirectToDashboard"/>
-      <constraint name="assertCustomerRedirectToDashboard" prev="assertCustomerSuccessRegisterMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerRedirectToDashboard"/>
     </variation>
   </testCase>
 </config>

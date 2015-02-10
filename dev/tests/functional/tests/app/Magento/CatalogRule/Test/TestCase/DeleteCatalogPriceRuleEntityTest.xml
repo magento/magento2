@@ -9,8 +9,8 @@
   <testCase name="DeleteCatalogPriceRuleEntityTest">
     <variation name="DeleteCatalogPriceRuleEntityTestVariation1" firstConstraint="assertCatalogPriceRuleSuccessDeleteMessage" method="test">
       <data name="catalogPriceRule/dataSet" xsi:type="string">active_catalog_price_rule_with_conditions</data>
-      <constraint name="assertCatalogPriceRuleSuccessDeleteMessage" next="assertCatalogPriceRuleNotInGrid"/>
-      <constraint name="assertCatalogPriceRuleNotInGrid" prev="assertCatalogPriceRuleSuccessDeleteMessage"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessDeleteMessage"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotInGrid"/>
     </variation>
   </testCase>
 </config>

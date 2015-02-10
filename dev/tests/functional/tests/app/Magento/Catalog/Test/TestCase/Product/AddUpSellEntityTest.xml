@@ -10,18 +10,18 @@
     <variation name="AddUpSellEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
       <data name="productData" xsi:type="string">catalogProductSimple::default</data>
       <data name="upSellProductsData" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertUpSellsProductsSection" prev="assertProductInGrid"/>
-      <constraint name="assertUpSellsProductsSection" prev="assertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertUpSellsProductsSection"/>
     </variation>
     <variation name="AddUpSellEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
       <data name="productData" xsi:type="string">configurableProductInjectable::default</data>
       <data name="upSellProductsData" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertConfigurableProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertConfigurableProductForm" next="assertUpSellsProductsSection" prev="assertProductInGrid"/>
-      <constraint name="assertUpSellsProductsSection" prev="assertConfigurableProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertUpSellsProductsSection"/>
     </variation>
   </testCase>
 </config>

@@ -9,8 +9,8 @@
   <testCase name="ProductReviewReportEntityTest">
     <variation name="ProductReviewReportEntityTestVariation1" firstConstraint="assertProductReviewReportIsVisibleInGrid" method="test">
       <data name="review/dataSet" xsi:type="string">frontend_review</data>
-      <constraint name="assertProductReviewReportIsVisibleInGrid" next="assertProductReviewIsAvailableForProduct"/>
-      <constraint name="assertProductReviewIsAvailableForProduct" prev="assertProductReviewReportIsVisibleInGrid"/>
+      <constraint name="Magento\Reports\Test\Constraint\AssertProductReviewReportIsVisibleInGrid"/>
+      <constraint name="Magento\Reports\Test\Constraint\AssertProductReviewIsAvailableForProduct"/>
     </variation>
   </testCase>
 </config>

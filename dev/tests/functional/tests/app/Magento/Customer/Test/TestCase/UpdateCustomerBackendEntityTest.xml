@@ -34,9 +34,9 @@
       <data name="address/data/telephone" xsi:type="string">-</data>
       <data name="address/data/fax" xsi:type="string">-</data>
       <data name="address/data/vat_id" xsi:type="string">-</data>
-      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerForm"/>
-      <constraint name="assertCustomerForm" next="assertCustomerInGrid" prev="assertCustomerSuccessSaveMessage"/>
-      <constraint name="assertCustomerInGrid" prev="assertCustomerForm"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
     </variation>
     <variation name="UpdateCustomerBackendEntityTestVariation2" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
       <data name="initialCustomer/dataSet" xsi:type="string">default</data>
@@ -65,9 +65,9 @@
       <data name="address/data/telephone" xsi:type="string">334-200-4060</data>
       <data name="address/data/fax" xsi:type="string">555-666-777-8910</data>
       <data name="address/data/vat_id" xsi:type="string">U1234567890</data>
-      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerForm"/>
-      <constraint name="assertCustomerForm" next="assertCustomerInGrid" prev="assertCustomerSuccessSaveMessage"/>
-      <constraint name="assertCustomerInGrid" prev="assertCustomerForm"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
     </variation>
     <variation name="UpdateCustomerBackendEntityTestVariation3" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
       <data name="initialCustomer/dataSet" xsi:type="string">default</data>
@@ -96,9 +96,9 @@
       <data name="address/data/telephone" xsi:type="string">999-777-111-2345</data>
       <data name="address/data/fax" xsi:type="string">-</data>
       <data name="address/data/vat_id" xsi:type="string">987654321</data>
-      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerForm"/>
-      <constraint name="assertCustomerForm" next="assertCustomerInGrid" prev="assertCustomerSuccessSaveMessage"/>
-      <constraint name="assertCustomerInGrid" prev="assertCustomerForm"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
     </variation>
   </testCase>
 </config>

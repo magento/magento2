@@ -31,8 +31,8 @@
       <data name="attribute/data/used_in_product_listing" xsi:type="string">Yes</data>
       <data name="attribute/data/used_for_sort_by" xsi:type="string">Yes</data>
       <data name="isRequired" xsi:type="string">Yes</data>
-      <constraint name="assertProductAttributeSaveMessage" next="assertAddedProductAttributeOnProductForm"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
     </variation>
     <variation name="UpdateProductAttributeEntityTestVariation2" firstConstraint="assertProductAttributeSaveMessage" method="test">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
@@ -58,8 +58,8 @@
       <data name="attribute/data/used_in_product_listing" xsi:type="string">Yes</data>
       <data name="attribute/data/used_for_sort_by" xsi:type="string">Yes</data>
       <data name="isRequired" xsi:type="string">Yes</data>
-      <constraint name="assertProductAttributeSaveMessage" next="assertAddedProductAttributeOnProductForm"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
     </variation>
   </testCase>
 </config>

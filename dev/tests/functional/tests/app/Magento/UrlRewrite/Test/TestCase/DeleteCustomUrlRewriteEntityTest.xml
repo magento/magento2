@@ -9,9 +9,9 @@
   <testCase name="DeleteCustomUrlRewriteEntityTest">
     <variation name="DeleteCustomUrlRewriteEntityTestVariation1" firstConstraint="assertUrlRewriteDeletedMessage" method="test">
       <data name="urlRewrite/dataSet" xsi:type="string">default</data>
-      <constraint name="assertUrlRewriteDeletedMessage" next="assertUrlRewriteNotInGrid"/>
-      <constraint name="assertUrlRewriteNotInGrid" next="assertPageByUrlRewriteIsNotFound" prev="assertUrlRewriteDeletedMessage"/>
-      <constraint name="assertPageByUrlRewriteIsNotFound" prev="assertUrlRewriteNotInGrid"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteDeletedMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteNotInGrid"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertPageByUrlRewriteIsNotFound"/>
     </variation>
   </testCase>
 </config>

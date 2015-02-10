@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="DeleteCustomerGroupEntityTest">
     <variation name="DeleteCustomerGroupEntityTestVariation1" firstConstraint="assertCustomerGroupSuccessDeleteMessage" method="test">
-      <constraint name="assertCustomerGroupSuccessDeleteMessage" next="assertCustomerGroupNotInGrid"/>
-      <constraint name="assertCustomerGroupNotInGrid" prev="assertCustomerGroupSuccessDeleteMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessDeleteMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupNotInGrid"/>
     </variation>
   </testCase>
 </config>

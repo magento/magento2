@@ -14,8 +14,8 @@
       <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
       <data name="urlRewrite/data/description" xsi:type="string">description_%isolation%</data>
       <data name="isRequired" xsi:type="string">Yes</data>
-      <constraint name="assertUrlRewriteSaveMessage" next="assertUrlRewriteProductRedirect"/>
-      <constraint name="assertUrlRewriteProductRedirect" prev="assertUrlRewriteSaveMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductRedirect"/>
     </variation>
   </testCase>
 </config>

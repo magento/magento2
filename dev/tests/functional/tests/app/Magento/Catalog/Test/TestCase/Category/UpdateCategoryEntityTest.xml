@@ -19,11 +19,11 @@
       <data name="category/data/available_sort_by/sort_1" xsi:type="string">-</data>
       <data name="category/data/default_product_listing_config" xsi:type="string">No</data>
       <data name="category/data/default_sort_by" xsi:type="string">Name</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
-      <constraint name="assertCategoryForm" next="assertUrlRewriteCategoryInGrid" prev="assertCategorySaveMessage"/>
-      <constraint name="assertUrlRewriteCategoryInGrid" next="assertCategoryRedirect" prev="assertCategoryForm"/>
-      <constraint name="assertCategoryRedirect" next="assertCategoryPage" prev="assertUrlRewriteCategoryInGrid"/>
-      <constraint name="assertCategoryPage" prev="assertCategoryRedirect"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryRedirect"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
     </variation>
     <variation name="UpdateCategoryEntityTestVariation2" firstConstraint="assertCategorySaveMessage" method="test">
       <data name="category/data/name" xsi:type="string">Name%isolation%</data>
@@ -37,10 +37,10 @@
       <data name="category/data/available_sort_by/sort_1" xsi:type="string">Price</data>
       <data name="category/data/default_product_listing_config" xsi:type="string">Yes</data>
       <data name="category/data/default_sort_by" xsi:type="string">-</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
-      <constraint name="assertCategoryForm" next="assertUrlRewriteCategoryInGrid" prev="assertCategorySaveMessage"/>
-      <constraint name="assertUrlRewriteCategoryInGrid" next="assertCategoryPage" prev="assertCategoryForm"/>
-      <constraint name="assertCategoryPage" prev="assertUrlRewriteCategoryInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
     </variation>
     <variation name="UpdateCategoryEntityTestVariation3" firstConstraint="assertCategorySaveMessage" method="test">
       <data name="category/data/name" xsi:type="string">Name%isolation%</data>
@@ -54,8 +54,8 @@
       <data name="category/data/available_sort_by/sort_1" xsi:type="string">-</data>
       <data name="category/data/default_product_listing_config" xsi:type="string">-</data>
       <data name="category/data/default_sort_by" xsi:type="string">-</data>
-      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
-      <constraint name="assertCategoryForm" prev="assertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
     </variation>
   </testCase>
 </config>

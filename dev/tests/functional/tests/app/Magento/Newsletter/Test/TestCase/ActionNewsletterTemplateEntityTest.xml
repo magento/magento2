@@ -10,12 +10,12 @@
     <variation name="ActionNewsletterTemplateEntityTestVariation1" firstConstraint="assertNewsletterPreview" method="test">
       <data name="newsletter/dataSet" xsi:type="string">default</data>
       <data name="action" xsi:type="string">Preview</data>
-      <constraint name="assertNewsletterPreview"/>
+      <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterPreview"/>
     </variation>
     <variation name="ActionNewsletterTemplateEntityTestVariation2" firstConstraint="assertNewsletterQueue" method="test">
       <data name="newsletter/dataSet" xsi:type="string">default</data>
       <data name="action" xsi:type="string">Queue Newsletter</data>
-      <constraint name="assertNewsletterQueue"/>
+      <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterQueue"/>
     </variation>
   </testCase>
 </config>

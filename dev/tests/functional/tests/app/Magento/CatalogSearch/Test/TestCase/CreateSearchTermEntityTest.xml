@@ -13,11 +13,11 @@
       <data name="searchTerm/data/synonym_for" xsi:type="string">Search Term Synonym %isolation%</data>
       <data name="searchTerm/data/redirect" xsi:type="string">http://example.com/</data>
       <data name="searchTerm/data/display_in_terms" xsi:type="string">No</data>
-      <constraint name="assertSearchTermSuccessSaveMessage" next="assertSearchTermInGrid"/>
-      <constraint name="assertSearchTermInGrid" next="assertSearchTermForm" prev="assertSearchTermSuccessSaveMessage"/>
-      <constraint name="assertSearchTermForm" next="assertSearchTermOnFrontend" prev="assertSearchTermInGrid"/>
-      <constraint name="assertSearchTermOnFrontend" next="assertSearchTermSynonymOnFrontend" prev="assertSearchTermForm"/>
-      <constraint name="assertSearchTermSynonymOnFrontend" prev="assertSearchTermOnFrontend"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessSaveMessage"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermInGrid"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermForm"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermOnFrontend"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSynonymOnFrontend"/>
     </variation>
   </testCase>
 </config>

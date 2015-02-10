@@ -9,7 +9,7 @@
   <testCase name="LowStockProductsReportEntityTest">
     <variation name="LowStockProductsReportEntityTestVariation1" firstConstraint="assertLowStockProductInGrid" method="test">
       <data name="product/dataSet" xsi:type="string">low_stock_product</data>
-      <constraint name="assertLowStockProductInGrid"/>
+      <constraint name="Magento\Reports\Test\Constraint\AssertLowStockProductInGrid"/>
     </variation>
   </testCase>
 </config>

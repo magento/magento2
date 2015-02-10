@@ -9,37 +9,37 @@
   <testCase name="DeleteProductsFromShoppingCartTest">
     <variation name="DeleteProductsFromShoppingCartTestVariation1" firstConstraint="assertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation2" firstConstraint="assertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">bundleProduct::bundle_fixed_product</data>
       <data name="issue" xsi:type="string">Bug: MAGETWO-28350</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation3" firstConstraint="assertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation4" firstConstraint="assertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">catalogProductVirtual::50_dollar_product</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation5" firstConstraint="assertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">configurableProductInjectable::default</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation6" firstConstraint="assertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation7" firstConstraint="assertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">groupedProductInjectable::three_simple_products</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation8" firstConstraint="assertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::50_dollar_product, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
       <data name="issue" xsi:type="string">Bug: MAGETWO-28350</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
   </testCase>
 </config>

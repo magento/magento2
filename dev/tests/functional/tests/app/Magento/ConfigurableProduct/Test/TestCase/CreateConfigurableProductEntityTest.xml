@@ -21,15 +21,15 @@
       <data name="product/data/weight" xsi:type="string">2</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
-      <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
-      <constraint name="assertConfigurableProductForm" next="assertProductInCategory" prev="assertChildProductsInGrid"/>
-      <constraint name="assertProductInCategory" next="assertConfigurableProductPage" prev="assertConfigurableProductForm"/>
-      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertProductInCategory"/>
-      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
-      <constraint name="assertConfigurableProductInCart" next="assertChildProductIsNotDisplayedSeparately" prev="assertProductInStock"/>
-      <constraint name="assertChildProductIsNotDisplayedSeparately" prev="assertConfigurableProductInCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
     </variation>
     <variation name="CreateConfigurableProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/configurable_attributes_data/preset" xsi:type="string">two_options</data>
@@ -45,13 +45,13 @@
       <data name="product/data/weight" xsi:type="string">2</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
       <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
-      <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
-      <constraint name="assertConfigurableProductForm" next="assertConfigurableProductPage" prev="assertChildProductsInGrid"/>
-      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertConfigurableProductForm"/>
-      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
-      <constraint name="assertConfigurableProductInCart" prev="assertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
     </variation>
     <variation name="CreateConfigurableProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/configurable_attributes_data/preset" xsi:type="string">two_new_options</data>
@@ -67,14 +67,14 @@
       <data name="product/data/weight" xsi:type="string">2</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
-      <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
-      <constraint name="assertConfigurableProductForm" next="assertConfigurableProductPage" prev="assertChildProductsInGrid"/>
-      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertConfigurableProductForm"/>
-      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
-      <constraint name="assertConfigurableProductInCart" next="assertProductSpecialPriceOnProductPage" prev="assertProductInStock"/>
-      <constraint name="assertProductSpecialPriceOnProductPage" prev="assertConfigurableProductInCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
     </variation>
     <variation name="CreateConfigurableProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/configurable_attributes_data/preset" xsi:type="string">two_options_with_assigned_product</data>
@@ -90,12 +90,12 @@
       <data name="product/data/weight" xsi:type="string">2</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertConfigurableProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertConfigurableProductForm" next="assertConfigurableProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertConfigurableProductForm"/>
-      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
-      <constraint name="assertConfigurableProductInCart" prev="assertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
     </variation>
   </testCase>
 </config>

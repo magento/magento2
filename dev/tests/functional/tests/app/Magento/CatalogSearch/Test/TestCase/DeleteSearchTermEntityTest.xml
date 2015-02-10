@@ -9,10 +9,10 @@
   <testCase name="DeleteSearchTermEntityTest">
     <variation name="DeleteSearchTermEntityTestVariation1" firstConstraint="assertSearchTermSuccessDeleteMessage" method="test">
       <data name="searchTerm/dataSet" xsi:type="string">default</data>
-      <constraint name="assertSearchTermSuccessDeleteMessage" next="assertSearchTermNotInGrid"/>
-      <constraint name="assertSearchTermNotInGrid" next="assertSearchTermNotOnFrontend" prev="assertSearchTermSuccessDeleteMessage"/>
-      <constraint name="assertSearchTermNotOnFrontend" next="assertSearchSynonymNotOnFrontend" prev="assertSearchTermNotInGrid"/>
-      <constraint name="assertSearchSynonymNotOnFrontend" prev="assertSearchTermNotOnFrontend"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessDeleteMessage"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotInGrid"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotOnFrontend"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymNotOnFrontend"/>
     </variation>
   </testCase>
 </config>

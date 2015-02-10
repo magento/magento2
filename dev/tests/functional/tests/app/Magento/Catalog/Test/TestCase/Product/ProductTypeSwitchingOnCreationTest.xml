@@ -10,77 +10,77 @@
     <variation name="ProductTypeSwitchingOnCreationTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">simple</data>
       <data name="product" xsi:type="string">configurableProductInjectable::default</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
-      <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
-      <constraint name="assertConfigurableProductForm" next="assertConfigurableProductPage" prev="assertChildProductsInGrid"/>
-      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertConfigurableProductForm"/>
-      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
-      <constraint name="assertConfigurableProductInCart" next="assertChildProductIsNotDisplayedSeparately" prev="assertProductInStock"/>
-      <constraint name="assertChildProductIsNotDisplayedSeparately" prev="assertConfigurableProductInCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">simple</data>
       <data name="product" xsi:type="string">catalogProductVirtual::default</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">configurable</data>
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">configurable</data>
       <data name="product" xsi:type="string">catalogProductVirtual::default</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">virtual</data>
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">virtual</data>
       <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
-      <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
-      <constraint name="assertConfigurableProductForm" next="assertConfigurableProductPage" prev="assertChildProductsInGrid"/>
-      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertConfigurableProductForm"/>
-      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
-      <constraint name="assertConfigurableProductInCart" next="assertChildProductIsNotDisplayedSeparately" prev="assertProductInStock"/>
-      <constraint name="assertChildProductIsNotDisplayedSeparately" prev="assertConfigurableProductInCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">virtual</data>
       <data name="product" xsi:type="string">downloadableProductInjectable::default</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertDownloadableProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductInStock" prev="assertDownloadableProductForm"/>
-      <constraint name="assertProductInStock" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">downloadable</data>
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">downloadable</data>
       <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
-      <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
-      <constraint name="assertConfigurableProductForm" next="assertConfigurableProductPage" prev="assertChildProductsInGrid"/>
-      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertConfigurableProductForm"/>
-      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
-      <constraint name="assertConfigurableProductInCart" next="assertChildProductIsNotDisplayedSeparately" prev="assertProductInStock"/>
-      <constraint name="assertChildProductIsNotDisplayedSeparately" prev="assertConfigurableProductInCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
     </variation>
   </testCase>
 </config>

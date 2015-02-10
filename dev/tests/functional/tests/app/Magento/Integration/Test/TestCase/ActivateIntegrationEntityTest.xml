@@ -9,9 +9,9 @@
   <testCase name="ActivateIntegrationEntityTest">
     <variation name="ActivateIntegrationEntityTestVariation1" firstConstraint="assertIntegrationResourcesPopup" method="test">
       <data name="integration/dataSet" xsi:type="string">default_with_all_resources</data>
-      <constraint name="assertIntegrationResourcesPopup" next="assertIntegrationTokensPopup"/>
-      <constraint name="assertIntegrationTokensPopup" next="assertIntegrationSuccessActivationMessage" prev="assertIntegrationResourcesPopup"/>
-      <constraint name="assertIntegrationSuccessActivationMessage" prev="assertIntegrationTokensPopup"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationResourcesPopup"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensPopup"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessActivationMessage"/>
     </variation>
   </testCase>
 </config>

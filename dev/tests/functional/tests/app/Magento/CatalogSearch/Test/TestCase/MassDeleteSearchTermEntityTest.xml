@@ -9,10 +9,10 @@
   <testCase name="MassDeleteSearchTermEntityTest">
     <variation name="MassDeleteSearchTermEntityTestVariation1" firstConstraint="assertSearchTermSuccessMassDeleteMessage" method="test">
       <data name="searchTerms" xsi:type="string">catalogSearchQuery::default,catalogSearchQuery::default,catalogSearchQuery::default</data>
-      <constraint name="assertSearchTermSuccessMassDeleteMessage" next="assertSearchTermMassActionsNotInGrid"/>
-      <constraint name="assertSearchTermMassActionsNotInGrid" next="assertSearchTermMassActionNotOnFrontend" prev="assertSearchTermSuccessMassDeleteMessage"/>
-      <constraint name="assertSearchTermMassActionNotOnFrontend" next="assertSearchSynonymMassActionNotOnFrontend" prev="assertSearchTermMassActionsNotInGrid"/>
-      <constraint name="assertSearchSynonymMassActionNotOnFrontend" prev="assertSearchTermMassActionNotOnFrontend"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessMassDeleteMessage"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionsNotInGrid"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionNotOnFrontend"/>
+      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymMassActionNotOnFrontend"/>
     </variation>
   </testCase>
 </config>

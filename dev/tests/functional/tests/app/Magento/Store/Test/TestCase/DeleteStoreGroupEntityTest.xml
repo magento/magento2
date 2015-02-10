@@ -10,15 +10,15 @@
     <variation name="DeleteStoreGroupEntityTestVariation1" firstConstraint="assertStoreGroupSuccessDeleteAndBackupMessages" method="test">
       <data name="storeGroup/dataSet" xsi:type="string">custom</data>
       <data name="createBackup" xsi:type="string">Yes</data>
-      <constraint name="assertStoreGroupSuccessDeleteAndBackupMessages" next="assertStoreGroupNotInGrid"/>
-      <constraint name="assertStoreGroupNotInGrid" next="assertBackupInGrid" prev="assertStoreGroupSuccessDeleteAndBackupMessages"/>
-      <constraint name="assertBackupInGrid" prev="assertStoreGroupNotInGrid"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteAndBackupMessages"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupNotInGrid"/>
+      <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid"/>
     </variation>
     <variation name="DeleteStoreGroupEntityTestVariation2" firstConstraint="assertStoreGroupSuccessDeleteMessage" method="test">
       <data name="storeGroup/dataSet" xsi:type="string">custom</data>
       <data name="createBackup" xsi:type="string">No</data>
-      <constraint name="assertStoreGroupSuccessDeleteMessage" next="assertStoreGroupNotInGrid"/>
-      <constraint name="assertStoreGroupNotInGrid" prev="assertStoreGroupSuccessDeleteMessage"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteMessage"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupNotInGrid"/>
     </variation>
   </testCase>
 </config>

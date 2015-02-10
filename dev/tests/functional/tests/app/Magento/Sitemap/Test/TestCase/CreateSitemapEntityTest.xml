@@ -10,18 +10,18 @@
     <variation name="CreateSitemapEntityTestVariation1" firstConstraint="assertSitemapSuccessSaveMessage" method="test">
       <data name="sitemap/data/sitemap_filename" xsi:type="string">sitemap.xml</data>
       <data name="sitemap/data/sitemap_path" xsi:type="string">/</data>
-      <constraint name="assertSitemapSuccessSaveMessage" next="assertSitemapInGrid"/>
-      <constraint name="assertSitemapInGrid" prev="assertSitemapSuccessSaveMessage"/>
+      <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessSaveMessage"/>
+      <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapInGrid"/>
     </variation>
     <variation name="CreateSitemapEntityTestVariation2" firstConstraint="assertSitemapFailPathSaveMessage" method="test">
       <data name="sitemap/data/sitemap_filename" xsi:type="string">%isolation%</data>
       <data name="sitemap/data/sitemap_path" xsi:type="string">/</data>
-      <constraint name="assertSitemapFailPathSaveMessage"/>
+      <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapFailPathSaveMessage"/>
     </variation>
     <variation name="CreateSitemapEntityTestVariation3" firstConstraint="assertSitemapFailFolderSaveMessage" method="test">
       <data name="sitemap/data/sitemap_filename" xsi:type="string">sitemap.xml</data>
       <data name="sitemap/data/sitemap_path" xsi:type="string">/%isolation%</data>
-      <constraint name="assertSitemapFailFolderSaveMessage"/>
+      <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapFailFolderSaveMessage"/>
     </variation>
   </testCase>
 </config>

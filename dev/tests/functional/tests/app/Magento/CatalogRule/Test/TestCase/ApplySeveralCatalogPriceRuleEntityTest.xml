@@ -16,9 +16,9 @@
       <data name="price/discount_amount" xsi:type="string">60</data>
       <data name="price/special" xsi:type="string">40</data>
       <data name="price/regular" xsi:type="string">100</data>
-      <constraint name="assertCatalogPriceRuleAppliedCatalogPage" next="assertCatalogPriceRuleAppliedProductPage"/>
-      <constraint name="assertCatalogPriceRuleAppliedProductPage" next="assertCatalogPriceRuleAppliedShoppingCart" prev="assertCatalogPriceRuleAppliedCatalogPage"/>
-      <constraint name="assertCatalogPriceRuleAppliedShoppingCart" prev="assertCatalogPriceRuleAppliedProductPage"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
     </variation>
     <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation2" firstConstraint="assertCatalogPriceRuleAppliedCatalogPage" method="test">
       <data name="catalogRulesOriginal/priority_0" xsi:type="string">catalog_price_rule_priority_0</data>
@@ -29,9 +29,9 @@
       <data name="price/discount_amount" xsi:type="string">55</data>
       <data name="price/special" xsi:type="string">45</data>
       <data name="price/regular" xsi:type="string">100</data>
-      <constraint name="assertCatalogPriceRuleAppliedCatalogPage" next="assertCatalogPriceRuleAppliedProductPage"/>
-      <constraint name="assertCatalogPriceRuleAppliedProductPage" next="assertCatalogPriceRuleAppliedShoppingCart" prev="assertCatalogPriceRuleAppliedCatalogPage"/>
-      <constraint name="assertCatalogPriceRuleAppliedShoppingCart" prev="assertCatalogPriceRuleAppliedProductPage"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
+      <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
     </variation>
   </testCase>
 </config>

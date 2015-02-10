@@ -21,14 +21,14 @@
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertBundleItemsOnProductPage" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundleItemsOnProductPage" next="assertBundleProductForm" prev="assertProductInGrid"/>
-      <constraint name="assertBundleProductForm" next="assertBundleProductPage" prev="assertBundleItemsOnProductPage"/>
-      <constraint name="assertBundleProductPage" next="assertProductInStock" prev="assertBundleProductForm"/>
-      <constraint name="assertProductInStock" next="assertBundlePriceView" prev="assertBundleProductPage"/>
-      <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertProductInStock"/>
-      <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductForm"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
     <variation name="UpdateBundleProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
       <data name="originalProduct/dataSet" xsi:type="string">bundle_fixed_product</data>
@@ -44,15 +44,15 @@
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_fixed</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertBundleItemsOnProductPage" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundleItemsOnProductPage" next="assertBundleProductForm" prev="assertProductInGrid"/>
-      <constraint name="assertBundleProductForm" next="assertBundleProductPage" prev="assertBundleItemsOnProductPage"/>
-      <constraint name="assertBundleProductPage" next="assertProductInStock" prev="assertBundleProductForm"/>
-      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertBundleProductPage"/>
-      <constraint name="assertProductVisibleInCategory" next="assertBundlePriceView" prev="assertProductInStock"/>
-      <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductForm"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
   </testCase>
 </config>

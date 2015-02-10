@@ -19,9 +19,9 @@
       <data name="taxRule/data/tax_product_class/dataSet/class_1" xsi:type="string">-</data>
       <data name="taxRule/data/priority" xsi:type="string">-</data>
       <data name="taxRule/data/position" xsi:type="string">-</data>
-      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
-      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
-      <constraint name="assertTaxRuleForm" prev="assertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
     </variation>
     <variation name="CreateTaxRuleEntityTestVariation2" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
       <data name="description" xsi:type="string">Creating tax rule with new tax classes</data>
@@ -35,9 +35,9 @@
       <data name="taxRule/data/tax_product_class/dataSet/class_1" xsi:type="string">-</data>
       <data name="taxRule/data/priority" xsi:type="string">1</data>
       <data name="taxRule/data/position" xsi:type="string">1</data>
-      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
-      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
-      <constraint name="assertTaxRuleForm" prev="assertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
     </variation>
     <variation name="CreateTaxRuleEntityTestVariation3" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
       <data name="description" xsi:type="string">Creating tax rule with new tax classes and tax rate</data>
@@ -51,9 +51,9 @@
       <data name="taxRule/data/tax_product_class/dataSet/class_1" xsi:type="string">-</data>
       <data name="taxRule/data/priority" xsi:type="string">-</data>
       <data name="taxRule/data/position" xsi:type="string">1</data>
-      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
-      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
-      <constraint name="assertTaxRuleForm" prev="assertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
     </variation>
     <variation name="CreateTaxRuleEntityTestVariation4" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
       <data name="description" xsi:type="string">Creating tax rule with new tax rate that has zip range</data>
@@ -67,9 +67,9 @@
       <data name="taxRule/data/tax_product_class/dataSet/class_1" xsi:type="string">product_tax_class</data>
       <data name="taxRule/data/priority" xsi:type="string">1</data>
       <data name="taxRule/data/position" xsi:type="string">-</data>
-      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
-      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
-      <constraint name="assertTaxRuleForm" prev="assertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
     </variation>
     <variation name="CreateTaxRuleEntityTestVariation5" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-12438: Create Tax Rule with New and Existing Tax Rate, Customer Tax Class, Product Tax Class</data>
@@ -82,8 +82,8 @@
       <data name="taxRule/data/tax_product_class/dataSet/class_0" xsi:type="string">Taxable Goods</data>
       <data name="taxRule/data/tax_product_class/dataSet/class_1" xsi:type="string">product_tax_class</data>
       <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
-      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
-      <constraint name="assertTaxRuleInGrid" prev="assertTaxRuleSuccessSaveMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
     </variation>
   </testCase>
 </config>

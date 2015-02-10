@@ -11,13 +11,13 @@
       <data name="description" xsi:type="string">add product to cart as registered user and check product in Report</data>
       <data name="customer/dataSet" xsi:type="string">default</data>
       <data name="products" xsi:type="string">catalogProductSimple::100_dollar_product</data>
-      <constraint name="assertAbandonedCartCustomerInfoResult"/>
+      <constraint name="Magento\Reports\Test\Constraint\AssertAbandonedCartCustomerInfoResult"/>
     </variation>
     <variation name="AbandonedCartsReportEntityTestVariation2" firstConstraint="assertAbandonedCartCustomerInfoResult" method="test">
       <data name="description" xsi:type="string">add two products to cart as registered user and check product in Report</data>
       <data name="customer/dataSet" xsi:type="string">default</data>
       <data name="products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::100_dollar_product</data>
-      <constraint name="assertAbandonedCartCustomerInfoResult"/>
+      <constraint name="Magento\Reports\Test\Constraint\AssertAbandonedCartCustomerInfoResult"/>
     </variation>
   </testCase>
 </config>

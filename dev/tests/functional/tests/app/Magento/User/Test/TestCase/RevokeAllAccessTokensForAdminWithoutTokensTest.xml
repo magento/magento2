@@ -9,7 +9,7 @@
   <testCase name="RevokeAllAccessTokensForAdminWithoutTokensTest">
     <variation name="RevokeAllAccessTokensForAdminWithoutTokensTestVariation1" firstConstraint="assertAccessTokensErrorRevokeMessage" method="test">
       <data name="user/dataSet" xsi:type="string">custom_admin</data>
-      <constraint name="assertAccessTokensErrorRevokeMessage"/>
+      <constraint name="Magento\User\Test\Constraint\AssertAccessTokensErrorRevokeMessage"/>
     </variation>
   </testCase>
 </config>

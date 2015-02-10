@@ -10,10 +10,10 @@
     <variation name="AddRelatedProductsEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
       <data name="productData" xsi:type="string">catalogProductSimple::default</data>
       <data name="relatedProductsData" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertRelatedProductsSection" prev="assertProductInGrid"/>
-      <constraint name="assertRelatedProductsSection" prev="assertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertRelatedProductsSection"/>
     </variation>
   </testCase>
 </config>

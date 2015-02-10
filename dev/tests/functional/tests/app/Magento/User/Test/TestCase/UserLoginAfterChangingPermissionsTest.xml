@@ -13,7 +13,7 @@
       <data name="role/data/roles_resources" xsi:type="string">Sales</data>
       <data name="updatedRole/data/rolename" xsi:type="string">UpdatedAdminRole%isolation%</data>
       <data name="updatedRole/data/resource_access" xsi:type="string">All</data>
-      <constraint name="assertUserSuccessLogin"/>
+      <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin"/>
     </variation>
   </testCase>
 </config>

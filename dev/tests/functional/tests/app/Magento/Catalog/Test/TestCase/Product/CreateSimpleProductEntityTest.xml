@@ -25,11 +25,11 @@
       <data name="product/data/price/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
-      <constraint name="assertProductInCart" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -49,11 +49,11 @@
       <data name="product/data/price/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
-      <constraint name="assertProductInCart" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -73,11 +73,11 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23029</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
-      <constraint name="assertProductInCart" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -97,11 +97,11 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23030</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
-      <constraint name="assertProductInCart" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -121,11 +121,11 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23030</data>
       <data name="product/data/group_price/preset" xsi:type="string">MAGETWO-23055</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
-      <constraint name="assertProductInCart" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -145,11 +145,11 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23029</data>
       <data name="product/data/group_price/preset" xsi:type="string">MAGETWO-23055</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
-      <constraint name="assertProductInCart" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -169,11 +169,11 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23030</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">MAGETWO-23002</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
-      <constraint name="assertProductInCart" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -193,11 +193,11 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23029</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">MAGETWO-23002</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductInCart" prev="assertProductInCategory"/>
-      <constraint name="assertProductInCart" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -217,10 +217,10 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductVisibleInCategory" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" prev="assertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation10" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -240,8 +240,8 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInStock"/>
-      <constraint name="assertProductInStock" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation11" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -260,8 +260,8 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductOutOfStock"/>
-      <constraint name="assertProductOutOfStock" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation12" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -281,8 +281,8 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductSearchableBySku"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation13" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -302,12 +302,12 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
-      <constraint name="assertProductInStock" next="assertProductSearchableBySku" prev="assertProductForm"/>
-      <constraint name="assertProductSearchableBySku" next="assertProductPage" prev="assertProductInStock"/>
-      <constraint name="assertProductPage" prev="assertProductSearchableBySku"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation14" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -327,12 +327,12 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
-      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
-      <constraint name="assertProductPage" prev="assertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation15" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -352,13 +352,13 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">default</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
-      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
-      <constraint name="assertProductPage" next="assertProductGroupedPriceOnProductPage" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertProductGroupedPriceOnProductPage" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation16" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -378,13 +378,13 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
-      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
-      <constraint name="assertProductPage" next="assertProductSpecialPriceOnProductPage" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertProductSpecialPriceOnProductPage" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation17" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -404,13 +404,13 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">default</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
-      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
-      <constraint name="assertProductPage" next="assertProductTierPriceOnProductPage" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertProductTierPriceOnProductPage" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation18" firstConstraint="assertProductSaveMessage" method="test">
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -430,13 +430,13 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
-      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
-      <constraint name="assertProductPage" next="assertProductCustomOptionsOnProductPage" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertProductCustomOptionsOnProductPage" prev="assertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage"/>
     </variation>
   </testCase>
 </config>

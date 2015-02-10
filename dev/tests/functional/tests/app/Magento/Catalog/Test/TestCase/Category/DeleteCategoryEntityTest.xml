@@ -9,15 +9,15 @@
   <testCase name="DeleteCategoryEntityTest">
     <variation name="DeleteCategoryEntityTestVariation1" firstConstraint="assertCategorySuccessDeleteMessage" method="test">
       <data name="category/dataSet" xsi:type="string">root_category</data>
-      <constraint name="assertCategorySuccessDeleteMessage" next="assertCategoryAbsenceOnBackend"/>
-      <constraint name="assertCategoryAbsenceOnBackend" prev="assertCategorySuccessDeleteMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySuccessDeleteMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnBackend"/>
     </variation>
     <variation name="DeleteCategoryEntityTestVariation2" firstConstraint="assertCategorySuccessDeleteMessage" method="test">
       <data name="category/dataSet" xsi:type="string">root_subcategory</data>
-      <constraint name="assertCategorySuccessDeleteMessage" next="assertUrlRewriteCategoryNotInGrid"/>
-      <constraint name="assertUrlRewriteCategoryNotInGrid" next="assertCategoryAbsenceOnBackend" prev="assertCategorySuccessDeleteMessage"/>
-      <constraint name="assertCategoryAbsenceOnBackend" next="assertCategoryAbsenceOnFrontend" prev="assertUrlRewriteCategoryNotInGrid"/>
-      <constraint name="assertCategoryAbsenceOnFrontend" prev="assertCategoryAbsenceOnBackend"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySuccessDeleteMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryNotInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnBackend"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnFrontend"/>
     </variation>
   </testCase>
 </config>

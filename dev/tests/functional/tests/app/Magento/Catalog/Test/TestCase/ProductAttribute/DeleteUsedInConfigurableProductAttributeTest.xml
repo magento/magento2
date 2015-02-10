@@ -9,9 +9,9 @@
   <testCase name="DeleteUsedInConfigurableProductAttributeTest">
     <variation name="DeleteUsedInConfigurableProductAttributeTestVariation1" firstConstraint="assertUsedSuperAttributeImpossibleDeleteMessages" method="test">
       <data name="product/dataSet" xsi:type="string">one_variation</data>
-      <constraint name="assertUsedSuperAttributeImpossibleDeleteMessages" next="assertProductAttributeInGrid"/>
-      <constraint name="assertProductAttributeInGrid" next="assertConfigurableProductForm" prev="assertUsedSuperAttributeImpossibleDeleteMessages"/>
-      <constraint name="assertConfigurableProductForm" prev="assertProductAttributeInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertUsedSuperAttributeImpossibleDeleteMessages"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
     </variation>
   </testCase>
 </config>
