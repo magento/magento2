@@ -150,7 +150,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getTitle()
     {
-        return $this->getData(self::KEY_TYPE);
+        return $this->getData(self::KEY_TITLE);
     }
 
     /**
