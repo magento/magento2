@@ -13,34 +13,6 @@ $connection = $installer->getConnection();
 $installer->startSetup();
 
 /**
- * Create table 'core_resource'
- */
-$table = $connection->newTable(
-    $installer->getTable('core_resource')
-)->addColumn(
-    'code',
-    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    50,
-    ['nullable' => false, 'primary' => true],
-    'Resource Code'
-)->addColumn(
-    'setup_version',
-    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    50,
-    [],
-    'Resource Version'
-)->addColumn(
-    'data_version',
-    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    50,
-    [],
-    'Data Version'
-)->setComment(
-    'Resources'
-);
-$connection->createTable($table);
-
-/**
  * Create table 'core_config_data'
  */
 $table = $connection->newTable(

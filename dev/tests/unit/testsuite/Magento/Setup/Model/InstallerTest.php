@@ -119,13 +119,21 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->filePermissions = $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false);
         $this->configWriter = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
         $this->config = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
+        $table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
+        $connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
+
+        $setup->expects($this->any())->method('getConnection')->willReturn($connection);
+        $table->expects($this->any())->method('addColumn')->willReturn($table);
+        $table->expects($this->any())->method('setComment')->willReturn($table);
+        $connection->expects($this->any())->method('newTable')->willReturn($table);
+
         $this->setupFactory = $this->getMock('Magento\Setup\Module\SetupFactory', [], [], '', false);
         $this->setupFactory->expects($this->any())->method('createSetupModule')->willReturn(
             $this->getMock('Magento\Setup\Module\SetupModule', [], [], '', false)
         );
-        $this->setupFactory->expects($this->any())->method('createSetup')->willReturn(
-            $this->getMock('Magento\Setup\Module\Setup', [], [], '', false)
-        );
+        $this->setupFactory->expects($this->any())->method('createSetup')->willReturn($setup);
+
         $this->moduleList = $this->getMockForAbstractClass('Magento\Framework\Module\ModuleListInterface');
         $this->moduleList->expects($this->any())->method('getNames')->willReturn(
             ['Foo_One', 'Bar_Two']

@@ -539,6 +539,41 @@ class Installer
     }
 
     /**
+     * Set up setup_module table to register modules' versions
+     *
+     * @return void
+     */
+    private function setupModuleRegistry()
+    {
+        $registrySetup = $this->setupFactory->createSetup();
+        $connection = $registrySetup->getConnection();
+        /**
+         * Create table 'setup_module'
+         */
+        $table = $connection->newTable($registrySetup->getTable('setup_module'))
+            ->addColumn(
+                'module',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                50,
+                ['nullable' => false, 'primary' => true],
+                'Module'
+            )->addColumn(
+                'setup_version',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                50,
+                [],
+                'Resource Version'
+            )->addColumn(
+                'data_version',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                50,
+                [],
+                'Data Version'
+            )->setComment('Module versions registry');
+        $connection->createTable($table);
+    }
+
+    /**
      * Installs DB schema
      *
      * @return void
@@ -547,6 +582,7 @@ class Installer
     {
         $this->assertDeploymentConfigExists();
         $this->assertDbAccessible();
+        $this->setupModuleRegistry();
 
         $moduleNames = $this->moduleList->getNames();
 

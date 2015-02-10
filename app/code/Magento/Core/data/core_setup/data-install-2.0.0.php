@@ -33,11 +33,11 @@ if ($tableName) {
 }
 
 /**
- * Delete rows by condition from core_resource
+ * Delete rows by condition from setup_module
  */
-$tableName = $installer->getTable('core_resource');
+$tableName = $installer->getTable('setup_module');
 if ($tableName) {
-    $installer->getConnection()->delete($tableName, ['code = ?' => 'admin_setup']);
+    $installer->getConnection()->delete($tableName, ['module = ?' => 'admin_setup']);
 }
 
 $installer->endSetup();

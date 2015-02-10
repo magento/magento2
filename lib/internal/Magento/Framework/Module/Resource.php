@@ -35,7 +35,7 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
      */
     protected function _construct()
     {
-        $this->_init('core_resource', 'code');
+        $this->_init('setup_module', 'module');
     }
 
     /**
@@ -60,12 +60,12 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
                 $select = $this->_getReadAdapter()->select()->from($this->getMainTable(), '*');
                 $rowset = $this->_getReadAdapter()->fetchAll($select);
                 foreach ($rowset as $row) {
-                    self::$_versions[$row['code']] = $row['setup_version'];
+                    self::$_versions[$row['module']] = $row['setup_version'];
                     if (array_key_exists('data_version', $row)) {
                         if (is_null(self::$_dataVersions)) {
                             self::$_dataVersions = [];
                         }
-                        self::$_dataVersions[$row['code']] = $row['data_version'];
+                        self::$_dataVersions[$row['module']] = $row['data_version'];
                     }
                 }
             }
@@ -91,14 +91,14 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
      */
     public function setDbVersion($resName, $version)
     {
-        $dbModuleInfo = ['code' => $resName, 'setup_version' => $version];
+        $dbModuleInfo = ['module' => $resName, 'setup_version' => $version];
 
         if ($this->getDbVersion($resName)) {
             self::$_versions[$resName] = $version;
             return $this->_getWriteAdapter()->update(
                 $this->getMainTable(),
                 $dbModuleInfo,
-                ['code = ?' => $resName]
+                ['module = ?' => $resName]
             );
         } else {
             self::$_versions[$resName] = $version;
@@ -123,11 +123,11 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
      */
     public function setDataVersion($resName, $version)
     {
-        $data = ['code' => $resName, 'data_version' => $version];
+        $data = ['module' => $resName, 'data_version' => $version];
 
         if ($this->getDbVersion($resName) || $this->getDataVersion($resName)) {
             self::$_dataVersions[$resName] = $version;
-            $this->_getWriteAdapter()->update($this->getMainTable(), $data, ['code = ?' => $resName]);
+            $this->_getWriteAdapter()->update($this->getMainTable(), $data, ['module = ?' => $resName]);
         } else {
             self::$_dataVersions[$resName] = $version;
             $this->_getWriteAdapter()->insert($this->getMainTable(), $data);

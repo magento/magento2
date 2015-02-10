@@ -42,22 +42,22 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
             $this->fail("Impossible to continue other tests, because database is broken: {$e}");
         }
         $this->assertNotEmpty(
-            $this->_model->getTableRow('core_resource', 'code', 'adminnotification_setup', 'version')
+            $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'version')
         );
         $this->assertNotEmpty(
-            $this->_model->getTableRow('core_resource', 'code', 'adminnotification_setup', 'data_version')
+            $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'data_version')
         );
     }
 
     public function testUpdateTableRow()
     {
-        $original = $this->_model->getTableRow('core_resource', 'code', 'adminnotification_setup', 'version');
-        $this->_model->updateTableRow('core_resource', 'code', 'adminnotification_setup', 'version', 'test');
+        $original = $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'version');
+        $this->_model->updateTableRow('setup_module', 'module', 'adminnotification_setup', 'version', 'test');
         $this->assertEquals(
             'test',
-            $this->_model->getTableRow('core_resource', 'code', 'adminnotification_setup', 'version')
+            $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'version')
         );
-        $this->_model->updateTableRow('core_resource', 'code', 'adminnotification_setup', 'version', $original);
+        $this->_model->updateTableRow('setup_module', 'module', 'adminnotification_setup', 'version', $original);
     }
 
     /**
@@ -65,8 +65,8 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTableRow()
     {
-        $this->assertNotEmpty($this->_model->getTableRow('core_resource', 'code', 'core_setup'));
-        $this->_model->getTableRow('core/resource', 'code', 'core_setup');
+        $this->assertNotEmpty($this->_model->getTableRow('setup_module', 'module', 'core_setup'));
+        $this->_model->getTableRow('setup/module', 'module', 'core_setup');
     }
 
     /**
@@ -74,7 +74,7 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteTableRow()
     {
-        $this->_model->deleteTableRow('core/resource', 'code', 'integration_test_fixture_setup');
+        $this->_model->deleteTableRow('setup/module', 'module', 'integration_test_fixture_setup');
     }
 
     /**
@@ -83,8 +83,8 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateTableRowNameConversion()
     {
-        $original = $this->_model->getTableRow('core_resource', 'code', 'core_setup', 'version');
-        $this->_model->updateTableRow('core/resource', 'code', 'core_setup', 'version', $original);
+        $original = $this->_model->getTableRow('setup_module', 'module', 'core_setup', 'version');
+        $this->_model->updateTableRow('setup/module', 'module', 'core_setup', 'version', $original);
     }
 
     public function testTableExists()
