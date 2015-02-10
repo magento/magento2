@@ -51,7 +51,8 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         $expectedConfig = $this->getSimpleConfig();
 
-        $requestedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting';
+        $requestedType = 'requestedType';
+        $type = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting';
         $sharedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencySharedTesting';
         $nonSharedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencyTesting';
 
@@ -62,6 +63,15 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                     [$requestedType, $expectedConfig],
                     [$sharedType, null],
                     [$nonSharedType, null]
+                ]
+            );
+        $this->config->expects($this->any())
+            ->method('getInstanceType')
+            ->willReturnMap(
+                [
+                    [$requestedType, $type],
+                    [$sharedType, $sharedType],
+                    [$nonSharedType, $nonSharedType]
                 ]
             );
 
@@ -90,7 +100,8 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         $expectedConfig = $this->getSimpleNestedConfig();
 
-        $requestedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting';
+        $type = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting';
+        $requestedType = 'requestedType';
         $sharedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencySharedTesting';
         $nonSharedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencyTesting';
 
@@ -101,6 +112,15 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                     [$requestedType, $expectedConfig],
                     [$sharedType, null],
                     [$nonSharedType, null]
+                ]
+            );
+        $this->config->expects($this->any())
+            ->method('getInstanceType')
+            ->willReturnMap(
+                [
+                    [$requestedType, $type],
+                    [$sharedType, $sharedType],
+                    [$nonSharedType, $nonSharedType]
                 ]
             );
 
