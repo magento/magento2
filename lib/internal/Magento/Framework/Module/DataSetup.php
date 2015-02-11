@@ -22,7 +22,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
      * Setup module name
      * @var string
      */
-    protected $moduleName;
+    private $moduleName;
 
     /**
      * Setup module configuration object
@@ -321,6 +321,14 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
     }
 
     /******************* UTILITY METHODS *****************/
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSetupCache()
+    {
+        return $this->_setupCache;
+    }
 
     /**
      * Retrieve row or field from table by id or string and parent id

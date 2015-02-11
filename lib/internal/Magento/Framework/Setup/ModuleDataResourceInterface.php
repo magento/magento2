@@ -102,4 +102,11 @@ interface ModuleDataResourceInterface extends ResourceInterface
      * @return \Magento\Framework\Module\Setup\Migration
      */
     public function createMigrationSetup(array $data = []);
+
+    /**
+     * Gets setup cache
+     *
+     * @return array
+     */
+    public function getSetupCache();
 }
