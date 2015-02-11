@@ -39,7 +39,6 @@ $hints = [
                    ng-model="config.address.base_url"
                    ng-init="config.address.auto_base_url = '<?php echo $this->autoBaseUrl ?>'; fillBaseURL();"
                    ng-blur="addSlash()"
-                   ng-change="populateHttps()"
                    class="form-control"
                    tooltip-placement="right"
                    tooltip-html-unsafe="<?php echo $hints['base_url']; ?>"
@@ -101,7 +100,7 @@ $hints = [
                        ng-model="config.https.text"
                        ng-if="config.https.front || config.https.admin"
                        class="form-control"
-                       ng-focus=""
+                       ng-focus="config.https.front"
                        required />
             </div>
             <div class="col-md-offset-3 col-md-4" ng-show="webconfig.https.$invalid && webconfig.submitted">
