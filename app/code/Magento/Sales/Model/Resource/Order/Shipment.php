@@ -57,7 +57,7 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
         ShipmentGrid $gridAggregator,
         $resourcePrefix = null
     ) {
-        parent::__construct($context, $attribute, $salesIncrement, $gridAggregator, $resourcePrefix);
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
     }
 
     /**

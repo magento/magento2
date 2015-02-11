@@ -45,8 +45,8 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
-        $resourcePrefix = null,
-        InvoiceGrid $gridAggregator
+        InvoiceGrid $gridAggregator,
+        $resourcePrefix = null
     ) {
         parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
     }

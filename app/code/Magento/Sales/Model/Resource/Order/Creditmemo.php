@@ -52,7 +52,7 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
         CreditmemoGrid $gridAggregator,
         $resourcePrefix = null
     ) {
-        parent::__construct($context, $attribute, $salesIncrement, $gridAggregator, $resourcePrefix);
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
     }
 
     /**
