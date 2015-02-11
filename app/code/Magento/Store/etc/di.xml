@@ -227,4 +227,10 @@
             <argument name="connectionName" xsi:type="string">Magento\Framework\Module\Updater::DEFAULT_SETUP_CONNECTION</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Helper\Context">
+        <arguments>
+            <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface\Proxy</argument>
+            <argument name="httpRequest" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
+        </arguments>
+    </type>
 </config>

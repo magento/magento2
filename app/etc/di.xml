@@ -104,7 +104,6 @@
     <preference for="Magento\Framework\Cache\ConfigInterface" type="Magento\Framework\Cache\Config" />
     <preference for="Magento\Framework\View\Asset\MergeStrategyInterface" type="Magento\Framework\View\Asset\MergeStrategy\Direct" />
     <preference for="Magento\Framework\App\ViewInterface" type="Magento\Framework\App\View" />
-    <preference for="Magento\Framework\TranslateInterface" type="Magento\Framework\Translate" />
     <preference for="Magento\Framework\Data\Collection\EntityFactoryInterface" type="Magento\Framework\Data\Collection\EntityFactory" />
     <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
     <preference for="Magento\Framework\Session\ValidatorInterface" type="Magento\Framework\Session\Validator" />
@@ -113,11 +112,6 @@
     <preference for="Magento\Framework\Url\QueryParamsResolverInterface" type="Magento\Framework\Url\QueryParamsResolver" />
     <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Framework\Url\ScopeResolver" />
     <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Framework\Url\SecurityInfo\Proxy" />
-    <preference for="Magento\Framework\Mview\ConfigInterface" type="Magento\Framework\Mview\Config" />
-    <preference for="Magento\Framework\Mview\ViewInterface" type="Magento\Framework\Mview\View" />
-    <preference for="Magento\Framework\Mview\ProcessorInterface" type="Magento\Framework\Mview\Processor" />
-    <preference for="Magento\Framework\Mview\View\CollectionInterface" type="Magento\Framework\Mview\View\Collection" />
-    <preference for="Magento\Framework\Mview\View\SubscriptionInterface" type="Magento\Framework\Mview\View\Subscription" />
     <preference for="Magento\Framework\Css\PreProcessor\AdapterInterface" type="Magento\Framework\Css\PreProcessor\Adapter\Oyejorge" />
     <preference for="Magento\Framework\LocaleInterface" type="Magento\Framework\Locale" />
     <preference for="Magento\Framework\Locale\CurrencyInterface" type="Magento\Framework\Locale\Currency" />
@@ -129,11 +123,8 @@
     <preference for="Magento\Framework\Less\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Less\PreProcessor\ErrorHandler" />
     <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\Resource" />
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
-    <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria" />
     <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
-    <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
@@ -901,12 +892,6 @@
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\Object\Copy\Config\Reader\Proxy</argument>
             <argument name="cacheId" xsi:type="string">fieldset_config</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\App\Helper\Context">
-        <arguments>
-            <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface\Proxy</argument>
-            <argument name="httpRequest" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Image">
