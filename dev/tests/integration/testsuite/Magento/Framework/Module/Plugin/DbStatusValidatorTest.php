@@ -24,9 +24,6 @@ class DbStatusValidatorTest extends \Magento\TestFramework\TestCase\AbstractCont
         /** @var \Magento\Framework\Module\ModuleListInterface $moduleList */
         $moduleList = $objectManager->get('Magento\Framework\Module\ModuleListInterface');
 
-        /** @var \Magento\Framework\Module\ResourceResolverInterface $resourceResolver */
-        $resourceResolver = $objectManager->get('Magento\Framework\Module\ResourceResolverInterface');
-
         // get first module name, we don't care which one it is.
         foreach ($moduleList->getNames() as $moduleName) {
             $moduleNameToTest = $moduleName;
