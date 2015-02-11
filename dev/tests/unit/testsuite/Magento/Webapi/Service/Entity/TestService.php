@@ -7,6 +7,8 @@ namespace Magento\Webapi\Service\Entity;
 
 class TestService
 {
+   const DEFAULT_VALUE = 42;
+
     /**
      * @param int $entityId
      * @param string $name
@@ -15,6 +17,15 @@ class TestService
     public function simple($entityId, $name)
     {
         return [$entityId, $name];
+    }
+
+    /**
+     * @param int $entityId
+     * @return string[]
+     */
+    public function simpleDefaultValue($entityId = self::DEFAULT_VALUE)
+    {
+        return [$entityId];
     }
 
     /**
