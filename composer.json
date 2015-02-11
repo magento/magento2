@@ -29,7 +29,7 @@
         "zendframework/zend-serializer": "2.3.1",
         "zendframework/zend-log": "2.3.1",
         "zendframework/zend-http": "2.3.1",
-        "magento/zendframework1": "1.12.9-patch1",
+        "magento/zendframework1": "1.12.10",
         "composer/composer": "1.0.0-alpha8",
         "monolog/monolog": "1.11.0",
         "tubalmartin/cssmin": "2.4.8-p4"
