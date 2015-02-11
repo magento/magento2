@@ -8,7 +8,6 @@
 
 namespace Magento\AdminNotification\Model\System\Message;
 
-use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Store\Model\Store;
 
 class Security implements \Magento\Framework\Notification\MessageInterface

@@ -5,7 +5,6 @@
  */
 namespace Magento\AdminNotification\Model\System\Message;
 
-use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Store\Model\Store;
 
 class BaseurlTest extends \PHPUnit_Framework_TestCase

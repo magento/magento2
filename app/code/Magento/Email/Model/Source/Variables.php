@@ -5,7 +5,6 @@
  */
 namespace Magento\Email\Model\Source;
 
-use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Store\Model\Store;
 
 /**

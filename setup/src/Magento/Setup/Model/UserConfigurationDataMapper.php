@@ -9,7 +9,6 @@ namespace Magento\Setup\Model;
 use Magento\Backend\Model\Url;
 use Magento\Core\Helper\Data;
 use Magento\Directory\Model\Currency;
-use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Setup\Module\Setup;
 use Magento\Store\Model\Store;
 

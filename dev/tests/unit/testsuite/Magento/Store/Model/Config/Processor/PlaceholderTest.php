@@ -5,7 +5,6 @@
  */
 namespace Magento\Store\Model\Config\Processor;
 
-use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Store\Model\Store;
 
 class PlaceholderTest extends \PHPUnit_Framework_TestCase

@@ -19,8 +19,6 @@ class SecureUrl implements \Magento\Framework\App\Router\SecureUrlInterface
     private $storeManager;
 
     /**
-     * @param \Magento\Framework\App\ResponseFactory $responseFactory
-     * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param StoreManagerInterface $storeManager

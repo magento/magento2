@@ -10,7 +10,6 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\Store\ScopeInterface;
-use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Store\Model\Store;
 
 /**
