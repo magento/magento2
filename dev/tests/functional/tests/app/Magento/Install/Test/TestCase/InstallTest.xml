@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="InstallTest">
+        <variation name="InstallTestVariation1">
+            <data name="user/dataSet">default</data>
+            <data name="install/dbTablePrefix">-</data>
+            <data name="install/admin">-</data>
+            <data name="install/httpsFront">-</data>
+            <data name="install/httpsAdmin">-</data>
+            <data name="install/apacheRewrites">-</data>
+            <data name="install/keyOwn">-</data>
+            <data name="install/keyValue">-</data>
+            <data name="install/language">-</data>
+            <data name="install/currency">-</data>
+            <data name="currencySymbol">-</data>
+            <data name="languageTemplate">-</data>
+            <data name="constraint">assertSuccessInstall, assertUserSuccessLogin</data>
+            <data name="description">install with default values</data>
+        </variation>
+        <variation name="InstallTestVariation2">
+            <data name="user/dataSet">default</data>
+            <data name="install/dbTablePrefix">-</data>
+            <data name="install/admin">custom</data>
+            <data name="install/httpsFront">-</data>
+            <data name="install/httpsAdmin">-</data>
+            <data name="install/apacheRewrites">-</data>
+            <data name="install/keyOwn">-</data>
+            <data name="install/keyValue">-</data>
+            <data name="install/language">-</data>
+            <data name="install/currency">-</data>
+            <data name="currencySymbol">-</data>
+            <data name="languageTemplate">-</data>
+            <data name="constraint">assertSuccessInstall, assertUserSuccessLogin</data>
+            <data name="description">install with custom admin path</data>
+        </variation>
+        <variation name="InstallTestVariation3">
+            <data name="user/dataSet">default</data>
+            <data name="install/dbTablePrefix">-</data>
+            <data name="install/admin">-</data>
+            <data name="install/httpsFront">-</data>
+            <data name="install/httpsAdmin">-</data>
+            <data name="install/apacheRewrites">-</data>
+            <data name="install/keyOwn">Yes</data>
+            <data name="install/keyValue">123123qa</data>
+            <data name="install/language">German (Germany)</data>
+            <data name="install/currency">Euro (EUR)</data>
+            <data name="currencySymbol">€</data>
+            <data name="languageTemplate">Suchbegriffe</data>
+            <data name="constraint">assertSuccessInstall, assertKeyCreated, assertUserSuccessLogin, assertCurrencySelected, assertLanguageSelected</data>
+            <data name="description">install with custom encryption key and changed currency and locale</data>
+        </variation>
+        <variation name="InstallTestVariation4">
+            <data name="user/dataSet">default</data>
+            <data name="install/dbTablePrefix">prefix1_</data>
+            <data name="install/admin">-</data>
+            <data name="install/httpsFront">-</data>
+            <data name="install/httpsAdmin">-</data>
+            <data name="install/apacheRewrites">-</data>
+            <data name="install/keyOwn">-</data>
+            <data name="install/keyValue">-</data>
+            <data name="install/language">Chinese (China)</data>
+            <data name="install/currency">-</data>
+            <data name="currencySymbol">-</data>
+            <data name="languageTemplate">-</data>
+            <data name="constraint">assertSuccessInstall, assertUserSuccessLogin</data>
+            <data name="description">install with table prefix</data>
+        </variation>
+        <variation name="InstallTestVariation5">
+            <data name="user/dataSet">default</data>
+            <data name="install/dbTablePrefix">-</data>
+            <data name="install/admin">-</data>
+            <data name="install/httpsFront">-</data>
+            <data name="install/httpsAdmin">-</data>
+            <data name="install/apacheRewrites">Yes</data>
+            <data name="install/keyOwn">-</data>
+            <data name="install/keyValue">-</data>
+            <data name="install/language">-</data>
+            <data name="install/currency">-</data>
+            <data name="currencySymbol">-</data>
+            <data name="languageTemplate">-</data>
+            <data name="constraint">assertSuccessInstall, assertUserSuccessLogin, assertRewritesEnabled</data>
+            <data name="description">install with enabled url rewrites</data>
+        </variation>
+        <variation name="InstallTestVariation6">
+            <data name="user/dataSet">default</data>
+            <data name="install/dbTablePrefix">-</data>
+            <data name="install/admin">-</data>
+            <data name="install/httpsFront">Yes</data>
+            <data name="install/httpsAdmin">Yes</data>
+            <data name="install/apacheRewrites">-</data>
+            <data name="install/keyOwn">-</data>
+            <data name="install/keyValue">-</data>
+            <data name="install/language">-</data>
+            <data name="install/currency">-</data>
+            <data name="currencySymbol">-</data>
+            <data name="languageTemplate">-</data>
+            <data name="constraint">assertSuccessInstall, assertUserSuccessLogin, assertSecureUrlEnabled</data>
+            <data name="description">install with enabled secure urls</data>
+        </variation>
+    </testCase>
+</config>

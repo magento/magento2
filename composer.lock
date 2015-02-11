@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "089a12df92109b065a465aad27ee43f5",
+    "hash": "a3f5234e881705dc2e2705f7393be1c5",
     "packages": [
         {
             "name": "composer/composer",
@@ -133,16 +133,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.12.9-patch1",
+            "version": "1.12.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "956e87daf5bfde66357b70365d42a484c6b7728b"
+                "reference": "d1e5cd8c9f83229bcdd9bb485c3ce25259c77884"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/956e87daf5bfde66357b70365d42a484c6b7728b",
-                "reference": "956e87daf5bfde66357b70365d42a484c6b7728b",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/d1e5cd8c9f83229bcdd9bb485c3ce25259c77884",
+                "reference": "d1e5cd8c9f83229bcdd9bb485c3ce25259c77884",
                 "shasum": ""
             },
             "require": {
@@ -176,7 +176,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2014-12-12 15:28:16"
+            "time": "2015-02-06 17:25:45"
         },
         {
             "name": "monolog/monolog",
@@ -1865,16 +1865,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.4.1",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "fecd7041b663796ef84c3c22361ec216a6a0e740"
+                "reference": "3af00cf237289a406e7307e18e7ab0d92cf57038"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/fecd7041b663796ef84c3c22361ec216a6a0e740",
-                "reference": "fecd7041b663796ef84c3c22361ec216a6a0e740",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/3af00cf237289a406e7307e18e7ab0d92cf57038",
+                "reference": "3af00cf237289a406e7307e18e7ab0d92cf57038",
                 "shasum": ""
             },
             "require": {
@@ -1914,7 +1914,7 @@
                 }
             ],
             "description": "A script to automatically fix Symfony Coding Standard",
-            "time": "2015-01-27 18:37:20"
+            "time": "2015-02-03 21:20:51"
         },
         {
             "name": "league/climate",
@@ -3265,7 +3265,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "~5.4.11|~5.5.0|~5.6.0"
+        "php": "~5.5.0|~5.6.0"
     },
     "platform-dev": {
         "lib-libxml": "*",
