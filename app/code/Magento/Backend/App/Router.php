@@ -56,9 +56,9 @@ class Router extends \Magento\Framework\App\Router\Base
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $routerId
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
+     * @param \Magento\Framework\App\Router\SecureUrlInterface $secureUrl
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @param \Magento\Framework\App\Router\SecureUrlInterface $secureUrl
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -72,9 +72,9 @@ class Router extends \Magento\Framework\App\Router\Base
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $routerId,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
+        \Magento\Framework\App\Router\SecureUrlInterface $secureUrl,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
-        \Magento\Backend\App\ConfigInterface $backendConfig,
-        \Magento\Framework\App\Router\SecureUrlInterface $secureUrl
+        \Magento\Backend\App\ConfigInterface $backendConfig
     ) {
         parent::__construct(
             $actionList,
