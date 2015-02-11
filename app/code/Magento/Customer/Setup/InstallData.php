@@ -5,7 +5,6 @@
  */
 namespace Magento\Customer\Setup;
 
-use Magento\Customer\Setup\Customer\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataResourceInterface;
@@ -13,13 +12,13 @@ use Magento\Framework\Setup\ModuleDataResourceInterface;
 class InstallData implements InstallDataInterface
 {
     /**
-     * @var Setup
+     * @var CustomerFactory
      */
-    private $customerSetup;
+    private $customerSetupFactory;
 
-    public function __construct(Setup $customerSetup)
+    public function __construct(CustomerFactory $customerSetupFactory)
     {
-        $this->customerSetup = $customerSetup;
+        $this->customerSetupFactory = $customerSetupFactory;
     }
 
     /**
@@ -27,6 +26,9 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
     {
+        /** @var Customer $customerSetup */
+        $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
+
         $setup->startSetup();
 
         // insert default customer groups
@@ -47,19 +49,19 @@ class InstallData implements InstallDataInterface
             ['customer_group_id' => 3, 'customer_group_code' => 'Retailer', 'tax_class_id' => 3]
         );
 
-        $this->customerSetup->installEntities();
+        $customerSetup->installEntities();
 
-        $this->customerSetup->installCustomerForms();
+        $customerSetup->installCustomerForms();
 
         // Add reset password link token attribute
-        $this->customerSetup->addAttribute(
+        $customerSetup->addAttribute(
             'customer',
             'rp_token',
             ['type' => 'varchar', 'input' => 'hidden', 'visible' => false, 'required' => false]
         );
 
         // Add reset password link token creation date attribute
-        $this->customerSetup->addAttribute(
+        $customerSetup->addAttribute(
             'customer',
             'rp_token_created_at',
             [
@@ -74,7 +76,7 @@ class InstallData implements InstallDataInterface
         // Add VAT attributes to customer address
         $disableAGCAttributeCode = 'disable_auto_group_change';
 
-        $this->customerSetup->addAttribute(
+        $customerSetup->addAttribute(
             'customer',
             $disableAGCAttributeCode,
             [
@@ -87,7 +89,7 @@ class InstallData implements InstallDataInterface
             ]
         );
 
-        $disableAGCAttribute = $this->customerSetup->getEavConfig()->getAttribute('customer', $disableAGCAttributeCode);
+        $disableAGCAttribute = $customerSetup->getEavConfig()->getAttribute('customer', $disableAGCAttributeCode);
         $disableAGCAttribute->setData('used_in_forms', ['adminhtml_customer']);
         $disableAGCAttribute->save();
 
@@ -127,22 +129,22 @@ class InstallData implements InstallDataInterface
         ];
 
         foreach ($attributesInfo as $attributeCode => $attributeParams) {
-            $this->customerSetup->addAttribute('customer_address', $attributeCode, $attributeParams);
+            $customerSetup->addAttribute('customer_address', $attributeCode, $attributeParams);
         }
 
-        $vatIdAttribute = $this->customerSetup->getEavConfig()->getAttribute('customer_address', 'vat_id');
+        $vatIdAttribute = $customerSetup->getEavConfig()->getAttribute('customer_address', 'vat_id');
         $vatIdAttribute->setData(
             'used_in_forms',
             ['adminhtml_customer_address', 'customer_address_edit', 'customer_register_address']
         );
         $vatIdAttribute->save();
 
-        $entities = $this->customerSetup->getDefaultEntities();
+        $entities = $customerSetup->getDefaultEntities();
         foreach ($entities as $entityName => $entity) {
-            $this->customerSetup->addEntityType($entityName, $entity);
+            $customerSetup->addEntityType($entityName, $entity);
         }
 
-        $this->customerSetup->updateAttribute(
+        $customerSetup->updateAttribute(
             'customer_address',
             'street',
             'backend_model',
