@@ -17,7 +17,7 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Module\DataSetup',
+            'Magento\Setup\Module\DataSetup',
             ['resourceName' => 'default_setup', 'moduleName' => 'Magento_Core']
         );
     }
@@ -78,7 +78,7 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Module\DataSetup::updateTableRow
+     * @covers \Magento\Setup\Module\DataSetup::updateTableRow
      * @expectedException \Zend_Db_Statement_Exception
      */
     public function testUpdateTableRowNameConversion()

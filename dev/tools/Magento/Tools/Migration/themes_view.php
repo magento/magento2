@@ -36,7 +36,7 @@ try {
 function updateFieldForTable($objectManager, $table, $col)
 {
     /** @var $installer \Magento\Framework\Setup\ModuleDataResourceInterface */
-    $installer = $objectManager->create('Magento\Framework\Module\DataSetup');
+    $installer = $objectManager->create('Magento\Setup\Module\DataSetup');
     $installer->startSetup();
 
     $table = $installer->getTable($table);
