@@ -258,10 +258,10 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         $keyName = (null !== ($alias = $this->getAlias($key))) ? $alias : $key;
         if (isset($this->params[$keyName])) {
             return $this->params[$keyName];
-        } elseif ($value = $this->getQuery($keyName)) {
-            return $value;
-        } elseif ($value = $this->getPost($keyName)) {
-            return $value;
+        } elseif (isset($this->queryParams[$keyName])) {
+            return $this->queryParams[$keyName];
+        } elseif (isset($this->postParams[$keyName])) {
+            return $this->postParams[$keyName];
         }
         return $default;
     }
@@ -382,7 +382,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     public function getServerValue($name = null, $default = null)
     {
-        $server = parent::getServer($name, $default);
+        $server = $this->getServer($name, $default);
         if ($server instanceof ParametersInterface) {
             return $server->toArray();
         }
@@ -398,7 +398,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     public function getQueryValue($name = null, $default = null)
     {
-        $query = parent::getQuery($name, $default);
+        $query = $this->getQuery($name, $default);
         if ($query instanceof ParametersInterface) {
             return $query->toArray();
         }
@@ -433,7 +433,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     public function getPostValue($name = null, $default = null)
     {
-        $post = parent::getPost($name, $default);
+        $post = $this->getPost($name, $default);
         if ($post instanceof ParametersInterface) {
             return $post->toArray();
         }
@@ -472,11 +472,11 @@ class Request extends \Zend\Http\PhpEnvironment\Request
             case isset($this->params[$key]):
                 return $this->params[$key];
 
-            case ($value = $this->getQuery($key)):
-                return $value;
+            case isset($this->queryParams[$key]):
+                return $this->queryParams[$key];
 
-            case ($value = $this->getPost($key)):
-                return $value;
+            case isset($this->postParams[$key]):
+                return $this->postParams[$key];
 
             case isset($_COOKIE[$key]):
                 return $_COOKIE[$key];
@@ -487,11 +487,11 @@ class Request extends \Zend\Http\PhpEnvironment\Request
             case ($key == 'PATH_INFO'):
                 return $this->getPathInfo();
 
-            case ($value = $this->getServer($key)):
-                return $value;
+            case isset($this->serverParams[$key]):
+                return $this->serverParams[$key];
 
-            case ($value = $this->getEnv($key)):
-                return $value;
+            case isset($this->envParams[$key]):
+                return $this->envParams[$key];
 
             default:
                 return null;
@@ -521,19 +521,19 @@ class Request extends \Zend\Http\PhpEnvironment\Request
             case isset($this->params[$key]):
                 return true;
 
-            case ($value = $this->getQuery($key)):
+            case isset($this->queryParams[$key]):
                 return true;
 
-            case ($value = $this->getPost($key)):
+            case isset($this->postParams[$key]):
                 return true;
 
             case isset($_COOKIE[$key]):
                 return true;
 
-            case ($value = $this->getServer($key)):
+            case isset($this->serverParams[$key]):
                 return true;
 
-            case ($value = $this->getEnv($key)):
+            case isset($this->envParams[$key]):
                 return true;
 
             default:
@@ -605,5 +605,53 @@ class Request extends \Zend\Http\PhpEnvironment\Request
             $ip = $this->getServer('REMOTE_ADDR');
         }
         return $ip;
+    }
+
+    /**
+     * Retrieve only user params
+     *
+     * @return array
+     */
+    public function getUserParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * Retrieve a single user param
+     *
+     * @param string $key
+     * @param string $default Default value to use if key not found
+     * @return mixed
+     */
+    public function getUserParam($key, $default = null)
+    {
+        if (isset($this->params[$key])) {
+            return $this->params[$key];
+        }
+        return $default;
+    }
+
+    /**
+     * Set the REQUEST_URI
+     *
+     * @param string $requestUri
+     * @return $this
+     */
+    public function setRequestUri($requestUri = null)
+    {
+        if ($requestUri === null) {
+            $this->requestUri = $this->detectRequestUri();
+        } elseif (!is_string($requestUri)) {
+            return $this;
+        } else {
+            if (false !== ($pos = strpos($requestUri, '?'))) {
+                $query = substr($requestUri, $pos + 1);
+                parse_str($query, $vars);
+                $this->setQueryValue($vars);
+            }
+        }
+        $this->requestUri = $requestUri;
+        return $this;
     }
 }

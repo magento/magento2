@@ -758,9 +758,10 @@ class Store extends AbstractModel implements
 
         $uri = \Zend_Uri::factory($secureBaseUrl);
         $port = $uri->getPort();
-        $isSecure = $uri->getScheme() == 'https' && isset(
-            $_SERVER['SERVER_PORT']
-        ) && $port == $_SERVER['SERVER_PORT'];
+        $serverPort = $this->_request->getServer('SERVER_PORT');
+        $isSecure = $uri->getScheme() == 'https'
+            && isset($serverPort)
+            && $port == $serverPort;
         return $isSecure;
     }
 

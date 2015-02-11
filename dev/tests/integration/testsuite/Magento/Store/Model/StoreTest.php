@@ -438,13 +438,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $objectManager->create('Magento\Store\Model\Store');
 
-        $server = $_SERVER;
-        foreach ($serverValues as $key => $value) {
-            $_SERVER[$key] = $value;
-        }
+        $request = $objectManager->get('Magento\Framework\App\RequestInterface');
+        $request->setServer(new \Zend\Stdlib\Parameters(array_merge($_SERVER, $serverValues)));
 
         $this->assertEquals($expected, $model->isCurrentlySecure());
-        $_SERVER = $server;
     }
 
     public function isCurrentlySecureDataProvider()

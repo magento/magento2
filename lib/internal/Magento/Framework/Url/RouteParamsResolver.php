@@ -88,13 +88,13 @@ class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\
         if (isset($data['_current'])) {
             if (is_array($data['_current'])) {
                 foreach ($data['_current'] as $key) {
-                    if (array_key_exists($key, $data) || !$this->_request->getParam($key)) {
+                    if (array_key_exists($key, $data) || !$this->_request->getUserParam($key)) {
                         continue;
                     }
-                    $data[$key] = $this->_request->getParam($key);
+                    $data[$key] = $this->_request->getUserParam($key);
                 }
             } elseif ($data['_current']) {
-                foreach ($this->_request->getParams() as $key => $value) {
+                foreach ($this->_request->getUserParams() as $key => $value) {
                     if (array_key_exists($key, $data) || $this->getRouteParam($key)) {
                         continue;
                     }
