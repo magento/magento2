@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="UpdateCustomUrlRewriteEntityTest">
+        <variation name="UpdateCustomUrlRewriteEntityTestVariation1">
+            <data name="initialRewrite/dataSet">default</data>
+            <data name="urlRewrite/data/store_id">Main Website/Main Website Store/Default Store View</data>
+            <data name="urlRewrite/data/request_path">wishlist/%isolation%</data>
+            <data name="urlRewrite/data/target_path/entity">http://www.magentocommerce.com/magento-connect/</data>
+            <data name="urlRewrite/data/redirect_type">Permanent (301)</data>
+            <data name="urlRewrite/data/description">test_description_relative path</data>
+            <data name="constraint">assertUrlRewriteSaveMessage, assertUrlRewriteInGrid, assertUrlRewriteSuccessOutsideRedirect</data>
+        </variation>
+        <variation name="UpdateCustomUrlRewriteEntityTestVariation2">
+            <data name="initialRewrite/dataSet">custom_rewrite_wishlist</data>
+            <data name="urlRewrite/data/store_id">Main Website/Main Website Store/Default Store View</data>
+            <data name="urlRewrite/data/request_path">wishlist/%isolation%</data>
+            <data name="urlRewrite/data/target_path/entity">catalogsearch/result/?q=$%catalogProductSimple::defaul%sku$</data>
+            <data name="urlRewrite/data/redirect_type">Temporary (302)</data>
+            <data name="urlRewrite/data/description">test_description_relative path</data>
+            <data name="constraint">assertUrlRewriteSaveMessage, assertUrlRewriteInGrid, assertUrlRewriteCustomSearchRedirect</data>
+        </variation>
+    </testCase>
+</config>

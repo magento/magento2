@@ -54,13 +54,12 @@ class TaxTest extends \Magento\Backend\Utility\Controller
             'Magento\Tax\Api\TaxClassRepositoryInterface'
         );
 
-        $taxClassBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Tax\Api\Data\TaxClassDataBuilder'
+        $taxClassFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Tax\Api\Data\TaxClassInterfaceFactory'
         );
-
-        $taxClass = $taxClassBuilder->setClassName($taxClassData['class_name'])
-            ->setClassType($taxClassData['class_type'])
-            ->create();
+        $taxClass = $taxClassFactory->create();
+        $taxClass->setClassName($taxClassData['class_name'])
+            ->setClassType($taxClassData['class_type']);
 
         $taxClassId = $taxClassService->save($taxClass);
 
