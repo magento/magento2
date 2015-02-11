@@ -166,7 +166,6 @@ class StockItemTest extends WebapiAbstract
                     'use_config_enable_qty_inc' => 1,
                     'enable_qty_increments' => 0,
                     'is_decimal_divided' => 0,
-                    'show_default_notification_message' => false,
                 ],
                 [
                     'item_id' => '1',

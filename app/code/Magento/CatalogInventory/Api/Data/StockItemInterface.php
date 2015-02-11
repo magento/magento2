@@ -35,7 +35,7 @@ interface StockItemInterface extends ExtensibleDataInterface
     const BACKORDERS = 'backorders';
 
     const USE_CONFIG_NOTIFY_STOCK_QTY = 'use_config_notify_stock_qty';
-    const NOTIFY_STOCK_QTY = 'use_config_notify_stock_qty';
+    const NOTIFY_STOCK_QTY = 'notify_stock_qty';
 
     const USE_CONFIG_QTY_INCREMENTS = 'use_config_qty_increments';
     const QTY_INCREMENTS = 'qty_increments';
