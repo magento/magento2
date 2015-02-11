@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Catalog\Test\Repository\CatalogProductSimple">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\CatalogProductSimple">
         <dataset name="default">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">default</item>
@@ -944,5 +944,5 @@
                 <item name="preset" xsi:type="string">one_fpt_for_all_states</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

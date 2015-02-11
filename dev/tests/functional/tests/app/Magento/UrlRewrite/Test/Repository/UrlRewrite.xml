@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\UrlRewrite\Test\Repository\UrlRewrite">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\UrlRewrite\Test\Repository\UrlRewrite">
         <dataset name="default">
             <field name="request_path" xsi:type="string">test-test-test%isolation%.html</field>
             <field name="target_path" xsi:type="string">http://www.ebayinc.com/</field>
@@ -27,5 +27,5 @@
             <field name="redirect_type" xsi:type="string">Temporary (302)</field>
             <field name="description" xsi:type="string">test description</field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

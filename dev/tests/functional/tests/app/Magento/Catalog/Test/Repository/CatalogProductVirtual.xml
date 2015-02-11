@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Catalog\Test\Repository\CatalogProductVirtual">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\CatalogProductVirtual">
         <dataset name="default">
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">taxable_goods</item>
@@ -122,5 +122,5 @@
                 <item name="preset" xsi:type="string">product_50_dollar</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

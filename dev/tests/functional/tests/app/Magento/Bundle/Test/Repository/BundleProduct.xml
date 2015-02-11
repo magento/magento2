@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Bundle\Test\Repository\BundleProduct">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Bundle\Test\Repository\BundleProduct">
         <dataset name="BundleDynamic_sku_1073507449">
             <field name="sku" xsi:type="string">BundleDynamic_sku_10735074493</field>
             <field name="name" xsi:type="string">BundleDynamic 1073507449</field>
@@ -131,5 +131,5 @@
                 <item name="preset" xsi:type="string">default_fixed</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

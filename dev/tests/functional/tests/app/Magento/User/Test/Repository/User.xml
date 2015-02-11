@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\User\Test\Repository\User">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\User\Test\Repository\User">
         <dataset name="default">
             <field name="username" xsi:type="string">admin</field>
             <field name="firstname" xsi:type="string">FirstName%isolation%</field>
@@ -41,5 +41,5 @@
             <field name="current_password" xsi:type="string">%current_password%</field>
             <field name="is_active" xsi:type="string">Active</field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>
