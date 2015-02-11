@@ -14,17 +14,17 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     protected $groupModel;
 
     /**
-     * @var \Magento\Customer\Api\Data\GroupDataBuilder
+     * @var \Magento\Customer\Api\Data\GroupInterfaceFactory
      */
-    protected $groupBuilder;
+    protected $groupFactory;
 
     protected function setUp()
     {
         $this->groupModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Customer\Model\Group'
         );
-        $this->groupBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\GroupDataBuilder'
+        $this->groupFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Api\Data\GroupInterfaceFactory'
         );
     }
 

@@ -8,8 +8,8 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\AddressDataBuilder;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\App\Action\NotFoundException;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -45,10 +45,11 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * @param Mapper $addressMapper
      * @param AccountManagementInterface $customerAccountManagement
      * @param AddressRepositoryInterface $addressRepository
-     * @param CustomerDataBuilder $customerDataBuilder
-     * @param AddressDataBuilder $addressDataBuilder
+     * @param CustomerInterfaceFactory $customerDataFactory
+     * @param AddressInterfaceFactory $addressDataFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param ObjectFactory $objectFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
@@ -76,10 +77,11 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         Mapper $addressMapper,
         AccountManagementInterface $customerAccountManagement,
         AddressRepositoryInterface $addressRepository,
-        CustomerDataBuilder $customerDataBuilder,
-        AddressDataBuilder $addressDataBuilder,
+        CustomerInterfaceFactory $customerDataFactory,
+        AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         ObjectFactory $objectFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
@@ -105,10 +107,11 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $addressMapper,
             $customerAccountManagement,
             $addressRepository,
-            $customerDataBuilder,
-            $addressDataBuilder,
+            $customerDataFactory,
+            $addressDataFactory,
             $customerMapper,
             $dataObjectProcessor,
+            $dataObjectHelper,
             $objectFactory,
             $layoutFactory,
             $resultLayoutFactory,
