@@ -539,7 +539,7 @@ class Installer
     }
 
     /**
-     * Set up setup_module table to register modules' versions
+     * Set up setup_module table to register modules' versions, skip this process if it already exists
      *
      * @return void
      */
@@ -547,30 +547,33 @@ class Installer
     {
         $registrySetup = $this->setupFactory->createSetup();
         $connection = $registrySetup->getConnection();
-        /**
-         * Create table 'setup_module'
-         */
-        $table = $connection->newTable($registrySetup->getTable('setup_module'))
-            ->addColumn(
-                'module',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                50,
-                ['nullable' => false, 'primary' => true],
-                'Module'
-            )->addColumn(
-                'schema_version',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                50,
-                [],
-                'Schema Version'
-            )->addColumn(
-                'data_version',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                50,
-                [],
-                'Data Version'
-            )->setComment('Module versions registry');
-        $connection->createTable($table);
+
+        if (!$connection->isTableExists($registrySetup->getTable('setup_module'))) {
+            /**
+             * Create table 'setup_module'
+             */
+            $table = $connection->newTable($registrySetup->getTable('setup_module'))
+                ->addColumn(
+                    'module',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    50,
+                    ['nullable' => false, 'primary' => true],
+                    'Module'
+                )->addColumn(
+                    'schema_version',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    50,
+                    [],
+                    'Schema Version'
+                )->addColumn(
+                    'data_version',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    50,
+                    [],
+                    'Data Version'
+                )->setComment('Module versions registry');
+            $connection->createTable($table);
+        }
     }
 
     /**
