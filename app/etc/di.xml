@@ -567,4 +567,25 @@
             <argument name="raise_php_limits" xsi:type="boolean">false</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
+        <arguments>
+            <argument name="preProcessors" xsi:type="array">
+                <item name="less" xsi:type="array">
+                    <item name="css" xsi:type="array">
+                        <item name="less_css" xsi:type="string">Magento\Framework\Css\PreProcessor\Less</item>
+                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
+                    </item>
+                    <item name="less" xsi:type="array">
+                        <item name="magento_import" xsi:type="string">Magento\Framework\Less\PreProcessor\Instruction\MagentoImport</item>
+                        <item name="import" xsi:type="string">Magento\Framework\Less\PreProcessor\Instruction\Import</item>
+                    </item>
+                </item>
+                <item name="css" xsi:type="array">
+                    <item name="css" xsi:type="array">
+                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
