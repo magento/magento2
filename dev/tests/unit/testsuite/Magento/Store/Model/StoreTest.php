@@ -61,6 +61,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'getCookie',
             'getDistroBaseUrl',
             'isSecure',
+            'getServer',
         ], [], '', false);
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactoryMock = $this->getMock(
@@ -543,12 +544,12 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      * @dataProvider isCurrentlySecureDataProvider
      *
      * @param bool $expected
-     * @param array $serverValues
+     * @param array $value
      * @param string|null $secureBaseUrl
      */
     public function testIsCurrentlySecure(
         $expected,
-        $serverValues,
+        $value,
         $requestSecure = false,
         $secureBaseUrl = 'https://example.com:443'
     ) {
@@ -569,32 +570,37 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->method('isSecure')
             ->willReturn($requestSecure);
 
+        $this->requestMock->expects($this->any())
+            ->method('getServer')
+            ->with($this->equalTo('SERVER_PORT'))
+            ->willReturn($value);
+
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             'Magento\Store\Model\Store',
             ['config' => $configMock, 'request' => $this->requestMock]
         );
 
-        $server = $_SERVER;
-        foreach ($serverValues as $key => $value) {
-            $_SERVER[$key] = $value;
-        }
+//        $server = $_SERVER;
+//        foreach ($serverValues as $key => $value) {
+//            $_SERVER[$key] = $value;
+//        }
 
         if ($expected) {
             $this->assertTrue($model->isCurrentlySecure(), "Was expecting this test to show as secure, but it wasn't");
         } else {
             $this->assertFalse($model->isCurrentlySecure(), "Was expecting this test to show as not secure!");
         }
-        $_SERVER = $server;
+//        $_SERVER = $server;
     }
 
     public function isCurrentlySecureDataProvider()
     {
         return [
             'secure request, no server setting' => [true, [], true],
-            'unsecure request, using registered port' => [true, ['SERVER_PORT' => 443]],
-            'unsecure request, no secure base url registered' => [false, ['SERVER_PORT' => 443], false, null],
-            'unsecure request, not using registered port' => [false, ['SERVER_PORT' => 80]],
+            'unsecure request, using registered port' => [true, 443],
+            'unsecure request, no secure base url registered' => [false, 443, false, null],
+            'unsecure request, not using registered port' => [false, 80],
         ];
     }
 
