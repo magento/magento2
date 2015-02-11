@@ -90,7 +90,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                 }
                 $redirectResult->setPath('adminhtml/*/');
                 return $redirectResult;
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_getSession()->setPostData($postData);
             } catch (\Exception $e) {
