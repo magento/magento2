@@ -60,9 +60,6 @@ class Publisher
     private function publishAsset(Asset\LocalInterface $asset)
     {
         $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        $rootDir = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $rootDir->getRelativePath($asset->getSourceFile());
-        $destination = $asset->getPath();
-        return $rootDir->copyFile($source, $destination, $dir);
+        return $dir->writeFile($asset->getPath(), $asset->getContent());
     }
 }
