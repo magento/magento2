@@ -9,6 +9,7 @@ namespace Magento\Tools\View;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\Test\Utility\Files;
+use Magento\Framework\App\View\Asset\Publisher;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -35,7 +36,7 @@ class Deployer
     /** @var \Magento\Framework\View\Asset\Repository */
     private $assetRepo;
 
-    /** @var \Magento\Framework\App\View\Asset\Publisher */
+    /** @var Publisher */
     private $assetPublisher;
 
     /** @var bool */
@@ -170,7 +171,11 @@ class Deployer
         $configLoader = $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
         $objectManager->configure($configLoader->load($areaCode));
         $this->assetRepo = $objectManager->get('Magento\Framework\View\Asset\Repository');
-        $this->assetPublisher = $objectManager->get('Magento\Framework\App\View\Asset\Publisher');
+
+        $this->assetPublisher = $objectManager->create(
+            'Magento\Framework\App\View\Asset\Publisher',
+            ['publisher' => new Publisher\Copy()]
+        );
     }
 
     /**

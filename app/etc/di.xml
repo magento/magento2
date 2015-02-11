@@ -463,11 +463,18 @@
             <argument name="stateCollection" xsi:type="object" shared="false">Magento\Framework\Mview\View\State\CollectionInterface</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\View\Asset\Publisher" shared="false" />
     <type name="Magento\Framework\App\StaticResource">
         <arguments>
             <argument name="response" xsi:type="object" shared="false">Magento\Core\Model\File\Storage\Response</argument>
+            <argument name="publisher" xsi:type="object">symlinkPublisher</argument>
         </arguments>
     </type>
+    <virtualType name="symlinkPublisher" type="Magento\Framework\App\View\Asset\Publisher">
+        <arguments>
+            <argument name="publisher" xsi:type="object">Magento\Framework\App\View\Asset\Publisher\Symlink</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="fallbackResolverSimpleWithGroupedCache" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Grouped</argument>

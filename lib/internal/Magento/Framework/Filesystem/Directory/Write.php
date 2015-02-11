@@ -143,8 +143,9 @@ class Write extends Read implements WriteInterface
         $this->assertIsFile($path);
 
         $targetDirectory = $targetDirectory ?: $this;
-        if (!$targetDirectory->isExist($this->driver->getParentDirectory($destination))) {
-            $targetDirectory->create($this->driver->getParentDirectory($destination));
+        $parentDirectory = $this->driver->getParentDirectory($destination);
+        if (!$targetDirectory->isExist($parentDirectory)) {
+            $targetDirectory->create($parentDirectory);
         }
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         $absoluteDestination = $targetDirectory->getAbsolutePath($destination);

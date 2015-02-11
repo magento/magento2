@@ -8,7 +8,6 @@ namespace Magento\Framework\App\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * A publishing service for view assets
@@ -16,25 +15,25 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 class Publisher
 {
     /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $appState;
-
-    /**
      * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
 
     /**
-     * @param \Magento\Framework\App\State $appState
+     * @var Publisher\PublisherInterface
+     */
+    private $publisher;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param Publisher\PublisherInterface $publisher
      */
     public function __construct(
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem,
+        Publisher\PublisherInterface $publisher
     ) {
-        $this->appState = $appState;
         $this->filesystem = $filesystem;
+        $this->publisher = $publisher;
     }
 
     /**
@@ -47,28 +46,21 @@ class Publisher
             return true;
         }
 
-        $rootDir = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $rootDir->getRelativePath($asset->getSourceFile());
-
-        return $this->publishFile(
-            $rootDir,
-            $source,
-            $asset->getPath(),
-            $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW)
-        );
+        return $this->publishAsset($asset);
     }
 
     /**
-     * Publish file
+     * Publish the asset
      *
-     * @param WriteInterface $rootDir
-     * @param string $source
-     * @param string $destination
-     * @param WriteInterface $dir
+     * @param Asset\LocalInterface $asset
      * @return bool
      */
-    protected function publishFile($rootDir, $source, $destination, $dir)
+    private function publishAsset(Asset\LocalInterface $asset)
     {
-        return $rootDir->copyFile($source, $destination, $dir);
+        $targetDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
+        $rootDir = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $rootDir->getRelativePath($asset->getSourceFile());
+        $destination = $asset->getPath();
+        return $this->publisher->publishFile($rootDir, $targetDir, $source, $destination);
     }
 }

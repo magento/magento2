@@ -8,7 +8,7 @@ namespace Magento\Framework\App\View\Asset\Publisher;
 
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
-class Symlink implements PublisherInterface
+interface PublisherInterface
 {
     /**
      * Publish file
@@ -24,7 +24,5 @@ class Symlink implements PublisherInterface
         WriteInterface $targetDir,
         $sourcePath,
         $destinationPath
-    ) {
-        return $rootDir->createSymlink($sourcePath, $destinationPath, $targetDir);
-    }
+    );
 }

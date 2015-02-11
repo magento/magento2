@@ -30,7 +30,7 @@ class StaticResource implements \Magento\Framework\AppInterface
     private $request;
 
     /**
-     * @var View\Asset\Publisher\Symlink
+     * @var View\Asset\Publisher
      */
     private $publisher;
 
@@ -62,7 +62,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @param State $state
      * @param Response\FileInterface $response
      * @param Request\Http $request
-     * @param View\Asset\Publisher\Symlink $publisher
+     * @param View\Asset\Publisher $publisher
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Module\ModuleList $moduleList
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -73,7 +73,7 @@ class StaticResource implements \Magento\Framework\AppInterface
         State $state,
         Response\FileInterface $response,
         Request\Http $request,
-        View\Asset\Publisher\Symlink $publisher,
+        View\Asset\Publisher $publisher,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Module\ModuleList $moduleList,
         \Magento\Framework\ObjectManagerInterface $objectManager,
