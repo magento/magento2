@@ -330,31 +330,6 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * Declare quote item quantity
-     *
-     * @param float $qty
-     * @return $this
-     */
-    public function setQty($qty)
-    {
-        $qty = $this->_prepareQty($qty);
-        $oldQty = $this->_getData('qty');
-        $this->setData('qty', $qty);
-
-        $this->_eventManager->dispatch('sales_quote_item_qty_set_after', ['item' => $this]);
-
-        if ($this->getQuote() && $this->getQuote()->getIgnoreOldQty()) {
-            return $this;
-        }
-
-        if ($this->getUseOldQty()) {
-            $this->setData('qty', $oldQty);
-        }
-
-        return $this;
-    }
-
-    /**
      * Retrieve option product with Qty
      *
      * Return array
@@ -503,25 +478,6 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function compare($item)
     {
         return $this->quoteItemCompare->compare($this, $item);
-    }
-
-    /**
-     * Get item product type
-     *
-     * @return string
-     */
-    public function getProductType()
-    {
-        $option = $this->getOptionByCode('product_type');
-        if ($option) {
-            return $option->getValue();
-        }
-        $product = $this->getProduct();
-        if ($product) {
-            return $product->getTypeId();
-        }
-        // $product should always exist or there will be an error in getProduct()
-        return $this->_getData('product_type');
     }
 
     /**
@@ -916,6 +872,14 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * {@inheritdoc}
      */
+    public function setItemId($itemID)
+    {
+        return $this->setData('item_id', $itemID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSku()
     {
         return $this->getData('sku');
@@ -924,9 +888,42 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * {@inheritdoc}
      */
+    public function setSku($sku)
+    {
+        return $this->setData('sku', $sku);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getQty()
     {
         return $this->getData('qty');
+    }
+
+    /**
+     * Declare quote item quantity
+     *
+     * @param float $qty
+     * @return $this
+     */
+    public function setQty($qty)
+    {
+        $qty = $this->_prepareQty($qty);
+        $oldQty = $this->_getData('qty');
+        $this->setData('qty', $qty);
+
+        $this->_eventManager->dispatch('sales_quote_item_qty_set_after', ['item' => $this]);
+
+        if ($this->getQuote() && $this->getQuote()->getIgnoreOldQty()) {
+            return $this;
+        }
+
+        if ($this->getUseOldQty()) {
+            $this->setData('qty', $oldQty);
+        }
+
+        return $this;
     }
 
     /**
@@ -940,6 +937,14 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * {@inheritdoc}
      */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getPrice()
     {
         return $this->getData('price');
@@ -948,9 +953,52 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * {@inheritdoc}
      */
+    public function setPrice($price)
+    {
+        return $this->setData('price', $price);
+    }
+
+    /**
+     * Get item product type
+     *
+     * @return string
+     */
+    public function getProductType()
+    {
+        $option = $this->getOptionByCode('product_type');
+        if ($option) {
+            return $option->getValue();
+        }
+        $product = $this->getProduct();
+        if ($product) {
+            return $product->getTypeId();
+        }
+        // $product should always exist or there will be an error in getProduct()
+        return $this->_getData('product_type');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductType($productType)
+    {
+        return $this->setData('product_type', $productType);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getQuoteId()
     {
         return $this->getData('quote_id');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQuoteId($quoteId)
+    {
+        return $this->setData('quote_id', $quoteId);
     }
     //@codeCoverageIgnoreEnd
 }

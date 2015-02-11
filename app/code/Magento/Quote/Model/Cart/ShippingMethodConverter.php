@@ -14,21 +14,21 @@ class ShippingMethodConverter
     /**
      * Shipping method builder.
      *
-     * @var \Magento\Quote\Api\Data\ShippingMethodDataBuilder
+     * @var \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory
      */
-    protected $builder;
+    protected $shippingMethodDataFactory;
 
     /**
      * Constructs a shipping method builder object.
      *
-     * @param \Magento\Quote\Api\Data\ShippingMethodDataBuilder $builder Shipping method builder.
+     * @param \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $shippingMethodDataFactory Shipping method factory.
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager Store manager interface.
      */
     public function __construct(
-        \Magento\Quote\Api\Data\ShippingMethodDataBuilder $builder,
+        \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $shippingMethodDataFactory,
         \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
-        $this->builder = $builder;
+        $this->shippingMethodDataFactory = $shippingMethodDataFactory;
         $this->storeManager = $storeManager;
     }
 
@@ -45,16 +45,25 @@ class ShippingMethodConverter
         $currency = $this->storeManager->getStore()->getBaseCurrency();
 
         $errorMessage = $rateModel->getErrorMessage();
-        $data = [
-            ShippingMethod::CARRIER_CODE => $rateModel->getCarrier(),
-            ShippingMethod::METHOD_CODE => $rateModel->getMethod(),
-            ShippingMethod::CARRIER_TITLE => $rateModel->getCarrierTitle(),
-            ShippingMethod::METHOD_TITLE => $rateModel->getMethodTitle(),
-            ShippingMethod::SHIPPING_AMOUNT => $currency->convert($rateModel->getPrice(), $quoteCurrencyCode),
-            ShippingMethod::BASE_SHIPPING_AMOUNT => $rateModel->getPrice(),
-            ShippingMethod::AVAILABLE => empty($errorMessage),
-        ];
-        $this->builder->populateWithArray($data);
-        return $this->builder->create();
+        return $this->shippingMethodDataFactory->create()
+            ->setCarrierCode($rateModel->getCarrier())
+            ->setMethodCode($rateModel->getMethod())
+            ->setCarrierTitle($rateModel->getCarrierTitle())
+            ->setMethodTitle($rateModel->getMethodTitle())
+            ->setAmount($currency->convert($rateModel->getPrice(), $quoteCurrencyCode))
+            ->setBaseAmount($rateModel->getPrice())
+            ->setAvailable(empty($errorMessage));
+
+//        $data = [
+//            ShippingMethod::CARRIER_CODE => $rateModel->getCarrier(),
+//            ShippingMethod::METHOD_CODE => $rateModel->getMethod(),
+//            ShippingMethod::CARRIER_TITLE => $rateModel->getCarrierTitle(),
+//            ShippingMethod::METHOD_TITLE => $rateModel->getMethodTitle(),
+//            ShippingMethod::SHIPPING_AMOUNT => $currency->convert($rateModel->getPrice(), $quoteCurrencyCode),
+//            ShippingMethod::BASE_SHIPPING_AMOUNT => $rateModel->getPrice(),
+//            ShippingMethod::AVAILABLE => empty($errorMessage),
+//        ];
+//        $this->builder->populateWithArray($data);
+//        return $this->builder->create();
     }
 }

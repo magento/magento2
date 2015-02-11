@@ -18,8 +18,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method \Magento\Quote\Model\Quote\Payment setCreatedAt(string $value)
  * @method string getUpdatedAt()
  * @method \Magento\Quote\Model\Quote\Payment setUpdatedAt(string $value)
- * @method \Magento\Quote\Model\Quote\Payment setMethod(string $value)
- * @method \Magento\Quote\Model\Quote\Payment setCcType(string $value)
  * @method string getCcNumberEnc()
  * @method \Magento\Quote\Model\Quote\Payment setCcNumberEnc(string $value)
  * @method string getCcLast4()
@@ -32,8 +30,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method \Magento\Quote\Model\Quote\Payment setCcSsStartMonth(int $value)
  * @method int getCcSsStartYear()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsStartYear(int $value)
- * @method \Magento\Quote\Model\Quote\Payment setPoNumber(string $value)
- * @method \Magento\Quote\Model\Quote\Payment setAdditionalData(string $value)
  * @method string getCcSsIssue()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsIssue(string $value)
  *
@@ -244,12 +240,28 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         return $this->getData('po_number');
     }
 
+    /*
+     * {@inheritdoc}
+     */
+    public function setPoNumber($poNumber)
+    {
+        return $this->setData('po_number', $poNumber);
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getMethod()
     {
         return $this->getData('method');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setMethod($method)
+    {
+        return $this->setData('method', $method);
     }
 
     /**
@@ -263,6 +275,14 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     /**
      * {@inheritdoc}
      */
+    public function setCcOwner($ccOwner)
+    {
+        return $this->setData('cc_owner', $ccOwner);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getCcNumber()
     {
         return $this->getData('cc_number');
@@ -271,9 +291,25 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     /**
      * {@inheritdoc}
      */
+    public function setCcNumber($ccNumber)
+    {
+        return $this->setData('cc_number', $ccNumber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getCcType()
     {
         return $this->getData('cc_type');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcType($ccType)
+    {
+        return $this->setData('cc_type',$ccType);
     }
 
     /**
@@ -288,9 +324,25 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     /**
      * {@inheritdoc}
      */
+    public function setCcExpYear($ccExpYear)
+    {
+        return $this->setData('cc_exp_year', $ccExpYear);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getCcExpMonth()
     {
         return $this->getData('cc_exp_month');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcExpMonth($ccExpMonth)
+    {
+        return $this->setData('cc_exp_month',$ccExpMonth);
     }
 
     /**
@@ -308,6 +360,14 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
             return $additionalDataValue;
         }
         return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAdditionalData(array $additionalData = null)
+    {
+        return $this->setData('additional_data', $additionalData);
     }
     //@codeCoverageIgnoreEnd
 }

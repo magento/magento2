@@ -15,9 +15,25 @@ interface PaymentMethodInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function getCode();
 
     /**
+     * Set payment method code
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setCode($code);
+
+    /**
      * Get payment method title
      *
      * @return string
      */
     public function getTitle();
+
+    /**
+     * Set payment method title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title);
 }

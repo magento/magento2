@@ -235,7 +235,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param string|string[] $street
      * @return $this
      */
-    public function setStreetFull($street)
+    public function setStreetFull(array $street = null)
     {
         return $this->setStreet($street);
     }
@@ -246,7 +246,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param string|string[] $street
      * @return $this
      */
-    public function setStreet($street)
+    public function setStreet(array $street = null)
     {
         $this->setData('street', $street);
         return $this;

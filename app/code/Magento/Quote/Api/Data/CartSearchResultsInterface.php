@@ -13,4 +13,12 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      * @return \Magento\Quote\Api\Data\CartInterface[]
      */
     public function getItems();
+
+    /**
+     * Set carts list.
+     *
+     * @param \Magento\Quote\Api\Data\CartInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

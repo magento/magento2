@@ -15,11 +15,27 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getItemId();
 
     /**
+     * Sets the item ID.
+     *
+     * @param int $itemId
+     * @return $this
+     */
+    public function setItemId($itemId);
+
+    /**
      * Returns the product SKU.
      *
      * @return string|null Product SKU. Otherwise, null.
      */
     public function getSku();
+
+    /**
+     * Sets the product SKU.
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku);
 
     /**
      * Returns the product quantity.
@@ -29,11 +45,27 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getQty();
 
     /**
+     * Sets the product quantity.
+     *
+     * @param int $qty
+     * @return $this
+     */
+    public function setQty($qty);
+
+    /**
      * Returns the product name.
      *
      * @return string|null Product name. Otherwise, null.
      */
     public function getName();
+
+    /**
+     * Sets the product name.
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
 
     /**
      * Returns the product price.
@@ -43,6 +75,14 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getPrice();
 
     /**
+     * Sets the product price.
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price);
+
+    /**
      * Returns the product type.
      *
      * @return string|null Product type. Otherwise, null.
@@ -50,9 +90,25 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getProductType();
 
     /**
+     * Sets the product type.
+     *
+     * @param string $productType
+     * @return $this
+     */
+    public function setProductType($productType);
+
+    /**
      * Returns Quote id.
      *
      * @return int
      */
     public function getQuoteId();
+
+    /**
+     * Sets Quote id.
+     *
+     * @param int $quoteId
+     * @return $this
+     */
+    public function setQuoteId($quoteId);
 }

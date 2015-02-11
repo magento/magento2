@@ -58,11 +58,27 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getId();
 
     /**
+     * Set id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id);
+
+    /**
      * Get region name
      *
      * @return string
      */
     public function getRegion();
+
+    /**
+     * Set region name
+     *
+     * @param string $region
+     * @return $this
+     */
+    public function setRegion($region);
 
     /**
      * Get region id
@@ -72,11 +88,27 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getRegionId();
 
     /**
+     * Set region id
+     *
+     * @param string $regionId
+     * @return $this
+     */
+    public function setRegionId($regionId);
+
+    /**
      * Get region code
      *
      * @return string
      */
     public function getRegionCode();
+
+    /**
+     * Set region code
+     *
+     * @param string $regionCode
+     * @return $this
+     */
+    public function setRegionCode($regionCode);
 
     /**
      * Get country id
@@ -86,11 +118,27 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getCountryId();
 
     /**
+     * Set country id
+     *
+     * @param string $countryId
+     * @return $this
+     */
+    public function setCountryId($countryId);
+
+    /**
      * Get street
      *
      * @return string[]
      */
     public function getStreet();
+
+    /**
+     * Set street
+     *
+     * @param string[] $street
+     * @return $this
+     */
+    public function setStreet(array $street = null);
 
     /**
      * Get company
@@ -100,11 +148,27 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getCompany();
 
     /**
+     * Set company
+     *
+     * @param string $company
+     * @return $this
+     */
+    public function setCompany($company);
+
+    /**
      * Get telephone number
      *
      * @return string
      */
     public function getTelephone();
+
+    /**
+     * Set telephone number
+     *
+     * @param string $telephone
+     * @return $this
+     */
+    public function setTelephone($telephone);
 
     /**
      * Get fax number
@@ -114,11 +178,27 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getFax();
 
     /**
+     * Set fax number
+     *
+     * @param string $fax
+     * @return $this
+     */
+    public function setFax($fax);
+
+    /**
      * Get postcode
      *
      * @return string
      */
     public function getPostcode();
+
+    /**
+     * Set postcode
+     *
+     * @param string $postcode
+     * @return $this
+     */
+    public function setPostcode($postcode);
 
     /**
      * Get city name
@@ -128,11 +208,27 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getCity();
 
     /**
+     * Set city name
+     *
+     * @param string $city
+     * @return $this
+     */
+    public function setCity($city);
+
+    /**
      * Get first name
      *
      * @return string
      */
     public function getFirstname();
+
+    /**
+     * Set first name
+     *
+     * @param string $firstname
+     * @return $this
+     */
+    public function setFirstname($firstname);
 
     /**
      * Get last name
@@ -142,11 +238,27 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getLastname();
 
     /**
+     * Set last name
+     *
+     * @param string $lastname
+     * @return $this
+     */
+    public function setLastname($lastname);
+
+    /**
      * Get middle name
      *
      * @return string|null
      */
     public function getMiddlename();
+
+    /**
+     * Set middle name
+     *
+     * @param string $middlename
+     * @return $this
+     */
+    public function setMiddlename($middlename);
 
     /**
      * Get prefix
@@ -156,11 +268,27 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getPrefix();
 
     /**
+     * Set prefix
+     *
+     * @param string $prefix
+     * @return $this
+     */
+    public function setPrefix($prefix);
+
+    /**
      * Get suffix
      *
      * @return string|null
      */
     public function getSuffix();
+
+    /**
+     * Set suffix
+     *
+     * @param string $suffix
+     * @return $this|null
+     */
+    public function setSuffix($suffix);
 
     /**
      * Get Vat id
@@ -170,6 +298,14 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getVatId();
 
     /**
+     * Set Vat id
+     *
+     * @param string $vatId
+     * @return $this
+     */
+    public function setVatId($vatId);
+
+    /**
      * Get customer id
      *
      * @return string|null
@@ -177,9 +313,25 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getCustomerId();
 
     /**
+     * Set customer id
+     *
+     * @param string $customerId
+     * @return $this
+     */
+    public function setCustomerId($customerId);
+
+    /**
      * Get billing/shipping email
      *
      * @return string
      */
     public function getEmail();
+
+    /**
+     * Set billing/shipping email
+     *
+     * @param string $email
+     * @return $this
+     */
+    public function setEmail($email);
 }

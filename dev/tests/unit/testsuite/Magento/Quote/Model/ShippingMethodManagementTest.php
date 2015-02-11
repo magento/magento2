@@ -35,7 +35,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $methodBuilderMock;
+    protected $methodDataFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -51,9 +51,18 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
-        $this->methodBuilderMock = $this->getMock(
-            '\Magento\Quote\Api\Data\ShippingMethodDataBuilder',
-            ['populateWithArray', 'create'],
+        $this->methodDataFactoryMock = $this->getMock(
+            '\Magento\Quote\Api\Data\ShippingMethodInterfaceFactory',
+            [
+                'create',
+                'setCarrierCode',
+                'setMethodCode',
+                'setCarrierTitle',
+                'setMethodTitle',
+                'setAmount',
+                'setBaseAmount',
+                'setAvailable'
+            ],
             [],
             '',
             false
@@ -105,7 +114,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Model\ShippingMethodManagement',
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
-                'methodBuilder' => $this->methodBuilderMock,
+                'methodDataFactory' => $this->methodDataFactoryMock,
                 'converter' => $this->converterMock,
             ]
         );
@@ -164,18 +173,37 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingAmount')->will($this->returnValue(123.56));
         $this->shippingAddressMock->expects($this->once())
             ->method('getBaseShippingAmount')->will($this->returnValue(100.06));
-        $output = [
-            ShippingMethodInterface::CARRIER_CODE => 'one',
-            ShippingMethodInterface::METHOD_CODE => 'two',
-            ShippingMethodInterface::CARRIER_TITLE => 'carrier',
-            ShippingMethodInterface::METHOD_TITLE => 'method',
-            ShippingMethodInterface::SHIPPING_AMOUNT => 123.56,
-            ShippingMethodInterface::BASE_SHIPPING_AMOUNT => 100.06,
-            ShippingMethodInterface::AVAILABLE => true,
-        ];
-        $this->methodBuilderMock->expects($this->once())
-            ->method('populateWithArray')->with($output)->will($this->returnValue($this->methodBuilderMock));
-        $this->methodBuilderMock->expects($this->once())->method('create');
+
+        $this->methodDataFactoryMock->expects($this->once())
+            ->method('create')->willReturn($this->methodDataFactoryMock);
+        $this->methodDataFactoryMock->expects($this->once())
+            ->method('setCarrierCode')
+            ->with('one')
+            ->willReturn($this->methodDataFactoryMock);
+        $this->methodDataFactoryMock->expects($this->once())
+            ->method('setMethodCode')
+            ->with('two')
+            ->willReturn($this->methodDataFactoryMock);
+        $this->methodDataFactoryMock->expects($this->once())
+            ->method('setCarrierTitle')
+            ->with('carrier')
+            ->willReturn($this->methodDataFactoryMock);
+        $this->methodDataFactoryMock->expects($this->once())
+            ->method('setMethodTitle')
+            ->with('method')
+            ->willReturn($this->methodDataFactoryMock);
+        $this->methodDataFactoryMock->expects($this->once())
+            ->method('setAmount')
+            ->with('123.56')
+            ->willReturn($this->methodDataFactoryMock);
+        $this->methodDataFactoryMock->expects($this->once())
+            ->method('setBaseAmount')
+            ->with('100.06')
+            ->willReturn($this->methodDataFactoryMock);
+        $this->methodDataFactoryMock->expects($this->once())
+            ->method('setAvailable')
+            ->with(true)
+            ->willReturn($this->methodDataFactoryMock);
 
         $this->model->get($cartId);
     }

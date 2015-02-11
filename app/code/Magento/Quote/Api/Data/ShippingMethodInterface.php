@@ -50,11 +50,27 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getCarrierCode();
 
     /**
+     * Sets the shipping carrier code.
+     *
+     * @param string $carrierCode
+     * @return $this
+     */
+    public function setCarrierCode($carrierCode);
+
+    /**
      * Returns the shipping method code.
      *
      * @return string Shipping method code.
      */
     public function getMethodCode();
+
+    /**
+     * Sets the shipping method code.
+     *
+     * @param string $methodCode
+     * @return $this
+     */
+    public function setMethodCode($methodCode);
 
     /**
      * Returns the shipping carrier title.
@@ -64,11 +80,27 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getCarrierTitle();
 
     /**
+     * Sets the shipping carrier title.
+     *
+     * @param string $carrierTitle
+     * @return $this
+     */
+    public function setCarrierTitle($carrierTitle);
+
+    /**
      * Returns the shipping method title.
      *
      * @return string|null Shipping method title. Otherwise, null.
      */
     public function getMethodTitle();
+
+    /**
+     * Sets the shipping method title.
+     *
+     * @param string $methodTitle
+     * @return $this
+     */
+    public function setMethodTitle($methodTitle);
 
     /**
      * Returns the shipping amount in store currency.
@@ -78,11 +110,27 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getAmount();
 
     /**
+     * Sets the shipping amount in store currency.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setAmount($amount);
+
+    /**
      * Returns the shipping amount in base currency.
      *
      * @return float Shipping amount in base currency.
      */
     public function getBaseAmount();
+
+    /**
+     * Sets the shipping amount in base currency.
+     *
+     * @param float $baseAmount
+     * @return $this
+     */
+    public function setBaseAmount($baseAmount);
 
     /**
      * Returns the value of the availability flag for the current shipping method.
@@ -91,4 +139,12 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getAvailable();
+
+    /**
+     * Sets the value of the availability flag for the current shipping method.
+     *
+     * @param bool $available
+     * @return $this
+     */
+    public function setAvailable($available);
 }

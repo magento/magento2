@@ -13,7 +13,7 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
-use Magento\Quote\Api\Data\ShippingMethodInterface;
+use Magento\Quote\Api\Data\ShippingMethodInterfaceFactory;
 
 /**
  * Shipping method read service.
@@ -28,11 +28,11 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     protected $quoteRepository;
 
     /**
-     * Shipping method builder.
+     * Shipping data factory.
      *
-     * @var \Magento\Quote\Api\Data\ShippingMethodDataBuilder
+     * @var \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory
      */
-    protected $methodBuilder;
+    protected $methodDataFactory;
 
     /**
      * Shipping method converter
@@ -45,16 +45,16 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
      * Constructs a shipping method read service object.
      *
      * @param QuoteRepository $quoteRepository Quote repository.
-     * @param \Magento\Quote\Api\Data\ShippingMethodDataBuilder $methodBuilder Shipping method builder.
+     * @param \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $methodDataFactory Shipping method builder.
      * @param \Magento\Quote\Model\Cart\ShippingMethodConverter $converter Shipping method builder converter.
      */
     public function __construct(
         QuoteRepository $quoteRepository,
-        \Magento\Quote\Api\Data\ShippingMethodDataBuilder $methodBuilder,
+        \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $methodDataFactory,
         Cart\ShippingMethodConverter $converter
     ) {
         $this->quoteRepository = $quoteRepository;
-        $this->methodBuilder = $methodBuilder;
+        $this->methodDataFactory = $methodDataFactory;
         $this->converter = $converter;
     }
 
@@ -80,17 +80,14 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         list($carrierCode, $methodCode) = $this->divideNames('_', $shippingAddress->getShippingMethod());
         list($carrierTitle, $methodTitle) = $this->divideNames(' - ', $shippingAddress->getShippingDescription());
 
-        $output = [
-            ShippingMethodInterface::CARRIER_CODE => $carrierCode,
-            ShippingMethodInterface::METHOD_CODE => $methodCode,
-            ShippingMethodInterface::CARRIER_TITLE => $carrierTitle,
-            ShippingMethodInterface::METHOD_TITLE => $methodTitle,
-            ShippingMethodInterface::SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
-            ShippingMethodInterface::BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
-            ShippingMethodInterface::AVAILABLE => true,
-        ];
-
-        return $this->methodBuilder->populateWithArray($output)->create();
+        return $this->methodDataFactory->create()
+            ->setCarrierCode($carrierCode)
+            ->setMethodCode($methodCode)
+            ->setCarrierTitle($carrierTitle)
+            ->setMethodTitle($methodTitle)
+            ->setAmount($shippingAddress->getShippingAmount())
+            ->setBaseAmount($shippingAddress->getBaseShippingAmount())
+            ->setAvailable(true);
     }
 
     /**
