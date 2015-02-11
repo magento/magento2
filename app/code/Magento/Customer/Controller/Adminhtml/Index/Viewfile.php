@@ -181,15 +181,11 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $contentLength = $stat['size'];
             $contentModify = $stat['mtime'];
 
-            $this->getResponse()
-                ->setHttpResponseCode(200)
+            $resultRaw->setHttpResponseCode(200)
                 ->setHeader('Pragma', 'public', true)
                 ->setHeader('Content-type', $contentType, true)
                 ->setHeader('Content-Length', $contentLength)
-                ->setHeader('Last-Modified', date('r', $contentModify))
-                ->clearBody();
-            $this->getResponse()->sendHeaders();
-
+                ->setHeader('Last-Modified', date('r', $contentModify));
             $resultRaw->setContents($directory->readFile($fileName));
         } else {
             $name = pathinfo($path, PATHINFO_BASENAME);
