@@ -56,4 +56,25 @@ class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Test\Utility\Files::init()->getPhtmlFiles()
         );
     }
+
+    public function testObsoleteJavascriptAttributeType()
+    {
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker(
+        /**
+         * "text/javascript" type attribute in not obligatory to use in templates due to HTML5 standards.
+         * For more details please go to "http://www.w3.org/TR/html5/scripting-1.html".
+         *
+         * @param string $file
+         */
+            function ($file) {
+                $this->assertNotRegexp(
+                    '/type="text\/javascript"/',
+                    file_get_contents($file),
+                    'Please do not use "text/javascript" type attribute.'
+                );
+            },
+            \Magento\Framework\Test\Utility\Files::init()->getPhtmlFiles()
+        );
+    }
 }
