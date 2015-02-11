@@ -42,22 +42,22 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
             $this->fail("Impossible to continue other tests, because database is broken: {$e}");
         }
         $this->assertNotEmpty(
-            $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'schema_version')
+            $this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification', 'schema_version')
         );
         $this->assertNotEmpty(
-            $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'data_version')
+            $this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification', 'data_version')
         );
     }
 
     public function testUpdateTableRow()
     {
-        $original = $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'schema_version');
-        $this->_model->updateTableRow('setup_module', 'module', 'adminnotification_setup', 'schema_version', 'test');
+        $original = $this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification', 'schema_version');
+        $this->_model->updateTableRow('setup_module', 'module', 'Magento_AdminNotification', 'schema_version', 'test');
         $this->assertEquals(
             'test',
-            $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'schema_version')
+            $this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification', 'schema_version')
         );
-        $this->_model->updateTableRow('setup_module', 'module', 'adminnotification_setup', 'schema_version', $original);
+        $this->_model->updateTableRow('setup_module', 'module', 'Magento_AdminNotification', 'schema_version', $original);
     }
 
     /**
