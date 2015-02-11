@@ -10,7 +10,7 @@ use Magento\Catalog\Test\Fixture\Product;
 use Magento\Catalog\Test\Fixture\ProductAttribute;
 use Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct as Repository;
 use Magento\Mtf\Factory\Factory;
-use Magento\Mtf\System\Config;
+use Magento\Mtf\Config;
 
 /**
  * Class ConfigurableProduct
