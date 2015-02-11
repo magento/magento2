@@ -10,6 +10,7 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)

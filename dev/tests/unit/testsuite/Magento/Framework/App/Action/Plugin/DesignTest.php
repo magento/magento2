@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\App\Action\Plugin;
+namespace Magento\Framework\App\Action\Plugin;
 
 class DesignTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +15,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             return 'Expected';
         };
         $requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
-        $plugin = new \Magento\Core\App\Action\Plugin\Design($designLoaderMock);
+        $plugin = new \Magento\Framework\App\Action\Plugin\Design($designLoaderMock);
         $designLoaderMock->expects($this->once())->method('load');
         $this->assertEquals('Expected', $plugin->aroundDispatch($subjectMock, $closureMock, $requestMock));
     }

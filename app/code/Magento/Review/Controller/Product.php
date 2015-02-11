@@ -91,7 +91,7 @@ class Product extends \Magento\Framework\App\Action\Action
     /**
      * Core form key validator
      *
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $_formKeyValidator;
 
@@ -107,7 +107,7 @@ class Product extends \Magento\Framework\App\Action\Action
      * @param \Magento\Catalog\Model\Design $catalogDesign
      * @param \Magento\Framework\Session\Generic $reviewSession
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -122,7 +122,7 @@ class Product extends \Magento\Framework\App\Action\Action
         \Magento\Catalog\Model\Design $catalogDesign,
         \Magento\Framework\Session\Generic $reviewSession,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
     ) {
         $this->_storeManager = $storeManager;
         $this->_coreRegistry = $coreRegistry;

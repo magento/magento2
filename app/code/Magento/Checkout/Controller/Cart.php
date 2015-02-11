@@ -29,7 +29,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $_formKeyValidator;
 
@@ -43,7 +43,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
      */
     public function __construct(
@@ -51,7 +51,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart
     ) {
         $this->_formKeyValidator = $formKeyValidator;

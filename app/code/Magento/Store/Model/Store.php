@@ -8,6 +8,7 @@ namespace Magento\Store\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Store\ScopeInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Store model
@@ -54,7 +55,7 @@ class Store extends AbstractModel implements
     const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
 
     const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
-
+    
     const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
 
     const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
@@ -542,7 +543,9 @@ class Store extends AbstractModel implements
             $secure = is_null($secure) ? $this->isCurrentlySecure() : (bool)$secure;
             switch ($type) {
                 case \Magento\Framework\UrlInterface::URL_TYPE_WEB:
-                    $path = $secure ? self::XML_PATH_SECURE_BASE_URL : self::XML_PATH_UNSECURE_BASE_URL;
+                    $path = $secure
+                        ? self::XML_PATH_SECURE_BASE_URL
+                        : self::XML_PATH_UNSECURE_BASE_URL;
                     $url = $this->_getConfig($path);
                     break;
 
