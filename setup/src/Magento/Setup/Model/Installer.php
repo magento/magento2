@@ -558,11 +558,11 @@ class Installer
                 ['nullable' => false, 'primary' => true],
                 'Module'
             )->addColumn(
-                'setup_version',
+                'schema_version',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 50,
                 [],
-                'Resource Version'
+                'Schema Version'
             )->addColumn(
                 'data_version',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,

@@ -42,7 +42,7 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
             $this->fail("Impossible to continue other tests, because database is broken: {$e}");
         }
         $this->assertNotEmpty(
-            $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'version')
+            $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'schema_version')
         );
         $this->assertNotEmpty(
             $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'data_version')
@@ -51,13 +51,13 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateTableRow()
     {
-        $original = $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'version');
-        $this->_model->updateTableRow('setup_module', 'module', 'adminnotification_setup', 'version', 'test');
+        $original = $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'schema_version');
+        $this->_model->updateTableRow('setup_module', 'module', 'adminnotification_setup', 'schema_version', 'test');
         $this->assertEquals(
             'test',
-            $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'version')
+            $this->_model->getTableRow('setup_module', 'module', 'adminnotification_setup', 'schema_version')
         );
-        $this->_model->updateTableRow('setup_module', 'module', 'adminnotification_setup', 'version', $original);
+        $this->_model->updateTableRow('setup_module', 'module', 'adminnotification_setup', 'schema_version', $original);
     }
 
     /**
@@ -83,8 +83,8 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateTableRowNameConversion()
     {
-        $original = $this->_model->getTableRow('setup_module', 'module', 'core_setup', 'version');
-        $this->_model->updateTableRow('setup/module', 'module', 'core_setup', 'version', $original);
+        $original = $this->_model->getTableRow('setup_module', 'module', 'core_setup', 'schema_version');
+        $this->_model->updateTableRow('setup/module', 'module', 'core_setup', 'schema_version', $original);
     }
 
     public function testTableExists()

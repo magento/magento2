@@ -99,14 +99,14 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         return [
             ["SELECT * FROM %s", \Magento\Framework\DB\Profiler::SELECT],
             [
-                "INSERT INTO %s (module, version, data_version) " .
+                "INSERT INTO %s (module, schema_version, data_version) " .
                 "VALUES ('" .
                 self::$_testResourceName .
                 "', '1.1', '1.1')",
                 \Magento\Framework\DB\Profiler::INSERT
             ],
             [
-                "UPDATE %s SET version = '1.2' WHERE module = '" . self::$_testResourceName . "'",
+                "UPDATE %s SET schema_version = '1.2' WHERE module = '" . self::$_testResourceName . "'",
                 \Magento\Framework\DB\Profiler::UPDATE
             ],
             [
