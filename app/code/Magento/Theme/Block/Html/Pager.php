@@ -751,7 +751,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * get the url fragment
+     * Get the URL fragment
      *
      * @return string|null
      */
@@ -761,9 +761,9 @@ class Pager extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * set the url fragment
-     * @param $fragment
+     * Set the URL fragment
      *
+     * @param string|null $fragment
      * @return $this
      */
     public function setFragment($fragment)
