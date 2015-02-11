@@ -6,14 +6,14 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="AbandonedCartsReportEntityTest">
-    <variation name="AbandonedCartsReportEntityTestVariation1" firstConstraint="assertAbandonedCartCustomerInfoResult" method="test">
+  <testCase name="Magento\Reports\Test\TestCase\AbandonedCartsReportEntityTest">
+    <variation name="AbandonedCartsReportEntityTestVariation1">
       <data name="description" xsi:type="string">add product to cart as registered user and check product in Report</data>
       <data name="customer/dataSet" xsi:type="string">default</data>
       <data name="products" xsi:type="string">catalogProductSimple::100_dollar_product</data>
       <constraint name="Magento\Reports\Test\Constraint\AssertAbandonedCartCustomerInfoResult"/>
     </variation>
-    <variation name="AbandonedCartsReportEntityTestVariation2" firstConstraint="assertAbandonedCartCustomerInfoResult" method="test">
+    <variation name="AbandonedCartsReportEntityTestVariation2">
       <data name="description" xsi:type="string">add two products to cart as registered user and check product in Report</data>
       <data name="customer/dataSet" xsi:type="string">default</data>
       <data name="products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::100_dollar_product</data>

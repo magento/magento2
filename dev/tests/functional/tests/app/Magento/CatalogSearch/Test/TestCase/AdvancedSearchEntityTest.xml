@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="AdvancedSearchEntityTest">
-    <variation name="AdvancedSearchEntityTestVariation1" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+  <testCase name="Magento\CatalogSearch\Test\TestCase\AdvancedSearchEntityTest">
+    <variation name="AdvancedSearchEntityTestVariation1">
       <data name="description" xsi:type="string">MAGETWO-12421: Use Advanced Search to Find the Product</data>
       <data name="products/simple_1" xsi:type="string">Yes</data>
       <data name="products/simple_2" xsi:type="string">-</data>
@@ -20,7 +20,7 @@
       <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation2" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation2">
       <data name="description" xsi:type="string">Search product in advanced search by name</data>
       <data name="products/simple_1" xsi:type="string">-</data>
       <data name="products/simple_2" xsi:type="string">Yes</data>
@@ -32,7 +32,7 @@
       <data name="productSearch/data/price/value/price_to" xsi:type="string">-</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation3" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation3">
       <data name="description" xsi:type="string">Search product in advanced search by partial name</data>
       <data name="products/simple_1" xsi:type="string">Yes</data>
       <data name="products/simple_2" xsi:type="string">-</data>
@@ -44,7 +44,7 @@
       <data name="productSearch/data/price/value/price_to" xsi:type="string">-</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation4" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation4">
       <data name="description" xsi:type="string">Search product in advanced search by sku</data>
       <data name="products/simple_1" xsi:type="string">Yes</data>
       <data name="products/simple_2" xsi:type="string">-</data>
@@ -56,7 +56,7 @@
       <data name="productSearch/data/price/value/price_to" xsi:type="string">-</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation5" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation5">
       <data name="description" xsi:type="string">Search product in advanced search by partial sku</data>
       <data name="products/simple_1" xsi:type="string">Yes</data>
       <data name="products/simple_2" xsi:type="string">-</data>
@@ -68,7 +68,7 @@
       <data name="productSearch/data/price/value/price_to" xsi:type="string">-</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation6" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation6">
       <data name="description" xsi:type="string">Search product in advanced search by partial sku and description</data>
       <data name="products/simple_1" xsi:type="string">Yes</data>
       <data name="products/simple_2" xsi:type="string">-</data>
@@ -80,7 +80,7 @@
       <data name="productSearch/data/price/value/price_to" xsi:type="string">-</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation7" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation7">
       <data name="description" xsi:type="string">Search product in advanced search by description</data>
       <data name="products/simple_1" xsi:type="string">-</data>
       <data name="products/simple_2" xsi:type="string">Yes</data>
@@ -92,7 +92,7 @@
       <data name="productSearch/data/price/value/price_to" xsi:type="string">-</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation8" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation8">
       <data name="description" xsi:type="string">Search product in advanced search by short description</data>
       <data name="products/simple_1" xsi:type="string">-</data>
       <data name="products/simple_2" xsi:type="string">-</data>
@@ -104,7 +104,7 @@
       <data name="productSearch/data/price/value/price_to" xsi:type="string">-</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation9" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation9">
       <data name="description" xsi:type="string">Search product in advanced search by partial short description</data>
       <data name="products/simple_1" xsi:type="string">Yes</data>
       <data name="products/simple_2" xsi:type="string">-</data>
@@ -116,7 +116,7 @@
       <data name="productSearch/data/price/value/price_to" xsi:type="string">-</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation10" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation10">
       <data name="description" xsi:type="string">Search product in advanced search by price to</data>
       <data name="products/simple_1" xsi:type="string">Yes</data>
       <data name="products/simple_2" xsi:type="string">Yes</data>
@@ -128,7 +128,7 @@
       <data name="productSearch/data/price/value/price_to" xsi:type="string">100</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation11" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation11">
       <data name="description" xsi:type="string">Search product in advanced search by price from and price to</data>
       <data name="products/simple_1" xsi:type="string">Yes</data>
       <data name="products/simple_2" xsi:type="string">-</data>
@@ -140,7 +140,7 @@
       <data name="productSearch/data/price/value/price_to" xsi:type="string">50</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation12" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation12">
       <data name="description" xsi:type="string">Search product in advanced search by name, sku, description, short description, price from and price to</data>
       <data name="products/simple_1" xsi:type="string">Yes</data>
       <data name="products/simple_2" xsi:type="string">-</data>
@@ -152,7 +152,7 @@
       <data name="productSearch/data/price/value/price_to" xsi:type="string">500</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
-    <variation name="AdvancedSearchEntityTestVariation13" firstConstraint="assertAdvancedSearchProductsResult" method="test">
+    <variation name="AdvancedSearchEntityTestVariation13">
       <data name="description" xsi:type="string">Search product in advanced search by name, sku, description, short description, price from and price to</data>
       <data name="products/simple_1" xsi:type="string">Yes</data>
       <data name="products/simple_2" xsi:type="string">-</data>

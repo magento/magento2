@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="ApplySeveralCatalogPriceRuleEntityTest">
-    <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation1" firstConstraint="assertCatalogPriceRuleAppliedCatalogPage" method="test">
+  <testCase name="Magento\CatalogRule\Test\TestCase\ApplySeveralCatalogPriceRuleEntityTest">
+    <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation1">
       <data name="catalogRulesOriginal/priority_0" xsi:type="string">catalog_price_rule_priority_0</data>
       <data name="catalogRulesOriginal/priority_1" xsi:type="string">-</data>
       <data name="catalogRulesOriginal/priority_2" xsi:type="string">catalog_price_rule_priority_2</data>
@@ -20,7 +20,7 @@
       <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
       <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
     </variation>
-    <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation2" firstConstraint="assertCatalogPriceRuleAppliedCatalogPage" method="test">
+    <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation2">
       <data name="catalogRulesOriginal/priority_0" xsi:type="string">catalog_price_rule_priority_0</data>
       <data name="catalogRulesOriginal/priority_1" xsi:type="string">catalog_price_rule_priority_1_stop_further_rules</data>
       <data name="catalogRulesOriginal/priority_2" xsi:type="string">catalog_price_rule_priority_2</data>

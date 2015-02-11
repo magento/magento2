@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateSimpleProductEntityTest">
-    <variation name="UpdateSimpleProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+  <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateSimpleProductEntityTest">
+    <variation name="UpdateSimpleProductEntityTestVariation1">
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -24,7 +24,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation2">
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -39,7 +39,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation3">
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -57,7 +57,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation4">
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -76,7 +76,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation5">
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -94,7 +94,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation6">
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -109,7 +109,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation7">
       <data name="product/data/category_ids/presets" xsi:type="string">default</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>

@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="CreateCategoryEntityTest">
-    <variation name="CreateCategoryEntityTestVariation1" firstConstraint="assertCategorySaveMessage" method="test">
+  <testCase name="Magento\Catalog\Test\TestCase\Category\CreateCategoryEntityTest">
+    <variation name="CreateCategoryEntityTestVariation1">
       <data name="description" xsi:type="string">Create root category with required fields</data>
       <data name="addCategory" xsi:type="string">addRootCategory</data>
       <data name="category/data/parent_id/dataSet" xsi:type="string">-</data>
@@ -33,7 +33,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
     </variation>
-    <variation name="CreateCategoryEntityTestVariation2" firstConstraint="assertCategorySaveMessage" method="test">
+    <variation name="CreateCategoryEntityTestVariation2">
       <data name="description" xsi:type="string">Create root category with all fields</data>
       <data name="addCategory" xsi:type="string">addRootCategory</data>
       <data name="category/data/parent_id/dataSet" xsi:type="string">-</data>
@@ -59,7 +59,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
     </variation>
-    <variation name="CreateCategoryEntityTestVariation3" firstConstraint="assertCategorySaveMessage" method="test">
+    <variation name="CreateCategoryEntityTestVariation3">
       <data name="description" xsi:type="string">Create subcategory with required fields</data>
       <data name="addCategory" xsi:type="string">addSubcategory</data>
       <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
@@ -86,7 +86,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
     </variation>
-    <variation name="CreateCategoryEntityTestVariation4" firstConstraint="assertCategorySaveMessage" method="test">
+    <variation name="CreateCategoryEntityTestVariation4">
       <data name="description" xsi:type="string">Create not anchor subcategory with required fields</data>
       <data name="addCategory" xsi:type="string">addSubcategory</data>
       <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
@@ -114,7 +114,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
     </variation>
-    <variation name="CreateCategoryEntityTestVariation5" firstConstraint="assertCategorySaveMessage" method="test">
+    <variation name="CreateCategoryEntityTestVariation5">
       <data name="description" xsi:type="string">Create anchor subcategory with all fields</data>
       <data name="addCategory" xsi:type="string">addSubcategory</data>
       <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
@@ -142,7 +142,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
     </variation>
-    <variation name="CreateCategoryEntityTestVariation6" firstConstraint="assertCategorySaveMessage" method="test">
+    <variation name="CreateCategoryEntityTestVariation6">
       <data name="description" xsi:type="string">Create not active subcategory</data>
       <data name="addCategory" xsi:type="string">addSubcategory</data>
       <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
@@ -168,7 +168,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
     </variation>
-    <variation name="CreateCategoryEntityTestVariation7" firstConstraint="assertCategorySaveMessage" method="test">
+    <variation name="CreateCategoryEntityTestVariation7">
       <data name="description" xsi:type="string">Create not included in menu subcategory</data>
       <data name="addCategory" xsi:type="string">addSubcategory</data>
       <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
@@ -194,7 +194,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
     </variation>
-    <variation name="CreateCategoryEntityTestVariation8" firstConstraint="assertCategorySaveMessage" method="test">
+    <variation name="CreateCategoryEntityTestVariation8">
       <data name="description" xsi:type="string">MAGETWO-12513: Create Category from Category page with Required Fields Only</data>
       <data name="addCategory" xsi:type="string">addSubcategory</data>
       <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
@@ -222,7 +222,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
     </variation>
-    <variation name="CreateCategoryEntityTestVariation9" firstConstraint="assertCategorySaveMessage" method="test">
+    <variation name="CreateCategoryEntityTestVariation9">
       <data name="description" xsi:type="string">MAGETWO-16351: Assign Products at the Category Level</data>
       <data name="addCategory" xsi:type="string">addSubcategory</data>
       <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>

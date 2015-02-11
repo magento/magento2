@@ -6,12 +6,12 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="DeleteAdminUserEntityTest">
-    <variation name="DeleteAdminUserEntityTestVariation1" firstConstraint="assertImpossibleDeleteYourOwnAccount" method="test">
+  <testCase name="Magento\User\Test\TestCase\DeleteAdminUserEntityTest">
+    <variation name="DeleteAdminUserEntityTestVariation1">
       <constraint name="Magento\User\Test\Constraint\AssertImpossibleDeleteYourOwnAccount"/>
       <constraint name="Magento\User\Test\Constraint\AssertUserInGrid"/>
     </variation>
-    <variation name="DeleteAdminUserEntityTestVariation2" firstConstraint="assertUserSuccessDeleteMessage" method="test">
+    <variation name="DeleteAdminUserEntityTestVariation2">
       <data name="isDefaultUser" xsi:type="string">1</data>
       <constraint name="Magento\User\Test\Constraint\AssertUserSuccessDeleteMessage"/>
       <constraint name="Magento\User\Test\Constraint\AssertUserNotInGrid"/>

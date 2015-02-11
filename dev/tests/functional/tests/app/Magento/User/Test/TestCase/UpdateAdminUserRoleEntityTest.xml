@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateAdminUserRoleEntityTest">
-    <variation name="UpdateAdminUserRoleEntityTestVariation1" firstConstraint="assertRoleSuccessSaveMessage" method="test">
+  <testCase name="Magento\User\Test\TestCase\UpdateAdminUserRoleEntityTest">
+    <variation name="UpdateAdminUserRoleEntityTestVariation1">
       <data name="user/dataSet" xsi:type="string">custom_admin_with_default_role</data>
       <data name="role/data/rolename" xsi:type="string">NewAdminRole%isolation%</data>
       <data name="role/data/resource_access" xsi:type="string">-</data>
@@ -18,7 +18,7 @@
       <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut"/>
       <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin"/>
     </variation>
-    <variation name="UpdateAdminUserRoleEntityTestVariation2" firstConstraint="assertRoleSuccessSaveMessage" method="test">
+    <variation name="UpdateAdminUserRoleEntityTestVariation2">
       <data name="user/dataSet" xsi:type="string">default</data>
       <data name="role/data/rolename" xsi:type="string">-</data>
       <data name="role/data/resource_access" xsi:type="string">Custom</data>

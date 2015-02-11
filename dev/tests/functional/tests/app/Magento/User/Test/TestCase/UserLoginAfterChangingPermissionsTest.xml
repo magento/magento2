@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UserLoginAfterChangingPermissionsTest">
-    <variation name="UserLoginAfterChangingPermissionsTestVariation1" firstConstraint="assertUserSuccessLogin" method="test">
+  <testCase name="Magento\User\Test\TestCase\UserLoginAfterChangingPermissionsTest">
+    <variation name="UserLoginAfterChangingPermissionsTestVariation1">
       <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>
       <data name="role/data/resource_access" xsi:type="string">Custom</data>
       <data name="role/data/roles_resources" xsi:type="string">Sales</data>

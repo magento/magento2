@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="CreateCatalogRuleTest">
-    <variation name="CreateCatalogRuleTestVariation1" firstConstraint="assertCatalogPriceRuleInGrid" method="test">
+  <testCase name="Magento\CatalogRule\Test\TestCase\CreateCatalogRuleTest">
+    <variation name="CreateCatalogRuleTestVariation1">
       <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>
       <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
       <data name="catalogPriceRule/data/website_ids" xsi:type="string">Main Website</data>

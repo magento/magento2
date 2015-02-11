@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="ProductTypeSwitchingOnCreationTest">
-    <variation name="ProductTypeSwitchingOnCreationTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+  <testCase name="Magento\Catalog\Test\TestCase\Product\ProductTypeSwitchingOnCreationTest">
+    <variation name="ProductTypeSwitchingOnCreationTestVariation1">
       <data name="createProduct" xsi:type="string">simple</data>
       <data name="product" xsi:type="string">configurableProductInjectable::default</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
@@ -19,31 +19,31 @@
       <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
       <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnCreationTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="ProductTypeSwitchingOnCreationTestVariation2">
       <data name="createProduct" xsi:type="string">simple</data>
       <data name="product" xsi:type="string">catalogProductVirtual::default</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnCreationTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="ProductTypeSwitchingOnCreationTestVariation3">
       <data name="createProduct" xsi:type="string">configurable</data>
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnCreationTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="ProductTypeSwitchingOnCreationTestVariation4">
       <data name="createProduct" xsi:type="string">configurable</data>
       <data name="product" xsi:type="string">catalogProductVirtual::default</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnCreationTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="ProductTypeSwitchingOnCreationTestVariation5">
       <data name="createProduct" xsi:type="string">virtual</data>
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnCreationTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="ProductTypeSwitchingOnCreationTestVariation6">
       <data name="createProduct" xsi:type="string">virtual</data>
       <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
@@ -55,7 +55,7 @@
       <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
       <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnCreationTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="ProductTypeSwitchingOnCreationTestVariation7">
       <data name="createProduct" xsi:type="string">virtual</data>
       <data name="product" xsi:type="string">downloadableProductInjectable::default</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
@@ -64,13 +64,13 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnCreationTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="ProductTypeSwitchingOnCreationTestVariation8">
       <data name="createProduct" xsi:type="string">downloadable</data>
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnCreationTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="ProductTypeSwitchingOnCreationTestVariation9">
       <data name="createProduct" xsi:type="string">downloadable</data>
       <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>

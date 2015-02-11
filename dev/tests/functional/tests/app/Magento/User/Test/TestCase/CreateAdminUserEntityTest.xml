@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="CreateAdminUserEntityTest">
-    <variation name="CreateAdminUserEntityTestVariation1" firstConstraint="assertUserSuccessSaveMessage" method="test">
+  <testCase name="Magento\User\Test\TestCase\CreateAdminUserEntityTest">
+    <variation name="CreateAdminUserEntityTestVariation1">
       <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
       <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
       <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
@@ -23,7 +23,7 @@
       <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut"/>
       <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin"/>
     </variation>
-    <variation name="CreateAdminUserEntityTestVariation2" firstConstraint="assertUserSuccessSaveMessage" method="test">
+    <variation name="CreateAdminUserEntityTestVariation2">
       <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
       <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
       <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
@@ -39,7 +39,7 @@
       <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut"/>
       <constraint name="Magento\User\Test\Constraint\AssertUserWrongCredentialsMessage"/>
     </variation>
-    <variation name="CreateAdminUserEntityTestVariation3" firstConstraint="assertUserDuplicateMessage" method="test">
+    <variation name="CreateAdminUserEntityTestVariation3">
       <data name="user/data/username" xsi:type="string">-</data>
       <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
       <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
@@ -52,7 +52,7 @@
       <data name="user/data/current_password" xsi:type="string">123123q</data>
       <constraint name="Magento\User\Test\Constraint\AssertUserDuplicateMessage"/>
     </variation>
-    <variation name="CreateAdminUserEntityTestVariation4" firstConstraint="assertUserDuplicateMessage" method="test">
+    <variation name="CreateAdminUserEntityTestVariation4">
       <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
       <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
       <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
@@ -65,7 +65,7 @@
       <data name="user/data/current_password" xsi:type="string">123123q</data>
       <constraint name="Magento\User\Test\Constraint\AssertUserDuplicateMessage"/>
     </variation>
-    <variation name="CreateAdminUserEntityTestVariation5" firstConstraint="assertUserSuccessSaveMessage" method="test">
+    <variation name="CreateAdminUserEntityTestVariation5">
       <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
       <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
       <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
@@ -81,7 +81,7 @@
       <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut"/>
       <constraint name="Magento\User\Test\Constraint\AssertUserWrongCredentialsMessage"/>
     </variation>
-    <variation name="CreateAdminUserEntityTestVariation6" firstConstraint="assertUserInvalidEmailMessage" method="test">
+    <variation name="CreateAdminUserEntityTestVariation6">
       <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
       <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
       <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>

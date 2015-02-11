@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateProductReviewEntityOnProductPageTest">
-    <variation name="UpdateProductReviewEntityOnProductPageTestVariation1" firstConstraint="assertProductReviewBackendSuccessSaveMessage" method="test">
+  <testCase name="Magento\Review\Test\TestCase\UpdateProductReviewEntityOnProductPageTest">
+    <variation name="UpdateProductReviewEntityOnProductPageTestVariation1">
       <data name="rating" xsi:type="string">3</data>
       <data name="review/data/status_id" xsi:type="string">Approved</data>
       <data name="productRating/data/select_stores" xsi:type="string">Main Website/Main Website Store/Default Store View</data>

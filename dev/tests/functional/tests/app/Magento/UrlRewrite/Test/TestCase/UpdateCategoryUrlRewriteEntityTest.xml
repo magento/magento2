@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateCategoryUrlRewriteEntityTest">
-    <variation name="UpdateCategoryUrlRewriteEntityTestVariation1" firstConstraint="assertUrlRewriteSaveMessage" method="test">
+  <testCase name="Magento\UrlRewrite\Test\TestCase\UpdateCategoryUrlRewriteEntityTest">
+    <variation name="UpdateCategoryUrlRewriteEntityTestVariation1">
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
       <data name="category/dataSet" xsi:type="string">default_subcategory</data>
       <data name="categoryRewrite/dataSet" xsi:type="string">default</data>
@@ -19,7 +19,7 @@
       <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid"/>
       <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryRedirect"/>
     </variation>
-    <variation name="UpdateCategoryUrlRewriteEntityTestVariation2" firstConstraint="assertUrlRewriteSaveMessage" method="test">
+    <variation name="UpdateCategoryUrlRewriteEntityTestVariation2">
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
       <data name="category/dataSet" xsi:type="string">default_subcategory</data>
       <data name="categoryRewrite/dataSet" xsi:type="string">default</data>
@@ -31,7 +31,7 @@
       <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid"/>
       <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryRedirect"/>
     </variation>
-    <variation name="UpdateCategoryUrlRewriteEntityTestVariation3" firstConstraint="assertUrlRewriteSaveMessage" method="test">
+    <variation name="UpdateCategoryUrlRewriteEntityTestVariation3">
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
       <data name="category/dataSet" xsi:type="string">default_subcategory</data>
       <data name="categoryRewrite/dataSet" xsi:type="string">default</data>
@@ -43,7 +43,7 @@
       <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid"/>
       <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryRedirect"/>
     </variation>
-    <variation name="UpdateCategoryUrlRewriteEntityTestVariation4" firstConstraint="assertUrlRewriteSaveMessage" method="test">
+    <variation name="UpdateCategoryUrlRewriteEntityTestVariation4">
       <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
       <data name="category/dataSet" xsi:type="string">default_subcategory</data>
       <data name="categoryRewrite/dataSet" xsi:type="string">default</data>

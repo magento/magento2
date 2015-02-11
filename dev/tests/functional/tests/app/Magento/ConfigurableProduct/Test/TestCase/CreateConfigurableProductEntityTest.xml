@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="CreateConfigurableProductEntityTest">
-    <variation name="CreateConfigurableProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+  <testCase name="Magento\ConfigurableProduct\Test\TestCase\CreateConfigurableProductEntityTest">
+    <variation name="CreateConfigurableProductEntityTestVariation1">
       <data name="product/data/configurable_attributes_data/preset" xsi:type="string">two_new_options</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">two_new_options</data>
       <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
@@ -31,7 +31,7 @@
       <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
       <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
     </variation>
-    <variation name="CreateConfigurableProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateConfigurableProductEntityTestVariation2">
       <data name="product/data/configurable_attributes_data/preset" xsi:type="string">two_options</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">two_options</data>
       <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
@@ -53,7 +53,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
       <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
     </variation>
-    <variation name="CreateConfigurableProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateConfigurableProductEntityTestVariation3">
       <data name="product/data/configurable_attributes_data/preset" xsi:type="string">two_new_options</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">two_new_options_with_special_price</data>
       <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
@@ -76,7 +76,7 @@
       <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
     </variation>
-    <variation name="CreateConfigurableProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateConfigurableProductEntityTestVariation4">
       <data name="product/data/configurable_attributes_data/preset" xsi:type="string">two_options_with_assigned_product</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">two_options_with_assigned_product</data>
       <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>

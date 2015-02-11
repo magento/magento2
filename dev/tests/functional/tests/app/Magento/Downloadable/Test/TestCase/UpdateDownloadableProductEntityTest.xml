@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateDownloadableProductEntityTest">
-    <variation name="UpdateDownloadableProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+  <testCase name="Magento\Downloadable\Test\TestCase\UpdateDownloadableProductEntityTest">
+    <variation name="UpdateDownloadableProductEntityTestVariation1">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">55</data>
@@ -38,7 +38,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateDownloadableProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateDownloadableProductEntityTestVariation2">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">100</data>
@@ -65,7 +65,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm"/>
     </variation>
-    <variation name="UpdateDownloadableProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateDownloadableProductEntityTestVariation3">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">9999</data>
@@ -92,7 +92,7 @@
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
     </variation>
-    <variation name="UpdateDownloadableProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateDownloadableProductEntityTestVariation4">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">48</data>
@@ -119,7 +119,7 @@
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
-    <variation name="UpdateDownloadableProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateDownloadableProductEntityTestVariation5">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">54</data>
@@ -150,7 +150,7 @@
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
     </variation>
-    <variation name="UpdateDownloadableProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateDownloadableProductEntityTestVariation6">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">43</data>

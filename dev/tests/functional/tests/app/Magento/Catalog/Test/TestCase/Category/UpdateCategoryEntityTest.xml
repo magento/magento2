@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateCategoryEntityTest">
-    <variation name="UpdateCategoryEntityTestVariation1" firstConstraint="assertCategorySaveMessage" method="test">
+  <testCase name="Magento\Catalog\Test\TestCase\Category\UpdateCategoryEntityTest">
+    <variation name="UpdateCategoryEntityTestVariation1">
       <data name="category/data/name" xsi:type="string">Name%isolation%</data>
       <data name="category/data/is_active" xsi:type="string">Yes</data>
       <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
@@ -25,7 +25,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryRedirect"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
     </variation>
-    <variation name="UpdateCategoryEntityTestVariation2" firstConstraint="assertCategorySaveMessage" method="test">
+    <variation name="UpdateCategoryEntityTestVariation2">
       <data name="category/data/name" xsi:type="string">Name%isolation%</data>
       <data name="category/data/is_active" xsi:type="string">Yes</data>
       <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
@@ -42,7 +42,7 @@
       <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
     </variation>
-    <variation name="UpdateCategoryEntityTestVariation3" firstConstraint="assertCategorySaveMessage" method="test">
+    <variation name="UpdateCategoryEntityTestVariation3">
       <data name="category/data/name" xsi:type="string">Name%isolation%</data>
       <data name="category/data/is_active" xsi:type="string">No</data>
       <data name="category/data/url_key" xsi:type="string">-</data>

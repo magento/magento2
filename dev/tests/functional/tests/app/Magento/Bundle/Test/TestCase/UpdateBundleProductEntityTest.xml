@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateBundleProductEntityTest">
-    <variation name="UpdateBundleProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+  <testCase name="Magento\Bundle\Test\TestCase\UpdateBundleProductEntityTest">
+    <variation name="UpdateBundleProductEntityTestVariation1">
       <data name="originalProduct/dataSet" xsi:type="string">bundle_dynamic_product</data>
       <data name="product/data/name" xsi:type="string">bundle_dynamic_%isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -30,7 +30,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
-    <variation name="UpdateBundleProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateBundleProductEntityTestVariation2">
       <data name="originalProduct/dataSet" xsi:type="string">bundle_fixed_product</data>
       <data name="product/data/name" xsi:type="string">bundle_dynamic_%isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>

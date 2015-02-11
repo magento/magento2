@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="CreateCatalogPriceRuleEntityTest">
-    <variation name="CreateCatalogPriceRuleEntityTestVariation1" firstConstraint="assertCatalogPriceRuleSuccessSaveMessage" method="test">
+  <testCase name="Magento\CatalogRule\Test\TestCase\CreateCatalogPriceRuleEntityTest">
+    <variation name="CreateCatalogPriceRuleEntityTestVariation1">
       <data name="catalogPriceRule/data/name" xsi:type="string">CatalogPriceRule %isolation%</data>
       <data name="catalogPriceRule/data/description" xsi:type="string">Catalog Price Rule Description</data>
       <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
@@ -21,7 +21,7 @@
       <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleForm"/>
       <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid"/>
     </variation>
-    <variation name="CreateCatalogPriceRuleEntityTestVariation2" firstConstraint="assertCatalogPriceRuleSuccessSaveMessage" method="test">
+    <variation name="CreateCatalogPriceRuleEntityTestVariation2">
       <data name="catalogPriceRule/data/name" xsi:type="string">CatalogPriceRule %isolation%</data>
       <data name="catalogPriceRule/data/description" xsi:type="string">Catalog Price Rule Description</data>
       <data name="catalogPriceRule/data/is_active" xsi:type="string">Inactive</data>

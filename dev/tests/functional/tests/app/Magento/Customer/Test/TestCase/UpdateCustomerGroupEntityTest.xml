@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateCustomerGroupEntityTest">
-    <variation name="UpdateCustomerGroupEntityTestVariation1" firstConstraint="assertCustomerGroupSuccessSaveMessage" method="test">
+  <testCase name="Magento\Customer\Test\TestCase\UpdateCustomerGroupEntityTest">
+    <variation name="UpdateCustomerGroupEntityTestVariation1">
       <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">Retail Customer</data>
       <data name="customerGroup/data/customer_group_code" xsi:type="string">GroupName%isolation%</data>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage"/>
@@ -15,12 +15,12 @@
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm"/>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupForm"/>
     </variation>
-    <variation name="UpdateCustomerGroupEntityTestVariation2" firstConstraint="assertCustomerGroupAlreadyExists" method="test">
+    <variation name="UpdateCustomerGroupEntityTestVariation2">
       <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">-</data>
       <data name="customerGroup/data/customer_group_code" xsi:type="string">General </data>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupAlreadyExists"/>
     </variation>
-    <variation name="UpdateCustomerGroupEntityTestVariation3" firstConstraint="assertCustomerGroupSuccessSaveMessage" method="test">
+    <variation name="UpdateCustomerGroupEntityTestVariation3">
       <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">customer_tax_class</data>
       <data name="customerGroup/data/customer_group_code" xsi:type="string">Group Name %isolation%</data>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage"/>
@@ -28,7 +28,7 @@
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm"/>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupForm"/>
     </variation>
-    <variation name="UpdateCustomerGroupEntityTestVariation4" firstConstraint="assertCustomerGroupSuccessSaveMessage" method="test">
+    <variation name="UpdateCustomerGroupEntityTestVariation4">
       <data name="customerGroup/data/tax_class_id/dataSet" xsi:type="string">customer_tax_class</data>
       <data name="customerGroup/data/customer_group_code" xsi:type="string">Group#Name%isolation%</data>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessSaveMessage"/>

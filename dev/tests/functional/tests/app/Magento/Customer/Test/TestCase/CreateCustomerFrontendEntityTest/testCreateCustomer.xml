@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="testCreateCustomer">
-    <variation name="testCreateCustomerVariation1" firstConstraint="assertCustomerSuccessRegisterMessage" method="test">
+  <testCase name="Magento\Customer\Test\TestCase\CreateCustomerFrontendEntityTest\testCreateCustomer">
+    <variation name="testCreateCustomerVariation1">
       <data name="customer/data/firstname" xsi:type="string">john</data>
       <data name="customer/data/lastname" xsi:type="string">doe</data>
       <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
@@ -17,7 +17,7 @@
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage"/>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
     </variation>
-    <variation name="testCreateCustomerVariation2" firstConstraint="assertCustomerSuccessRegisterMessage" method="test">
+    <variation name="testCreateCustomerVariation2">
       <data name="customer/data/firstname" xsi:type="string">john</data>
       <data name="customer/data/lastname" xsi:type="string">doe</data>
       <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>

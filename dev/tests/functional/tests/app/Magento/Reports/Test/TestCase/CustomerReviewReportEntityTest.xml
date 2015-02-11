@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="CustomerReviewReportEntityTest">
-    <variation name="CustomerReviewReportEntityTestVariation1" firstConstraint="assertProductReviewsQtyByCustomer" method="test">
+  <testCase name="Magento\Reports\Test\TestCase\CustomerReviewReportEntityTest">
+    <variation name="CustomerReviewReportEntityTestVariation1">
       <data name="customerLogin" xsi:type="string">Yes</data>
       <data name="product/dataSet" xsi:type="string">default</data>
       <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
@@ -17,7 +17,7 @@
       <constraint name="Magento\Reports\Test\Constraint\AssertProductReviewsQtyByCustomer"/>
       <constraint name="Magento\Reports\Test\Constraint\AssertProductReportByCustomerInGrid"/>
     </variation>
-    <variation name="CustomerReviewReportEntityTestVariation2" firstConstraint="assertProductReviewsQtyByCustomer" method="test">
+    <variation name="CustomerReviewReportEntityTestVariation2">
       <data name="customerLogin" xsi:type="string">Yes</data>
       <data name="product/dataSet" xsi:type="string">default</data>
       <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
@@ -27,7 +27,7 @@
       <constraint name="Magento\Reports\Test\Constraint\AssertProductReviewsQtyByCustomer"/>
       <constraint name="Magento\Reports\Test\Constraint\AssertProductReportByCustomerInGrid"/>
     </variation>
-    <variation name="CustomerReviewReportEntityTestVariation3" firstConstraint="assertProductReviewsQtyByCustomer" method="test">
+    <variation name="CustomerReviewReportEntityTestVariation3">
       <data name="customerLogin" xsi:type="string">No</data>
       <data name="product/dataSet" xsi:type="string">default</data>
       <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>

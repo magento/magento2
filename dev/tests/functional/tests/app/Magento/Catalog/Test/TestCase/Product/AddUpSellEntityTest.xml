@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="AddUpSellEntityTest">
-    <variation name="AddUpSellEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+  <testCase name="Magento\Catalog\Test\TestCase\Product\AddUpSellEntityTest">
+    <variation name="AddUpSellEntityTestVariation1">
       <data name="productData" xsi:type="string">catalogProductSimple::default</data>
       <data name="upSellProductsData" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
@@ -15,7 +15,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertUpSellsProductsSection"/>
     </variation>
-    <variation name="AddUpSellEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="AddUpSellEntityTestVariation2">
       <data name="productData" xsi:type="string">configurableProductInjectable::default</data>
       <data name="upSellProductsData" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>

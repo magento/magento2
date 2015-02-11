@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="CreateDownloadableProductEntityTest">
-    <variation name="CreateDownloadableProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+  <testCase name="Magento\Downloadable\Test\TestCase\CreateDownloadableProductEntityTest">
+    <variation name="CreateDownloadableProductEntityTestVariation1">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">100</data>
@@ -37,7 +37,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation2">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">1</data>
@@ -67,7 +67,7 @@
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableSamplesData"/>
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation3">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">33</data>
@@ -97,7 +97,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation4">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">55</data>
@@ -130,7 +130,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation5">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">100</data>
@@ -158,7 +158,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation6">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">9999</data>
@@ -186,7 +186,7 @@
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation7">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">98</data>
@@ -214,7 +214,7 @@
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation8">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">57</data>
@@ -245,7 +245,7 @@
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableSamplesData"/>
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation9">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">65</data>
@@ -276,7 +276,7 @@
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableSamplesData"/>
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation10" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation10">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">65</data>
@@ -306,7 +306,7 @@
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation11" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation11">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">100</data>
@@ -334,7 +334,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation12" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation12">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">10</data>
@@ -363,7 +363,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation13" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation13">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">365</data>
@@ -392,7 +392,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage"/>
     </variation>
-    <variation name="CreateDownloadableProductEntityTestVariation14" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateDownloadableProductEntityTestVariation14">
       <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">250</data>

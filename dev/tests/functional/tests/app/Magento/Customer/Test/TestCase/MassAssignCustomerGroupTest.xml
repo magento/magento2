@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="MassAssignCustomerGroupTest">
-    <variation name="MassAssignCustomerGroupTestVariation1" firstConstraint="assertMassActionSuccessUpdateMessage" method="test">
+  <testCase name="Magento\Customer\Test\TestCase\MassAssignCustomerGroupTest">
+    <variation name="MassAssignCustomerGroupTestVariation1">
       <data name="customerGroup/dataSet" xsi:type="string">default</data>
       <constraint name="Magento\Customer\Test\Constraint\AssertMassActionSuccessUpdateMessage"/>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid"/>

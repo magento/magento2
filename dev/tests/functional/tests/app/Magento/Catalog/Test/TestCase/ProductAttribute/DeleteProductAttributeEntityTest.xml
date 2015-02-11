@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="DeleteProductAttributeEntityTest">
-    <variation name="DeleteProductAttributeEntityTestVariation1" firstConstraint="assertProductAttributeSuccessDeleteMessage" method="test">
+  <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\DeleteProductAttributeEntityTest">
+    <variation name="DeleteProductAttributeEntityTestVariation1">
       <data name="attribute/dataSet" xsi:type="string">attribute_type_text_field</data>
       <data name="isRequired" xsi:type="string">Yes</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSuccessDeleteMessage"/>
@@ -15,7 +15,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeAbsenceInSearchOnProductForm"/>
       <constraint name="Magento\ImportExport\Test\Constraint\AssertProductAttributeAbsenceForExport"/>
     </variation>
-    <variation name="DeleteProductAttributeEntityTestVariation2" firstConstraint="assertProductAttributeSuccessDeleteMessage" method="test">
+    <variation name="DeleteProductAttributeEntityTestVariation2">
       <data name="attribute/dataSet" xsi:type="string">attribute_type_dropdown</data>
       <data name="isRequired" xsi:type="string">No</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSuccessDeleteMessage"/>

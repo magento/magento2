@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="ViewedProductsReportEntityTest">
-    <variation name="ViewedProductsReportEntityTestVariation1" firstConstraint="assertProductViewsReportTotalResult" method="test">
+  <testCase name="Magento\Reports\Test\TestCase\ViewedProductsReportEntityTest">
+    <variation name="ViewedProductsReportEntityTestVariation1">
       <data name="description" xsi:type="string">view products on front and verify they all reflected in Year report</data>
       <data name="total" xsi:type="string">2, 1</data>
       <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
@@ -17,7 +17,7 @@
       <data name="viewsReport/show_empty_rows" xsi:type="string">No</data>
       <constraint name="Magento\Reports\Test\Constraint\AssertProductViewsReportTotalResult"/>
     </variation>
-    <variation name="ViewedProductsReportEntityTestVariation2" firstConstraint="assertProductViewsReportTotalResult" method="test">
+    <variation name="ViewedProductsReportEntityTestVariation2">
       <data name="description" xsi:type="string">view products on front and verify they all reflected in Month report</data>
       <data name="total" xsi:type="string">1, 1</data>
       <data name="products" xsi:type="string">downloadableProductInjectable::default, bundleProduct::bundle_dynamic_product</data>
@@ -27,7 +27,7 @@
       <data name="viewsReport/show_empty_rows" xsi:type="string">No</data>
       <constraint name="Magento\Reports\Test\Constraint\AssertProductViewsReportTotalResult"/>
     </variation>
-    <variation name="ViewedProductsReportEntityTestVariation3" firstConstraint="assertProductViewsReportTotalResult" method="test">
+    <variation name="ViewedProductsReportEntityTestVariation3">
       <data name="description" xsi:type="string">view products on front and verify they all reflected in Day report</data>
       <data name="total" xsi:type="string">1, 1</data>
       <data name="products" xsi:type="string">configurableProductInjectable::default, groupedProductInjectable::default</data>

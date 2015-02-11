@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="CreateProductRatingEntityTest">
-    <variation name="CreateProductRatingEntityTestVariation1" firstConstraint="assertProductRatingSuccessSaveMessage" method="test">
+  <testCase name="Magento\Review\Test\TestCase\CreateProductRatingEntityTest">
+    <variation name="CreateProductRatingEntityTestVariation1">
       <data name="productRating/data/rating_code" xsi:type="string">productRating_%isolation%</data>
       <data name="productRating/data/stores" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
       <data name="productRating/data/is_active" xsi:type="string">Yes</data>
@@ -15,7 +15,7 @@
       <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInGrid"/>
       <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage"/>
     </variation>
-    <variation name="CreateProductRatingEntityTestVariation2" firstConstraint="assertProductRatingSuccessSaveMessage" method="test">
+    <variation name="CreateProductRatingEntityTestVariation2">
       <data name="productRating/data/rating_code" xsi:type="string">productRating_%isolation%</data>
       <data name="productRating/data/stores" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
       <data name="productRating/data/is_active" xsi:type="string">No</data>
