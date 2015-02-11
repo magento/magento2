@@ -114,7 +114,13 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $resultRedirect = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
         $resultRedirect->expects($this->once())->method('setPath')->with('backup/*');
 
-        $resultRedirectFactory = $this->getMock('Magento\Backend\Model\View\Result\RedirectFactory', [], [], '', false);
+        $resultRedirectFactory = $this->getMock(
+            'Magento\Backend\Model\View\Result\RedirectFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $resultRedirectFactory->expects($this->once())->method('create')->will($this->returnValue($resultRedirect));
 
         /** @var Download|\PHPUnit_Framework_MockObject_MockObject $controller */
