@@ -42,6 +42,12 @@ angular.module('web-configuration', ['ngStorage'])
             obj.expanded = !obj.expanded;
         }
 
+        $scope.fillBaseURL = function() {
+            if (angular.equals($scope.config.address.base_url, '')) {
+                $scope.config.address.base_url = $scope.config.address.auto_base_url;
+            }
+        }
+
         $scope.$watch('config.address.base_url', function() {
             if (angular.equals($scope.config.address.base_url, '')) {
                 $scope.config.address.actual_base_url = $scope.config.address.auto_base_url;

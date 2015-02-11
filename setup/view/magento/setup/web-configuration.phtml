@@ -37,7 +37,7 @@ $hints = [
             <input type="url"
                    name="base_url"
                    ng-model="config.address.base_url"
-                   ng-init="config.address.auto_base_url = '<?php echo $this->autoBaseUrl ?>'; config.address.base_url = config.address.auto_base_url;"
+                   ng-init="config.address.auto_base_url = '<?php echo $this->autoBaseUrl ?>'; fillBaseURL();"
                    ng-blur="addSlash()"
                    ng-change="populateHttps()"
                    class="form-control"
