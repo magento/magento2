@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Code\Generator\CodeGenerator;
+namespace Magento\Framework\Code\Generator;
 
-class ZendTest extends \PHPUnit_Framework_TestCase
+class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**#@+
      * Possible flags for assertion
@@ -23,7 +23,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
     /**#@-*/
 
     /**
-     * @var \Magento\Framework\Code\Generator\CodeGenerator\Zend
+     * @var \Magento\Framework\Code\Generator\ClassGenerator
      */
     protected $_model;
 
@@ -117,7 +117,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new \Magento\Framework\Code\Generator\CodeGenerator\Zend();
+        $this->_model = new \Magento\Framework\Code\Generator\ClassGenerator();
     }
 
     protected function tearDown()

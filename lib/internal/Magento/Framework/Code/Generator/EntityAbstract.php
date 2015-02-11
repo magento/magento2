@@ -39,7 +39,7 @@ abstract class EntityAbstract
     /**
      * Class generator object
      *
-     * @var CodeGenerator\CodeGeneratorInterface
+     * @var \Magento\Framework\Code\Generator\CodeGeneratorInterface
      */
     protected $_classGenerator;
 
@@ -52,14 +52,14 @@ abstract class EntityAbstract
      * @param null|string $sourceClassName
      * @param null|string $resultClassName
      * @param Io $ioObject
-     * @param CodeGenerator\CodeGeneratorInterface $classGenerator
+     * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
      * @param DefinedClasses $definedClasses
      */
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
-        CodeGenerator\CodeGeneratorInterface $classGenerator = null,
+        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
         DefinedClasses $definedClasses = null
     ) {
         if ($ioObject) {
@@ -70,7 +70,7 @@ abstract class EntityAbstract
         if ($classGenerator) {
             $this->_classGenerator = $classGenerator;
         } else {
-            $this->_classGenerator = new CodeGenerator\Zend();
+            $this->_classGenerator = new ClassGenerator();
         }
         if ($definedClasses) {
             $this->definedClasses = $definedClasses;

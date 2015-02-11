@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Code\Generator\CodeGenerator;
+namespace Magento\Framework\Code\Generator;
 
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\PropertyGenerator;
 
-class Zend extends \Zend\Code\Generator\ClassGenerator implements
-    \Magento\Framework\Code\Generator\CodeGenerator\CodeGeneratorInterface
+class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
+    \Magento\Framework\Code\Generator\CodeGeneratorInterface
 {
     /**
      * Possible doc block options

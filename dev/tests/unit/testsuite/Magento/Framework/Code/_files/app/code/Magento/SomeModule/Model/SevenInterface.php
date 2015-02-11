@@ -13,7 +13,7 @@ use Magento\SomeModule\Model\Three\Test as TestThree;
  * @tag1 data1
  * @tag2 data2
  */
-interface SevenInterface extends \Magento\Framework\Code\Generator\CodeGenerator\CodeGeneratorInterface
+interface SevenInterface extends \Magento\Framework\Code\Generator\CodeGeneratorInterface
 {
 
     /**

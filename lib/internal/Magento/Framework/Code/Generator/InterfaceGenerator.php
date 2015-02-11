@@ -8,7 +8,7 @@ namespace Magento\Framework\Code\Generator;
 /**
  * Interface generator.
  */
-class InterfaceGenerator extends \Magento\Framework\Code\Generator\CodeGenerator\Zend
+class InterfaceGenerator extends \Magento\Framework\Code\Generator\ClassGenerator
 {
     /**
      * {@inheritdoc}

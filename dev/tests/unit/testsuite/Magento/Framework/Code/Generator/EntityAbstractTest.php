@@ -58,7 +58,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEmpty('_resultClassName', $this->_model);
         $this->assertAttributeInstanceOf('Magento\Framework\Code\Generator\Io', '_ioObject', $this->_model);
         $this->assertAttributeInstanceOf(
-            'Magento\Framework\Code\Generator\CodeGenerator\Zend',
+            'Magento\Framework\Code\Generator\ClassGenerator',
             '_classGenerator',
             $this->_model
         );
@@ -79,7 +79,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         // with all arguments
         $ioObject = $this->getMock('Magento\Framework\Code\Generator\Io', [], [], '', false);
         $codeGenerator = $this->getMock(
-            'Magento\Framework\Code\Generator\CodeGenerator\Zend',
+            'Magento\Framework\Code\Generator\ClassGenerator',
             [],
             [],
             '',
@@ -382,7 +382,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $mocks = $this->_prepareMocksForValidateData();
 
         $codeGenerator = $this->getMock(
-            'Magento\Framework\Code\Generator\CodeGenerator\Zend',
+            'Magento\Framework\Code\Generator\ClassGenerator',
             ['setName', 'addProperties', 'addMethods', 'setClassDocBlock', 'generate'],
             [],
             '',

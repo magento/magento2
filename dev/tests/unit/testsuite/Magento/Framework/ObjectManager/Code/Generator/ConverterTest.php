@@ -28,7 +28,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     protected $generator;
 
     /**
-     * @var \Magento\Framework\Code\Generator\CodeGenerator\Zend | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Generator\ClassGenerator | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $classGenerator;
 
@@ -47,7 +47,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->classGenerator = $this->getMock(
-            'Magento\Framework\Code\Generator\CodeGenerator\Zend',
+            'Magento\Framework\Code\Generator\ClassGenerator',
             [],
             [],
             '',

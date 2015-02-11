@@ -84,7 +84,7 @@ class InterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
             ->setNamespaceName('Magento\SomeModule\Model')
             ->addUse('Magento\SomeModule\Model\Two\Test', 'TestTwo')
             ->addUse('Magento\SomeModule\Model\Three\Test', 'TestThree')
-            ->setExtendedClass('\Magento\Framework\Code\Generator\CodeGenerator\CodeGeneratorInterface');
+            ->setExtendedClass('\Magento\Framework\Code\Generator\CodeGeneratorInterface');
         $generatedInterface = $this->interfaceGenerator->generate();
         $expectedInterface = file_get_contents(
             __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/SevenInterface.php'
