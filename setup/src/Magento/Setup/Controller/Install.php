@@ -138,6 +138,10 @@ class Install extends AbstractActionController
             ? $source['config']['address']['admin'] : '';
         $result[DeploymentConfigMapper::KEY_ENCRYPTION_KEY] = isset($source['config']['encrypt']['key'])
             ? $source['config']['encrypt']['key'] : '';
+        $result[Installer::ENABLE_MODULES] = isset($source['store']['selectedModules'])
+            ? implode(',', $source['store']['selectedModules']) : '';
+        $result[Installer::DISABLE_MODULES] = isset($source['store']['allModules'])
+            ? implode( ',', array_diff($source['store']['allModules'], $source['store']['selectedModules'])) : '';
         return $result;
     }
 

@@ -86,27 +86,47 @@ class Status
      * Whether it is allowed to enable or disable specified modules
      *
      * @param bool $isEnabled
-     * @param string[] $modules
+     * @param string[] $modulesToBeChanged
+     * @param string[] $currentlyEnabledModules
+     * @param bool $prettyMessage
+     *  
      * @return string[]
      */
-    public function checkConstraints($isEnabled, $modules)
-    {
+    public function checkConstraints(
+        $isEnabled,
+        $modulesToBeChanged,
+        $currentlyEnabledModules = null,
+        $prettyMessage = false
+    ) {
         $errorMessages = [];
         if ($isEnabled) {
-            $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenEnableModules($modules);
-            $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules($modules);
+            $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenEnableModules(
+                $modulesToBeChanged,
+                $currentlyEnabledModules
+            );
+            $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules(
+                $modulesToBeChanged,
+                $currentlyEnabledModules
+            );
         } else {
-            $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenDisableModules($modules);
+            $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenDisableModules(
+                $modulesToBeChanged,
+                $currentlyEnabledModules
+            );
             $errorModulesConflict = [];
         }
 
         foreach ($errorModulesDependency as $moduleName => $missingDependencies) {
             if (!empty($missingDependencies)) {
                 $errorMessages[] = $isEnabled ?
-                    "Cannot enable $moduleName, depending on disabled modules:" :
-                    "Cannot disable $moduleName, modules depending on it:";
+                    ($prettyMessage ? "Cannot enable $moduleName" :
+                        "Cannot enable $moduleName, depending on disabled modules:") :
+                    ($prettyMessage ? "Cannot disable $moduleName" :
+                        "Cannot disable $moduleName, modules depending on it:");
                 foreach ($missingDependencies as $errorModule => $path) {
-                    $errorMessages [] = "$errorModule: " . implode('->', $path);
+                    if (!$prettyMessage) {
+                        $errorMessages [] = "$errorModule: " . implode('->', $path);
+                    }
                 }
             }
         }

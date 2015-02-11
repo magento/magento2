@@ -9,13 +9,14 @@
 ?>
 <div class="step-controls">
     <a href="" class="btn btn-primary" ng-click="previousState()">Previous</a>
-    <a href="" class="btn btn-primary" ng-click="nextState()">Next</a>
+    <a href="" class="btn btn-primary" ng-click="checkModuleConstraints()">Next</a>
 </div>
 
 <div class="page-header">
     <h1>{{$state.current.header}}</h1>
 </div>
 
+<form novalidate name="customizeStore" class="form-horizontal" role="form">
 <form class="form-horizontal" role="form">
     <div class="form-group">
         <label class="col-md-3 control-label">Sample Data</label>
@@ -64,7 +65,6 @@
             </select>
         </div>
     </div>
-
     <div class="form-group">
         <label class="col-md-3 control-label">Store Default Language&nbsp;<span class="required">*</span></label>
         <div class="col-md-4">
@@ -80,9 +80,36 @@
             </select>
         </div>
     </div>
+    <div class="collapsed-options">
+        <a href="#" class="collapsed-options" ng-click="updateOnExpand(store.advanced)">Advanced Modules Configurations</a>
+        <span class="caret"></span>
+    </div>
+    <div ng-show="store.advanced.expanded" class="form-group">
+        <div ng-show="store.errorMessage !== '' && store.errorMessage !== false " class="col-sm-10  error-container">
+            <input type="checkbox" ng-model="store.force" ng-click="toggleForce()">&nbsp; Skip dependency check for individual modules
+        </div>
+        <div ng-show="store.errorMessage !== '' && store.errorMessage !== false " class="col-sm-10 error-container animate-show text-danger glyphicon glyphicon-remove-sign"> An error has occurred. <a href="#" class="text-danger" style="text-decoration: none;" ng-click="expandError()">Click to see detailed error.</a><span class="caret"></span>
+        </div>
+        <div ng-show="store.errorMessage !== '' && store.errorFlag === true" class="col-sm-10 error-container animate-show text-danger glyphicon glyphicon-remove-sign" ng-bind-html="store.errorMessage">
+        </div>
+        <div class="col-sm-8" ng-show="loading"><p style="color:blue">Validating Constraints for enabling/disabling modules...<img src="pub/images/ajax-loader.gif"/></div>
+        <div>&nbsp;</div>
+        <div class="col-sm-10 form-group">
+            <input type="checkbox"
+               ng-model="store.selectAll"
+               ng-click="toggleAllModules()">&nbsp;Select All
+        </div>
+        <div class="form-group multiSelect">
+            <label class="col-md-7 uncheckedClass" ng-repeat="module in store.allModules"  ng-class="{'disabledClass': (store.disabledModules.indexOf(module) > -1) && (store.selectedModules.indexOf(module) > -1), 'checkedClass':  (store.selectedModules.indexOf(module) > -1)}">
+                <input class="moduleCheckbox" type="checkbox" ng-click="toggleModule(module)" ng-disabled="store.disabledModules.indexOf(module) > -1"  ng-checked="store.selectedModules.indexOf(module) > -1" name="{{module}}"> {{module}}<br/>
+            </label>
+        </div>
+        <div class="form-group">
+            {{store.selectedModules.length}} out of {{store.allModules.length}} selected.
+        </div>
+    </div>
 </form>
-
 <div class="step-controls">
     <a href="" class="btn btn-primary" ng-click="previousState()">Previous</a>
-    <a href="" class="btn btn-primary" ng-click="nextState()">Next</a>
+    <a href="" class="btn btn-primary" ng-click="checkModuleConstraints()">Next</a>
 </div>

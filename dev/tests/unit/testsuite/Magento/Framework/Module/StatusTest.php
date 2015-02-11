@@ -69,7 +69,11 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenEnableModules')
             ->will($this->returnValue(['Module_Foo' => [], 'Module_Bar' => []]));
-        $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => '']);
+        $result = $this->object->checkConstraints(
+            true,
+            ['Module_Foo' => '', 'Module_Bar' => ''],
+            ['Module_baz', 'Module_quz']
+            );
         $this->assertEquals([], $result);
     }
 
@@ -86,12 +90,37 @@ class StatusTest extends \PHPUnit_Framework_TestCase
                     'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
                 ]
             ));
-        $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => '']);
+        $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => ''], [], false);
         $expect = [
             'Cannot enable Module_Foo, depending on disabled modules:',
             "Module_Baz: Module_Foo->Module_Baz",
             'Cannot enable Module_Bar, depending on disabled modules:',
             "Module_Baz: Module_Bar->Module_Baz",
+            'Cannot enable Module_Foo, conflicting with other modules:',
+            "Module_Bar",
+            'Cannot enable Module_Bar, conflicting with other modules:',
+            "Module_Foo",
+        ];
+        $this->assertEquals($expect, $result);
+    }
+
+    public function testCheckConstraintsEnableNotAllowedWithPrettyMsg()
+    {
+        $this->conflictChecker->expects($this->once())
+            ->method('checkConflictsWhenEnableModules')
+            ->will($this->returnValue(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]));
+        $this->dependencyChecker->expects($this->once())
+            ->method('checkDependenciesWhenEnableModules')
+            ->will($this->returnValue(
+                [
+                    'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
+                    'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
+                ]
+            ));
+        $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => ''], [], true);
+        $expect = [
+            'Cannot enable Module_Foo',
+            'Cannot enable Module_Bar',
             'Cannot enable Module_Foo, conflicting with other modules:',
             "Module_Bar",
             'Cannot enable Module_Bar, conflicting with other modules:',

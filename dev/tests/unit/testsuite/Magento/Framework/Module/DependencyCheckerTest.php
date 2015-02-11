@@ -79,6 +79,15 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testCheckDependenciesWhenDisableModulesWithCurEnabledModules()
+    {
+        $this->checker = new DependencyChecker($this->listMock, $this->loaderMock, $this->packageInfoFactoryMock);
+
+        $actual = $this->checker->checkDependenciesWhenDisableModules(['B', 'D'], ['C', 'D', 'E']);
+        $expected = ['B' => [], 'D' => []];
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testCheckDependenciesWhenEnableModules()
     {
         $this->listMock
@@ -87,6 +96,17 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['C']));
         $this->checker = new DependencyChecker($this->listMock, $this->loaderMock, $this->packageInfoFactoryMock);
         $actual = $this->checker->checkDependenciesWhenEnableModules(['B', 'D']);
+        $expected = [
+            'B' => ['A' => ['B', 'D', 'A'], 'E' => ['B', 'E']],
+            'D' => ['A' => ['D', 'A'], 'E' => ['D', 'A', 'B', 'E']],
+        ];
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testCheckDependenciesWhenEnableModulesWithCurEnabledModules()
+    {
+        $this->checker = new DependencyChecker($this->listMock, $this->loaderMock, $this->packageInfoFactoryMock);
+        $actual = $this->checker->checkDependenciesWhenEnableModules(['B', 'D'], ['C']);
         $expected = [
             'B' => ['A' => ['B', 'D', 'A'], 'E' => ['B', 'E']],
             'D' => ['A' => ['D', 'A'], 'E' => ['D', 'A', 'B', 'E']],
