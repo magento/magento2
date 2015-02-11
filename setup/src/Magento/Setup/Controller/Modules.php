@@ -6,7 +6,7 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Setup\Model\ModuleStatus;
-use Magento\Setup\Model\ObjectManagerFactory;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
@@ -27,12 +27,12 @@ class Modules extends AbstractActionController
 
     /**
      * @param ModuleStatus $allModules
-     * @param ObjectManagerFactory $objectManagerFactory
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(ModuleStatus $allModules, ObjectManagerFactory $objectManagerFactory)
+    public function __construct(ModuleStatus $allModules, ObjectManagerProvider $objectManagerProvider)
     {
         $this->allModules = $allModules;
-        $this->objectManager = $objectManagerFactory->create();
+        $this->objectManager = $objectManagerProvider->get();
     }
 
     /**
