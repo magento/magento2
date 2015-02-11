@@ -180,9 +180,6 @@
             <argument name="cacheKey" xsi:type="string">global_acl_resources</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Action\Action">
-        <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
-    </type>
     <type name="Magento\Framework\App\Config\Initial\Converter">
         <arguments>
             <argument name="nodeMap" xsi:type="array">
@@ -213,13 +210,6 @@
                 <item name="store" xsi:type="string">Magento\Store\Model\Store</item>
                 <item name="website" xsi:type="string">Magento\Store\Model\Website</item>
                 <item name="storeGroup" xsi:type="string">Magento\Store\Model\Group</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="core_setup" xsi:type="string">Magento\Framework\Module\DataSetup</item>
             </argument>
         </arguments>
     </type>
