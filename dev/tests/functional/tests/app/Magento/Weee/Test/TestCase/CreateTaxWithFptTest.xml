@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="CreateTaxWithFptTest">
+        <variation name="CreateTaxWithFptTestVariation1">
+            <data name="description">Check not taxed FPT display set to Excluding, Description and Including FPT on product with custom option catalog price Excluding Tax</data>
+            <data name="configData">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_excl</data>
+            <data name="productData">with_custom_option_and_fpt</data>
+            <data name="prices/category_price">70.00</data>
+            <data name="prices/fpt_category">10.00</data>
+            <data name="prices/fpt_total_category">80.00</data>
+            <data name="prices/product_page_price">100.00</data>
+            <data name="prices/product_page_fpt">10.00</data>
+            <data name="prices/product_page_fpt_total">110.00</data>
+            <data name="prices/cart_item_price">100.00</data>
+            <data name="prices/cart_item_fpt">10.00</data>
+            <data name="prices/cart_item_fpt_total">110.00</data>
+            <data name="prices/cart_item_subtotal">100.00</data>
+            <data name="prices/cart_item_subtotal_fpt">10.00</data>
+            <data name="prices/cart_item_subtotal_fpt_total">110.00</data>
+            <data name="prices/grand_total">118.25</data>
+            <data name="prices/total_fpt">10.00</data>
+            <data name="constraint">assertFptApplied</data>
+        </variation>
+        <variation name="CreateTaxWithFptTestVariation2">
+            <data name="description">Check not taxed FPT display set to Including FPT and Description on product with custom option catalog price Excluding Tax</data>
+            <data name="configData">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_incl, display_including_tax</data>
+            <data name="productData">with_custom_option_and_fpt</data>
+            <data name="prices/category_price">80.00</data>
+            <data name="prices/fpt_category">10.00</data>
+            <data name="prices/product_page_price">100.00</data>
+            <data name="prices/product_page_fpt">10.00</data>
+            <data name="prices/cart_item_price">110.00</data>
+            <data name="prices/cart_item_fpt">10.00</data>
+            <data name="prices/cart_item_subtotal">110.00</data>
+            <data name="prices/cart_item_subtotal_fpt">10.00</data>
+            <data name="prices/grand_total">118.25</data>
+            <data name="prices/total_fpt">10.00</data>
+            <data name="constraint">assertFptApplied</data>
+        </variation>
+        <variation name="CreateTaxWithFptTestVariation3">
+            <data name="description">Check not taxed FPT display set to Excluding, Description and Including FPT on product with special price catalog price Excluding Tax</data>
+            <data name="configData">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_incl, display_including_tax</data>
+            <data name="productData">with_special_price_and_fpt</data>
+            <data name="prices/category_price">110.00</data>
+            <data name="prices/fpt_category">10.00</data>
+            <data name="prices/product_page_price">110.00</data>
+            <data name="prices/product_page_fpt">10.00</data>
+            <data name="prices/cart_item_price">110.00</data>
+            <data name="prices/cart_item_fpt">10.00</data>
+            <data name="prices/cart_item_subtotal">110.00</data>
+            <data name="prices/cart_item_subtotal_fpt">10.00</data>
+            <data name="prices/grand_total">118.25</data>
+            <data name="prices/total_fpt">10.00</data>
+            <data name="constraint">assertFptApplied</data>
+        </variation>
+        <variation name="CreateTaxWithFptTestVariation4">
+            <data name="description">Check not taxed FPT display set to Including FPT and Description on product with special price catalog price Excluding Tax</data>
+            <data name="configData">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_excl,</data>
+            <data name="productData">with_special_price_and_fpt</data>
+            <data name="prices/category_price">100.00</data>
+            <data name="prices/fpt_category">10.00</data>
+            <data name="prices/fpt_total_category">110.00</data>
+            <data name="prices/product_page_price">100.00</data>
+            <data name="prices/product_page_fpt">10.00</data>
+            <data name="prices/product_page_fpt_total">110.00</data>
+            <data name="prices/cart_item_price">100.00</data>
+            <data name="prices/cart_item_fpt">10.00</data>
+            <data name="prices/cart_item_fpt_total">110.00</data>
+            <data name="prices/cart_item_subtotal">100.00</data>
+            <data name="prices/cart_item_subtotal_fpt">10.00</data>
+            <data name="prices/cart_item_subtotal_fpt_total">110.00</data>
+            <data name="prices/grand_total">118.25</data>
+            <data name="prices/total_fpt">10.00</data>
+            <data name="constraint">assertFptApplied</data>
+        </variation>
+        <variation name="CreateTaxWithFptTestVariation5">
+            <data name="description">Check taxed FPT display set to Excluding, Description and Including FPT on product with with custom option catalog price Excluding Tax</data>
+            <data name="configData">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_excl_disc_on_excl</data>
+            <data name="productData">with_custom_option_and_fpt</data>
+            <data name="prices/category_price">70.00</data>
+            <data name="prices/fpt_category">10.00</data>
+            <data name="prices/fpt_total_category">80.00</data>
+            <data name="prices/product_page_price">100.00</data>
+            <data name="prices/product_page_fpt">10.00</data>
+            <data name="prices/product_page_fpt_total">110.00</data>
+            <data name="prices/cart_item_price">100.00</data>
+            <data name="prices/cart_item_fpt">10.00</data>
+            <data name="prices/cart_item_fpt_total">110.00</data>
+            <data name="prices/cart_item_subtotal">100.00</data>
+            <data name="prices/cart_item_subtotal_fpt">10.00</data>
+            <data name="prices/cart_item_subtotal_fpt_total">110.00</data>
+            <data name="prices/grand_total">119.08</data>
+            <data name="prices/total_fpt">10.00</data>
+            <data name="constraint">assertFptApplied</data>
+        </variation>
+        <variation name="CreateTaxWithFptTestVariation6">
+            <data name="description">Check taxed FPT display set to Including FPT and Description on product with with custom option catalog price Excluding Tax</data>
+            <data name="configData">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_excl_disc_on_incl, display_including_tax</data>
+            <data name="productData">with_custom_option_and_fpt</data>
+            <data name="prices/category_price">80.00</data>
+            <data name="prices/fpt_category">10.00</data>
+            <data name="prices/product_page_price">100.00</data>
+            <data name="prices/product_page_fpt">10.00</data>
+            <data name="prices/cart_item_price">110.00</data>
+            <data name="prices/cart_item_fpt">10.00</data>
+            <data name="prices/cart_item_subtotal">110.00</data>
+            <data name="prices/cart_item_subtotal_fpt">10.00</data>
+            <data name="prices/grand_total">119.08</data>
+            <data name="prices/total_fpt">10.00</data>
+            <data name="constraint">assertFptApplied</data>
+        </variation>
+        <variation name="CreateTaxWithFptTestVariation7">
+            <data name="description">Check taxed FPT display set to Excluding, Description and Including FPT on product with special price catalog price Excluding Tax</data>
+            <data name="configData">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_excl_disc_on_incl, display_including_tax</data>
+            <data name="productData">with_special_price_and_fpt</data>
+            <data name="prices/category_price">110.00</data>
+            <data name="prices/fpt_category">10.00</data>
+            <data name="prices/product_page_price">110.00</data>
+            <data name="prices/product_page_fpt">10.00</data>
+            <data name="prices/cart_item_price">110.00</data>
+            <data name="prices/cart_item_fpt">10.00</data>
+            <data name="prices/cart_item_subtotal">110.00</data>
+            <data name="prices/cart_item_subtotal_fpt">10.00</data>
+            <data name="prices/grand_total">119.08</data>
+            <data name="prices/total_fpt">10.00</data>
+            <data name="constraint">assertFptApplied</data>
+        </variation>
+        <variation name="CreateTaxWithFptTestVariation8">
+            <data name="description">Check taxed FPT display set to Including FPT and Description on product with special price catalog price Excluding Tax</data>
+            <data name="configData">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_excl_disc_on_excl</data>
+            <data name="productData">with_special_price_and_fpt</data>
+            <data name="prices/category_price">100.00</data>
+            <data name="prices/fpt_category">10.00</data>
+            <data name="prices/fpt_total_category">110.00</data>
+            <data name="prices/product_page_price">100.00</data>
+            <data name="prices/product_page_fpt">10.00</data>
+            <data name="prices/product_page_fpt_total">110.00</data>
+            <data name="prices/cart_item_price">100.00</data>
+            <data name="prices/cart_item_fpt">10.00</data>
+            <data name="prices/cart_item_fpt_total">110.00</data>
+            <data name="prices/cart_item_subtotal">100.00</data>
+            <data name="prices/cart_item_subtotal_fpt">10.00</data>
+            <data name="prices/cart_item_subtotal_fpt_total">110.00</data>
+            <data name="prices/grand_total">119.08</data>
+            <data name="prices/total_fpt">10.00</data>
+            <data name="constraint">assertFptApplied</data>
+        </variation>
+        <variation name="CreateTaxWithFptTestVariation9">
+            <data name="description">Check taxed FPT display set to Excluding, Description and Including FPT on product with with special price and catalog price Including Tax</data>
+            <data name="configData">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_incl_disc_on_excl</data>
+            <data name="productData">with_special_price_and_fpt</data>
+            <data name="prices/category_price">82.38</data>
+            <data name="prices/fpt_category">10.00</data>
+            <data name="prices/fpt_total_category">92.38</data>
+            <data name="prices/product_page_price">82.38</data>
+            <data name="prices/product_page_fpt">10.00</data>
+            <data name="prices/product_page_fpt_total">92.38</data>
+            <data name="prices/cart_item_price">92.38</data>
+            <data name="prices/cart_item_fpt">9.24</data>
+            <data name="prices/cart_item_fpt_total">101.62</data>
+            <data name="prices/cart_item_subtotal">92.38</data>
+            <data name="prices/cart_item_subtotal_fpt">9.24</data>
+            <data name="prices/cart_item_subtotal_fpt_total">101.62</data>
+            <data name="prices/grand_total">110.00</data>
+            <data name="prices/total_fpt">10.00</data>
+            <data name="constraint">assertFptApplied</data>
+        </variation>
+        <variation name="CreateTaxWithFptTestVariation10">
+            <data name="description">Check taxed FPT display set to Including FPT and Description on product with with special price and catalog price Including Tax</data>
+            <data name="configData">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_incl_disc_on_incl, display_including_tax</data>
+            <data name="productData">with_special_price_and_fpt</data>
+            <data name="prices/category_price">92.38</data>
+            <data name="prices/fpt_category">10.00</data>
+            <data name="prices/product_page_price">92.38</data>
+            <data name="prices/product_page_fpt">10.00</data>
+            <data name="prices/cart_item_price">101.62</data>
+            <data name="prices/cart_item_fpt">9.24</data>
+            <data name="prices/cart_item_subtotal">101.62</data>
+            <data name="prices/cart_item_subtotal_fpt">9.24</data>
+            <data name="prices/grand_total">110.00</data>
+            <data name="prices/total_fpt">10.00</data>
+            <data name="constraint">assertFptApplied</data>
+        </variation>
+        <variation name="CreateTaxWithFptTestVariation11">
+            <data name="description">Check taxed FPT display set to Excluding, Description and Including FPT on product with with custom option and catalog price Including Tax</data>
+            <data name="configData">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_incl_disc_on_excl</data>
+            <data name="productData">with_custom_option_and_fpt</data>
+            <data name="prices/category_price">54.67</data>
+            <data name="prices/fpt_category">10.00</data>
+            <data name="prices/fpt_total_category">64.67</data>
+            <data name="prices/product_page_price">82.38</data>
+            <data name="prices/product_page_fpt">10.00</data>
+            <data name="prices/product_page_fpt_total">92.38</data>
+            <data name="prices/cart_item_price">92.38</data>
+            <data name="prices/cart_item_fpt">9.24</data>
+            <data name="prices/cart_item_fpt_total">101.62</data>
+            <data name="prices/cart_item_subtotal">92.38</data>
+            <data name="prices/cart_item_subtotal_fpt">9.24</data>
+            <data name="prices/cart_item_subtotal_fpt_total">101.62</data>
+            <data name="prices/grand_total">110.00</data>
+            <data name="prices/total_fpt">10.00</data>
+            <data name="constraint">assertFptApplied</data>
+        </variation>
+    </testCase>
+</config>

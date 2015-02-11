@@ -20,7 +20,7 @@ class CollectionProvider implements CollectionProviderInterface
     protected $objectManager;
 
     /**
-     * Magetno resource instance.
+     * Magento resource instance.
      *
      * @var \Magento\Framework\App\Resource
      */

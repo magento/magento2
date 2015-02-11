@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="UpdateTermEntityTest">
+        <variation name="UpdateTermEntityTestVariation1">
+            <data name="product">catalogProductSimple::default</data>
+            <data name="agreementOrigin/dataSet">term_disabled_text</data>
+            <data name="agreement/data/name">name%isolation%</data>
+            <data name="agreement/data/is_active">Enabled</data>
+            <data name="agreement/data/is_html">HTML</data>
+            <data name="agreement/data/stores/dataSet/0">default</data>
+            <data name="agreement/data/checkbox_text">test_checkbox%isolation%</data>
+            <data name="agreement/data/content">TestMessage%isolation%</data>
+            <data name="shipping/shipping_service">Flat Rate</data>
+            <data name="shipping/shipping_method">Fixed</data>
+            <data name="payment/method">checkmo</data>
+            <data name="constraint">assertTermSuccessSaveMessage, assertTermInGrid, assertTermOnCheckout</data>
+        </variation>
+        <variation name="UpdateTermEntityTestVariation2">
+            <data name="product">catalogProductSimple::default</data>
+            <data name="agreementOrigin/dataSet">term_disabled_html</data>
+            <data name="agreement/data/name">name%isolation%</data>
+            <data name="agreement/data/is_active">Enabled</data>
+            <data name="agreement/data/is_html">Text</data>
+            <data name="agreement/data/stores/dataSet/0">default</data>
+            <data name="agreement/data/checkbox_text">test_checkbox%isolation%</data>
+            <data name="agreement/data/content">&lt;html&gt;</data>
+            <data name="shipping/shipping_service">Flat Rate</data>
+            <data name="shipping/shipping_method">Fixed</data>
+            <data name="payment/method">checkmo</data>
+            <data name="constraint">assertTermSuccessSaveMessage, assertTermInGrid, assertTermOnCheckout</data>
+        </variation>
+        <variation name="UpdateTermEntityTestVariation3">
+            <data name="product">catalogProductSimple::default</data>
+            <data name="agreementOrigin/dataSet">term_enabled_text</data>
+            <data name="agreement/data/name">name%isolation%</data>
+            <data name="agreement/data/is_active">Disabled</data>
+            <data name="agreement/data/is_html">HTML</data>
+            <data name="agreement/data/stores/dataSet/0">default</data>
+            <data name="agreement/data/checkbox_text">test_checkbox%isolation%</data>
+            <data name="agreement/data/content">TestMessage%isolation%</data>
+            <data name="shipping/shipping_service">Flat Rate</data>
+            <data name="shipping/shipping_method">Fixed</data>
+            <data name="payment/method">checkmo</data>
+            <data name="constraint">assertTermSuccessSaveMessage, assertTermInGrid, assertTermAbsentOnCheckout</data>
+        </variation>
+    </testCase>
+</config>

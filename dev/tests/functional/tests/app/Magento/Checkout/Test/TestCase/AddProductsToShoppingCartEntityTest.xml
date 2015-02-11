@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="AddProductsToShoppingCartEntityTest">
+        <variation name="AddProductsToShoppingCartEntityTestVariation1">
+            <data name="productsData">bundleProduct::bundle_dynamic_product</data>
+            <data name="cart/data/grand_total">200</data>
+            <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariation2">
+            <data name="productsData">bundleProduct::bundle_fixed_product</data>
+            <data name="cart/data/grand_total">756</data>
+            <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariation3">
+            <data name="productsData">catalogProductSimple::with_two_custom_option</data>
+            <data name="cart/data/grand_total">340</data>
+            <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariation4">
+            <data name="productsData">catalogProductVirtual::product_50_dollar</data>
+            <data name="cart/data/grand_total">50</data>
+            <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariation5">
+            <data name="productsData">configurableProduct::default</data>
+            <data name="cart/data/grand_total">516</data>
+            <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariation6">
+            <data name="productsData">downloadableProduct::with_two_separately_links</data>
+            <data name="cart/data/grand_total">46</data>
+            <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
+            <data name="issue">Bug: MAGETWO-24195</data>
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariation7">
+            <data name="productsData">groupedProduct::three_simple_products</data>
+            <data name="cart/data/grand_total">1920</data>
+            <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariation8">
+            <data name="productsData">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProduct::with_two_separately_links, groupedProduct::three_simple_products, configurableProduct::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
+            <data name="cart/data/grand_total">3249</data>
+            <data name="constraint">assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertSubtotalInShoppingCart, assertCartItemsOptions, assertGrandTotalInShoppingCart</data>
+            <data name="issue">Bug: MAGETWO-24195</data>
+        </variation>
+    </testCase>
+</config>

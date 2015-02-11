@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="AddProductsToCartFromCustomerWishlistOnFrontendTest">
+        <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation1">
+            <data name="products">catalogProductSimple::product_100_dollar</data>
+            <data name="qty">2</data>
+            <data name="constraint">assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist</data>
+        </variation>
+        <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation2">
+            <data name="products">catalogProductVirtual::product_50_dollar</data>
+            <data name="qty">1</data>
+            <data name="constraint">assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist</data>
+        </variation>
+        <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation3">
+            <data name="products">catalogProductSimple::default,catalogProductVirtual::product_50_dollar,catalogProductSimple::default,catalogProductVirtual::product_50_dollar</data>
+            <data name="qty">-</data>
+            <data name="constraint">assertProductQtyInShoppingCart, assertWishlistIsEmpty</data>
+        </variation>
+        <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation4">
+            <data name="products">groupedProduct::three_simple_products</data>
+            <data name="qty">-</data>
+            <data name="constraint">assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist</data>
+        </variation>
+        <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation5">
+            <data name="products">downloadableProduct::with_two_separately_links</data>
+            <data name="qty">-</data>
+            <data name="constraint">assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist</data>
+        </variation>
+        <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation6">
+            <data name="products">configurableProduct::default</data>
+            <data name="qty">3</data>
+            <data name="constraint">assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist</data>
+        </variation>
+        <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation7">
+            <data name="products">bundleProduct::bundle_dynamic_product</data>
+            <data name="qty">2</data>
+            <data name="constraint">assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist</data>
+        </variation>
+        <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation8">
+            <data name="products">bundleProduct::bundle_fixed_product</data>
+            <data name="qty">2</data>
+            <data name="constraint">assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist</data>
+        </variation>
+    </testCase>
+</config>

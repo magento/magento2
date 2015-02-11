@@ -1,6 +1,0 @@
-"product";"constraint"
-"catalogProductSimple::with_two_custom_option";"assertProductInCustomerWishlistOnBackendGrid"
-"configurableProduct::default";"assertConfigurableProductInCustomerWishlistOnBackendGrid"
-"bundleProduct::bundle_dynamic_product";"assertBundleProductInCustomerWishlistOnBackendGrid"
-"downloadableProduct::with_two_separately_links";"assertDownloadableProductInCustomerWishlistOnBackendGrid"
-"groupedProduct::three_simple_products";"assertGroupedProductInCustomerWishlistOnBackendGrid"

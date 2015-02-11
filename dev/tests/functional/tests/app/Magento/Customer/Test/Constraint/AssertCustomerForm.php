@@ -70,6 +70,7 @@ class AssertCustomerForm extends AbstractConstraint
 
         $pageCustomerIndex->open();
         $pageCustomerIndex->getCustomerGridBlock()->searchAndOpen($filter);
+
         $dataForm = $pageCustomerIndexEdit->getCustomerForm()->getDataCustomer($customer, $address);
         $dataDiff = $this->verify($data, $dataForm);
         \PHPUnit_Framework_Assert::assertTrue(
@@ -95,13 +96,22 @@ class AssertCustomerForm extends AbstractConstraint
             if (in_array($name, $this->customerSkippedFields)) {
                 continue;
             }
-            $result[] = "\ncustomer {$name}: \"{$dataForm['customer'][$name]}\" instead of \"{$value}\"";
+            if (isset($dataForm['customer'][$name])) {
+                $result[] = "\ncustomer {$name}: \"{$dataForm['customer'][$name]}\" instead of \"{$value}\"";
+            } else {
+                $result[] = "\ncustomer {$name}: Field is absent. Expected value \"{$value}\"";
+            }
         }
         foreach ($dataFixture['addresses'] as $key => $address) {
             $addressDiff = array_diff($address, $dataForm['addresses'][$key]);
             foreach ($addressDiff as $name => $value) {
-                $result[] = "\naddress #{$key} {$name}: \"{$dataForm['addresses'][$key][$name]}"
-                . "\" instead of \"{$value}\"";
+                if (isset($dataForm['addresses'][$key][$name])) {
+                    $result[] = "\naddress #{$key} {$name}: \"{$dataForm['addresses'][$key][$name]}"
+                        . "\" instead of \"{$value}\"";
+                } else {
+                    $result[] = "\naddress #{$key} {$name}: Field absent. Expected value \"{$value}\"";
+                }
+
             }
         }
 

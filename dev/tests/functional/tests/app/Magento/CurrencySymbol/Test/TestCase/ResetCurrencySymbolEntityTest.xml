@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="ResetCurrencySymbolEntityTest">
+        <variation name="ResetCurrencySymbolEntityTestVariation1">
+            <data name="configData">config_currency_symbols_usd_and_uah</data>
+            <data name="currencySymbolOriginal/dataSet">currency_symbols_uah</data>
+            <data name="currencySymbol/data/code">UAH</data>
+            <data name="currencySymbolDefault">₴</data>
+            <data name="currencySymbol/data/inherit_custom_currency_symbol">Yes</data>
+            <data name="currencySymbol/data/custom_currency_symbol">-</data>
+            <data name="constraint">assertCurrencySymbolSuccessSaveMessage, assertCurrencySymbolOnProductPage,assertCurrencySymbolOnCatalogPage</data>
+        </variation>
+    </testCase>
+</config>

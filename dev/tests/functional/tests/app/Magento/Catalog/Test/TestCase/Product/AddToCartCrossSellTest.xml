@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
+    <testCase name="AddToCartCrossSellTest">
+        <variation name="AddToCartCrossSellTestVariation1">
+            <data name="products">simple1::catalogProductSimple::product_with_category,simple2::catalogProductSimple::product_with_category,config1::configurableProduct::two_options_with_fixed_price</data>
+            <data name="promotedProducts">simple1:simple2,config1;config1:simple2</data>
+            <data name="navigateProductsOrder">simple1,config1,simple2</data>
+            <data name="productsToVerify">simple1:simple2,config1;config1:simple2;simple2:</data>
+            <data name="tag">test_type:acceptance_test</data>
+        </variation>
+    </testCase>
+</config>

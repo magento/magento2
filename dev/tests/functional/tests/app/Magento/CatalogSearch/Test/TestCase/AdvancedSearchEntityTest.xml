@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="AdvancedSearchEntityTest">
+        <variation name="AdvancedSearchEntityTestVariation1">
+            <data name="description">MAGETWO-12421: Use Advanced Search to Find the Product</data>
+            <data name="products/simple_1">Yes</data>
+            <data name="products/simple_2">-</data>
+            <data name="productSearch/data/name">abc_dfj</data>
+            <data name="productSearch/data/sku">abc_dfj</data>
+            <data name="productSearch/data/description">-</data>
+            <data name="productSearch/data/short_description">-</data>
+            <data name="productSearch/data/price/value/price_from">-</data>
+            <data name="productSearch/data/price/value/price_to">-</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+            <data name="tag">test_type:acceptance_test</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation2">
+            <data name="description">Search product in advanced search by name</data>
+            <data name="products/simple_1">-</data>
+            <data name="products/simple_2">Yes</data>
+            <data name="productSearch/data/name">adc_123</data>
+            <data name="productSearch/data/sku">-</data>
+            <data name="productSearch/data/description">-</data>
+            <data name="productSearch/data/short_description">-</data>
+            <data name="productSearch/data/price/value/price_from">-</data>
+            <data name="productSearch/data/price/value/price_to">-</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation3">
+            <data name="description">Search product in advanced search by partial name</data>
+            <data name="products/simple_1">Yes</data>
+            <data name="products/simple_2">-</data>
+            <data name="productSearch/data/name">abc</data>
+            <data name="productSearch/data/sku">-</data>
+            <data name="productSearch/data/description">-</data>
+            <data name="productSearch/data/short_description">-</data>
+            <data name="productSearch/data/price/value/price_from">-</data>
+            <data name="productSearch/data/price/value/price_to">-</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation4">
+            <data name="description">Search product in advanced search by sku</data>
+            <data name="products/simple_1">Yes</data>
+            <data name="products/simple_2">-</data>
+            <data name="productSearch/data/name">-</data>
+            <data name="productSearch/data/sku">abc_dfj</data>
+            <data name="productSearch/data/description">-</data>
+            <data name="productSearch/data/short_description">-</data>
+            <data name="productSearch/data/price/value/price_from">-</data>
+            <data name="productSearch/data/price/value/price_to">-</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation5">
+            <data name="description">Search product in advanced search by partial sku</data>
+            <data name="products/simple_1">Yes</data>
+            <data name="products/simple_2">-</data>
+            <data name="productSearch/data/name">-</data>
+            <data name="productSearch/data/sku">abc</data>
+            <data name="productSearch/data/description">-</data>
+            <data name="productSearch/data/short_description">-</data>
+            <data name="productSearch/data/price/value/price_from">-</data>
+            <data name="productSearch/data/price/value/price_to">-</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation6">
+            <data name="description">Search product in advanced search by partial sku and description</data>
+            <data name="products/simple_1">Yes</data>
+            <data name="products/simple_2">-</data>
+            <data name="productSearch/data/name">-</data>
+            <data name="productSearch/data/sku">abc</data>
+            <data name="productSearch/data/description">adc_full</data>
+            <data name="productSearch/data/short_description">-</data>
+            <data name="productSearch/data/price/value/price_from">-</data>
+            <data name="productSearch/data/price/value/price_to">-</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation7">
+            <data name="description">Search product in advanced search by description</data>
+            <data name="products/simple_1">-</data>
+            <data name="products/simple_2">Yes</data>
+            <data name="productSearch/data/name">-</data>
+            <data name="productSearch/data/sku">-</data>
+            <data name="productSearch/data/description">dfj_full</data>
+            <data name="productSearch/data/short_description">-</data>
+            <data name="productSearch/data/price/value/price_from">-</data>
+            <data name="productSearch/data/price/value/price_to">-</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation8">
+            <data name="description">Search product in advanced search by short description</data>
+            <data name="products/simple_1">-</data>
+            <data name="products/simple_2">-</data>
+            <data name="productSearch/data/name">-</data>
+            <data name="productSearch/data/sku">-</data>
+            <data name="productSearch/data/description">-</data>
+            <data name="productSearch/data/short_description">dfj_short</data>
+            <data name="productSearch/data/price/value/price_from">-</data>
+            <data name="productSearch/data/price/value/price_to">-</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation9">
+            <data name="description">Search product in advanced search by partial short description</data>
+            <data name="products/simple_1">Yes</data>
+            <data name="products/simple_2">-</data>
+            <data name="productSearch/data/name">-</data>
+            <data name="productSearch/data/sku">-</data>
+            <data name="productSearch/data/description">-</data>
+            <data name="productSearch/data/short_description">abc_short</data>
+            <data name="productSearch/data/price/value/price_from">-</data>
+            <data name="productSearch/data/price/value/price_to">-</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation10">
+            <data name="description">Search product in advanced search by price to</data>
+            <data name="products/simple_1">Yes</data>
+            <data name="products/simple_2">Yes</data>
+            <data name="productSearch/data/name">-</data>
+            <data name="productSearch/data/sku">-</data>
+            <data name="productSearch/data/description">-</data>
+            <data name="productSearch/data/short_description">-</data>
+            <data name="productSearch/data/price/value/price_from">-</data>
+            <data name="productSearch/data/price/value/price_to">100</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation11">
+            <data name="description">Search product in advanced search by price from and price to</data>
+            <data name="products/simple_1">Yes</data>
+            <data name="products/simple_2">-</data>
+            <data name="productSearch/data/name">-</data>
+            <data name="productSearch/data/sku">-</data>
+            <data name="productSearch/data/description">-</data>
+            <data name="productSearch/data/short_description">-</data>
+            <data name="productSearch/data/price/value/price_from">50</data>
+            <data name="productSearch/data/price/value/price_to">50</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation12">
+            <data name="description">Search product in advanced search by name, sku, description, short description, price from and price to</data>
+            <data name="products/simple_1">Yes</data>
+            <data name="products/simple_2">-</data>
+            <data name="productSearch/data/name">abc_dfj</data>
+            <data name="productSearch/data/sku">abc_dfj</data>
+            <data name="productSearch/data/description">adc_Full</data>
+            <data name="productSearch/data/short_description">abc_short</data>
+            <data name="productSearch/data/price/value/price_from">49</data>
+            <data name="productSearch/data/price/value/price_to">500</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation13">
+            <data name="description">Search product in advanced search by name, sku, description, short description, price from and price to</data>
+            <data name="products/simple_1">Yes</data>
+            <data name="products/simple_2">-</data>
+            <data name="productSearch/data/name">abc_dfj</data>
+            <data name="productSearch/data/sku">abc_dfj</data>
+            <data name="productSearch/data/description">adc_Full</data>
+            <data name="productSearch/data/short_description">abc_short</data>
+            <data name="productSearch/data/price/value/price_from">49</data>
+            <data name="productSearch/data/price/value/price_to">50</data>
+            <data name="constraint">assertAdvancedSearchProductsResult</data>
+        </variation>
+    </testCase>
+</config>

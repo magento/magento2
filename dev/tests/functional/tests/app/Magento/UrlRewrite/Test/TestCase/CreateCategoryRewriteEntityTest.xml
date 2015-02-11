@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="CreateCategoryRewriteEntityTest">
+        <variation name="CreateCategoryRewriteEntityTestVariation1">
+            <data name="description">MAGETWO-12407: Add Permanent Redirect for Category</data>
+            <data name="urlRewrite/data/entity_type">For category</data>
+            <data name="urlRewrite/data/store_id">Main Website/Main Website Store/Default Store View</data>
+            <data name="urlRewrite/data/request_path">cat%isolation%-redirect.html</data>
+            <data name="urlRewrite/data/redirect_type">Permanent (301)</data>
+            <data name="urlRewrite/data/description">End-to-end test</data>
+            <data name="constraint">assertUrlRewriteSaveMessage, assertUrlRewriteCategoryRedirect</data>
+            <data name="tag">test_type:acceptance_test</data>
+        </variation>
+        <variation name="CreateCategoryRewriteEntityTestVariation2">
+            <data name="description">Create Category URL Rewrites with no redirect</data>
+            <data name="urlRewrite/data/entity_type">For category</data>
+            <data name="urlRewrite/data/store_id">Main Website/Main Website Store/Default Store View</data>
+            <data name="urlRewrite/data/request_path">test_request%isolation%</data>
+            <data name="urlRewrite/data/redirect_type">No</data>
+            <data name="urlRewrite/data/description">test description</data>
+            <data name="constraint">assertUrlRewriteSaveMessage, assertUrlRewriteInGrid</data>
+        </variation>
+        <variation name="CreateCategoryRewriteEntityTestVariation3">
+            <data name="description">Create Category URL Rewrites with Temporary redirect</data>
+            <data name="urlRewrite/data/entity_type">For category</data>
+            <data name="urlRewrite/data/store_id">Main Website/Main Website Store/Default Store View</data>
+            <data name="urlRewrite/data/request_path">request_path%isolation%</data>
+            <data name="urlRewrite/data/redirect_type">Temporary (302)</data>
+            <data name="urlRewrite/data/description">test description</data>
+            <data name="constraint">assertUrlRewriteSaveMessage, assertUrlRewriteInGrid, assertUrlRewriteCategoryRedirect</data>
+        </variation>
+        <variation name="CreateCategoryRewriteEntityTestVariation4">
+            <data name="description">Create Category URL Rewrites with Permanent redirect</data>
+            <data name="urlRewrite/data/entity_type">For category</data>
+            <data name="urlRewrite/data/store_id">Main Website/Main Website Store/Default Store View</data>
+            <data name="urlRewrite/data/request_path">request_path%isolation%</data>
+            <data name="urlRewrite/data/redirect_type">Permanent (301)</data>
+            <data name="urlRewrite/data/description">test description</data>
+            <data name="constraint">assertUrlRewriteSaveMessage, assertUrlRewriteInGrid, assertUrlRewriteCategoryRedirect</data>
+        </variation>
+    </testCase>
+</config>

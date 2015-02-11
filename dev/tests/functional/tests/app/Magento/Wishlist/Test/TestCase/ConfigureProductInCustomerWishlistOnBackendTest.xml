@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="ConfigureProductInCustomerWishlistOnBackendTest">
+        <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation1">
+            <data name="product">catalogProductSimple::with_two_custom_option</data>
+            <data name="constraint">assertProductInCustomerWishlistOnBackendGrid</data>
+        </variation>
+        <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation2">
+            <data name="product">configurableProduct::default</data>
+            <data name="constraint">assertConfigurableProductInCustomerWishlistOnBackendGrid</data>
+        </variation>
+        <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation3">
+            <data name="product">bundleProduct::bundle_dynamic_product</data>
+            <data name="constraint">assertBundleProductInCustomerWishlistOnBackendGrid</data>
+        </variation>
+        <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation4">
+            <data name="product">downloadableProduct::with_two_separately_links</data>
+            <data name="constraint">assertDownloadableProductInCustomerWishlistOnBackendGrid</data>
+        </variation>
+        <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation5">
+            <data name="product">groupedProduct::three_simple_products</data>
+            <data name="constraint">assertGroupedProductInCustomerWishlistOnBackendGrid</data>
+        </variation>
+    </testCase>
+</config>

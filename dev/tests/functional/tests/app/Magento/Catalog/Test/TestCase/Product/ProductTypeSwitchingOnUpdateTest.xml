@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
+    <testCase name="ProductTypeSwitchingOnUpdateTest">
+        <variation name="ProductTypeSwitchingOnUpdateTestVariation1">
+            <data name="productOrigin">catalogProductSimple::default</data>
+            <data name="product">configurableProduct::default</data>
+            <data name="actionName">-</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertChildProductIsNotDisplayedSeparately</data>
+        </variation>
+        <variation name="ProductTypeSwitchingOnUpdateTestVariation2">
+            <data name="productOrigin">catalogProductSimple::default</data>
+            <data name="product">catalogProductVirtual::default</data>
+            <data name="actionName">-</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid</data>
+        </variation>
+        <variation name="ProductTypeSwitchingOnUpdateTestVariation3">
+            <data name="productOrigin">configurableProduct::default</data>
+            <data name="product">catalogProductSimple::default</data>
+            <data name="actionName">deleteAttributes</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid</data>
+        </variation>
+        <variation name="ProductTypeSwitchingOnUpdateTestVariation4">
+            <data name="productOrigin">configurableProduct::default</data>
+            <data name="product">catalogProductVirtual::default</data>
+            <data name="actionName">deleteAttributes</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid</data>
+        </variation>
+        <variation name="ProductTypeSwitchingOnUpdateTestVariation5">
+            <data name="productOrigin">catalogProductVirtual::default</data>
+            <data name="product">catalogProductSimple::default</data>
+            <data name="actionName">-</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid</data>
+        </variation>
+        <variation name="ProductTypeSwitchingOnUpdateTestVariation6">
+            <data name="productOrigin">catalogProductVirtual::default</data>
+            <data name="product">configurableProduct::not_virtual_for_type_switching</data>
+            <data name="actionName">-</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertChildProductIsNotDisplayedSeparately</data>
+        </variation>
+        <variation name="ProductTypeSwitchingOnUpdateTestVariation7">
+            <data name="productOrigin">catalogProductVirtual::default</data>
+            <data name="product">downloadableProduct::default</data>
+            <data name="actionName">-</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertDownloadableProductForm, assertProductPage, assertProductInStock, assertDownloadableLinksData</data>
+        </variation>
+        <variation name="ProductTypeSwitchingOnUpdateTestVariation8">
+            <data name="productOrigin">downloadableProduct::default</data>
+            <data name="product">catalogProductSimple::default</data>
+            <data name="actionName">-</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid</data>
+        </variation>
+        <variation name="ProductTypeSwitchingOnUpdateTestVariation9">
+            <data name="productOrigin">downloadableProduct::default</data>
+            <data name="product">configurableProduct::not_virtual_for_type_switching</data>
+            <data name="actionName">-</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertChildProductIsNotDisplayedSeparately</data>
+        </variation>
+        <variation name="ProductTypeSwitchingOnUpdateTestVariation10">
+            <data name="productOrigin">downloadableProduct::default</data>
+            <data name="product">catalogProductVirtual::default</data>
+            <data name="actionName">clearDownloadableData</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid</data>
+        </variation>
+        <variation name="ProductTypeSwitchingOnUpdateTestVariation11">
+            <data name="productOrigin">catalogProductSimple::default</data>
+            <data name="product">downloadableProduct::default</data>
+            <data name="actionName">-</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertDownloadableProductForm, assertProductPage, assertProductInStock, assertDownloadableLinksData</data>
+        </variation>
+    </testCase>
+</config>

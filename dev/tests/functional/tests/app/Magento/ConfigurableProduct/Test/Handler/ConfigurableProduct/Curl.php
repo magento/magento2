@@ -10,7 +10,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct\ConfigurableAttributesData;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\System\Config;
+use Magento\Mtf\Config;
 
 /**
  * Class Curl
