@@ -65,7 +65,7 @@
       <constraint name="assertProductSaveMessage" next="assertSpecialPriceOnGroupedProductPage"/>
       <constraint name="assertSpecialPriceOnGroupedProductPage" prev="assertProductSaveMessage"/>
     </variation>
-    <variation name="UpdateGroupedProductEntityTestVariation5">
+    <variation name="UpdateGroupedProductEntityTestVariation5" method="test">
       <data name="originalProduct/dataSet" xsi:type="string">default</data>
       <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
       <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
@@ -75,7 +75,9 @@
       <data name="product/data/associated/preset" xsi:type="string">-</data>
       <data name="product/data/description" xsi:type="string">-</data>
       <data name="product/data/short_description" xsi:type="string">-</data>
-      <data name="product/data/url_key" xsi:type="string">assertProductSaveMessage, assertProductOutOfStock</data>
+      <data name="product/data/url_key" xsi:type="string">updated-grouped-product-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertSpecialPriceOnGroupedProductPage"/>
+      <constraint name="assertSpecialPriceOnGroupedProductPage" prev="assertProductSaveMessage"/>
     </variation>
   </testCase>
 </config>
