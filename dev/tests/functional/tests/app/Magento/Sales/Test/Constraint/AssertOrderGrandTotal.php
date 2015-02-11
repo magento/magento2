@@ -34,8 +34,7 @@ class AssertOrderGrandTotal extends AbstractConstraint
         OrderIndex $salesOrder,
         $orderId,
         $grandTotal
-    )
-    {
+    ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
