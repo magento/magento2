@@ -56,7 +56,13 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $resultRaw = $this->getMock('\Magento\Framework\Controller\Result\Raw', [], [], '', false);
         $resultRaw->expects($this->once())->method('setContents')->with($output);
 
-        $resultRawFactory = $this->getMock('\Magento\Framework\Controller\Result\RawFactory', [], [], '', false);
+        $resultRawFactory = $this->getMock(
+            '\Magento\Framework\Controller\Result\RawFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $resultRawFactory->expects($this->once())->method('create')->will($this->returnValue($resultRaw));
 
         $context = $this->getMock('\Magento\Backend\App\Action\Context', [], [], '', false);
