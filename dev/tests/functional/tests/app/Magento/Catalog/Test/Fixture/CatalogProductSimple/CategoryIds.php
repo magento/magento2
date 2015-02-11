@@ -57,7 +57,7 @@ class CategoryIds implements FixtureInterface
         } elseif (isset($data['presets'])) {
             $presets = explode(',', $data['presets']);
             foreach ($presets as $preset) {
-                if ($preset == "") {
+                if (trim($preset) == '-') {
                     $this->data[] = '';
                     continue;
                 }

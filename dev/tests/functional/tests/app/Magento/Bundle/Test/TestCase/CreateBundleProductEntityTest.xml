@@ -75,7 +75,7 @@
             <data name="product/data/visibility">Catalog, Search</data>
             <data name="product/data/use_config_gift_message_available">No</data>
             <data name="product/data/gift_message_available">Yes</data>
-            <data name="constraint">assertProductSaveMessage,  assertProductNotSearchableBySku</data>
+            <data name="constraint">assertProductSaveMessage, assertProductNotSearchableBySku</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation3">
             <data name="description">Create dynamic bundle with price randle and all types options</data>
@@ -506,7 +506,7 @@
             <data name="product/data/status">-</data>
             <data name="product/data/price_type">Fixed</data>
             <data name="product/data/price/value">100</data>
-            <data name="product/data/price/preset">-</data>
+            <data name="product/data/price/preset">fixed-100</data>
             <data name="product/data/tax_class_id/dataSet">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
             <data name="product/data/weight_type">Fixed</data>
@@ -530,7 +530,7 @@
             <data name="product/data/visibility">-</data>
             <data name="product/data/use_config_gift_message_available">-</data>
             <data name="product/data/gift_message_available">-</data>
-            <data name="constraint">assertProductSaveMessage, assertBundleInGrid, assertBundleInCategory, assertBundleProductPage</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertBundleInCategory, assertBundleProductPage</data>
             <data name="tag">test_type:acceptance_test</data>
         </variation>
         <variation name="CreateBundleProductEntityTestVariation16">
@@ -542,7 +542,7 @@
             <data name="product/data/status">-</data>
             <data name="product/data/price_type">Dynamic</data>
             <data name="product/data/price/value">-</data>
-            <data name="product/data/price/preset">-</data>
+            <data name="product/data/price/preset">dynamic-560</data>
             <data name="product/data/tax_class_id/dataSet">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
             <data name="product/data/weight_type">-</data>
@@ -566,7 +566,7 @@
             <data name="product/data/visibility">-</data>
             <data name="product/data/use_config_gift_message_available">-</data>
             <data name="product/data/gift_message_available">-</data>
-            <data name="constraint">assertProductSaveMessage, assertBundleInGrid, assertBundleInCategory, assertBundleProductPage</data>
+            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertBundleInCategory, assertBundleProductPage</data>
             <data name="tag">test_type:acceptance_test</data>
         </variation>
     </testCase>

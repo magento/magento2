@@ -130,6 +130,7 @@
         <variation name="UpdateSimpleProductEntityTestVariation9">
             <data name="description">MAGETWO-12417: Unassign Products from the Category</data>
             <data name="initialProduct/dataSet">product_with_category</data>
+            <data name="product/data/category_ids/presets"> -</data>
             <data name="product/data/name">-</data>
             <data name="product/data/sku">-</data>
             <data name="product/data/price/value">-</data>

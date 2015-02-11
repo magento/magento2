@@ -587,6 +587,7 @@ class BundleSelections implements FixtureInterface
                     [
                         'title' => 'Drop-down Option',
                         'type' => 'Drop-down',
+                        'required' => 'Yes',
                         'assigned_products' => [
                             [
                                 'search_data' => [
@@ -620,6 +621,7 @@ class BundleSelections implements FixtureInterface
                     [
                         'title' => 'Drop-down Option',
                         'type' => 'Drop-down',
+                        'required' => 'Yes',
                         'assigned_products' => [
                             [
                                 'search_data' => [

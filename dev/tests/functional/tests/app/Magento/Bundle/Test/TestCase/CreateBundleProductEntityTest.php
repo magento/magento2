@@ -13,8 +13,6 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for CreateBundleProductEntity
- *
  * Test Flow:
  * 1. Login as admin
  * 2. Navigate to the Products>Inventory>Catalog
