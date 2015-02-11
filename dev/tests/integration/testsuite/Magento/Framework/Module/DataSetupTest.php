@@ -65,8 +65,8 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTableRow()
     {
-        $this->assertNotEmpty($this->_model->getTableRow('setup_module', 'module', 'core_setup'));
-        $this->_model->getTableRow('setup/module', 'module', 'core_setup');
+        $this->assertNotEmpty($this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification'));
+        $this->_model->getTableRow('setup/module', 'module', 'Magento_AdminNotification');
     }
 
     /**
