@@ -7,14 +7,14 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /** @var \Magento\Cookie\Block\Html\Notices $this */ ?>
-<?php if ($this->helper('Magento\Cookie\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
+<?php /** @var \Magento\Cookie\Block\Html\Notices $block */ ?>
+<?php if ($block->helper('Magento\Cookie\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
     <div class="message global cookie" id="notice-cookie-block" style="display: none">
         <div class="content">
             <p>
                 <strong><?php echo __('We use cookies to make your experience better.') ?></strong>
                 <span><?php echo __('To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.') ?></span>
-                <?php echo __('<a href="%1">Learn more</a>.', $this->getPrivacyPolicyLink()) ?></p>
+                <?php echo __('<a href="%1">Learn more</a>.', $block->getPrivacyPolicyLink()) ?></p>
             <div class="actions">
                 <button id="btn-cookie-allow" class="action allow primary">
                     <span><?php echo __('Allow Cookies');?></span>
@@ -32,9 +32,9 @@
             $('#notice-cookie-block').mage('cookieNotices', {
                 cookieAllowButtonSelector: '#btn-cookie-allow',
                 cookieName: '<?php echo \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
-                cookieValue: '<?php echo $this->helper('Magento\Cookie\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
-                cookieLifetime: <?php echo $this->helper('Magento\Cookie\Helper\Cookie')->getCookieRestrictionLifetime()?>,
-                noCookiesUrl: '<?php echo $this->getUrl('cookie/index/noCookies') ?>'
+                cookieValue: '<?php echo $block->helper('Magento\Cookie\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
+                cookieLifetime: <?php echo $block->helper('Magento\Cookie\Helper\Cookie')->getCookieRestrictionLifetime()?>,
+                noCookiesUrl: '<?php echo $block->getUrl('cookie/index/noCookies') ?>'
             });
     // ]]>
 
