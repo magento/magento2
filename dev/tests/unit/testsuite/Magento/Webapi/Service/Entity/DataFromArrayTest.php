@@ -125,6 +125,24 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value_two', $associativeArray['key_two']);
     }
 
+    public function testAssociativeArrayPropertiesWithItem()
+    {
+        $data = ['associativeArray' => ['item' => 'value']];
+        $result = $this->serializer->getInputData(
+            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'associativeArray',
+            $data
+        );
+        $this->assertNotNull($result);
+        /** @var array $result */
+        $this->assertEquals(1, count($result));
+        /** @var array $associativeArray */
+        $associativeArray = $result[0];
+        $this->assertNotNull($associativeArray);
+        $this->assertEquals('value', $associativeArray[0]);
+    }
+
+
     public function testArrayOfDataObjectProperties()
     {
         $data = [

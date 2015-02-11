@@ -21,7 +21,6 @@ class TestService
 
     /**
      * @param int $entityId
-     * @param string $name
      * @return string[]
      */
     public function simpleDefaultValue($entityId = self::DEFAULT_VALUE)
