@@ -16,6 +16,9 @@ class InstallData implements InstallDataInterface
      */
     private $customerSetupFactory;
 
+    /**
+     * @param CustomerFactory $customerSetupFactory
+     */
     public function __construct(CustomerFactory $customerSetupFactory)
     {
         $this->customerSetupFactory = $customerSetupFactory;
