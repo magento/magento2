@@ -1,3 +1,0 @@
-"catalogRulesOriginal/priority_0";"catalogRulesOriginal/priority_1";"catalogRulesOriginal/priority_2";"price/sub_total";"price/grand_total";"price/discount_amount";"price/special";"price/regular";"constraint"
-"catalog_price_rule_priority_0";"-";"catalog_price_rule_priority_2";"100";"40";"60";"40";"100";"assertCatalogPriceRuleAppliedCatalogPage, assertCatalogPriceRuleAppliedProductPage, assertCatalogPriceRuleAppliedShoppingCart"
-"catalog_price_rule_priority_0";"catalog_price_rule_priority_1_stop_further_rules";"catalog_price_rule_priority_2";"100";"45";"55";"45";"100";"assertCatalogPriceRuleAppliedCatalogPage, assertCatalogPriceRuleAppliedProductPage, assertCatalogPriceRuleAppliedShoppingCart"

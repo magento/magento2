@@ -26,9 +26,25 @@ interface TaxRateTitleInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function getStoreId();
 
     /**
+     * Set store id
+     *
+     * @param string $storeId
+     * @return $this
+     */
+    public function setStoreId($storeId);
+
+    /**
      * Get title value
      *
      * @return string
      */
     public function getValue();
+
+    /**
+     * Set title value
+     *
+     * @param string $value
+     * @return string
+     */
+    public function setValue($value);
 }

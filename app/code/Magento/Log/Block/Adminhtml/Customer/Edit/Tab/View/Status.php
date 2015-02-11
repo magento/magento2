@@ -34,16 +34,22 @@ class Status extends \Magento\Backend\Block\Template
     protected $logFactory;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
-    protected $customerBuilder;
+    protected $customerFactory;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Log\Model\CustomerFactory $logFactory
      * @param \Magento\Log\Model\Log $modelLog
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
+     * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
      */
     public function __construct(
@@ -51,13 +57,15 @@ class Status extends \Magento\Backend\Block\Template
         \Magento\Log\Model\CustomerFactory $logFactory,
         \Magento\Log\Model\Log $modelLog,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
+        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = []
     ) {
         $this->logFactory = $logFactory;
         $this->modelLog = $modelLog;
         $this->dateTime = $dateTime;
-        $this->customerBuilder = $customerBuilder;
+        $this->customerFactory = $customerFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct($context, $data);
     }
 
@@ -79,9 +87,9 @@ class Status extends \Magento\Backend\Block\Template
     public function getCustomer()
     {
         if (!$this->customer) {
-            $this->customer = $this->customerBuilder->populateWithArray(
-                $this->_backendSession->getCustomerData()['account']
-            )->create();
+            $this->customer = $this->customerFactory->create();
+            $this->dataObjectHelper
+                ->populateWithArray($this->customer, $this->_backendSession->getCustomerData()['account']);
         }
         return $this->customer;
     }

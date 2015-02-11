@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="DeleteAdminUserEntityTest">
+        <variation name="DeleteAdminUserEntityTestVariation1">
+            <data name="isDefaultUser">0</data>
+            <data name="constraint">assertImpossibleDeleteYourOwnAccount, assertUserInGrid</data>
+        </variation>
+        <variation name="DeleteAdminUserEntityTestVariation2">
+            <data name="isDefaultUser">1</data>
+            <data name="constraint">assertUserSuccessDeleteMessage, assertUserNotInGrid</data>
+        </variation>
+    </testCase>
+</config>

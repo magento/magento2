@@ -192,7 +192,26 @@ class ObjectManager
             ->will($this->_testObject->returnCallback(
                 function ($className, $arguments) {
                     $reflectionClass = new \ReflectionClass($className);
-                    return $reflectionClass->newInstanceArgs($arguments);
+                    $constructorMethod = $reflectionClass->getConstructor();
+                    $parameters = $constructorMethod->getParameters();
+                    $args = [];
+                    foreach ($parameters as $parameter) {
+                        $parameterName = $parameter->getName();
+                        if (isset($arguments[$parameterName])) {
+                            $args[] = $arguments[$parameterName];
+                        } else {
+                            if ($parameter->isArray()) {
+                                $args[] = [];
+                            } elseif ($parameter->allowsNull()) {
+                                $args[] = null;
+                            } else {
+                                $mock = $this->_getMockWithoutConstructorCall($parameter->getClass()->getName());
+                                $args[] = $mock;
+                            }
+                        }
+                    }
+
+                    return $reflectionClass->newInstanceArgs($args);
                 }
             ));
 

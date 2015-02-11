@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Api\Search;
 
-use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Framework\Api\Builder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\MetadataServiceInterface;
@@ -25,7 +24,7 @@ class FilterGroupBuilder extends Builder
     /**
      * @param ObjectFactory $objectFactory
      * @param MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $attributeValueBuilder
+     * @param \Magento\Framework\Api\AttributeValueFactory  $attributeValueFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory
@@ -36,7 +35,7 @@ class FilterGroupBuilder extends Builder
     public function __construct(
         ObjectFactory $objectFactory,
         MetadataServiceInterface $metadataService,
-        \Magento\Framework\Api\AttributeDataBuilder $attributeValueBuilder,
+        \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory,
@@ -47,7 +46,7 @@ class FilterGroupBuilder extends Builder
         parent::__construct(
             $objectFactory,
             $metadataService,
-            $attributeValueBuilder,
+            $attributeValueFactory,
             $objectProcessor,
             $typeProcessor,
             $dataBuilderFactory,
