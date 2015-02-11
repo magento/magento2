@@ -13,7 +13,8 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Tax\Api\Data\TaxRateInterface as TaxRateDataObject;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Model\Resource\Calculation\Rate\Collection;
@@ -104,12 +105,10 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         try {
             $this->resourceModel->save($taxRate);
             $taxRate->saveTitles($taxRateTitles);
-        } catch (ModelException $e) {
-            if ($e->getCode() == ModelException::ERROR_CODE_ENTITY_ALREADY_EXISTS) {
-                throw new InputException($e->getMessage());
-            } else {
-                throw $e;
-            }
+        } catch (AlreadyExistsException $e) {
+            throw new InputException($e->getMessage());
+        } catch (LocalizedException $e) {
+            throw $e;
         }
         $this->rateRegistry->registerTaxRate($taxRate);
         return $taxRate;

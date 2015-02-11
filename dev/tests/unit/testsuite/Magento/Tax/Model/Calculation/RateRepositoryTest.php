@@ -5,9 +5,10 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
-use Magento\TestFramework\Helper\ObjectManager;
-use Magento\Framework\Model\Exception as ModelException;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\AlreadyExistsException;
 
 class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -264,13 +265,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ModelException $expectedException
+     * @dataProvider saveThrowsExceptionIfCannotSaveTitlesDataProvider
+     * @param LocalizedException $expectedException
      * @param string $exceptionType
      * @param string $exceptionMessage
-     * @throws ModelException
+     * @throws LocalizedException
      * @throws \Exception
      * @throws \Magento\Framework\Exception\InputException
-     * @dataProvider saveThrowsExceptionIfCannotSaveTitlesDataProvider
      */
     public function testSaveThrowsExceptionIfCannotSaveTitles($expectedException, $exceptionType, $exceptionMessage)
     {
@@ -319,18 +320,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'entity_already_exists' => [
-                new ModelException(
-                    'Cannot save titles',
-                    ModelException::ERROR_CODE_ENTITY_ALREADY_EXISTS
-                ),
+                new AlreadyExistsException('Entity already exists'),
                 'Magento\Framework\Exception\InputException',
-                'Cannot save titles'
+                'Entity already exists'
             ],
             'cannot_save_title' => [
-                new ModelException(
-                    'Cannot save titles'
-                ),
-                'Magento\Framework\Model\Exception',
+                new LocalizedException('Cannot save titles'),
+                'Magento\Framework\Exception\LocalizedException',
                 'Cannot save titles'
             ]
         ];

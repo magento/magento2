@@ -9,13 +9,14 @@ namespace Magento\Tax\Model;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Tax\Api\Data\TaxRuleInterface;
-use Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
+use Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder;
 use Magento\Tax\Model\Calculation\RuleFactory;
 use Magento\Tax\Model\Calculation\TaxRuleRegistry;
 use Magento\Tax\Model\Resource\Calculation\Rule as Resource;
@@ -92,14 +93,12 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
                 $this->taxRuleRegistry->retrieveTaxRule($ruleId);
             }
             $this->resource->save($rule);
-        } catch (ModelException $e) {
-            if ($e->getCode() == ModelException::ERROR_CODE_ENTITY_ALREADY_EXISTS) {
-                throw new InputException($e->getMessage());
-            } else {
-                throw new CouldNotSaveException($e->getMessage());
-            }
-        } catch (NoSuchEntityException $exception) {
-            throw $exception;
+        } catch (AlreadyExistsException $e) {
+            throw new InputException($e->getMessage());
+        } catch (NoSuchEntityException $e) {
+            throw $e;
+        } catch (LocalizedException $e) {
+            throw new CouldNotSaveException($e->getMessage());
         }
         $this->taxRuleRegistry->registerTaxRule($rule);
         return $rule;

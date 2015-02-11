@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Model\Resource\Db;
 
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Model\Exception as ModelException;
 
 /**
@@ -596,7 +597,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws ModelException
+     * @throws AlreadyExistsException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _checkUnique(\Magento\Framework\Model\AbstractModel $object)
@@ -639,7 +640,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             } else {
                 $error = __('%1 already exist.', implode(', ', $existent));
             }
-            throw new ModelException($error, ModelException::ERROR_CODE_ENTITY_ALREADY_EXISTS);
+            throw new AlreadyExistsException($error);
         }
         return $this;
     }
