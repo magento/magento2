@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// @codingStandardsIgnoreFile
+/**
+ * @var \Magento\AdvancedSearch\Block\SearchDataInterface $block
+ */
+?>
+<?php
+/** @var \Magento\Search\Model\QueryResult[] $data */
+$data = $block->getSearchData();
+if (count($data)):?>
+    <dl class="block">
+        <dt class="title">AAA<?php echo __($block->getTitle()); ?></dt>
+        <?php foreach ($data as $additionalInfo) : ?>
+            <dd class="item">
+                <a href="<?php echo $block->getLink($additionalInfo->getQueryText()) ?>"
+                    ><?php echo $additionalInfo->getQueryText() ?></a>
+                <?php if ($block->isCountResultsEnabled()): ?>
+                    <span class="count"><?php echo $additionalInfo->getResultsCount() ?></span>
+                <?php endif; ?>
+            </dd>
+        <?php endforeach; ?>
+    </dl>
+<?php endif; ?>
