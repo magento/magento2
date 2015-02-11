@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Block\Form;
+namespace Magento\Customer\Block\Form\Login;
 
-class LoginTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
@@ -13,7 +13,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Customer\Block\Form\Login
+     * @var \Magento\Customer\Block\Form\Login\Info
      */
     protected $block;
 
@@ -52,7 +52,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->block = $this->objectManager->getObject(
-            'Magento\Customer\Block\Form\Login',
+            'Magento\Customer\Block\Form\Login\Info',
             [
                 'customerUrl' => $this->customerUrl,
                 'checkoutData' => $this->checkoutData,
@@ -61,13 +61,20 @@ class LoginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetCreateAccountUrl()
+    public function testGetExistingCreateAccountUrl()
     {
         $expectedUrl = 'Custom Url';
 
         $this->block->setCreateAccountUrl($expectedUrl);
         $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(false));
         $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
+    }
+
+    public function testGetCreateAccountUrlWithContext()
+    {
+        $url = 'Custom Url';
+        $expectedUrl = 'Custom Url with context';
+        $this->block->setCreateAccountUrl($url);
 
         $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(true));
         $this->coreUrl->expects(
@@ -75,30 +82,20 @@ class LoginTest extends \PHPUnit_Framework_TestCase
         )->method(
             'addRequestParam'
         )->with(
-            $expectedUrl,
+            $url,
             ['context' => 'checkout']
         )->will(
             $this->returnValue($expectedUrl)
         );
         $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
+    }
 
-        $this->block->unsCreateAccountUrl();
+    public function testGetCreateAccountUrl()
+    {
+        $expectedUrl = 'Custom Url';
+
         $this->customerUrl->expects($this->any())->method('getRegisterUrl')->will($this->returnValue($expectedUrl));
         $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(false));
-        $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
-
-        $this->customerUrl->expects($this->any())->method('getRegisterUrl')->will($this->returnValue($expectedUrl));
-        $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(true));
-        $this->coreUrl->expects(
-            $this->any()
-        )->method(
-            'addRequestParam'
-        )->with(
-            $expectedUrl,
-            ['context' => 'checkout']
-        )->will(
-            $this->returnValue($expectedUrl)
-        );
         $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
     }
 }
