@@ -581,17 +581,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ['config' => $configMock, 'request' => $this->requestMock]
         );
 
-//        $server = $_SERVER;
-//        foreach ($serverValues as $key => $value) {
-//            $_SERVER[$key] = $value;
-//        }
-
         if ($expected) {
             $this->assertTrue($model->isCurrentlySecure(), "Was expecting this test to show as secure, but it wasn't");
         } else {
             $this->assertFalse($model->isCurrentlySecure(), "Was expecting this test to show as not secure!");
         }
-//        $_SERVER = $server;
     }
 
     public function isCurrentlySecureDataProvider()
