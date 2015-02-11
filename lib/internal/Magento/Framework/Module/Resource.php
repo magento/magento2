@@ -77,31 +77,31 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
     /**
      * {@inheritdoc}
      */
-    public function getDbVersion($resName)
+    public function getDbVersion($moduleName)
     {
         if (!$this->_getReadAdapter()) {
             return false;
         }
         $this->_loadVersion('db');
-        return isset(self::$_versions[$resName]) ? self::$_versions[$resName] : false;
+        return isset(self::$_versions[$moduleName]) ? self::$_versions[$moduleName] : false;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setDbVersion($resName, $version)
+    public function setDbVersion($moduleName, $version)
     {
-        $dbModuleInfo = ['module' => $resName, 'schema_version' => $version];
+        $dbModuleInfo = ['module' => $moduleName, 'schema_version' => $version];
 
-        if ($this->getDbVersion($resName)) {
-            self::$_versions[$resName] = $version;
+        if ($this->getDbVersion($moduleName)) {
+            self::$_versions[$moduleName] = $version;
             return $this->_getWriteAdapter()->update(
                 $this->getMainTable(),
                 $dbModuleInfo,
-                ['module = ?' => $resName]
+                ['module = ?' => $moduleName]
             );
         } else {
-            self::$_versions[$resName] = $version;
+            self::$_versions[$moduleName] = $version;
             return $this->_getWriteAdapter()->insert($this->getMainTable(), $dbModuleInfo);
         }
     }
@@ -109,27 +109,27 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
     /**
      * {@inheritdoc}
      */
-    public function getDataVersion($resName)
+    public function getDataVersion($moduleName)
     {
         if (!$this->_getReadAdapter()) {
             return false;
         }
         $this->_loadVersion('data');
-        return isset(self::$_dataVersions[$resName]) ? self::$_dataVersions[$resName] : false;
+        return isset(self::$_dataVersions[$moduleName]) ? self::$_dataVersions[$moduleName] : false;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setDataVersion($resName, $version)
+    public function setDataVersion($moduleName, $version)
     {
-        $data = ['module' => $resName, 'data_version' => $version];
+        $data = ['module' => $moduleName, 'data_version' => $version];
 
-        if ($this->getDbVersion($resName) || $this->getDataVersion($resName)) {
-            self::$_dataVersions[$resName] = $version;
-            $this->_getWriteAdapter()->update($this->getMainTable(), $data, ['module = ?' => $resName]);
+        if ($this->getDbVersion($moduleName) || $this->getDataVersion($moduleName)) {
+            self::$_dataVersions[$moduleName] = $version;
+            $this->_getWriteAdapter()->update($this->getMainTable(), $data, ['module = ?' => $moduleName]);
         } else {
-            self::$_dataVersions[$resName] = $version;
+            self::$_dataVersions[$moduleName] = $version;
             $this->_getWriteAdapter()->insert($this->getMainTable(), $data);
         }
     }
