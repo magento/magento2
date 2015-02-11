@@ -32,12 +32,4 @@ if ($tableName) {
     $installer->getConnection()->delete($tableName, ['resource_id = ?' => 'admin/system/tools/compiler']);
 }
 
-/**
- * Delete rows by condition from setup_module
- */
-$tableName = $installer->getTable('setup_module');
-if ($tableName) {
-    $installer->getConnection()->delete($tableName, ['module = ?' => 'admin_setup']);
-}
-
 $installer->endSetup();
