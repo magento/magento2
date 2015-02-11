@@ -22,18 +22,18 @@ class Customer extends Eav
     protected $eavConfig;
 
     /**
-     * @param Config $eavConfig
      * @param ModuleDataResourceInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
+     * @param Config $eavConfig
      */
     public function __construct(
-        Config $eavConfig,
         ModuleDataResourceInterface $setup,
         Context $context,
         CacheInterface $cache,
-        CollectionFactory $attrGroupCollectionFactory
+        CollectionFactory $attrGroupCollectionFactory,
+        Config $eavConfig
     ) {
         $this->eavConfig = $eavConfig;
         parent::__construct($setup, $context, $cache, $attrGroupCollectionFactory);

@@ -148,3 +148,9 @@ Magento/Weee/Model/Resource
 Magento/Theme/Model/Design/Backend
 Magento/Core/Model/Resource/Layout/Link
 Magento/Theme/Model/Resource/Design
+
+app/code/Magento/Customer/data/customer_setup/data-install-2.0.0.php
+app/code/Magento/Customer/Model/Resource/Setup.php
+app/code/Magento/Eav/Model/Entity/Setup.php
+app/code/Magento/GoogleShopping/data/googleshopping_setup/data-install-2.0.0.php
+app/code/Magento/GoogleShopping/Model/Resource/Setup.php
