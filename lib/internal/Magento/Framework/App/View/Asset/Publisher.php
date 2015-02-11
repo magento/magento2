@@ -8,6 +8,7 @@ namespace Magento\Framework\App\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * A publishing service for view assets
@@ -41,28 +42,33 @@ class Publisher
      */
     public function publish(Asset\LocalInterface $asset)
     {
-        if ($this->appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
-            return false;
-        }
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
         if ($dir->isExist($asset->getPath())) {
             return true;
         }
-        return $this->publishAsset($asset);
+
+        $rootDir = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $rootDir->getRelativePath($asset->getSourceFile());
+
+        return $this->publishFile(
+            $rootDir,
+            $source,
+            $asset->getPath(),
+            $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW)
+        );
     }
 
     /**
-     * Publish the asset
+     * Publish file
      *
-     * @param Asset\LocalInterface $asset
+     * @param WriteInterface $rootDir
+     * @param string $source
+     * @param string $destination
+     * @param WriteInterface $dir
      * @return bool
      */
-    private function publishAsset(Asset\LocalInterface $asset)
+    protected function publishFile($rootDir, $source, $destination, $dir)
     {
-        $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        $rootDir = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $rootDir->getRelativePath($asset->getSourceFile());
-        $destination = $asset->getPath();
         return $rootDir->copyFile($source, $destination, $dir);
     }
 }

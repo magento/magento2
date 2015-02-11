@@ -130,6 +130,29 @@ class Write extends Read implements WriteInterface
     }
 
     /**
+     * Creates symlink on a file and places it to destination
+     *
+     * @param string $path
+     * @param string $destination
+     * @param WriteInterface $targetDirectory [optional]
+     * @return bool
+     * @throws \Magento\Framework\Filesystem\FilesystemException
+     */
+    public function createSymlink($path, $destination, WriteInterface $targetDirectory = null)
+    {
+        $this->assertIsFile($path);
+
+        $targetDirectory = $targetDirectory ?: $this;
+        if (!$targetDirectory->isExist($this->driver->getParentDirectory($destination))) {
+            $targetDirectory->create($this->driver->getParentDirectory($destination));
+        }
+        $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+        $absoluteDestination = $targetDirectory->getAbsolutePath($destination);
+
+        return $this->driver->symlink($absolutePath, $absoluteDestination, $targetDirectory->driver);
+    }
+
+    /**
      * Delete given path
      *
      * @param string $path
