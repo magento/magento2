@@ -4,9 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Controller\Adminhtml\System\Variable;
+namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
-class Index extends \Magento\Backend\Controller\Adminhtml\System\Variable
+class Index extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
     /**
      * Index Action

@@ -4,9 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Controller\Adminhtml\System\Variable;
+namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
-class Edit extends \Magento\Backend\Controller\Adminhtml\System\Variable
+class Edit extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
     /**
      * Edit Action
@@ -27,7 +27,7 @@ class Edit extends \Magento\Backend\Controller\Adminhtml\System\Variable
                 $resultPage->getLayout()->createBlock(
                     'Magento\Framework\View\Element\Template',
                     '',
-                    ['data' => ['template' => 'Magento_Backend::system/variable/js.phtml']]
+                    ['data' => ['template' => 'Magento_Variable::system/variable/js.phtml']]
                 )
             );
         return $resultPage;
