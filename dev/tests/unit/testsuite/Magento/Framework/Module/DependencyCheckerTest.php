@@ -65,6 +65,7 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->will($this->returnValue(['A' => [], 'B' => [], 'C' => [], 'D' => [], 'E' => []]));
     }
+
     public function testCheckDependenciesWhenDisableModules()
     {
         $this->listMock
