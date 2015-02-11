@@ -89,9 +89,10 @@ class InterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
         $expectedInterface = file_get_contents(
             __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/SevenInterface.php'
         );
-        $this->assertEquals(
+
+        $this->assertStringEndsWith(
+            $generatedInterface,
             $expectedInterface,
-            "<?php\n" . $generatedInterface,
             "Interface was generated incorrectly."
         );
     }

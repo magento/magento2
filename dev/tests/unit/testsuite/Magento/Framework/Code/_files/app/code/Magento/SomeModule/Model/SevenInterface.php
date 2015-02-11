@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\SomeModule\Model;
 
 use Magento\SomeModule\Model\Two\Test as TestTwo;
