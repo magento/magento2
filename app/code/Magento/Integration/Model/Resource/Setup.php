@@ -11,7 +11,7 @@ use Magento\Integration\Model\Manager;
 /**
  * Resource Setup Model
  */
-class Setup extends \Magento\Framework\Module\DataSetup
+class Setup extends \Magento\Setup\Module\DataSetup
 {
     /**
      * @var  Manager

@@ -11,13 +11,6 @@
             <argument name="aclCache" xsi:type="object">Magento\Framework\Acl\Cache\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="user_setup" xsi:type="string">Magento\Framework\Module\DataSetup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Authorization\Model\Role">
         <plugin name="updateRoleUsersAcl" type="Magento\User\Model\Plugin\AuthorizationRole" sortOrder="20"/>
     </type>

@@ -6,13 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="store_setup" xsi:type="string">Magento\Framework\Module\DataSetup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\App\Config\ScopePool">
         <arguments>
             <argument name="readerPool" xsi:type="object">Magento\Store\Model\Config\Reader\ReaderPool\Proxy</argument>

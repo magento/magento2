@@ -7,7 +7,7 @@ namespace Magento\GoogleShopping\Model\Resource;
 
 use Magento\Framework\Setup\ModuleDataResourceInterface;
 
-class Setup extends \Magento\Framework\Module\DataSetup
+class Setup extends \Magento\Setup\Module\DataSetup
 {
     /**
      * @var \Magento\Framework\Module\Manager

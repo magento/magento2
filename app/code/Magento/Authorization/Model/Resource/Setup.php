@@ -12,7 +12,7 @@ use Magento\Framework\Setup\ModuleDataResourceInterface;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Setup extends \Magento\Framework\Module\DataSetup
+class Setup extends \Magento\Setup\Module\DataSetup
 {
     /**
      * Role model factory

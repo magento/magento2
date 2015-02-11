@@ -9,7 +9,7 @@ namespace Magento\GiftMessage\Model\Resource;
 
 use Magento\Framework\Setup\ModuleDataResourceInterface;
 
-class Setup extends \Magento\Framework\Module\DataSetup
+class Setup extends \Magento\Setup\Module\DataSetup
 {
     /**
      * @var \Magento\Catalog\Model\Resource\SetupFactory

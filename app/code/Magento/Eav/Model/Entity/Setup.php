@@ -11,7 +11,7 @@ use Magento\Framework\Setup\ModuleDataResourceInterface;
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Setup extends \Magento\Framework\Module\DataSetup
+class Setup extends \Magento\Setup\Module\DataSetup
 {
     /**
      * @var \Magento\Framework\App\CacheInterface

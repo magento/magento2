@@ -9,7 +9,7 @@ use Magento\Framework\Setup\ModuleDataResourceInterface;
 /**
  * Cms resource setup
  */
-class Setup extends \Magento\Framework\Module\DataSetup
+class Setup extends \Magento\Setup\Module\DataSetup
 {
     /**
      * Block factory

@@ -13,7 +13,7 @@ use Magento\Framework\Setup\ModuleDataResourceInterface;
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Migration extends \Magento\Framework\Module\DataSetup
+class Migration extends \Magento\Setup\Module\DataSetup
 {
     /**#@+
      * Type of field content where class alias is used

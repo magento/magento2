@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Acl\CacheInterface" type="Magento\Framework\Acl\Cache" />
     <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area" />
-    <preference for="Magento\Framework\Setup\ModuleDataResourceInterface" type="Magento\Framework\Module\DataSetup" />
+    <preference for="Magento\Framework\Setup\ModuleDataResourceInterface" type="Magento\Setup\Module\DataSetup" />
     <preference for="Magento\Framework\Module\ResourceResolverInterface" type="Magento\Framework\Module\ResourceResolver" />
     <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />
     <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\DefaultPolicy" />
@@ -623,19 +623,6 @@
                 <item name="xml" xsi:type="string"><![CDATA[/<block.*?class=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?>/sui]]></item>
                 <item name="serialized" xsi:type="string"><![CDATA[#(?P<string>s:\d+:"(?P<alias>[a-z]+[_a-z\d]*?/[a-z]+[_a-z\d]*?)")#sui]]></item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="core_setup" xsi:type="string">Magento\Framework\Module\DataSetup</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Module\DataSetup">
-        <arguments>
-            <argument name="resourceName" xsi:type="string">core_setup</argument>
-            <argument name="connectionName" xsi:type="string">Magento\Framework\Module\Updater::DEFAULT_SETUP_CONNECTION</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Config\Value">

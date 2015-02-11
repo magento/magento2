@@ -9,7 +9,7 @@ use Magento\Framework\Setup\ModuleDataResourceInterface;
 /**
  * Core resource setup
  */
-class Setup extends \Magento\Framework\Module\DataSetup
+class Setup extends \Magento\Setup\Module\DataSetup
 {
     /**
      * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory

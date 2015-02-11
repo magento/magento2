@@ -8,13 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface" type="Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository" />
     <preference for="Magento\CheckoutAgreements\Api\Data\AgreementInterface" type="Magento\CheckoutAgreements\Model\Agreement" />
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="checkoutagreements_setup" xsi:type="string">Magento\Framework\Module\DataSetup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Checkout\Model\Agreements\AgreementsValidator">
         <arguments>
             <argument name="list" xsi:type="array">
