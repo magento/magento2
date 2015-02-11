@@ -16,8 +16,6 @@ use Magento\Framework\View\Result\Page as ResultPage;
 class View extends \Magento\Framework\App\Helper\AbstractHelper
 {
     // List of exceptions throwable during prepareAndRender() method
-    public $ERR_NO_PRODUCT_LOADED = 1;
-
     public $ERR_BAD_CONTROLLER_INTERFACE = 2;
 
     /**
@@ -198,7 +196,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         // Standard algorithm to prepare and render product view page
         $product = $productHelper->initProduct($productId, $controller, $params);
         if (!$product) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Product is not loaded'), $this->ERR_NO_PRODUCT_LOADED);
+            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Product is not loaded'));
         }
 
         $buyRequest = $params->getBuyRequest();
