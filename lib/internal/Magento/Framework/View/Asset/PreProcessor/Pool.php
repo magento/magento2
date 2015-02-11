@@ -6,7 +6,9 @@
 
 namespace Magento\Framework\View\Asset\PreProcessor;
 
+use Magento\Framework\Model\Exception;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
  * A registry of asset preprocessors (not to confuse with the "Registry" pattern)
@@ -14,16 +16,23 @@ use Magento\Framework\ObjectManagerInterface;
 class Pool
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @param ObjectManagerInterface $objectManager
+     * @var PreProcessorInterface[]
      */
-    public function __construct(ObjectManagerInterface $objectManager)
+    private $preProcessors = [];
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param array $preProcessors
+     */
+    public function __construct(ObjectManagerInterface $objectManager, array $preProcessors = null)
     {
         $this->objectManager = $objectManager;
+        $this->preProcessors = $preProcessors;
     }
 
     /**
@@ -35,26 +44,23 @@ class Pool
      *
      * @param string $sourceContentType
      * @param string $targetContentType
-     * @return \Magento\Framework\View\Asset\PreProcessorInterface[]
+     * @throws Exception
+     * @return PreProcessorInterface[]
      */
     public function getPreProcessors($sourceContentType, $targetContentType)
     {
         $result = [];
-        if ($sourceContentType == 'less') {
-            if ($targetContentType == 'css') {
-                $result[] = $this->objectManager->get('Magento\Framework\Css\PreProcessor\Less');
-            } elseif ($targetContentType == 'less') {
-                /**
-                 * @bug This logic is duplicated at \Magento\Framework\Less\FileGenerator::generateLessFileTree()
-                 * If you need to extend or modify behavior of LESS preprocessing, you must account for both places
-                 */
-                $result[] = $this->objectManager->get('Magento\Framework\Less\PreProcessor\Instruction\MagentoImport');
-                $result[] = $this->objectManager->get('Magento\Framework\Less\PreProcessor\Instruction\Import');
+        if (!isset($this->preProcessors[$sourceContentType][$targetContentType])) {
+            throw new \LogicException('Preprocessor from [' . $sourceContentType . '] to [' . $targetContentType .'] isn\'t defined');
+        }
+        foreach($this->preProcessors[$sourceContentType][$targetContentType] as $processorClass) {
+            $preProcessor = $this->objectManager->get($processorClass);
+            if (!$preProcessor instanceof PreProcessorInterface) {
+                throw new Exception($preProcessor . ' doesn\'t implement \Magento\Framework\View\Asset\PreProcessorInterface');
             }
+            $result[] = $preProcessor;
         }
-        if ($targetContentType == 'css') {
-            $result[] = $this->objectManager->get('Magento\Framework\View\Asset\PreProcessor\ModuleNotation');
-        }
+
         return $result;
     }
 }
