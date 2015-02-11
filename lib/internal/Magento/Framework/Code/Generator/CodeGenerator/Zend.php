@@ -99,7 +99,7 @@ class Zend extends \Zend\Code\Generator\ClassGenerator implements
     public function addMethods(array $methods)
     {
         foreach ($methods as $methodOptions) {
-            $methodObject = new MethodGenerator();
+            $methodObject = $this->createMethodGenerator();
             $this->_setDataToObject($methodObject, $methodOptions, $this->_methodOptions);
 
             if (isset(
@@ -190,5 +190,15 @@ class Zend extends \Zend\Code\Generator\ClassGenerator implements
         }
 
         return parent::addPropertyFromGenerator($property);
+    }
+
+    /**
+     * Instantiate method generator object.
+     *
+     * @return MethodGenerator
+     */
+    protected function createMethodGenerator()
+    {
+        return new MethodGenerator();
     }
 }
