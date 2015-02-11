@@ -13,7 +13,7 @@
 $data = $block->getSearchData();
 if (count($data)):?>
     <dl class="block">
-        <dt class="title">AAA<?php echo __($block->getTitle()); ?></dt>
+        <dt class="title"><?php echo __($block->getTitle()); ?></dt>
         <?php foreach ($data as $additionalInfo) : ?>
             <dd class="item">
                 <a href="<?php echo $block->getLink($additionalInfo->getQueryText()) ?>"

@@ -9,7 +9,7 @@
     <type name="Magento\AdvancedSearch\Block\Recommendations">
         <arguments>
             <argument name="searchDataProvider" xsi:type="object">Magento\AdvancedSearch\Model\SearchDataProvider</argument>
-            <argument name="title" xsi:type="string">SSSRelated search terms</argument>
+            <argument name="title" xsi:type="string">Related search terms</argument>
         </arguments>
     </type>
     <type name="Magento\AdvancedSearch\Block\Suggestions">
