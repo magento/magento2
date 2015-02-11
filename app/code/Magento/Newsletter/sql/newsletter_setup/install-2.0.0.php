@@ -4,13 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Newsletter install
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
+/** @var $installer \Magento\Framework\Setup\ModuleSchemaResourceInterface */
 $installer = $this;
-/* @var $installer \Magento\Framework\Module\Setup */
 
 $installer->startSetup();
 

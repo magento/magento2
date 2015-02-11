@@ -4,14 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Sales\Model\Resource\Setup */
-$this->startSetup();
+/** @var $installer \Magento\Framework\Setup\ModuleSchemaResourceInterface */
+$installer = $this;
+$installer->startSetup();
 
 /**
  * Create table 'sales_order'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_order')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_order')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -823,16 +824,16 @@ $table = $this->getConnection()->newTable(
     ['nullable' => true],
     'Coupon Sales Rule Name'
 )->addIndex(
-    $this->getIdxName('sales_order', ['status']),
+    $installer->getIdxName('sales_order', ['status']),
     ['status']
 )->addIndex(
-    $this->getIdxName('sales_order', ['state']),
+    $installer->getIdxName('sales_order', ['state']),
     ['state']
 )->addIndex(
-    $this->getIdxName('sales_order', ['store_id']),
+    $installer->getIdxName('sales_order', ['store_id']),
     ['store_id']
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_order',
         ['increment_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -840,44 +841,44 @@ $table = $this->getConnection()->newTable(
     ['increment_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_order', ['created_at']),
+    $installer->getIdxName('sales_order', ['created_at']),
     ['created_at']
 )->addIndex(
-    $this->getIdxName('sales_order', ['customer_id']),
+    $installer->getIdxName('sales_order', ['customer_id']),
     ['customer_id']
 )->addIndex(
-    $this->getIdxName('sales_order', ['ext_order_id']),
+    $installer->getIdxName('sales_order', ['ext_order_id']),
     ['ext_order_id']
 )->addIndex(
-    $this->getIdxName('sales_order', ['quote_id']),
+    $installer->getIdxName('sales_order', ['quote_id']),
     ['quote_id']
 )->addIndex(
-    $this->getIdxName('sales_order', ['updated_at']),
+    $installer->getIdxName('sales_order', ['updated_at']),
     ['updated_at']
 )->addForeignKey(
-    $this->getFkName('sales_order', 'customer_id', 'customer_entity', 'entity_id'),
+    $installer->getFkName('sales_order', 'customer_id', 'customer_entity', 'entity_id'),
     'customer_id',
-    $this->getTable('customer_entity'),
+    $installer->getTable('customer_entity'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_order', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_order', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Order'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_order_grid'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_order_grid')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_order_grid')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -975,25 +976,25 @@ $table = $this->getConnection()->newTable(
     [],
     'Updated At'
 )->addIndex(
-    $this->getIdxName('sales_order_grid', ['status']),
+    $installer->getIdxName('sales_order_grid', ['status']),
     ['status']
 )->addIndex(
-    $this->getIdxName('sales_order_grid', ['store_id']),
+    $installer->getIdxName('sales_order_grid', ['store_id']),
     ['store_id']
 )->addIndex(
-    $this->getIdxName('sales_order_grid', ['base_grand_total']),
+    $installer->getIdxName('sales_order_grid', ['base_grand_total']),
     ['base_grand_total']
 )->addIndex(
-    $this->getIdxName('sales_order_grid', ['base_total_paid']),
+    $installer->getIdxName('sales_order_grid', ['base_total_paid']),
     ['base_total_paid']
 )->addIndex(
-    $this->getIdxName('sales_order_grid', ['grand_total']),
+    $installer->getIdxName('sales_order_grid', ['grand_total']),
     ['grand_total']
 )->addIndex(
-    $this->getIdxName('sales_order_grid', ['total_paid']),
+    $installer->getIdxName('sales_order_grid', ['total_paid']),
     ['total_paid']
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_order_grid',
         ['increment_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -1001,51 +1002,51 @@ $table = $this->getConnection()->newTable(
     ['increment_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_order_grid', ['shipping_name']),
+    $installer->getIdxName('sales_order_grid', ['shipping_name']),
     ['shipping_name']
 )->addIndex(
-    $this->getIdxName('sales_order_grid', ['billing_name']),
+    $installer->getIdxName('sales_order_grid', ['billing_name']),
     ['billing_name']
 )->addIndex(
-    $this->getIdxName('sales_order_grid', ['created_at']),
+    $installer->getIdxName('sales_order_grid', ['created_at']),
     ['created_at']
 )->addIndex(
-    $this->getIdxName('sales_order_grid', ['customer_id']),
+    $installer->getIdxName('sales_order_grid', ['customer_id']),
     ['customer_id']
 )->addIndex(
-    $this->getIdxName('sales_order_grid', ['updated_at']),
+    $installer->getIdxName('sales_order_grid', ['updated_at']),
     ['updated_at']
 )->addForeignKey(
-    $this->getFkName('sales_order_grid', 'customer_id', 'customer_entity', 'entity_id'),
+    $installer->getFkName('sales_order_grid', 'customer_id', 'customer_entity', 'entity_id'),
     'customer_id',
-    $this->getTable('customer_entity'),
+    $installer->getTable('customer_entity'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_order_grid', 'entity_id', 'sales_order', 'entity_id'),
+    $installer->getFkName('sales_order_grid', 'entity_id', 'sales_order', 'entity_id'),
     'entity_id',
-    $this->getTable('sales_order'),
+    $installer->getTable('sales_order'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_order_grid', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_order_grid', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Order Grid'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_order_address'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_order_address')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_order_address')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -1173,25 +1174,25 @@ $table = $this->getConnection()->newTable(
     [],
     'Company'
 )->addIndex(
-    $this->getIdxName('sales_order_address', ['parent_id']),
+    $installer->getIdxName('sales_order_address', ['parent_id']),
     ['parent_id']
 )->addForeignKey(
-    $this->getFkName('sales_order_address', 'parent_id', 'sales_order', 'entity_id'),
+    $installer->getFkName('sales_order_address', 'parent_id', 'sales_order', 'entity_id'),
     'parent_id',
-    $this->getTable('sales_order'),
+    $installer->getTable('sales_order'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Order Address'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_order_status_history'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_order_status_history')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_order_status_history')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -1241,28 +1242,28 @@ $table = $this->getConnection()->newTable(
     ['nullable' => true],
     'Shows what entity history is bind to.'
 )->addIndex(
-    $this->getIdxName('sales_order_status_history', ['parent_id']),
+    $installer->getIdxName('sales_order_status_history', ['parent_id']),
     ['parent_id']
 )->addIndex(
-    $this->getIdxName('sales_order_status_history', ['created_at']),
+    $installer->getIdxName('sales_order_status_history', ['created_at']),
     ['created_at']
 )->addForeignKey(
-    $this->getFkName('sales_order_status_history', 'parent_id', 'sales_order', 'entity_id'),
+    $installer->getFkName('sales_order_status_history', 'parent_id', 'sales_order', 'entity_id'),
     'parent_id',
-    $this->getTable('sales_order'),
+    $installer->getTable('sales_order'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Order Status History'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_order_item'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_order_item')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_order_item')
 )->addColumn(
     'item_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -1672,35 +1673,35 @@ $table = $this->getConnection()->newTable(
     [],
     'Base Discount Refunded'
 )->addIndex(
-    $this->getIdxName('sales_order_item', ['order_id']),
+    $installer->getIdxName('sales_order_item', ['order_id']),
     ['order_id']
 )->addIndex(
-    $this->getIdxName('sales_order_item', ['store_id']),
+    $installer->getIdxName('sales_order_item', ['store_id']),
     ['store_id']
 )->addForeignKey(
-    $this->getFkName('sales_order_item', 'order_id', 'sales_order', 'entity_id'),
+    $installer->getFkName('sales_order_item', 'order_id', 'sales_order', 'entity_id'),
     'order_id',
-    $this->getTable('sales_order'),
+    $installer->getTable('sales_order'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_order_item', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_order_item', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Order Item'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_order_payment'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_order_payment')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_order_payment')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -2026,25 +2027,25 @@ $table = $this->getConnection()->newTable(
     [],
     'Additional Information'
 )->addIndex(
-    $this->getIdxName('sales_order_payment', ['parent_id']),
+    $installer->getIdxName('sales_order_payment', ['parent_id']),
     ['parent_id']
 )->addForeignKey(
-    $this->getFkName('sales_order_payment', 'parent_id', 'sales_order', 'entity_id'),
+    $installer->getFkName('sales_order_payment', 'parent_id', 'sales_order', 'entity_id'),
     'parent_id',
-    $this->getTable('sales_order'),
+    $installer->getTable('sales_order'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Order Payment'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_shipment'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_shipment')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_shipment')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -2136,13 +2137,13 @@ $table = $this->getConnection()->newTable(
     [],
     'Shipping Label Content'
 )->addIndex(
-    $this->getIdxName('sales_shipment', ['store_id']),
+    $installer->getIdxName('sales_shipment', ['store_id']),
     ['store_id']
 )->addIndex(
-    $this->getIdxName('sales_shipment', ['total_qty']),
+    $installer->getIdxName('sales_shipment', ['total_qty']),
     ['total_qty']
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_shipment',
         ['increment_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -2150,38 +2151,38 @@ $table = $this->getConnection()->newTable(
     ['increment_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_shipment', ['order_id']),
+    $installer->getIdxName('sales_shipment', ['order_id']),
     ['order_id']
 )->addIndex(
-    $this->getIdxName('sales_shipment', ['created_at']),
+    $installer->getIdxName('sales_shipment', ['created_at']),
     ['created_at']
 )->addIndex(
-    $this->getIdxName('sales_shipment', ['updated_at']),
+    $installer->getIdxName('sales_shipment', ['updated_at']),
     ['updated_at']
 )->addForeignKey(
-    $this->getFkName('sales_shipment', 'order_id', 'sales_order', 'entity_id'),
+    $installer->getFkName('sales_shipment', 'order_id', 'sales_order', 'entity_id'),
     'order_id',
-    $this->getTable('sales_order'),
+    $installer->getTable('sales_order'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_shipment', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_shipment', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Shipment'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_shipment_grid'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_shipment_grid')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_shipment_grid')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -2243,19 +2244,19 @@ $table = $this->getConnection()->newTable(
     [],
     'Shipping Name'
 )->addIndex(
-    $this->getIdxName('sales_shipment_grid', ['store_id']),
+    $installer->getIdxName('sales_shipment_grid', ['store_id']),
     ['store_id']
 )->addIndex(
-    $this->getIdxName('sales_shipment_grid', ['total_qty']),
+    $installer->getIdxName('sales_shipment_grid', ['total_qty']),
     ['total_qty']
 )->addIndex(
-    $this->getIdxName('sales_shipment_grid', ['order_id']),
+    $installer->getIdxName('sales_shipment_grid', ['order_id']),
     ['order_id']
 )->addIndex(
-    $this->getIdxName('sales_shipment_grid', ['shipment_status']),
+    $installer->getIdxName('sales_shipment_grid', ['shipment_status']),
     ['shipment_status']
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_shipment_grid',
         ['increment_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -2263,41 +2264,41 @@ $table = $this->getConnection()->newTable(
     ['increment_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_shipment_grid', ['order_increment_id']),
+    $installer->getIdxName('sales_shipment_grid', ['order_increment_id']),
     ['order_increment_id']
 )->addIndex(
-    $this->getIdxName('sales_shipment_grid', ['created_at']),
+    $installer->getIdxName('sales_shipment_grid', ['created_at']),
     ['created_at']
 )->addIndex(
-    $this->getIdxName('sales_shipment_grid', ['order_created_at']),
+    $installer->getIdxName('sales_shipment_grid', ['order_created_at']),
     ['order_created_at']
 )->addIndex(
-    $this->getIdxName('sales_shipment_grid', ['shipping_name']),
+    $installer->getIdxName('sales_shipment_grid', ['shipping_name']),
     ['shipping_name']
 )->addForeignKey(
-    $this->getFkName('sales_shipment_grid', 'entity_id', 'sales_shipment', 'entity_id'),
+    $installer->getFkName('sales_shipment_grid', 'entity_id', 'sales_shipment', 'entity_id'),
     'entity_id',
-    $this->getTable('sales_shipment'),
+    $installer->getTable('sales_shipment'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_shipment_grid', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_shipment_grid', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Shipment Grid'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_shipment_item'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_shipment_item')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_shipment_item')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -2371,25 +2372,25 @@ $table = $this->getConnection()->newTable(
     [],
     'Sku'
 )->addIndex(
-    $this->getIdxName('sales_shipment_item', ['parent_id']),
+    $installer->getIdxName('sales_shipment_item', ['parent_id']),
     ['parent_id']
 )->addForeignKey(
-    $this->getFkName('sales_shipment_item', 'parent_id', 'sales_shipment', 'entity_id'),
+    $installer->getFkName('sales_shipment_item', 'parent_id', 'sales_shipment', 'entity_id'),
     'parent_id',
-    $this->getTable('sales_shipment'),
+    $installer->getTable('sales_shipment'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Shipment Item'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_shipment_track'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_shipment_track')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_shipment_track')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -2457,31 +2458,31 @@ $table = $this->getConnection()->newTable(
     [],
     'Updated At'
 )->addIndex(
-    $this->getIdxName('sales_shipment_track', ['parent_id']),
+    $installer->getIdxName('sales_shipment_track', ['parent_id']),
     ['parent_id']
 )->addIndex(
-    $this->getIdxName('sales_shipment_track', ['order_id']),
+    $installer->getIdxName('sales_shipment_track', ['order_id']),
     ['order_id']
 )->addIndex(
-    $this->getIdxName('sales_shipment_track', ['created_at']),
+    $installer->getIdxName('sales_shipment_track', ['created_at']),
     ['created_at']
 )->addForeignKey(
-    $this->getFkName('sales_shipment_track', 'parent_id', 'sales_shipment', 'entity_id'),
+    $installer->getFkName('sales_shipment_track', 'parent_id', 'sales_shipment', 'entity_id'),
     'parent_id',
-    $this->getTable('sales_shipment'),
+    $installer->getTable('sales_shipment'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Shipment Track'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_shipment_comment'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_shipment_comment')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_shipment_comment')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -2519,28 +2520,28 @@ $table = $this->getConnection()->newTable(
     [],
     'Created At'
 )->addIndex(
-    $this->getIdxName('sales_shipment_comment', ['created_at']),
+    $installer->getIdxName('sales_shipment_comment', ['created_at']),
     ['created_at']
 )->addIndex(
-    $this->getIdxName('sales_shipment_comment', ['parent_id']),
+    $installer->getIdxName('sales_shipment_comment', ['parent_id']),
     ['parent_id']
 )->addForeignKey(
-    $this->getFkName('sales_shipment_comment', 'parent_id', 'sales_shipment', 'entity_id'),
+    $installer->getFkName('sales_shipment_comment', 'parent_id', 'sales_shipment', 'entity_id'),
     'parent_id',
-    $this->getTable('sales_shipment'),
+    $installer->getTable('sales_shipment'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Shipment Comment'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_invoice'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_invoice')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_invoice')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -2806,19 +2807,19 @@ $table = $this->getConnection()->newTable(
     [],
     'Discount Description'
 )->addIndex(
-    $this->getIdxName('sales_invoice', ['store_id']),
+    $installer->getIdxName('sales_invoice', ['store_id']),
     ['store_id']
 )->addIndex(
-    $this->getIdxName('sales_invoice', ['grand_total']),
+    $installer->getIdxName('sales_invoice', ['grand_total']),
     ['grand_total']
 )->addIndex(
-    $this->getIdxName('sales_invoice', ['order_id']),
+    $installer->getIdxName('sales_invoice', ['order_id']),
     ['order_id']
 )->addIndex(
-    $this->getIdxName('sales_invoice', ['state']),
+    $installer->getIdxName('sales_invoice', ['state']),
     ['state']
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_invoice',
         ['increment_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -2826,32 +2827,32 @@ $table = $this->getConnection()->newTable(
     ['increment_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_invoice', ['created_at']),
+    $installer->getIdxName('sales_invoice', ['created_at']),
     ['created_at']
 )->addForeignKey(
-    $this->getFkName('sales_invoice', 'order_id', 'sales_order', 'entity_id'),
+    $installer->getFkName('sales_invoice', 'order_id', 'sales_order', 'entity_id'),
     'order_id',
-    $this->getTable('sales_order'),
+    $installer->getTable('sales_order'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_invoice', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_invoice', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Invoice'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_invoice_grid'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_invoice_grid')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_invoice_grid')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -2943,19 +2944,19 @@ $table = $this->getConnection()->newTable(
     [],
     'Billing Name'
 )->addIndex(
-    $this->getIdxName('sales_invoice_grid', ['store_id']),
+    $installer->getIdxName('sales_invoice_grid', ['store_id']),
     ['store_id']
 )->addIndex(
-    $this->getIdxName('sales_invoice_grid', ['grand_total']),
+    $installer->getIdxName('sales_invoice_grid', ['grand_total']),
     ['grand_total']
 )->addIndex(
-    $this->getIdxName('sales_invoice_grid', ['order_id']),
+    $installer->getIdxName('sales_invoice_grid', ['order_id']),
     ['order_id']
 )->addIndex(
-    $this->getIdxName('sales_invoice_grid', ['state']),
+    $installer->getIdxName('sales_invoice_grid', ['state']),
     ['state']
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_invoice_grid',
         ['increment_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -2963,41 +2964,41 @@ $table = $this->getConnection()->newTable(
     ['increment_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_invoice_grid', ['order_increment_id']),
+    $installer->getIdxName('sales_invoice_grid', ['order_increment_id']),
     ['order_increment_id']
 )->addIndex(
-    $this->getIdxName('sales_invoice_grid', ['created_at']),
+    $installer->getIdxName('sales_invoice_grid', ['created_at']),
     ['created_at']
 )->addIndex(
-    $this->getIdxName('sales_invoice_grid', ['order_created_at']),
+    $installer->getIdxName('sales_invoice_grid', ['order_created_at']),
     ['order_created_at']
 )->addIndex(
-    $this->getIdxName('sales_invoice_grid', ['billing_name']),
+    $installer->getIdxName('sales_invoice_grid', ['billing_name']),
     ['billing_name']
 )->addForeignKey(
-    $this->getFkName('sales_invoice_grid', 'entity_id', 'sales_invoice', 'entity_id'),
+    $installer->getFkName('sales_invoice_grid', 'entity_id', 'sales_invoice', 'entity_id'),
     'entity_id',
-    $this->getTable('sales_invoice'),
+    $installer->getTable('sales_invoice'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_invoice_grid', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_invoice_grid', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Invoice Grid'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_invoice_item'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_invoice_item')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_invoice_item')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -3149,25 +3150,25 @@ $table = $this->getConnection()->newTable(
     [],
     'Ratio of tax invoiced over tax of the order item'
 )->addIndex(
-    $this->getIdxName('sales_invoice_item', ['parent_id']),
+    $installer->getIdxName('sales_invoice_item', ['parent_id']),
     ['parent_id']
 )->addForeignKey(
-    $this->getFkName('sales_invoice_item', 'parent_id', 'sales_invoice', 'entity_id'),
+    $installer->getFkName('sales_invoice_item', 'parent_id', 'sales_invoice', 'entity_id'),
     'parent_id',
-    $this->getTable('sales_invoice'),
+    $installer->getTable('sales_invoice'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Invoice Item'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_invoice_comment'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_invoice_comment')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_invoice_comment')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -3205,28 +3206,28 @@ $table = $this->getConnection()->newTable(
     [],
     'Created At'
 )->addIndex(
-    $this->getIdxName('sales_invoice_comment', ['created_at']),
+    $installer->getIdxName('sales_invoice_comment', ['created_at']),
     ['created_at']
 )->addIndex(
-    $this->getIdxName('sales_invoice_comment', ['parent_id']),
+    $installer->getIdxName('sales_invoice_comment', ['parent_id']),
     ['parent_id']
 )->addForeignKey(
-    $this->getFkName('sales_invoice_comment', 'parent_id', 'sales_invoice', 'entity_id'),
+    $installer->getFkName('sales_invoice_comment', 'parent_id', 'sales_invoice', 'entity_id'),
     'parent_id',
-    $this->getTable('sales_invoice'),
+    $installer->getTable('sales_invoice'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Invoice Comment'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_creditmemo'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_creditmemo')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_creditmemo')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -3516,16 +3517,16 @@ $table = $this->getConnection()->newTable(
     [],
     'Discount Description'
 )->addIndex(
-    $this->getIdxName('sales_creditmemo', ['store_id']),
+    $installer->getIdxName('sales_creditmemo', ['store_id']),
     ['store_id']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo', ['order_id']),
+    $installer->getIdxName('sales_creditmemo', ['order_id']),
     ['order_id']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo', ['creditmemo_status']),
+    $installer->getIdxName('sales_creditmemo', ['creditmemo_status']),
     ['creditmemo_status']
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_creditmemo',
         ['increment_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -3533,35 +3534,35 @@ $table = $this->getConnection()->newTable(
     ['increment_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_creditmemo', ['state']),
+    $installer->getIdxName('sales_creditmemo', ['state']),
     ['state']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo', ['created_at']),
+    $installer->getIdxName('sales_creditmemo', ['created_at']),
     ['created_at']
 )->addForeignKey(
-    $this->getFkName('sales_creditmemo', 'order_id', 'sales_order', 'entity_id'),
+    $installer->getFkName('sales_creditmemo', 'order_id', 'sales_order', 'entity_id'),
     'order_id',
-    $this->getTable('sales_order'),
+    $installer->getTable('sales_order'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_creditmemo', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_creditmemo', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Creditmemo'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_creditmemo_grid'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_creditmemo_grid')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_creditmemo_grid')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -3689,25 +3690,25 @@ $table = $this->getConnection()->newTable(
     [],
     'Billing Name'
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_grid', ['store_id']),
+    $installer->getIdxName('sales_creditmemo_grid', ['store_id']),
     ['store_id']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_grid', ['grand_total']),
+    $installer->getIdxName('sales_creditmemo_grid', ['grand_total']),
     ['grand_total']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_grid', ['base_grand_total']),
+    $installer->getIdxName('sales_creditmemo_grid', ['base_grand_total']),
     ['base_grand_total']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_grid', ['order_id']),
+    $installer->getIdxName('sales_creditmemo_grid', ['order_id']),
     ['order_id']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_grid', ['creditmemo_status']),
+    $installer->getIdxName('sales_creditmemo_grid', ['creditmemo_status']),
     ['creditmemo_status']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_grid', ['state']),
+    $installer->getIdxName('sales_creditmemo_grid', ['state']),
     ['state']
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_creditmemo_grid',
         ['increment_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -3715,41 +3716,41 @@ $table = $this->getConnection()->newTable(
     ['increment_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_grid', ['order_increment_id']),
+    $installer->getIdxName('sales_creditmemo_grid', ['order_increment_id']),
     ['order_increment_id']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_grid', ['created_at']),
+    $installer->getIdxName('sales_creditmemo_grid', ['created_at']),
     ['created_at']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_grid', ['order_created_at']),
+    $installer->getIdxName('sales_creditmemo_grid', ['order_created_at']),
     ['order_created_at']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_grid', ['billing_name']),
+    $installer->getIdxName('sales_creditmemo_grid', ['billing_name']),
     ['billing_name']
 )->addForeignKey(
-    $this->getFkName('sales_creditmemo_grid', 'entity_id', 'sales_creditmemo', 'entity_id'),
+    $installer->getFkName('sales_creditmemo_grid', 'entity_id', 'sales_creditmemo', 'entity_id'),
     'entity_id',
-    $this->getTable('sales_creditmemo'),
+    $installer->getTable('sales_creditmemo'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_creditmemo_grid', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_creditmemo_grid', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Creditmemo Grid'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_creditmemo_item'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_creditmemo_item')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_creditmemo_item')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -3901,25 +3902,25 @@ $table = $this->getConnection()->newTable(
     [],
     'Ratio of tax in the creditmemo item over tax of the order item'
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_item', ['parent_id']),
+    $installer->getIdxName('sales_creditmemo_item', ['parent_id']),
     ['parent_id']
 )->addForeignKey(
-    $this->getFkName('sales_creditmemo_item', 'parent_id', 'sales_creditmemo', 'entity_id'),
+    $installer->getFkName('sales_creditmemo_item', 'parent_id', 'sales_creditmemo', 'entity_id'),
     'parent_id',
-    $this->getTable('sales_creditmemo'),
+    $installer->getTable('sales_creditmemo'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Creditmemo Item'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_creditmemo_comment'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_creditmemo_comment')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_creditmemo_comment')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -3957,28 +3958,28 @@ $table = $this->getConnection()->newTable(
     [],
     'Created At'
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_comment', ['created_at']),
+    $installer->getIdxName('sales_creditmemo_comment', ['created_at']),
     ['created_at']
 )->addIndex(
-    $this->getIdxName('sales_creditmemo_comment', ['parent_id']),
+    $installer->getIdxName('sales_creditmemo_comment', ['parent_id']),
     ['parent_id']
 )->addForeignKey(
-    $this->getFkName('sales_creditmemo_comment', 'parent_id', 'sales_creditmemo', 'entity_id'),
+    $installer->getFkName('sales_creditmemo_comment', 'parent_id', 'sales_creditmemo', 'entity_id'),
     'parent_id',
-    $this->getTable('sales_creditmemo'),
+    $installer->getTable('sales_creditmemo'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Creditmemo Comment'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_invoiced_aggregated'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_invoiced_aggregated')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_invoiced_aggregated')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -4034,7 +4035,7 @@ $table = $this->getConnection()->newTable(
     [],
     'Invoiced Not Captured'
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_invoiced_aggregated',
         ['period', 'store_id', 'order_status'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -4042,25 +4043,25 @@ $table = $this->getConnection()->newTable(
     ['period', 'store_id', 'order_status'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_invoiced_aggregated', ['store_id']),
+    $installer->getIdxName('sales_invoiced_aggregated', ['store_id']),
     ['store_id']
 )->addForeignKey(
-    $this->getFkName('sales_invoiced_aggregated', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_invoiced_aggregated', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Invoiced Aggregated'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_invoiced_aggregated_order'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_invoiced_aggregated_order')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_invoiced_aggregated_order')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -4116,7 +4117,7 @@ $table = $this->getConnection()->newTable(
     [],
     'Invoiced Not Captured'
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_invoiced_aggregated_order',
         ['period', 'store_id', 'order_status'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -4124,25 +4125,25 @@ $table = $this->getConnection()->newTable(
     ['period', 'store_id', 'order_status'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_invoiced_aggregated_order', ['store_id']),
+    $installer->getIdxName('sales_invoiced_aggregated_order', ['store_id']),
     ['store_id']
 )->addForeignKey(
-    $this->getFkName('sales_invoiced_aggregated_order', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_invoiced_aggregated_order', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Invoiced Aggregated Order'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_order_aggregated_created'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_order_aggregated_created')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_order_aggregated_created')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -4264,7 +4265,7 @@ $table = $this->getConnection()->newTable(
     ['nullable' => false, 'default' => '0.0000'],
     'Total Discount Amount Actual'
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_order_aggregated_created',
         ['period', 'store_id', 'order_status'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -4272,32 +4273,32 @@ $table = $this->getConnection()->newTable(
     ['period', 'store_id', 'order_status'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_order_aggregated_created', ['store_id']),
+    $installer->getIdxName('sales_order_aggregated_created', ['store_id']),
     ['store_id']
 )->addForeignKey(
-    $this->getFkName('sales_order_aggregated_created', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_order_aggregated_created', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Order Aggregated Created'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
-$this->getConnection()->createTable(
-    $this->getConnection()->createTableByDdl(
-        $this->getTable('sales_order_aggregated_created'),
-        $this->getTable('sales_order_aggregated_updated')
+$installer->getConnection()->createTable(
+    $installer->getConnection()->createTableByDdl(
+        $installer->getTable('sales_order_aggregated_created'),
+        $installer->getTable('sales_order_aggregated_updated')
     )
 );
 
 /**
  * Create table 'sales_payment_transaction'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_payment_transaction')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_payment_transaction')
 )->addColumn(
     'transaction_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -4359,7 +4360,7 @@ $table = $this->getConnection()->newTable(
     [],
     'Created At'
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_payment_transaction',
         ['order_id', 'payment_id', 'txn_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -4367,42 +4368,42 @@ $table = $this->getConnection()->newTable(
     ['order_id', 'payment_id', 'txn_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_payment_transaction', ['parent_id']),
+    $installer->getIdxName('sales_payment_transaction', ['parent_id']),
     ['parent_id']
 )->addIndex(
-    $this->getIdxName('sales_payment_transaction', ['payment_id']),
+    $installer->getIdxName('sales_payment_transaction', ['payment_id']),
     ['payment_id']
 )->addForeignKey(
-    $this->getFkName('sales_payment_transaction', 'order_id', 'sales_order', 'entity_id'),
+    $installer->getFkName('sales_payment_transaction', 'order_id', 'sales_order', 'entity_id'),
     'order_id',
-    $this->getTable('sales_order'),
+    $installer->getTable('sales_order'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_payment_transaction', 'parent_id', 'sales_payment_transaction', 'transaction_id'),
+    $installer->getFkName('sales_payment_transaction', 'parent_id', 'sales_payment_transaction', 'transaction_id'),
     'parent_id',
-    $this->getTable('sales_payment_transaction'),
+    $installer->getTable('sales_payment_transaction'),
     'transaction_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_payment_transaction', 'payment_id', 'sales_order_payment', 'entity_id'),
+    $installer->getFkName('sales_payment_transaction', 'payment_id', 'sales_order_payment', 'entity_id'),
     'payment_id',
-    $this->getTable('sales_order_payment'),
+    $installer->getTable('sales_order_payment'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Payment Transaction'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_refunded_aggregated'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_refunded_aggregated')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_refunded_aggregated')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -4452,7 +4453,7 @@ $table = $this->getConnection()->newTable(
     [],
     'Offline Refunded'
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_refunded_aggregated',
         ['period', 'store_id', 'order_status'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -4460,25 +4461,25 @@ $table = $this->getConnection()->newTable(
     ['period', 'store_id', 'order_status'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_refunded_aggregated', ['store_id']),
+    $installer->getIdxName('sales_refunded_aggregated', ['store_id']),
     ['store_id']
 )->addForeignKey(
-    $this->getFkName('sales_refunded_aggregated', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_refunded_aggregated', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Refunded Aggregated'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_refunded_aggregated_order'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_refunded_aggregated_order')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_refunded_aggregated_order')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -4528,7 +4529,7 @@ $table = $this->getConnection()->newTable(
     [],
     'Offline Refunded'
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_refunded_aggregated_order',
         ['period', 'store_id', 'order_status'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -4536,25 +4537,25 @@ $table = $this->getConnection()->newTable(
     ['period', 'store_id', 'order_status'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_refunded_aggregated_order', ['store_id']),
+    $installer->getIdxName('sales_refunded_aggregated_order', ['store_id']),
     ['store_id']
 )->addForeignKey(
-    $this->getFkName('sales_refunded_aggregated_order', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_refunded_aggregated_order', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Refunded Aggregated Order'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_shipping_aggregated'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_shipping_aggregated')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_shipping_aggregated')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -4604,7 +4605,7 @@ $table = $this->getConnection()->newTable(
     [],
     'Total Shipping Actual'
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_shipping_aggregated',
         ['period', 'store_id', 'order_status', 'shipping_description'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -4612,25 +4613,25 @@ $table = $this->getConnection()->newTable(
     ['period', 'store_id', 'order_status', 'shipping_description'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_shipping_aggregated', ['store_id']),
+    $installer->getIdxName('sales_shipping_aggregated', ['store_id']),
     ['store_id']
 )->addForeignKey(
-    $this->getFkName('sales_shipping_aggregated', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_shipping_aggregated', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Shipping Aggregated'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_shipping_aggregated_order'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_shipping_aggregated_order')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_shipping_aggregated_order')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -4680,7 +4681,7 @@ $table = $this->getConnection()->newTable(
     [],
     'Total Shipping Actual'
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_shipping_aggregated_order',
         ['period', 'store_id', 'order_status', 'shipping_description'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -4688,25 +4689,25 @@ $table = $this->getConnection()->newTable(
     ['period', 'store_id', 'order_status', 'shipping_description'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_shipping_aggregated_order', ['store_id']),
+    $installer->getIdxName('sales_shipping_aggregated_order', ['store_id']),
     ['store_id']
 )->addForeignKey(
-    $this->getFkName('sales_shipping_aggregated_order', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_shipping_aggregated_order', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Shipping Aggregated Order'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_bestsellers_aggregated_daily'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_bestsellers_aggregated_daily')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_bestsellers_aggregated_daily')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -4756,7 +4757,7 @@ $table = $this->getConnection()->newTable(
     ['unsigned' => true, 'nullable' => false, 'default' => '0'],
     'Rating Pos'
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_bestsellers_aggregated_daily',
         ['period', 'store_id', 'product_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -4764,35 +4765,35 @@ $table = $this->getConnection()->newTable(
     ['period', 'store_id', 'product_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_bestsellers_aggregated_daily', ['store_id']),
+    $installer->getIdxName('sales_bestsellers_aggregated_daily', ['store_id']),
     ['store_id']
 )->addIndex(
-    $this->getIdxName('sales_bestsellers_aggregated_daily', ['product_id']),
+    $installer->getIdxName('sales_bestsellers_aggregated_daily', ['product_id']),
     ['product_id']
 )->addForeignKey(
-    $this->getFkName('sales_bestsellers_aggregated_daily', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_bestsellers_aggregated_daily', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_bestsellers_aggregated_daily', 'product_id', 'catalog_product_entity', 'entity_id'),
+    $installer->getFkName('sales_bestsellers_aggregated_daily', 'product_id', 'catalog_product_entity', 'entity_id'),
     'product_id',
-    $this->getTable('catalog_product_entity'),
+    $installer->getTable('catalog_product_entity'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Bestsellers Aggregated Daily'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_bestsellers_aggregated_monthly'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_bestsellers_aggregated_monthly')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_bestsellers_aggregated_monthly')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -4842,7 +4843,7 @@ $table = $this->getConnection()->newTable(
     ['unsigned' => true, 'nullable' => false, 'default' => '0'],
     'Rating Pos'
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_bestsellers_aggregated_monthly',
         ['period', 'store_id', 'product_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -4850,35 +4851,35 @@ $table = $this->getConnection()->newTable(
     ['period', 'store_id', 'product_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_bestsellers_aggregated_monthly', ['store_id']),
+    $installer->getIdxName('sales_bestsellers_aggregated_monthly', ['store_id']),
     ['store_id']
 )->addIndex(
-    $this->getIdxName('sales_bestsellers_aggregated_monthly', ['product_id']),
+    $installer->getIdxName('sales_bestsellers_aggregated_monthly', ['product_id']),
     ['product_id']
 )->addForeignKey(
-    $this->getFkName('sales_bestsellers_aggregated_monthly', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_bestsellers_aggregated_monthly', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_bestsellers_aggregated_monthly', 'product_id', 'catalog_product_entity', 'entity_id'),
+    $installer->getFkName('sales_bestsellers_aggregated_monthly', 'product_id', 'catalog_product_entity', 'entity_id'),
     'product_id',
-    $this->getTable('catalog_product_entity'),
+    $installer->getTable('catalog_product_entity'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Bestsellers Aggregated Monthly'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_bestsellers_aggregated_yearly'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_bestsellers_aggregated_yearly')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_bestsellers_aggregated_yearly')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -4928,7 +4929,7 @@ $table = $this->getConnection()->newTable(
     ['unsigned' => true, 'nullable' => false, 'default' => '0'],
     'Rating Pos'
 )->addIndex(
-    $this->getIdxName(
+    $installer->getIdxName(
         'sales_bestsellers_aggregated_yearly',
         ['period', 'store_id', 'product_id'],
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
@@ -4936,35 +4937,35 @@ $table = $this->getConnection()->newTable(
     ['period', 'store_id', 'product_id'],
     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
 )->addIndex(
-    $this->getIdxName('sales_bestsellers_aggregated_yearly', ['store_id']),
+    $installer->getIdxName('sales_bestsellers_aggregated_yearly', ['store_id']),
     ['store_id']
 )->addIndex(
-    $this->getIdxName('sales_bestsellers_aggregated_yearly', ['product_id']),
+    $installer->getIdxName('sales_bestsellers_aggregated_yearly', ['product_id']),
     ['product_id']
 )->addForeignKey(
-    $this->getFkName('sales_bestsellers_aggregated_yearly', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_bestsellers_aggregated_yearly', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_bestsellers_aggregated_yearly', 'product_id', 'catalog_product_entity', 'entity_id'),
+    $installer->getFkName('sales_bestsellers_aggregated_yearly', 'product_id', 'catalog_product_entity', 'entity_id'),
     'product_id',
-    $this->getTable('catalog_product_entity'),
+    $installer->getTable('catalog_product_entity'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Bestsellers Aggregated Yearly'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_order_tax'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_order_tax')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_order_tax')
 )->addColumn(
     'tax_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -5038,18 +5039,18 @@ $table = $this->getConnection()->newTable(
     ['unsigned' => true, 'nullable' => false, 'default' => '0'],
     'Hidden'
 )->addIndex(
-    $this->getIdxName('sales_order_tax', ['order_id', 'priority', 'position']),
+    $installer->getIdxName('sales_order_tax', ['order_id', 'priority', 'position']),
     ['order_id', 'priority', 'position']
 )->setComment(
     'Sales Order Tax Table'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_order_status'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_order_status')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_order_status')
 )->addColumn(
     'status',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -5065,13 +5066,13 @@ $table = $this->getConnection()->newTable(
 )->setComment(
     'Sales Order Status Table'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_order_status_state'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_order_status_state')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_order_status_state')
 )->addColumn(
     'status',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -5097,22 +5098,22 @@ $table = $this->getConnection()->newTable(
     ['unsigned' => true, 'nullable' => false, 'default' => '0'],
     'Visible on front'
 )->addForeignKey(
-    $this->getFkName('sales_order_status_state', 'status', 'sales_order_status', 'status'),
+    $installer->getFkName('sales_order_status_state', 'status', 'sales_order_status', 'status'),
     'status',
-    $this->getTable('sales_order_status'),
+    $installer->getTable('sales_order_status'),
     'status',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Order Status Table'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'sales_order_status_label'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('sales_order_status_label')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('sales_order_status_label')
 )->addColumn(
     'status',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -5132,25 +5133,25 @@ $table = $this->getConnection()->newTable(
     ['nullable' => false],
     'Label'
 )->addIndex(
-    $this->getIdxName('sales_order_status_label', ['store_id']),
+    $installer->getIdxName('sales_order_status_label', ['store_id']),
     ['store_id']
 )->addForeignKey(
-    $this->getFkName('sales_order_status_label', 'status', 'sales_order_status', 'status'),
+    $installer->getFkName('sales_order_status_label', 'status', 'sales_order_status', 'status'),
     'status',
-    $this->getTable('sales_order_status'),
+    $installer->getTable('sales_order_status'),
     'status',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('sales_order_status_label', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('sales_order_status_label', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Order Status Label Table'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
-$this->endSetup();
+$installer->endSetup();

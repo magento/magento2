@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+/** @var $installer \Magento\Framework\Setup\ModuleSchemaResourceInterface */
 $installer = $this;
-/* @var $installer \Magento\Catalog\Model\Resource\Setup */
 
 $installer->startSetup();
 

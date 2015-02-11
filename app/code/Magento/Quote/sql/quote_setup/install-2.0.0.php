@@ -4,14 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Quote\Model\Resource\Setup */
-$this->startSetup();
+/** @var $installer \Magento\Framework\Setup\ModuleSchemaResourceInterface */
+$installer = $this;
+$installer->startSetup();
 
 /**
  * Create table 'quote'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('quote')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('quote')
 )->addColumn(
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -307,28 +308,28 @@ $table = $this->getConnection()->newTable(
     [],
     'Ext Shipping Info'
 )->addIndex(
-    $this->getIdxName('quote', ['customer_id', 'store_id', 'is_active']),
+    $installer->getIdxName('quote', ['customer_id', 'store_id', 'is_active']),
     ['customer_id', 'store_id', 'is_active']
 )->addIndex(
-    $this->getIdxName('quote', ['store_id']),
+    $installer->getIdxName('quote', ['store_id']),
     ['store_id']
 )->addForeignKey(
-    $this->getFkName('quote', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('quote', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Quote'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'quote_address'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('quote_address')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('quote_address')
 )->addColumn(
     'address_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -660,25 +661,25 @@ $table = $this->getConnection()->newTable(
     [],
     'Base Shipping Incl Tax'
 )->addIndex(
-    $this->getIdxName('quote_address', ['quote_id']),
+    $installer->getIdxName('quote_address', ['quote_id']),
     ['quote_id']
 )->addForeignKey(
-    $this->getFkName('quote_address', 'quote_id', 'quote', 'entity_id'),
+    $installer->getFkName('quote_address', 'quote_id', 'quote', 'entity_id'),
     'quote_id',
-    $this->getTable('quote'),
+    $installer->getTable('quote'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Quote Address'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'quote_item'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('quote_item')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('quote_item')
 )->addColumn(
     'item_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -932,55 +933,55 @@ $table = $this->getConnection()->newTable(
     [],
     'Base Hidden Tax Amount'
 )->addIndex(
-    $this->getIdxName('quote_item', ['parent_item_id']),
+    $installer->getIdxName('quote_item', ['parent_item_id']),
     ['parent_item_id']
 )->addIndex(
-    $this->getIdxName('quote_item', ['product_id']),
+    $installer->getIdxName('quote_item', ['product_id']),
     ['product_id']
 )->addIndex(
-    $this->getIdxName('quote_item', ['quote_id']),
+    $installer->getIdxName('quote_item', ['quote_id']),
     ['quote_id']
 )->addIndex(
-    $this->getIdxName('quote_item', ['store_id']),
+    $installer->getIdxName('quote_item', ['store_id']),
     ['store_id']
 )->addForeignKey(
-    $this->getFkName('quote_item', 'parent_item_id', 'quote_item', 'item_id'),
+    $installer->getFkName('quote_item', 'parent_item_id', 'quote_item', 'item_id'),
     'parent_item_id',
-    $this->getTable('quote_item'),
+    $installer->getTable('quote_item'),
     'item_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('quote_item', 'product_id', 'catalog_product_entity', 'entity_id'),
+    $installer->getFkName('quote_item', 'product_id', 'catalog_product_entity', 'entity_id'),
     'product_id',
-    $this->getTable('catalog_product_entity'),
+    $installer->getTable('catalog_product_entity'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('quote_item', 'quote_id', 'quote', 'entity_id'),
+    $installer->getFkName('quote_item', 'quote_id', 'quote', 'entity_id'),
     'quote_id',
-    $this->getTable('quote'),
+    $installer->getTable('quote'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('quote_item', 'store_id', 'store', 'store_id'),
+    $installer->getFkName('quote_item', 'store_id', 'store', 'store_id'),
     'store_id',
-    $this->getTable('store'),
+    $installer->getTable('store'),
     'store_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Quote Item'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'quote_address_item'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('quote_address_item')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('quote_address_item')
 )->addColumn(
     'address_item_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -1210,55 +1211,55 @@ $table = $this->getConnection()->newTable(
     [],
     'Base Hidden Tax Amount'
 )->addIndex(
-    $this->getIdxName('quote_address_item', ['quote_address_id']),
+    $installer->getIdxName('quote_address_item', ['quote_address_id']),
     ['quote_address_id']
 )->addIndex(
-    $this->getIdxName('quote_address_item', ['parent_item_id']),
+    $installer->getIdxName('quote_address_item', ['parent_item_id']),
     ['parent_item_id']
 )->addIndex(
-    $this->getIdxName('quote_address_item', ['quote_item_id']),
+    $installer->getIdxName('quote_address_item', ['quote_item_id']),
     ['quote_item_id']
 )->addForeignKey(
-    $this->getFkName(
+    $installer->getFkName(
         'quote_address_item',
         'quote_address_id',
         'quote_address',
         'address_id'
     ),
     'quote_address_id',
-    $this->getTable('quote_address'),
+    $installer->getTable('quote_address'),
     'address_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName(
+    $installer->getFkName(
         'quote_address_item',
         'parent_item_id',
         'quote_address_item',
         'address_item_id'
     ),
     'parent_item_id',
-    $this->getTable('quote_address_item'),
+    $installer->getTable('quote_address_item'),
     'address_item_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $this->getFkName('quote_address_item', 'quote_item_id', 'quote_item', 'item_id'),
+    $installer->getFkName('quote_address_item', 'quote_item_id', 'quote_item', 'item_id'),
     'quote_item_id',
-    $this->getTable('quote_item'),
+    $installer->getTable('quote_item'),
     'item_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Quote Address Item'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'quote_item_option'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('quote_item_option')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('quote_item_option')
 )->addColumn(
     'option_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -1290,25 +1291,25 @@ $table = $this->getConnection()->newTable(
     [],
     'Value'
 )->addIndex(
-    $this->getIdxName('quote_item_option', ['item_id']),
+    $installer->getIdxName('quote_item_option', ['item_id']),
     ['item_id']
 )->addForeignKey(
-    $this->getFkName('quote_item_option', 'item_id', 'quote_item', 'item_id'),
+    $installer->getFkName('quote_item_option', 'item_id', 'quote_item', 'item_id'),
     'item_id',
-    $this->getTable('quote_item'),
+    $installer->getTable('quote_item'),
     'item_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Quote Item Option'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'quote_payment'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('quote_payment')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('quote_payment')
 )->addColumn(
     'payment_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -1424,25 +1425,25 @@ $table = $this->getConnection()->newTable(
     [],
     'Additional Information'
 )->addIndex(
-    $this->getIdxName('quote_payment', ['quote_id']),
+    $installer->getIdxName('quote_payment', ['quote_id']),
     ['quote_id']
 )->addForeignKey(
-    $this->getFkName('quote_payment', 'quote_id', 'quote', 'entity_id'),
+    $installer->getFkName('quote_payment', 'quote_id', 'quote', 'entity_id'),
     'quote_id',
-    $this->getTable('quote'),
+    $installer->getTable('quote'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Quote Payment'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
 /**
  * Create table 'quote_shipping_rate'
  */
-$table = $this->getConnection()->newTable(
-    $this->getTable('quote_shipping_rate')
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('quote_shipping_rate')
 )->addColumn(
     'rate_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -1516,18 +1517,18 @@ $table = $this->getConnection()->newTable(
     [],
     'Method Title'
 )->addIndex(
-    $this->getIdxName('quote_shipping_rate', ['address_id']),
+    $installer->getIdxName('quote_shipping_rate', ['address_id']),
     ['address_id']
 )->addForeignKey(
-    $this->getFkName('quote_shipping_rate', 'address_id', 'quote_address', 'address_id'),
+    $installer->getFkName('quote_shipping_rate', 'address_id', 'quote_address', 'address_id'),
     'address_id',
-    $this->getTable('quote_address'),
+    $installer->getTable('quote_address'),
     'address_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->setComment(
     'Sales Flat Quote Shipping Rate'
 );
-$this->getConnection()->createTable($table);
+$installer->getConnection()->createTable($table);
 
-$this->endSetup();
+$installer->endSetup();

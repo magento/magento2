@@ -4,12 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * GoogleShopping install
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-/** @var $installer \Magento\Framework\Module\Setup */
+/** @var $installer \Magento\Framework\Setup\ModuleSchemaResourceInterface */
 $installer = $this;
 
 $installer->startSetup();

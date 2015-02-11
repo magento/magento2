@@ -65,9 +65,9 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
     protected function _loadTableData($table)
     {
         $table = $this->getTable($table);
-        $select = $this->_connection->select();
+        $select = $this->getConnection()->select();
         $select->from($table);
-        return $this->_connection->fetchAll($select);
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**

@@ -17,28 +17,28 @@ class Setup implements ResourceInterface
      *
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected $_connection = null;
+    private $_connection = null;
 
     /**
      * Tables cache array
      *
      * @var array
      */
-    protected $_tables = [];
+    private $_tables = [];
 
     /**
      * Modules configuration
      *
      * @var \Magento\Framework\App\Resource
      */
-    protected $_resourceModel;
+    private $_resourceModel;
 
     /**
      * Connection instance name
      *
      * @var string
      */
-    protected $_connectionName;
+    private $_connectionName;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
@@ -99,7 +99,7 @@ class Setup implements ResourceInterface
      * @param string|array $tableName
      * @return string
      */
-    protected function _getTableCacheName($tableName)
+    private function _getTableCacheName($tableName)
     {
         if (is_array($tableName)) {
             return join('_', $tableName);

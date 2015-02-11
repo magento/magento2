@@ -6,6 +6,9 @@
 
 use Magento\Framework\DB\Ddl\Table;
 
+/** @var $installer \Magento\Framework\Setup\ModuleSchemaResourceInterface */
+$installer = $this;
+
 /**
  * update columns created_at and updated_at in sales entities tables
  */
@@ -24,19 +27,19 @@ $tables = [
     'sales_shipment_track'
 ];
 /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
-$connection = $this->getConnection();
+$connection = $installer->getConnection();
 foreach ($tables as $table) {
-    $columns = $connection->describeTable($this->getTable($table));
+    $columns = $connection->describeTable($installer->getTable($table));
     if (isset($columns['created_at'])) {
         $createdAt = $columns['created_at'];
         $createdAt['DEFAULT'] = Table::TIMESTAMP_INIT;
         $createdAt['TYPE'] = Table::TYPE_TIMESTAMP;
-        $connection->modifyColumn($this->getTable($table), 'created_at', $createdAt);
+        $connection->modifyColumn($installer->getTable($table), 'created_at', $createdAt);
     }
     if (isset($columns['updated_at'])) {
         $updatedAt = $columns['updated_at'];
         $updatedAt['DEFAULT'] = Table::TIMESTAMP_UPDATE;
         $updatedAt['TYPE'] = Table::TYPE_TIMESTAMP;
-        $connection->modifyColumn($this->getTable($table), 'updated_at', $updatedAt);
+        $connection->modifyColumn($installer->getTable($table), 'updated_at', $updatedAt);
     }
 }
