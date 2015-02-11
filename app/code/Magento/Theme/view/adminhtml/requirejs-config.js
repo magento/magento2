@@ -45,6 +45,7 @@ var config = {
         }
     },
     "deps": [
+        "jsbuild",
         "js/theme",
         "mage/backend/bootstrap"
     ],
@@ -52,7 +53,3 @@ var config = {
         "jquery/ui": "jquery/jquery-ui-1.9.2"
     }
 };
-
-require(['jquery'], function (jQuery) {
-    jQuery.noConflict();
-});

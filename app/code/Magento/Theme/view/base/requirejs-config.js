@@ -38,7 +38,7 @@ var config = {
         "jquery/file-uploader": "jquery/fileUploader/jquery.fileupload-fp",
         "handlebars": "jquery/handlebars/handlebars-v1.3.0",
         "jquery/jquery.hashchange": "jquery/jquery.ba-hashchange.min",
-        "prototype": "prototype/prototype-amd",
+        "prototype": "legacy-build.min",
         "text": "requirejs/text",
         "domReady": "requirejs/domReady",
         "ko": "ko/ko",
