@@ -93,7 +93,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Framework\Object $customer
      * @return $this
      * @throws \Magento\Customer\Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeSave(\Magento\Framework\Object $customer)
     {
