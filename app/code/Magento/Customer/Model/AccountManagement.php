@@ -24,6 +24,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
@@ -511,10 +512,9 @@ class AccountManagement implements AccountManagementInterface
         try {
             // If customer exists existing hash will be used by Repository
             $customer = $this->customerRepository->save($customer, $hash);
-        } catch (\Magento\Customer\Exception $e) {
-            if ($e->getCode() === CustomerModel::EXCEPTION_EMAIL_EXISTS) {
-                throw new InputMismatchException('Customer with the same email already exists in associated website.');
-            }
+        } catch (\Magento\Framework\Exception\Customer\Exception $e) {
+            throw new InputMismatchException('Customer with the same email already exists in associated website.');
+        } catch (LocalizedException $e) {
             throw $e;
         }
 
