@@ -113,8 +113,14 @@ class StockItemTest extends WebapiAbstract
         ];
 
         $stockItemDetailsDo = $this->objectManager->get(
-            'Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder'
-        )->populateWithArray($newData)->create();
+            'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory'
+        )->create();
+        $dataObjectHelper = $this->objectManager->get('\Magento\Framework\Api\DataObjectHelper');
+        $dataObjectHelper->populateWithArray(
+            $stockItemDetailsDo,
+            $newData,
+            '\Magento\CatalogInventory\Api\Data\StockItemInterface'
+        );
         $arguments = ['productSku' => $productSku, 'stockItem' => $stockItemDetailsDo->getData()];
         $this->assertEquals($stockItemOld['item_id'], $this->_webApiCall($serviceInfo, $arguments));
 

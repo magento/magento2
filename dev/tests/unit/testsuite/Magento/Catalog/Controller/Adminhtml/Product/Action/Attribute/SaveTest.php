@@ -19,7 +19,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $attributeHelper;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $stockItemBuilder;
+    protected $dataObjectHelperMock;
 
     /** @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor|\PHPUnit_Framework_MockObject_MockObject */
     protected $stockIndexerProcessor;
@@ -105,9 +105,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->stockItemBuilder = $this->getMockBuilder('Magento\CatalogInventory\Api\Data\StockItemDataBuilder')
+        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
-            ->setMethods(['mergeDataObjectWithArray', 'create'])
             ->getMock();
 
         $this->stockIndexerProcessor = $this->getMock(
@@ -136,7 +135,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context,
                 'attributeHelper' => $this->attributeHelper,
                 'stockIndexerProcessor' => $this->stockIndexerProcessor,
-                'stockItemBuilder' => $this->stockItemBuilder,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
                 'resultRedirectFactory' => $resultRedirectFactory
             ]
         );
@@ -261,17 +260,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->attributeHelper->expects($this->any())->method('getSelectedStoreId')->will($this->returnValue([1]));
         $this->attributeHelper->expects($this->any())->method('getStoreWebsiteId')->will($this->returnValue(1));
         $this->stockConfig->expects($this->any())->method('getConfigItemOptions')->will($this->returnValue([]));
-        $itemToSave = $this->getMockBuilder('Magento\CatalogInventory\Api\Data\StockItemInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['setItemId', 'save'])
-            ->getMockForAbstractClass();
-        $this->stockItemBuilder->expects($this->any())
-            ->method('mergeDataObjectWithArray')
-            ->withAnyParameters()
+        $this->dataObjectHelperMock->expects($this->any())
+            ->method('populateWithArray')
+            ->with($this->stockItem, $this->anything(), '\Magento\CatalogInventory\Api\Data\StockItemInterface')
             ->willReturnSelf();
-        $this->stockItemBuilder->expects($this->any())
-            ->method('create')
-            ->willReturn($itemToSave);
         $this->product->expects($this->any())->method('isProductsHasSku')->with([5])->will($this->returnValue(true));
         $this->stockItemService->expects($this->any())->method('getStockItem')->with(5, 1)
             ->will($this->returnValue($this->stockItem));

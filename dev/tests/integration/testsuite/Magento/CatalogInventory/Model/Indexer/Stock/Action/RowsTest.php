@@ -36,9 +36,14 @@ class RowsTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Block\Product\ListProduct'
         );
 
-        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder $stockRegistry */
-        $stockItemBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder'
+        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory */
+        $stockItemFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory'
+        );
+
+        /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
+        $dataObjectHelper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            '\Magento\Framework\Api\DataObjectHelper'
         );
 
         /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
@@ -61,11 +66,14 @@ class RowsTest extends \PHPUnit_Framework_TestCase
             'qty' => $stockItem->getQty() + 12,
         ];
 
-        $stockItemBuilder = $stockItemBuilder->mergeDataObjectWithArray($stockItem, $stockItemData);
-        $stockItemSave = $stockItemBuilder->create();
+        $dataObjectHelper->populateWithArray(
+            $stockItem,
+            $stockItemData,
+            '\Magento\CatalogInventory\Api\Data\StockItemInterface'
+        );
         $stockItemResource->setProcessIndexEvents(false);
 
-        $stockItemRepository->save($stockItemSave);
+        $stockItemRepository->save($stockItem);
 
         $this->_processor->reindexList([1]);
 

@@ -14,12 +14,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * CatalogInventory Stock Status
- *
- * @method Status setProductId(int $value)
- * @method Status setWebsiteId(int $value)
- * @method Status setStockId(int $value)
- * @method Status setQty(float $value)
- * @method Status setStockStatus(int $value)
  */
 class Status extends AbstractExtensibleModel implements StockStatusInterface
 {
@@ -29,6 +23,16 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     const STATUS_OUT_OF_STOCK = 0;
 
     const STATUS_IN_STOCK = 1;
+    /**#@-*/
+
+    /**#@+
+     * Field name
+     */
+    const KEY_PRODUCT_ID = 'product_id';
+    const KEY_WEBSITE_ID = 'website_id';
+    const KEY_STOCK_ID = 'stock_id';
+    const KEY_QTY = 'qty';
+    const KEY_STOCK_STATUS = 'stock_status';
     /**#@-*/
 
     /**
@@ -73,12 +77,13 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
         $this->_init('Magento\CatalogInventory\Model\Resource\Stock\Status');
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * @return int
      */
     public function getProductId()
     {
-        return $this->getData('product_id');
+        return $this->getData(self::KEY_PRODUCT_ID);
     }
 
     /**
@@ -86,7 +91,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
      */
     public function getWebsiteId()
     {
-        return $this->getData('website_id');
+        return $this->getData(self::KEY_WEBSITE_ID);
     }
 
     /**
@@ -94,7 +99,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
      */
     public function getStockId()
     {
-        return $this->getData('stock_id');
+        return $this->getData(self::KEY_WEBSITE_ID);
     }
 
     /**
@@ -102,7 +107,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
      */
     public function getQty()
     {
-        return $this->getData('qty');
+        return $this->getData(self::KEY_QTY);
     }
 
     /**
@@ -110,8 +115,9 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
      */
     public function getStockStatus()
     {
-        return $this->getData('stock_status');
+        return $this->getData(self::KEY_STOCK_STATUS);
     }
+    //@codeCoverageIgnoreEnd
 
     /**
      * @return StockItemInterface
@@ -120,4 +126,51 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     {
         return $this->stockRegistry->getStockItem($this->getProductId(), $this->getWebsiteId());
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * @param int $productId
+     * @return $this
+     */
+    public function setProductId($productId)
+    {
+        return $this->setData(self::KEY_PRODUCT_ID, $productId);
+    }
+
+    /**
+     * @param int $websiteId
+     * @return int
+     */
+    public function setWebsiteId($websiteId)
+    {
+        return $this->setData(self::KEY_WEBSITE_ID, $websiteId);
+    }
+
+    /**
+     * @param int $stockId
+     * @return $this
+     */
+    public function setStockId($stockId)
+    {
+        return $this->setData(self::KEY_STOCK_ID, $stockId);
+    }
+
+    /**
+     * @param int $qty
+     * @return $this
+     */
+    public function setQty($qty)
+    {
+        return $this->setData(self::KEY_QTY, $qty);
+    }
+
+    /**
+     * @param int $stockStatus
+     * @return int
+     */
+    public function setStockStatus($stockStatus)
+    {
+        return $this->setData(self::KEY_STOCK_STATUS, $stockStatus);
+    }
+    //@codeCoverageIgnoreEnd
 }

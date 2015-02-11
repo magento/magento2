@@ -186,9 +186,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Stock item factory
      *
-     * @var \Magento\CatalogInventory\Api\Data\StockItemDataBuilder
+     * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
      */
-    protected $_stockItemBuilder;
+    protected $_stockItemFactory;
 
     /**
      * Item option factory
@@ -238,6 +238,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $imageCacheFactory;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataService
@@ -246,7 +251,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Url $url
      * @param Product\Link $productLink
      * @param Product\Configuration\Item\OptionFactory $itemOptionFactory
-     * @param \Magento\CatalogInventory\Api\Data\StockItemDataBuilder $stockItemBuilder
+     * @param \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory
      * @param Product\Option $catalogProductOption
      * @param Product\Visibility $catalogProductVisibility
      * @param Product\Attribute\Source\Status $catalogProductStatus
@@ -264,6 +269,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Product\Image\CacheFactory $imageCacheFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -277,7 +283,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         Product\Url $url,
         Product\Link $productLink,
         \Magento\Catalog\Model\Product\Configuration\Item\OptionFactory $itemOptionFactory,
-        \Magento\CatalogInventory\Api\Data\StockItemDataBuilder $stockItemBuilder,
+        \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
@@ -295,10 +301,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         CategoryRepositoryInterface $categoryRepository,
         Product\Image\CacheFactory $imageCacheFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = []
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
-        $this->_stockItemBuilder = $stockItemBuilder;
+        $this->_stockItemFactory = $stockItemFactory;
         $this->_optionInstance = $catalogProductOption;
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_catalogProductStatus = $catalogProductStatus;
@@ -316,6 +323,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
         $this->categoryRepository = $categoryRepository;
         $this->imageCacheFactory = $imageCacheFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct(
             $context,
             $registry,
@@ -1560,7 +1568,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         if (isset($data['stock_item'])) {
             if ($this->moduleManager->isEnabled('Magento_CatalogInventory')) {
-                $stockItem = $this->_stockItemBuilder->populateWithArray($data['stock_item'])->create();
+                $stockItem = $this->_stockItemFactory->create();
+                $this->dataObjectHelper->populateWithArray(
+                    $stockItem,
+                    $data['stock_item'],
+                    '\Magento\CatalogInventory\Api\Data\StockItemInterface'
+                );
                 $stockItem->setProduct($this);
                 $this->setStockItem($stockItem);
             }

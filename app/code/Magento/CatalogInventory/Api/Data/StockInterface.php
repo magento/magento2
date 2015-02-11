@@ -26,6 +26,14 @@ interface StockInterface extends ExtensibleDataInterface
     public function getStockId();
 
     /**
+     * Set stock identifier
+     *
+     * @param int $stockId
+     * @return $this
+     */
+    public function setStockId($stockId);
+
+    /**
      * Retrieve website identifier
      *
      * @return int
@@ -33,9 +41,25 @@ interface StockInterface extends ExtensibleDataInterface
     public function getWebsiteId();
 
     /**
+     * Retrieve website identifier
+     *
+     * @param int $websiteId
+     * @return $this
+     */
+    public function setWebsiteId($websiteId);
+
+    /**
      * Retrieve stock name
      *
      * @return string
      */
     public function getStockName();
+
+    /**
+     * Set stock name
+     *
+     * @param string $stockName
+     * @return $this
+     */
+    public function setStockName($stockName);
 }

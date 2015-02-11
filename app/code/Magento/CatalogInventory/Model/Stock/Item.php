@@ -17,29 +17,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Catalog Inventory Stock Item Model
  *
- * @method \Magento\CatalogInventory\Model\Stock\Item setProductId(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setStockId(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setQty(float $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setMinQty(float $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setUseConfigMinQty(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setIsQtyDecimal(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setBackorders(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setUseConfigBackorders(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setMinSaleQty(float $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setUseConfigMinSaleQty(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setMaxSaleQty(float $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setUseConfigMaxSaleQty(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setIsInStock(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setLowStockDate(string $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setNotifyStockQty(float $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setUseConfigNotifyStockQty(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setManageStock(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setUseConfigManageStock(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setStockStatusChangedAutomatically(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setUseConfigQtyIncrements(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setQtyIncrements(float $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setUseConfigEnableQtyInc(int $value)
- * @method \Magento\CatalogInventory\Model\Stock\Item setEnableQtyIncrements(int $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends AbstractExtensibleModel implements StockItemInterface
@@ -574,4 +551,260 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
         $this->customerGroupId = $value;
         return $this;
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * @param int $itemId
+     * @return $this
+     */
+    public function setItemId($itemId)
+    {
+        return $this->setData(self::ITEM_ID, $itemId);
+    }
+
+    /**
+     * @param int $productId
+     * @return $this
+     */
+    public function setProductId($productId)
+    {
+        return $this->setData(self::PRODUCT_ID, $productId);
+    }
+
+    /**
+     * Set Website Id
+     *
+     * @param int $websiteId
+     * @return $this
+     */
+    public function setWebsiteId($websiteId)
+    {
+        return $this->setData(self::WEBSITE_ID, $websiteId);
+    }
+
+    /**
+     * Set stock identifier
+     *
+     * @param int $stockId
+     * @return $this
+     */
+    public function setStockId($stockId)
+    {
+        return $this->setData(self::STOCK_ID, $stockId);
+    }
+
+    /**
+     * @param float $qty
+     * @return $this
+     */
+    public function setQty($qty)
+    {
+        return $this->setData(self::QTY, $qty);
+    }
+
+    /**
+     * Set Stock Availability
+     *
+     * @param bool|int $isInStock
+     * @return $this
+     */
+    public function setIsInStock($isInStock)
+    {
+        return $this->setData(self::IS_IN_STOCK, $isInStock);
+    }
+
+    /**
+     * @param bool $isQtyDecimal
+     * @return $this
+     */
+    public function setIsQtyDecimal($isQtyDecimal)
+    {
+        return $this->setData(self::IS_QTY_DECIMAL, $isQtyDecimal);
+    }
+
+    /**
+     * @param bool $useConfigMinQty
+     * @return $this
+     */
+    public function setUseConfigMinQty($useConfigMinQty)
+    {
+        return $this->setData(self::USE_CONFIG_MIN_QTY, $useConfigMinQty);
+    }
+
+    /**
+     * Set minimal quantity available for item status in stock
+     *
+     * @param float $minQty
+     * @return $this
+     */
+    public function setMinQty($minQty)
+    {
+        return $this->setData(self::MIN_QTY, $minQty);
+    }
+
+    /**
+     * @param int $useConfigMinSaleQty
+     * @return $this
+     */
+    public function setUseConfigMinSaleQty($useConfigMinSaleQty)
+    {
+        return $this->setData(self::USE_CONFIG_MIN_SALE_QTY, $useConfigMinSaleQty);
+    }
+
+    /**
+     * Set Minimum Qty Allowed in Shopping Cart or NULL when there is no limitation
+     *
+     * @param float $minSaleQty
+     * @return $this
+     */
+    public function setMinSaleQty($minSaleQty)
+    {
+        return $this->setData(self::MIN_SALE_QTY, $minSaleQty);
+    }
+
+    /**
+     * @param $useConfigMaxSaleQty
+     * @return $this
+     */
+    public function setUseConfigMaxSaleQty($useConfigMaxSaleQty)
+    {
+        return $this->setData(self::USE_CONFIG_MAX_SALE_QTY, $useConfigMaxSaleQty);
+    }
+
+    /**
+     * Set Maximum Qty Allowed in Shopping Cart data wrapper
+     *
+     * @param float $maxSaleQty
+     * @return $this
+     */
+    public function setMaxSaleQty($maxSaleQty)
+    {
+        return $this->setData(self::MAX_SALE_QTY, $maxSaleQty);
+    }
+
+    /**
+     * @param bool $useConfigBackorders
+     * @return $this
+     */
+    public function setUseConfigBackorders($useConfigBackorders)
+    {
+        return $this->setData(self::USE_CONFIG_BACKORDERS, $useConfigBackorders);
+    }
+
+    /**
+     * Set backOrders status
+     *
+     * @param int $backOrders
+     * @return $this
+     */
+    public function setBackorders($backOrders)
+    {
+        return $this->setData(self::BACKORDERS, $backOrders);
+    }
+
+    /**
+     * @param bool $useConfigNotifyStockQty
+     * @return $this
+     */
+    public function setUseConfigNotifyStockQty($useConfigNotifyStockQty)
+    {
+        return $this->setData(self::USE_CONFIG_NOTIFY_STOCK_QTY, $useConfigNotifyStockQty);
+    }
+
+    /**
+     * Set Notify for Quantity Below data wrapper
+     *
+     * @param float $notifyStockQty
+     * @return $this
+     */
+    public function setNotifyStockQty($notifyStockQty)
+    {
+        return $this->setData(self::NOTIFY_STOCK_QTY, $notifyStockQty);
+    }
+
+    /**
+     * @param bool $useConfigQtyIncrements
+     * @return $this
+     */
+    public function setUseConfigQtyIncrements($useConfigQtyIncrements)
+    {
+        return $this->setData(self::USE_CONFIG_QTY_INCREMENTS, $useConfigQtyIncrements);
+    }
+
+    /**
+     * Set Quantity Increments data wrapper
+     *
+     * @param float $qtyIncrements
+     * @return $this
+     */
+    public function setQtyIncrements($qtyIncrements)
+    {
+        return $this->setData(self::QTY_INCREMENTS, $qtyIncrements);
+    }
+
+    /**
+     * @param bool $useConfigEnableQtyInc
+     * @return $this
+     */
+    public function setUseConfigEnableQtyInc($useConfigEnableQtyInc)
+    {
+        return $this->setData(self::USE_CONFIG_ENABLE_QTY_INC, $useConfigEnableQtyInc);
+    }
+
+    /**
+     * Set whether Quantity Increments is enabled
+     *
+     * @param bool $enableQtyIncrements
+     * @return $this
+     */
+    public function setEnableQtyIncrements($enableQtyIncrements)
+    {
+        return $this->setData(self::ENABLE_QTY_INCREMENTS, $enableQtyIncrements);
+    }
+
+    /**
+     * @param bool $useConfigManageStock
+     * @return $this
+     */
+    public function setUseConfigManageStock($useConfigManageStock)
+    {
+        return $this->setData(self::USE_CONFIG_MANAGE_STOCK, $useConfigManageStock);
+    }
+
+    /**
+     * @param bool $manageStock
+     * @return $this
+     */
+    public function setManageStock($manageStock)
+    {
+        return $this->setData(self::MANAGE_STOCK, $manageStock);
+    }
+
+    /**
+     * @param string $lowStockDate
+     * @return $this
+     */
+    public function setLowStockDate($lowStockDate)
+    {
+        return $this->setData(self::LOW_STOCK_DATE, $lowStockDate);
+    }
+
+    /**
+     * @param bool $isDecimalDivided
+     * @return $this
+     */
+    public function setIsDecimalDivided($isDecimalDivided)
+    {
+        return $this->setData(self::IS_DECIMAL_DIVIDED, $isDecimalDivided);
+    }
+
+    /**
+     * @param int $stockStatusChangedAuto
+     * @return $this
+     */
+    public function setStockStatusChangedAuto($stockStatusChangedAuto)
+    {
+        return $this->setData(self::STOCK_STATUS_CHANGED_AUTO, $stockStatusChangedAuto);
+    }
+    //@codeCoverageIgnoreEnd
 }
