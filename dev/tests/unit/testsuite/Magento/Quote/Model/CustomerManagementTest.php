@@ -21,16 +21,11 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerAddressRepositoryMock;
-    /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder|\PHPUnit_Framework_MockObject_MockObject
-     *
-     */
     protected $accountManagementMock;
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerBuilderMock;
+    protected $customerAddressRepositoryMock;
     /**
      * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -39,7 +34,6 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteAddressMock;
-
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -79,13 +73,6 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->customerBuilderMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerDataBuilder',
-            ['populate', 'create'],
-            [],
-            '',
-            false
-        );
         $this->quoteMock = $this->getMock(
             'Magento\Quote\Model\Quote',
             ['getId', 'getCustomer', 'getBillingAddress', 'getShippingAddress', 'setCustomer', 'getPasswordHash'],
@@ -121,8 +108,7 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
         $this->customerManagement = new \Magento\Quote\Model\CustomerManagement(
             $this->customerRepositoryMock,
             $this->customerAddressRepositoryMock,
-            $this->accountManagementMock,
-            $this->customerBuilderMock
+            $this->accountManagementMock
         );
     }
 
@@ -134,16 +120,9 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
         $this->customerMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(null);
-        $this->customerBuilderMock->expects($this->once())
-            ->method('populate')
-            ->with($this->customerMock)
-            ->willReturnSelf();
         $this->customerMock->expects($this->atLeastOnce())
             ->method('getDefaultBilling')
             ->willReturn(100500);
-        $this->customerBuilderMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->customerMock);
         $this->quoteMock->expects($this->atLeastOnce())
             ->method('getBillingAddress')
             ->willReturn($this->quoteAddressMock);

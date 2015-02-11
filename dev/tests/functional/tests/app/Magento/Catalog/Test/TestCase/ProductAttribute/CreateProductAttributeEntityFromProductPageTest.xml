@@ -17,7 +17,6 @@
       <data name="attribute/data/default_value_text" xsi:type="string">&lt;b&gt;&lt;i&gt;default_value_text%isolation%&lt;/i&gt;&lt;/b&gt;</data>
       <data name="attribute/data/default_value_textarea" xsi:type="string">-</data>
       <data name="attribute/data/is_unique" xsi:type="string">Yes</data>
-      <data name="attribute/data/is_configurable" xsi:type="string">-</data>
       <data name="attribute/data/manage_frontend_label" xsi:type="string">-</data>
       <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
       <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
@@ -50,7 +49,6 @@
       <data name="attribute/data/default_value_text" xsi:type="string">-</data>
       <data name="attribute/data/default_value_textarea" xsi:type="string">-</data>
       <data name="attribute/data/is_unique" xsi:type="string">-</data>
-      <data name="attribute/data/is_configurable" xsi:type="string">Yes</data>
       <data name="attribute/data/manage_frontend_label" xsi:type="string">-</data>
       <data name="attribute/data/is_searchable" xsi:type="string">-</data>
       <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">-</data>
@@ -76,7 +74,6 @@
       <data name="attribute/data/default_value_text" xsi:type="string">default_value_text%isolation%</data>
       <data name="attribute/data/default_value_textarea" xsi:type="string">-</data>
       <data name="attribute/data/is_unique" xsi:type="string">-</data>
-      <data name="attribute/data/is_configurable" xsi:type="string">-</data>
       <data name="attribute/data/manage_frontend_label" xsi:type="string">-</data>
       <data name="attribute/data/is_searchable" xsi:type="string">-</data>
       <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">-</data>
@@ -100,7 +97,6 @@
       <data name="attribute/data/default_value_text" xsi:type="string">default_value_text%isolation%</data>
       <data name="attribute/data/default_value_textarea" xsi:type="string">-</data>
       <data name="attribute/data/is_unique" xsi:type="string">Yes</data>
-      <data name="attribute/data/is_configurable" xsi:type="string">-</data>
       <data name="attribute/data/manage_frontend_label" xsi:type="string">-</data>
       <data name="attribute/data/is_searchable" xsi:type="string">-</data>
       <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">-</data>

@@ -19,7 +19,6 @@
     <variation name="AddProductsToShoppingCartEntityTestVariation2">
       <data name="productsData" xsi:type="string">bundleProduct::bundle_fixed_product</data>
       <data name="cart/data/grand_total" xsi:type="string">756</data>
-      <data name="issue" xsi:type="string">Bug: MAGETWO-28350</data>
       <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart"/>
       <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart"/>
       <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart"/>
@@ -36,7 +35,7 @@
       <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart"/>
     </variation>
     <variation name="AddProductsToShoppingCartEntityTestVariation4">
-      <data name="productsData" xsi:type="string">catalogProductVirtual::50_dollar_product</data>
+      <data name="productsData" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
       <data name="cart/data/grand_total" xsi:type="string">50</data>
       <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart"/>
       <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart"/>
@@ -56,7 +55,6 @@
     <variation name="AddProductsToShoppingCartEntityTestVariation6">
       <data name="productsData" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
       <data name="cart/data/grand_total" xsi:type="string">46</data>
-      <data name="issue" xsi:type="string">Bug: MAGETWO-24195</data>
       <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart"/>
       <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart"/>
       <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart"/>
@@ -73,9 +71,8 @@
       <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart"/>
     </variation>
     <variation name="AddProductsToShoppingCartEntityTestVariation8">
-      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::50_dollar_product, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
+      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
       <data name="cart/data/grand_total" xsi:type="string">3272</data>
-      <data name="issue" xsi:type="string">Bug: MAGETWO-28350</data>
       <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart"/>
       <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart"/>
       <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart"/>

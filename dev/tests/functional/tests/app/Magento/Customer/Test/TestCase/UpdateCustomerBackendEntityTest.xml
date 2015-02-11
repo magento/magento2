@@ -34,6 +34,7 @@
       <data name="address/data/telephone" xsi:type="string">-</data>
       <data name="address/data/fax" xsi:type="string">-</data>
       <data name="address/data/vat_id" xsi:type="string">-</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-31689</data>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
@@ -96,6 +97,7 @@
       <data name="address/data/telephone" xsi:type="string">999-777-111-2345</data>
       <data name="address/data/fax" xsi:type="string">-</data>
       <data name="address/data/vat_id" xsi:type="string">987654321</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-31689</data>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
       <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>

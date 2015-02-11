@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="Magento\Catalog\Test\TestCase\Product\CreateSimpleProductEntityTest">
     <variation name="CreateSimpleProductEntityTestVariation1">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -32,6 +33,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation2">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -56,6 +58,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation3">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -80,6 +83,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation4">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -104,6 +108,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation5">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -128,6 +133,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation6">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -152,6 +158,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation7">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -176,6 +183,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation8">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -200,6 +208,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation9">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -223,6 +232,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation10">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -244,6 +254,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation11">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -252,6 +263,7 @@
       <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
       <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
       <data name="product/data/weight" xsi:type="string">60</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">0</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
@@ -264,6 +276,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation12">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -285,6 +298,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation13">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -310,6 +324,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation14">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
@@ -335,9 +350,10 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation15">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/price/value" xsi:type="string">10014</data>
       <data name="product/data/special_price" xsi:type="string">-</data>
       <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
@@ -361,9 +377,10 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation16">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/price/value" xsi:type="string">10015</data>
       <data name="product/data/special_price" xsi:type="string">-</data>
       <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
@@ -387,6 +404,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation17">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">None</data>
@@ -413,6 +431,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation18">
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
       <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>

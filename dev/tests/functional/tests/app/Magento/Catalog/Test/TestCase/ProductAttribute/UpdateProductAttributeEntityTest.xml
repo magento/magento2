@@ -18,7 +18,6 @@
       <data name="attribute/data/is_global" xsi:type="string">Global</data>
       <data name="attribute/data/default_value_text" xsi:type="string">attribute_edited%isolation%</data>
       <data name="attribute/data/is_unique" xsi:type="string">Yes</data>
-      <data name="attribute/data/is_configurable&quot;" xsi:type="string">-</data>
       <data name="attribute/data/manage_frontend_label" xsi:type="string">-</data>
       <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
       <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
@@ -45,7 +44,6 @@
       <data name="attribute/data/is_global" xsi:type="string">Global</data>
       <data name="attribute/data/default_value_text" xsi:type="string">-</data>
       <data name="attribute/data/is_unique" xsi:type="string">Yes</data>
-      <data name="attribute/data/is_configurable&quot;" xsi:type="string">Yes</data>
       <data name="attribute/data/manage_frontend_label" xsi:type="string">-</data>
       <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
       <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>

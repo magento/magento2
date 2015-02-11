@@ -26,6 +26,14 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getCode();
 
     /**
+     * Set code
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setCode($code);
+
+    /**
      * Get Title
      *
      * @return string|null
@@ -33,9 +41,25 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getTitle();
 
     /**
+     * Set Title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title);
+
+    /**
      * Get Tax Percent
      *
      * @return float|null
      */
     public function getPercent();
+
+    /**
+     * Set Tax Percent
+     *
+     * @param float $percent
+     * @return $this
+     */
+    public function setPercent($percent);
 }

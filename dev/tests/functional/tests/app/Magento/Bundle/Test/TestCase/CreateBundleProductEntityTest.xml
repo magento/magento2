@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="Magento\Bundle\Test\TestCase\CreateBundleProductEntityTest">
     <variation name="CreateBundleProductEntityTestVariation1">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">-</data>
       <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
@@ -31,7 +32,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">No</data>
       <data name="product/data/shipment_type" xsi:type="string">-</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -43,6 +44,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation2">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
       <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
@@ -66,7 +68,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
       <data name="product/data/shipment_type" xsi:type="string">Separately</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -77,6 +79,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotSearchableBySku"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation3">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
       <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
@@ -100,7 +103,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
       <data name="product/data/shipment_type" xsi:type="string">Together</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">all_types_dynamic</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">all_types_bundle_options</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -119,6 +122,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation4">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
       <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
@@ -142,7 +146,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
       <data name="product/data/shipment_type" xsi:type="string">-</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_fixed</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -157,6 +161,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation5">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
       <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
@@ -164,7 +169,7 @@
       <data name="product/data/price_type" xsi:type="string">Fixed</data>
       <data name="product/data/price/value" xsi:type="string">100</data>
       <data name="product/data/price/preset" xsi:type="string">fixed-24</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/weight_type" xsi:type="string">Fixed</data>
       <data name="product/data/weight" xsi:type="string">10</data>
@@ -180,7 +185,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
       <data name="product/data/shipment_type" xsi:type="string">Separately</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">all_types_fixed</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">all_types_bundle_fixed_and_custom_options</data>
       <data name="product/data/custom_options/preset" xsi:type="string">all_types</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -199,6 +204,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation6">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
       <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
@@ -206,7 +212,7 @@
       <data name="product/data/price_type" xsi:type="string">Fixed</data>
       <data name="product/data/price/value" xsi:type="string">10</data>
       <data name="product/data/price/preset" xsi:type="string">fixed-1</data>
-      <data name="product/data/tax_class_id/dataSet" xsi:type="string">Taxable Goods</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
       <data name="product/data/weight_type" xsi:type="string">Fixed</data>
       <data name="product/data/weight" xsi:type="string">10</data>
@@ -222,7 +228,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
       <data name="product/data/shipment_type" xsi:type="string">Together</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">with_not_required_options</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product|catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar|catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">with_not_required_options</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -237,6 +243,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation7">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
       <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
@@ -260,7 +267,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">No</data>
       <data name="product/data/shipment_type" xsi:type="string">Together</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductVirtual::50_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -276,6 +283,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertTierPriceOnBundleProductPage"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation8">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
       <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
@@ -299,7 +307,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
       <data name="product/data/shipment_type" xsi:type="string">-</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -310,6 +318,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation9">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
       <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
@@ -333,7 +342,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
       <data name="product/data/shipment_type" xsi:type="string">-</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -346,6 +355,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation10">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
       <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
@@ -369,7 +379,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
       <data name="product/data/shipment_type" xsi:type="string">-</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -382,6 +392,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation11">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
       <data name="product/data/sku" xsi:type="string">sku_bundle_fixed_%isolation%</data>
@@ -405,7 +416,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
       <data name="product/data/shipment_type" xsi:type="string">-</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">second</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">with_custom_options_1</data>
       <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
@@ -419,6 +430,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertProductCustomOptionsOnBundleProductPage"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation12">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
       <data name="product/data/sku" xsi:type="string">sku_bundle_fixed_%isolation%</data>
@@ -442,7 +454,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
       <data name="product/data/shipment_type" xsi:type="string">-</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">second</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">with_custom_options_2</data>
       <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -455,6 +467,7 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation13">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
       <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
@@ -478,7 +491,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
       <data name="product/data/shipment_type" xsi:type="string">-</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
@@ -488,6 +501,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation14">
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
       <data name="product/data/sku" xsi:type="string">sku_bundle_fixed_%isolation%</data>
@@ -511,7 +525,7 @@
       <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
       <data name="product/data/shipment_type" xsi:type="string">-</data>
       <data name="product/data/bundle_selections/preset" xsi:type="string">second</data>
-      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::100_dollar_product,catalogProductSimple::40_dollar_product</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::product_40_dollar</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/custom_options/import_products" xsi:type="string">-</data>

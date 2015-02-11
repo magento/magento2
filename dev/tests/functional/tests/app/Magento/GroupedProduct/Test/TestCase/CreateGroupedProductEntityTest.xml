@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="Magento\GroupedProduct\Test\TestCase\CreateGroupedProductEntityTest">
     <variation name="CreateGroupedProductEntityTestVariation1">
+      <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
@@ -21,6 +22,7 @@
       <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductsDefaultQty"/>
     </variation>
     <variation name="CreateGroupedProductEntityTestVariation2">
+      <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">-</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
@@ -35,6 +37,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
     <variation name="CreateGroupedProductEntityTestVariation3">
+      <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
@@ -47,6 +50,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
     </variation>
     <variation name="CreateGroupedProductEntityTestVariation4">
+      <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
@@ -61,6 +65,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
     <variation name="CreateGroupedProductEntityTestVariation5">
+      <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
@@ -75,6 +80,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
     <variation name="CreateGroupedProductEntityTestVariation6">
+      <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
@@ -89,6 +95,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
     <variation name="CreateGroupedProductEntityTestVariation7">
+      <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
@@ -102,6 +109,7 @@
       <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductsDefaultQty"/>
     </variation>
     <variation name="CreateGroupedProductEntityTestVariation8">
+      <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
