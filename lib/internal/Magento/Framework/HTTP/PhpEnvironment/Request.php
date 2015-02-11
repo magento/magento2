@@ -295,11 +295,11 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     public function getParams()
     {
         $params = $this->params;
-        if ($this->isGet()) {
-            $params += $this->getQuery()->toArray();
+        if ($value = (array)$this->getQuery()) {
+            $params += $value;
         }
-        if ($this->isPost()) {
-            $params += $this->getPost()->toArray();
+        if ($value = (array)$this->getPost()) {
+            $params += $value;
         }
         return $params;
     }
@@ -451,9 +451,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     public function setPostValue($name, $value = null)
     {
         if (is_array($name)) {
-            foreach ($name as $key => $value) {
-                $this->getPost()->set($key, $value);
-            }
+            $this->setPost(new Parameters($name));
             return $this;
         }
         $this->getPost()->set($name, $value);

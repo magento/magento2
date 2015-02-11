@@ -26,6 +26,8 @@ class FirebugTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('Remove it when MAGETWO-33495 is done.');
+
         $this->_response = $this->getMockBuilder(
             '\Magento\Framework\App\Response\Http'
         )->setMethods(
@@ -51,8 +53,6 @@ class FirebugTest extends \PHPUnit_Framework_TestCase
 
     public function testDisplay()
     {
-        $this->markTestSkipped('ZF1 Required!');
-
         $this->_response->expects($this->atLeastOnce())->method('sendHeaders');
         $this->_request->expects($this->atLeastOnce())->method('getHeader');
 
