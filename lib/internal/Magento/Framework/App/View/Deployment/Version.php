@@ -70,13 +70,13 @@ class Version
                 try {
                     $result = $this->versionStorage->load();
                 } catch (\UnexpectedValueException $e) {
-                    $result = $this->dateTime->toTimestamp(true);
+                    $result = (new \DateTime())->getTimestamp();
                     $this->versionStorage->save($result);
                 }
                 break;
 
             case \Magento\Framework\App\State::MODE_DEVELOPER:
-                $result = $this->dateTime->toTimestamp(true);
+                $result = (new \DateTime())->getTimestamp();
                 break;
 
             default:

@@ -696,8 +696,8 @@ class User extends AbstractModel implements StorageInterface
 
         $expirationPeriod = $this->_userData->getResetPasswordLinkExpirationPeriod();
 
-        $currentTimestamp = $this->dateTime->toTimestamp($this->dateTime->now());
-        $tokenTimestamp = $this->dateTime->toTimestamp($linkTokenCreatedAt);
+        $currentTimestamp = (new \DateTime())->getTimestamp();
+        $tokenTimestamp = (new \DateTime($linkTokenCreatedAt))->getTimestamp();
         if ($tokenTimestamp > $currentTimestamp) {
             return true;
         }

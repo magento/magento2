@@ -85,7 +85,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
             $this->_getFlag()->setFlagData($value);
         }
 
-        $time = $this->dateTime->toTimestamp(true);
+        $time = (new \DateTime())->getTimestamp();
         // touch last_update
         $this->_getFlag()->setLastUpdate($this->dateTime->formatDate($time));
 

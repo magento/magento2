@@ -999,8 +999,8 @@ class AccountManagement implements AccountManagementInterface
 
         $expirationPeriod = $this->customerModel->getResetPasswordLinkExpirationPeriod();
 
-        $currentTimestamp = $this->dateTime->toTimestamp($this->dateTime->now());
-        $tokenTimestamp = $this->dateTime->toTimestamp($rpTokenCreatedAt);
+        $currentTimestamp = (new \DateTime())->getTimestamp();
+        $tokenTimestamp = (new \DateTime())->getTimestamp($rpTokenCreatedAt);
         if ($tokenTimestamp > $currentTimestamp) {
             return true;
         }

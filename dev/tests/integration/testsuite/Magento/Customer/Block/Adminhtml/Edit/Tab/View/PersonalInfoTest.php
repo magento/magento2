@@ -139,7 +139,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $customer = $this->_loadCustomer();
         $date = $this->_context->getLocaleDate()->scopeDate(
             $customer->getStoreId(),
-            $this->dateTime->toTimestamp($customer->getCreatedAt()),
+            (new \DateTime($customer->getCreatedAt()))->getTimestamp(),
             true
         );
         $storeCreateDate = $this->_block->formatDate(

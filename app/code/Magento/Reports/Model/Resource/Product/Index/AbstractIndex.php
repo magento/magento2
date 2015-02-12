@@ -197,7 +197,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
             'customer_id' => $object->getCustomerId(),
             'store_id' => $object->getStoreId(),
         ];
-        $addedAt = $this->dateTime->toTimestamp(true);
+        $addedAt = (new \DateTime())->getTimestamp();
         $data = [];
         foreach ($productIds as $productId) {
             $productId = (int)$productId;

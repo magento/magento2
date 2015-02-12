@@ -35,26 +35,6 @@ class DateTime
     const YEAR_MAX_VALUE = 10000;
 
     /**
-     * Convert date to UNIX timestamp
-     * Returns current UNIX timestamp if date is true
-     *
-     * @param \Magento\Framework\Stdlib\DateTime\DateInterface|bool $date
-     * @return int
-     */
-    public function toTimestamp($date)
-    {
-        if ($date instanceof \Magento\Framework\Stdlib\DateTime\DateInterface) {
-            return $date->getTimestamp();
-        }
-
-        if ($date === true) {
-            return time();
-        }
-
-        return strtotime($date);
-    }
-
-    /**
      * Retrieve current date in internal format
      *
      * @param boolean $withoutTime day only flag
@@ -92,7 +72,7 @@ class DateTime
         }
 
         if (!is_numeric($date)) {
-            $date = $this->toTimestamp($date);
+            $date = (new \DateTime())->getTimestamp();
         }
 
         $format = $includeTime ? self::DATETIME_PHP_FORMAT : self::DATE_PHP_FORMAT;
