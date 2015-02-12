@@ -16,7 +16,7 @@
     <type name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
-            <argument name="resultPage" xsi:type="object">Magento\CatalogSearch\Test\Page\Advanced\Result</argument>
+            <argument name="resultPage" xsi:type="object">Magento\CatalogSearch\Test\Page\AdvancedResult</argument>
             <argument name="productSearch" xsi:type="object">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
         </arguments>
     </type>
