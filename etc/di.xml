@@ -14,7 +14,7 @@
     </type>
     <type name="Magento\AdvancedSearch\Block\Suggestions">
         <arguments>
-            <argument name="searchDataProvider" xsi:type="object">Magento\AdvancedSearch\Model\SearchDataProvider</argument>
+            <argument name="searchDataProvider" xsi:type="object">Magento\AdvancedSearch\Model\SuggestedQueries</argument>
             <argument name="title" xsi:type="string">Did you mean</argument>
         </arguments>
     </type>

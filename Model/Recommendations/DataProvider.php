@@ -8,13 +8,13 @@ namespace Magento\AdvancedSearch\Model\Recommendations;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Store\ScopeInterface;
 use Magento\Search\Model\QueryInterface;
-use Magento\AdvancedSearch\Model\SearchDataProviderInterface;
+use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 
-class DataProvider implements SearchDataProviderInterface
+class DataProvider implements SuggestedQueriesInterface
 {
-    const CONFIG_SEARCH_RECOMMENDATIONS_ENABLED = 'catalog/search/search_recommendations_enabled';
-    const CONFIG_SEARCH_RECOMMENDATIONS_COUNT_RESULTS_ENABLED = 'catalog/search/search_recommendations_count_results_enabled';
-    const CONFIG_SEARCH_RECOMMENDATIONS_RESULTS_COUNT = 'catalog/search/search_recommendations_count';
+    const CONFIG_IS_ENABLED = 'catalog/search/search_recommendations_enabled';
+    const CONFIG_RESULTS_COUNT_ENABLED = 'catalog/search/search_recommendations_count_results_enabled';
+    const CONFIG_RESULTS_COUNT = 'catalog/search/search_recommendations_count';
 
     /**
      * @var \Magento\Search\Model\QueryResultFactory
@@ -32,11 +32,6 @@ class DataProvider implements SearchDataProviderInterface
     private $scopeConfig;
 
     /**
-     * @var \Magento\Search\Model\QueryFactory
-     */
-    private $queryFactory;
-
-    /**
      * @var \Magento\AdvancedSearch\Model\Resource\RecommendationsFactory
      */
     private $recommendationsFactory;
@@ -44,21 +39,18 @@ class DataProvider implements SearchDataProviderInterface
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-     * @param \Magento\Search\Model\QueryFactory $queryFactory
      * @param \Magento\AdvancedSearch\Model\Resource\RecommendationsFactory $recommendationsFactory
      * @param \Magento\Search\Model\QueryResultFactory $queryResultFactory
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
-        \Magento\Search\Model\QueryFactory $queryFactory,
         \Magento\AdvancedSearch\Model\Resource\RecommendationsFactory $recommendationsFactory,
         \Magento\Search\Model\QueryResultFactory $queryResultFactory
     )
     {
         $this->scopeConfig = $scopeConfig;
         $this->searchLayer = $layerResolver->get();
-        $this->queryFactory = $queryFactory;
         $this->recommendationsFactory = $recommendationsFactory;
         $this->queryResultFactory = $queryResultFactory;
     }
@@ -66,20 +58,18 @@ class DataProvider implements SearchDataProviderInterface
     /**
      * @return bool
      */
-    public function isCountResultsEnabled()
+    public function isResultsCountEnabled()
     {
         return (bool)$this->scopeConfig->getValue(
-            self::CONFIG_SEARCH_RECOMMENDATIONS_COUNT_RESULTS_ENABLED,
+            self::CONFIG_RESULTS_COUNT_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter
      */
-    public function getSearchData(QueryInterface $query, $limit = null, $additionalFilters = [])
+    public function getItems(QueryInterface $query)
     {
         $recommendations = [];
 
@@ -87,7 +77,7 @@ class DataProvider implements SearchDataProviderInterface
             return [];
         }
 
-        foreach ($this->getSearchRecommendations() as $recommendation) {
+        foreach ($this->getSearchRecommendations($query) as $recommendation) {
             $recommendations[] = $this->queryResultFactory->create(
                 [
                     'queryText' => $recommendation['query_text'],
@@ -101,10 +91,10 @@ class DataProvider implements SearchDataProviderInterface
     /**
      * @return array
      */
-    private function getSearchRecommendations()
+    private function getSearchRecommendations(\Magento\Search\Model\QueryInterface $query)
     {
         $productCollection = $this->searchLayer->getProductCollection();
-        $searchQueryText = $this->queryFactory->get()->getQueryText();
+        $searchQueryText = $query->getQueryText();
 
         $params = ['store_id' => $productCollection->getStoreId()];
 
@@ -133,7 +123,7 @@ class DataProvider implements SearchDataProviderInterface
     private function isSearchRecommendationsEnabled()
     {
         return (bool)$this->scopeConfig->getValue(
-            self::CONFIG_SEARCH_RECOMMENDATIONS_ENABLED,
+            self::CONFIG_IS_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
     }
@@ -144,7 +134,7 @@ class DataProvider implements SearchDataProviderInterface
     private function getSearchRecommendationsCount()
     {
         return (int)$this->scopeConfig->getValue(
-            self::CONFIG_SEARCH_RECOMMENDATIONS_RESULTS_COUNT,
+            self::CONFIG_RESULTS_COUNT,
             ScopeInterface::SCOPE_STORE
         );
     }

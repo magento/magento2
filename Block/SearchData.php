@@ -8,7 +8,7 @@ namespace Magento\AdvancedSearch\Block;
 use Magento\Framework\View\Element\Template;
 use Magento\Search\Model\QueryFactoryInterface;
 use Magento\Search\Model\QueryInterface;
-use Magento\AdvancedSearch\Model\SearchDataProviderInterface;
+use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 
 abstract class SearchData extends Template implements SearchDataInterface
 {
@@ -23,7 +23,7 @@ abstract class SearchData extends Template implements SearchDataInterface
     protected $title;
 
     /**
-     * @var SearchDataProviderInterface
+     * @var SuggestedQueriesInterface
      */
     private $searchDataProvider;
 
@@ -34,14 +34,14 @@ abstract class SearchData extends Template implements SearchDataInterface
 
     /**
      * @param Template\Context $context
-     * @param SearchDataProviderInterface $searchDataProvider
+     * @param SuggestedQueriesInterface $searchDataProvider
      * @param QueryFactoryInterface $queryFactory
      * @param string $title
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
-        SearchDataProviderInterface $searchDataProvider,
+        SuggestedQueriesInterface $searchDataProvider,
         QueryFactoryInterface $queryFactory,
         $title,
         array $data = []
@@ -57,15 +57,15 @@ abstract class SearchData extends Template implements SearchDataInterface
      */
     public function getSearchData()
     {
-        return $this->searchDataProvider->getSearchData($this->query);
+        return $this->searchDataProvider->getItems($this->query);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isCountResultsEnabled()
+    public function isShowResultsCount()
     {
-        return $this->searchDataProvider->isCountResultsEnabled();
+        return $this->searchDataProvider->isResultsCountEnabled();
     }
 
     /**

@@ -7,18 +7,16 @@ namespace Magento\AdvancedSearch\Model;
 
 use Magento\Search\Model\QueryInterface;
 
-interface SearchDataProviderInterface
+interface SuggestedQueriesInterface
 {
     /**
      * @param QueryInterface $query
-     * @param int $limit
-     * @param array $additionalFilters
      * @return \Magento\Search\Model\QueryResult[]
      */
-    public function getSearchData(QueryInterface $query, $limit = null, $additionalFilters = []);
+    public function getItems(QueryInterface $query);
 
     /**
      * @return bool
      */
-    public function isCountResultsEnabled();
+    public function isResultsCountEnabled();
 }

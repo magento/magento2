@@ -18,7 +18,7 @@ if (count($data)):?>
             <dd class="item">
                 <a href="<?php echo $block->getLink($additionalInfo->getQueryText()) ?>"
                     ><?php echo $additionalInfo->getQueryText() ?></a>
-                <?php if ($block->isCountResultsEnabled()): ?>
+                <?php if ($block->isShowResultsCount()): ?>
                     <span class="count"><?php echo $additionalInfo->getResultsCount() ?></span>
                 <?php endif; ?>
             </dd>

@@ -17,7 +17,7 @@ interface SearchDataInterface
     /**
      * @return bool
      */
-    public function isCountResultsEnabled();
+    public function isShowResultsCount();
 
     /**
      * @param string $queryText
