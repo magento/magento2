@@ -6,8 +6,7 @@
 
 namespace Magento\Framework\View\Asset\PreProcessor;
 
-use Magento\Framework\Model\Exception;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Asset\PreProcessorFactory;
 use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
@@ -16,9 +15,9 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
 class Pool
 {
     /**
-     * @var ObjectManagerInterface
+     * @var PreProcessorFactory
      */
-    private $objectManager;
+    private $processorFactory;
 
     /**
      * @var PreProcessorInterface[]
@@ -26,41 +25,32 @@ class Pool
     private $preProcessors = [];
 
     /**
-     * @param ObjectManagerInterface $objectManager
+     * @param PreProcessorFactory $processorFactory
      * @param array $preProcessors
      */
-    public function __construct(ObjectManagerInterface $objectManager, array $preProcessors = null)
+    public function __construct(PreProcessorFactory $processorFactory, array $preProcessors = null)
     {
-        $this->objectManager = $objectManager;
+        $this->processorFactory = $processorFactory;
         $this->preProcessors = $preProcessors;
     }
 
     /**
-     * Retrieve preprocessors instances suitable to convert source content type into a destination one
+     * Execute preprocessors instances suitable to convert source content type into a destination one
      *
-     * BUG: this implementation is hard-coded intentionally because there is a logic duplication that needs to be fixed.
-     * Adding an extensibility layer through DI configuration would add even more fragility to this design.
-     * If you need to add another preprocessor, use interceptors or class inheritance (at your own risk).
-     *
-     * @param string $sourceContentType
-     * @param string $targetContentType
-     * @throws Exception
-     * @return PreProcessorInterface[]
+     * @param Chain $chain
      */
-    public function getPreProcessors($sourceContentType, $targetContentType)
+    public function process(Chain $chain)
     {
-        $result = [];
-        if (!isset($this->preProcessors[$sourceContentType][$targetContentType])) {
-            throw new \LogicException('Preprocessor from [' . $sourceContentType . '] to [' . $targetContentType .'] isn\'t defined');
+        $processorClasses = [];
+        if (isset($this->preProcessors[$chain->getOrigContentType()])) {
+            $processorClasses =
+                isset($this->preProcessors[$chain->getOrigContentType()][$chain->getTargetContentType()])
+                ? $this->preProcessors[$chain->getOrigContentType()][$chain->getTargetContentType()] : [];
+        } else {
+            $this->processorFactory->create('Magento\Framework\View\Asset\PreProcessor\Passthrough')->process($chain);
         }
-        foreach($this->preProcessors[$sourceContentType][$targetContentType] as $processorClass) {
-            $preProcessor = $this->objectManager->get($processorClass);
-            if (!$preProcessor instanceof PreProcessorInterface) {
-                throw new Exception($preProcessor . ' doesn\'t implement \Magento\Framework\View\Asset\PreProcessorInterface');
-            }
-            $result[] = $preProcessor;
+        foreach($processorClasses as $processorClass) {
+            $this->processorFactory->create($processorClass)->process($chain);
         }
-
-        return $result;
     }
 }
