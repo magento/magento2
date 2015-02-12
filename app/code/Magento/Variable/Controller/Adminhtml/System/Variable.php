@@ -82,7 +82,7 @@ class Variable extends Action
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu('Magento_Backend::system_variable')
+        $resultPage->setActiveMenu('Magento_Variable::system_variable')
             ->addBreadcrumb(__('Custom Variables'), __('Custom Variables'));
         return $resultPage;
     }
@@ -112,6 +112,6 @@ class Variable extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Adminhtml::variable');
+        return $this->_authorization->isAllowed('Magento_Variable::variable');
     }
 }

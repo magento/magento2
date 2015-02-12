@@ -51,9 +51,7 @@
                     <resource id="Magento_Adminhtml::tools" title="Tools" sortOrder="50">
                         <resource id="Magento_Adminhtml::cache" title="Cache Management"  sortOrder="10" />
                     </resource>
-                    <resource id="Magento_Adminhtml::system_other_settings" title="Other Settings"  sortOrder="80">
-                        <resource id="Magento_Adminhtml::variable" title="Custom Variables"  sortOrder="20" />
-                    </resource>
+                    <resource id="Magento_Adminhtml::system_other_settings" title="Other Settings"  sortOrder="80" />
                 </resource>
             </resource>
         </resources>
