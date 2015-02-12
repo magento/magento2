@@ -35,11 +35,13 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * @var array
      */
     protected $_allowedParams = [
-        'timeout' => CURLOPT_TIMEOUT,
+        'timeout'      => CURLOPT_TIMEOUT,
         'maxredirects' => CURLOPT_MAXREDIRS,
-        'proxy' => CURLOPT_PROXY,
-        'ssl_cert' => CURLOPT_SSLCERT,
-        'userpwd' => CURLOPT_USERPWD,
+        'proxy'        => CURLOPT_PROXY,
+        'ssl_cert'     => CURLOPT_SSLCERT,
+        'userpwd'      => CURLOPT_USERPWD,
+        'useragent'    => CURLOPT_USERAGENT,
+        'referer'      => CURLOPT_REFERER
     ];
 
     /**

@@ -51,6 +51,16 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     protected $_deploymentConfig;
 
     /**
+     * @var \Magento\Framework\App\ProductMetadataInterface
+     */
+    protected $productMetadata;
+
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
@@ -68,15 +78,19 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
+        \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_backendConfig = $backendConfig;
-        $this->_inboxFactory = $inboxFactory;
-        $this->curlFactory = $curlFactory;
+        $this->_backendConfig    = $backendConfig;
+        $this->_inboxFactory     = $inboxFactory;
+        $this->curlFactory       = $curlFactory;
         $this->_deploymentConfig = $deploymentConfig;
+        $this->productMetadata   = $productMetadata;
+        $this->urlBuilder        = $urlBuilder;
     }
 
     /**
@@ -191,7 +205,15 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     public function getFeedData()
     {
         $curl = $this->curlFactory->create();
-        $curl->setConfig(['timeout' => 2]);
+        $curl->setConfig(
+            [
+                'timeout'   => 2,
+                'useragent' => $this->productMetadata->getName()
+                    . '/' . $this->productMetadata->getVersion()
+                    . ' (' . $this->productMetadata->getEdition() . ')',
+                'referer'   => $this->urlBuilder->getUrl('*/*/*')
+            ]
+        );
         $curl->write(\Zend_Http_Client::GET, $this->getFeedUrl(), '1.0');
         $data = $curl->read();
         if ($data === false) {
