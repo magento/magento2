@@ -368,6 +368,7 @@ return [
     ['_catalogData', 'Magento\Catalog\Block\Product\AbstractProduct'],
     ['_env', 'Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection'],
     ['_catalogImage', 'Magento\Catalog\Model\Product'],
+    ['_view', 'Magento\Cms\Helper\Page'],
     ['_routingInfo', 'Magento\Framework\App\Request\Http'],
     ['_rewritedPathInfo', 'Magento\Framework\App\Request\Http'],
     ['_requestedRouteName', 'Magento\Framework\App\Request\Http'],

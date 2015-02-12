@@ -191,7 +191,7 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Prepare label for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -201,7 +201,7 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Prepare title for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

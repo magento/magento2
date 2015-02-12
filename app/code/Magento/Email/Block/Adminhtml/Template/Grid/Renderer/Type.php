@@ -26,7 +26,7 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * Render grid column
      *
      * @param \Magento\Framework\Object $row
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function render(\Magento\Framework\Object $row)
     {

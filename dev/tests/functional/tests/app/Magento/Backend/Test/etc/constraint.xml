@@ -18,4 +18,7 @@
     <assertGlobalSearchCustomerName module="Magento_Backend">
         <severity>low</severity>
     </assertGlobalSearchCustomerName>
+    <assertBestsellersOnDashboard module="Magento_Backend">
+        <severity>low</severity>
+    </assertBestsellersOnDashboard>
 </constraint>

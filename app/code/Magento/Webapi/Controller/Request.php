@@ -60,22 +60,4 @@ class Request extends HttpRequest implements RequestInterface
     {
         return $this->_cookieReader->getCookie($name, $default);
     }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Added CGI environment support.
-     */
-    public function getHeader($name, $default = false)
-    {
-        $headerValue = parent::getHeader($name);
-        if ($headerValue == false) {
-            /** Workaround for php-fpm environment */
-            $header = strtoupper(str_replace('-', '_', $name));
-            if (isset($_SERVER[$header]) && in_array($header, ['CONTENT_TYPE', 'CONTENT_LENGTH'])) {
-                $headerValue = $_SERVER[$header];
-            }
-        }
-        return $headerValue;
-    }
 }

@@ -32,7 +32,7 @@ class ObserverTest extends \Magento\TestFramework\TestCase\AbstractController
         ];
         $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/admin');
-        $this->assertContains(__('Incorrect CAPTCHA'), $this->getResponse()->getBody());
+        $this->assertContains((string)__('Incorrect CAPTCHA'), $this->getResponse()->getBody());
     }
 
     /**
