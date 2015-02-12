@@ -290,7 +290,7 @@ class Cart extends Object implements CartInterface
             try {
                 $product = $this->productRepository->getById($productInfo, false, $storeId);
             } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'), 0, $e);
+                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'), [], $e);
             }
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'));

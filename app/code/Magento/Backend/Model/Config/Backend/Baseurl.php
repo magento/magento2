@@ -51,7 +51,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
             $field = $this->getFieldConfig();
             $label = $field && is_array($field) ? $field['label'] : 'value';
             $msg = __('Invalid %1. %2', $label, $e->getMessage());
-            $error = new \Magento\Framework\Exception\LocalizedException($msg, 0, $e);
+            $error = new \Magento\Framework\Exception\LocalizedException($msg, [], $e);
             throw $error;
         }
     }
@@ -164,7 +164,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
             $this->_assertStartsWithValuesOrUrl($values, $value);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $msg = __('%1 An empty value is allowed as well.', $e->getMessage());
-            $error = new \Magento\Framework\Exception\LocalizedException($msg, 0, $e);
+            $error = new \Magento\Framework\Exception\LocalizedException($msg, [], $e);
             throw $error;
         }
     }

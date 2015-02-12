@@ -378,7 +378,7 @@ class Item extends AbstractModel implements ItemInterface
             try {
                 $product = $this->productRepository->getById($this->getProductId(), false, $this->getStoreId());
             } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'), 0, $e);
+                throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'), [], $e);
             }
             $this->setData('product', $product);
         }

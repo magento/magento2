@@ -144,8 +144,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
         }
 
         throw new \Magento\Framework\Exception\LocalizedException(
-            __('There is no information about associated entity type "%1".', $entityType),
-            0
+            __('There is no information about associated entity type "%1".', $entityType)
         );
     }
 }
