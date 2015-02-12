@@ -40,10 +40,12 @@ class ModuleStatus
      *
      * @param ModuleLoader $moduleLoader
      * @param DeploymentConfig $deploymentConfig
-     * @param ObjectManagerFactory $objectManagerFactory
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(ModuleLoader $moduleLoader, DeploymentConfig $deploymentConfig,
-        ObjectManagerFactory $objectManagerFactory
+    public function __construct(
+        ModuleLoader $moduleLoader,
+        DeploymentConfig $deploymentConfig,
+        ObjectManagerProvider $objectManagerProvider
     ) {
         $this->allModules = $moduleLoader->load();
         foreach ($this->allModules as $module => $value) {
@@ -51,7 +53,7 @@ class ModuleStatus
             $this->allModules[$module]['disabled'] = true;
         }
         $this->deploymentConfig = $deploymentConfig;
-        $this->dependencyChecker = $objectManagerFactory->create()->get('Magento\Framework\Module\DependencyChecker');
+        $this->dependencyChecker = $objectManagerProvider->get()->get('Magento\Framework\Module\DependencyChecker');
     }
 
     /**
