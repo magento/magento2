@@ -6,9 +6,9 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Webapi\Exception;
 
 class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementInterface
 {
@@ -101,9 +101,8 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         $product = $this->productRepository->get($productSku);
 
         if ($product->getTypeId() != \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
-            throw new Exception(
-                sprintf('Product with specified sku: %s is not a configurable product', $productSku),
-                Exception::HTTP_FORBIDDEN
+            throw new InputException(
+                sprintf('Product with specified sku: %s is not a configurable product', $productSku)
             );
         }
 
