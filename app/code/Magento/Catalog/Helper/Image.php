@@ -95,13 +95,6 @@ class Image extends AbstractHelper
     protected $_assetRepo;
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * Product image factory
      *
      * @var \Magento\Catalog\Model\Product\ImageFactory
@@ -112,17 +105,14 @@ class Image extends AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\View\Asset\Repository $assetRepo
     ) {
         $this->_productImageFactory = $productImageFactory;
         parent::__construct($context);
-        $this->_scopeConfig = $scopeConfig;
         $this->_assetRepo = $assetRepo;
     }
 
@@ -162,25 +152,25 @@ class Image extends AbstractHelper
         $this->setProduct($product);
 
         $this->setWatermark(
-            $this->_scopeConfig->getValue(
+            $this->scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_image",
                 \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkImageOpacity(
-            $this->_scopeConfig->getValue(
+            $this->scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity",
                 \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkPosition(
-            $this->_scopeConfig->getValue(
+            $this->scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_position",
                 \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkSize(
-            $this->_scopeConfig->getValue(
+            $this->scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_size",
                 \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )

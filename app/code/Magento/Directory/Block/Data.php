@@ -32,13 +32,13 @@ class Data extends \Magento\Framework\View\Element\Template
     protected $_jsonEncoder;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Directory\Helper\Data
      */
-    protected $_coreData;
+    protected $directoryHelper;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
@@ -47,7 +47,7 @@ class Data extends \Magento\Framework\View\Element\Template
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
@@ -55,7 +55,7 @@ class Data extends \Magento\Framework\View\Element\Template
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->_coreData = $coreData;
+        $this->directoryHelper = $directoryHelper;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_configCacheType = $configCacheType;
         $this->_regionCollectionFactory = $regionCollectionFactory;
@@ -179,7 +179,7 @@ class Data extends \Magento\Framework\View\Element\Template
     {
         $countryId = $this->getData('country_id');
         if (is_null($countryId)) {
-            $countryId = $this->_coreData->getDefaultCountry();
+            $countryId = $this->directoryHelper->getDefaultCountry();
         }
         return $countryId;
     }

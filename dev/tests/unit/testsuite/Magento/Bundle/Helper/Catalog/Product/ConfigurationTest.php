@@ -9,8 +9,8 @@ use Magento\TestFramework\Helper\ObjectManager;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Core\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $coreData;
+    /** @var \Magento\Framework\Pricing\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    protected $pricingHelper;
 
     /** @var \Magento\Catalog\Helper\Product\Configuration|\PHPUnit_Framework_MockObject_MockObject */
     protected $productConfiguration;
@@ -26,7 +26,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->coreData = $this->getMock('Magento\Core\Helper\Data', ['currency'], [], '', false);
+        $this->pricingHelper = $this->getMock('Magento\Framework\Pricing\Helper\Data', ['currency'], [], '', false);
         $this->productConfiguration = $this->getMock('Magento\Catalog\Helper\Product\Configuration', [], [], '', false);
         $this->escaper = $this->getMock('Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
         $this->item = $this->getMock(
@@ -37,7 +37,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->helper = (new ObjectManager($this))->getObject(
             'Magento\Bundle\Helper\Catalog\Product\Configuration',
             [
-                'coreData' => $this->coreData,
+                'pricingHelper' => $this->pricingHelper,
                 'productConfiguration' => $this->productConfiguration,
                 'escaper' => $this->escaper,
             ]
@@ -163,7 +163,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $collection2 = $this->getMock('Magento\Bundle\Model\Resource\Selection\Collection', [], [], '', false);
 
         $this->escaper->expects($this->once())->method('escapeHtml')->with('name')->will($this->returnValue('name'));
-        $this->coreData->expects($this->once())->method('currency')->with(15)
+        $this->pricingHelper->expects($this->once())->method('currency')->with(15)
             ->will($this->returnValue('<span class="price">$15.00</span>'));
         $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->will($this->returnValue(15));
         $selectionQty->expects($this->any())->method('getValue')->will($this->returnValue(1));

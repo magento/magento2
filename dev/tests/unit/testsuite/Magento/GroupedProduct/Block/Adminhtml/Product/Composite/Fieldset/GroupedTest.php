@@ -25,7 +25,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $coreHelperMock;
+    protected $pricingHelperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -36,7 +36,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $this->registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
+        $this->pricingHelperMock = $this->getMock('\Magento\Framework\Pricing\Helper\Data', [], [], '', false);
         $this->storeManagerMock = $this->getMock(
             '\Magento\Framework\Store\StoreManagerInterface',
             [],
@@ -56,7 +56,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             [
                 'registry' => $this->registryMock,
                 'storeManager' => $this->storeManagerMock,
-                'coreHelper' => $this->coreHelperMock,
+                'pricingHelper' => $this->pricingHelperMock,
                 'data' => ['product' => $this->productMock]
             ]
         );
@@ -296,7 +296,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock->expects($this->once())->method('getStore')->will($this->returnValue($storeId));
 
-        $this->coreHelperMock->expects(
+        $this->pricingHelperMock->expects(
             $this->once()
         )->method(
             'currencyByStore'

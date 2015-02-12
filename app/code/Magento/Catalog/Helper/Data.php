@@ -174,7 +174,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Category $catalogCategory
      * @param Product $catalogProduct
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory
      * @param string $templateFilterModel
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyFactory
@@ -196,7 +195,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         Category $catalogCategory,
         Product $catalogProduct,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory,
         $templateFilterModel,
         \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyFactory,
@@ -215,7 +213,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->string = $string;
         $this->_catalogCategory = $catalogCategory;
         $this->_catalogProduct = $catalogProduct;
-        $this->_scopeConfig = $scopeConfig;
         $this->_coreRegistry = $coreRegistry;
         $this->_templateFilterModel = $templateFilterModel;
         $this->_taxClassKeyFactory = $taxClassKeyFactory;
@@ -386,7 +383,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getPriceScope()
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_PRICE_SCOPE,
             \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
@@ -409,7 +406,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isUsingStaticUrlsAllowed()
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             self::CONFIG_USE_STATIC_URLS,
             \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->_storeId
@@ -423,7 +420,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isUrlDirectivesParsingAllowed()
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             self::CONFIG_PARSE_URL_DIRECTIVES,
             \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->_storeId
@@ -447,7 +444,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function shouldDisplayProductCountOnLayer($storeId = null)
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_DISPLAY_PRODUCT_COUNT,
             \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
