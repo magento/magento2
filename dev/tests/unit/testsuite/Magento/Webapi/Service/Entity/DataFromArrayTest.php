@@ -6,11 +6,18 @@
 namespace Magento\Webapi\Service\Entity;
 
 use Magento\Webapi\Controller\ServiceArgsSerializer;
+use Magento\Webapi\Service\Entity\TestService;
 
 class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ServiceArgsSerializer */
     protected $serializer;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $attributeValueBuilder;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $serviceConfigReader;
 
     public function setUp()
     {
@@ -23,9 +30,24 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $cache->expects($this->any())->method('load')->willReturn(false);
 
+        $this->serviceConfigReader = $this->getMockBuilder('Magento\Framework\Api\Config\Reader')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->attributeValueBuilder = $this->getMockBuilder('Magento\Framework\Api\AttributeDataBuilder')
+            ->setMethods(['setAttributeCode', 'setValue', 'create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->serializer = $objectManager->getObject(
             'Magento\Webapi\Controller\ServiceArgsSerializer',
-            ['typeProcessor' => $typeProcessor, 'builderFactory' => $objectFactory, 'cache' => $cache]
+            [
+                'typeProcessor' => $typeProcessor,
+                'builderFactory' => $objectFactory,
+                'cache' => $cache,
+                'serviceConfigReader' => $this->serviceConfigReader,
+                'attributeValueBuilder' => $this->attributeValueBuilder
+            ]
         );
     }
 
@@ -142,6 +164,23 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('value', $associativeArray[0]);
     }
 
+    public function testAssociativeArrayPropertiesWithItemArray()
+    {
+        $data = ['associativeArray' => ['item' => ['value1','value2']]];
+        $result = $this->serializer->getInputData(
+            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'associativeArray',
+            $data
+        );
+        $this->assertNotNull($result);
+        /** @var array $result */
+        $this->assertEquals(1, count($result));
+        /** @var array $associativeArray */
+        $array = $result[0];
+        $this->assertNotNull($array);
+        $this->assertEquals('value1', $array[0]);
+        $this->assertEquals('value2', $array[1]);
+    }
 
     public function testArrayOfDataObjectProperties()
     {
@@ -249,5 +288,79 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($second instanceof Simple);
         $this->assertEquals(2, $second->getEntityId());
         $this->assertEquals('Second', $second->getName());
+    }
+
+    /**
+     * Covers object with custom attributes
+     *
+     * @dataProvider customAttributesDataProvider
+     */
+    public function testCustomAttributesProperties($customAttributeType, $customAttributeValue)
+    {
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+
+        $this->serviceConfigReader->expects($this->any())->method('read')->willReturn(
+            [
+                'Magento\Webapi\Service\Entity\ObjectWithCustomAttributes' => [
+                    TestService::CUSTOM_ATTRIBUTE_CODE => $customAttributeType
+                ]
+            ]
+        );
+
+        $dataObject = $objectManager->getObject(
+            'Magento\Framework\Api\AttributeValue',
+            ['data' => ['attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE, 'value' => $customAttributeValue]]
+        );
+
+        $this->attributeValueBuilder->expects($this->any())->method('create')->willReturn($dataObject);
+        $this->attributeValueBuilder->expects($this->any())->method('setValue')->willReturn(
+            $this->attributeValueBuilder
+        );
+        $this->attributeValueBuilder->expects($this->any())->method('setAttributeCode')->willReturn(
+            $this->attributeValueBuilder
+        );
+
+        $data = [
+            'param' => [
+                'customAttributes' => [
+                    ['attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE, 'value' => $customAttributeValue]
+                ]
+            ]
+        ];
+        $result = $this->serializer->getInputData(
+            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'ObjectWithCustomAttributesMethod',
+            $data
+        );
+
+        /** @var \Magento\Framework\Api\AttributeValue $obj */
+        $obj = $result[0];
+
+        $this->assertEquals(
+            $customAttributeValue,
+            $obj->getCustomAttribute(TestService::CUSTOM_ATTRIBUTE_CODE)->getValue()
+        );
+        $this->assertEquals(
+            TestService::CUSTOM_ATTRIBUTE_CODE,
+            $obj->getCustomAttribute(TestService::CUSTOM_ATTRIBUTE_CODE)->getAttributeCode());
+    }
+
+    /**
+     * Provides data for testCustomAttributesProperties
+     *
+     * @return array
+     */
+    public function customAttributesDataProvider()
+    {
+        return [
+            'customAttributeInteger' => [
+                'type' => 'integer[]',
+                'value' => [TestService::DEFAULT_VALUE]
+            ],
+            'customAttributeObject' => [
+                'type' => '\Magento\Webapi\Service\Entity\SimpleArray',
+                'value' => ['ids' => [1, 2, 3, 4]]
+            ],
+        ];
     }
 }
