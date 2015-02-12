@@ -9,17 +9,17 @@ namespace Magento\Setup\Model;
 class ModuleStatusTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Magento\Framework\Module\ModuleList\Loader
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList\Loader
      */
     private $moduleLoader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Magento\Framework\App\DeploymentConfig
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Magento\Framework\Module\DependencyChecker
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\DependencyChecker
      */
     private $dependencyChecker;
 
@@ -29,9 +29,9 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
      */
-    private $objectManagerFactory;
+    private $objectManagerProvider;
 
 
     public function setUp()
@@ -40,8 +40,8 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
         $this->dependencyChecker = $this->getMock('Magento\Framework\Module\DependencyChecker', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->objectManagerFactory = $this->getMock('Magento\Setup\Model\ObjectManagerFactory', [], [], '', false);
-        $this->objectManagerFactory->expects($this->once())->method('create')->willReturn($this->objectManager);
+        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->objectManager->expects($this->once())->method('get')->willReturn($this->dependencyChecker);
     }
 
@@ -61,7 +61,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
         );
 
-        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerFactory);
+        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerProvider);
         $allModules = $moduleStatus->getAllModules();
         $this->assertSame($expectedResult[0], $allModules['module1']['selected']);
         $this->assertSame($expectedResult[1], $allModules['module2']['selected']);
@@ -85,7 +85,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
         );
 
-        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerFactory);
+        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerProvider);
         $allModules = $moduleStatus->getAllModules(['module1' , 'module2']);
         $this->assertSame(true, $allModules['module1']['selected']);
         $this->assertSame(true, $allModules['module2']['selected']);
@@ -109,7 +109,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
         );
 
-        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerFactory);
+        $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerProvider);
         $moduleStatus->setIsEnabled(false, 'module1');
         $allModules = $moduleStatus->getAllModules();
         $this->assertSame(false, $allModules['module1']['selected']);
