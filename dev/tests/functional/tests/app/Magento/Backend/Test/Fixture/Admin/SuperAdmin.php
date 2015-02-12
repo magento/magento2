@@ -19,14 +19,13 @@ class SuperAdmin extends DataFixture
      */
     protected function _initData()
     {
-        $config = $this->_configuration->getConfigParam('application/backend_user_credentials');
         $this->_data = [
             'fields' => [
                 'username' => [
-                    'value' => $config['login'],
+                    'value' => $this->_configuration->getParameter('application/backendLogin'),
                 ],
                 'password' => [
-                    'value' => $config['password'],
+                    'value' => $this->_configuration->getParameter('application/backendPassword'),
                 ],
             ],
         ];
