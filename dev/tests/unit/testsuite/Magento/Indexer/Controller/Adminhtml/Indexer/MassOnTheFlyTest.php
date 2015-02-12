@@ -9,7 +9,7 @@ namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 class MassOnTheFlyTest extends \Magento\Indexer\Controller\Adminhtml\Indexer
 {
     /**
-     * @var \Magento\Indexer\Controller\Adminhtml\Indexer\MassChangelog
+     * @var \Magento\Indexer\Controller\Adminhtml\Indexer\MassOnTheFly
      */
     protected $model;
 

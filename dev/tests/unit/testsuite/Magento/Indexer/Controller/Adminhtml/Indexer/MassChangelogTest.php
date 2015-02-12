@@ -34,7 +34,7 @@ class MassChangelogTest extends \PHPUnit_Framework_TestCase
     protected $config;
 
     /**
-     * @var \Title
+     * @var \Magento\Framework\View\Page\Title
      */
     protected $title;
 
@@ -152,7 +152,7 @@ class MassChangelogTest extends \PHPUnit_Framework_TestCase
         $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
         $this->page = $this->getMock('\Magento\Framework\View\Result\Page', [], [], '', false);
         $this->config = $this->getMock('\Magento\Framework\View\Result\Page', [], [], '', false);
-        $this->title = $this->getMock('\Title', [], [], '', false);
+        $this->title = $this->getMock('\Magento\Framework\View\Page\Title', [], [], '', false);
         $this->messageManager = $this->getMockForAbstractClass(
             '\Magento\Framework\Message\ManagerInterface',
             ['addError', 'addSuccess'],
