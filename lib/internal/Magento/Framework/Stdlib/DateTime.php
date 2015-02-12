@@ -35,18 +35,6 @@ class DateTime
     const YEAR_MAX_VALUE = 10000;
 
     /**
-     * Retrieve current date in internal format
-     *
-     * @param boolean $withoutTime day only flag
-     * @return string
-     */
-    public function now($withoutTime = false)
-    {
-        $format = $withoutTime ? self::DATE_PHP_FORMAT : self::DATETIME_PHP_FORMAT;
-        return date($format);
-    }
-
-    /**
      * Format date to internal format
      *
      * @param string|\Zend_Date|bool|null $date

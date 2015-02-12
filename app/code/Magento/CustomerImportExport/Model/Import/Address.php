@@ -494,8 +494,8 @@ class Address extends AbstractCustomer
         $entityRow = [
             'entity_id' => $addressId,
             'parent_id' => $customerId,
-            'created_at' => $this->dateTime->now(),
-            'updated_at' => $this->dateTime->now(),
+            'created_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT),
+            'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT),
         ];
 
         // attribute values

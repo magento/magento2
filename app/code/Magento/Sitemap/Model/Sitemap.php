@@ -405,7 +405,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      */
     protected function _getCurrentDateTime()
     {
-        return $this->dateTime->now();
+        return (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT);
     }
 
     /**

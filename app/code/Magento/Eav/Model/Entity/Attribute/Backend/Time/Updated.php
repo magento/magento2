@@ -31,7 +31,7 @@ class Updated extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
      */
     public function beforeSave($object)
     {
-        $object->setData($this->getAttribute()->getAttributeCode(), $this->dateTime->now());
+        $object->setData($this->getAttribute()->getAttributeCode(), (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
         return $this;
     }
 }

@@ -96,7 +96,7 @@ class Status extends \Magento\Backend\Block\Template
         $log = $this->getCustomerLog();
         $interval = $this->modelLog->getOnlineMinutesInterval();
         if ($log->getLogoutAt() ||
-            strtotime($this->dateTime->now()) - strtotime($log->getLastVisitAt()) > $interval * 60
+            strtotime((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT)) - strtotime($log->getLastVisitAt()) > $interval * 60
         ) {
             return __('Offline');
         }

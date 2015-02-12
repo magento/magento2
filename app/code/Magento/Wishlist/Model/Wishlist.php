@@ -294,7 +294,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             $item = $this->_wishlistItemFactory->create();
             $item->setProductId($product->getId());
             $item->setWishlistId($this->getId());
-            $item->setAddedAt($this->dateTime->now());
+            $item->setAddedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
             $item->setStoreId($storeId);
             $item->setOptions($product->getCustomOptions());
             $item->setProduct($product);

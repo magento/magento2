@@ -98,10 +98,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadChangeCache()
     {
-        /** @var \Magento\Framework\Stdlib\DateTime $dateTime */
-        $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Stdlib\DateTime');
-        $date = $dateTime->now(true);
+        $date = (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT);
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Store\Model\StoreManagerInterface'
         )->getDefaultStoreView()->getId();

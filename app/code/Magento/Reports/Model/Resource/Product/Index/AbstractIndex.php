@@ -79,14 +79,14 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
                 $data = [
                     'visitor_id' => $object->getVisitorId(),
                     'store_id' => $object->getStoreId(),
-                    'added_at' => $this->dateTime->now(),
+                    'added_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT),
                 ];
             } else {
                 $where = ['index_id = ?' => $row['index_id']];
                 $data = [
                     'customer_id' => $object->getCustomerId(),
                     'store_id' => $object->getStoreId(),
-                    'added_at' => $this->dateTime->now(),
+                    'added_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT),
                 ];
             }
 

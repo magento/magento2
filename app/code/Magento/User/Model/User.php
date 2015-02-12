@@ -228,7 +228,7 @@ class User extends AbstractModel implements StorageInterface
             'firstname' => $this->getFirstname(),
             'lastname' => $this->getLastname(),
             'email' => $this->getEmail(),
-            'modified' => $this->dateTime->now(),
+            'modified' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT),
             'extra' => serialize($this->getExtra()),
         ];
 
@@ -675,7 +675,7 @@ class User extends AbstractModel implements StorageInterface
             throw new \Magento\Framework\Model\Exception(__('Please correct the password reset token.'));
         }
         $this->setRpToken($newToken);
-        $this->setRpTokenCreatedAt($this->dateTime->now());
+        $this->setRpTokenCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
 
         return $this;
     }

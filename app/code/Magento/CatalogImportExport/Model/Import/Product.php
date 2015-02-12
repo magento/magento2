@@ -1314,7 +1314,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     if (isset($this->_oldSku[$rowSku])) {
                         // existing row
                         $entityRowsUp[] = [
-                            'updated_at' => $this->dateTime->now(),
+                            'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT),
                             'entity_id' => $this->_oldSku[$rowSku]['entity_id'],
                         ];
                     } else {
@@ -1325,8 +1325,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 'type_id' => $this->_newSku[$rowSku]['type_id'],
                                 'sku' => $rowSku,
                                 'has_options' => isset($rowData['has_options']) ? $rowData['has_options'] : 0,
-                                'created_at' => $this->dateTime->now(),
-                                'updated_at' => $this->dateTime->now(),
+                                'created_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT),
+                                'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT),
                             ];
                             $productsQty++;
                         } else {
