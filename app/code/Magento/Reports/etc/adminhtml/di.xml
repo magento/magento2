@@ -11,4 +11,18 @@
             <argument name="modelName" xsi:type="string">Magento\Customer\Model\Backend\Customer</argument>
         </arguments>
     </type>
+    <type name="Magento\Reports\Controller\Adminhtml\Report\Statistics">
+        <arguments>
+            <argument name="reportTypes" xsi:type="array">
+                <item name="sales" xsi:type="string">Magento\Sales\Model\Resource\Report\Order</item>
+                <item name="tax" xsi:type="string">Magento\Tax\Model\Resource\Report\Tax</item>
+                <item name="shipping" xsi:type="string">Magento\Sales\Model\Resource\Report\Shipping</item>
+                <item name="invoiced" xsi:type="string">Magento\Sales\Model\Resource\Report\Invoiced</item>
+                <item name="refunded" xsi:type="string">Magento\Sales\Model\Resource\Report\Refunded</item>
+                <item name="coupons" xsi:type="string">Magento\SalesRule\Model\Resource\Report\Rule</item>
+                <item name="bestsellers" xsi:type="string">Magento\Sales\Model\Resource\Report\Bestsellers</item>
+                <item name="viewed" xsi:type="string">Magento\Reports\Model\Resource\Report\Product\Viewed</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
