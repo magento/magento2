@@ -671,7 +671,7 @@
         <variation name="CreateSimpleProductEntityTestVariation23">
             <data name="description">MAGETWO-13345: Create Simple Product with Creating New Category (Required Fields Only)</data>
             <data name="configData">-</data>
-            <data name="product/data/category_ids/new_category">no</data>
+            <data name="product/data/category_ids/new_category">yes</data>
             <data name="product/data/category_ids/presets">default_subcategory</data>
             <data name="product/data/url_key">simple%isolation%</data>
             <data name="product/data/name">simple%isolation%</data>

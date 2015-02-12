@@ -69,7 +69,7 @@ class NewCategoryIds extends Form
      */
     protected function openNewCategoryDialog()
     {
-        $this->_rootElement->find($this->buttonNewCategory)->click();
+        $this->browser->find($this->buttonNewCategory)->click();
         $this->waitForElementVisible($this->createCategoryDialog);
     }
 }

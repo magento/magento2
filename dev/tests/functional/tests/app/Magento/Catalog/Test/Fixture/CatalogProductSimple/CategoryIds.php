@@ -62,7 +62,7 @@ class CategoryIds implements FixtureInterface
                     continue;
                 }
                 $category = $fixtureFactory->createByCode('category', ['dataSet' => $preset]);
-                if (!isset($data['new_category']) || $data['new_category'] !== 'no') {
+                if (!isset($data['new_category']) || $data['new_category'] !== 'yes') {
                     $category->persist();
                 }
 
