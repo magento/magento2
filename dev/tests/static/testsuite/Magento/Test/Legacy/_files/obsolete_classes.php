@@ -2917,4 +2917,5 @@ return [
     ['Magento\Core\Block\RequireCookie', 'Magento\Cookie\Block\RequireCookie'],
     ['Magento\Core\Controller\Index\NoCookies', 'Magento\Cookie\Controller\Index\NoCookies'],
     ['Magento\Core\Model\Asset\Config', 'Magento\Framework\View\Asset\Config'],
+    ['Magento\Reports\Model\Resource\Shopcart\Product\Collection']
 ];

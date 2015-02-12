@@ -33,11 +33,11 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     protected $_productEntityTableName;
 
     /**
-     * Product entity type identifier
+     * Product entity attribute set identifier
      *
      * @var int
      */
-    protected $_productEntityTypeId;
+    protected $_productEntityAttributeSetId;
 
     /**
      * Select count
@@ -110,7 +110,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     ) {
         $this->setProductEntityId($product->getEntityIdField());
         $this->setProductEntityTableName($product->getEntityTable());
-        $this->setProductEntityTypeId($product->getTypeId());
+        $this->setProductAttributeSetId($product->getEntityType()->getDefaultAttributeSetId());
         parent::__construct(
             $entityFactory,
             $logger,
@@ -140,6 +140,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Set Type for COUNT SQL Select
      *
+     * @codeCoverageIgnoreStart
      * @param int $type
      * @return $this
      */
@@ -194,26 +195,27 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     }
 
     /**
-     * Set product entity type id
+     * Get product attribute set  id
+     *
+     * @return int
+     */
+    public function getProductAttributeSetId()
+    {
+        return $this->_productEntityAttributeSetId;
+    }
+
+    /**
+     * Set product attribute set id
      *
      * @param int $value
      * @return $this
      */
-    public function setProductEntityTypeId($value)
+    public function setProductAttributeSetId($value)
     {
-        $this->_productEntityTypeId = $value;
+        $this->_productEntityAttributeSetId = $value;
         return $this;
     }
-
-    /**
-     * Get product entity type id
-     *
-     * @return int
-     */
-    public function getProductEntityTypeId()
-    {
-        return $this->_productEntityTypeId;
-    }
+    //@codeCoverageIgnoreEnd
 
     /**
      * Join fields
@@ -259,39 +261,6 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $countSelect->columns("count(DISTINCT e.entity_id)");
 
         return $countSelect;
-    }
-
-    /**
-     * Add carts count
-     *
-     * @return $this
-     */
-    public function addCartsCount()
-    {
-        $countSelect = clone $this->getSelect();
-        $countSelect->reset();
-
-        $countSelect->from(
-            ['quote_items' => $this->getTable('quote_item')],
-            'COUNT(*)'
-        )->join(
-            ['quotes' => $this->getTable('quote')],
-            'quotes.entity_id = quote_items.quote_id AND quotes.is_active = 1',
-            []
-        )->where(
-            "quote_items.product_id = e.entity_id"
-        );
-
-        $this->getSelect()->columns(
-            ["carts" => "({$countSelect})"]
-        )->group(
-            "e.{$this->getProductEntityId()}"
-        )->having(
-            'carts > ?',
-            0
-        );
-
-        return $this;
     }
 
     /**
@@ -351,7 +320,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $productJoinCondition = [
             $adapter->quoteInto('(e.type_id NOT IN (?))', $compositeTypeIds),
             'e.entity_id = order_items.product_id',
-            $adapter->quoteInto('e.entity_type_id = ?', $this->getProductEntityTypeId()),
+           $adapter->quoteInto('e.attribute_set_id = ?', $this->getProductAttributeSetId()),
         ];
 
         if ($from != '' && $to != '') {
@@ -371,7 +340,6 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             implode(' AND ', $productJoinCondition),
             [
                 'entity_id' => 'order_items.product_id',
-                'entity_type_id' => 'e.entity_type_id',
                 'attribute_set_id' => 'e.attribute_set_id',
                 'type_id' => 'e.type_id',
                 'sku' => 'e.sku',
@@ -435,8 +403,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         )->join(
             ['e' => $this->getProductEntityTableName()],
             $this->getConnection()->quoteInto(
-                "e.entity_id = report_table_views.object_id AND e.entity_type_id = ?",
-                $this->getProductEntityTypeId()
+                "e.entity_id = report_table_views.object_id AND e.attribute_set_id = ?",
+                $this->getProductAttributeSetId()
             )
         )->where(
             'report_table_views.event_type_id = ?',

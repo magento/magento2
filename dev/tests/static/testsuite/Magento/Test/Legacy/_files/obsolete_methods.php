@@ -2046,4 +2046,6 @@ return [
     ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
     ['register', 'Magento\Sendfriend\Model\Sendfriend'],
     ['_getImageHelper', 'Magento\Catalog\Model\Product'],
+    ['getProductEntityTypeId', 'Magento\Reports\Model\Resource\Product\Collection'],
+    ['setProductEntityTypeId', 'Magento\Reports\Model\Resource\Product\Collection'],
 ];
