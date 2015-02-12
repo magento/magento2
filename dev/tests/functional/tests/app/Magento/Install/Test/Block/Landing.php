@@ -19,7 +19,7 @@ class Landing extends Block
      *
      * @var string
      */
-    protected $agreeAndSetup = '.btn-lg.btn-primary';
+    protected $agreeAndSetup = '.btn-prime.btn-submit';
 
     /**
      * 'Terms & Agreement' link.
