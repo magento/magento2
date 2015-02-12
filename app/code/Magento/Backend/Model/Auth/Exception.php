@@ -10,6 +10,6 @@ namespace Magento\Backend\Model\Auth;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Exception extends \Magento\Framework\Model\Exception
+class Exception extends \Magento\Framework\Exception\LocalizedException
 {
 }

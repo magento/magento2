@@ -139,7 +139,7 @@ abstract class Validator
         }
         if (count($dimensions) > 0) {
             if (!is_null($fileFullPath) && !$this->isImage($fileFullPath)) {
-                throw new NotImageException();
+                throw new NotImageException(__('This is not an image.'));
             }
             $object->addValidator(new \Zend_Validate_File_ImageSize($dimensions));
         }

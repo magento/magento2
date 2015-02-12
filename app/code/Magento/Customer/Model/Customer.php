@@ -68,8 +68,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
 
     const EXCEPTION_INVALID_EMAIL_OR_PASSWORD = 2;
 
-    const EXCEPTION_EMAIL_EXISTS = 3;
-
     const EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN = 4;
 
     const SUBSCRIBED_YES = 'yes';

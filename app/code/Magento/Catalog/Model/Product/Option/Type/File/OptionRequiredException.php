@@ -6,6 +6,6 @@
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
-class OptionRequiredException extends \Magento\Framework\Model\Exception
+class OptionRequiredException extends \Magento\Framework\Exception\LocalizedException
 {
 }

@@ -99,7 +99,9 @@ class ValidatorFile extends Validator
         try {
             $runValidation = $option->getIsRequire() || $upload->isUploaded($file);
             if (!$runValidation) {
-                throw new RunValidationException();
+                throw new RunValidationException(
+                    __('Validation failed. Required options were not filled or file was not uploaded.')
+                );
             }
 
             $fileInfo = $upload->getFileInfo($file)[$file];
@@ -114,7 +116,7 @@ class ValidatorFile extends Validator
                     __("The file you uploaded is larger than %1 Megabytes allowed by server", $value)
                 );
             } else {
-                throw new OptionRequiredException();
+                throw new OptionRequiredException(__('Option required.'));
             }
         }
 

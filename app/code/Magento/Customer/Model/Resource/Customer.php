@@ -6,6 +6,7 @@
 namespace Magento\Customer\Model\Resource;
 
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
  * Customer entity resource model
@@ -92,8 +93,9 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param \Magento\Framework\Object $customer
      * @return $this
-     * @throws \Magento\Customer\Exception
-     * @throws \Magento\Framework\Model\Exception
+     * @throws AlreadyExistsException
+     * @throws InputException
+     * @throws \Magento\Framework\Validator\ValidatorException
      */
     protected function _beforeSave(\Magento\Framework\Object $customer)
     {
@@ -101,7 +103,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         parent::_beforeSave($customer);
 
         if (!$customer->getEmail()) {
-            throw new \Magento\Customer\Exception(__('Customer email is required'));
+            throw new InputException(__('Customer email is required'));
         }
 
         $adapter = $this->_getWriteAdapter();
@@ -124,9 +126,8 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
 
         $result = $adapter->fetchOne($select, $bind);
         if ($result) {
-            throw new \Magento\Customer\Exception(
-                __('Customer with the same email already exists in associated website.'),
-                \Magento\Customer\Model\Customer::EXCEPTION_EMAIL_EXISTS
+            throw new AlreadyExistsException(
+                __('Customer with the same email already exists in associated website.')
             );
         }
 

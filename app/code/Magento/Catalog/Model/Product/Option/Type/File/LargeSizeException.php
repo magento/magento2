@@ -6,6 +6,6 @@
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
-class LargeSizeException extends \Magento\Framework\Model\Exception
+class LargeSizeException extends \Magento\Framework\Exception\LocalizedException
 {
 }

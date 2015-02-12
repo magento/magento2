@@ -197,16 +197,15 @@ class Auth
      * Throws specific Backend Authentication \Exception
      *
      * @param string $msg
-     * @param string $code
      * @return void
      * @throws \Magento\Backend\Model\Auth\Exception
      * @static
      */
-    public static function throwException($msg = null, $code = null)
+    public static function throwException($msg = null)
     {
         if (is_null($msg)) {
             $msg = __('Authentication error occurred.');
         }
-        throw new \Magento\Backend\Model\Auth\Exception($msg, $code);
+        throw new \Magento\Backend\Model\Auth\Exception($msg);
     }
 }

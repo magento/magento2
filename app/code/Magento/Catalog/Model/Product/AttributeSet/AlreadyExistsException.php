@@ -6,6 +6,6 @@
 
 namespace Magento\Catalog\Model\Product\AttributeSet;
 
-class AlreadyExistsException extends \Magento\Framework\Model\Exception
+class AlreadyExistsException extends \Magento\Framework\Exception\LocalizedException
 {
 }

@@ -5,6 +5,6 @@
  */
 namespace Magento\Directory;
 
-class Exception extends \Magento\Framework\Model\Exception
+class Exception extends \Magento\Framework\Exception\LocalizedException
 {
 }

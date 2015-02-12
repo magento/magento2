@@ -21,6 +21,7 @@ use Magento\Customer\Model\Metadata\Validator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
@@ -71,8 +72,6 @@ class AccountManagement implements AccountManagementInterface
     /**
      * Codes of exceptions related to customer model
      */
-    const EXCEPTION_EMAIL_EXISTS = 3;
-
     // Constants for the type of new account email to be sent
     const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';
 
@@ -512,7 +511,7 @@ class AccountManagement implements AccountManagementInterface
         try {
             // If customer exists existing hash will be used by Repository
             $customer = $this->customerRepository->save($customer, $hash);
-        } catch (\Magento\Framework\Exception\Customer\Exception $e) {
+        } catch (AlreadyExistsException $e) {
             throw new InputMismatchException('Customer with the same email already exists in associated website.');
         } catch (LocalizedException $e) {
             throw $e;
