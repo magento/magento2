@@ -1,4 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="downloadableProductInjectable" module="Magento_Downloadable" type="eav" entity_type="catalog_product" product_type="downloadable" collection="Magento\Catalog\Model\Resource\Product\Collection" identifier="sku" repository_class="Magento\Downloadable\Test\Repository\DownloadableProductInjectable" handler_interface="Magento\Downloadable\Test\Handler\DownloadableProductInjectable\DownloadableProductInjectableInterface" class="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable">
     <dataset name="default">

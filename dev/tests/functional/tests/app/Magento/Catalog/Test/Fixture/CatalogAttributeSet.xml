@@ -1,6 +1,12 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
-  <fixture name="catalogAttributeSet" module="Magento_Catalog" type="flat" entity_type="eav_attribute_set" collection="Magento\Catalog\Model\Resource\Product\Link\Product\Collection" repository_class="Magento\Catalog\Test\Repository\CatalogAttributeSet" handler_interface="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface" class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">
+    <fixture name="catalogAttributeSet" module="Magento_Catalog" type="flat" entity_type="eav_attribute_set" collection="Magento\Catalog\Model\Resource\Product\Link\Product\Collection" repository_class="Magento\Catalog\Test\Repository\CatalogAttributeSet" handler_interface="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface" class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">
     <dataset name="default">
         <field name="attribute_set_name" xsi:type="string">Default_attribute_set_%isolation%</field>
         <field name="skeleton_set" xsi:type="array">

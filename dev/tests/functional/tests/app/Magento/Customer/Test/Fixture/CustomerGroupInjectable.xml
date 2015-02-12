@@ -1,4 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="customerGroupInjectable" module="Magento_Customer" type="flat" entity_type="customer_group" collection="Magento\Customer\Model\Resource\Group\Collection" repository_class="Magento\Customer\Test\Repository\CustomerGroupInjectable" handler_interface="Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface" class="Magento\Customer\Test\Fixture\CustomerGroupInjectable">
     <dataset name="default">

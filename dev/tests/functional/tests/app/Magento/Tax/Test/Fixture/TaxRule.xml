@@ -1,4 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="taxRule" module="Magento_Tax" type="flat" entity_type="tax_calculation_rule" collection="Magento\Tax\Model\Resource\Calculation\Rule\Collection" identifier="code" repository_class="Magento\Tax\Test\Repository\TaxRule" handler_interface="Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface" class="Magento\Tax\Test\Fixture\TaxRule">
     <dataset name="default">

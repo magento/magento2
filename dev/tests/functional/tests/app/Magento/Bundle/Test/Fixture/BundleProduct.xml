@@ -1,4 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="bundleProduct" module="Magento_Bundle" type="eav" entity_type="catalog_product" product_type="bundle" collection="Magento\Catalog\Model\Resource\Product\Collection" identifier="sku" repository_class="Magento\Bundle\Test\Repository\BundleProduct" handler_interface="Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface" class="Magento\Bundle\Test\Fixture\BundleProduct">
     <dataset name="default">

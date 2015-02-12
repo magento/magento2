@@ -1,4 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="giftMessage" module="Magento_GiftMessage" type="flat" entity_type="gift_message" collection="Magento\GiftMessage\Model\Resource\Message\Collection" identifier="gift_message_id" repository_class="Magento\GiftMessage\Test\Repository\GiftMessage" class="Magento\GiftMessage\Test\Fixture\GiftMessage">
     <dataset name="default">

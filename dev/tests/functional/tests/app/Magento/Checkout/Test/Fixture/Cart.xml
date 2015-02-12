@@ -1,4 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="cart" module="Magento_Checkout" type="flat" entity_type="quote" collection="Magento\Checkout\Model\Resource\Cart" repository_class="Magento\Checkout\Test\Repository\Cart" handler_interface="Magento\Checkout\Test\Handler\Cart\CartInterface" class="Magento\Checkout\Test\Fixture\Cart">
     <field name="entity_id" backend_type="int" is_required="1" input="">

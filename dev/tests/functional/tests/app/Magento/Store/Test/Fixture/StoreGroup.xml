@@ -1,4 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
   <fixture name="storeGroup" module="Magento_Store" type="flat" entity_type="store_group" collection="Magento\Store\Model\Resource\Group\Collection" identifier="" repository_class="Magento\Store\Test\Repository\StoreGroup" handler_interface="Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface" class="Magento\Store\Test\Fixture\StoreGroup">
     <dataset name="default">
