@@ -443,17 +443,16 @@ abstract class AbstractModel extends \Magento\Framework\Object
      * Validate model before saving it
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Validator\ValidatorException
      */
     public function validateBeforeSave()
     {
         $validator = $this->_getValidatorBeforeSave();
         if ($validator && !$validator->isValid($this)) {
             $errors = $validator->getMessages();
-            $exception = new \Magento\Framework\Exception\LocalizedException(implode(PHP_EOL, $errors));
-            foreach ($errors as $errorMessage) {
-                $exception->addMessage(new \Magento\Framework\Message\Error($errorMessage));
-            }
+            $exception = new \Magento\Framework\Validator\ValidatorException(
+                implode(PHP_EOL, $errors), [], null, $errors
+            );
             throw $exception;
         }
         return $this;

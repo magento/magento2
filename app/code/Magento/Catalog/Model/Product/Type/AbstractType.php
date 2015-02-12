@@ -1022,7 +1022,7 @@ abstract class AbstractType
                 $errors[] = $result;
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $errors[] = $e->getMessages();
+            $errors[] = $e->getMessage();
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             $errors[] = __('Something went wrong while processing the request.');

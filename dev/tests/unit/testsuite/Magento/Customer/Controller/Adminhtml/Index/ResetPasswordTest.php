@@ -324,9 +324,9 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup a core exception to return
-        $exception = new \Magento\Framework\Exception\LocalizedException();
-        $error = new \Magento\Framework\Message\Error('Something Bad happened');
-        $exception->addMessage($error);
+        $error = 'Something Bad happened';
+        $exception = new \Magento\Framework\Validator\ValidatorException($error);
+        $exception->addError('Something Bad happened');
 
         $this->_customerRepositoryMock->expects(
             $this->once()
@@ -339,7 +339,9 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         );
 
         // Verify error message is set
-        $this->messageManager->expects($this->once())->method('addMessage')->with($this->equalTo($error));
+        $this->messageManager->expects($this->once())
+            ->method('addMessage')
+            ->with($this->equalTo(new \Magento\Framework\Message\Error($error)));
 
         $this->_testedObject->execute();
     }
@@ -361,19 +363,14 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup a core exception to return
-        $exception = new \Magento\Framework\Exception\LocalizedException($warningText);
-        $error = new \Magento\Framework\Message\Warning('Something Not So Bad happened');
-        $exception->addMessage($error);
+        $exception = new \Magento\Framework\Validator\ValidatorException($warningText);
+        $error = 'Something Not So Bad happened';
+        $exception->addError($error);
 
-        $this->_customerRepositoryMock->expects(
-            $this->once()
-        )->method(
-            'getById'
-        )->with(
-            $customerId
-        )->will(
-            $this->throwException($exception)
-        );
+        $this->_customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->will($this->throwException($exception));
 
         // Verify Warning is converted to an Error and message text is set to exception text
         $this->messageManager->expects(

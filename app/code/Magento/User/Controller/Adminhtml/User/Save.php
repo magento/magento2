@@ -63,9 +63,10 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addMessages($e->getMessages());
+        } catch (\Magento\Framework\Validator\ValidatorException $e) {
             $messages = $e->getMessages();
+            $this->messageManager->addMessages($messages);
+
             if (empty($messages)) {
                 if ($e->getMessage()) {
                     $this->messageManager->addError($e->getMessage());
