@@ -62,16 +62,42 @@ class Onepage extends Action
     protected $quoteRepository;
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Framework\View\Result\LayoutFactory
+     */
+    protected $resultLayoutFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -79,12 +105,17 @@ class Onepage extends Action
         \Magento\Customer\Model\Session $customerSession,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $accountManagement,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Translate\InlineInterface $translateInline,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_translateInline = $translateInline;
@@ -92,7 +123,17 @@ class Onepage extends Action
         $this->scopeConfig = $scopeConfig;
         $this->layoutFactory = $layoutFactory;
         $this->quoteRepository = $quoteRepository;
-        parent::__construct($context, $customerSession, $customerRepository, $accountManagement);
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->resultRawFactory = $resultRawFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
+        parent::__construct(
+            $context,
+            $customerSession,
+            $customerRepository,
+            $accountManagement,
+            $resultRedirectFactory
+        );
     }
 
     /**
@@ -105,7 +146,10 @@ class Onepage extends Action
     public function dispatch(RequestInterface $request)
     {
         $this->_request = $request;
-        $this->_preDispatchValidateCustomer();
+        $result = $this->_preDispatchValidateCustomer();
+        if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
+            return $result;
+        }
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->_objectManager->get('Magento\Checkout\Model\Session')->getQuote();
@@ -120,12 +164,14 @@ class Onepage extends Action
     }
 
     /**
-     * @return $this
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     protected function _ajaxRedirectResponse()
     {
-        $this->getResponse()->setHeader('HTTP/1.1', '403 Session Expired')->setHeader('Login-Required', 'true');
-        return $this;
+        $resultRaw = $this->resultRawFactory->create();
+        $resultRaw->setHeader('HTTP/1.1', '403 Session Expired')
+            ->setHeader('Login-Required', 'true');
+        return $resultRaw;
     }
 
     /**
@@ -137,21 +183,14 @@ class Onepage extends Action
     {
         $quote = $this->getOnepage()->getQuote();
         if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
-            $this->_ajaxRedirectResponse();
-            return true;
+            return false;
         }
         $action = $this->getRequest()->getActionName();
-        if ($this->_objectManager->get(
-            'Magento\Checkout\Model\Session'
-        )->getCartWasUpdated(
-            true
-        ) && !in_array(
-            $action,
-            ['index', 'progress']
-        )
+        if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getCartWasUpdated(true)
+            &&
+            !in_array($action, ['index', 'progress'])
         ) {
-            $this->_ajaxRedirectResponse();
-            return true;
+            return false;
         }
 
         return false;

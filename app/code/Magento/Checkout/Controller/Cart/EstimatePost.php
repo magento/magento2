@@ -1,11 +1,11 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Framework;
 use Magento\Checkout\Model\Cart as CustomerCart;
 
 class EstimatePost extends \Magento\Checkout\Controller\Cart
@@ -22,15 +22,17 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        Framework\App\Action\Context $context,
+        Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
+        Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         $this->quoteRepository = $quoteRepository;
@@ -40,14 +42,15 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
             $checkoutSession,
             $storeManager,
             $formKeyValidator,
-            $cart
+            $cart,
+            $resultRedirectFactory
         );
     }
 
     /**
      * Initialize shipping information
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -57,20 +60,14 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
         $regionId = (string)$this->getRequest()->getParam('region_id');
         $region = (string)$this->getRequest()->getParam('region');
 
-        $this->cart->getQuote()->getShippingAddress()->setCountryId(
-            $country
-        )->setCity(
-            $city
-        )->setPostcode(
-            $postcode
-        )->setRegionId(
-            $regionId
-        )->setRegion(
-            $region
-        )->setCollectShippingRates(
-            true
-        );
+        $this->cart->getQuote()->getShippingAddress()
+            ->setCountryId($country)
+            ->setCity($city)
+            ->setPostcode($postcode)
+            ->setRegionId($regionId)
+            ->setRegion($region)
+            ->setCollectShippingRates(true);
         $this->quoteRepository->save($this->cart->getQuote());
-        $this->_goBack();
+        return $this->_goBack();
     }
 }

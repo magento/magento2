@@ -7,6 +7,7 @@ namespace Magento\Checkout\Controller;
 
 use Magento\Catalog\Controller\Product\View\ViewInterface;
 use Magento\Checkout\Model\Cart as CustomerCart;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Shopping cart controller
@@ -39,12 +40,18 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
     protected $cart;
 
     /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -52,42 +59,42 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        CustomerCart $cart
+        CustomerCart $cart,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_scopeConfig = $scopeConfig;
         $this->_checkoutSession = $checkoutSession;
         $this->_storeManager = $storeManager;
         $this->cart = $cart;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
     /**
      * Set back redirect url to response
      *
-     * @return $this
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     protected function _goBack()
     {
         $returnUrl = $this->getRequest()->getParam('return_url');
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($returnUrl && $this->_isInternalUrl($returnUrl)) {
             $this->messageManager->getMessages()->clear();
-            $this->getResponse()->setRedirect($returnUrl);
-        } elseif (!$this->_scopeConfig->getValue(
-            'checkout/cart/redirect_to_cart',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
-        ) && !$this->getRequest()->getParam(
-            'in_cart'
-        ) && ($backUrl = $this->_redirect->getRefererUrl())
+            $resultRedirect->setUrl($returnUrl);
+        } elseif (!$this->_scopeConfig->getValue('checkout/cart/redirect_to_cart', ScopeInterface::SCOPE_STORE)
+            && !$this->getRequest()->getParam('in_cart')
+            && ($backUrl = $this->_redirect->getRefererUrl())
         ) {
-            $this->getResponse()->setRedirect($backUrl);
+            $resultRedirect->setUrl($backUrl);
         } else {
             if ($this->getRequest()->getActionName() == 'add' && !$this->getRequest()->getParam('in_cart')) {
                 $this->_checkoutSession->setContinueShoppingUrl($this->_redirect->getRefererUrl());
             }
-            $this->_redirect('checkout/cart');
+            $resultRedirect->setPath('checkout/cart');
         }
-        return $this;
+        return $resultRedirect;
     }
 
     /**

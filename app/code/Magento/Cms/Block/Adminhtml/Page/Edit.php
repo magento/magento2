@@ -75,7 +75,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Retrieve text for header element depending on loaded page
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

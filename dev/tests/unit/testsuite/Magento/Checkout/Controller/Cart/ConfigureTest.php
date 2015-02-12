@@ -10,7 +10,6 @@ namespace Magento\Checkout\Controller\Cart;
  */
 class ConfigureTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
@@ -20,6 +19,11 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\View\Result\PageFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultPageFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -35,11 +39,6 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Message\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $messageManagerMock;
-
-    /**
-     * @var \Magento\Framework\App\Response\RedirectInterface | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $redirectMock;
 
     /**
      * @var \Magento\Checkout\Controller\Cart\Configure | \PHPUnit_Framework_MockObject_MockObject
@@ -58,91 +57,40 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $urlMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $actionFlagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $viewMock = $this->getMockBuilder('Magento\Framework\App\ViewInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $this->responseMock = $this->getMockBuilder('Magento\Framework\App\ResponseInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
-            ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $this->redirectMock = $this->getMockBuilder('Magento\Framework\App\Response\RedirectInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Action\Context')
-            ->setConstructorArgs(
-                [
-                    $this->requestMock,
-                    $this->responseMock,
-                    $this->objectManagerMock,
-                    $eventManagerMock,
-                    $urlMock,
-                    $this->redirectMock,
-                    $actionFlagMock,
-                    $viewMock,
-                    $this->messageManagerMock
-                ]
-            )
-            ->setMethods([])
-            ->getMock();
-        $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
-        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
-        $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
-        $this->contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);
-        $this->contextMock->expects($this->any())->method('getRedirect')->willReturn($this->redirectMock);
-        $scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $session = $this->getMockBuilder('Magento\Checkout\Model\Session')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $formKeyValidator = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\Validator')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->responseMock = $this->getMock('Magento\Framework\App\ResponseInterface');
+        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
         $this->cartMock = $this->getMockBuilder('Magento\Checkout\Model\Cart')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultRedirectFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultRedirectFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
 
-        $this->configureController = new \Magento\Checkout\Controller\Cart\Configure(
-            $this->contextMock,
-            $scopeConfig,
-            $session,
-            $storeManager,
-            $formKeyValidator,
-            $this->cartMock,
-            $this->resultPageFactoryMock
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+
+        $this->configureController = $objectManagerHelper->getObject(
+            'Magento\Checkout\Controller\Cart\Configure',
+            [
+                'request' => $this->requestMock,
+                'response' => $this->responseMock,
+                'objectManager' => $this->objectManagerMock,
+                'messageManager' => $this->messageManagerMock,
+                'cart' => $this->cartMock,
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'resultRedirectFactory' => $resultRedirectFactoryMock
+            ]
         );
     }
 
@@ -231,20 +179,23 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->with('id')
-            ->willReturn($quotaId);
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('product_id')
-            ->willReturn($productIdInRequest);
+            ->willReturnMap([
+                ['id', null, $quotaId],
+                ['product_id', null, $productIdInRequest]
+            ]);
         $this->cartMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getItemById')->willReturn($quoteItemMock);
-        $quoteItemMock->expects($this->exactly(1))->method('getProduct')->willReturn($productMock);
-        $productMock->expects($this->exactly(1))->method('getId')->willReturn($productIdInQuota);
-        $this->messageManagerMock->expects($this->once())->method('addError');
-        $this->redirectMock->expects($this->once())->method('redirect')->with($this->responseMock, 'checkout/cart', []);
-        $this->configureController->execute();
+        $quoteItemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
+        $productMock->expects($this->once())->method('getId')->willReturn($productIdInQuota);
+        $this->messageManagerMock->expects($this->once())
+            ->method('addError')
+            ->willReturn('');
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('checkout/cart', [])
+            ->willReturnSelf();
+        $this->assertSame($this->resultRedirectMock, $this->configureController->execute());
     }
 }

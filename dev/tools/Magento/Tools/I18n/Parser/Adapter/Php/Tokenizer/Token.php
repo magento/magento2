@@ -76,6 +76,16 @@ class Token
     }
 
     /**
+     * Is "new" operator
+     *
+     * @return bool
+     */
+    public function isNew()
+    {
+        return $this->getName() == T_NEW;
+    }
+
+    /**
      * Whenever token is equal function
      *
      * @param string $functionName
@@ -154,5 +164,25 @@ class Token
     public function isSemicolon()
     {
         return $this->getValue() == ';';
+    }
+
+    /**
+     * Is namespace separator
+     *
+     * @return bool
+     */
+    public function isNamespaceSeparator()
+    {
+        return $this->getName() == T_NS_SEPARATOR;
+    }
+
+    /**
+     * Is identifier
+     *
+     * @return bool
+     */
+    public function isIdentifier()
+    {
+        return $this->getName() == T_STRING;
     }
 }
