@@ -15,7 +15,9 @@
             </block>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Backend\Block\Dashboard" name="dashboard"/>
+            <block class="Magento\Backend\Block\Dashboard" name="dashboard">
+                <block class="Magento\Backend\Block\Template" name="refresh_statistics" template="Magento_Backend::dashboard/totalbar/refreshstatistics.phtml"/>
+            </block>
         </referenceContainer>
     </body>
 </page>

@@ -72,7 +72,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
     /**
      * Get label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getLabel()
     {

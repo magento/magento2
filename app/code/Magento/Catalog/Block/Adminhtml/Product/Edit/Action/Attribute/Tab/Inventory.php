@@ -82,7 +82,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     /**
      * Tab settings
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -90,7 +90,7 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {
