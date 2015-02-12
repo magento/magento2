@@ -40,7 +40,7 @@ class String implements InterpreterInterface
             }
             $needTranslation = isset($data['translate']) ? $this->booleanUtils->toBoolean($data['translate']) : false;
             if ($needTranslation) {
-                $result = __($result);
+                $result = (string)new \Magento\Framework\Phrase($result);
             }
         } else {
             $result = '';

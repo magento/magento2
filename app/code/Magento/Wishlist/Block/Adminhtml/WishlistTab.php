@@ -53,7 +53,7 @@ class WishlistTab extends TabWrapper
     /**
      * Return Tab label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
