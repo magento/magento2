@@ -2981,6 +2981,13 @@ return [
     ['Magento\Webapi\Controller\Response', 'Magento\Framework\Webapi\Response'],
     ['Magento\Webapi\Controller\ServiceArgsSerializer', 'Magento\Framework\Webapi\ServiceInputProcessor'],
     ['Magento\Webapi\Controller\Rest\Response\DataObjectConverter', 'Magento\Framework\Webapi\ServiceOutputProcessor'],
-
-
+    ['Magento\Webapi\Model\Config\Integration\Converter', 'Magento\Integration\Model\Config\Integration\Converter'],
+    ['Magento\Webapi\Model\Config\Integration\Reader', 'Magento\Integration\Model\Config\Integration\Reader'],
+    [
+        'Magento\Webapi\Model\Config\Integration\SchemaLocator',
+        'Magento\Integration\Model\Config\Integration\SchemaLocator'
+    ],
+    ['Magento\Webapi\Model\IntegrationConfig', 'Magento\Integration\Model\IntegrationConfig'],
+    ['Magento\Webapi\Model\Plugin\Service\V1\Integration', 'Magento\Integration\Model\Plugin\Service\V1\Integration'],
+    ['Magento\Webapi\Model\Plugin\Setup', 'Magento\Integration\Model\Plugin\Setup'],
 ];

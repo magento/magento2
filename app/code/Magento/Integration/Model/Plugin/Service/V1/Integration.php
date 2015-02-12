@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Webapi\Model\Plugin\Service\V1;
+namespace Magento\Integration\Model\Plugin\Service\V1;
 
 use Magento\Authorization\Model\Acl\AclRetriever;
 use Magento\Authorization\Model\UserContextInterface;

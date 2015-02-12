@@ -3,11 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Model\Plugin;
+namespace Magento\Integration\Model\Plugin;
 
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Service\V1\AuthorizationServiceInterface as IntegrationAuthorizationInterface;
-use Magento\Webapi\Model\IntegrationConfig;
+use Magento\Integration\Model\IntegrationConfig;
 
 /**
  * Plugin for Magento\Framework\Module\Setup model to manage resource permissions of

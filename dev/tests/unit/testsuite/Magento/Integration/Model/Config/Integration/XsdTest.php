@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Model\Config\Integration;
+namespace Magento\Integration\Model\Config\Integration;
 
 /**
  * Test for validation rules implemented by XSD schema for API integration configuration.
@@ -17,7 +17,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_schemaFile = BP . '/app/code/Magento/Webapi/etc/integration/api.xsd';
+        $this->_schemaFile = BP . '/app/code/Magento/Integration/etc/integration/api.xsd';
     }
 
     /**

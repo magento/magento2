@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Model;
+namespace Magento\Integration\Model;
 
 use Magento\Webapi\Model\Cache\TypeIntegration;
 
@@ -22,7 +22,7 @@ class IntegrationConfig
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Webapi\Model\Config\Integration\Reader
+     * @var \Magento\Integration\Model\Config\Integration\Reader
      */
     protected $_configReader;
 

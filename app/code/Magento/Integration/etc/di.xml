@@ -24,4 +24,7 @@
             <argument name="date" xsi:type="object">Magento\Framework\Stdlib\DateTime\DateTime\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Integration\Service\V1\Integration">
+        <plugin name="webapiIntegrationServiceV1" type="Magento\Integration\Model\Plugin\Service\V1\Integration"/>
+    </type>
 </config>

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Model\Config\Integration;
+namespace Magento\Integration\Model\Config\Integration;
 
 /**
  * Integration config schema locator.
@@ -29,7 +29,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Webapi') . '/integration/api.xsd';
+        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Integration') . '/integration/api.xsd';
     }
 
     /**

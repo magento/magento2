@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  *
  */
-namespace Magento\Webapi\Model\Config\Integration;
+namespace Magento\Integration\Model\Config\Integration;
 
-use Magento\Webapi\Model\Config\Integration\Reader as ConfigReader;
+use Magento\Integration\Model\Config\Integration\Reader as ConfigReader;
 
 /**
  * Integration API config reader test.
@@ -25,7 +25,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_configReader = $objectManager->create(
-            'Magento\Webapi\Model\Config\Integration\Reader',
+            'Magento\Integration\Model\Config\Integration\Reader',
             ['fileResolver' => $this->_fileResolverMock]
         );
     }

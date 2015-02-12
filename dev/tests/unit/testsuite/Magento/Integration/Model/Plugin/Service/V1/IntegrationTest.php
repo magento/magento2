@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Model\Plugin\Service\V1;
+namespace Magento\Integration\Model\Plugin\Service\V1;
 
 use Magento\Authorization\Model\Acl\AclRetriever;
 use Magento\Integration\Model\Integration;
@@ -13,7 +13,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * API setup plugin
      *
-     * @var \Magento\Webapi\Model\Plugin\Service\V1\Integration
+     * @var \Magento\Integration\Model\Plugin\Service\V1\Integration
      */
     protected $integrationV1Plugin;
 
@@ -39,7 +39,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->aclRetrieverMock = $this->getMockBuilder('Magento\Authorization\Model\Acl\AclRetriever')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->integrationV1Plugin = new \Magento\Webapi\Model\Plugin\Service\V1\Integration(
+        $this->integrationV1Plugin = new \Magento\Integration\Model\Plugin\Service\V1\Integration(
             $this->integrationAuthServiceMock,
             $this->aclRetrieverMock
         );

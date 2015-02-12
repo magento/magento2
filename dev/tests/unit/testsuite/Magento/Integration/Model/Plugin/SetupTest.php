@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Model\Plugin;
+namespace Magento\Integration\Model\Plugin;
 
 use Magento\Integration\Model\Integration;
 
@@ -12,7 +12,7 @@ class SetupTest extends \PHPUnit_Framework_TestCase
     /**
      * API Integration config
      *
-     * @var \Magento\Webapi\Model\IntegrationConfig
+     * @var \Magento\Integration\Model\IntegrationConfig
      */
     protected $integrationConfigMock;
 
@@ -33,7 +33,7 @@ class SetupTest extends \PHPUnit_Framework_TestCase
     /**
      * API setup plugin
      *
-     * @var \Magento\Webapi\Model\Plugin\Setup
+     * @var \Magento\Integration\Model\Plugin\Setup
      */
     protected $apiSetupPlugin;
 
@@ -45,7 +45,7 @@ class SetupTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->integrationConfigMock = $this->getMockBuilder(
-            '\Magento\Webapi\Model\IntegrationConfig'
+            '\Magento\Integration\Model\IntegrationConfig'
         )->disableOriginalConstructor()->setMethods(
             ['getIntegrations']
         )->getMock();
@@ -63,7 +63,7 @@ class SetupTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $this->subjectMock = $this->getMock('Magento\Integration\Model\Resource\Setup', [], [], '', false);
-        $this->apiSetupPlugin = new \Magento\Webapi\Model\Plugin\Setup(
+        $this->apiSetupPlugin = new \Magento\Integration\Model\Plugin\Setup(
             $this->integrationConfigMock,
             $this->integrationAuthorizationServiceMock,
             $this->integrationServiceMock
