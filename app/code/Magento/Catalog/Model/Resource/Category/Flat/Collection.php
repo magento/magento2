@@ -6,12 +6,12 @@
 namespace Magento\Catalog\Model\Resource\Category\Flat;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\Core\Model\EntityFactory;
+use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Model\Resource\Db\AbstractDb;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Catalog category flat collection
@@ -37,7 +37,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -49,11 +49,11 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_storeId;
 
     /**
-     * @param EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param AbstractDb $resource
      */

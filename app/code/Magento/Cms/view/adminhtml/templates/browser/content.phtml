@@ -3,21 +3,24 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
- /** @var $this \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content */
+
+// @codingStandardsIgnoreFile
+
+ /** @var $block \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content */
 ?>
 
-<div data-mage-init='{"mediabrowser": <?php echo $this->escapeHtml($this->getFilebrowserSetupObject()); ?>}'>
+<div data-mage-init='{"mediabrowser": <?php echo $block->escapeHtml($block->getFilebrowserSetupObject()); ?>}'>
     <div style="float:right; width: 79%">
         <div class="insert-title" id="content_header">
             <div class="insert-title-inner">
                 <div class="insert-actions">
-                    <?php echo $this->getButtonsHtml() ?>
+                    <?php echo $block->getButtonsHtml() ?>
                 </div>
-                <div class="title"><?php echo $this->getHeaderText() ?></div>
+                <div class="title"><?php echo $block->getHeaderText() ?></div>
             </div>
         </div>
-        <div id="contents-uploader"><?php echo $this->getChildHtml('wysiwyg_images.uploader') ?></div>
+        <div id="contents-uploader"><?php echo $block->getChildHtml('wysiwyg_images.uploader') ?></div>
         <div id="contents"></div>
     </div>
-    <div style="float:left;  width: 20%"><?php echo $this->getChildHtml('wysiwyg_images.tree') ?></div>
+    <div style="float:left;  width: 20%"><?php echo $block->getChildHtml('wysiwyg_images.tree') ?></div>
 </div>

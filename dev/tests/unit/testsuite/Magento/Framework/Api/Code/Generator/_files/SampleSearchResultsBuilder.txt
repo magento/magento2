@@ -1,7 +1,7 @@
 namespace \Magento\Framework\Api\Code\Generator;
 
 /**
- * SearchResultsBuilder class for \Magento\Framework\Api\Code\Generator\Sample
+ * SearchResultsBuilder class for @see \Magento\Framework\Api\Code\Generator\Sample
  */
 class SampleSearchResultsBuilder extends \Magento\Framework\Api\AbstractSearchResultsBuilder
 {
@@ -10,8 +10,8 @@ class SampleSearchResultsBuilder extends \Magento\Framework\Api\AbstractSearchRe
      *
      * @param
      */
-    public function __construct(\Magento\Framework\Api\ObjectFactory $objectFactory, \Magento\Framework\Api\AttributeDataBuilder $valueBuilder, \Magento\Framework\Api\Config\MetadataConfig $metadataService, \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder, \Magento\Framework\Api\Code\Generator\SampleBuilder $itemObjectBuilder)
+    public function __construct(\Magento\Framework\Api\ObjectFactory $objectFactory, \Magento\Framework\Api\AttributeValueFactory $valueFactory, \Magento\Framework\Api\Config\MetadataConfig $metadataService, \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder, \Magento\Framework\Api\Code\Generator\SampleBuilder $itemObjectBuilder)
     {
-        parent::__construct($objectFactory, $valueBuilder, $metadataService, $searchCriteriaBuilder, $itemObjectBuilder);
+        parent::__construct($objectFactory, $valueFactory, $metadataService, $searchCriteriaBuilder, $itemObjectBuilder);
     }
 }

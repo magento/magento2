@@ -11,6 +11,9 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -26,7 +29,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     /**
      * Prepare label for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -36,7 +39,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     /**
      * Prepare title for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

@@ -4,8 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Weee\Block\Item\Price\Renderer $this */
-$_item = $this->getItem();
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Weee\Block\Item\Price\Renderer $block */
+$_item = $block->getItem();
 ?>
-<?php $_order = $this->getItem()->getOrderItem()->getOrder() ?>
-<?php echo $_order->formatPrice($this->getTotalAmount($_item))?>
+<?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
+<?php echo $_order->formatPrice($block->getTotalAmount($_item))?>

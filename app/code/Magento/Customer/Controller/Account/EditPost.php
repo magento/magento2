@@ -9,9 +9,10 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Core\App\Action\FormKeyValidator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
@@ -27,9 +28,6 @@ class EditPost extends \Magento\Customer\Controller\Account
     /** @var CustomerRepositoryInterface  */
     protected $customerRepository;
 
-    /** @var CustomerDataBuilder */
-    protected $customerDataBuilder;
-
     /** @var FormKeyValidator */
     protected $formKeyValidator;
 
@@ -39,9 +37,10 @@ class EditPost extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
+     * @param RedirectFactory $resultRedirectFactory
+     * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
-     * @param CustomerDataBuilder $customerDataBuilder
      * @param FormKeyValidator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -49,38 +48,39 @@ class EditPost extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
+        RedirectFactory $resultRedirectFactory,
+        PageFactory $resultPageFactory,
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
-        CustomerDataBuilder $customerDataBuilder,
         FormKeyValidator $formKeyValidator,
         CustomerExtractor $customerExtractor
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
-        $this->customerDataBuilder = $customerDataBuilder;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
-        parent::__construct($context, $customerSession);
+        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
     }
 
     /**
      * Change customer password action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         if (!$this->formKeyValidator->validate($this->getRequest())) {
-            $this->_redirect('*/*/edit');
-            return;
+            $resultRedirect->setPath('*/*/edit');
+            return $resultRedirect;
         }
 
         if ($this->getRequest()->isPost()) {
             $customerId = $this->_getSession()->getCustomerId();
             $customer = $this->customerExtractor->extract('customer_account_edit', $this->_request);
-            $this->customerDataBuilder->populate($customer);
-            $this->customerDataBuilder->setId($customerId);
+            $customer->setId($customerId);
 
             if ($this->getRequest()->getParam('change_password')) {
                 $currPass = $this->getRequest()->getPost('current_password');
@@ -109,7 +109,7 @@ class EditPost extends \Magento\Customer\Controller\Account
             }
 
             try {
-                $this->customerRepository->save($this->customerDataBuilder->create());
+                $this->customerRepository->save($customer);
             } catch (AuthenticationException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (InputException $e) {
@@ -123,15 +123,16 @@ class EditPost extends \Magento\Customer\Controller\Account
 
             if ($this->messageManager->getMessages()->getCount() > 0) {
                 $this->_getSession()->setCustomerFormData($this->getRequest()->getPost());
-                $this->_redirect('*/*/edit');
-                return;
+                $resultRedirect->setPath('*/*/edit');
+                return $resultRedirect;
             }
 
             $this->messageManager->addSuccess(__('The account information has been saved.'));
-            $this->_redirect('customer/account');
-            return;
+            $resultRedirect->setPath('customer/account');
+            return $resultRedirect;
         }
 
-        $this->_redirect('*/*/edit');
+        $resultRedirect->setPath('*/*/edit');
+        return $resultRedirect;
     }
 }

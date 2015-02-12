@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
@@ -41,7 +44,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             $datetimeTo->setTimezone(
                 $this->_scopeConfig->getValue(
                     $this->_localeDate->getDefaultTimezonePath(),
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             );
             $datetimeTo->addDay(1)->subSecond(1);
@@ -67,7 +70,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                 $dateObj->setTimezone(
                     $this->_scopeConfig->getValue(
                         $this->_localeDate->getDefaultTimezonePath(),
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     )
                 );
 
@@ -136,7 +139,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                         dateFormat: "' . $format . '",
                         timeFormat: "' . $timeFormat . '",
                         showsTime: ' . ($this->getColumn()->getFilterTime() ? 'true' : 'false') . ',
-                        buttonImage: "' . $this->getViewFileUrl('images/grid-cal.gif') . '",
+                        buttonImage: "' . $this->getViewFileUrl('images/grid-cal.png') . '",
                         buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
                         from: {
                             id: "' . $htmlId . '_from"

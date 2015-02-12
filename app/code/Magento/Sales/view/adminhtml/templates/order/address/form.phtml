@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="message message-info">
     <div class="message-inner">
@@ -11,10 +14,10 @@
 </div>
 <fieldset class="fieldset">
     <legend class="legend">
-        <span><?php echo $this->getHeaderText() ?></span>
+        <span><?php echo $block->getHeaderText() ?></span>
     </legend>
     <br>
     <div class="form-inline">
-        <?php echo $this->getForm()->toHtml() ?>
+        <?php echo $block->getForm()->toHtml() ?>
     </div>
 </fieldset>

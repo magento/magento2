@@ -39,13 +39,13 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
     protected $_backup = null;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Backup\Model\Backup $backup
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Magento\Backup\Helper\Data $backupData,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Backup\Model\Backup $backup

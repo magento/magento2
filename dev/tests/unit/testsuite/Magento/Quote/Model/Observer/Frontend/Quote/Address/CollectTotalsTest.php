@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Model\Observer\Frontend\Quote\Address;
 
 /**
@@ -58,7 +61,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerBuilderMock;
+    protected $customerDataFactoryMock;
 
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
@@ -75,6 +78,14 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
      */
     protected $groupInterfaceMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataObjectHelperMock;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -90,8 +101,8 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         );
         $this->customerAddressMock = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
         $this->customerVatMock = $this->getMock('Magento\Customer\Model\Vat', [], [], '', false);
-        $this->customerBuilderMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerDataBuilder',
+        $this->customerDataFactoryMock = $this->getMock(
+            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
             ['mergeDataObjectWithArray', 'create'],
             [],
             '',
@@ -152,6 +163,10 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
             ['getId']
         );
 
+        $this->dataObjectHelperMock = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->observerMock->expects($this->any())
             ->method('getQuoteAddress')
             ->will($this->returnValue($this->quoteAddressMock));
@@ -170,8 +185,9 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
                 'customerAddressHelper' => $this->customerAddressMock,
                 'customerVat' => $this->customerVatMock,
                 'vatValidator' => $this->vatValidatorMock,
-                'customerBuilder' => $this->customerBuilderMock,
-                'groupManagement' => $this->groupManagementMock
+                'customerDataFactory' => $this->customerDataFactoryMock,
+                'groupManagement' => $this->groupManagementMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
             ]
         );
     }
@@ -191,6 +207,9 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         $this->model->dispatch($this->observerMock);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testDispatchWithCustomerCountryNotInEUAndNotLoggedCustomerInGroup()
     {
         $this->groupManagementMock->expects($this->once())
@@ -226,7 +245,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
         /** Assertions */
         $this->quoteAddressMock->expects($this->never())->method('setPrevQuoteCustomerGroupId');
-        $this->customerBuilderMock->expects($this->never())->method('mergeDataObjectWithArray');
+        $this->customerDataFactoryMock->expects($this->never())->method('mergeDataObjectWithArray');
         $this->quoteMock->expects($this->never())->method('setCustomerGroupId');
 
         /** SUT execution */
@@ -261,11 +280,11 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
             ->method('setPrevQuoteCustomerGroupId')
             ->with('customerGroupId');
         $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with('defaultCustomerGroupId');
-        $this->customerBuilderMock->expects($this->once())
-            ->method('mergeDataObjectWithArray')
+        $this->dataObjectHelperMock->expects($this->never())
+            ->method('populateWithArray')
             ->with($this->customerMock, ['group_id' => 'defaultCustomerGroupId'])
             ->will($this->returnSelf());
-        $this->customerBuilderMock->expects($this->any())
+        $this->customerDataFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->customerMock);
 
@@ -317,11 +336,11 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with('customerGroupId');
         $this->quoteMock->expects($this->once())->method('setCustomer')->with($this->customerMock);
-        $this->customerBuilderMock->expects($this->once())
-            ->method('mergeDataObjectWithArray')
+        $this->dataObjectHelperMock->expects($this->never())
+            ->method('populateWithArray')
             ->with($this->customerMock, ['group_id' => 'customerGroupId'])
             ->will($this->returnSelf());
-        $this->customerBuilderMock->expects($this->any())
+        $this->customerDataFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->customerMock);
         $this->model->dispatch($this->observerMock);

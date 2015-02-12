@@ -11,6 +11,7 @@ namespace Magento\Framework\Model;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractModel extends \Magento\Framework\Object
 {
@@ -232,7 +233,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
     protected function _getResource()
     {
         if (empty($this->_resourceName) && empty($this->_resource)) {
-            throw new \Magento\Framework\Model\Exception(__('Resource is not set.'));
+            throw new \Magento\Framework\Model\Exception((string)new \Magento\Framework\Phrase('Resource is not set.'));
         }
 
         return $this->_resource ?: \Magento\Framework\App\ObjectManager::getInstance()->get($this->_resourceName);
@@ -259,7 +260,9 @@ abstract class AbstractModel extends \Magento\Framework\Object
     public function getResourceCollection()
     {
         if (empty($this->_resourceCollection) && empty($this->_collectionName)) {
-            throw new \Magento\Framework\Model\Exception(__('Model collection resource name is not defined.'));
+            throw new \Magento\Framework\Model\Exception(
+                (string)new \Magento\Framework\Phrase('Model collection resource name is not defined.')
+            );
         }
         return $this->_resourceCollection ? clone $this
             ->_resourceCollection : \Magento\Framework\App\ObjectManager::getInstance()
@@ -581,7 +584,9 @@ abstract class AbstractModel extends \Magento\Framework\Object
     public function beforeDelete()
     {
         if (!$this->_actionValidator->isAllowed($this)) {
-            throw new Exception(__('Delete operation is forbidden for current area'));
+            throw new Exception(
+                (string)new \Magento\Framework\Phrase('Delete operation is forbidden for current area')
+            );
         }
 
         $this->_eventManager->dispatch('model_delete_before', ['object' => $this]);

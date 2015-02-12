@@ -18,6 +18,9 @@ use Magento\Tax\Api\Data\TaxRateInterface as TaxRateDataObject;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Model\Resource\Calculation\Rate\Collection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 {
     const MESSAGE_TAX_RATE_ID_IS_NOT_ALLOWED = 'id is not expected for this request.';
@@ -28,13 +31,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @var  Converter
      */
     protected $converter;
-
-    /**
-     * Tax rate data object builder
-     *
-     * @var  \Magento\Tax\Api\Data\TaxRateDataBuilder
-     */
-    protected $rateBuilder;
 
     /**
      * Tax rate registry
@@ -69,7 +65,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     protected $resourceModel;
 
     /**
-     * @param \Magento\Tax\Api\Data\TaxRateDataBuilder $rateBuilder
      * @param Converter $converter
      * @param RateRegistry $rateRegistry
      * @param \Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder $taxRateSearchResultsBuilder
@@ -79,7 +74,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @param \Magento\Tax\Model\Resource\Calculation\Rate $rateResource
      */
     public function __construct(
-        \Magento\Tax\Api\Data\TaxRateDataBuilder $rateBuilder,
         Converter $converter,
         RateRegistry $rateRegistry,
         \Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder $taxRateSearchResultsBuilder,
@@ -88,7 +82,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         RegionFactory $regionFactory,
         \Magento\Tax\Model\Resource\Calculation\Rate $rateResource
     ) {
-        $this->rateBuilder = $rateBuilder;
         $this->converter = $converter;
         $this->rateRegistry = $rateRegistry;
         $this->taxRateSearchResultsBuilder = $taxRateSearchResultsBuilder;

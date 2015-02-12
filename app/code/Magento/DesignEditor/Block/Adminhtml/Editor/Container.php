@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\DesignEditor\Block\Adminhtml\Editor;
 
 /**
@@ -41,7 +44,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
     /**
      * Get header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

@@ -3,27 +3,30 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
- * @var $this \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links
+ * @var $block \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links
  */
 
-$_product = $this->getProduct();
-$this->getConfigJson();
+$_product = $block->getProduct();
+$block->getConfigJson();
 ?>
 <div class="form-inline">
     <div class="field">
         <label class="label" for="name"><span><?php echo __('Title')?></span></label>
         <div class="control">
-            <input type="text" class="input-text" name="product[samples_title]" value="<?php echo $this->getSamplesTitle() ?>" <?php echo($_product->getStoreId() && $this->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <input type="text" class="input-text" name="product[samples_title]" value="<?php echo $block->getSamplesTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
             <?php if ($_product->getStoreId()): ?>
-                <input id="sample_title_default" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $this->getUsedDefault() ? 'checked="checked"' : '' ?> />
+                <input id="sample_title_default" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
                 <label class="normal" for="sample_title_default">Use Default Value</label>
             <?php endif; ?>
         </div>
         <div class="field-service">
-            <?php echo !$this->isSingleStoreMode() ? __('[STORE VIEW]') : ''; ?>
+            <?php echo !$block->isSingleStoreMode() ? __('[STORE VIEW]') : ''; ?>
         </div>
     </div>
 
@@ -38,7 +41,7 @@ $this->getConfigJson();
         </thead>
         <tfoot>
             <tr>
-                <td colspan="4" class="col-actions-add"><?php echo $this->getAddButtonHtml() ?></td>
+                <td colspan="4" class="col-actions-add"><?php echo $block->getAddButtonHtml() ?></td>
             </tr>
         </tfoot>
         <tbody id="sample_items_body">
@@ -72,7 +75,7 @@ require([
                                             '<div id="downloadable_sample_{{id}}_file-new" class="file-row-info new-file"></div>'+
                                             '<div class="fileinput-button form-buttons">'+
                                                 '<span><?php echo __('Browse Files...') ?></span>' +
-                                                '<input id="downloadable_sample_{{id}}_file" type="file" name="<?php echo $this->getConfig()->getFileField() ?>" data-url="<?php echo $this->getConfig()->getUrl() ?>">' +
+                                                '<input id="downloadable_sample_{{id}}_file" type="file" name="<?php echo $block->getConfig()->getFileField() ?>" data-url="<?php echo $block->getConfig()->getUrl() ?>">' +
                                                 '<script>' +
                                                 '/*<![CDATA[*/' +
                                                     'sampleUploader("#downloadable_sample_{{id}}_file"); ' +
@@ -150,7 +153,7 @@ require([
                     'downloadable[sample]['+data.id+']',
                     data.file_save,
                     'downloadable_sample_'+data.id+'_file',
-                    <?php echo $this->getConfigJson() ?>
+                    <?php echo $block->getConfigJson() ?>
                 );
                 sampleUrl.advaiceContainer = 'downloadable_sample_'+data.id+'_container';
                 sampleFile = $('downloadable_sample_'+data.id+'_file_type');
@@ -187,7 +190,7 @@ require([
             (function ($, id) {
                 $(id).fileupload({
                     dataType: 'json',
-                    url: '<?php echo $this->getConfig()->getUrl() ?>',
+                    url: '<?php echo $block->getConfig()->getUrl() ?>',
                     sequentialUploads: true,
                     maxFileSize: 2000000,
                     add: function (e, data) {
@@ -237,7 +240,7 @@ require([
             Event.observe('add_sample_item', 'click', sampleItems.add.bind(sampleItems));
         }
 
-        <?php foreach ($this->getSampleData() as $item): ?>
+        <?php foreach ($block->getSampleData() as $item): ?>
             sampleItems.add(<?php echo $item->toJson() ?>);
         <?php endforeach; ?>
 

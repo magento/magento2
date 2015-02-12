@@ -8,4 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Mtf\Util\Generate\Fixture\FieldsProviderInterface" type="Magento\Mtf\Util\Generate\Fixture\FieldsProvider" />
     <preference for="Magento\Mtf\Util\Generate\Repository\CollectionProviderInterface" type="Magento\Mtf\Util\Generate\Repository\CollectionProvider" />
+    <virtualType name="Magento\Mtf\Config\SchemaLocator\Config" type="Magento\Mtf\Config\SchemaLocator">
+        <arguments>
+            <argument name="schemaPath" xsi:type="string">etc/global/config.xsd</argument>
+        </arguments>
+    </virtualType>
 </config>

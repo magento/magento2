@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -24,7 +23,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
 
         try {
             /** @var CustomerInterface $customer */
-            $customer = $this->customerDataBuilder->create();
+            $customer = $this->customerDataFactory->create();
 
             $customerForm = $this->_formFactory->create(
                 'customer',
@@ -44,7 +43,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
                 unset($data['website_id']);
             }
 
-            $customer = $this->customerDataBuilder->populateWithArray($data)->create();
+            $this->dataObjectHelper->populateWithArray($customer, $data);
             $errors = $this->customerAccountManagement->validate($customer);
         } catch (\Magento\Framework\Model\Exception $exception) {
             /* @var $error Error */
@@ -99,7 +98,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * AJAX customer validation action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {
@@ -110,12 +109,14 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
         if ($customer) {
             $this->_validateCustomerAddress($response);
         }
-
+        $resultJson = $this->resultJsonFactory->create();
         if ($response->getError()) {
-            $this->_view->getLayout()->initMessages();
-            $response->setHtmlMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());
+            $layout = $this->layoutFactory->create();
+            $layout->initMessages();
+            $response->setHtmlMessage($layout->getMessagesBlock()->getGroupedHtml());
         }
 
-        $this->getResponse()->representJson($response->toJson());
+        $resultJson->setData($response);
+        return $resultJson;
     }
 }

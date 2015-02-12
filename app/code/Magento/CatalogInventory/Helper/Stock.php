@@ -6,7 +6,7 @@
 namespace Magento\CatalogInventory\Helper;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -46,7 +46,7 @@ class Stock
 
     /**
      * @param StockRegistryInterface $stockRegistry
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param ObjectManagerInterface $objectManager
      */
@@ -84,6 +84,7 @@ class Stock
      *
      * @param \Magento\Catalog\Model\Resource\Collection\AbstractCollection $productCollection
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function addStockStatusToProducts(
         \Magento\Catalog\Model\Resource\Collection\AbstractCollection $productCollection
@@ -108,7 +109,7 @@ class Stock
     {
         $manageStock = $this->scopeConfig->getValue(
             \Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         $cond = [
             '{{table}}.use_config_manage_stock = 0 AND {{table}}.manage_stock=1 AND {{table}}.is_in_stock=1',

@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Dashboard\Tab\Products;
  * Adminhtml dashboard most viewed products grid
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Viewed extends \Magento\Backend\Block\Dashboard\Grid
 {
@@ -80,7 +81,6 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
             'price',
             [
                 'header' => __('Price'),
-                'width' => '120px',
                 'type' => 'currency',
                 'currency_code' => (string)$this->_storeManager->getStore(
                     (int)$this->getParam('store')
@@ -94,10 +94,10 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
             'views',
             [
                 'header' => __('Views'),
-                'width' => '120px',
-                'align' => 'right',
                 'sortable' => false,
-                'index' => 'views'
+                'index' => 'views',
+                'header_css_class' => 'col-views',
+                'column_css_class' => 'col-views'
             ]
         );
 

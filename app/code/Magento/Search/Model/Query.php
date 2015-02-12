@@ -14,7 +14,7 @@ use Magento\Framework\Data\Collection\Db;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Resource\AbstractResource;
 use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Search query model
@@ -40,6 +40,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method string getUpdatedAt()
  * @method \Magento\Search\Model\Query setUpdatedAt(string $value)
  * @method \Magento\Search\Model\Query setIsQueryTextExceeded(bool $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Query extends AbstractModel implements QueryInterface
 {
@@ -73,7 +74,7 @@ class Query extends AbstractModel implements QueryInterface
     /**
      * Store manager
      *
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -98,7 +99,7 @@ class Query extends AbstractModel implements QueryInterface
      * @param Registry $registry
      * @param QueryCollectionFactory $queryCollectionFactory
      * @param CollectionFactory $searchCollectionFactory
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Config $scopeConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param Db $resourceCollection
@@ -109,7 +110,7 @@ class Query extends AbstractModel implements QueryInterface
         Registry $registry,
         QueryCollectionFactory $queryCollectionFactory,
         CollectionFactory $searchCollectionFactory,
-        StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         AbstractResource $resource = null,
         Db $resourceCollection = null,
@@ -239,7 +240,7 @@ class Query extends AbstractModel implements QueryInterface
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_MIN_QUERY_LENGTH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
     }
@@ -253,7 +254,7 @@ class Query extends AbstractModel implements QueryInterface
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_MAX_QUERY_LENGTH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
     }

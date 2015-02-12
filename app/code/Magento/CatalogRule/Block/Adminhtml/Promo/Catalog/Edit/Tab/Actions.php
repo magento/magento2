@@ -14,7 +14,7 @@ class Actions extends Generic implements TabInterface
     /**
      * Prepare content for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -24,7 +24,7 @@ class Actions extends Generic implements TabInterface
     /**
      * Prepare title for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {
@@ -53,6 +53,7 @@ class Actions extends Generic implements TabInterface
 
     /**
      * @return Form
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

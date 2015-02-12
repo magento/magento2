@@ -5,37 +5,21 @@
  */
 namespace Magento\Downloadable\Model;
 
+use Magento\Downloadable\Api\Data\LinkInterface;
+use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Downloadable\Model\Resource\Link as Resource;
 
 /**
  * Downloadable link model
  *
- * @method Resource _getResource()
  * @method Resource getResource()
  * @method int getProductId()
  * @method Link setProductId(int $value)
- * @method int getSortOrder()
- * @method Link setSortOrder(int $value)
- * @method int getNumberOfDownloads()
- * @method Link setNumberOfDownloads(int $value)
- * @method int getIsShareable()
- * @method Link setIsShareable(int $value)
- * @method string getLinkUrl()
- * @method Link setLinkUrl(string $value)
- * @method string getLinkFile()
- * @method Link setLinkFile(string $value)
- * @method string getLinkType()
- * @method Link setLinkType(string $value)
- * @method string getSampleUrl()
- * @method Link setSampleUrl(string $value)
- * @method string getSampleFile()
- * @method Link setSampleFile(string $value)
- * @method string getSampleType()
- * @method Link setSampleType(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Link extends \Magento\Framework\Model\AbstractModel
+class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, LinkInterface
 {
     const XML_PATH_LINKS_TITLE = 'catalog/downloadable/links_title';
 
@@ -52,8 +36,20 @@ class Link extends \Magento\Framework\Model\AbstractModel
     const LINK_SHAREABLE_CONFIG = 2;
 
     /**
+     * @var MetadataServiceInterface
+     */
+    protected $metadataService;
+
+    /**
+     * @var AttributeDataBuilder
+     */
+    protected $customAttributeBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -61,11 +57,21 @@ class Link extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -80,8 +86,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Enter description here...
-     *
      * @return $this
      */
     public function afterSave()
@@ -140,5 +144,104 @@ class Link extends \Magento\Framework\Model\AbstractModel
     public function getSearchableData($productId, $storeId)
     {
         return $this->_getResource()->getSearchableData($productId, $storeId);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTitle()
+    {
+        return $this->getData('title');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getPrice()
+    {
+        return $this->getData('price');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getIsShareable()
+    {
+        return $this->getData('is_shareable');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSortOrder()
+    {
+        return $this->getData('sort_order');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getNumberOfDownloads()
+    {
+        return $this->getData('number_of_downloads');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getLinkType()
+    {
+        return $this->getData('link_type');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getLinkFile()
+    {
+        return $this->getData('link_file');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getLinkUrl()
+    {
+        return $this->getData('link_url');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleType()
+    {
+        return $this->getData('sample_type');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleFile()
+    {
+        return $this->getData('sample_file');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleUrl()
+    {
+        return $this->getData('sample_url');
     }
 }

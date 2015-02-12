@@ -3,16 +3,20 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Model;
 
 use Magento\Quote\Model\Quote\Address;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Quote\Model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
@@ -110,16 +114,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Api\FilterBuilder | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $filterBuilderMock;
-
-    /**
-     * @var \Magento\Customer\Api\Data\AddressDataBuilder | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $addressBuilderMock;
-
-    /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $customerBuilderMock;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter | \PHPUnit_Framework_MockObject_MockObject
@@ -265,16 +259,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->addressBuilderMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressDataBuilder')
-            ->disableOriginalConstructor()
-            ->setMethods(['mergeDataObjectWithArray', 'create'])
-            ->getMock();
-
-        $this->customerBuilderMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerDataBuilder')
-            ->disableOriginalConstructor()
-            ->setMethods(['populate', 'setAddresses', 'create'])
-            ->getMock();
-
         $this->quote = (new ObjectManager($this))
             ->getObject(
                 'Magento\Quote\Model\Quote',
@@ -289,8 +273,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                     'addressRepository' => $this->addressRepositoryMock,
                     'criteriaBuilder' => $this->criteriaBuilderMock,
                     'filterBuilder' => $this->filterBuilderMock,
-                    'addressBuilder' => $this->addressBuilderMock,
-                    'customerBuilder' => $this->customerBuilderMock,
                     'quoteItemCollectionFactory' => $this->quoteItemCollectionFactoryMock,
                     'quotePaymentCollectionFactory' => $this->quotePaymentCollectionFactoryMock,
                     'quotePaymentFactory' => $this->paymentFactoryMock,
@@ -523,6 +505,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testSetCustomerAddressData()
     {
         $customerId = 1;
@@ -554,29 +539,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $customerMock->expects($this->once())
             ->method('getAddresses')
             ->will($this->returnValue($addresses));
-
-        $this->customerBuilderMock->expects($this->atLeastOnce())
-            ->method('populate')
-            ->with($customerMock)
-            ->will($this->returnSelf());
-        $addresses[] = $addressMock;
-        $this->customerBuilderMock->expects($this->atLeastOnce())
-            ->method('setAddresses')
-            ->will($this->returnSelf());
-        $this->customerBuilderMock->expects($this->atLeastOnce())
-            ->method('create')
-            ->will($this->returnValue($customerResultMock));
-        $this->objectFactoryMock->expects($this->once())
-        ->method('create')
-        ->with(['create-result'])
-        ->will($this->returnValue('return-value'));
-        $this->extensibleDataObjectConverterMock->expects($this->once())
-            ->method('toFlatArray')
-            ->with($customerMock)
-            ->will($this->returnValue(['create-result']));
-        $this->objectCopyServiceMock->expects($this->once())
-            ->method('copyFieldsetToTarget')
-            ->with('customer_account', 'to_quote', 'return-value', $this->quote);
 
         $result = $this->quote->setCustomerAddressData([$addressMock]);
         $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
@@ -925,10 +887,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->setStoreId($storeId);
 
         $valueMap = [
-            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/multi_address', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
         $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')
@@ -951,10 +913,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->setStoreId($storeId);
 
         $valueMap = [
-            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/multi_address', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/amount', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/tax_including', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId, true],
         ];
         $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')

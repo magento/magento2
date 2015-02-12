@@ -12,6 +12,7 @@ use Magento\Framework\App\Action\Action;
 
 /**
  * Catalog products compare block
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
 {
@@ -191,7 +192,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      *
      * @param Product $product
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getProductAttributeValue($product, $attribute)
     {

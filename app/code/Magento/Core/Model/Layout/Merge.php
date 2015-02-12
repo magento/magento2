@@ -10,6 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Layout merge model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 {
@@ -39,7 +41,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     const PAGE_LAYOUT_CACHE_SUFFIX = 'page_layout';
 
     /**
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\Theme\Model\Theme
      */
     private $_theme;
 
@@ -158,7 +160,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Init merge model
      *
      * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\File\CollectorInterface $fileSource
      * @param \Magento\Framework\View\File\CollectorInterface $pageLayoutFileSource
      * @param \Magento\Core\Model\Resource\Layout\Update $resource
@@ -169,10 +171,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
      * @param string $cacheSuffix
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\DesignInterface $design,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\View\File\CollectorInterface $fileSource,
         \Magento\Framework\View\File\CollectorInterface $pageLayoutFileSource,
         \Magento\Core\Model\Resource\Layout\Update $resource,
@@ -734,7 +737,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Find the closest physical theme among ancestors and a theme itself
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      * @throws \Magento\Framework\Exception
      */
     protected function _getPhysicalTheme(\Magento\Framework\View\Design\ThemeInterface $theme)

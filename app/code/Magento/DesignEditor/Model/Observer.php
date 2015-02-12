@@ -48,6 +48,7 @@ class Observer
      *
      * @param EventObserver $event
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function clearJs(EventObserver $event)
     {
@@ -113,7 +114,7 @@ class Observer
      */
     public function saveChangeTime($event)
     {
-        /** @var $theme \Magento\Core\Model\Theme|null */
+        /** @var $theme \Magento\Theme\Model\Theme|null */
         $theme = $event->getTheme() ?: $event->getDataObject()->getTheme();
         /** @var $change \Magento\DesignEditor\Model\Theme\Change */
         $change = $this->objectManager->create('Magento\DesignEditor\Model\Theme\Change');

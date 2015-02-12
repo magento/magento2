@@ -4,6 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items;
 
 use Magento\Backend\App\Action;
@@ -64,7 +67,7 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
                 'adminhtml/*/',
                 [
                     'store' => $this->_objectManager->get(
-                        'Magento\Store\Model\StoreManagerInterface'
+                        'Magento\Framework\Store\StoreManagerInterface'
                     )->getStore()->getId(),
                     '_current' => true
                 ]

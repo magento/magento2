@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -15,59 +18,59 @@
  *  getVarNamePage()
  *
  */
-/* @var $this \Magento\Backend\Block\Widget\Grid */
-$numColumns = sizeof($this->getColumns());
+/* @var $block \Magento\Backend\Block\Widget\Grid */
+$numColumns = sizeof($block->getColumns());
 ?>
-<?php if ($this->getCollection()): ?>
-<?php if ($this->canDisplayContainer()): ?>
-    <?php if ($this->getGridHeader()): ?>
+<?php if ($block->getCollection()): ?>
+<?php if ($block->canDisplayContainer()): ?>
+    <?php if ($block->getGridHeader()): ?>
         <div class="page-title">
             <div class="page-title-inner">
-                <h1 class="title"><?php echo $this->getGridHeader(); ?></h1>
+                <h1 class="title"><?php echo $block->getGridHeader(); ?></h1>
             </div>
         </div>
     <?php endif ?>
 
-    <div id="<?php echo $this->getId() ?>" data-grid-id="<?php echo $this->getId() ?>">
+    <div id="<?php echo $block->getId() ?>" data-grid-id="<?php echo $block->getId() ?>">
         <?php else: ?>
-            <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+            <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
         <?php endif; ?>
-        <?php if ($this->getPagerVisibility() || $this->getExportTypes() || $this->getChildBlock('grid.columnSet')->getFilterVisibility()): ?>
+        <?php if ($block->getPagerVisibility() || $block->getExportTypes() || $block->getChildBlock('grid.columnSet')->getFilterVisibility()): ?>
             <div class="grid-actions">
-                <?php if ($this->getChildBlock('grid.export')): ?>
+                <?php if ($block->getChildBlock('grid.export')): ?>
                     <div class="export">
-                        <?php echo $this->getChildHtml('grid.export'); ?>
+                        <?php echo $block->getChildHtml('grid.export'); ?>
                     </div>
                 <?php endif; ?>
                 <div class="filter-actions">
-                    <?php echo $this->getMainButtonsHtml() ?>
+                    <?php echo $block->getMainButtonsHtml() ?>
                 </div>
-                <?php if ($this->getPagerVisibility()): ?>
+                <?php if ($block->getPagerVisibility()): ?>
                     <div class="pager">
-                        <?php $countRecords = $this->getCollection()->getSize(); ?>
+                        <?php $countRecords = $block->getCollection()->getSize(); ?>
                         <span class="pages-total-found"><?php echo __('Total %1 records found', $countRecords) ?></span>
-                        <span id="<?php echo $this->getHtmlId() ?>-total-count"
-                              class="total-count no-display"<?php echo $this->getUiId('total-count') ?>>
+                        <span id="<?php echo $block->getHtmlId() ?>-total-count"
+                              class="total-count no-display"<?php echo $block->getUiId('total-count') ?>>
                             <?php echo $countRecords ?>
                         </span>
                         <label class="view-pages">
                             <?php echo __('View') ?>
-                            <select name="<?php echo $this->getVarNameLimit() ?>"
-                                    onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)" <?php echo $this->getUiId('per-page') ?>
+                            <select name="<?php echo $block->getVarNameLimit() ?>"
+                                    onchange="<?php echo $block->getJsObjectName() ?>.loadByElement(this)" <?php echo $block->getUiId('per-page') ?>
                                     class="select">
-                                <option value="20"<?php if ($this->getCollection()->getPageSize() == 20): ?>
+                                <option value="20"<?php if ($block->getCollection()->getPageSize() == 20): ?>
                                     selected="selected"<?php endif; ?>>20
                                 </option>
-                                <option value="30"<?php if ($this->getCollection()->getPageSize() == 30): ?>
+                                <option value="30"<?php if ($block->getCollection()->getPageSize() == 30): ?>
                                     selected="selected"<?php endif; ?>>30
                                 </option>
-                                <option value="50"<?php if ($this->getCollection()->getPageSize() == 50): ?>
+                                <option value="50"<?php if ($block->getCollection()->getPageSize() == 50): ?>
                                     selected="selected"<?php endif; ?>>50
                                 </option>
-                                <option value="100"<?php if ($this->getCollection()->getPageSize() == 100): ?>
+                                <option value="100"<?php if ($block->getCollection()->getPageSize() == 100): ?>
                                     selected="selected"<?php endif; ?>>100
                                 </option>
-                                <option value="200"<?php if ($this->getCollection()->getPageSize() == 200): ?>
+                                <option value="200"<?php if ($block->getCollection()->getPageSize() == 200): ?>
                                     selected="selected"<?php endif; ?>>200
                                 </option>
                             </select>
@@ -77,96 +80,96 @@ $numColumns = sizeof($this->getColumns());
                 <?php endif ?>
             </div>
         <?php endif; ?>
-        <?php if ($this->getChildBlock('grid.massaction') && $this->getChildBlock('grid.massaction')->isAvailable()): ?>
-            <?php echo $this->getChildHtml('grid.massaction') ?>
+        <?php if ($block->getChildBlock('grid.massaction') && $block->getChildBlock('grid.massaction')->isAvailable()): ?>
+            <?php echo $block->getChildHtml('grid.massaction') ?>
         <?php endif ?>
 
-        <?php if ($this->getGridCssClass()): ?>
+        <?php if ($block->getGridCssClass()): ?>
             <div class="grid-container">
-                <table class="<?php echo $this->getGridCssClass() ?>" id="<?php echo $this->getId() ?>_table">
+                <table class="<?php echo $block->getGridCssClass() ?>" id="<?php echo $block->getId() ?>_table">
                     <!-- Rendering column set -->
-                    <?php echo $this->getChildHtml('grid.columnSet'); ?>
+                    <?php echo $block->getChildHtml('grid.columnSet'); ?>
                 </table>
             </div>
         <?php else: ?>
             <div class="grid">
                 <div class="hor-scroll">
-                    <table class="data" id="<?php echo $this->getId() ?>_table">
+                    <table class="data" id="<?php echo $block->getId() ?>_table">
                         <!-- Rendering column set -->
-                        <?php echo $this->getChildHtml('grid.columnSet'); ?>
+                        <?php echo $block->getChildHtml('grid.columnSet'); ?>
                     </table>
                 </div>
-                <?php if ($this->getPagerVisibility()): ?>
+                <?php if ($block->getPagerVisibility()): ?>
                     <div class="pager">
                         <label class="page"><?php echo __('Page') ?></label>
 
-                        <?php $_curPage = $this->getCollection()->getCurPage() ?>
-                        <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
+                        <?php $_curPage = $block->getCollection()->getCurPage() ?>
+                        <?php $_lastPage = $block->getCollection()->getLastPageNumber() ?>
 
                         <?php if ($_curPage > 1): ?>
                             <a href="#" title="<?php echo __('Previous page') ?>" class="action-previous"
-                               onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo($_curPage - 1) ?>');return false;"><span><?php echo __('Previous page') ?></span></a>
+                               onclick="<?php echo $block->getJsObjectName() ?>.setPage('<?php echo($_curPage - 1) ?>');return false;"><span><?php echo __('Previous page') ?></span></a>
                         <?php else: ?>
                             <span class="action-previous disabled"><span><?php echo __('Previous page') ?></span></span>
                         <?php endif; ?>
 
-                        <input type="text" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>"
+                        <input type="text" name="<?php echo $block->getVarNamePage() ?>" value="<?php echo $_curPage ?>"
                                class="input-text page"
-                               onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')" <?php echo $this->getUiId('current-page') ?> />
+                               onkeypress="<?php echo $block->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')" <?php echo $block->getUiId('current-page') ?> />
 
                         <span class="pages-total">
-                            <?php echo __('of %1', $this->getCollection()->getLastPageNumber()) ?></span>
+                            <?php echo __('of %1', $block->getCollection()->getLastPageNumber()) ?></span>
                         </span>
 
                         <?php if ($_curPage < $_lastPage): ?>
                             <a href="#" title="<?php echo __('Next page') ?>" class="action-next"
-                               onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo($_curPage + 1) ?>');return false;"><span><?php echo __('Next page') ?></span></a>
+                               onclick="<?php echo $block->getJsObjectName() ?>.setPage('<?php echo($_curPage + 1) ?>');return false;"><span><?php echo __('Next page') ?></span></a>
                         <?php else: ?>
                             <span class="action-next disabled"><span><?php echo __('Next page') ?></span></span>
                         <?php endif; ?>
-                        <?php if ($this->getChildBlock('grid.bottom.links')): ?>
-                            <?php echo $this->getChildHtml('grid.bottom.links') ?>
+                        <?php if ($block->getChildBlock('grid.bottom.links')): ?>
+                            <?php echo $block->getChildHtml('grid.bottom.links') ?>
                         <?php endif; ?>
                     </div>
                 <?php endif ?>
             </div>
         <?php endif ?>
-        <?php if ($this->canDisplayContainer()): ?>
+        <?php if ($block->canDisplayContainer()): ?>
     </div>
     <script>
         var deps = ['mage/adminhtml/grid'];
 
-    <?php if (strpos($this->getRowClickCallback(), 'order.') !== false): ?>
+    <?php if (strpos($block->getRowClickCallback(), 'order.') !== false): ?>
     deps.push('Magento_Sales/order/create/form')
     <?php endif; ?>
 
         require(deps, function(){
             <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
 
-            <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
-            <?php echo $this->getJsObjectName() ?>.useAjax = <?php echo $this->getUseAjax() ? 'true' : 'false' ?>;
-            <?php if ($this->getRowClickCallback()): ?>
-            <?php echo $this->getJsObjectName() ?>.rowClickCallback = <?php echo $this->getRowClickCallback() ?>;
+            <?php echo $block->getJsObjectName() ?> = new varienGrid('<?php echo $block->getId() ?>', '<?php echo $block->getGridUrl() ?>', '<?php echo $block->getVarNamePage() ?>', '<?php echo $block->getVarNameSort() ?>', '<?php echo $block->getVarNameDir() ?>', '<?php echo $block->getVarNameFilter() ?>');
+            <?php echo $block->getJsObjectName() ?>.useAjax = <?php echo $block->getUseAjax() ? 'true' : 'false' ?>;
+            <?php if ($block->getRowClickCallback()): ?>
+            <?php echo $block->getJsObjectName() ?>.rowClickCallback = <?php echo $block->getRowClickCallback() ?>;
             <?php endif; ?>
-            <?php if ($this->getCheckboxCheckCallback()): ?>
-            <?php echo $this->getJsObjectName() ?>.checkboxCheckCallback = <?php echo $this->getCheckboxCheckCallback() ?>;
+            <?php if ($block->getCheckboxCheckCallback()): ?>
+            <?php echo $block->getJsObjectName() ?>.checkboxCheckCallback = <?php echo $block->getCheckboxCheckCallback() ?>;
             <?php endif; ?>
-            <?php if ($this->getSortableUpdateCallback()): ?>
-            <?php echo $this->getJsObjectName() ?>.sortableUpdateCallback = <?php echo $this->getSortableUpdateCallback()?>;
+            <?php if ($block->getSortableUpdateCallback()): ?>
+            <?php echo $block->getJsObjectName() ?>.sortableUpdateCallback = <?php echo $block->getSortableUpdateCallback()?>;
             <?php endif; ?>
-            <?php echo $this->getJsObjectName() ?>.bindSortable();
-            <?php if ($this->getRowInitCallback()): ?>
-            <?php echo $this->getJsObjectName() ?>.initRowCallback = <?php echo $this->getRowInitCallback() ?>;
-            <?php echo $this->getJsObjectName() ?>.initGridRows();
+            <?php echo $block->getJsObjectName() ?>.bindSortable();
+            <?php if ($block->getRowInitCallback()): ?>
+            <?php echo $block->getJsObjectName() ?>.initRowCallback = <?php echo $block->getRowInitCallback() ?>;
+            <?php echo $block->getJsObjectName() ?>.initGridRows();
             <?php endif; ?>
-            <?php if ($this->getChildBlock('grid.massaction') && $this->getChildBlock('grid.massaction')->isAvailable()): ?>
-            <?php echo $this->getChildBlock('grid.massaction')->getJavaScript() ?>
+            <?php if ($block->getChildBlock('grid.massaction') && $block->getChildBlock('grid.massaction')->isAvailable()): ?>
+            <?php echo $block->getChildBlock('grid.massaction')->getJavaScript() ?>
             <?php endif ?>
-            <?php echo $this->getAdditionalJavaScript(); ?>
+            <?php echo $block->getAdditionalJavaScript(); ?>
         });
 </script>
 <?php endif; ?>
-    <?php if ($this->getChildBlock('grid.js')): ?>
-        <?php echo $this->getChildHtml('grid.js'); ?>
+    <?php if ($block->getChildBlock('grid.js')): ?>
+        <?php echo $block->getChildHtml('grid.js'); ?>
     <?php endif; ?>
 <?php endif ?>

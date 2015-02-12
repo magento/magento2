@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
 
 /**
  * Catalog category helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Core\Helper\Url
 {
@@ -81,6 +82,13 @@ class Product extends \Magento\Core\Helper\Url
     protected $_catalogSession;
 
     /**
+     * Invalidate product category indexer params
+     *
+     * @var array
+     */
+    protected $_reindexProductCategoryIndexerData;
+
+    /**
      * Invalidate price indexer params
      *
      * @var array
@@ -99,7 +107,7 @@ class Product extends \Magento\Core\Helper\Url
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Registry $coreRegistry
@@ -108,12 +116,14 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param string $typeSwitcherLabel
      * @param array $reindexPriceIndexerData
+     * @param array $reindexProductCategoryIndexerData
      * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Registry $coreRegistry,
@@ -122,6 +132,7 @@ class Product extends \Magento\Core\Helper\Url
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         $typeSwitcherLabel,
         $reindexPriceIndexerData,
+        $reindexProductCategoryIndexerData,
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository
     ) {
@@ -135,6 +146,7 @@ class Product extends \Magento\Core\Helper\Url
         $this->_reindexPriceIndexerData = $reindexPriceIndexerData;
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->_reindexProductCategoryIndexerData = $reindexProductCategoryIndexerData;
         parent::__construct($context, $storeManager);
     }
 
@@ -162,6 +174,22 @@ class Product extends \Magento\Core\Helper\Url
                 if (isset($data[$param])) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Retrieve data for product category indexer update
+     *
+     * @param \Magento\Catalog\Model\Product $data
+     * @return boolean
+     */
+    public function isDataForProductCategoryIndexerWasChanged(\Magento\Catalog\Model\Product $data)
+    {
+        foreach ($this->_reindexProductCategoryIndexerData['byDataChange'] as $param) {
+            if ($data->dataHasChangedFor($param)) {
+                return true;
             }
         }
         return false;
@@ -246,6 +274,7 @@ class Product extends \Magento\Core\Helper\Url
      *
      * @param ModelProduct|\Magento\Framework\Object $product
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getThumbnailUrl($product)
     {
@@ -284,6 +313,7 @@ class Product extends \Magento\Core\Helper\Url
      * @param ModelProduct|int $product
      * @param string $where
      * @return boolean
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canShow($product, $where = 'catalog')
     {
@@ -311,7 +341,7 @@ class Product extends \Magento\Core\Helper\Url
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_USE_PRODUCT_CANONICAL_TAG,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -385,6 +415,8 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\Framework\Object $params
      *
      * @return false|ModelProduct
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function initProduct($productId, $controller, $params = null)
     {
@@ -538,6 +570,7 @@ class Product extends \Magento\Core\Helper\Url
      * Get flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getSkipSaleableCheck()
     {
@@ -567,7 +600,7 @@ class Product extends \Magento\Core\Helper\Url
     /**
      * Get label for virtual control
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTypeSwitcherControlLabel()
     {

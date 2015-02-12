@@ -10,7 +10,7 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface as StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface as StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
@@ -40,6 +40,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method \Magento\CatalogInventory\Model\Stock\Item setQtyIncrements(float $value)
  * @method \Magento\CatalogInventory\Model\Stock\Item setUseConfigEnableQtyInc(int $value)
  * @method \Magento\CatalogInventory\Model\Stock\Item setEnableQtyIncrements(int $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends AbstractExtensibleModel implements StockItemInterface
 {
@@ -67,7 +68,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * Store model manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -114,23 +115,24 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryInterface $stockRegistry
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         StockConfigurationInterface $stockConfiguration,
         StockRegistryInterface $stockRegistry,
         StockItemRepositoryInterface $stockItemRepository,
@@ -142,7 +144,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -212,6 +214,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getStockStatusChangedAuto()
     {
@@ -241,6 +244,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsQtyDecimal()
     {
@@ -249,6 +253,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsDecimalDivided()
     {
@@ -267,6 +272,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Check if notification message should be added despite of backorders notification flag
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShowDefaultNotificationMessage()
     {
@@ -275,6 +281,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigMinQty()
     {
@@ -298,6 +305,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigMinSaleQty()
     {
@@ -321,6 +329,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigMaxSaleQty()
     {
@@ -345,6 +354,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigNotifyStockQty()
     {
@@ -366,6 +376,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigEnableQtyInc()
     {
@@ -376,6 +387,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve whether Quantity Increments is enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getEnableQtyIncrements()
     {
@@ -389,6 +401,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * Retrieve whether config for Quantity Increments should be used
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigQtyIncrements()
     {
@@ -419,6 +432,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigBackorders()
     {
@@ -440,6 +454,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigManageStock()
     {

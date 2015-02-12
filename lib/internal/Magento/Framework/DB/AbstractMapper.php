@@ -15,6 +15,7 @@ use Magento\Framework\Object;
 /**
  * Class AbstractMapper
  * @package Magento\Framework\DB
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractMapper implements MapperInterface
 {
@@ -289,7 +290,9 @@ abstract class AbstractMapper implements MapperInterface
     {
         if (!$conn instanceof \Magento\Framework\DB\Adapter\AdapterInterface) {
             throw new \InvalidArgumentException(
-                __('dbModel read resource does not implement \Magento\Framework\DB\Adapter\AdapterInterface')
+                (string)new \Magento\Framework\Phrase(
+                    'dbModel read resource does not implement \Magento\Framework\DB\Adapter\AdapterInterface'
+                )
             );
         }
         $this->conn = $conn;

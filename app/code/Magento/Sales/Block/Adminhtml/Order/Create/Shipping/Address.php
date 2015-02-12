@@ -9,13 +9,14 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Shipping;
  * Adminhtml sales order create shipping address block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 {
     /**
      * Return header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
@@ -63,6 +64,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Same as billing address flag
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsAsBilling()
     {
@@ -73,6 +75,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Saving shipping address must be turned off, when it is the same as billing
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDontSaveInAddressBook()
     {
@@ -119,6 +122,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Return true is the quote is virtual
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsDisabled()
     {

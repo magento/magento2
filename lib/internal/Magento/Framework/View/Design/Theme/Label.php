@@ -50,6 +50,6 @@ class Label
      */
     public function getLabelsCollectionForSystemConfiguration()
     {
-        return $this->getLabelsCollection(__('-- No Theme --'));
+        return $this->getLabelsCollection((string)new \Magento\Framework\Phrase('-- No Theme --'));
     }
 }

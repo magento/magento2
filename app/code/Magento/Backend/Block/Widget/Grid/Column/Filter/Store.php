@@ -37,6 +37,8 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * Render HTML of the element
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getHtml()
     {

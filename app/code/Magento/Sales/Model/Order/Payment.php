@@ -3,9 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Payment\Model\Info;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -67,6 +70,9 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * @method \Magento\Sales\Model\Order\Payment setCcNumberEnc(string $value)
  * @method \Magento\Sales\Model\Order\Payment setCcTransId(string $value)
  * @method \Magento\Sales\Model\Order\Payment setAddressStatus(string $value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Payment extends Info implements OrderPaymentInterface
 {
@@ -135,7 +141,7 @@ class Payment extends Info implements OrderPaymentInterface
     protected $_transactionCollectionFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -148,29 +154,30 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
      * @param Payment\TransactionFactory $transactionFactory
      * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
         \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory,
         \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -185,7 +192,7 @@ class Payment extends Info implements OrderPaymentInterface
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $paymentData,
             $encryptor,
             $resource,
@@ -279,6 +286,7 @@ class Payment extends Info implements OrderPaymentInterface
      * This method is supposed to be called only when order is placed
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function place()
     {
@@ -693,6 +701,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @return $this
      * @throws \Exception
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function refund($creditmemo)
     {
@@ -788,6 +798,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param float $amount
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function registerRefundNotification($amount)
     {
@@ -976,6 +987,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @param bool $isOnline
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function registerPaymentReviewAction($action, $isOnline)
     {
@@ -1193,6 +1206,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @param float $amount
      * @param string $gatewayCallback
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _void($isOnline, $amount = null, $gatewayCallback = 'void')
     {
@@ -1267,6 +1282,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Sales\Model\AbstractModel $salesDocument
      * @param bool $failsafe
      * @return null|\Magento\Sales\Model\Order\Payment\Transaction
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addTransaction($type, $salesDocument = null, $failsafe = false)
     {

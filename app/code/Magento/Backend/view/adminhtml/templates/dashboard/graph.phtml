@@ -3,22 +3,31 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="dashboard-diagram">
     <div class="dashboard-diagram-switcher">
-        <label for="order_<?php echo $this->getHtmlId() ?>_period"><?php echo __('Select Range:') ?></label>
-        <select name="period" id="order_<?php echo $this->getHtmlId() ?>_period" onchange="changeDiagramsPeriod(this);">
-            <?php foreach ($this->helper('Magento\Backend\Helper\Dashboard\Data')->getDatePeriods() as $value => $label): ?>
-                <?php if (in_array($value, ['custom'])) {
-    continue;
-} ?>
-                <option value="<?php echo $value ?>" <?php if ($this->getRequest()->getParam('period') == $value): ?> selected="selected"<?php endif; ?>><?php echo $label ?></option>
-            <?php endforeach; ?>
-        </select>
+        <label for="order_<?php echo $block->getHtmlId() ?>_period" class="label"><?php echo __('Select Range:') ?></label>
+        <div class="form-select-label">
+            <select name="period" id="order_<?php echo $block->getHtmlId() ?>_period"
+                    onchange="changeDiagramsPeriod(this);" class="form-el-select">
+                <?php foreach ($this->helper('Magento\Backend\Helper\Dashboard\Data')->getDatePeriods() as $value => $label): ?>
+                    <?php if (in_array($value, ['custom'])) {
+                        continue;
+                    } ?>
+                    <option
+                        value="<?php echo $value ?>"
+                        <?php if ($block->getRequest()->getParam('period') == $value): ?> selected="selected"<?php endif; ?>
+                        ><?php echo $label ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
     </div>
-    <?php if ($this->getCount()): ?>
+    <?php if ($block->getCount()): ?>
     <div class="dashboard-diagram-image">
-        <img src="<?php echo $this->getChartUrl(false) ?>" class="dashboard-diagram-chart" alt="Chart" title="Chart" />
+        <img src="<?php echo $block->getChartUrl(false) ?>" class="dashboard-diagram-chart" alt="Chart" title="Chart" />
     </div>
     <?php else: ?>
     <div class="dashboard-diagram-nodata">

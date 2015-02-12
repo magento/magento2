@@ -11,6 +11,7 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * Multishipping checkout controller
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Checkout extends \Magento\Checkout\Controller\Action implements
     \Magento\Checkout\Controller\Express\RedirectLoginInterface
@@ -22,14 +23,22 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         CustomerRepositoryInterface $customerRepository,
-        AccountManagementInterface $accountManagement
+        AccountManagementInterface $accountManagement,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
     ) {
-        parent::__construct($context, $customerSession, $customerRepository, $accountManagement);
+        parent::__construct(
+            $context,
+            $customerSession,
+            $customerRepository,
+            $accountManagement,
+            $resultRedirectFactory
+        );
     }
 
     /**
@@ -77,6 +86,8 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function dispatch(RequestInterface $request)
     {
@@ -119,16 +130,18 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
             }
         }
 
-        if (!$this->_preDispatchValidateCustomer()) {
+        $result = $this->_preDispatchValidateCustomer();
+        if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
+            return $result;
+        }
+
+        if (!$result) {
             return $this->getResponse();
         }
 
-        if ($this->_getCheckoutSession()->getCartWasUpdated(
-            true
-        ) && !in_array(
-            $action,
-            ['index', 'login', 'register', 'addresses', 'success']
-        )
+        if ($this->_getCheckoutSession()->getCartWasUpdated(true)
+            &&
+            !in_array($action, ['index', 'login', 'register', 'addresses', 'success'])
         ) {
             $this->getResponse()->setRedirect($this->_getHelper()->getCartUrl());
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);

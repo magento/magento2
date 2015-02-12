@@ -22,14 +22,14 @@ class Result
     protected $_error = null;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Framework\Store\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
     }
@@ -182,6 +182,7 @@ class Result
      * Sort rates by price from min to max
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function sortRatesByPrice()
     {

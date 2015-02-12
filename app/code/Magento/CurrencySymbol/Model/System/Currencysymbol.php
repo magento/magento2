@@ -84,7 +84,7 @@ class Currencysymbol
     protected $_systemStore;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -110,7 +110,7 @@ class Currencysymbol
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $coreConfig
      * @param \Magento\Backend\Model\Config\Factory $configFactory
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -120,7 +120,7 @@ class Currencysymbol
         \Magento\Framework\App\Config\ReinitableConfigInterface $coreConfig,
         \Magento\Backend\Model\Config\Factory $configFactory,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\Framework\Event\ManagerInterface $eventManager
@@ -139,6 +139,8 @@ class Currencysymbol
      * Returns currency symbol properties array based on config values
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getCurrencySymbolsData()
     {
@@ -152,7 +154,7 @@ class Currencysymbol
             self::ALLOWED_CURRENCIES_CONFIG_SEPARATOR,
             $this->_scopeConfig->getValue(
                 self::XML_PATH_ALLOWED_CURRENCIES,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 null
             )
         );
@@ -179,7 +181,7 @@ class Currencysymbol
                     }
                     $storeSymbols = $this->_scopeConfig->getValue(
                         self::XML_PATH_ALLOWED_CURRENCIES,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                         $store
                     );
                     $allowedCurrencies = array_merge(
@@ -312,7 +314,7 @@ class Currencysymbol
         $result = [];
         $configData = (string)$this->_scopeConfig->getValue(
             $configPath,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if ($configData) {

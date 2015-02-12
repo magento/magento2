@@ -13,6 +13,7 @@ use Magento\Tax\Api\Data\TaxClassKeyInterface;
  * Tax attribute model
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
 {
@@ -48,18 +49,11 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     protected $_taxCalculationService;
 
     /**
-     * Quote Details Builder
+     * Quote Details Factory
      *
-     * @var \Magento\Tax\Api\Data\QuoteDetailsDataBuilder
+     * @var \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory
      */
-    protected $_quoteDetailsBuilder;
-
-    /**
-     * Quote Details Item Builder
-     *
-     * @var \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder
-     */
-    protected $_quoteDetailsItemBuilder;
+    protected $_quoteDetailsFactory;
 
     /**
      * Default customer tax classId
@@ -76,6 +70,11 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     protected $_regionFactory;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -87,12 +86,13 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Tax\Api\TaxRateManagementInterface $taxRateManagement
      * @param \Magento\Tax\Api\TaxCalculationInterface $taxCalculationService
-     * @param \Magento\Tax\Api\Data\QuoteDetailsDataBuilder $quoteDetailsBuilder
-     * @param \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder
+     * @param \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory $quoteDetailsFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -106,10 +106,10 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Tax\Api\TaxRateManagementInterface $taxRateManagement,
         \Magento\Tax\Api\TaxCalculationInterface $taxCalculationService,
-        \Magento\Tax\Api\Data\QuoteDetailsDataBuilder $quoteDetailsBuilder,
-        \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder,
+        \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory $quoteDetailsFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
@@ -117,10 +117,10 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         $this->_taxData = $taxData;
         $this->_taxRateManagement = $taxRateManagement;
         $this->_taxCalculationService = $taxCalculationService;
-        $this->_quoteDetailsBuilder = $quoteDetailsBuilder;
-        $this->_quoteDetailsItemBuilder = $quoteDetailsItemBuilder;
+        $this->_quoteDetailsFactory = $quoteDetailsFactory;
         $this->_regionFactory = $regionFactory;
         $this->groupManagement = $groupManagement;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct(
             $context,
             $registry,
@@ -212,9 +212,12 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                         ],
                     ];
 
-                    $quoteDetailsObject = $this->_quoteDetailsBuilder
-                        ->populateWithArray($quoteDetailsDataArray)
-                        ->create();
+                    $quoteDetailsObject = $this->_quoteDetailsFactory->create();
+                    $this->dataObjectHelper->populateWithArray(
+                        $quoteDetailsObject,
+                        $quoteDetailsDataArray,
+                        '\Magento\Tax\Api\Data\QuoteDetailsInterface'
+                    );
 
                     $taxDetails = $this->_taxCalculationService
                         ->calculateTax($quoteDetailsObject, $product->getStoreId());

@@ -6,14 +6,17 @@
 namespace Magento\Tax\Model\Calculation;
 
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
-use Magento\Tax\Api\Data\AppliedTaxDataBuilder;
-use Magento\Tax\Api\Data\AppliedTaxRateDataBuilder;
+use Magento\Tax\Api\Data\AppliedTaxInterfaceFactory;
+use Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
-use Magento\Tax\Api\Data\TaxDetailsItemDataBuilder;
+use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\Calculation;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class AbstractCalculator
 {
     /**#@+
@@ -27,11 +30,11 @@ abstract class AbstractCalculator
     /**#@-*/
 
     /**
-     * Tax details item builder
+     * Tax details item data object factory
      *
-     * @var TaxDetailsItemDataBuilder
+     * @var TaxDetailsItemInterfaceFactory
      */
-    protected $taxDetailsItemBuilder;
+    protected $taxDetailsItemDataObjectFactory;
 
     /**
      * Tax calculation tool
@@ -117,22 +120,22 @@ abstract class AbstractCalculator
     protected $taxClassManagement;
 
     /**
-     * @var AppliedTaxDataBuilder
+     * @var AppliedTaxInterfaceFactory
      */
-    protected $appliedTaxBuilder;
+    protected $appliedTaxDataObjectFactory;
 
     /**
-     * @var AppliedTaxRateDataBuilder
+     * @var AppliedTaxRateInterfaceFactory
      */
-    protected $appliedRateBuilder;
+    protected $appliedTaxRateDataObjectFactory;
 
     /**
      * Constructor
      *
      * @param TaxClassManagementInterface $taxClassService
-     * @param TaxDetailsItemDataBuilder $taxDetailsItemBuilder
-     * @param AppliedTaxDataBuilder $appliedTaxBuilder
-     * @param AppliedTaxRateDataBuilder $appliedRateBuilder
+     * @param TaxDetailsItemInterfaceFactory $taxDetailsItemDataObjectFactory
+     * @param AppliedTaxInterfaceFactory $appliedTaxDataObjectFactory
+     * @param AppliedTaxRateInterfaceFactory $appliedTaxRateDataObjectFactory
      * @param Calculation $calculationTool
      * @param \Magento\Tax\Model\Config $config
      * @param int $storeId
@@ -140,18 +143,18 @@ abstract class AbstractCalculator
      */
     public function __construct(
         TaxClassManagementInterface $taxClassService,
-        TaxDetailsItemDataBuilder $taxDetailsItemBuilder,
-        AppliedTaxDataBuilder $appliedTaxBuilder,
-        AppliedTaxRateDataBuilder $appliedRateBuilder,
+        TaxDetailsItemInterfaceFactory $taxDetailsItemDataObjectFactory,
+        AppliedTaxInterfaceFactory $appliedTaxDataObjectFactory,
+        AppliedTaxRateInterfaceFactory $appliedTaxRateDataObjectFactory,
         Calculation $calculationTool,
         \Magento\Tax\Model\Config $config,
         $storeId,
         \Magento\Framework\Object $addressRateRequest = null
     ) {
         $this->taxClassManagement = $taxClassService;
-        $this->taxDetailsItemBuilder = $taxDetailsItemBuilder;
-        $this->appliedTaxBuilder = $appliedTaxBuilder;
-        $this->appliedRateBuilder = $appliedRateBuilder;
+        $this->taxDetailsItemDataObjectFactory = $taxDetailsItemDataObjectFactory;
+        $this->appliedTaxDataObjectFactory = $appliedTaxDataObjectFactory;
+        $this->appliedTaxRateDataObjectFactory = $appliedTaxRateDataObjectFactory;
         $this->calculationTool = $calculationTool;
         $this->config = $config;
         $this->storeId = $storeId;
@@ -302,24 +305,22 @@ abstract class AbstractCalculator
      */
     protected function getAppliedTax($rowTax, $appliedRate)
     {
-        $appliedTaxBuilder = $this->appliedTaxBuilder;
-        $appliedTaxRateBuilder = $this->appliedRateBuilder;
-        $appliedTaxBuilder->setAmount($rowTax);
-        $appliedTaxBuilder->setPercent($appliedRate['percent']);
-        $appliedTaxBuilder->setTaxRateKey($appliedRate['id']);
+        $appliedTaxDataObject = $this->appliedTaxDataObjectFactory->create();
+        $appliedTaxDataObject->setAmount($rowTax);
+        $appliedTaxDataObject->setPercent($appliedRate['percent']);
+        $appliedTaxDataObject->setTaxRateKey($appliedRate['id']);
 
         /** @var  \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rateDataObjects */
         $rateDataObjects = [];
         foreach ($appliedRate['rates'] as $rate) {
-            $appliedTaxRateBuilder->setPercent($rate['percent']);
-            $appliedTaxRateBuilder->setCode($rate['code']);
-            $appliedTaxRateBuilder->setTitle($rate['title']);
             //Skipped position, priority and rule_id
-            $rateDataObjects[$rate['code']] = $appliedTaxRateBuilder->create();
+            $rateDataObjects[$rate['code']] = $this->appliedTaxRateDataObjectFactory->create()
+                ->setPercent($rate['percent'])
+                ->setCode($rate['code'])
+                ->setTitle($rate['title']);
         }
-        $appliedTaxBuilder->setRates($rateDataObjects);
-        $appliedTax = $appliedTaxBuilder->create();
-        return $appliedTax;
+        $appliedTaxDataObject->setRates($rateDataObjects);
+        return $appliedTaxDataObject;
     }
 
     /**
@@ -353,8 +354,6 @@ abstract class AbstractCalculator
      */
     protected function getAppliedTaxes($rowTax, $totalTaxRate, $appliedRates)
     {
-        $appliedTaxBuilder = $this->appliedTaxBuilder;
-        $appliedTaxRateBuilder = $this->appliedRateBuilder;
         /** @var \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes */
         $appliedTaxes = [];
         $totalAppliedAmount = 0;
@@ -376,22 +375,22 @@ abstract class AbstractCalculator
             }
             $totalAppliedAmount += $appliedAmount;
 
-            $appliedTaxBuilder->setAmount($appliedAmount);
-            $appliedTaxBuilder->setPercent($appliedRate['percent']);
-            $appliedTaxBuilder->setTaxRateKey($appliedRate['id']);
+            $appliedTaxDataObject = $this->appliedTaxDataObjectFactory->create();
+            $appliedTaxDataObject->setAmount($appliedAmount);
+            $appliedTaxDataObject->setPercent($appliedRate['percent']);
+            $appliedTaxDataObject->setTaxRateKey($appliedRate['id']);
 
             /** @var  \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rateDataObjects */
             $rateDataObjects = [];
             foreach ($appliedRate['rates'] as $rate) {
-                $appliedTaxRateBuilder->setPercent($rate['percent']);
-                $appliedTaxRateBuilder->setCode($rate['code']);
-                $appliedTaxRateBuilder->setTitle($rate['title']);
                 //Skipped position, priority and rule_id
-                $rateDataObjects[$rate['code']] = $appliedTaxRateBuilder->create();
+                $rateDataObjects[$rate['code']] = $this->appliedTaxRateDataObjectFactory->create()
+                    ->setPercent($rate['percent'])
+                    ->setCode($rate['code'])
+                    ->setTitle($rate['title']);
             }
-            $appliedTaxBuilder->setRates($rateDataObjects);
-            $appliedTax = $appliedTaxBuilder->create();
-            $appliedTaxes[$appliedTax->getTaxRateKey()] = $appliedTax;
+            $appliedTaxDataObject->setRates($rateDataObjects);
+            $appliedTaxes[$appliedTaxDataObject->getTaxRateKey()] = $appliedTaxDataObject;
         }
 
         return $appliedTaxes;

@@ -135,6 +135,39 @@ class Graph
     }
 
     /**
+     * Find paths to reachable nodes from root node
+     *
+     * Returns array of paths, key is destination node and value is path (an array) from rootNode to destination node
+     * Eg. dest => [root, A, dest] means root -> A -> dest
+     *
+     * @param string|int $rootNode
+     * @param int $mode
+     * @return array
+     */
+    public function findPathsToReachableNodes($rootNode, $mode = self::DIRECTIONAL)
+    {
+        $graph = $this->getRelations($mode);
+        $paths = [];
+        $queue = [$rootNode];
+        $visited = [$rootNode => $rootNode];
+        $paths[$rootNode] = [$rootNode];
+        while (!empty($queue)) {
+            $node = array_shift($queue);
+            if (!empty($graph[$node])) {
+                foreach ($graph[$node] as $child) {
+                    if (!isset($visited[$child])) {
+                        $paths[$child] = $paths[$node];
+                        $paths[$child][] = $child;
+                        $visited[$child] = $child;
+                        $queue[] = $child;
+                    }
+                }
+            }
+        }
+        return $paths;
+    }
+
+    /**
      * "Depth-first search" of a path between nodes
      *
      * Returns path as array of nodes or empty array if path does not exist.

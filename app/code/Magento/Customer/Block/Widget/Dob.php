@@ -118,7 +118,7 @@ class Dob extends AbstractWidget
     /**
      * Return label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getLabel()
     {
@@ -138,7 +138,7 @@ class Dob extends AbstractWidget
             'class' => $this->getHtmlClass(),
             'value' => $this->getValue(),
             'date_format' => $this->getDateFormat(),
-            'image' => $this->getViewFileUrl('Magento_Core::calendar.gif'),
+            'image' => $this->getViewFileUrl('Magento_Core::calendar.png'),
         ]);
         return $this->dateElement->getHtml();
     }

@@ -13,6 +13,7 @@ use Magento\Framework\Object;
 
 /**
  * Shopping cart model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cart extends Object implements CartInterface
 {
@@ -45,7 +46,7 @@ class Cart extends Object implements CartInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -92,7 +93,7 @@ class Cart extends Object implements CartInterface
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Resource\Cart $resourceCart
      * @param Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
@@ -102,11 +103,12 @@ class Cart extends Object implements CartInterface
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param ProductRepositoryInterface $productRepository
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Resource\Cart $resourceCart,
         Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
@@ -330,6 +332,7 @@ class Cart extends Object implements CartInterface
      * @param \Magento\Framework\Object|int|array $requestInfo
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addProduct($productInfo, $requestInfo = null)
     {
@@ -473,6 +476,8 @@ class Cart extends Object implements CartInterface
      * @param  array $data
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function updateItems($data)
     {
@@ -618,7 +623,7 @@ class Cart extends Object implements CartInterface
         if ($quoteId && $this->_summaryQty === null) {
             $useQty = $this->_scopeConfig->getValue(
                 'checkout/cart_link/use_qty',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
             $this->_summaryQty = $useQty ? $this->getItemsQty() : $this->getItemsCount();
         }
@@ -657,6 +662,7 @@ class Cart extends Object implements CartInterface
      * @throws \Magento\Framework\Model\Exception
      *
      * @see \Magento\Quote\Model\Quote::updateItem()
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function updateItem($itemId, $requestInfo = null, $updatingParams = null)
     {

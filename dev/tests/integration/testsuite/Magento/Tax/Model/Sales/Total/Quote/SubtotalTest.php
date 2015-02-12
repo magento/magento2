@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Tax\Model\ClassModel;
@@ -21,17 +23,9 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManager;
 
-    /**
-     * Builder
-     *
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
-     */
-    private $customerBuilder;
-
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->customerBuilder = $this->objectManager->create('Magento\Customer\Api\Data\CustomerDataBuilder');
     }
 
     protected function getCustomerById($id)

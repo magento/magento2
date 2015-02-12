@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 /**
  * Layer price filter based on Search API
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends AbstractFilter
 {
@@ -43,21 +44,22 @@ class Price extends AbstractFilter
 
     /**
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\Price $resource
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Search\Dynamic\Algorithm $priceAlgorithm
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory $algorithmFactory
+     * @param \Magento\Catalog\Model\Layer\Filter\DataProvider\PriceFactory $dataProviderFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
         \Magento\Catalog\Model\Resource\Layer\Filter\Price $resource,
@@ -107,6 +109,7 @@ class Price extends AbstractFilter
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -168,7 +171,7 @@ class Price extends AbstractFilter
      *
      * @param float|string $fromPrice
      * @param float|string $toPrice
-     * @return string
+     * @return float|\Magento\Framework\Phrase
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {

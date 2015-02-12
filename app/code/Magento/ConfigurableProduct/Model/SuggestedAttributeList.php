@@ -53,9 +53,6 @@ class SuggestedAttributeList
             'frontend_label',
             ['like' => $escapedLabelPart]
         )->addFieldToFilter(
-            'is_configurable',
-            [["eq" => 1], ['null' => true]]
-        )->addFieldToFilter(
             'is_user_defined',
             1
         )->addFieldToFilter(

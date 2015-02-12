@@ -3,29 +3,32 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /**
- * @var \Magento\Ui\Component\Form\Fieldset $this
+ * @var \Magento\Ui\Component\Form\Fieldset $block
  */
-$children = $this->getChildren();
-$content = $this->getContent();
-$ajaxUrl = $this->getAjaxUrl();
+$children = $block->getChildren();
+$content = $block->getContent();
+$ajaxUrl = $block->getAjaxUrl();
 ?>
 
 <div class="fieldset-wrapper-title" tabindex="3" data-bind="click: onClick, keyboard: { 13: toggle }">
     <strong class="title">
-        <span data-bind="text: label"><?php echo $this->getData('config/label'); ?></span>
+        <span data-bind="text: label"><?php echo $block->getData('config/label'); ?></span>
     </strong>
 </div>
 
 <div class="fieldset-wrapper-content">
-    <fieldset id="<?php echo $this->getData('index'); ?>" class="fieldset">
+    <fieldset id="<?php echo $block->getData('index'); ?>" class="fieldset">
         <?php if (!empty($content)): ?>
             <?php echo $content; ?>
         <?php endif; ?>
         <?php if (is_array($children) && !$ajaxUrl): ?>
             <?php foreach ($children as $childName): ?>
-                <?php $childElement = $this->getLayoutElement($childName);?>
-                <p><?php echo $this->renderElement('group', $childElement); ?></p>
+                <?php $childElement = $block->getLayoutElement($childName);?>
+                <p><?php echo $block->renderElement('group', $childElement); ?></p>
             <?php endforeach; ?>
         <?php endif; ?>
     </fieldset>

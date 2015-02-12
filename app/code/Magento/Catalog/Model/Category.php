@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Convert\ConvertArray;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Profiler;
@@ -27,6 +27,10 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @method Category setUrlPath(string $urlPath)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category extends \Magento\Catalog\Model\AbstractModel implements
     \Magento\Framework\Object\IdentityInterface,
@@ -173,8 +177,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Resource\Category\Tree $categoryTreeResource
      * @param Resource\Category\TreeFactory $categoryTreeFactory
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
@@ -190,13 +194,14 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        AttributeValueFactory $customAttributeFactory,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTreeResource,
         \Magento\Catalog\Model\Resource\Category\TreeFactory $categoryTreeFactory,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
@@ -229,7 +234,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $storeManager,
             $resource,
             $resourceCollection,
@@ -257,6 +262,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Get flat resource model flag
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseFlatResource()
     {
@@ -408,6 +414,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $noDesignAttributes
      * @return array
      * @todo Use with Flat Resource
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getAttributes($noDesignAttributes = false)
     {
@@ -1017,8 +1024,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 $flatIndexer->reindexRow($this->getId());
             }
         }
+        $affectedProductIds = $this->getAffectedProductIds();
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);
-        if (!$productIndexer->isScheduled()) {
+        if (!$productIndexer->isScheduled() && !empty($affectedProductIds)) {
             $productIndexer->reindexList($this->getPathIds());
         }
     }
@@ -1093,6 +1101,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsActive()
     {

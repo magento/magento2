@@ -103,7 +103,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $attributeCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false)
+            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         foreach ($this->_attributes as $attributeData) {
             $arguments = $objectManagerHelper->getConstructArguments(

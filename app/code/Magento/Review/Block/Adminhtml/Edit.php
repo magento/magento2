@@ -55,6 +55,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Initialize edit review
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _construct()
     {
@@ -210,7 +211,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Get edit review header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

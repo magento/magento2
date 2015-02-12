@@ -47,6 +47,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * @param $dateFrom
      * @param $dateTo
      * @param $isTotal
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testTableSelection($period, $expectedTable, $dateFrom, $dateTo, $isTotal = false)
     {
@@ -92,6 +93,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * Data provider for testTableSelection
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function tableForPeriodDataProvider()
     {

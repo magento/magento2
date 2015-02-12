@@ -4,8 +4,10 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
- * @var $this \Magento\Framework\View\Element\Template
+ * @var $block \Magento\Framework\View\Element\Template
  */
 ?>
 <script>
@@ -20,13 +22,13 @@ wishlistControl = {
         if (!urlParams) {
             urlParams = '';
         }
-        var url = <?php echo $this->getJsObjectName() ?>.url + '?ajax=true' + urlParams;
+        var url = <?php echo $block->getJsObjectName() ?>.url + '?ajax=true' + urlParams;
         new Ajax.Updater(
-            <?php echo $this->getJsObjectName() ?>.containerId,
+            <?php echo $block->getJsObjectName() ?>.containerId,
             url,
             {
                 parameters: {form_key: FORM_KEY},
-                onComplete: <?php echo $this->getJsObjectName() ?>.initGrid.bind(<?php echo $this->getJsObjectName() ?>),
+                onComplete: <?php echo $block->getJsObjectName() ?>.initGrid.bind(<?php echo $block->getJsObjectName() ?>),
                 evalScripts:true
             }
         );
@@ -57,8 +59,8 @@ wishlistControl = {
 productConfigure.addListType(
     'wishlist',
     {
-        urlFetch: '<?php echo $this->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
-        urlConfirm: '<?php echo $this->getUrl('customer/wishlist_product_composite_wishlist/update') ?>'
+        urlFetch: '<?php echo $block->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
+        urlConfirm: '<?php echo $block->getUrl('customer/wishlist_product_composite_wishlist/update') ?>'
     }
 );
 //-->

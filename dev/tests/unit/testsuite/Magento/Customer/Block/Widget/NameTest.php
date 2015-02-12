@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
@@ -364,13 +367,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStoreLabel($attributeCode, $storeLabel, $expectedValue)
     {
-        $this->attribute->expects(
-            $this->once()
-        )->method(
-            'getStoreLabel'
-        )->will(
-            $this->returnValue($storeLabel)
-        );
+        $this->attribute->expects($this->atLeastOnce())->method('getStoreLabel')->willReturn($storeLabel);
         $this->assertEquals($expectedValue, $this->_block->getStoreLabel($attributeCode));
     }
 
@@ -402,13 +399,14 @@ class NameTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->assertSame('', $this->_block->getStoreLabel('attributeCode'));
+        $this->assertSame('', (string)$this->_block->getStoreLabel('attributeCode'));
     }
 
     /**
      * Helper method for testing all show*() methods.
      *
      * @param array $data Customer attribute(s)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function _setUpShowAttribute(array $data)
     {

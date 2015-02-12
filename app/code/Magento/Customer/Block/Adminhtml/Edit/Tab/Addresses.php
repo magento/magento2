@@ -7,11 +7,11 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Model\AttributeMetadataDataBuilder;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\Data\AddressDataBuilder;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Model\Address\Mapper as AddressMapper;
 
@@ -19,6 +19,7 @@ use Magento\Customer\Model\Address\Mapper as AddressMapper;
  * Customer addresses forms
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Addresses extends GenericMetadata
 {
@@ -59,19 +60,21 @@ class Addresses extends GenericMetadata
     /** @var  AddressMetadataInterface */
     protected $_addressMetadataService;
 
-    /** @var  AddressDataBuilder */
-    protected $_addressBuilder;
+    /** @var  AddressInterfaceFactory */
+    protected $addressDataFactory;
 
-    /** @var CustomerDataBuilder */
-    protected $_customerBuilder;
-
-    /** @var  AttributeMetadataDataBuilder */
-    protected $_attributeMetadataBuilder;
+    /** @var CustomerInterfaceFactory */
+    protected $customerDataFactory;
 
     /**
      * @var AddressMapper
      */
     protected $addressMapper;
+
+    /**
+     * @var DataObjectHelper
+     */
+    protected $dataObjectHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -87,12 +90,12 @@ class Addresses extends GenericMetadata
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param AccountManagementInterface $customerAccountManagement
      * @param AddressMetadataInterface $addressMetadataService
-     * @param AddressDataBuilder $addressBuilder
-     * @param CustomerDataBuilder $customerBuilder
-     * @param AttributeMetadataDataBuilder $attributeMetadataBuilder
+     * @param AddressInterfaceFactory $addressDataFactory
+     * @param CustomerInterfaceFactory $customerInterfaceFactory
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param AddressMapper $addressMapper
      * @param CustomerMapper $customerMapper
+     * @param DataObjectHelper $dataObjectHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -111,11 +114,11 @@ class Addresses extends GenericMetadata
         \Magento\Customer\Helper\Address $addressHelper,
         AccountManagementInterface $customerAccountManagement,
         AddressMetadataInterface $addressMetadataService,
-        AddressDataBuilder $addressBuilder,
-        CustomerDataBuilder $customerBuilder,
-        AttributeMetadataDataBuilder $attributeMetadataBuilder,
+        AddressInterfaceFactory $addressDataFactory,
+        CustomerInterfaceFactory $customerInterfaceFactory,
         \Magento\Directory\Helper\Data $directoryHelper,
         AddressMapper $addressMapper,
+        DataObjectHelper $dataObjectHelper,
         array $data = []
     ) {
         $this->options = $options;
@@ -127,11 +130,11 @@ class Addresses extends GenericMetadata
         $this->_systemStore = $systemStore;
         $this->_customerAccountManagement = $customerAccountManagement;
         $this->_addressMetadataService = $addressMetadataService;
-        $this->_addressBuilder = $addressBuilder;
-        $this->_customerBuilder = $customerBuilder;
-        $this->_attributeMetadataBuilder = $attributeMetadataBuilder;
+        $this->addressDataFactory = $addressDataFactory;
+        $this->customerDataFactory = $customerInterfaceFactory;
         $this->_directoryHelper = $directoryHelper;
         $this->addressMapper = $addressMapper;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct($context, $registry, $formFactory, $dataObjectProcessor, $data);
     }
 
@@ -233,15 +236,14 @@ class Addresses extends GenericMetadata
         $fieldset = $form->addFieldset('address_fieldset', ['legend' => __("Edit Customer's Address")]);
 
         $account = $customerData['account'];
-        $this->_addressBuilder->populateWithArray([]);
+        $address = $this->addressDataFactory->create();
         if (!empty($account) && isset($account['store_id'])) {
-            $this->_addressBuilder->setCountryId(
+            $address->setCountryId(
                 $this->_coreData->getDefaultCountry($this->_storeManager->getStore($account['store_id']))
             );
         } else {
-            $this->_addressBuilder->setCountryId($this->_coreData->getDefaultCountry());
+            $address->setCountryId($this->_coreData->getDefaultCountry());
         }
-        $address = $this->_addressBuilder->create();
 
         $addressForm = $this->_metadataFormFactory->create(
             'customer_address',
@@ -252,21 +254,12 @@ class Addresses extends GenericMetadata
         $attributes = $addressForm->getAttributes();
         if (isset($attributes['street'])) {
             if ($attributes['street']->getMultilineCount() <= 0) {
-                $attributes['street'] = $this->_attributeMetadataBuilder->populate(
-                    $attributes['street']
-                )->setMultilineCount(
-                    self::DEFAULT_STREET_LINES_COUNT
-                )->create();
+                $attributes['street']->setMultilineCount(self::DEFAULT_STREET_LINES_COUNT);
             }
         }
         foreach ($attributes as $key => $attribute) {
-            $attributes[$key] = $this->_attributeMetadataBuilder->populate(
-                $attribute
-            )->setFrontendLabel(
-                __($attribute->getFrontendLabel())
-            )->setVisible(
-                false
-            )->create();
+            $attributes[$key]->setFrontendLabel(__($attribute->getFrontendLabel()))
+                ->setIsVisible(false);
         }
         $this->_setFieldset($attributes, $fieldset);
 
@@ -331,10 +324,14 @@ class Addresses extends GenericMetadata
             }
         }
 
-        $this->assign('customer', $this->_customerBuilder->populateWithArray($account)->create());
+        $customerDataObject = $this->customerDataFactory->create();
+        $this->dataObjectHelper->populateWithArray($customerDataObject, $account);
+        $this->assign('customer', $customerDataObject);
         $addressCollection = [];
         foreach ($customerData['address'] as $key => $addressData) {
-            $addressCollection[$key] = $this->_addressBuilder->populateWithArray($addressData)->create();
+            $addressDataObject = $this->addressDataFactory->create();
+            $this->dataObjectHelper->populateWithArray($addressDataObject, $addressData);
+            $addressCollection[$key] = $addressDataObject;
         }
         $this->assign('addressCollection', $addressCollection);
         $form->setValues($this->addressMapper->toFlatArray($address));

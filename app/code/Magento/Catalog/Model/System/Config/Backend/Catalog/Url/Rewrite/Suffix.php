@@ -14,16 +14,19 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\Resource;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Suffix extends \Magento\Framework\App\Config\Value
 {
     /** @var \Magento\UrlRewrite\Helper\UrlRewrite */
     protected $urlRewriteHelper;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var \Magento\Framework\Store\StoreManagerInterface */
     protected $storeManager;
 
     /** @var \Magento\UrlRewrite\Model\UrlFinderInterface */
@@ -39,17 +42,18 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param \Magento\UrlRewrite\Helper\UrlRewrite $urlRewriteHelper
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Resource $appResource
      * @param \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\UrlRewrite\Helper\UrlRewrite $urlRewriteHelper,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Resource $appResource,
         \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,

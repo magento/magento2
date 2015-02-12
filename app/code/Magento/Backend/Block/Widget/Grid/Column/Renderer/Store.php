@@ -53,6 +53,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * Retrieve 'show all stores label' flag
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     protected function _getShowAllStoresLabelFlag()
     {
@@ -67,6 +68,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * Retrieve 'show empty stores label' flag
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     protected function _getShowEmptyStoresLabelFlag()
     {
@@ -81,7 +83,9 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * Render row store views
      *
      * @param \Magento\Framework\Object $row
-     * @return string
+     * @return \Magento\Framework\Phrase|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function render(\Magento\Framework\Object $row)
     {
@@ -131,7 +135,8 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * Render row store views for export
      *
      * @param \Magento\Framework\Object $row
-     * @return string
+     * @return \Magento\Framework\Phrase|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function renderExport(\Magento\Framework\Object $row)
     {

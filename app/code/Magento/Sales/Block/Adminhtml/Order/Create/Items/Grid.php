@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote\Item;
 
 /**
  * Adminhtml sales order create items grid block
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -82,6 +83,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param StockRegistryInterface $stockRegistry
      * @param StockStateInterface $stockState
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -340,7 +342,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get qty title
      *
      * @param Item $item
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getQtyTitle($item)
     {
@@ -447,6 +449,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get flag for rights to move items to customer storage
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getMoveToCustomerStorage()
     {
@@ -499,7 +502,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Get including/excluding tax message
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getInclExclTaxMessage()
     {

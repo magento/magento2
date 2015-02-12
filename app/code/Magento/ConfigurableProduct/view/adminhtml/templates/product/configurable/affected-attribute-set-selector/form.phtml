@@ -4,9 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/* @var $this \Magento\Framework\View\Element\Template */
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Framework\View\Element\Template */
 ?>
-<div id="<?php echo $this->getNameInLayout() ?>" style="display:none" data-role="dialog" data-id="affected-attribute-set-selector">
+<div id="<?php echo $block->getNameInLayout() ?>" style="display:none" data-role="dialog" data-id="affected-attribute-set-selector">
     <form action="">
 
         <div class="messages">
@@ -21,7 +23,7 @@
                 <div class="control">
                     <input type="radio" id="affected-attribute-set-current" name="affected-attribute-set" value="current" checked="checked" />
                     <label class="label" for="affected-attribute-set-current">
-                        <span><?php echo __('Add configurable attributes to the current set ("<span data-role="name-container">%1</span>")', $this->getLayout()->getBlock('product_edit')->getAttributeSetName())?></span>
+                        <span><?php echo __('Add configurable attributes to the current set ("<span data-role="name-container">%1</span>")', $block->getLayout()->getBlock('product_edit')->getAttributeSetName())?></span>
                     </label>
                 </div>
             </div>

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -170,7 +169,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Save customer action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -187,7 +186,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $addressesData = $this->_extractCustomerAddressData($customerData);
                 $request = $this->getRequest();
                 $isExistingCustomer = (bool)$customerId;
-                $customerBuilder = $this->customerDataBuilder;
+                $customer = $this->customerDataFactory->create();
                 if ($isExistingCustomer) {
                     $savedCustomerData = $this->_customerRepository->getById($customerId);
                     $customerData = array_merge(
@@ -197,7 +196,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $customerData['id'] = $customerId;
                 }
 
-                $customerBuilder->populateWithArray($customerData);
+                $this->dataObjectHelper->populateWithArray($customer, $customerData);
                 $addresses = [];
                 foreach ($addressesData as $addressData) {
                     $region = isset($addressData['region']) ? $addressData['region'] : null;
@@ -206,15 +205,16 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                         'region' => $region,
                         'region_id' => $regionId,
                     ];
-                    $addresses[] = $this->addressDataBuilder->populateWithArray($addressData)->create();
+                    $addressDataObject = $this->addressDataFactory->create();
+                    $this->dataObjectHelper->populateWithArray($addressDataObject, $addressData);
+                    $addresses[] = $addressDataObject;
                 }
 
                 $this->_eventManager->dispatch(
                     'adminhtml_customer_prepare_save',
-                    ['customer' => $customerBuilder, 'request' => $request]
+                    ['customer' => $customer, 'request' => $request]
                 );
-                $customerBuilder->setAddresses($addresses);
-                $customer = $customerBuilder->create();
+                $customer->setAddresses($addresses);
 
                 // Save customer
                 if ($isExistingCustomer) {
@@ -266,14 +266,22 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $returnToEdit = true;
             }
         }
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($returnToEdit) {
             if ($customerId) {
-                $this->_redirect('customer/*/edit', ['id' => $customerId, '_current' => true]);
+                $resultRedirect->setPath(
+                    'customer/*/edit',
+                    ['id' => $customerId, '_current' => true]
+                );
             } else {
-                $this->_redirect('customer/*/new', ['_current' => true]);
+                $resultRedirect->setPath(
+                    'customer/*/new',
+                    ['_current' => true]
+                );
             }
         } else {
-            $this->_redirect('customer/index');
+            $resultRedirect->setPath('customer/index');
         }
+        return $resultRedirect;
     }
 }

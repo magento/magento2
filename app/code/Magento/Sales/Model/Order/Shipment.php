@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
@@ -27,6 +27,7 @@ use Magento\Sales\Model\EntityInterface;
  * @method \Magento\Sales\Model\Order\Shipment setIncrementId(string $value)
  * @method \Magento\Sales\Model\Order\Shipment setCreatedAt(string $value)
  * @method \Magento\Sales\Model\Order\Shipment setUpdatedAt(string $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Shipment extends AbstractModel implements EntityInterface, ShipmentInterface
 {
@@ -102,7 +103,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -113,12 +114,13 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -139,7 +141,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $localeDate,
             $dateTime,
             $resource,

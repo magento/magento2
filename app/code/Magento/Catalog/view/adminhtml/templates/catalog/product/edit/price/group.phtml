@@ -3,39 +3,42 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
-/** @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group */
-$element = $this->getElement();
-$_htmlId = $this->getElement()->getHtmlId();
-$_htmlClass = $this->getElement()->getClass();
-$_htmlName = $this->getElement()->getName();
-$_readonly = $this->getElement()->getReadonly();
-$_priceValueValidation = $this->getPriceValidation('validate-zero-or-greater');
+/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group */
+$element = $block->getElement();
+$_htmlId = $block->getElement()->getHtmlId();
+$_htmlClass = $block->getElement()->getClass();
+$_htmlName = $block->getElement()->getName();
+$_readonly = $block->getElement()->getReadonly();
+$_priceValueValidation = $block->getPriceValidation('validate-zero-or-greater');
 
-$_showWebsite = $this->isMultiWebsites();
+$_showWebsite = $block->isMultiWebsites();
 ?>
 <div class="field" id="attribute-<?php echo $_htmlId?>-container" data-attribute-code="<?php echo $_htmlId?>"
-     data-apply-to="<?php echo $this->escapeHtml(
+     data-apply-to="<?php echo $block->escapeHtml(
          $this->helper('Magento\Core\Helper\Data')->jsonEncode(
              $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
          )
      )?>">
-    <label class="label"><span><?php echo $this->getElement()->getLabel(); ?></span></label>
+    <label class="label"><span><?php echo $block->getElement()->getLabel(); ?></span></label>
     <div class="control">
         <table cellspacing="0" class="data-table" id="group_prices_table">
             <thead>
                 <tr>
                     <th <?php if (!$_showWebsite): ?>style="display: none;"<?php endif; ?>><?php echo __('Web Site'); ?></th>
                     <th class="required"><?php echo __('Customer Group'); ?></th>
-                    <th class="required"><?php echo $this->getPriceColumnHeader(__('Price')); ?></th>
+                    <th class="required"><?php echo $block->getPriceColumnHeader(__('Price')); ?></th>
                     <th class="col-delete"><?php echo __('Action'); ?></th>
                 </tr>
             </thead>
             <tbody id="<?php echo $_htmlId; ?>_container"></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="<?php if (!$_showWebsite): ?>5<?php else: ?>4<?php endif; ?>" class="col-actions-add"><?php echo $this->getAddButtonHtml(); ?></td>
+                    <td colspan="<?php if (!$_showWebsite): ?>5<?php else: ?>4<?php endif; ?>" class="col-actions-add"><?php echo $block->getAddButtonHtml(); ?></td>
                 </tr>
             </tfoot>
         </table>
@@ -50,13 +53,13 @@ require([
 var groupPriceRowTemplate = '<tr>'
     + '<td<?php if (!$_showWebsite): ?> style="display:none"<?php endif; ?>>'
     + '<select class="<?php echo $_htmlClass; ?> required-entry" name="<?php echo $_htmlName; ?>[{{index}}][website_id]" id="group_price_row_{{index}}_website">'
-    <?php foreach ($this->getWebsites() as $_websiteId => $_info) : ?>
-    + '<option value="<?php echo $_websiteId; ?>"><?php echo $this->escapeJsQuote($this->escapeHtml($_info['name'])); ?><?php if (!empty($_info['currency'])) : ?> [<?php echo $this->escapeHtml($_info['currency']); ?>]<?php endif; ?></option>'
+    <?php foreach ($block->getWebsites() as $_websiteId => $_info) : ?>
+    + '<option value="<?php echo $_websiteId; ?>"><?php echo $block->escapeJsQuote($block->escapeHtml($_info['name'])); ?><?php if (!empty($_info['currency'])) : ?> [<?php echo $block->escapeHtml($_info['currency']); ?>]<?php endif; ?></option>'
     <?php endforeach; ?>
     + '</select></td>'
     + '<td><select class="<?php echo $_htmlClass; ?> custgroup required-entry" name="<?php echo $_htmlName; ?>[{{index}}][cust_group]" id="group_price_row_{{index}}_cust_group">'
-    <?php foreach ($this->getCustomerGroups() as $_groupId => $_groupName): ?>
-    + '<option value="<?php echo $_groupId; ?>"><?php echo $this->escapeJsQuote($this->escapeHtml($_groupName)); ?></option>'
+    <?php foreach ($block->getCustomerGroups() as $_groupId => $_groupName): ?>
+    + '<option value="<?php echo $_groupId; ?>"><?php echo $block->escapeJsQuote($block->escapeHtml($_groupName)); ?></option>'
     <?php endforeach; ?>
     + '</select></td>'
     + '<td><input class="<?php echo $_htmlClass; ?> required-entry <?php echo $_priceValueValidation; ?>" type="text" name="<?php echo $_htmlName; ?>[{{index}}][price]" value="{{price}}" id="group_price_row_{{index}}_price" /></td>'
@@ -75,8 +78,8 @@ var groupPriceControl = {
         }
         <?php endif; ?>
         var data = {
-            website_id: '<?php echo $this->getDefaultWebsite(); ?>',
-            group: '<?php echo $this->getDefaultCustomerGroup(); ?>',
+            website_id: '<?php echo $block->getDefaultWebsite(); ?>',
+            group: '<?php echo $block->getDefaultCustomerGroup(); ?>',
             price: '',
             readOnly: false,
             index: this.itemsCount++
@@ -98,7 +101,7 @@ var groupPriceControl = {
         $('group_price_row_' + data.index + '_cust_group').value = data.group;
         $('group_price_row_' + data.index + '_website').value    = data.website_id;
 
-        <?php if ($this->isShowWebsiteColumn() && !$this->isAllowChangeWebsite()): ?>
+        <?php if ($block->isShowWebsiteColumn() && !$block->isAllowChangeWebsite()): ?>
         var websiteElement = $('group_price_row_' + data.index + '_website');
         var websiteCaption = websiteElement.options[websiteElement.selectedIndex].text;
 
@@ -141,7 +144,7 @@ var groupPriceControl = {
         return false;
     }
 };
-<?php foreach ($this->getValues() as $_item) : ?>
+<?php foreach ($block->getValues() as $_item) : ?>
 groupPriceControl.addItem('<?php echo $_item['website_id']; ?>', '<?php echo $_item['cust_group']; ?>', '<?php echo sprintf('%.2f', $_item['price']); ?>', <?php echo (int)!empty($_item['readonly']); ?>);
 <?php endforeach; ?>
 <?php if ($_readonly) : ?>

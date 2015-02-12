@@ -73,7 +73,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $this->_store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->_store->expects($this->any())->method('getId')->will($this->returnValue(20));
-        $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('Magento\Framework\Store\StoreManagerInterface');
         $storeManager->expects($this->once())->method('getStore')->with(null)->will($this->returnValue($this->_store));
 
         $this->_resource = $this->getMock('Magento\Core\Model\Resource\Layout\Update', [], [], '', false);
@@ -92,7 +92,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $this->_cache = $this->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface');
 
-        $this->_theme = $this->getMock('Magento\Core\Model\Theme', [], [], '', false, false);
+        $this->_theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false, false);
         $this->_theme->expects($this->any())->method('isPhysical')->will($this->returnValue(true));
         $this->_theme->expects($this->any())->method('getArea')->will($this->returnValue('area'));
         $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(100));
@@ -321,17 +321,17 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'customer_account' => [
                 'name' => 'customer_account',
-                'label' => 'Customer My Account (All Pages)',
+                'label' => __('Customer My Account (All Pages)'),
                 'design_abstraction' => 'custom',
             ],
             'page_empty' => [
                 'name' => 'page_empty',
-                'label' => 'All Empty Layout Pages',
+                'label' => __('All Empty Layout Pages'),
                 'design_abstraction' => 'page_layout',
             ],
         ];
 
-        $this->assertSame($expected, $this->_model->getAllDesignAbstractions());
+        $this->assertEquals($expected, $this->_model->getAllDesignAbstractions());
     }
 
     public function testIsPageLayoutDesignAbstractions()

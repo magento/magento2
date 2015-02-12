@@ -12,6 +12,7 @@ use Magento\Shipping\Model\Shipment\Request;
 
 /**
  * Abstract online shipping carrier model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractCarrierOnline extends AbstractCarrier
 {
@@ -247,6 +248,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param RateRequest $request
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAllItems(RateRequest $request)
     {
@@ -279,6 +281,8 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param RateRequest $request
      * @return $this|bool|Error
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function proccessAdditionalValidation(RateRequest $request)
     {
@@ -518,6 +522,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @return bool
      *
      * @todo implement rollback logic
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function rollBack($data)
     {
@@ -566,6 +571,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param null|string $countyDest
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isGirthAllowed($countyDest = null)
     {

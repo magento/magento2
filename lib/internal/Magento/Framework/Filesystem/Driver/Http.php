@@ -49,6 +49,7 @@ class Http extends File
      *
      * @param string $path
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function stat($path)
     {
@@ -123,13 +124,14 @@ class Http extends File
      * @param string $mode
      * @return resource file
      * @throws FilesystemException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fileOpen($path, $mode)
     {
         $urlProp = $this->parseUrl($this->getScheme() . $path);
 
         if (false === $urlProp) {
-            throw new FilesystemException(__('Please correct the download URL.'));
+            throw new FilesystemException((string)new \Magento\Framework\Phrase('Please correct the download URL.'));
         }
 
         $hostname = $urlProp['host'];
@@ -202,6 +204,7 @@ class Http extends File
      * @param string $path
      * @param string|null $scheme
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAbsolutePath($basePath, $path, $scheme = null)
     {
@@ -233,7 +236,10 @@ class Http extends File
         $result = @fsockopen($hostname, $port, $errorNumber, $errorMessage);
         if ($result === false) {
             throw new FilesystemException(
-                __('Something went wrong connecting to the host. Error#%1 - %2.', $errorNumber, $errorMessage)
+                (string)new \Magento\Framework\Phrase(
+                    'Something went wrong connecting to the host. Error#%1 - %2.',
+                    [$errorNumber, $errorMessage]
+                )
             );
         }
         return $result;

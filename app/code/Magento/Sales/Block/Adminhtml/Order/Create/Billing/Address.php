@@ -9,13 +9,14 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing;
  * Adminhtml sales order create billing address block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 {
     /**
      * Return header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

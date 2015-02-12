@@ -11,12 +11,12 @@ class SaveShipping extends \Magento\Checkout\Controller\Onepage
     /**
      * Shipping address save action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         if (!$this->getRequest()->isPost() || $this->_expireAjax()) {
-            return;
+            return $this->_ajaxRedirectResponse();
         }
         $data = $this->getRequest()->getPost('shipping', []);
         $customerAddressId = $this->getRequest()->getPost('shipping_address_id', false);
@@ -29,7 +29,7 @@ class SaveShipping extends \Magento\Checkout\Controller\Onepage
                     'error' => -1,
                     'message' => $this->scopeConfig->getValue(
                         'sales/minimum_order/error_message',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                         $quote->getStoreId()
                     ),
                 ];
@@ -42,8 +42,7 @@ class SaveShipping extends \Magento\Checkout\Controller\Onepage
                 $result['update_progress'] = ['html' => $this->getProgressHtml($result['goto_section'])];
             }
         }
-        $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
-        );
+
+        return $this->resultJsonFactory->create()->setData($result);
     }
 }

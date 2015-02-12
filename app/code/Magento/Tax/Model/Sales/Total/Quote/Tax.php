@@ -5,14 +5,15 @@
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\Customer\Api\Data\AddressDataBuilder as CustomerAddressBuilder;
-use Magento\Customer\Api\Data\RegionDataBuilder as CustomerAddressRegionBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
+use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\Calculation;
 
 /**
  * Tax totals calculation model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Tax extends CommonTaxCollector
 {
@@ -49,21 +50,21 @@ class Tax extends CommonTaxCollector
      *
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Tax\Api\TaxCalculationInterface $taxCalculationService
-     * @param \Magento\Tax\Api\Data\QuoteDetailsDataBuilder $quoteDetailsBuilder
-     * @param \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder
-     * @param \Magento\Tax\Api\Data\TaxClassKeyDataBuilder $taxClassKeyBuilder
-     * @param CustomerAddressBuilder $customerAddressBuilder
-     * @param CustomerAddressRegionBuilder $customerAddressRegionBuilder
+     * @param \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory $quoteDetailsDataObjectFactory
+     * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $quoteDetailsItemDataObjectFactory
+     * @param \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyDataObjectFactory
+     * @param CustomerAddressFactory $customerAddressFactory
+     * @param CustomerAddressRegionFactory $customerAddressRegionFactory
      * @param \Magento\Tax\Helper\Data $taxData
      */
     public function __construct(
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Tax\Api\TaxCalculationInterface $taxCalculationService,
-        \Magento\Tax\Api\Data\QuoteDetailsDataBuilder $quoteDetailsBuilder,
-        \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder,
-        \Magento\Tax\Api\Data\TaxClassKeyDataBuilder $taxClassKeyBuilder,
-        CustomerAddressBuilder $customerAddressBuilder,
-        CustomerAddressRegionBuilder $customerAddressRegionBuilder,
+        \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory $quoteDetailsDataObjectFactory,
+        \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $quoteDetailsItemDataObjectFactory,
+        \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyDataObjectFactory,
+        CustomerAddressFactory $customerAddressFactory,
+        CustomerAddressRegionFactory $customerAddressRegionFactory,
         \Magento\Tax\Helper\Data $taxData
     ) {
         $this->setCode('tax');
@@ -71,11 +72,11 @@ class Tax extends CommonTaxCollector
         parent::__construct(
             $taxConfig,
             $taxCalculationService,
-            $quoteDetailsBuilder,
-            $quoteDetailsItemBuilder,
-            $taxClassKeyBuilder,
-            $customerAddressBuilder,
-            $customerAddressRegionBuilder
+            $quoteDetailsDataObjectFactory,
+            $quoteDetailsItemDataObjectFactory,
+            $taxClassKeyDataObjectFactory,
+            $customerAddressFactory,
+            $customerAddressRegionFactory
         );
     }
 
@@ -165,7 +166,7 @@ class Tax extends CommonTaxCollector
 
         //process extra taxable items associated only with quote
         $quoteExtraTaxables = $this->mapQuoteExtraTaxables(
-            $this->quoteDetailsItemBuilder,
+            $this->quoteDetailsItemDataObjectFactory,
             $address,
             $useBaseCurrency
         );
@@ -185,13 +186,13 @@ class Tax extends CommonTaxCollector
     /**
      * Map extra taxables associated with quote
      *
-     * @param \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $itemBuilder
+     * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $itemDataObjectFactory
      * @param Address $address
      * @param bool $useBaseCurrency
      * @return \Magento\Tax\Api\Data\QuoteDetailsItemInterface[]
      */
     public function mapQuoteExtraTaxables(
-        \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $itemBuilder,
+        \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $itemDataObjectFactory,
         Address $address,
         $useBaseCurrency
     ) {
@@ -202,23 +203,23 @@ class Tax extends CommonTaxCollector
         }
 
         foreach ($extraTaxables as $extraTaxable) {
-            $itemBuilder->setCode($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_CODE]);
-            $itemBuilder->setType($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_TYPE]);
-            $itemBuilder->setQuantity($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_QUANTITY]);
-            $itemBuilder->setTaxClassKey(
-                $this->taxClassKeyBuilder->setType(TaxClassKeyInterface::TYPE_ID)
-                    ->setValue($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_TAX_CLASS_ID])
-                    ->create()
-            );
             if ($useBaseCurrency) {
                 $unitPrice = $extraTaxable[self::KEY_ASSOCIATED_TAXABLE_BASE_UNIT_PRICE];
             } else {
                 $unitPrice = $extraTaxable[self::KEY_ASSOCIATED_TAXABLE_UNIT_PRICE];
             }
-            $itemBuilder->setUnitPrice($unitPrice);
-            $itemBuilder->setTaxIncluded($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_PRICE_INCLUDES_TAX]);
-            $itemBuilder->setAssociatedItemCode($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_ASSOCIATION_ITEM_CODE]);
-            $itemDataObjects[] = $itemBuilder->create();
+            $itemDataObjects[] = $itemDataObjectFactory->create()
+                ->setCode($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_CODE])
+                ->setType($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_TYPE])
+                ->setQuantity($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_QUANTITY])
+                ->setTaxClassKey(
+                    $this->taxClassKeyDataObjectFactory->create()
+                        ->setType(TaxClassKeyInterface::TYPE_ID)
+                        ->setValue($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_TAX_CLASS_ID])
+                )
+                ->setUnitPrice($unitPrice)
+                ->setIsTaxIncluded($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_PRICE_INCLUDES_TAX])
+                ->setAssociatedItemCode($extraTaxable[self::KEY_ASSOCIATED_TAXABLE_ASSOCIATION_ITEM_CODE]);
         }
 
         return $itemDataObjects;
@@ -230,6 +231,7 @@ class Tax extends CommonTaxCollector
      * @param Address $address
      * @param array $itemsByType
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function processExtraTaxables(Address $address, Array $itemsByType)
     {
@@ -281,6 +283,7 @@ class Tax extends CommonTaxCollector
      *
      * @param   Address $address
      * @return  $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function fetch(Address $address)
     {
@@ -362,7 +365,7 @@ class Tax extends CommonTaxCollector
     /**
      * Get Tax label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getLabel()
     {

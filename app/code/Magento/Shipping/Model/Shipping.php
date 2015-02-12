@@ -8,6 +8,9 @@ namespace Magento\Shipping\Model;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Shipping implements RateCollectorInterface
 {
     /**
@@ -39,7 +42,7 @@ class Shipping implements RateCollectorInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -81,7 +84,7 @@ class Shipping implements RateCollectorInterface
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory
@@ -92,7 +95,7 @@ class Shipping implements RateCollectorInterface
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Shipping\Model\Config $shippingConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory,
@@ -170,25 +173,25 @@ class Shipping implements RateCollectorInterface
             $request->setCountryId(
                 $this->_scopeConfig->getValue(
                     Shipment::XML_PATH_STORE_COUNTRY_ID,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $request->getStore()
                 )
             )->setRegionId(
                 $this->_scopeConfig->getValue(
                     Shipment::XML_PATH_STORE_REGION_ID,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $request->getStore()
                 )
             )->setCity(
                 $this->_scopeConfig->getValue(
                     Shipment::XML_PATH_STORE_CITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $request->getStore()
                 )
             )->setPostcode(
                 $this->_scopeConfig->getValue(
                     Shipment::XML_PATH_STORE_ZIP,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $request->getStore()
                 )
             );
@@ -198,7 +201,7 @@ class Shipping implements RateCollectorInterface
         if (!$limitCarrier) {
             $carriers = $this->_scopeConfig->getValue(
                 'carriers',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
 
@@ -212,7 +215,7 @@ class Shipping implements RateCollectorInterface
             foreach ($limitCarrier as $carrierCode) {
                 $carrierConfig = $this->_scopeConfig->getValue(
                     'carriers/' . $carrierCode,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $storeId
                 );
                 if (!$carrierConfig) {
@@ -231,6 +234,8 @@ class Shipping implements RateCollectorInterface
      * @param string $carrierCode
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function collectCarrierRates($carrierCode, $request)
     {
@@ -310,6 +315,8 @@ class Shipping implements RateCollectorInterface
      * @param \Magento\Shipping\Model\Carrier\AbstractCarrier $carrier
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return array [int, float]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function composePackagesForCarrier($carrier, $request)
     {

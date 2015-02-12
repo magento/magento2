@@ -3,18 +3,21 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php
-$_htmlId = $this->getHtmlId() ? $this->getHtmlId() : '_' . uniqid();
-$_colspan = $this->isAddAfter() ? 2 : 1;
+$_htmlId = $block->getHtmlId() ? $block->getHtmlId() : '_' . uniqid();
+$_colspan = $block->isAddAfter() ? 2 : 1;
 ?>
 
 <div class="design_theme_ua_regexp" id="grid<?php echo $_htmlId; ?>">
     <table cellspacing="0" class="data-table">
         <thead>
         <tr>
-            <?php foreach ($this->getColumns() as $columnName => $column): ?>
+            <?php foreach ($block->getColumns() as $columnName => $column): ?>
             <th><?php echo $column['label']; ?></th>
             <?php endforeach;?>
             <th class="col-actions" colspan="<?php echo $_colspan; ?>">Action</th>
@@ -22,32 +25,32 @@ $_colspan = $this->isAddAfter() ? 2 : 1;
         </thead>
         <tfoot>
         <tr>
-            <td colspan="<?php echo count($this->getColumns())+$_colspan; ?>" class="col-actions-add">
+            <td colspan="<?php echo count($block->getColumns())+$_colspan; ?>" class="col-actions-add">
                 <button id="addToEndBtn<?php echo $_htmlId; ?>" class="action- add" title="<?php echo __('Add'); ?>" type="button">
-                    <span><?php echo $this->getAddButtonLabel(); ?><?php echo __('Add'); ?></span>
+                    <span><?php echo $block->getAddButtonLabel(); ?><?php echo __('Add'); ?></span>
                 </button>
             </td>
         </tr>
         </tfoot>
         <tbody id="addRow<?php echo $_htmlId; ?>"></tbody>
     </table>
-    <input type="hidden" name="<?php echo $this->getElement()->getName(); ?>[__empty]" value="" />
+    <input type="hidden" name="<?php echo $block->getElement()->getName(); ?>[__empty]" value="" />
 
     <script>
-
+        require(['prototype'], function(){
         // create row creator
         var arrayRow<?php echo $_htmlId ?> = {
 
             // define row prototypeJS template
             template: new Template(
                     '<tr id="#{_id}">'
-                    <?php foreach ($this->getColumns() as $columnName => $column): ?>
+                    <?php foreach ($block->getColumns() as $columnName => $column): ?>
                             + '<td>'
-                            + '<?php echo $this->renderCellTemplate($columnName)?>'
+                            + '<?php echo $block->renderCellTemplate($columnName)?>'
                             + '<\/td>'
                         <?php endforeach; ?>
 
-                    <?php if ($this->isAddAfter()): ?>
+                    <?php if ($block->isAddAfter()): ?>
                             + '<td><button class="action- add" type="button" id="addAfterBtn#{_id}"><span><?php echo __('Add after'); ?><\/span><\/button><\/td>'
                         <?php endif; ?>
 
@@ -65,7 +68,7 @@ $_colspan = $this->isAddAfter() ? 2 : 1;
                 } else {
                     var d = new Date();
                     templateValues = {
-                <?php foreach ($this->getColumns() as $columnName => $column): ?>
+                <?php foreach ($block->getColumns() as $columnName => $column): ?>
                     <?php echo $columnName ?>: '',
                     <?php endforeach; ?>
                         _id: '_' + d.getTime() + '_' + d.getMilliseconds()
@@ -90,7 +93,7 @@ $_colspan = $this->isAddAfter() ? 2 : 1;
         }
 
         // Add event for {addAfterBtn} button
-        <?php if ($this->isAddAfter()): ?>
+        <?php if ($block->isAddAfter()): ?>
         Event.observe('addAfterBtn' + templateValues._id, 'click', this.add.bind(this, false, templateValues._id));
             <?php endif; ?>
         },
@@ -105,15 +108,15 @@ $_colspan = $this->isAddAfter() ? 2 : 1;
 
         // add existing rows
         <?php
-        foreach ($this->getArrayRows() as $_rowId => $_row) {
+        foreach ($block->getArrayRows() as $_rowId => $_row) {
             echo "arrayRow{$_htmlId}.add(" . $_row->toJson() . ");\n";
         }
         ?>
 
         // Toggle the grid availability, if element is disabled (depending on scope)
-        <?php if ($this->getElement()->getDisabled()):?>
+        <?php if ($block->getElement()->getDisabled()):?>
         toggleValueElements({checked: true}, $('grid<?php echo $_htmlId; ?>').parentNode);
             <?php endif;?>
-
+        });
     </script>
 </div>

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 /**
@@ -40,12 +43,22 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|
      */
-    protected $taxClassKeyBuilderMock;
+    protected $taxClassKeyDataObjectFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|
      */
-    protected $quoteDetailsItemBuilderMock;
+    protected $quoteDetailsItemDataObjectFactoryMock;
+
+    /**
+     * @var \Magento\Tax\Api\Data\QuoteDetailsItemInterface
+     */
+    protected $quoteDetailsItemDataObject;
+
+    /**
+     * @var \Magento\Tax\Api\Data\TaxClassKeyInterface
+     */
+    protected $taxClassKeyDataObject;
 
     public function setUp()
     {
@@ -78,19 +91,25 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->any())
             ->method('getQuote')
             ->will($this->returnValue($this->quote));
-        $methods = ['setType', 'setCode', 'setQuantity', 'setUnitPrice', 'setDiscountAmount',
-            'setTaxClassKey', 'setTaxIncluded', 'create', ];
-        $this->quoteDetailsItemBuilderMock
-            = $this->getMock('Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder', $methods, [], '', false);
-        $classMethods = ['setType', 'setValue', 'create'];
-        $this->taxClassKeyBuilderMock =
-            $this->getMock('Magento\Tax\Api\Data\TaxClassKeyDataBuilder', $classMethods, [], '', false);
+        $methods = ['create'];
+        $this->quoteDetailsItemDataObject = $objectManager->getObject('Magento\Tax\Model\Sales\Quote\ItemDetails');
+        $this->taxClassKeyDataObject = $objectManager->getObject('Magento\Tax\Model\TaxClass\Key');
+        $this->quoteDetailsItemDataObjectFactoryMock
+            = $this->getMock('Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory', $methods, [], '', false);
+        $this->quoteDetailsItemDataObjectFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->quoteDetailsItemDataObject);
+        $this->taxClassKeyDataObjectFactoryMock =
+            $this->getMock('Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory', $methods, [], '', false);
+        $this->taxClassKeyDataObjectFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->taxClassKeyDataObject);
         $this->commonTaxCollector = $objectManager->getObject(
             'Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector',
             [
                 'taxConfig' => $this->taxConfig,
-                'quoteDetailsItemBuilder' => $this->quoteDetailsItemBuilderMock,
-                'taxClassKeyBuilder' => $this->taxClassKeyBuilderMock
+                'quoteDetailsItemDataObjectFactory' => $this->quoteDetailsItemDataObjectFactoryMock,
+                'taxClassKeyDataObjectFactory' => $this->taxClassKeyDataObjectFactoryMock
             ]
         );
     }
@@ -99,8 +118,7 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
      * @param array $addressData
      * @param bool $useBaseCurrency
      * @param string $shippingTaxClass
-     * @param bool shippingPriceInclTax
-     * @param array $expectedValue
+     * @param bool $shippingPriceInclTax
      * @dataProvider getShippingDataObjectDataProvider
      */
     public function testGetShippingDataObject(
@@ -111,7 +129,6 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
     ) {
         $baseShippingAmount = $addressData['base_shipping_amount'];
         $shippingAmount = $addressData['shipping_amount'];
-        $itemMock = $this->getMock('Magento\Tax\Api\Data\QuoteDetailsItemInterface');
         $this->taxConfig->expects($this->any())
             ->method('getShippingTaxClass')
             ->with($this->store)
@@ -130,29 +147,20 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
                     ->expects($this->once())
                     ->method('getBaseShippingDiscountAmount')
                     ->willReturn($baseShippingAmount);
-                $this->quoteDetailsItemBuilderMock
-                    ->expects($this->once())
-                    ->method('setDiscountAmount')
-                    ->with($baseShippingAmount);
+                $expectedDiscountAmount = $baseShippingAmount;
             } else {
                 $this->address->expects($this->never())->method('getBaseShippingDiscountAmount');
-                $this->quoteDetailsItemBuilderMock
-                    ->expects($this->once())
-                    ->method('setDiscountAmount')
-                    ->with($shippingAmount);
+                $expectedDiscountAmount = $shippingAmount;
             }
         }
         foreach ($addressData as $key => $value) {
             $this->address->setData($key, $value);
         }
-        $this->taxClassKeyBuilderMock->expects($this->any())->method('setType')->willReturnSelf();
-        $this->taxClassKeyBuilderMock
-            ->expects($this->any())
-            ->method('setValue')
-            ->with($shippingTaxClass)->willReturnSelf();
-        $this->quoteDetailsItemBuilderMock->expects($this->once())->method('create')->willReturn($itemMock);
-        $this->assertEquals($itemMock,
+        $this->assertEquals($this->quoteDetailsItemDataObject,
             $this->commonTaxCollector->getShippingDataObject($this->address, $useBaseCurrency));
+        if ($shippingAmount) {
+            $this->assertEquals($expectedDiscountAmount, $this->quoteDetailsItemDataObject->getDiscountAmount());
+        }
     }
 
     public function getShippingDataObjectDataProvider()

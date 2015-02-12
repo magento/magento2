@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Helper\Session;
 
 class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
@@ -23,9 +26,9 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
     protected $layoutMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerDataBuilderMock;
+    protected $customerInterfaceFactoryMock;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -69,8 +72,8 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
     {
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
-        $this->customerDataBuilderMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerDataBuilder',
+        $this->customerInterfaceFactoryMock = $this->getMock(
+            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
             ['create', 'setGroupId'],
             [],
             '',
@@ -97,7 +100,7 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
         $this->currentCustomer = new \Magento\Customer\Helper\Session\CurrentCustomer(
             $this->customerSessionMock,
             $this->layoutMock,
-            $this->customerDataBuilderMock,
+            $this->customerInterfaceFactoryMock,
             $this->customerRepositoryMock,
             $this->requestMock,
             $this->moduleManagerMock,
@@ -129,14 +132,14 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
             )->will(
                 $this->returnValue($this->customerGroupId)
             );
-        $this->customerDataBuilderMock->expects(
+        $this->customerInterfaceFactoryMock->expects(
             $this->once()
         )->method(
                 'create'
             )->will(
                 $this->returnValue($this->customerDataMock)
             );
-        $this->customerDataBuilderMock->expects(
+        $this->customerDataMock->expects(
             $this->once()
         )->method(
                 'setGroupId'

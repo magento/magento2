@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
@@ -39,6 +42,7 @@ class Editor extends Textarea
 
     /**
      * @return string
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getElementHtml()
     {
@@ -111,7 +115,7 @@ class Editor extends Textarea
                 '
                 <script type="text/javascript">
                 //<![CDATA[
-                require(["jquery", "mage/translate", "mage/adminhtml/events", "mage/adminhtml/wysiwyg/tiny_mce/setup"], function(jQuery){' .
+                require(["jquery", "mage/translate", "mage/adminhtml/events", "mage/adminhtml/wysiwyg/tiny_mce/setup", "mage/adminhtml/wysiwyg/widget"], function(jQuery){' .
                 "\n" .
                 '(function($) {$.mage.translate.add(' .
                 \Zend_Json::encode(
@@ -218,6 +222,8 @@ class Editor extends Textarea
      *
      * @param bool $visible Display button or not
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getPluginButtonsHtml($visible = true)
     {
@@ -255,17 +261,19 @@ class Editor extends Textarea
             );
         }
 
-        foreach ($this->getConfig('plugins') as $plugin) {
-            if (isset($plugin['options']) && $this->_checkPluginButtonOptions($plugin['options'])) {
-                $buttonOptions = $this->_prepareButtonOptions($plugin['options']);
-                if (!$visible) {
-                    $configStyle = '';
-                    if (isset($buttonOptions['style'])) {
-                        $configStyle = $buttonOptions['style'];
+        if (is_array($this->getConfig('plugins'))) {
+            foreach ($this->getConfig('plugins') as $plugin) {
+                if (isset($plugin['options']) && $this->_checkPluginButtonOptions($plugin['options'])) {
+                    $buttonOptions = $this->_prepareButtonOptions($plugin['options']);
+                    if (!$visible) {
+                        $configStyle = '';
+                        if (isset($buttonOptions['style'])) {
+                            $configStyle = $buttonOptions['style'];
+                        }
+                        $buttonOptions = array_merge($buttonOptions, ['style' => 'display:none;' . $configStyle]);
                     }
-                    $buttonOptions = array_merge($buttonOptions, ['style' => 'display:none;' . $configStyle]);
+                    $buttonsHtml .= $this->_getButtonHtml($buttonOptions);
                 }
-                $buttonsHtml .= $this->_getButtonHtml($buttonOptions);
             }
         }
 
@@ -332,6 +340,7 @@ class Editor extends Textarea
      *
      * @param array $data Button params
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getButtonHtml($data)
     {
@@ -393,11 +402,11 @@ class Editor extends Textarea
      * Translate string using defined helper
      *
      * @param string $string String to be translated
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function translate($string)
     {
-        return __($string);
+        return (string)new \Magento\Framework\Phrase($string);
     }
 
     /**

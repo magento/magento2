@@ -5,8 +5,7 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Api\Data\GroupDataBuilder;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Customer group model
@@ -50,11 +49,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
     protected $_storesConfig;
 
     /**
-     * @var GroupDataBuilder
-     */
-    protected $groupBuilder;
-
-    /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
      */
     protected $dataObjectProcessor;
@@ -70,22 +64,21 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoresConfig $storesConfig
-     * @param GroupDataBuilder $groupBuilder
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Tax\Model\ClassModelFactory $classModelFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoresConfig $storesConfig,
-        GroupDataBuilder $groupBuilder,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Tax\Model\ClassModelFactory $classModelFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -94,13 +87,12 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
     ) {
         $this->_storesConfig = $storesConfig;
         $this->dataObjectProcessor = $dataObjectProcessor;
-        $this->groupBuilder = $groupBuilder;
         $this->classModelFactory = $classModelFactory;
         parent::__construct(
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data

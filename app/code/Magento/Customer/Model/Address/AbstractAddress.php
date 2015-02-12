@@ -7,12 +7,12 @@
 namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AddressDataBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\RegionDataBuilder;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Model\Data\Address as AddressData;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Address abstract model
@@ -27,6 +27,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method string getTelephone()
  * @method string getPostcode()
  * @method bool getShouldIgnoreValidation()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
 {
@@ -98,45 +99,53 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
     protected $_addressMetadataService;
 
     /**
-     * @var AddressDataBuilder
+     * @var AddressInterfaceFactory
      */
-    protected $_addressBuilder;
+    protected $addressDataFactory;
 
     /**
-     * @var RegionDataBuilder
+     * @var RegionInterfaceFactory
      */
-    protected $_regionBuilder;
+    protected $regionDataFactory;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param AddressMetadataInterface $addressMetadataService
-     * @param AddressDataBuilder $addressBuilder
-     * @param RegionDataBuilder $regionBuilder
+     * @param AddressInterfaceFactory $addressDataFactory
+     * @param RegionInterfaceFactory $regionDataFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
         AddressMetadataInterface $addressMetadataService,
-        AddressDataBuilder $addressBuilder,
-        RegionDataBuilder $regionBuilder,
+        AddressInterfaceFactory $addressDataFactory,
+        RegionInterfaceFactory $regionDataFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -148,13 +157,14 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
         $this->_regionFactory = $regionFactory;
         $this->_countryFactory = $countryFactory;
         $this->_addressMetadataService = $addressMetadataService;
-        $this->_addressBuilder = $addressBuilder;
-        $this->_regionBuilder = $regionBuilder;
+        $this->addressDataFactory = $addressDataFactory;
+        $this->regionDataFactory = $regionDataFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct(
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -472,6 +482,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
      * @return AddressInterface
      * @deprecated Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
      * the instance of Api/Data/AddressInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
@@ -491,35 +502,30 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
         }
 
         /** @var RegionInterface $region */
-        $region = $this->_regionBuilder
-            ->populateWithArray(
-                [
-                    RegionInterface::REGION => $this->getRegion(),
-                    RegionInterface::REGION_ID => $this->getRegionId(),
-                    RegionInterface::REGION_CODE => $this->getRegionCode(),
-                ]
-            )
-            ->create();
+        $region = $this->regionDataFactory->create();
+        $region->setRegion($this->getRegion())
+            ->setRegionCode($this->getRegionCode())
+            ->setRegionId($this->getRegionId());
 
         $addressData[AddressData::REGION] = $region;
 
-        $this->_addressBuilder->populateWithArray($addressData);
+        $addressDataObject = $this->addressDataFactory->create();
+        $this->dataObjectHelper->populateWithArray($addressDataObject, $addressData);
         if ($addressId) {
-            $this->_addressBuilder->setId($addressId);
+            $addressDataObject->setId($addressId);
         }
 
         if ($this->getCustomerId() || $this->getParentId()) {
             $customerId = $this->getCustomerId() ?: $this->getParentId();
-            $this->_addressBuilder->setCustomerId($customerId);
+            $addressDataObject->setCustomerId($customerId);
             if ($defaultBillingAddressId == $addressId) {
-                $this->_addressBuilder->setDefaultBilling(true);
+                $addressDataObject->setIsDefaultBilling(true);
             }
             if ($defaultShippingAddressId == $addressId) {
-                $this->_addressBuilder->setDefaultShipping(true);
+                $addressDataObject->setIsDefaultShipping(true);
             }
         }
 
-        $addressDataObject = $this->_addressBuilder->create();
         return $addressDataObject;
     }
 
@@ -527,6 +533,8 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
      * Validate address attribute values
      *
      * @return bool|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validate()
     {

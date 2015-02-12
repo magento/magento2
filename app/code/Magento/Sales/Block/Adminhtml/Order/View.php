@@ -64,6 +64,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Constructor
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _construct()
     {
@@ -270,7 +273,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Get header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
@@ -449,7 +452,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * @param \Magento\Sales\Model\Order $order
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function getEditMessage($order)
     {

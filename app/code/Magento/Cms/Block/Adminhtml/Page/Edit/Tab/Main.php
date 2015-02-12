@@ -37,6 +37,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * Prepare form
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
@@ -144,7 +145,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     /**
      * Prepare label for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -154,7 +155,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     /**
      * Prepare title for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

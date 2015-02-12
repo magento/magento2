@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Core\Model\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -11,6 +14,7 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class Storage
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Storage extends AbstractModel
 {
@@ -97,6 +101,7 @@ class Storage extends AbstractModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -195,6 +200,8 @@ class Storage extends AbstractModel
      *
      * @param  array $storage
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function synchronize($storage)
     {
@@ -285,7 +292,7 @@ class Storage extends AbstractModel
             $config['allowed_resources'][] = $allowedResource;
         }
 
-        $config['update_time'] = $this->_scopeConfig->getValue(self::XML_PATH_MEDIA_UPDATE_TIME, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $config['update_time'] = $this->_scopeConfig->getValue(self::XML_PATH_MEDIA_UPDATE_TIME, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
 
         return $config;
     }

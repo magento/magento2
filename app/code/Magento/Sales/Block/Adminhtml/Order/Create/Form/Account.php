@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
@@ -46,6 +49,7 @@ class Account extends AbstractForm
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -86,7 +90,7 @@ class Account extends AbstractForm
     /**
      * Return header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

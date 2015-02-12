@@ -4,17 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 ?>
-<?php /* @var $this \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi */ ?>
-<?php $_option = $this->getOption() ?>
+<?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi */ ?>
+<?php $_option = $block->getOption() ?>
 <?php $_selections = $_option->getSelections() ?>
 <div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
     <label class="label" for="bundle-option-<?php echo $_option->getId() ?>">
-        <span><?php echo $this->escapeHtml($_option->getTitle()) ?></span>
+        <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
-        <?php if ($this->showSingle()): ?>
-            <?php echo $this->getSelectionQtyTitlePrice($_selections[0]) ?>
+        <?php if ($block->showSingle()): ?>
+            <?php echo $block->getSelectionQtyTitlePrice($_selections[0]) ?>
             <input type="hidden"
                    name="bundle_option[<?php echo $_option->getId() ?>]"
                    value="<?php echo $_selections[0]->getSelectionId() ?>"/>
@@ -30,9 +32,9 @@
                 <?php endif; ?>
                 <?php foreach ($_selections as $_selection): ?>
                     <option value="<?php echo $_selection->getSelectionId() ?>"
-                            <?php if ($this->isSelected($_selection)) echo ' selected="selected"' ?>
+                            <?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?>
                             <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>>
-                        <?php echo $this->getSelectionQtyTitlePrice($_selection, false) ?>
+                        <?php echo $block->getSelectionQtyTitlePrice($_selection, false) ?>
                     </option>
                 <?php endforeach; ?>
             </select>

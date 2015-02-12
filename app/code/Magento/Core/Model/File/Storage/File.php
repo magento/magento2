@@ -86,7 +86,7 @@ class File
     /**
      * Return storage name
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getStorageName()
     {
@@ -131,6 +131,7 @@ class File
      * @param  int $count
      * @param  string $type
      * @return array|bool
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function collectData($offset = 0, $count = 100, $type = 'files')
     {

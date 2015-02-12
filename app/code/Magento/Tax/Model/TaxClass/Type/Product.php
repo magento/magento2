@@ -49,7 +49,7 @@ class Product extends \Magento\Tax\Model\TaxClass\AbstractType
     /**
      * Get Name of Objects that use this Tax Class Type
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getObjectTypeName()
     {

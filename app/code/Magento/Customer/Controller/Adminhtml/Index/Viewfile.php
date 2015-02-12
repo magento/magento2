@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,8 +8,8 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\AddressDataBuilder;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\App\Action\NotFoundException;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -41,11 +40,18 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * @param Mapper $addressMapper
      * @param AccountManagementInterface $customerAccountManagement
      * @param AddressRepositoryInterface $addressRepository
-     * @param CustomerDataBuilder $customerDataBuilder
-     * @param AddressDataBuilder $addressDataBuilder
+     * @param CustomerInterfaceFactory $customerDataFactory
+     * @param AddressInterfaceFactory $addressDataFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param ObjectFactory $objectFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -65,11 +71,18 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         Mapper $addressMapper,
         AccountManagementInterface $customerAccountManagement,
         AddressRepositoryInterface $addressRepository,
-        CustomerDataBuilder $customerDataBuilder,
-        AddressDataBuilder $addressDataBuilder,
+        CustomerInterfaceFactory $customerDataFactory,
+        AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         ObjectFactory $objectFactory,
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
         \Magento\Framework\Url\DecoderInterface $urlDecoder
     ) {
         parent::__construct(
@@ -87,11 +100,18 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $addressMapper,
             $customerAccountManagement,
             $addressRepository,
-            $customerDataBuilder,
-            $addressDataBuilder,
+            $customerDataFactory,
+            $addressDataFactory,
             $customerMapper,
             $dataObjectProcessor,
-            $objectFactory
+            $dataObjectHelper,
+            $objectFactory,
+            $layoutFactory,
+            $resultLayoutFactory,
+            $resultPageFactory,
+            $resultRedirectFactory,
+            $resultForwardFactory,
+            $resultJsonFactory
         );
         $this->urlDecoder  = $urlDecoder;
     }
@@ -157,11 +177,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $this->getResponse()
                 ->setHttpResponseCode(200)
                 ->setHeader('Pragma', 'public', true)
-                ->setHeader(
-                    'Content-type',
-                    $contentType,
-                    true
-                )
+                ->setHeader('Content-type', $contentType, true)
                 ->setHeader('Content-Length', $contentLength)
                 ->setHeader('Last-Modified', date('r', $contentModify))
                 ->clearBody();
@@ -170,13 +186,9 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             echo $directory->readFile($fileName);
         } else {
             $name = pathinfo($path, PATHINFO_BASENAME);
-            $this->_fileFactory->create(
-                $name,
-                ['type' => 'filename', 'value' => $fileName],
-                DirectoryList::MEDIA
-            )->sendResponse();
+            $this->_fileFactory->create($name, ['type' => 'filename', 'value' => $fileName], DirectoryList::MEDIA)
+                ->sendResponse();
         }
-
         exit;
     }
 }

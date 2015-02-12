@@ -9,6 +9,9 @@ namespace Magento\Shipping\Model\Shipping;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LabelGenerator
 {
     /**
@@ -92,7 +95,7 @@ class LabelGenerator
         $carrierCode = $carrier->getCarrierCode();
         $carrierTitle = $this->scopeConfig->getValue(
             'carriers/' . $carrierCode . '/title',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $shipment->getStoreId()
         );
         if (!empty($trackingNumbers)) {

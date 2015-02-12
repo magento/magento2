@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Dashboard\Tab\Customers;
  * Adminhtml dashboard most recent customers grid
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Newest extends \Magento\Backend\Block\Dashboard\Grid
 {
@@ -88,12 +89,13 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
             'orders_avg_amount',
             [
                 'header' => __('Average'),
-                'align' => 'right',
                 'sortable' => false,
                 'type' => 'currency',
                 'currency_code' => $baseCurrencyCode,
                 'index' => 'orders_avg_amount',
-                'renderer' => 'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency'
+                'renderer' => 'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency',
+                'header_css_class' => 'col-avg',
+                'column_css_class' => 'col-avg'
             ]
         );
 
@@ -101,12 +103,13 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
             'orders_sum_amount',
             [
                 'header' => __('Total'),
-                'align' => 'right',
                 'sortable' => false,
                 'type' => 'currency',
                 'currency_code' => $baseCurrencyCode,
                 'index' => 'orders_sum_amount',
-                'renderer' => 'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency'
+                'renderer' => 'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency',
+                'header_css_class' => 'col-total',
+                'column_css_class' => 'col-total'
             ]
         );
 

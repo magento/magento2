@@ -32,6 +32,7 @@ namespace Magento\Newsletter\Model;
  * @method \Magento\Newsletter\Model\Template setModifiedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Template extends \Magento\Email\Model\AbstractTemplate
 {
@@ -52,7 +53,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     /**
      * Store manager to emulate design
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -93,21 +94,22 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Core\Model\App\Emulation $appEmulation
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Newsletter\Model\Template\Filter $filter
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
-        \Magento\Core\Model\App\Emulation $appEmulation,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\App\Emulation $appEmulation,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\Filter $filter,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -217,6 +219,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Check Template Text Preprocessed
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getTemplateTextPreprocessed()
     {
@@ -332,7 +335,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     {
         return !$this->_scopeConfig->isSetFlag(
             \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) && $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
     }
 }

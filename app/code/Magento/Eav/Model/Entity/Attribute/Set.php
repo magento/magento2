@@ -20,8 +20,11 @@
 namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Eav\Model\Entity\Type;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Eav\Api\Data\AttributeSetInterface
 {
@@ -62,7 +65,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
@@ -70,12 +73,13 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $attrGroupFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
@@ -88,7 +92,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -156,6 +160,8 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param array $data
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function organizeData($data)
     {
@@ -263,6 +269,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param array $attributes
      * @param int $setId
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addSetInfo($entityType, array $attributes, $setId = null)
     {

@@ -183,7 +183,7 @@ class Main extends \Magento\Backend\Block\Template
     /**
      * Retrieve Block Header Text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getHeader()
     {
@@ -345,6 +345,7 @@ class Main extends \Magento\Backend\Block\Template
      * Check Current Attribute Set is a default
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsCurrentSetDefault()
     {

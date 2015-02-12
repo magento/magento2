@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Adminhtml catalog product edit action attributes update tab block
  *
@@ -13,6 +15,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -149,7 +154,7 @@ HTML;
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -157,7 +162,7 @@ HTML;
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

@@ -260,7 +260,9 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
             return '';
         }
 
-        $gridIds = $this->getParentBlock()->getCollection()->getAllIds();
+        /** @var \Magento\Framework\Data\Collection $allIdsCollection */
+        $allIdsCollection = clone $this->getParentBlock()->getCollection();
+        $gridIds = $allIdsCollection->clear()->setPageSize(0)->getAllIds();
 
         if (!empty($gridIds)) {
             return join(",", $gridIds);
@@ -295,6 +297,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve select all functionality flag check
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseSelectAll()
     {

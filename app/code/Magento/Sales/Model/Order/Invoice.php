@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
@@ -52,6 +52,9 @@ use Magento\Sales\Model\EntityInterface;
  * @method \Magento\Sales\Model\Order\Invoice setBaseShippingHiddenTaxAmnt(float $value)
  * @method \Magento\Sales\Model\Order\Invoice setShippingInclTax(float $value)
  * @method \Magento\Sales\Model\Order\Invoice setBaseShippingInclTax(float $value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 {
@@ -154,7 +157,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Invoice\Config $invoiceConfig
@@ -166,12 +169,13 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\Order\Invoice\Config $invoiceConfig,
@@ -194,7 +198,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $localeDate,
             $dateTime,
             $resource,
@@ -593,7 +597,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * Retrieve invoice state name by state identifier
      *
      * @param   int|null $stateId
-     * @return  string
+     * @return \Magento\Framework\Phrase
      */
     public function getStateName($stateId = null)
     {
@@ -617,6 +621,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function register()
     {

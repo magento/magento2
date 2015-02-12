@@ -11,6 +11,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
  * Sitemap resource product collection model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
@@ -52,7 +53,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_productResource;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -85,7 +86,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Sitemap\Helper\Data $sitemapData
      * @param \Magento\Catalog\Model\Resource\Product $productResource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute
@@ -96,7 +97,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Framework\App\Resource $resource,
         \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute,

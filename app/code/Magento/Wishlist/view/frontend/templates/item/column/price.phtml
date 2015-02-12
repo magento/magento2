@@ -4,9 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /* @var \Magento\Wishlist\Model\Item $item */
 ?>
 
-<?php foreach ($this->getChildNames() as $childName): ?>
-    <?php echo $this->getLayout()->renderElement($childName, false); ?>
+<?php foreach ($block->getChildNames() as $childName): ?>
+    <?php echo $block->getLayout()->renderElement($childName, false); ?>
 <?php endforeach;?>

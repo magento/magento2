@@ -7,7 +7,7 @@
 
 namespace Magento\Quote\Model;
 
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Framework\Api\SearchCriteria;
 
 class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,12 +36,22 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $quoteMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $searchResultsBuilderMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $quoteCollectionMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->quoteFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteFactory', ['create'], [], '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
         $this->quoteMock = $this->getMock(
             '\Magento\Quote\Model\Quote',
             ['load', 'loadByCustomer', 'getIsActive', 'getId', '__wakeup', 'setSharedStoreIds', 'save', 'delete',
@@ -51,11 +61,23 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $this->searchResultsBuilderMock = $this->getMock(
+            '\Magento\Quote\Api\Data\CartSearchResultsDataBuilder',
+            ['setSearchCriteria', 'setTotalCount', 'setItems', 'create'],
+            [],
+            '',
+            false
+        );
+
+        $this->quoteCollectionMock = $this->getMock('Magento\Quote\Model\Resource\Quote\Collection', [], [], '', false);
+
         $this->model = $objectManager->getObject(
             'Magento\Quote\Model\QuoteRepository',
             [
                 'quoteFactory' => $this->quoteFactoryMock,
                 'storeManager' => $this->storeManagerMock,
+                'searchResultsBuilder' => $this->searchResultsBuilderMock,
+                'quoteCollection' => $this->quoteCollectionMock,
             ]
         );
     }
@@ -279,5 +301,78 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->exactly(1))->method('getCustomerId')->willReturn(2);
 
         $this->model->delete($this->quoteMock);
+    }
+
+    /**
+     * @param int $direction
+     * @param string $expectedDirection
+     * @dataProvider getListSuccessDataProvider
+     */
+    public function testGetListSuccess($direction, $expectedDirection)
+    {
+        $searchResult = $this->getMock('\Magento\Quote\Api\Data\CartSearchResultsInterface', [], [], '', false);
+        $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
+        $cartMock = $this->getMock('Magento\Payment\Model\Cart', [], [], '', false);
+        $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
+        $pageSize = 10;
+
+        $this->searchResultsBuilderMock
+            ->expects($this->once())
+            ->method('setSearchCriteria');
+
+        $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
+        $searchCriteriaMock
+            ->expects($this->any())
+            ->method('getFilterGroups')
+            ->will($this->returnValue([$filterGroupMock]));
+
+        //addFilterGroupToCollection() checks
+        $filterGroupMock->expects($this->any())->method('getFilters')->will($this->returnValue([$filterMock]));
+        $filterMock->expects($this->once())->method('getField')->will($this->returnValue('store_id'));
+        $filterMock->expects($this->any())->method('getConditionType')->will($this->returnValue('eq'));
+        $filterMock->expects($this->once())->method('getValue')->will($this->returnValue('filter_value'));
+
+        //back in getList()
+        $this->quoteCollectionMock->expects($this->once())->method('getSize')->willReturn($pageSize);
+        $this->searchResultsBuilderMock->expects($this->once())->method('setTotalCount')->with($pageSize);
+        $sortOrderMock = $this->getMockBuilder('Magento\Framework\Api\SortOrder')
+            ->setMethods(['getField', 'getDirection'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        //foreach cycle
+        $searchCriteriaMock
+            ->expects($this->once())
+            ->method('getSortOrders')
+            ->will($this->returnValue([$sortOrderMock]));
+        $sortOrderMock->expects($this->once())->method('getField')->will($this->returnValue('id'));
+        $sortOrderMock->expects($this->once())->method('getDirection')->will($this->returnValue($direction));
+        $this->quoteCollectionMock->expects($this->once())->method('addOrder')->with('id', $expectedDirection);
+
+
+        $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->will($this->returnValue(1));
+        $searchCriteriaMock->expects($this->once())->method('getPageSize')->will($this->returnValue(10));
+        $this->quoteCollectionMock->expects($this->once())->method('setCurPage')->with(1);
+        $this->quoteCollectionMock->expects($this->once())->method('setPageSize')->with(10);
+
+
+        $this->quoteCollectionMock->expects($this->once())->method('getItems')->willReturn([$cartMock]);
+        $this->searchResultsBuilderMock->expects($this->once())->method('setItems')->with([$cartMock]);
+        $this->searchResultsBuilderMock
+            ->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($searchResult));
+        $this->assertEquals($searchResult, $this->model->getList($searchCriteriaMock));
+    }
+
+    /**
+     * @return array
+     */
+    public function getListSuccessDataProvider()
+    {
+        return [
+            'asc' => [SearchCriteria::SORT_ASC, 'ASC'],
+            'desc' => [SearchCriteria::SORT_DESC, 'DESC']
+        ];
     }
 }

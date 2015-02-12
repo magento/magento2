@@ -4,12 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Api;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Tax\Api\Data\TaxClassDataBuilder;
+use Magento\Tax\Api\Data\TaxClassInterfaceFactory;
 use Magento\Tax\Model\ClassModelRegistry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -30,8 +32,8 @@ class TaxClassRepositoryTest extends WebapiAbstract
     /** @var FilterBuilder */
     private $filterBuilder;
 
-    /** @var TaxClassDataBuilder */
-    private $taxClassBuilder;
+    /** @var TaxClassInterfaceFactory */
+    private $taxClassFactory;
 
     /** @var TaxClassRepositoryInterface */
     private $taxClassRepository;
@@ -52,8 +54,8 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $this->filterBuilder = Bootstrap::getObjectManager()->create(
             'Magento\Framework\Api\FilterBuilder'
         );
-        $this->taxClassBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Tax\Api\Data\TaxClassDataBuilder'
+        $this->taxClassFactory = Bootstrap::getObjectManager()->create(
+            'Magento\Tax\Api\Data\TaxClassInterfaceFactory'
         );
         $this->taxClassRegistry = Bootstrap::getObjectManager()->create(
             'Magento\Tax\Model\ClassModelRegistry'
@@ -71,9 +73,9 @@ class TaxClassRepositoryTest extends WebapiAbstract
     {
         $taxClassName = self::SAMPLE_TAX_CLASS_NAME . uniqid();
         /** @var  \Magento\Tax\Api\Data\TaxClassInterface $taxClassDataObject */
-        $taxClassDataObject = $this->taxClassBuilder->setClassName($taxClassName)
-            ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER)
-            ->create();
+        $taxClassDataObject = $this->taxClassFactory->create();
+        $taxClassDataObject->setClassName($taxClassName)
+            ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER);
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
@@ -107,18 +109,16 @@ class TaxClassRepositoryTest extends WebapiAbstract
     public function testUpdateTaxClass()
     {
         //Create Tax Class
-        $taxClassDataObject = $this->taxClassBuilder->setClassName(self::SAMPLE_TAX_CLASS_NAME . uniqid())
-            ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER)
-            ->create();
+        $taxClassDataObject = $this->taxClassFactory->create();
+        $taxClassDataObject->setClassName(self::SAMPLE_TAX_CLASS_NAME . uniqid())
+            ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER);
         $taxClassId = $this->taxClassRepository->save($taxClassDataObject);
         $this->assertNotNull($taxClassId);
 
         //Update Tax Class
         $updatedTaxClassName = self::SAMPLE_TAX_CLASS_NAME . uniqid();
-        $updatedTaxClassDataObject = $this->taxClassBuilder
-            ->populate($taxClassDataObject)
-            ->setClassName($updatedTaxClassName)
-            ->create();
+        $updatedTaxClassDataObject = $taxClassDataObject;
+        $updatedTaxClassDataObject->setClassName($updatedTaxClassName);
 
         $serviceInfo = [
             'rest' => [
@@ -152,9 +152,9 @@ class TaxClassRepositoryTest extends WebapiAbstract
     {
         //Create Tax Class
         $taxClassName = self::SAMPLE_TAX_CLASS_NAME . uniqid();
-        $taxClassDataObject = $this->taxClassBuilder->setClassName($taxClassName)
-            ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER)
-            ->create();
+        $taxClassDataObject = $this->taxClassFactory->create();
+        $taxClassDataObject->setClassName($taxClassName)
+            ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER);
         $taxClassId = $this->taxClassRepository->save($taxClassDataObject);
         $this->assertNotNull($taxClassId);
 
@@ -184,9 +184,9 @@ class TaxClassRepositoryTest extends WebapiAbstract
      */
     public function testDeleteTaxClass()
     {
-        $taxClassDataObject = $this->taxClassBuilder->setClassName(self::SAMPLE_TAX_CLASS_NAME . uniqid())
-            ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER)
-            ->create();
+        $taxClassDataObject = $this->taxClassFactory->create();
+        $taxClassDataObject->setClassName(self::SAMPLE_TAX_CLASS_NAME . uniqid())
+            ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER);
         $taxClassId = $this->taxClassRepository->save($taxClassDataObject);
         $this->assertNotNull($taxClassId);
 

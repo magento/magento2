@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Product description template
  *
- * @var $this \Magento\Catalog\Block\Product\View\Description
+ * @var $block \Magento\Catalog\Block\Product\View\Description
  */
 ?>
-<?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($this->getProduct(), $this->getProduct()->getDescription(), 'description') ?>
+<?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($block->getProduct(), $block->getProduct()->getDescription(), 'description') ?>
