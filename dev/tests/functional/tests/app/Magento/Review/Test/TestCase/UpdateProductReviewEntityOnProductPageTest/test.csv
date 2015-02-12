@@ -1,2 +1,0 @@
-"rating";"review/data/status_id";"productRating/data/select_stores";"review/data/nickname";"review/data/title";"review/data/detail";"constraint"
-"3";"Approved";"Main Website/Main Website Store/Default Store View";"name%isolation%";"title%isolation%";"details%isolation%";"assertProductReviewBackendSuccessSaveMessage, assertProductReviewInGrid, assertProductReviewOnProductPage, assertProductRatingInProductPage"

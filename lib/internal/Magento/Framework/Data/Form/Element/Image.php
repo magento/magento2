@@ -95,7 +95,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
     {
         $html = '';
         if ($this->getValue()) {
-            $label = __('Delete Image');
+            $label = (string)new \Magento\Framework\Phrase('Delete Image');
             $html .= '<span class="delete-image">';
             $html .= '<input type="checkbox"' .
                 ' name="' .

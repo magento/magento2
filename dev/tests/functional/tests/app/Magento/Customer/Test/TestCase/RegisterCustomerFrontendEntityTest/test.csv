@@ -1,4 +1,0 @@
-"description";"customer/data/firstname";"customer/data/lastname";"customer/data/email";"customer/data/is_subscribed";"customer/data/password";"customer/data/password_confirmation";"constraint";"tag"
-"Register new customer";"john";"doe";"johndoe%isolation%@example.com";"No";"123123q";"123123q";"assertCustomerSuccessRegisterMessage, assertCustomerInGrid";""
-"Register new customer with subscribing";"john";"doe";"johndoe%isolation%@example.com";"Yes";"123123q";"123123q";"assertCustomerSuccessRegisterMessage, assertCustomerInGrid, assertCustomerForm, assertCustomerIsSubscribedToNewsletter";""
-"MAGETWO-12394: Register Customer";"john";"doe";"johndoe%isolation%@example.com";"No";"123123q";"123123q";"assertCustomerSuccessRegisterMessage, assertCustomerRedirectToDashboard";"bamboo_plan:end_to_end,test_type:acceptance_test"

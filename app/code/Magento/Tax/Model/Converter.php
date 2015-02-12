@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Model;
 
-use Magento\Tax\Api\Data\TaxClassDataBuilder;
+use Magento\Tax\Api\Data\TaxClassInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassInterface as TaxClass;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\ClassModelFactory as TaxClassFactory;
@@ -17,9 +17,9 @@ use Magento\Tax\Model\ClassModelFactory as TaxClassFactory;
 class Converter
 {
     /**
-     * @var TaxClassDataBuilder
+     * @var TaxClassInterfaceFactory
      */
-    protected $taxClassBuilder;
+    protected $taxClassDataObjectFactory;
 
     /**
      * @var TaxClassFactory
@@ -29,12 +29,12 @@ class Converter
     /**
      * Initialize dependencies.
      *
-     * @param TaxClassDataBuilder $taxClassBuilder
+     * @param TaxClassInterfaceFactory $taxClassDataObjectFactory
      * @param TaxClassFactory $taxClassFactory
      */
-    public function __construct(TaxClassDataBuilder $taxClassBuilder, TaxClassFactory $taxClassFactory)
+    public function __construct(TaxClassInterfaceFactory $taxClassDataObjectFactory, TaxClassFactory $taxClassFactory)
     {
-        $this->taxClassBuilder = $taxClassBuilder;
+        $this->taxClassDataObjectFactory = $taxClassDataObjectFactory;
         $this->taxClassFactory = $taxClassFactory;
     }
 
@@ -46,11 +46,10 @@ class Converter
      */
     public function createTaxClassData(TaxClassModel $taxClassModel)
     {
-        $this->taxClassBuilder
+        return $this->taxClassDataObjectFactory->create()
             ->setClassId($taxClassModel->getId())
             ->setClassName($taxClassModel->getClassName())
             ->setClassType($taxClassModel->getClassType());
-        return $this->taxClassBuilder->create();
     }
 
     /**
