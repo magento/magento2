@@ -562,16 +562,22 @@ input.search,
 input[type=tel],
 input[type=color],
 textarea,
+select,
 .input-text {
     display: inline-block;
-    padding: 4px;
-    margin: 0;
-    background-color: #fff;
-    height: 30px;
-    .style9();
-    border: 1px solid #ada89e;
     box-sizing: border-box;
-    border-radius: 2px;
+    border: 1px solid #adadad;
+    border-radius: 1px;
+    padding: 4px;
+    color: #303030;
+    background-color: #fff;
+    font-weight: 500;
+    font-size: 14px;
+    height: 33px;
+    &:focus {
+        border-color: #007bdb;
+        outline: 0;
+    }
 }
 
 textarea,
@@ -581,42 +587,15 @@ textarea,
 
 textarea {
     resize: vertical;
-}
-
-select {
-    height: 30px;
-    padding: 4px 4px 5px;
-    margin: 0 0 8px;
-    border: 1px solid #ada89e;
-    border-radius: 2px;
-    box-sizing: border-box;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    line-height: 1.18em;
+    max-width: none;
 }
 
 select[multiple],
 select[size] {
     height: auto;
-}
-
-input[type=text]:focus,
-input[type=password]:focus,
-input[type=datetime]:focus,
-input[type=datetime-local]:focus,
-input[type=date]:focus,
-input[type=month]:focus,
-input[type=time]:focus,
-input[type=week]:focus,
-input[type=number]:focus,
-input[type=range]:focus,
-input[type=email]:focus,
-input[type=url]:focus,
-input[type=search]:focus,
-input.search:focus,
-input[type=tel]:focus,
-input[type=color]:focus,
-textarea:focus,
-select:focus {
-    border-color: #75b9f0;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
 }
 
 input[type="radio"],
@@ -673,7 +652,8 @@ option.placeholder {
 
 .form-inline .label {
     width: 20%;
-    padding-top: 6px;
+    padding-top: 8px;
+    padding-right: 30px;
 }
 
 .form-inline .label ~ .control {
@@ -729,10 +709,12 @@ fieldset.field [class^='fields-group-'] .field .control {
     width: 160px;
 }
 
-.control > input[type="radio"],
-.control > input[type="checkbox"],
-.control > input[type="file"] {
-    width: auto;
+.control {
+    > input[type="file"],
+    > input[type="checkbox"],
+    > input[type="radio"] {
+        width: auto;
+    }
 }
 
 .control > table {
@@ -1017,7 +999,9 @@ input.mage-error ~ .addafter {
 }
 
 .fieldset .label {
-    .style2();
+    color: #303030;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .fieldset .control .label {
@@ -1025,7 +1009,12 @@ input.mage-error ~ .addafter {
 }
 
 .field.required > .label:after {
-    .style8();
+    color: #eb5202;
+    font-size: 16px;
+    font-weight: 500;
+    position: absolute;
+    margin-left: 10px;
+    top: 9px;
 }
 
 .with-addon .textarea {
@@ -1227,8 +1216,7 @@ input.mage-error ~ .addafter {
             top: 0;
         }
         &:focus ~ .addafter {
-            border-color: #75b9f0;
-            box-shadow: 0 0 8px rgba(82, 168, 236, .6);
+            border-color: #007bdb;
             strong {
                 margin-top: 0;
             }
@@ -1302,14 +1290,14 @@ input.mage-error ~ .addafter {
 .field-price input:focus,
 .field-special_price input:focus,
 .field-msrp input:focus {
-    box-shadow: 0 0 8px rgba(82, 168, 236, .6);
+    border-color: #007bdb;
 }
 
 .field.type-price input:focus ~ label.addafter,
 .field-price input:focus ~ label.addafter,
 .field-special_price input:focus ~ label.addafter,
 .field-msrp input:focus ~ label.addafter {
-    box-shadow: 0 0 8px rgba(82, 168, 236, .6);
+    border-color: #007bdb;
 }
 
 .field.type-price input ~ label.addafter strong,
@@ -1861,57 +1849,6 @@ address {
     }
 }
 
-///*
-//.page-login .logo {
-//    display: block;
-//    width: 100px;
-//    height: 65px;
-//    margin: 0;
-//    text-indent: -999em;
-//    position: relative;
-//    z-index: 1;
-//}
-//
-//.page-login .logo:before,
-//.page-login .logo:after {
-//    font-family: 'admin-icons';
-//    font-size: 65px;
-//    content: '\e00d';
-//    position: absolute;
-//    bottom: 0;
-//    left: 0;
-//    text-indent: 0;
-//    line-height: 1;
-//    font-weight: normal;
-//}
-//
-//.page-login .logo:before {
-//    content: '\e00d';
-//    color: #f37b20;
-//}
-//
-//.page-login .logo:after {
-//    content: '\e00e';
-//    color: #fab57f;
-//}
-//
-//.page-login .logo span:before {
-//    font-family: 'admin-icons';
-//    content: '\e00f';
-//    display: block;
-//    position: absolute;
-//    top: 0;
-//    bottom: 0;
-//    left: 70px;
-//    font-size: 154px;
-//    margin-top: -42px;
-//    text-indent: 0;
-//    line-height: 1;
-//    font-weight: normal;
-//    color: #000;
-//}
-//*/
-
 .page-login .form-actions {
     padding: 0;
     margin: 0;
@@ -1930,6 +1867,9 @@ address {
     font-size: 18px;
     padding: 12px 12px 14px;
     height: auto;
+    &:focus {
+        border-color: #007bdb;
+    }
 }
 
 .page-login :-ms-input-placeholder {
@@ -2759,7 +2699,7 @@ address {
 }
 
 .switcher input[type="checkbox"]:focus + .switcher-label:after {
-    border-color: #75b9f0;
+    border-color: #007bdb;
 }
 
 .switcher input[type="checkbox"]:checked + .switcher-label:after {
@@ -3308,19 +3248,6 @@ tr.dynamic-grid input.input-text {
     clear: both;
 }
 
-// Default & Primary Button
-// input[type=button],
-// input[type=submit],
-// input[type=reset],
-// button,
-// [class^="action-"],
-// .popup-window .add-widget {
-//     &:extend(.DefaultButton all);
-//     &.primary {
-//         &:extend(.PrimaryButton all);
-//     }
-// }
-
 // Custom grids view
 .CustomGridView {
     .col-1-layout {
@@ -3349,125 +3276,6 @@ tr.dynamic-grid input.input-text {
         padding: 0;
     }
 }
-
-// // Primary Add Button for grid tables on pages:
-// // sales
-// .sales-order-index,
-// .adminhtml-rma-index,
-// // marketing
-// .adminhtml-catalog-event-index,
-// .adminhtml-urlrewrite-index,
-// .catalog-search-index,
-// .review-product-index,
-// .catalog-rule-promo-catalog-index,
-// .sales-rule-promo-quote-index,
-// .adminhtml-reminder-index,
-// .newsletter-template-index,
-// .adminhtml-system-email-template-index,
-// .adminhtml-sitemap-index,
-// // products
-// .adminhtml-googleshopping-types-index,
-// // customers
-// .customer-index-index,
-// // cms
-// .adminhtml-cms-page-index,
-// .cms-block-index,
-// .adminhtml-banner-index,
-// .adminhtml-widget-instance-index,
-// .cms-page-index,
-// // system
-// .adminhtml-webapi-user-index,
-// .adminhtml-webapi-role-index,
-// .adminhtml-system-variable-index,
-// .adminhtml-user-index,
-// .adminhtml-user-role-index,
-// .adminhtml-integration-index,
-// // content
-// .adminhtml-system-design-theme-index,
-// .adminhtml-system-design-index,
-// // stores
-// .adminhtml-customer-attribute-index,
-// .adminhtml-customer-address-attribute-index,
-// .rating-index-index,
-// .tax-rule-index,
-// .tax-rate-index,
-// .adminhtml-rma-item-attribute-index,
-// .adminhtml-reward-rate-index,
-// .customer-group-index,
-// .checkout-agreement-index,
-// .catalog-product-attribute-index,
-// .catalog-product-set-index {
-//     &:extend(.CustomGridView all);
-//     &:extend(.CustomGridAction all);
-//     .page-actions {
-//         .add {
-//             &:extend(.PrimaryAddButton all);
-//         }
-//     }
-// }
-
-// .catalog-product-index {
-//     &:extend(.CustomGridView all);
-//     &:extend(.CustomGridAction all);
-// }
-
-// Primary Add Split Button or Primary Split Button
-// .catalog-product-new,
-// .catalog-product-edit,
-// .catalog-product-index,
-// .adminhtml-integration-new {
-//     .actions-split {
-//         &:extend(.PrimarySplitButton all);
-//     }
-// }
-
-// // Custom Grid View for pages:
-// // sales
-// .sales-invoice-index,
-// .sales-shipment-index,
-// .sales-creditmemo-index,
-// .sales-billing-agreement-index,
-// .sales-transactions-index,
-// // products
-// .adminhtml-googleshopping-items-index,
-// // customer
-// .customer-online-index,
-// // marketing
-// .newsletter-queue-index,
-// .newsletter-subscriber-index,
-// // reports
-// .adminhtml-report-shopcart-product,
-// .adminhtml-report-shopcart-abandoned
-// .adminhtml-report-product-downloads,
-// .adminhtml-report-product-sold,
-// .adminhtml-report-product-lowstock,
-// .adminhtml-report-customer-accounts,
-// .adminhtml-report-customer-totals,
-// .adminhtml-report-customer-orders,
-// .adminhtml-report-customer-wishlist-wishlist,
-// .adminhtml-report-review-customer,
-// .adminhtml-report-review-product,
-// .adminhtml-report-search,
-// .adminhtml-report-statistics-index,
-// .newsletter-problem-index,
-// //store
-// .adminhtml-system-store-index,
-// .sales-order-status-index,
-// .adminhtml-system-currency-index,
-// .adminhtml-system-currencysymbol-index,
-// .adminhtml-scheduled-operation-index,
-// // system
-// .adminhtml-cache-index,
-// .adminhtml-system-backup-index,
-// .adminhtml-locks-index,
-// .adminhtml-notification-index,
-// .adminhtml-logging-archive,
-// .adminhtml-logging-index,
-// .adminhtml-process-list,
-// // product
-// .catalog-product-index {
-//     &:extend(.CustomGridView all);
-// }
 
 // Custom page-actions view
 .adminhtml-googleshopping-items-index .grid-title {
@@ -3501,15 +3309,6 @@ tr.dynamic-grid input.input-text {
 .adminhtml-cache-index .additional-cache-management {
     margin-bottom: 0;
 }
-
-// .catalog-rule-promo-catalog-index .grid-actions {
-//     padding-left: 210px;
-// }
-
-// .catalog-rule-promo-catalog-index .page-actions .apply {
-//     float: right;
-//     margin: 0 0 0 10px;
-// }
 
 .sidebar-actions {
     padding: 14px 0;

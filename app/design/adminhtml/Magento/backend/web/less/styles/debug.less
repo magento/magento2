@@ -319,9 +319,12 @@
 
 .accordion .config .label {
     float: none;
-    width: 25%;
+    width: 33%;
+    padding-right: 30px;
     text-align: right;
-    .style2();
+    font-size: 14px;
+    font-weight: 600;
+    color: #303030;
 }
 
 .accordion .config .value .label {
@@ -335,13 +338,13 @@
 }
 
 .accordion .config .label label {
-    padding-top: 6px;
+    padding-top: 7px;
 }
 
 .accordion .config td {
     background: none;
     border: 0;
-    padding: 8px 15px 0 0;
+    padding: 22px 15px 0 0;
     vertical-align: top;
 }
 
@@ -358,7 +361,6 @@
 .accordion .config select,
 .accordion .config textarea {
     width: 100%;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 }
 
 .accordion .config input.input-file {
@@ -370,7 +372,7 @@
 }
 
 .accordion .config .value {
-    width: 50%;
+    width: 44%;
     padding-right: 40px;
     .checkboxes {
         list-style: none;
@@ -443,31 +445,17 @@
     color: #999;
     font-size: 12px;
     letter-spacing: .05em;
-    padding: 15px 15px 0 0;
+    padding: 31px 15px 0 0;
 }
 
 .accordion .config .note {
-    .style19();
-    padding-left: 15px;
-    margin: 5px 0;
+    color: #303030;
+    font-size: 12px;
+    margin: 0;
 }
 
 .accordion .config .note a {
     .style22();
-}
-
-.accordion .config .note:before {
-    position: absolute;
-    margin: 4px 0 0 -14px;
-    content: '';
-    display: inline-block;
-    vertical-align: top;
-    font-size: 0;
-    line-height: 0;
-    width: 0;
-    border-bottom: 5px solid #666;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
 }
 
 .accordion .config .system-tooltip-box {

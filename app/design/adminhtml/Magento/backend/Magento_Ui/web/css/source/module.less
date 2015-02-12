@@ -546,6 +546,9 @@
 .addon {
   input {
     border-width: 1px 0 1px 1px;
+      .field-special_price & {
+          border-width: 1px 1px 1px 0;
+      }
     ~ .addafter strong {
       display: inline-block;
       background: #fff;
@@ -558,8 +561,7 @@
       top: 0;
     }
     &:focus ~ .addafter {
-      border-color: #75b9f0;
-      box-shadow: 0 0 8px rgba(82, 168, 236, .6);
+      border-color: #007bdb;
       strong {
         margin-top: 0;
       }
@@ -612,14 +614,6 @@
 
 .field-price input {
   border-width: 1px 1px 1px 0;
-}
-
-.field-price input:focus {
-  box-shadow: 0 0 8px rgba(82, 168, 236, .6);
-}
-
-.field-price input:focus ~ label.addafter {
-  box-shadow: 0 0 8px rgba(82, 168, 236, .6);
 }
 
 .field-price input ~ label.addafter strong {
