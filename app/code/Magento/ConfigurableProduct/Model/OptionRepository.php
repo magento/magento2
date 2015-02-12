@@ -26,9 +26,9 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     protected $productRepository;
 
     /**
-     * @var \Magento\ConfigurableProduct\Api\Data\OptionValueDataBuilder
+     * @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory
      */
-    protected $optionValueBuilder;
+    protected $optionValueFactory;
 
     /**
      * @var Product\Type\Configurable
@@ -57,7 +57,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\ConfigurableProduct\Api\Data\OptionValueDataBuilder $optionValueBuilder
+     * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory $optionValueFactory
      * @param ConfigurableType $configurableType
      * @param Resource\Product\Type\Configurable\Attribute $optionResource
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
@@ -66,7 +66,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\ConfigurableProduct\Api\Data\OptionValueDataBuilder $optionValueBuilder,
+        \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory $optionValueFactory,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute $optionResource,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
@@ -74,7 +74,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory $configurableAttributeFactory
     ) {
         $this->productRepository = $productRepository;
-        $this->optionValueBuilder = $optionValueBuilder;
+        $this->optionValueFactory = $optionValueFactory;
         $this->configurableType = $configurableType;
         $this->optionResource = $optionResource;
         $this->storeManager = $storeManager;
@@ -98,11 +98,12 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $prices = $configurableAttribute->getPrices();
         if (is_array($prices)) {
             foreach ($prices as $price) {
-                $values[] = $this->optionValueBuilder
-                    ->setValueIndex($price['value_index'])
+                /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
+                $value = $this->optionValueFactory->create();
+                $value->setValueIndex($price['value_index'])
                     ->setPricingValue($price['pricing_value'])
-                    ->setIsPercent($price['is_percent'])
-                    ->create();
+                    ->setIsPercent($price['is_percent']);
+                $values[] = $value;
             }
         }
         $configurableAttribute->setValues($values);
@@ -121,7 +122,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             $prices = $option->getPrices();
             if (is_array($prices)) {
                 foreach ($prices as $price) {
-                    $values[] = $this->optionValueBuilder
+                    $values[] = $this->optionValueFactory
                         ->setValueIndex($price['value_index'])
                         ->setPricingValue($price['pricing_value'])
                         ->setIsPercent($price['is_percent'])
