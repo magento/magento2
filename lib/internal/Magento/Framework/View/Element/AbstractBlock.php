@@ -765,7 +765,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     /**
      * Retrieve formatting date
      *
-     * @param   \Zend_Date|string|null $date
+     * @param   \DateTime|string|null $date
      * @param   string $format
      * @param   bool $showTime
      * @return  string

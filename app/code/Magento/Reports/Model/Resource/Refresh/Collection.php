@@ -49,10 +49,7 @@ class Collection extends \Magento\Framework\Data\Collection
         $flag = $this->_reportsFlagFactory->create()->setReportFlagCode($reportCode)->loadSelf();
         return $flag->hasData() ? $this->_localeDate->scopeDate(
             0,
-            new \Magento\Framework\Stdlib\DateTime\Date(
-                $flag->getLastUpdate(),
-                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-            ),
+            $flag->getLastUpdate(),
             true
         ) : '';
     }
