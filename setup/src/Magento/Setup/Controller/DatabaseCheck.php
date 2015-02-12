@@ -47,7 +47,15 @@ class DatabaseCheck extends AbstractActionController
     public function indexAction()
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
+        var_dump($params);
         try {
+            if (isset($params['tablePrefix'])
+                && $params['tablePrefix'] !==''
+                && !preg_match('/^([[:alnum:]]+)([[:alnum:]_]+)$/', $params['tablePrefix'])
+            ) {
+                die("dfdfd");
+                throw new \InvalidArgumentException('Table prefix is in wrong format.');
+            }
             $installer = $this->installerFactory->create($this->webLogger);
             $password = isset($params['password']) ? $params['password'] : '';
             $installer->checkDatabaseConnection($params['name'], $params['host'], $params['user'], $password);
