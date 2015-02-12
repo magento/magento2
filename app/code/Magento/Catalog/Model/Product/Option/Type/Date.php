@@ -179,7 +179,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getFormattedOptionValue($optionValue)
     {
         if ($this->_formattedOptionValue === null) {
-            $option = $this->getOption();
             if ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE) {
                 $format = $this->_localeDate->getDateFormat(
                     \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
@@ -198,8 +197,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     $format
                 );
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME) {
-                $date = new \Magento\Framework\Stdlib\DateTime\Date($optionValue);
-                $result = date($this->is24hTimeFormat() ? 'H:i' : 'h:i a', $date->getTimestamp());
+                $result = (new \DateTime($optionValue))->format($this->is24hTimeFormat() ? 'H:i' : 'h:i a');
             } else {
                 $result = $optionValue;
             }

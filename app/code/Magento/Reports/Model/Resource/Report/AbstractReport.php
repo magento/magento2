@@ -418,32 +418,24 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
         $tzTransitions = [];
         try {
             if (!empty($from)) {
-                $from = new \Magento\Framework\Stdlib\DateTime\Date($from, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
-                $from = $from->getTimestamp();
+                $from = (new \DateTime($from))->getTimestamp();
             }
 
-            $to = new \Magento\Framework\Stdlib\DateTime\Date($to, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
-            $nextPeriod = $this->_getWriteAdapter()->formatDate(
-                $to->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
-            );
+            $to = new \DateTime($to);
+            $nextPeriod = $to->format('Y-m-d H:i:s');
             $to = $to->getTimestamp();
 
             $dtz = new \DateTimeZone($timezone);
             $transitions = $dtz->getTransitions();
-            $dateTimeObject = new \Magento\Framework\Stdlib\DateTime\Date('c');
 
-            for ($i = count($transitions) - 1; $i >= 0; $i--) {
-                $tr = $transitions[$i];
+            foreach ($transitions as $tr) {
                 try {
                     $this->timezoneValidator->validate($tr['ts'], $to);
                 } catch (\Magento\Framework\Stdlib\DateTime\Timezone\ValidationException $e) {
                     continue;
                 }
 
-                $dateTimeObject->set($tr['time']);
-                $tr['time'] = $this->_getWriteAdapter()->formatDate(
-                    $dateTimeObject->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
-                );
+                $tr['time'] = (new \DateTime($tr['time']))->format('Y-m-d H:i:s');
                 $tzTransitions[$tr['offset']][] = ['from' => $tr['time'], 'to' => $nextPeriod];
 
                 if (!empty($from) && $tr['ts'] < $from) {
