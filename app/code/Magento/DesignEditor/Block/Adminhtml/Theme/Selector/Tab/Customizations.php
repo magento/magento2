@@ -24,7 +24,7 @@ class Customizations extends \Magento\DesignEditor\Block\Adminhtml\Theme\Selecto
     /**
      * Return Tab title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

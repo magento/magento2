@@ -183,7 +183,7 @@ class Main extends \Magento\Backend\Block\Template
     /**
      * Retrieve Block Header Text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getHeader()
     {
