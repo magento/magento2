@@ -1182,6 +1182,8 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
 
                 $object->setParentId((int)$object->getParentId());
 
+                $this->objectRelationProcessor->validateDataIntegrity($this->getEntityTable(), $object->getData());
+
                 $this->_beforeSave($object);
                 $this->_processSaveData($this->_collectSaveData($object));
                 $this->_afterSave($object);
