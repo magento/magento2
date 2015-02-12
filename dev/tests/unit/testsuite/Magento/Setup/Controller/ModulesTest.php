@@ -34,12 +34,15 @@ class ModulesTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->status = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
-        $objectManagerFactory = $this->getMock('Magento\Setup\Model\ObjectManagerFactory', [], [], '', false);
-        $objectManagerFactory->expects($this->once())->method('create')->willReturn($this->objectManager);
+        /** @var
+         * $objectManagerProvider \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
+         */
+        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->modules = $this->getMock('Magento\Setup\Model\ModuleStatus', [], [], '', false);
         $this->status = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
         $this->objectManager->expects($this->once())->method('create')->will($this->returnValue($this->status));
-        $this->controller = new Modules($this->modules, $objectManagerFactory);
+        $this->controller = new Modules($this->modules, $objectManagerProvider);
     }
 
     /**
