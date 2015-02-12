@@ -97,7 +97,7 @@ class Status extends \Magento\Backend\Block\Template
     /**
      * Get customer's current status
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getCurrentStatus()
     {
@@ -114,7 +114,7 @@ class Status extends \Magento\Backend\Block\Template
     /**
      * Get customer last login date
      *
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getLastLoginDate()
     {
@@ -126,7 +126,7 @@ class Status extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getStoreLastLoginDate()
     {

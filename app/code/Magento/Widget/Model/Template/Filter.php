@@ -110,4 +110,17 @@ class Filter extends \Magento\Cms\Model\Template\Filter
 
         return $widget->toHtml();
     }
+
+    /**
+     * Retrieve media file URL directive
+     *
+     * @param string[] $construction
+     * @return string
+     */
+    public function mediaDirective($construction)
+    {
+        $params = $this->_getIncludeParameters($construction[2]);
+        return $this->_storeManager->getStore()
+            ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
+    }
 }

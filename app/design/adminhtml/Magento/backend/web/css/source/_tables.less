@@ -8,7 +8,7 @@
 //  _____________________________________________
 
 @base-table-color: @color-very-dark-gray-black;
-@base-table-border-th-color: @color-gray80;
+@base-table-border-th-color: @color-gray89;
 @base-table-border-td-color: @color-gray89;
 @base-table-background-tfoot: @color-white-fog;
 
@@ -19,7 +19,7 @@
 table {
     color: @base-table-color;
     > caption {
-        margin-bottom: 5px;
+        margin-bottom: .5rem;
     }
     tfoot {
         background: @base-table-background-tfoot;
@@ -30,15 +30,15 @@ table {
     }
     th {
         background: transparent;
-        border-bottom: 1px solid @base-table-border-th-color;
-        border-top: 1px solid @base-table-border-th-color;
+        border-bottom: .1rem solid @base-table-border-th-color;
+        border-top: .1rem solid @base-table-border-th-color;
         font-weight: 700;
-        padding: 10px 15px;
+        padding: 1rem 1.5rem;
         text-align: left;
     }
     td {
-        border-bottom: 1px solid @base-table-border-td-color;
-        padding: 10px 15px;
+        border-bottom: .1rem solid @base-table-border-td-color;
+        padding: 1rem 1.5rem;
         vertical-align: top;
     }
     tbody {

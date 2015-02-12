@@ -48,7 +48,9 @@ class BlockPool
     public function add($name, $class, array $arguments = [])
     {
         if (!class_exists($class)) {
-            throw new \InvalidArgumentException(__('Invalid Block class name: ' . $class));
+            throw new \InvalidArgumentException(
+                (string)new \Magento\Framework\Phrase('Invalid Block class name: %1', [$class])
+            );
         }
 
         $block = $this->blockFactory->createBlock($class, $arguments);

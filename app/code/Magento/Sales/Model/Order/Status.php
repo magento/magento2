@@ -127,7 +127,7 @@ class Status extends \Magento\Framework\Model\AbstractModel
      * Get status label by store
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getStoreLabel($store = null)
     {

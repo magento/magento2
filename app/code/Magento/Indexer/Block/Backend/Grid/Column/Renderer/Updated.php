@@ -11,7 +11,7 @@ class Updated extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Datetim
      * Render indexer updated time
      *
      * @param \Magento\Framework\Object $row
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function render(\Magento\Framework\Object $row)
     {
