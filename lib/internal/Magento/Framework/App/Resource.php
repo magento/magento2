@@ -90,6 +90,17 @@ class Resource
     public function getConnection($resourceName)
     {
         $connectionName = $this->_config->getConnectionName($resourceName);
+        return $this->getConnectionByName($connectionName);
+    }
+
+    /**
+     * Retrieve connection by $connectionName
+     *
+     * @param string $connectionName
+     * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function getConnectionByName($connectionName)
+    {
         if (isset($this->_connections[$connectionName])) {
             return $this->_connections[$connectionName];
         }
