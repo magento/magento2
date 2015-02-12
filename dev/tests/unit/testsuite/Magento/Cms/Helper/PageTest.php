@@ -54,11 +54,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $viewMock;
-
-    /**
      * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $escaperMock;
@@ -113,6 +108,11 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     protected $messageCollectionMock;
 
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultPageFactory;
+
     protected function setUp()
     {
         $this->actionMock = $this->getMockBuilder('Magento\Framework\App\Action\Action')
@@ -150,8 +150,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->viewMock = $this->getMockBuilder('Magento\Framework\App\ViewInterface')
-            ->getMockForAbstractClass();
         $this->escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
             ->disableOriginalConstructor()
             ->getMock();
@@ -189,6 +187,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'urlBuilder' => $this->urlBuilderMock
             ]
         );
+
+        $this->resultPageFactory = $this->getMock('Magento\Framework\View\Result\PageFactory', [], [], '', false);
+
         $this->object = $objectManager->getObject(
             'Magento\Cms\Helper\Page',
             [
@@ -199,9 +200,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'localeDate' => $this->localeDateMock,
                 'design' => $this->designMock,
                 'pageConfig' => $this->pageConfigMock,
-                'view' => $this->viewMock,
                 'escaper' => $this->escaperMock,
-                'messageManager' => $this->messageManagerMock
+                'messageManager' => $this->messageManagerMock,
+                'resultPageFactory' => $this->resultPageFactory
             ]
         );
     }
@@ -221,7 +222,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testRenderPageExtended(
+    public function testPrepareResultPage(
         $pageId,
         $internalPageId,
         $pageLoadResultIndex,
@@ -287,6 +288,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->pageMock->expects($this->any())
             ->method('getCustomPageLayout')
             ->willReturn($customPageLayout);
+        $this->resultPageFactory->expects($this->any())->method('create')
+            ->will($this->returnValue($this->resultPageMock));
         $this->resultPageMock->expects($this->any())
             ->method('getConfig')
             ->willReturn($this->pageConfigMock);
@@ -294,9 +297,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->method('setPageLayout')
             ->with($handle)
             ->willReturnSelf();
-        $this->viewMock->expects($this->any())
-            ->method('getPage')
-            ->willReturn($this->resultPageMock);
         $this->resultPageMock->expects($this->any())
             ->method('initLayout')
             ->willReturnSelf();
@@ -313,10 +313,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->pageMock->expects($this->any())
             ->method('getIdentifier')
             ->willReturn($pageIdentifier);
-        $this->viewMock->expects($this->any())
-            ->method('addPageLayoutHandles')
-            ->with(['id' => $pageIdentifier])
-            ->willReturn(true);
         $this->eventManagerMock->expects($this->any())
             ->method('dispatch')
             ->with(
@@ -326,9 +322,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
                     'controller_action' => $this->actionMock
                 ]
             );
-        $this->viewMock->expects($this->any())
-            ->method('loadLayoutUpdates')
-            ->willReturnSelf();
         $this->pageMock->expects($this->any())
             ->method('getCustomLayoutUpdateXml')
             ->willReturn($customLayoutUpdateXml);
@@ -338,12 +331,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->layoutProcessorMock->expects($this->any())
             ->method('addUpdate')
             ->with($layoutUpdate)
-            ->willReturnSelf();
-        $this->viewMock->expects($this->any())
-            ->method('generateLayoutXml')
-            ->willReturnSelf();
-        $this->viewMock->expects($this->any())
-            ->method('generateLayoutBlocks')
             ->willReturnSelf();
         $this->layoutMock->expects($this->any())
             ->method('getBlock')
@@ -377,13 +364,14 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->method('addMessages')
             ->with($this->messageCollectionMock)
             ->willReturnSelf();
-        $this->viewMock->expects($this->any())
-            ->method('renderLayout')
-            ->willReturnSelf();
 
-        $this->assertEquals(
+        if ($expectedResult) {
+            $expectedResult = $this->resultPageMock;
+        }
+
+        $this->assertSame(
             $expectedResult,
-            $this->object->renderPageExtended($this->actionMock, $pageId)
+            $this->object->prepareResultPage($this->actionMock, $pageId)
         );
     }
 

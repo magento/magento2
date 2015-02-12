@@ -99,7 +99,7 @@ class View extends \Magento\Framework\View\Element\Template
     /**
      * Return back title for logged in and guest users
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getBackTitle()
     {

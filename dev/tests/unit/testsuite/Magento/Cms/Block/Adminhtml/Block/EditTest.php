@@ -84,7 +84,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with($title)
             ->willReturn($escapedTitle);
 
-        $this->assertInternalType('string', $this->this->getHeaderText());
+        $this->assertInstanceOf('Magento\Framework\Phrase', $this->this->getHeaderText());
     }
 
     public function getHeaderTextDataProvider()

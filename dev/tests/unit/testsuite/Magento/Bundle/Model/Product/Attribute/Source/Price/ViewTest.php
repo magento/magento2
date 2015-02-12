@@ -74,7 +74,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $existValue = 1;
 
-        $this->assertInternalType('string', $this->model->getOptionText($existValue));
+        $this->assertInstanceOf('Magento\Framework\Phrase', $this->model->getOptionText($existValue));
     }
 
     /**

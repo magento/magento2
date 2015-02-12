@@ -122,7 +122,7 @@ class Translator
      * Translate node value
      *
      * @param string $value
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _translateValue($value)
     {
