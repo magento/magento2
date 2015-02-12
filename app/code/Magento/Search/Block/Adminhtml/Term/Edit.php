@@ -47,7 +47,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
