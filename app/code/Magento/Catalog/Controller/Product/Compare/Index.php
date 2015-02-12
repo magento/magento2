@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Controller\Product\Compare;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Core\App\Action\FormKeyValidator;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\PageFactory;
 
@@ -30,7 +30,7 @@ class Index extends \Magento\Catalog\Controller\Product\Compare
      * @param \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param FormKeyValidator $formKeyValidator
+     * @param Validator $formKeyValidator
      * @param Result\RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
      * @param ProductRepositoryInterface $productRepository
@@ -47,7 +47,7 @@ class Index extends \Magento\Catalog\Controller\Product\Compare
         \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        FormKeyValidator $formKeyValidator,
+        Validator $formKeyValidator,
         Result\RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         ProductRepositoryInterface $productRepository,

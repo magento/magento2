@@ -1,12 +1,9 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Cart;
-
-use Magento\Checkout\Model\Cart as CustomerCart;
 
 class CouponPost extends \Magento\Checkout\Controller\Cart
 {
@@ -22,8 +19,9 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
-     * @param CustomerCart $cart
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param \Magento\Checkout\Model\Cart $cart
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
@@ -31,8 +29,9 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         parent::__construct(
@@ -41,7 +40,8 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
             $checkoutSession,
             $storeManager,
             $formKeyValidator,
-            $cart
+            $cart,
+            $resultRedirectFactory
         );
         $this->quoteRepository = $quoteRepository;
     }
@@ -49,7 +49,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
     /**
      * Initialize coupon
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -59,20 +59,16 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
          * No reason continue with empty shopping cart
          */
         if (!$this->cart->getQuote()->getItemsCount()) {
-            $this->_goBack();
-            return;
+            return $this->_goBack();
         }
 
-        $couponCode = $this->getRequest()->getParam(
-            'remove'
-        ) == 1 ? '' : trim(
-            $this->getRequest()->getParam('coupon_code')
-        );
+        $couponCode = $this->getRequest()->getParam('remove') == 1
+            ? ''
+            : trim($this->getRequest()->getParam('coupon_code'));
         $oldCouponCode = $this->cart->getQuote()->getCouponCode();
 
         if (!strlen($couponCode) && !strlen($oldCouponCode)) {
-            $this->_goBack();
-            return;
+            return $this->_goBack();
         }
 
         try {
@@ -109,6 +105,6 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
 
-        $this->_goBack();
+        return $this->_goBack();
     }
 }

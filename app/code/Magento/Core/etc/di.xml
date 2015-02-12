@@ -375,19 +375,9 @@
             <argument name="reader" xsi:type="object">Magento\Framework\App\Route\Config\Reader\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\App\Router\Base">
+    <type name="Magento\Framework\App\Router\Base">
         <arguments>
             <argument name="routerId" xsi:type="string">standard</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\App\Router\NoRouteHandlerList">
-        <arguments>
-            <argument name="handlerClassesList" xsi:type="array">
-                <item name="default" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Core\App\Router\NoRouteHandler</item>
-                    <item name="sortOrder" xsi:type="string">100</item>
-                </item>
-            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Session\Validator">
@@ -490,10 +480,6 @@
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\App\Action\Action">
-        <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
-        <plugin name="designLoader" type="Magento\Core\App\Action\Plugin\Design" sortOrder="30"/>
     </type>
     <virtualType name="Magento\Core\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>

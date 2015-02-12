@@ -26,7 +26,7 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * return array
+     * @return array
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

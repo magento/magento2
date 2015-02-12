@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
+use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\Store;
+
 class BaseurlTest extends \PHPUnit_Framework_TestCase
 {
     public function testSaveMergedJsCssMustBeCleaned()
@@ -43,7 +46,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
         );
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
 
-        $model->setValue('http://example.com/')->setPath(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL);
+        $model->setValue('http://example.com/')->setPath(Store::XML_PATH_UNSECURE_BASE_URL);
         $model->afterSave();
     }
 }
