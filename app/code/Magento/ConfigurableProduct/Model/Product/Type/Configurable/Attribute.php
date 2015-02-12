@@ -162,7 +162,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function setAttributeId($attributeId)
     {
-        return $this->setAttributeId(self::KEY_ATTRIBUTE_ID, $attributeId);
+        return $this->setData(self::KEY_ATTRIBUTE_ID, $attributeId);
     }
 
     /**
@@ -171,7 +171,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function setLabel($label)
     {
-        return $this->setAttributeId(self::KEY_LABEL, $label);
+        return $this->setData(self::KEY_LABEL, $label);
     }
 
     /**
@@ -180,7 +180,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function setType($type)
     {
-        return $this->setAttributeId(self::KEY_TYPE, $type);
+        return $this->setData(self::KEY_TYPE, $type);
     }
 
     /**
@@ -189,7 +189,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function setPosition($position)
     {
-        return $this->setAttributeId(self::KEY_POSITION, $position);
+        return $this->setData(self::KEY_POSITION, $position);
     }
 
     /**
@@ -198,7 +198,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function setIsUseDefault($isUseDefault)
     {
-        return $this->setAttributeId(self::KEY_IS_USE_DEFAULT, $isUseDefault);
+        return $this->setData(self::KEY_IS_USE_DEFAULT, $isUseDefault);
     }
 
     /**
@@ -207,7 +207,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function setValues(array $values = null)
     {
-        return $this->setAttributeId(self::KEY_VALUES, $values);
+        return $this->setData(self::KEY_VALUES, $values);
     }
     //@codeCoverageIgnoreEnd
 }

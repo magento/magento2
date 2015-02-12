@@ -122,11 +122,12 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             $prices = $option->getPrices();
             if (is_array($prices)) {
                 foreach ($prices as $price) {
-                    $values[] = $this->optionValueFactory
-                        ->setValueIndex($price['value_index'])
+                    /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
+                    $value = $this->optionValueFactory->create();
+                    $value->setValueIndex($price['value_index'])
                         ->setPricingValue($price['pricing_value'])
-                        ->setIsPercent($price['is_percent'])
-                        ->create();
+                        ->setIsPercent($price['is_percent']);
+                    $values[] = $value;
                 }
             }
             $option->setValues($values);
