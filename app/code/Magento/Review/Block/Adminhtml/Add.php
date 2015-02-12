@@ -123,7 +123,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Get add new review header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

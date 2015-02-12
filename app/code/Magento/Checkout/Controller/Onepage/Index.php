@@ -11,34 +11,27 @@ class Index extends \Magento\Checkout\Controller\Onepage
     /**
      * Checkout page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         if (!$this->_objectManager->get('Magento\Checkout\Helper\Data')->canOnepageCheckout()) {
             $this->messageManager->addError(__('The onepage checkout is disabled.'));
-            $this->_redirect('checkout/cart');
-            return;
+            return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
         $quote = $this->getOnepage()->getQuote();
         if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
-            $this->_redirect('checkout/cart');
-            return;
+            return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
 
         $this->_customerSession->regenerateId();
         $this->_objectManager->get('Magento\Checkout\Model\Session')->setCartWasUpdated(false);
-        $currentUrl = $this->_objectManager->create('Magento\Framework\UrlInterface')
-            ->getUrl(
-                '*/*/*',
-                ['_secure' => true]
-            );
+        $currentUrl = $this->_url->getUrl('*/*/*', ['_secure' => true]);
         $this->_objectManager->get('Magento\Customer\Model\Session')->setBeforeAuthUrl($currentUrl);
         $this->getOnepage()->initCheckout();
-        $this->_view->loadLayout();
-        $layout = $this->_view->getLayout();
-        $layout->initMessages();
-        $this->_view->getPage()->getConfig()->getTitle()->set(__('Checkout'));
-        $this->_view->renderLayout();
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getLayout()->initMessages();
+        $resultPage->getConfig()->getTitle()->set(__('Checkout'));
+        return $resultPage;
     }
 }

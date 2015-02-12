@@ -465,7 +465,7 @@ abstract class AbstractEntity
         $messages = [];
         foreach ($this->_errors as $errorCode => $errorRows) {
             if (isset($this->_messageTemplates[$errorCode])) {
-                $errorCode = __($this->_messageTemplates[$errorCode]);
+                $errorCode = (string)__($this->_messageTemplates[$errorCode]);
             }
             foreach ($errorRows as $errorRowData) {
                 $key = $errorRowData[1] ? sprintf($errorCode, $errorRowData[1]) : $errorCode;

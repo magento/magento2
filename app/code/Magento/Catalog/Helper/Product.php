@@ -582,7 +582,7 @@ class Product extends \Magento\Core\Helper\Url
     /**
      * Get label for virtual control
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTypeSwitcherControlLabel()
     {

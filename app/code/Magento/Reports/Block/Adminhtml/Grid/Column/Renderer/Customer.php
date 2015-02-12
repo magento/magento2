@@ -16,7 +16,7 @@ class Customer extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      * Renders grid column
      *
      * @param \Magento\Framework\Object $row
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function render(\Magento\Framework\Object $row)
     {

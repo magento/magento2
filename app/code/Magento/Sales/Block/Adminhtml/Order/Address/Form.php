@@ -119,7 +119,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
     /**
      * Form header text getter
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
