@@ -29,6 +29,7 @@
                         <xs:field xpath="@name"/>
                     </xs:unique>
                 </xs:element>
+                <xs:element name="exclude" minOccurs="0" maxOccurs="1" type="excludeType"/>
             </xs:sequence>
         </xs:complexType>
         <xs:unique name="varsModuleIdentifier">
@@ -36,4 +37,36 @@
             <xs:field xpath="@module"/>
         </xs:unique>
     </xs:element>
+    <xs:complexType name="excludeType">
+        <xs:sequence>
+            <xs:element name="area" type="areaType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="areaType">
+        <xs:sequence>
+            <xs:element name="item" type="itemType" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="frontend"/>
+                    <xs:enumeration value="adminhtml"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="itemType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="type" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="file"/>
+                            <xs:enumeration value="directory"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 </xs:schema>
