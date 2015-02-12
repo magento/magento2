@@ -97,7 +97,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
     /**
      * Get label for shipping include tax
      *
-     * @return float
+     * @return \Magento\Framework\Phrase
      */
     public function getIncludeTaxLabel()
     {
@@ -110,7 +110,7 @@ class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
     /**
      * Get label for shipping exclude tax
      *
-     * @return float
+     * @return \Magento\Framework\Phrase
      */
     public function getExcludeTaxLabel()
     {

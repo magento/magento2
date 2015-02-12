@@ -62,7 +62,7 @@ class Config
      * Retrieve already translated label that corresponds to service name
      *
      * @param string $serviceName
-     * @return string|null
+     * @return \Magento\Framework\Phrase|null
      */
     public function getServiceLabel($serviceName)
     {

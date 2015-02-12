@@ -2047,4 +2047,7 @@ return [
     ['register', 'Magento\Sendfriend\Model\Sendfriend'],
     ['_getImageHelper', 'Magento\Catalog\Model\Product'],
     ['isPhpFile', '\Magento\Tools\Di\Code\Reader\ClassesScanner'],
+    ['renderPage', 'Magento\Cms\Helper\Page'],
+    ['renderPageExtended', 'Magento\Cms\Helper\Page'],
+    ['_renderPage', 'Magento\Cms\Helper\Page'],
 ];

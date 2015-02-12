@@ -7,6 +7,7 @@ namespace Magento\Checkout\Controller;
 
 use Magento\Catalog\Controller\Product\View\ViewInterface;
 use Magento\Checkout\Model\Cart as CustomerCart;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Shopping cart controller
@@ -39,12 +40,18 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
     protected $cart;
 
     /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param CustomerCart $cart
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -52,13 +59,15 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
-        CustomerCart $cart
+        CustomerCart $cart,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_scopeConfig = $scopeConfig;
         $this->_checkoutSession = $checkoutSession;
         $this->_storeManager = $storeManager;
         $this->cart = $cart;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -73,7 +82,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
         if ($backUrl || $backUrl = $this->getBackUrl($this->_redirect->getRefererUrl())) {
             $this->getResponse()->setRedirect($backUrl);
         }
-        return $this;
+        return $resultRedirect;
     }
 
     /**

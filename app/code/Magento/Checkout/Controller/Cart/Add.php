@@ -30,6 +30,7 @@ class Add extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param CustomerCart $cart
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
@@ -39,9 +40,18 @@ class Add extends \Magento\Checkout\Controller\Cart
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         CustomerCart $cart,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         ProductRepositoryInterface $productRepository
     ) {
-        parent::__construct($context, $scopeConfig, $checkoutSession, $storeManager, $formKeyValidator, $cart);
+        parent::__construct(
+            $context,
+            $scopeConfig,
+            $checkoutSession,
+            $storeManager,
+            $formKeyValidator,
+            $cart,
+            $resultRedirectFactory
+        );
         $this->productRepository = $productRepository;
     }
 
@@ -67,7 +77,7 @@ class Add extends \Magento\Checkout\Controller\Cart
     /**
      * Add product to shopping cart action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -88,8 +98,7 @@ class Add extends \Magento\Checkout\Controller\Cart
              * Check product availability
              */
             if (!$product) {
-                $this->goBack();
-                return;
+                return $this->goBack();
             }
 
             $this->cart->addProduct($product, $params);
@@ -117,7 +126,7 @@ class Add extends \Magento\Checkout\Controller\Cart
                     );
                     $this->messageManager->addSuccess($message);
                 }
-                $this->goBack(null, $product);
+                return $this->goBack(null, $product);
             }
         } catch (\Magento\Framework\Model\Exception $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
@@ -136,14 +145,14 @@ class Add extends \Magento\Checkout\Controller\Cart
             $url = $this->_checkoutSession->getRedirectUrl(true);
             if (!$url) {
                 $cartUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
-                $url = $this->_redirect->getRedirectUrl($cartUrl);
+                return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl($cartUrl));
             }
             $this->goBack($url);
 
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot add this item to your shopping cart'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->goBack();
+            return $this->goBack();
         }
     }
 
