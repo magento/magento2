@@ -12,7 +12,7 @@ interface SearchDataInterface
      *
      * @return array
      */
-    public function getSearchData();
+    public function getItems();
 
     /**
      * @return bool
