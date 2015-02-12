@@ -69,7 +69,7 @@ class Index extends \Magento\Checkout\Controller\Cart
                     ->toCurrency(
                         $this->_scopeConfig->getValue(
                             'sales/minimum_order/amount',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                         )
                 );
 
