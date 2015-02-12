@@ -11,17 +11,48 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\View\Asset\PreProcessor\Pool
      */
-    protected $factory;
+    protected $processorPool;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\PreProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $objectManager;
+    protected $processorFactory;
+
+    /**
+     * @var \Magento\Framework\View\Asset\PreProcessor\Chain|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $processorChain;
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->factory = new Pool($this->objectManager);
+        $this->processorChain = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->processorFactory = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessorFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->processorPool = new Pool(
+            $this->processorFactory,
+            [
+                'less' => [
+                    'css' =>
+                        [
+                            'Magento\Framework\Css\PreProcessor\Less',
+                            'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'
+                        ],
+                    'less' =>
+                        [
+                            'Magento\Framework\Less\PreProcessor\Instruction\MagentoImport',
+                            'Magento\Framework\Less\PreProcessor\Instruction\Import',
+                        ],
+                    ],
+                'css' => [
+                    'css' => ['Magento\Framework\View\Asset\PreProcessor\ModuleNotation']
+                ],
+            ]
+        );
     }
 
     /**
@@ -31,14 +62,26 @@ class PoolTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider getPreProcessorsDataProvider
      */
-    public function testGetPreProcessors($sourceContentType, $targetContentType, array $expectedResult)
+    public function testProcess($sourceContentType, $targetContentType, array $expectedResult)
     {
-        // Make the object manager to return strings for simplicity of mocking
-        $this->objectManager->expects($this->any())
-            ->method('get')
-            ->with($this->anything())
-            ->will($this->returnArgument(0));
-        $this->assertSame($expectedResult, $this->factory->getPreProcessors($sourceContentType, $targetContentType));
+
+        $this->processorChain->expects($this->any())
+            ->method('getOrigContentType')
+            ->willReturn($sourceContentType);
+        $this->processorChain->expects($this->any())
+            ->method('getTargetContentType')
+            ->willReturn($targetContentType);
+        $processorMaps = [];
+        foreach($expectedResult as $processor) {
+            $processorMock = $this->getMock($processor, ['process'], [], '', false);
+            $processorMock->expects($this->any())
+                ->method('process')
+                ->with($this->processorChain);
+            $processorMaps[] = [$processor, [], $processorMock];
+        }
+        $this->processorFactory->method('create')->willReturnMap($processorMaps);
+
+        $this->processorPool->process($this->processorChain);
     }
 
     public function getPreProcessorsDataProvider()
@@ -50,9 +93,10 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                     'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'
                 ],
             ],
-            'css => less (irrelevant)' => [
+            //all undefined types will be processed by Passthrough preprocessor
+            'css => less' => [
                 'css', 'less',
-                [],
+                ['Magento\Framework\View\Asset\PreProcessor\Passthrough'],
             ],
             'less => css' => [
                 'less', 'css',
@@ -68,9 +112,10 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                     'Magento\Framework\Less\PreProcessor\Instruction\Import',
                 ],
             ],
-            'txt => log (unsupported)' => [
+            //all undefined types will be processed by Passthrough preprocessor
+            'txt => log (undefined)' => [
                 'txt', 'log',
-                [],
+                ['Magento\Framework\View\Asset\PreProcessor\Passthrough'],
             ],
         ];
     }
