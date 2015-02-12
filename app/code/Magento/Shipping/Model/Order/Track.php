@@ -87,7 +87,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
     /**
      * Retrieve detail for shipment track
      *
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getNumberDetail()
     {
