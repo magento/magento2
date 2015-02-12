@@ -75,13 +75,17 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
      * Set back redirect url to response
      *
      * @param null|string $backUrl
-     * @return $this
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     protected function _goBack($backUrl = null)
     {
+        $resultRedirect = $this->resultRedirectFactory->create();
+
         if ($backUrl || $backUrl = $this->getBackUrl($this->_redirect->getRefererUrl())) {
-            $this->getResponse()->setRedirect($backUrl);
+            $resultRedirect->setUrl($backUrl);
         }
+        
         return $resultRedirect;
     }
 
@@ -111,6 +115,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
      * Get resolved back url
      *
      * @param null $defaultUrl
+     *
      * @return mixed|null|string
      */
     protected function getBackUrl($defaultUrl = null)

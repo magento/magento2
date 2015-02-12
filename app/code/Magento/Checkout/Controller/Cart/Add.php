@@ -143,11 +143,15 @@ class Add extends \Magento\Checkout\Controller\Cart
             }
 
             $url = $this->_checkoutSession->getRedirectUrl(true);
-            if (!$url) {
+
+            if ($url) {
+                return $this->resultRedirectFactory->create()->setUrl($url);
+            } else {
                 $cartUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
-                return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl($cartUrl));
+                $url = $this->_redirect->getRedirectUrl($cartUrl);
             }
-            $this->goBack($url);
+
+            return $this->goBack($url);
 
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot add this item to your shopping cart'));
@@ -161,7 +165,7 @@ class Add extends \Magento\Checkout\Controller\Cart
      *
      * @param string $backUrl
      * @param \Magento\Catalog\Model\Product $product
-     * @return $this|void
+     * @return $this|\Magento\Framework\Controller\Result\Redirect
      */
     protected function goBack($backUrl = null, $product = null)
     {
