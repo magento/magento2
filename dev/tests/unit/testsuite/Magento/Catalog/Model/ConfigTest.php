@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers Magento\Catalog\Model\Config::loadAttributeSets
+     * covers Magento\Catalog\Model\Config::loadAttributeSets
      * @return object
      */
     public function testLoadAttributeSets()
@@ -50,7 +50,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testLoadAttributeSets
-     * @covers Magento\Catalog\Model\Config::getAttributeSetName
+     * covers Magento\Catalog\Model\Config::getAttributeSetName
      */
     public function testGetAttributeSetName($model)
     {
@@ -59,7 +59,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
     /**
      * @depends testLoadAttributeSets
-     * @covers Magento\Catalog\Model\Config::getAttributeSetId
+     * covers Magento\Catalog\Model\Config::getAttributeSetId
      */
     public function testGetAttributeSetId($model)
     {
@@ -68,7 +68,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\Catalog\Model\Config::loadAttributeGroups
+     * covers Magento\Catalog\Model\Config::loadAttributeGroups
      * @return object
      */
     public function testLoadAttributeGroups()
@@ -112,7 +112,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testLoadAttributeGroups
-     * @covers Magento\Catalog\Model\Config::getAttributeGroupName
+     * covers Magento\Catalog\Model\Config::getAttributeGroupName
      */
     public function testGetAttributeGroupName($model)
     {
@@ -121,7 +121,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
     /**
      * @depends testLoadAttributeGroups
-     * @covers Magento\Catalog\Model\Config::getAttributeGroupId
+     * covers Magento\Catalog\Model\Config::getAttributeGroupId
      */
     public function testGetAttributeGroupId($model)
     {
@@ -130,7 +130,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\Catalog\Model\Config::loadProductTypes
+     * covers Magento\Catalog\Model\Config::loadProductTypes
      * @return object
      */
     public function testLoadProductTypes()
@@ -153,7 +153,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testLoadProductTypes
-     * @covers Magento\Catalog\Model\Config::getProductTypeId
+     * covers Magento\Catalog\Model\Config::getProductTypeId
      */
     public function testGetProductTypeId($model)
     {
@@ -163,7 +163,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testLoadProductTypes
-     * @covers Magento\Catalog\Model\Config::getProductTypeName
+     * covers Magento\Catalog\Model\Config::getProductTypeName
      */
     public function testGetProductTypeName($model)
     {
@@ -176,7 +176,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @param $data
      * @param $search
      *
-     * @covers Magento\Catalog\Model\Config::getSourceOptionId
+     * covers Magento\Catalog\Model\Config::getSourceOptionId
      * @dataProvider getSourceOptionIdDataProvider
      */
     public function testGetSourceOptionId($expected, $data, $search)
@@ -263,7 +263,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\Catalog\Model\Config::getAttributesUsedInProductListing
+     * covers Magento\Catalog\Model\Config::getAttributesUsedInProductListing
      * return object
      */
     public function testGetAttributesUsedInProductListing()
@@ -275,7 +275,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testGetAttributesUsedInProductListing
-     * @covers Magento\Catalog\Model\Config::getProductAttributes
+     * covers Magento\Catalog\Model\Config::getProductAttributes
      */
     public function testGetProductAttributes($model)
     {
@@ -283,7 +283,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\Catalog\Model\Config::getAttributesUsedForSortBy
+     * covers Magento\Catalog\Model\Config::getAttributesUsedForSortBy
      */
     public function testGetAttributesUsedForSortBy()
     {
@@ -292,7 +292,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\Catalog\Model\Config::getAttributeUsedForSortByArray
+     * covers Magento\Catalog\Model\Config::getAttributeUsedForSortByArray
      */
     public function testGetAttributeUsedForSortByArray()
     {
@@ -301,7 +301,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\Catalog\Model\Config::getProductListDefaultSortBy
+     * covers Magento\Catalog\Model\Config::getProductListDefaultSortBy
      */
     public function testGetProductListDefaultSortBy()
     {

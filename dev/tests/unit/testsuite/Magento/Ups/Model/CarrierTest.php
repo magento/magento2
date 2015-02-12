@@ -43,7 +43,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      * @param int $freeShippingSubtotal
      * @param int $requestSubtotal
      * @param int $expectedPrice
-     * @covers Magento\Shipping\Model\Carrier\AbstractCarrierOnline::getMethodPrice
+     * covers Magento\Shipping\Model\Carrier\AbstractCarrierOnline::getMethodPrice
      */
     public function testGetMethodPrice(
         $cost,

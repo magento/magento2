@@ -197,11 +197,10 @@ class CopyService
      */
     protected function _deleteFilesRecursively($targetDir)
     {
-        if (!$this->_directory->isExist($targetDir)) {
-            return;
-        }
-        foreach ($this->_directory->read($targetDir) as $path) {
-            $this->_directory->delete($path);
+        if ($this->_directory->isExist($targetDir)) {
+            foreach ($this->_directory->read($targetDir) as $path) {
+                $this->_directory->delete($path);
+            }
         }
     }
 }

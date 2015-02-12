@@ -12,7 +12,7 @@ namespace Magento\Framework\View\Layout\Reader;
 /**
  * Class BlockTest
  *
- * @covers Magento\Framework\View\Layout\Reader\Block
+ * covers Magento\Framework\View\Layout\Reader\Block
  */
 class BlockTest extends \PHPUnit_Framework_TestCase
 {

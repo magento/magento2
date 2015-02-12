@@ -451,9 +451,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout::setBlock
-     * @covers \Magento\Framework\View\Layout::getAllBlocks
-     * @covers \Magento\Framework\View\Layout::unsetElement
+     * covers \Magento\Framework\View\Layout::setBlock
+     * covers \Magento\Framework\View\Layout::getAllBlocks
+     * covers \Magento\Framework\View\Layout::unsetElement
      */
     public function testSetGetBlock()
     {

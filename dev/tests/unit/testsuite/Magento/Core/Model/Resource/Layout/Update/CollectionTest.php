@@ -49,7 +49,7 @@ class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCas
     }
 
     /**
-     * @covers \Magento\Core\Model\Resource\Layout\Update\Collection::_joinWithLink
+     * covers \Magento\Core\Model\Resource\Layout\Update\Collection::_joinWithLink
      */
     public function testJoinWithLink()
     {

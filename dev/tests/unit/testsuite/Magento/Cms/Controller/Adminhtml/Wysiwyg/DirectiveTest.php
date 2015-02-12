@@ -139,7 +139,7 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
+     * covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
     public function testExecute()
     {
@@ -169,7 +169,7 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
+     * covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
     public function testExecuteException()
     {

@@ -38,7 +38,7 @@ class BasicTest extends \Magento\ImportExport\Model\Source\Import\AbstractBehavi
     /**
      * Test toArray method
      *
-     * @covers \Magento\ImportExport\Model\Source\Import\Behavior\Basic::toArray
+     * covers \Magento\ImportExport\Model\Source\Import\Behavior\Basic::toArray
      */
     public function testToArray()
     {
@@ -50,7 +50,7 @@ class BasicTest extends \Magento\ImportExport\Model\Source\Import\AbstractBehavi
     /**
      * Test behavior group code
      *
-     * @covers \Magento\ImportExport\Model\Source\Import\Behavior\Basic::getCode
+     * covers \Magento\ImportExport\Model\Source\Import\Behavior\Basic::getCode
      */
     public function testGetCode()
     {

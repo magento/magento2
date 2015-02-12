@@ -9,27 +9,29 @@
  */
 namespace Magento\Theme\Model\Config;
 
+use Magento\Framework\App\Area;
+
 class CustomizationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_designPackage;
+    protected $designPackage;
 
     /**
      * @var \Magento\Theme\Model\Resource\Theme\Collection
      */
-    protected $_themeCollection;
+    protected $themeCollection;
 
     /**
      * @var \Magento\Theme\Model\Config\Customization
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockBuilder
@@ -38,216 +40,133 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeManager = $this->getMockForAbstractClass(
-            'Magento\Framework\Store\StoreManagerInterface',
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getStores']
-        );
-        $this->_designPackage = $this->getMockForAbstractClass(
-            'Magento\Framework\View\DesignInterface',
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getConfigurationDesignTheme']
-        );
-        $this->_themeCollection = $this->getMock(
-            'Magento\Theme\Model\Resource\Theme\Collection',
-            ['filterThemeCustomizations', 'load'],
-            [],
-            '',
-            false
-        );
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
+        $this->designPackage = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
+        $this->themeCollection = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $collectionFactory = $this->getMock(
-            'Magento\Theme\Model\Resource\Theme\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $collectionFactory = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
-        $collectionFactory->expects($this->any())->method('create')->will($this->returnValue($this->_themeCollection));
+        $collectionFactory->expects($this->any())->method('create')->will($this->returnValue($this->themeCollection));
 
-        $this->themeProviderMock = $this->getMock(
-            '\Magento\Theme\Model\Theme\ThemeProvider',
-            ['getThemeCustomizations', 'getThemeByFullPath'],
-            [$collectionFactory, $this->getMock('\Magento\Theme\Model\ThemeFactory', [], [], '', false)],
-            '',
-            false
-        );
+        $this->themeProviderMock = $this->getMockBuilder('\Magento\Theme\Model\Theme\ThemeProvider')
+            ->disableOriginalConstructor()
+            ->setMethods(['getThemeCustomizations', 'getThemeByFullPath'])
+            ->getMock();
 
-        $this->_model = new \Magento\Theme\Model\Config\Customization(
-            $this->_storeManager,
-            $this->_designPackage,
+        $this->model = new \Magento\Theme\Model\Config\Customization(
+            $this->storeManager,
+            $this->designPackage,
             $this->themeProviderMock
         );
     }
 
-    protected function tearDown()
-    {
-        $this->_storeManager = null;
-        $this->_designPackage = null;
-        $this->_themeCollection = null;
-        $this->_model = null;
-    }
-
     /**
-     * @covers \Magento\Theme\Model\Config\Customization::getAssignedThemeCustomizations
+     * covers \Magento\Theme\Model\Config\Customization::getAssignedThemeCustomizations
+     * covers \Magento\Theme\Model\Config\Customization::hasThemeAssigned
      */
     public function testGetAssignedThemeCustomizations()
     {
-        $this->_designPackage->expects(
-            $this->once()
-        )->method(
-            'getConfigurationDesignTheme'
-        )->will(
-            $this->returnValue($this->_getAssignedTheme()->getId())
-        );
+        $this->designPackage->expects($this->once())
+            ->method('getConfigurationDesignTheme')
+            ->willReturn($this->getAssignedTheme()->getId());
 
-        $this->_storeManager->expects(
-            $this->once()
-        )->method(
-            'getStores'
-        )->will(
-            $this->returnValue([$this->_getStore()])
-        );
+        $this->storeManager->expects($this->once())
+            ->method('getStores')
+            ->willReturn([$this->getStore()]);
 
-        $this->themeProviderMock->expects(
-            $this->once()
-        )->method(
-            'getThemeCustomizations'
-        )->with(
-            \Magento\Framework\App\Area::AREA_FRONTEND
-        )->will(
-            $this->returnValue([$this->_getAssignedTheme(), $this->_getUnassignedTheme()])
-        );
+        $this->themeProviderMock->expects($this->once())
+            ->method('getThemeCustomizations')
+            ->with(Area::AREA_FRONTEND)
+            ->willReturn([$this->getAssignedTheme(), $this->getUnassignedTheme()]);
 
-        $assignedThemes = $this->_model->getAssignedThemeCustomizations();
-        $this->assertArrayHasKey($this->_getAssignedTheme()->getId(), $assignedThemes);
+        $assignedThemes = $this->model->getAssignedThemeCustomizations();
+        $this->assertArrayHasKey($this->getAssignedTheme()->getId(), $assignedThemes);
+        $this->assertTrue($this->model->hasThemeAssigned());
     }
 
     /**
-     * @covers \Magento\Theme\Model\Config\Customization::getUnassignedThemeCustomizations
+     * covers \Magento\Theme\Model\Config\Customization::getUnassignedThemeCustomizations
      */
     public function testGetUnassignedThemeCustomizations()
     {
-        $this->_storeManager->expects(
-            $this->once()
-        )->method(
-            'getStores'
-        )->will(
-            $this->returnValue([$this->_getStore()])
-        );
+        $this->storeManager->expects($this->once())
+            ->method('getStores')
+            ->willReturn([$this->getStore()]);
 
-        $this->_designPackage->expects(
-            $this->once()
-        )->method(
-            'getConfigurationDesignTheme'
-        )->will(
-            $this->returnValue($this->_getAssignedTheme()->getId())
-        );
+        $this->designPackage->expects($this->once())
+            ->method('getConfigurationDesignTheme')
+            ->willReturn($this->getAssignedTheme()->getId());
 
-        $this->themeProviderMock->expects(
-            $this->once()
-        )->method(
-            'getThemeCustomizations'
-        )->with(
-            \Magento\Framework\App\Area::AREA_FRONTEND
-        )->will(
-            $this->returnValue([$this->_getAssignedTheme(), $this->_getUnassignedTheme()])
-        );
+        $this->themeProviderMock->expects($this->once())
+            ->method('getThemeCustomizations')
+            ->with(Area::AREA_FRONTEND)
+            ->willReturn([$this->getAssignedTheme(), $this->getUnassignedTheme()]);
 
-        $unassignedThemes = $this->_model->getUnassignedThemeCustomizations();
-        $this->assertArrayHasKey($this->_getUnassignedTheme()->getId(), $unassignedThemes);
+        $unassignedThemes = $this->model->getUnassignedThemeCustomizations();
+        $this->assertArrayHasKey($this->getUnassignedTheme()->getId(), $unassignedThemes);
     }
 
     /**
-     * @covers \Magento\Theme\Model\Config\Customization::getStoresByThemes
+     * covers \Magento\Theme\Model\Config\Customization::getStoresByThemes
      */
     public function testGetStoresByThemes()
     {
-        $this->_storeManager->expects(
-            $this->once()
-        )->method(
-            'getStores'
-        )->will(
-            $this->returnValue([$this->_getStore()])
-        );
+        $this->storeManager->expects($this->once())
+            ->method('getStores')
+            ->willReturn([$this->getStore()]);
 
-        $this->_designPackage->expects(
-            $this->once()
-        )->method(
-            'getConfigurationDesignTheme'
-        )->will(
-            $this->returnValue($this->_getAssignedTheme()->getId())
-        );
+        $this->designPackage->expects($this->once())
+            ->method('getConfigurationDesignTheme')
+            ->willReturn($this->getAssignedTheme()->getId());
 
-        $stores = $this->_model->getStoresByThemes();
-        $this->assertArrayHasKey($this->_getAssignedTheme()->getId(), $stores);
+        $stores = $this->model->getStoresByThemes();
+        $this->assertArrayHasKey($this->getAssignedTheme()->getId(), $stores);
     }
 
     /**
-     * @covers \Magento\Theme\Model\Config\Customization::isThemeAssignedToStore
+     * covers \Magento\Theme\Model\Config\Customization::isThemeAssignedToStore
      */
     public function testIsThemeAssignedToDefaultStore()
     {
-        $this->_storeManager->expects(
-            $this->once()
-        )->method(
-            'getStores'
-        )->will(
-            $this->returnValue([$this->_getStore()])
-        );
+        $this->storeManager->expects($this->once())
+            ->method('getStores')
+            ->willReturn([$this->getStore()]);
 
-        $this->_designPackage->expects(
-            $this->once()
-        )->method(
-            'getConfigurationDesignTheme'
-        )->will(
-            $this->returnValue($this->_getAssignedTheme()->getId())
-        );
+        $this->designPackage->expects($this->once())
+            ->method('getConfigurationDesignTheme')
+            ->willReturn($this->getAssignedTheme()->getId());
 
-        $this->themeProviderMock->expects(
-            $this->once()
-        )->method(
-            'getThemeCustomizations'
-        )->with(
-            \Magento\Framework\App\Area::AREA_FRONTEND
-        )->will(
-            $this->returnValue([$this->_getAssignedTheme(), $this->_getUnassignedTheme()])
-        );
+        $this->themeProviderMock->expects($this->once())
+            ->method('getThemeCustomizations')
+            ->with(Area::AREA_FRONTEND)
+            ->willReturn([$this->getAssignedTheme(), $this->getUnassignedTheme()]);
 
-        $themeAssigned = $this->_model->isThemeAssignedToStore($this->_getAssignedTheme());
+        $themeAssigned = $this->model->isThemeAssignedToStore($this->getAssignedTheme());
         $this->assertEquals(true, $themeAssigned);
     }
 
     /**
-     * @covers \Magento\Theme\Model\Config\Customization::isThemeAssignedToStore
+     * covers \Magento\Theme\Model\Config\Customization::isThemeAssignedToStore
      */
     public function testIsThemeAssignedToConcreteStore()
     {
-        $this->_designPackage->expects(
-            $this->once()
-        )->method(
-            'getConfigurationDesignTheme'
-        )->will(
-            $this->returnValue($this->_getAssignedTheme()->getId())
-        );
+        $this->designPackage->expects($this->once())
+            ->method('getConfigurationDesignTheme')
+            ->willReturn($this->getAssignedTheme()->getId());
 
-        $themeUnassigned = $this->_model->isThemeAssignedToStore($this->_getUnassignedTheme(), $this->_getStore());
+        $themeUnassigned = $this->model->isThemeAssignedToStore($this->getUnassignedTheme(), $this->getStore());
         $this->assertEquals(false, $themeUnassigned);
     }
 
     /**
      * @return \Magento\Framework\Object
      */
-    protected function _getAssignedTheme()
+    protected function getAssignedTheme()
     {
         return new \Magento\Framework\Object(['id' => 1, 'theme_path' => 'Magento/luma']);
     }
@@ -255,7 +174,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \Magento\Framework\Object
      */
-    protected function _getUnassignedTheme()
+    protected function getUnassignedTheme()
     {
         return new \Magento\Framework\Object(['id' => 2, 'theme_path' => 'Magento/blank']);
     }
@@ -263,7 +182,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \Magento\Framework\Object
      */
-    protected function _getStore()
+    protected function getStore()
     {
         return new \Magento\Framework\Object(['id' => 55]);
     }

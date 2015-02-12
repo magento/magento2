@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model\Template;
 
 /**
- * @covers \Magento\Cms\Model\Template\Filter
+ * covers \Magento\Cms\Model\Template\Filter
  */
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +44,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Template\Filter::mediaDirective
+     * covers \Magento\Cms\Model\Template\Filter::mediaDirective
      */
     public function testMediaDirective()
     {
