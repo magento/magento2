@@ -45,7 +45,6 @@ var config = {
         }
     },
     "deps": [
-        "jsbuild",
         "js/theme",
         "mage/backend/bootstrap"
     ],
