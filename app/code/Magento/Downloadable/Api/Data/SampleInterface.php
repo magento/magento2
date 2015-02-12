@@ -19,11 +19,27 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getId();
 
     /**
+     * Set product sample id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id);
+
+    /**
      * Sample title
      *
      * @return string
      */
     public function getTitle();
+
+    /**
+     * Set sample title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title);
 
     /**
      * Sort order index for sample
@@ -33,9 +49,23 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getSortOrder();
 
     /**
+     * Set sort order index for sample
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder);
+
+    /**
      * @return string
      */
     public function getSampleType();
+
+    /**
+     * @param string $sampleType
+     * @return $this
+     */
+    public function setSampleType($sampleType);
 
     /**
      * Return file path or null when type is 'url'
@@ -45,9 +75,25 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getSampleFile();
 
     /**
+     * Set file path or null when type is 'url'
+     *
+     * @param string $sampleFile
+     * @return $this
+     */
+    public function setSampleFile($sampleFile);
+
+    /**
      * Return URL or NULL when type is 'file'
      *
      * @return string|null file URL
      */
     public function getSampleUrl();
+
+    /**
+     * Set sample URL
+     *
+     * @param string $sampleUrl
+     * @return $this
+     */
+    public function setSampleUrl($sampleUrl);
 }

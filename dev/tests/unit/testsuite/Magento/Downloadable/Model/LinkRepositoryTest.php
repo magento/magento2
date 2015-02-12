@@ -45,12 +45,12 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $linkBuilder;
+    protected $linkDataObjectFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $sampleBuilder;
+    protected $sampleDataObjectFactory;
 
     /**
      * @var LinkRepository
@@ -61,38 +61,18 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->repositoryMock = $this->getMock('\Magento\Catalog\Model\ProductRepository', [], [], '', false);
         $this->productTypeMock = $this->getMock('\Magento\Downloadable\Model\Product\Type', [], [], '', false);
-        $this->linkBuilder = $this->getMockBuilder('\Magento\Downloadable\Api\Data\LinkDataBuilder')
+        $this->linkDataObjectFactory = $this->getMockBuilder('\Magento\Downloadable\Api\Data\LinkInterfaceFactory')
             ->setMethods(
                 [
                     'create',
-                    'populateWithArray',
-                    'setId',
-                    'setTitle',
-                    'setSortOrder',
-                    'setSampleType',
-                    'setSampleFile',
-                    'setSampleUrl',
-                    'setPrice',
-                    'setNumberOfDownloads',
-                    'setIsShareable',
-                    'setLinkType',
-                    'setLinkFile',
-                    'setLinkUrl'
                 ]
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sampleBuilder = $this->getMockBuilder('\Magento\Downloadable\Api\Data\SampleDataBuilder')
+        $this->sampleDataObjectFactory = $this->getMockBuilder('\Magento\Downloadable\Api\Data\SampleInterfaceFactory')
             ->setMethods(
                 [
                     'create',
-                    'populateWithArray',
-                    'setId',
-                    'setTitle',
-                    'setSortOrder',
-                    'setSampleType',
-                    'setSampleFile',
-                    'setSampleUrl'
                 ]
             )
             ->disableOriginalConstructor()
@@ -136,8 +116,8 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->service = new LinkRepository(
             $this->repositoryMock,
             $this->productTypeMock,
-            $this->linkBuilder,
-            $this->sampleBuilder,
+            $this->linkDataObjectFactory,
+            $this->sampleDataObjectFactory,
             $this->linkFactoryMock,
             $this->contentValidatorMock,
             $this->jsonEncoderMock,
@@ -469,8 +449,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$linkMock]));
 
         $this->setLinkAssertions($linkMock, $linkData);
-        $this->linkBuilder->expects($this->once())->method('populateWithArray')->with([]);
-        $this->linkBuilder->expects($this->once())->method('create')->willReturn($linkInterfaceMock);
+        $this->linkDataObjectFactory->expects($this->once())->method('create')->willReturn($linkInterfaceMock);
 
         $this->assertEquals([$linkInterfaceMock], $this->service->getLinks($productSku));
     }
@@ -520,9 +499,8 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$sampleMock]));
 
         $this->setSampleAssertions($sampleMock, $sampleData);
-        $this->sampleBuilder->expects($this->once())->method('populateWithArray')->with([]);
 
-        $this->sampleBuilder->expects($this->once())->method('create')->willReturn($sampleInterfaceMock);
+        $this->sampleDataObjectFactory->expects($this->once())->method('create')->willReturn($sampleInterfaceMock);
 
         $this->assertEquals([$sampleInterfaceMock], $this->service->getSamples($productSku));
     }

@@ -35,6 +35,22 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
 
     const LINK_SHAREABLE_CONFIG = 2;
 
+    /**#@+
+     * Constants for field names
+     */
+    const KEY_TITLE = 'title';
+    const KEY_SORT_ORDER = 'sort_order';
+    const KEY_IS_SHAREABLE = 'is_shareable';
+    const KEY_PRICE = 'price';
+    const KEY_NUMBER_OF_DOWNLOADS = 'number_of_downloads';
+    const KEY_LINK_TYPE = 'link_type';
+    const KEY_LINK_FILE = 'link_file';
+    const KEY_LINK_URL = 'link_url';
+    const KEY_SAMPLE_TYPE = 'sample_type';
+    const KEY_SAMPLE_FILE = 'sample_file';
+    const KEY_SAMPLE_URL = 'sample_url';
+    /**#@-*/
+
     /**
      * @var MetadataServiceInterface
      */
@@ -152,7 +168,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     public function getTitle()
     {
-        return $this->getData('title');
+        return $this->getData(self::KEY_TITLE);
     }
 
     /**
@@ -161,7 +177,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     public function getPrice()
     {
-        return $this->getData('price');
+        return $this->getData(self::KEY_PRICE);
     }
 
     /**
@@ -170,7 +186,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     public function getIsShareable()
     {
-        return $this->getData('is_shareable');
+        return $this->getData(self::KEY_IS_SHAREABLE);
     }
 
     /**
@@ -179,7 +195,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     public function getSortOrder()
     {
-        return $this->getData('sort_order');
+        return $this->getData(self::KEY_SORT_ORDER);
     }
 
     /**
@@ -188,7 +204,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     public function getNumberOfDownloads()
     {
-        return $this->getData('number_of_downloads');
+        return $this->getData(self::KEY_NUMBER_OF_DOWNLOADS);
     }
 
     /**
@@ -197,7 +213,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     public function getLinkType()
     {
-        return $this->getData('link_type');
+        return $this->getData(self::KEY_LINK_TYPE);
     }
 
     /**
@@ -206,7 +222,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     public function getLinkFile()
     {
-        return $this->getData('link_file');
+        return $this->getData(self::KEY_LINK_FILE);
     }
 
     /**
@@ -215,7 +231,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     public function getLinkUrl()
     {
-        return $this->getData('link_url');
+        return $this->getData(self::KEY_LINK_URL);
     }
 
     /**
@@ -224,7 +240,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     public function getSampleType()
     {
-        return $this->getData('sample_type');
+        return $this->getData(self::KEY_SAMPLE_TYPE);
     }
 
     /**
@@ -233,7 +249,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     public function getSampleFile()
     {
-        return $this->getData('sample_file');
+        return $this->getData(self::KEY_SAMPLE_FILE);
     }
 
     /**
@@ -242,6 +258,120 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     public function getSampleUrl()
     {
-        return $this->getData('sample_url');
+        return $this->getData(self::KEY_SAMPLE_URL);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::KEY_TITLE, $title);
+    }
+
+    /**
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::KEY_SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * @param int $isShareable
+     * @return $this
+     */
+    public function setIsShareable($isShareable)
+    {
+        return $this->setData(self::KEY_IS_SHAREABLE, $isShareable);
+    }
+
+    /**
+     * Set link price
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(self::KEY_PRICE, $price);
+    }
+
+    /**
+     * Set number of downloads per user
+     * Null for unlimited downloads
+     *
+     * @param int $numberOfDownloads
+     * @return $this
+     */
+    public function setNumberOfDownloads($numberOfDownloads)
+    {
+        return $this->setData(self::KEY_NUMBER_OF_DOWNLOADS, $numberOfDownloads);
+    }
+
+    /**
+     * @param string $linkType
+     * @return $this
+     */
+    public function setLinkType($linkType)
+    {
+        return $this->setData(self::KEY_LINK_TYPE, $linkType);
+    }
+
+    /**
+     * Set file path or null when type is 'url'
+     *
+     * @param string $linkFile
+     * @return $this
+     */
+    public function setLinkFile($linkFile)
+    {
+        return $this->setData(self::KEY_LINK_FILE, $linkFile);
+    }
+
+    /**
+     * Set URL
+     *
+     * @param string $linkUrl
+     * @return $this
+     */
+    public function setLinkUrl($linkUrl)
+    {
+        return $this->setData(self::KEY_LINK_URL, $linkUrl);
+    }
+
+    /**
+     * @param string $sampleType
+     * @return $this
+     */
+    public function setSampleType($sampleType)
+    {
+        return $this->setData(self::KEY_SAMPLE_TYPE, $sampleType);
+    }
+
+    /**
+     * Set file path
+     *
+     * @param string $sampleFile
+     * @return $this
+     */
+    public function setSampleFile($sampleFile)
+    {
+        return $this->setData(self::KEY_SAMPLE_FILE, $sampleFile);
+    }
+
+    /**
+     * Set URL
+     *
+     * @param string $sampleUrl
+     * @return $this
+     */
+    public function setSampleUrl($sampleUrl)
+    {
+        return $this->setData(self::KEY_SAMPLE_URL, $sampleUrl);
+    }
+    //@codeCoverageIgnoreEnd
 }
