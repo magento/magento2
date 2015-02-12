@@ -919,14 +919,6 @@
             <argument name="dataStorage" xsi:type="object">Magento\Framework\View\Layout\PageType\Config\Data</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\FrontController">
-        <plugin name="install" type="Magento\Framework\Module\Plugin\DbStatusValidator" sortOrder="40"/>
-    </type>
-    <type name="Magento\Framework\Module\Plugin\DbStatusValidator">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-        </arguments>
-    </type>
     <virtualType name="Magento\Framework\Message\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">message</argument>

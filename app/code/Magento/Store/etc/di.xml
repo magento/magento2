@@ -225,4 +225,12 @@
             <argument name="httpRequest" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\FrontController">
+        <plugin name="install" type="Magento\Framework\Module\Plugin\DbStatusValidator" sortOrder="40"/>
+    </type>
+    <type name="Magento\Framework\Module\Plugin\DbStatusValidator">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
 </config>
