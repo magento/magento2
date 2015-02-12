@@ -385,7 +385,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
      * Translate a label
      *
      * @param string $label an option label that should be translated
-     * @return string the translated version of the input label
+     * @return \Magento\Framework\Phrase
      */
     private function _translateLabel($label)
     {

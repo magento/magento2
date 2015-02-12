@@ -27,5 +27,10 @@
             <locator>.navigation</locator>
             <strategy>css selector</strategy>
         </menuBlock>
+        <storeStatsBlock>
+            <class>Magento\Backend\Test\Block\Dashboard\StoreStats</class>
+            <locator>.dashboard-store-stats</locator>
+            <strategy>css selector</strategy>
+        </storeStatsBlock>
     </blocks>
 </page>
