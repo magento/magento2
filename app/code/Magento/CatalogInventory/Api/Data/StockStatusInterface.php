@@ -42,7 +42,7 @@ interface StockStatusInterface extends ExtensibleDataInterface
 
     /**
      * @param int $websiteId
-     * @return int
+     * @return $this
      */
     public function setWebsiteId($websiteId);
 
@@ -75,7 +75,7 @@ interface StockStatusInterface extends ExtensibleDataInterface
 
     /**
      * @param int $stockStatus
-     * @return int
+     * @return $this
      */
     public function setStockStatus($stockStatus);
 

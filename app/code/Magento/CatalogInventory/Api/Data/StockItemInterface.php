@@ -210,7 +210,7 @@ interface StockItemInterface extends ExtensibleDataInterface
     public function getUseConfigMaxSaleQty();
 
     /**
-     * @param $useConfigMaxSaleQty
+     * @param bool $useConfigMaxSaleQty
      * @return $this
      */
     public function setUseConfigMaxSaleQty($useConfigMaxSaleQty);

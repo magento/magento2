@@ -663,7 +663,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
-     * @param $useConfigMaxSaleQty
+     * @param bool $useConfigMaxSaleQty
      * @return $this
      */
     public function setUseConfigMaxSaleQty($useConfigMaxSaleQty)

@@ -139,7 +139,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
 
     /**
      * @param int $websiteId
-     * @return int
+     * @return $this
      */
     public function setWebsiteId($websiteId)
     {
@@ -166,7 +166,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
 
     /**
      * @param int $stockStatus
-     * @return int
+     * @return $this
      */
     public function setStockStatus($stockStatus)
     {
