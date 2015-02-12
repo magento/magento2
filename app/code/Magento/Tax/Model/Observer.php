@@ -311,9 +311,9 @@ class Observer
         // prepare correct template for options render
         if ($this->_taxData->displayBothPrices()) {
             $options['optionTemplate'] = sprintf(
-                '<%%= label %%>'
-                . '<%% if(finalPrice.value) { %%>'
-                . ' +<%%= finalPrice.formatted %%> (%1$s <%%= basePrice.formatted %%>)'
+                '<%%= data.label %%>'
+                . '<%% if(data.finalPrice.value) { %%>'
+                . ' <%%= data.finalPrice.formatted %%> (%1$s <%%= data.basePrice.formatted %%>)'
                 . '<%% } %%>',
                 __('Excl. tax:')
             );
