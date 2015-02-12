@@ -37,37 +37,19 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->blockFactory = $this->getMockBuilder(
-            'Magento\Framework\View\Element\BlockFactory'
-        )->disableOriginalConstructor()->getMock();
-        $this->storeManager = $this->getMockBuilder(
-            'Magento\Framework\Store\StoreManagerInterface'
-        )->disableOriginalConstructor()->getMock();
-        $this->scopeConfig = $this->getMockBuilder(
-            'Magento\Framework\App\Config\ScopeConfigInterface'
-        )->disableOriginalConstructor()->getMock();
-        $this->customerMetadataService = $this->getMockBuilder(
-            'Magento\Customer\Api\CustomerMetadataInterface'
-        )->disableOriginalConstructor()->getMock();
-        $this->addressConfig = $this->getMockBuilder(
-            'Magento\Customer\Model\Address\Config'
-        )->disableOriginalConstructor()->getMock();
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $className = 'Magento\Customer\Helper\Address';
+        $arguments = $objectManagerHelper->getConstructArguments($className);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $this->context = $arguments['context'];
+        $this->blockFactory = $arguments['blockFactory'];
+        $this->storeManager = $arguments['storeManager'];
+        $this->scopeConfig = $this->context->getScopeConfig();
+        $this->customerMetadataService = $arguments['customerMetadataService'];
+        $this->addressConfig = $arguments['addressConfig'];
+        $this->addressMetadataService = $arguments['addressMetadataService'];
 
-        $this->addressMetadataService = $this->getMockBuilder('Magento\Customer\Api\AddressMetadataInterface')
-            ->getMock();
-
-        $this->helper = new \Magento\Customer\Helper\Address(
-            $this->context,
-            $this->blockFactory,
-            $this->storeManager,
-            $this->scopeConfig,
-            $this->customerMetadataService,
-            $this->addressMetadataService,
-            $this->addressConfig
-        );
+        $this->helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
     /**
@@ -119,7 +101,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->context,
             $blockFactory,
             $this->storeManager,
-            $this->scopeConfig,
             $this->customerMetadataService,
             $this->addressMetadataService,
             $this->addressConfig

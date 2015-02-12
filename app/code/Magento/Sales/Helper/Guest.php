@@ -12,7 +12,7 @@ use Magento\Framework\App as App;
  * Sales module base helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Guest extends \Magento\Core\Helper\Data
+class Guest extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Core registry
@@ -67,11 +67,13 @@ class Guest extends \Magento\Core\Helper\Data
     const COOKIE_LIFETIME = 600;
 
     /**
+     * @var \Magento\Framework\Store\StoreManagerInterface
+     */
+    private $_storeManager;
+
+    /**
      * @param App\Helper\Context $context
-     * @param App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
@@ -79,39 +81,31 @@ class Guest extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
-     * @param bool $dbCompatibleMode
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         App\Helper\Context $context,
-        App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
-        $dbCompatibleMode = true
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->coreRegistry = $coreRegistry;
+        $this->_storeManager = $storeManager;
         $this->customerSession = $customerSession;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->messageManager = $messageManager;
         $this->orderFactory = $orderFactory;
         $this->resultRedirectFactory = $resultRedirectFactory;
+
         parent::__construct(
-            $context,
-            $scopeConfig,
-            $storeManager,
-            $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $context
         );
     }
 
