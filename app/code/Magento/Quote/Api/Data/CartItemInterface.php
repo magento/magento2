@@ -7,6 +7,25 @@ namespace Magento\Quote\Api\Data;
 
 interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_ITEM_ID = 'item_id';
+
+    const KEY_SKU = 'sku';
+
+    const KEY_QTY = 'qty';
+
+    const KEY_NAME = 'name';
+
+    const KEY_PRICE = 'price';
+
+    const KEY_PRODUCT_TYPE = 'product_type';
+
+    const KEY_QUOTE_ID = 'quote_id';
+
+    /**#@-*/
+
     /**
      * Returns the item ID.
      *

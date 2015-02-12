@@ -7,6 +7,92 @@ namespace Magento\Quote\Api\Data;
 
 interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+
+    /**
+     * Price.
+     */
+    const KEY_PRICE = 'price';
+
+    /**
+     * Base price.
+     */
+    const KEY_BASE_PRICE = 'base_price';
+
+    /**
+     * Quantity.
+     */
+    const KEY_QTY = 'qty';
+
+    /**
+     * Row total.
+     */
+    const KEY_ROW_TOTAL = 'row_total';
+
+    /**
+     * Base row total.
+     */
+    const KEY_BASE_ROW_TOTAL = 'base_row_total';
+
+    /**
+     * Row total with discount.
+     */
+    const KEY_ROW_TOTAL_WITH_DISCOUNT = 'row_total_with_discount';
+
+    /**
+     * Discount amount.
+     */
+    const KEY_DISCOUNT_AMOUNT = 'discount_amount';
+
+    /**
+     * Base discount amount.
+     */
+    const KEY_BASE_DISCOUNT_AMOUNT = 'base_discount_amount';
+
+    /**
+     * Discount percent.
+     */
+    const KEY_DISCOUNT_PERCENT = 'discount_percent';
+
+    /**
+     * Tax amount.
+     */
+    const KEY_TAX_AMOUNT = 'tax_amount';
+
+    /**
+     * Base tax amount.
+     */
+    const KEY_BASE_TAX_AMOUNT = 'base_tax_amount';
+
+    /**
+     * Tax percent.
+     */
+    const KEY_TAX_PERCENT = 'tax_percent';
+
+    /**
+     * Price including tax.
+     */
+    const KEY_PRICE_INCL_TAX = 'price_incl_tax';
+
+    /**
+     * Base price including tax.
+     */
+    const KEY_BASE_PRICE_INCL_TAX = 'base_price_incl_tax';
+
+    /**
+     * Row total including tax.
+     */
+    const KEY_ROW_TOTAL_INCL_TAX = 'row_total_incl_tax';
+
+    /**
+     * Base row total including tax.
+     */
+    const KEY_BASE_ROW_TOTAL_INCL_TAX = 'base_row_total_incl_tax';
+
+    /**#@-*/
+
     /**
      * Returns the item price in quote currency.
      *

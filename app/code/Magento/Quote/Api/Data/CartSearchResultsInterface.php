@@ -7,6 +7,13 @@ namespace Magento\Quote\Api\Data;
 
 interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_ITEMS = 'items';
+
+    /**#@-*/
+
     /**
      * Get carts list.
      *

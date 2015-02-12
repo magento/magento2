@@ -7,6 +7,57 @@ namespace Magento\Quote\Api\Data;
 
 interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_GRAND_TOTAL = 'grand_total';
+
+    const KEY_BASE_GRAND_TOTAL = 'base_grand_total';
+
+    const KEY_SUBTOTAL = 'subtotal';
+
+    const KEY_BASE_SUBTOTAL = 'base_subtotal';
+
+    const KEY_DISCOUNT_AMOUNT = 'discount_amount';
+
+    const KEY_BASE_DISCOUNT_AMOUNT = 'base_discount_amount';
+
+    const KEY_SUBTOTAL_WITH_DISCOUNT = 'subtotal_with_discount';
+
+    const KEY_BASE_SUBTOTAL_WITH_DISCOUNT = 'base_subtotal_with_discount';
+
+    const KEY_SHIPPING_AMOUNT = 'shipping_amount';
+
+    const KEY_BASE_SHIPPING_AMOUNT = 'base_shipping_amount';
+
+    const KEY_SHIPPING_DISCOUNT_AMOUNT = 'shipping_discount_amount';
+
+    const KEY_BASE_SHIPPING_DISCOUNT_AMOUNT = 'base_shipping_discount_amount';
+
+    const KEY_TAX_AMOUNT = 'tax_amount';
+
+    const KEY_BASE_TAX_AMOUNT = 'base_tax_amount';
+
+    const KEY_SHIPPING_TAX_AMOUNT = 'shipping_tax_amount';
+
+    const KEY_BASE_SHIPPING_TAX_AMOUNT = 'base_shipping_tax_amount';
+
+    const KEY_SUBTOTAL_INCL_TAX = 'subtotal_incl_tax';
+
+    const KEY_BASE_SUBTOTAL_INCL_TAX = 'base_subtotal_incl_tax';
+
+    const KEY_SHIPPING_INCL_TAX = 'shipping_incl_tax';
+
+    const KEY_BASE_SHIPPING_INCL_TAX = 'base_shipping_incl_tax';
+
+    const KEY_BASE_CURRENCY_CODE = 'base_currency_code';
+
+    const KEY_QUOTE_CURRENCY_CODE = 'quote_currency_code';
+
+    const KEY_ITEMS = 'items';
+
+    /**#@-*/
+
     /**
      * Get grand total in quote currency
      *

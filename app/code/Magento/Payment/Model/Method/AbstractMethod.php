@@ -67,6 +67,11 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * @var string
      */
+    protected $_title;
+
+    /**
+     * @var string
+     */
     protected $_formBlockType = 'Magento\Payment\Block\Form';
 
     /**
@@ -469,6 +474,23 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
+     * Sets payment method code
+     *
+     * @param string $code
+     * @return string
+     * @throws \Magento\Framework\Model\Exception
+     */
+    public function setCode($code)
+    {
+        if (empty($code)) {
+            throw new \Magento\Framework\Model\Exception(__('We cannot set the payment method code.'));
+        }
+
+        $this->_code = $code;
+        return $this->_code;
+    }
+
+    /**
      * Retrieve block type for method form generation
      *
      * @return string
@@ -719,7 +741,25 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      */
     public function getTitle()
     {
-        return $this->getConfigData('title');
+        if (empty($this->_title)) {
+            return $this->getConfigData('title');
+        } else {
+            return $this->_title;
+        }
+
+
+    }
+
+    /**
+     * Sets payment method title
+     *
+     * @param string $title
+     * @return string
+     */
+    public function setTitle($title)
+    {
+        $this->_title = $title;
+        return $this->_title;
     }
 
     /**

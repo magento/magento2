@@ -52,7 +52,6 @@ use Magento\Framework\Api\MetadataServiceInterface;
  * @method \Magento\Quote\Model\Quote\Item setRowTotalWithDiscount(float $value)
  * @method float getRowWeight()
  * @method \Magento\Quote\Model\Quote\Item setRowWeight(float $value)
- * @method \Magento\Quote\Model\Quote\Item setProductType(string $value)
  * @method float getBaseTaxBeforeDiscount()
  * @method \Magento\Quote\Model\Quote\Item setBaseTaxBeforeDiscount(float $value)
  * @method float getTaxBeforeDiscount()
@@ -487,7 +486,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getRealProductType()
     {
-        return $this->_getData('product_type');
+        return $this->_getData(SELF::KEY_PRODUCT_TYPE);
     }
 
     /**
@@ -866,7 +865,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getItemId()
     {
-        return $this->getData('item_id');
+        return $this->getData(SELF::KEY_ITEM_ID);
     }
 
     /**
@@ -874,7 +873,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setItemId($itemID)
     {
-        return $this->setData('item_id', $itemID);
+        return $this->setData(SELF::KEY_ITEM_ID, $itemID);
     }
 
     /**
@@ -882,7 +881,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getSku()
     {
-        return $this->getData('sku');
+        return $this->getData(SELF::KEY_SKU);
     }
 
     /**
@@ -890,7 +889,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setSku($sku)
     {
-        return $this->setData('sku', $sku);
+        return $this->setData(SELF::KEY_SKU, $sku);
     }
 
     /**
@@ -898,7 +897,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getQty()
     {
-        return $this->getData('qty');
+        return $this->getData(SELF::KEY_QTY);
     }
 
     /**
@@ -910,8 +909,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function setQty($qty)
     {
         $qty = $this->_prepareQty($qty);
-        $oldQty = $this->_getData('qty');
-        $this->setData('qty', $qty);
+        $oldQty = $this->_getData(SELF::KEY_QTY);
+        $this->setData(SELF::KEY_QTY, $qty);
 
         $this->_eventManager->dispatch('sales_quote_item_qty_set_after', ['item' => $this]);
 
@@ -920,7 +919,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         }
 
         if ($this->getUseOldQty()) {
-            $this->setData('qty', $oldQty);
+            $this->setData(SELF::KEY_QTY, $oldQty);
         }
 
         return $this;
@@ -931,7 +930,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getName()
     {
-        return $this->getData('name');
+        return $this->getData(SELF::KEY_NAME);
     }
 
     /**
@@ -939,7 +938,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setName($name)
     {
-        return $this->setData('name', $name);
+        return $this->setData(SELF::KEY_NAME, $name);
     }
 
     /**
@@ -947,7 +946,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getPrice()
     {
-        return $this->getData('price');
+        return $this->getData(SELF::KEY_PRICE);
     }
 
     /**
@@ -955,7 +954,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setPrice($price)
     {
-        return $this->setData('price', $price);
+        return $this->setData(SELF::KEY_PRICE, $price);
     }
 
     /**
@@ -965,7 +964,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getProductType()
     {
-        $option = $this->getOptionByCode('product_type');
+        $option = $this->getOptionByCode(SELF::KEY_PRODUCT_TYPE);
         if ($option) {
             return $option->getValue();
         }
@@ -974,7 +973,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             return $product->getTypeId();
         }
         // $product should always exist or there will be an error in getProduct()
-        return $this->_getData('product_type');
+        return $this->_getData(SELF::KEY_PRODUCT_TYPE);
     }
 
     /**
@@ -982,7 +981,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setProductType($productType)
     {
-        return $this->setData('product_type', $productType);
+        return $this->setData(SELF::KEY_PRODUCT_TYPE, $productType);
     }
 
     /**
@@ -990,7 +989,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getQuoteId()
     {
-        return $this->getData('quote_id');
+        return $this->getData(SELF::KEY_QUOTE_ID);
     }
 
     /**
@@ -998,7 +997,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setQuoteId($quoteId)
     {
-        return $this->setData('quote_id', $quoteId);
+        return $this->setData(SELF::KEY_QUOTE_ID, $quoteId);
     }
     //@codeCoverageIgnoreEnd
 }

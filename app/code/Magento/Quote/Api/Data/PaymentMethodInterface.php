@@ -7,6 +7,15 @@ namespace Magento\Quote\Api\Data;
 
 interface PaymentMethodInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_CODE = 'code';
+
+    const KEY_TITLE = 'title';
+
+    /**#@-*/
+
     /**
      * Get payment method code
      *

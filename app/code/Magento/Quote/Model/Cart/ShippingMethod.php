@@ -22,7 +22,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function getCarrierCode()
     {
-        return $this->_get(self::CARRIER_CODE);
+        return $this->_get(self::KEY_CARRIER_CODE);
     }
 
     /**
@@ -32,7 +32,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function setCarrierCode($carrierCode)
     {
-        return $this->setData(self::CARRIER_CODE, $carrierCode);
+        return $this->setData(self::KEY_CARRIER_CODE, $carrierCode);
     }
 
     /**
@@ -42,7 +42,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function getMethodCode()
     {
-        return $this->_get(self::METHOD_CODE);
+        return $this->_get(self::KEY_METHOD_CODE);
     }
 
     /**
@@ -52,7 +52,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function setMethodCode($methodCode)
     {
-        return $this->setData(self::METHOD_CODE, $methodCode);
+        return $this->setData(self::KEY_METHOD_CODE, $methodCode);
     }
 
     /**
@@ -62,7 +62,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function getCarrierTitle()
     {
-        return $this->_get(self::CARRIER_TITLE);
+        return $this->_get(self::KEY_CARRIER_TITLE);
     }
 
     /**
@@ -72,7 +72,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function setCarrierTitle($carrierTitle)
     {
-        return $this->setData(self::CARRIER_TITLE, $carrierTitle);
+        return $this->setData(self::KEY_CARRIER_TITLE, $carrierTitle);
     }
 
     /**
@@ -82,7 +82,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function getMethodTitle()
     {
-        return $this->_get(self::METHOD_TITLE);
+        return $this->_get(self::KEY_METHOD_TITLE);
     }
 
     /**
@@ -92,7 +92,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function setMethodTitle($methodTitle)
     {
-        return $this->setData(self::METHOD_TITLE, $methodTitle);
+        return $this->setData(self::KEY_METHOD_TITLE, $methodTitle);
     }
 
     /**
@@ -102,7 +102,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function getAmount()
     {
-        return $this->_get(self::SHIPPING_AMOUNT);
+        return $this->_get(self::KEY_SHIPPING_AMOUNT);
     }
 
     /**
@@ -112,7 +112,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function setAmount($amount)
     {
-        return $this->setData(self::SHIPPING_AMOUNT, $amount);
+        return $this->setData(self::KEY_SHIPPING_AMOUNT, $amount);
     }
 
     /**
@@ -122,7 +122,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function getBaseAmount()
     {
-        return $this->_get(self::BASE_SHIPPING_AMOUNT);
+        return $this->_get(self::KEY_BASE_SHIPPING_AMOUNT);
     }
 
     /**
@@ -132,7 +132,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function setBaseAmount($baseAmount)
     {
-        return $this->setData(self::BASE_SHIPPING_AMOUNT, $baseAmount);
+        return $this->setData(self::KEY_BASE_SHIPPING_AMOUNT, $baseAmount);
     }
 
     /**
@@ -143,7 +143,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function getAvailable()
     {
-        return $this->_get(self::AVAILABLE);
+        return $this->_get(self::KEY_AVAILABLE);
     }
 
     /**
@@ -153,6 +153,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      */
     public function setAvailable($available)
     {
-        return $this->setData(self::AVAILABLE, $available);
+        return $this->setData(self::KEY_AVAILABLE, $available);
     }
 }

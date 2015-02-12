@@ -237,7 +237,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function getPoNumber()
     {
-        return $this->getData('po_number');
+        return $this->getData(SELF::KEY_PO_NUMBER);
     }
 
     /*
@@ -245,7 +245,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function setPoNumber($poNumber)
     {
-        return $this->setData('po_number', $poNumber);
+        return $this->setData(SELF::KEY_PO_NUMBER, $poNumber);
     }
 
     /**
@@ -253,7 +253,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function getMethod()
     {
-        return $this->getData('method');
+        return $this->getData(SELF::KEY_METHOD);
     }
 
     /**
@@ -261,7 +261,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function setMethod($method)
     {
-        return $this->setData('method', $method);
+        return $this->setData(SELF::KEY_METHOD, $method);
     }
 
     /**
@@ -269,7 +269,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function getCcOwner()
     {
-        return $this->getData('cc_owner');
+        return $this->getData(SELF::KEY_CC_OWNER);
     }
 
     /**
@@ -277,7 +277,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function setCcOwner($ccOwner)
     {
-        return $this->setData('cc_owner', $ccOwner);
+        return $this->setData(SELF::KEY_CC_OWNER, $ccOwner);
     }
 
     /**
@@ -285,7 +285,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function getCcNumber()
     {
-        return $this->getData('cc_number');
+        return $this->getData(SELF::KEY_CC_NUMBER);
     }
 
     /**
@@ -293,7 +293,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function setCcNumber($ccNumber)
     {
-        return $this->setData('cc_number', $ccNumber);
+        return $this->setData(SELF::KEY_CC_NUMBER, $ccNumber);
     }
 
     /**
@@ -301,7 +301,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function getCcType()
     {
-        return $this->getData('cc_type');
+        return $this->getData(SELF::KEY_CC_TYPE);
     }
 
     /**
@@ -309,7 +309,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function setCcType($ccType)
     {
-        return $this->setData('cc_type',$ccType);
+        return $this->setData(SELF::KEY_CC_TYPE,$ccType);
     }
 
     /**
@@ -317,7 +317,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function getCcExpYear()
     {
-        $expirationYear = $this->getData('cc_exp_year') ?: null;
+        $expirationYear = $this->getData(SELF::KEY_CC_EXP_YEAR) ?: null;
         return $expirationYear;
     }
 
@@ -326,7 +326,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function setCcExpYear($ccExpYear)
     {
-        return $this->setData('cc_exp_year', $ccExpYear);
+        return $this->setData(SELF::KEY_CC_EXP_YEAR, $ccExpYear);
     }
 
     /**
@@ -334,7 +334,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function getCcExpMonth()
     {
-        return $this->getData('cc_exp_month');
+        return $this->getData(SELF::KEY_CC_EXP_MONTH);
     }
 
     /**
@@ -342,7 +342,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function setCcExpMonth($ccExpMonth)
     {
-        return $this->setData('cc_exp_month',$ccExpMonth);
+        return $this->setData(SELF::KEY_CC_EXP_MONTH,$ccExpMonth);
     }
 
     /**
@@ -350,7 +350,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function getAdditionalData()
     {
-        $additionalDataValue = $this->getData('additional_data');
+        $additionalDataValue = $this->getData(SELF::KEY_ADDITIONAL_DATA);
         if (is_string($additionalDataValue)) {
             $additionalData = @unserialize($additionalDataValue);
             if (is_array($additionalData)) {
@@ -367,7 +367,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function setAdditionalData(array $additionalData = null)
     {
-        return $this->setData('additional_data', $additionalData);
+        return $this->setData(SELF::KEY_ADDITIONAL_DATA, $additionalData);
     }
     //@codeCoverageIgnoreEnd
 }

@@ -7,6 +7,27 @@ namespace Magento\Quote\Api\Data;
 
 interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_PO_NUMBER = 'po_number';
+
+    const KEY_METHOD = 'method';
+
+    const KEY_CC_OWNER = 'cc_owner';
+
+    const KEY_CC_NUMBER = 'cc_number';
+
+    const KEY_CC_TYPE = 'cc_type';
+
+    const KEY_CC_EXP_YEAR = 'cc_exp_year';
+
+    const KEY_CC_EXP_MONTH = 'cc_exp_month';
+
+    const KEY_ADDITIONAL_DATA = 'additional_data';
+
+    /**#@-*/
+
     /**
      * Get purchase order number
      *

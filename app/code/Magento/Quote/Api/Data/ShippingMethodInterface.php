@@ -10,37 +10,37 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Shipping carrier code.
      */
-    const CARRIER_CODE = 'carrier_code';
+    const KEY_CARRIER_CODE = 'carrier_code';
 
     /**
      * Shipping method code.
      */
-    const METHOD_CODE = 'method_code';
+    const KEY_METHOD_CODE = 'method_code';
 
     /**
      * Shipping carrier title.
      */
-    const CARRIER_TITLE = 'carrier_title';
+    const KEY_CARRIER_TITLE = 'carrier_title';
 
     /**
      * Shipping method title.
      */
-    const METHOD_TITLE = 'method_title';
+    const KEY_METHOD_TITLE = 'method_title';
 
     /**
      * Shipping amount in store currency.
      */
-    const SHIPPING_AMOUNT = 'amount';
+    const KEY_SHIPPING_AMOUNT = 'amount';
 
     /**
      * Shipping amount in base currency.
      */
-    const BASE_SHIPPING_AMOUNT = 'base_amount';
+    const KEY_BASE_SHIPPING_AMOUNT = 'base_amount';
 
     /**
      * Available.
      */
-    const AVAILABLE = 'available';
+    const KEY_AVAILABLE = 'available';
 
     /**
      * Returns the shipping carrier code.
