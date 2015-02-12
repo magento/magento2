@@ -204,7 +204,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function getMappedSqlField()
     {
         $result = '';
-        if ($this->getAttributeObject()->isStatic()) {
+        if ($this->getAttribute() == 'category_ids') {
+            $result = parent::getMappedSqlField();
+        } elseif ($this->getAttributeObject()->isStatic()) {
             $result = $this->getAttributeObject()->getAttributeCode();
         } elseif ($this->getAttributeObject()->isScopeGlobal()) {
             if (isset($this->joinedAttributes[$this->getAttribute()])) {
