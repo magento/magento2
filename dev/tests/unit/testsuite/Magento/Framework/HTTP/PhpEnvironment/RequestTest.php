@@ -173,4 +173,30 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->getFiles('no_such_file'));
         $this->assertEquals('default', $this->model->getFiles('no_such_file', 'default'));
     }
+
+    public function testGetBaseUrlWithUrl()
+    {
+        $this->model = $this->getModel();
+        $this->model->setBaseUrl('http://test.com/one/two');
+        $this->assertEquals('http://test.com/one/two', $this->model->getBaseUrl());
+    }
+
+    public function testGetBaseUrlWithEmptyUrl()
+    {
+        $this->model = $this->getModel();
+        $this->assertEmpty($this->model->getBaseUrl());
+    }
+
+    public function testGetAliasWhenAliasSet()
+    {
+        $this->model = $this->getModel();
+        $this->model->setAlias('AliasName', 'AliasTarget');
+        $this->assertEquals('AliasTarget', $this->model->getAlias('AliasName'));
+    }
+
+    public function testGetAliasWhenAliasAreEmpty()
+    {
+        $this->model = $this->getModel();
+        $this->assertNull($this->model->getAlias(''));
+    }
 }
