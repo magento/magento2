@@ -30,7 +30,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        CustomerCart $cart,
+        \Magento\Checkout\Model\Cart $cart,
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
