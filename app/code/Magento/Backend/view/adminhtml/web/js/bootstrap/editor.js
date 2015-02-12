@@ -4,6 +4,6 @@
  * See COPYING.txt for license details.
  */
 require([
-    "Magento_Backend/variables",
+    "Magento_Variable/variables",
     "mage/adminhtml/browser"
 ]);
