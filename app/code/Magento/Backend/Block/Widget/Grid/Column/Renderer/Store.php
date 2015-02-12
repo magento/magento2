@@ -83,7 +83,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * Render row store views
      *
      * @param \Magento\Framework\Object $row
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -135,7 +135,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      * Render row store views for export
      *
      * @param \Magento\Framework\Object $row
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function renderExport(\Magento\Framework\Object $row)
