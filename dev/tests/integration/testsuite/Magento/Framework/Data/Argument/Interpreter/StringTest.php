@@ -48,7 +48,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
     public function testEvaluate($input, $expected)
     {
         $actual = $this->_model->evaluate($input);
-        $this->assertSame($expected, $actual);
+        $this->assertSame($expected, (string)$actual);
     }
 
     public function evaluateDataProvider()

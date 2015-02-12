@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Reflection;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
@@ -109,13 +110,13 @@ class DataObjectProcessor
                 $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 3));
                 if ($key === ExtensibleDataInterface::CUSTOM_ATTRIBUTES) {
                     $value = $this->convertCustomAttributes($value, $dataObjectType);
-                } elseif (is_object($value)) {
+                } elseif (is_object($value) && !($value instanceof Phrase)) {
                     $value = $this->buildOutputDataArray($value, $returnType);
                 } elseif (is_array($value)) {
                     $valueResult = [];
                     $arrayElementType = substr($returnType, 0, -2);
                     foreach ($value as $singleValue) {
-                        if (is_object($singleValue)) {
+                        if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
                             $singleValue = $this->buildOutputDataArray($singleValue, $arrayElementType);
                         }
                         $valueResult[] = $this->castValueToType($singleValue, $arrayElementType);
