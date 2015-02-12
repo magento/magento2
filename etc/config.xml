@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
+    <default>
+        <catalog>
+            <search>
+                <search_recommendations_enabled>1</search_recommendations_enabled>
+                <search_recommendations_count>5</search_recommendations_count>
+                <search_recommendations_count_results_enabled>0</search_recommendations_count_results_enabled>
+            </search>
+        </catalog>
+    </default>
+</config>

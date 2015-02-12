@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+    <system>
+        <section id="catalog">
+            <group id="search">
+                <field id="search_recommendations_enabled"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="80"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Enable Search Recommendations</label>
+                    <comment>When you enable this option your site may slow down.</comment>
+                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="search_recommendations_count"
+                       translate="label"
+                       type="text"
+                       sortOrder="81"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Search Recommendations Count</label>
+                    <validate>validate-digits</validate>
+                    <depends>
+                        <field id="search_recommendations_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="search_recommendations_count_results_enabled"
+                       translate="label"
+                       type="select"
+                       sortOrder="82"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Show Results Count for Each Recommendation</label>
+                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="search_recommendations_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -8,7 +8,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\AdvancedSearch\Block\Recommendations">
         <arguments>
-            <argument name="searchDataProvider" xsi:type="object">Magento\AdvancedSearch\Model\SearchDataProvider</argument>
+            <argument name="searchDataProvider" xsi:type="object">Magento\AdvancedSearch\Model\Recommendations\DataProvider</argument>
             <argument name="title" xsi:type="string">Related search terms</argument>
         </arguments>
     </type>
