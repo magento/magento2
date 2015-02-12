@@ -115,8 +115,8 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
                 'sort_order' => 20,
             ]
         );
-        $this->_sourceFiles = [$sourceFileOne, $sourceFileTwo];
-        $this->_sourceTheme = $this->getMock(
+        $this->sourceFiles = [$sourceFileOne, $sourceFileTwo];
+        $this->sourceTheme = $this->getMock(
             'Magento\Theme\Model\Theme',
             ['__wakeup', 'getCustomization'],
             [],
@@ -124,11 +124,11 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_targetFiles = [
+        $this->targetFiles = [
             $this->getMock('Magento\Theme\Model\Theme\File', ['__wakeup', 'delete'], [], '', false),
             $this->getMock('Magento\Theme\Model\Theme\File', ['__wakeup', 'delete'], [], '', false),
         ];
-        $this->_targetTheme = $this->getMock(
+        $this->targetTheme = $this->getMock(
             'Magento\Theme\Model\Theme',
             ['__wakeup', 'getCustomization'],
             [],
