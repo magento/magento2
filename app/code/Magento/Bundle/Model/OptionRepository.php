@@ -7,8 +7,8 @@
 namespace Magento\Bundle\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Webapi\Exception;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -205,13 +205,13 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     /**
      * @param string $productSku
      * @return \Magento\Catalog\Api\Data\ProductInterface
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     private function getProduct($productSku)
     {
         $product = $this->productRepository->get($productSku);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new Exception('Only implemented for bundle product', Exception::HTTP_FORBIDDEN);
+            throw new InputException('Only implemented for bundle product');
         }
         return $product;
     }

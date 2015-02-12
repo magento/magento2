@@ -71,9 +71,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     {
         $product = $this->productRepository->get($productId);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new \Magento\Webapi\Exception(
-                'Only implemented for bundle product',
-                \Magento\Webapi\Exception::HTTP_FORBIDDEN
+            throw new InputException(
+                'Only implemented for bundle product'
             );
         }
 
@@ -178,9 +177,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $product = $this->productRepository->get($productSku);
 
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new \Magento\Webapi\Exception(
-                sprintf('Product with specified sku: %s is not a bundle product', $productSku),
-                \Magento\Webapi\Exception::HTTP_FORBIDDEN
+            throw new InputException(
+                sprintf('Product with specified sku: %s is not a bundle product', $productSku)
             );
         }
 

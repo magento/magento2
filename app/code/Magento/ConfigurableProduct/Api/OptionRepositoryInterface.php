@@ -15,7 +15,7 @@ interface OptionRepositoryInterface
      * @param int $optionId
      * @return \Magento\ConfigurableProduct\Api\Data\OptionInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function get($productSku, $optionId);
 
@@ -25,14 +25,14 @@ interface OptionRepositoryInterface
      * @param string $productSku
      * @return \Magento\ConfigurableProduct\Api\Data\OptionInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function getList($productSku);
 
     /**
      * Remove option from configurable product
      *
-     * @param Data\OptionInterface $option
+     * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
      * @return bool
      */
     public function delete(\Magento\ConfigurableProduct\Api\Data\OptionInterface $option);
@@ -44,7 +44,7 @@ interface OptionRepositoryInterface
      * @param int $optionId
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function deleteById($productSku, $optionId);
 

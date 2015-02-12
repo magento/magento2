@@ -7,7 +7,8 @@ namespace Magento\Webapi\Service\Entity;
 
 class TestService
 {
-   const DEFAULT_VALUE = 42;
+    const DEFAULT_VALUE = 42;
+    const CUSTOM_ATTRIBUTE_CODE = 'customAttr';
 
     /**
      * @param int $entityId
@@ -89,5 +90,14 @@ class TestService
     public function nestedDataArray(DataArray $dataObjects)
     {
         return $dataObjects;
+    }
+
+    /**
+     * @param \Magento\Webapi\Service\Entity\ObjectWithCustomAttributes $param
+     * @return \Magento\Webapi\Service\Entity\ObjectWithCustomAttributes
+     */
+    public function ObjectWithCustomAttributesMethod(\Magento\Webapi\Service\Entity\ObjectWithCustomAttributes $param)
+    {
+        return $param;
     }
 }

@@ -7,7 +7,6 @@
 namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Webapi\Exception;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -241,15 +240,14 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      *
      * @param string $productSku
      * @return \Magento\Catalog\Model\Product
-     * @throws \Magento\Webapi\Exception
+     * @throws InputException
      */
     private function getProduct($productSku)
     {
         $product = $this->productRepository->get($productSku);
         if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE !== $product->getTypeId()) {
-            throw new Exception(
-                sprintf('Only implemented for configurable product: %s', $productSku),
-                Exception::HTTP_FORBIDDEN
+            throw new InputException(
+                sprintf('Only implemented for configurable product: %s', $productSku)
             );
         }
         return $product;
