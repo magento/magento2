@@ -19,7 +19,7 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
      *
      * @var array
      */
-    protected static $_versions = null;
+    protected static $schema_versions = null;
 
     /**
      * Resource data versions cache array
@@ -50,8 +50,8 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
      */
     protected function _loadVersion($needType)
     {
-        if ($needType == 'db' && is_null(self::$_versions) || $needType == 'data' && is_null(self::$_dataVersions)) {
-            self::$_versions = [];
+        if ($needType == 'db' && is_null(self::$schema_versions) || $needType == 'data' && is_null(self::$_dataVersions)) {
+            self::$schema_versions = [];
             // Db version column always exists
             self::$_dataVersions = null;
             // Data version array will be filled only if Data column exist
@@ -60,7 +60,7 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
                 $select = $this->_getReadAdapter()->select()->from($this->getMainTable(), '*');
                 $rowset = $this->_getReadAdapter()->fetchAll($select);
                 foreach ($rowset as $row) {
-                    self::$_versions[$row['module']] = $row['schema_version'];
+                    self::$schema_versions[$row['module']] = $row['schema_version'];
                     if (array_key_exists('data_version', $row)) {
                         if (is_null(self::$_dataVersions)) {
                             self::$_dataVersions = [];
@@ -83,7 +83,7 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
             return false;
         }
         $this->_loadVersion('db');
-        return isset(self::$_versions[$moduleName]) ? self::$_versions[$moduleName] : false;
+        return isset(self::$schema_versions[$moduleName]) ? self::$schema_versions[$moduleName] : false;
     }
 
     /**
@@ -94,14 +94,14 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
         $dbModuleInfo = ['module' => $moduleName, 'schema_version' => $version];
 
         if ($this->getDbVersion($moduleName)) {
-            self::$_versions[$moduleName] = $version;
+            self::$schema_versions[$moduleName] = $version;
             return $this->_getWriteAdapter()->update(
                 $this->getMainTable(),
                 $dbModuleInfo,
                 ['module = ?' => $moduleName]
             );
         } else {
-            self::$_versions[$moduleName] = $version;
+            self::$schema_versions[$moduleName] = $version;
             return $this->_getWriteAdapter()->insert($this->getMainTable(), $dbModuleInfo);
         }
     }
