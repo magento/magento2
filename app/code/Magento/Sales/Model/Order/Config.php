@@ -109,7 +109,7 @@ class Config
      * State label getter
      *
      * @param   string $state
-     * @return  string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getStateLabel($state)
     {

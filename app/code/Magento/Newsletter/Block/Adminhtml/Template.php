@@ -56,7 +56,7 @@ class Template extends \Magento\Backend\Block\Template
     /**
      * Get header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
