@@ -217,7 +217,7 @@ class Layer extends \Magento\Framework\Object
             try {
                 $category = $this->categoryRepository->get($category);
             } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the category.'), 0, $e);
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the category.'), [], $e);
             }
         } elseif ($category instanceof \Magento\Catalog\Model\Category) {
             if (!$category->getId()) {

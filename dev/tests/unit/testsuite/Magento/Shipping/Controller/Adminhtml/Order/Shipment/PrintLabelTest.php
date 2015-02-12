@@ -347,7 +347,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->throwException(new \Magento\Framework\Exception\LocalizedException()));
+            ->will($this->throwException(new \Magento\Framework\Exception\LocalizedException('message')));
         $this->messageManagerMock->expects($this->once())->method('addError')->will($this->returnSelf());
         $this->redirectSection();
 
