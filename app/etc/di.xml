@@ -159,6 +159,15 @@
                         <item name="tag" xsi:type="string">MAGE</item>
                     </item>
                 </item>
+                <item name="profiler" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Framework\Cache\Frontend\Decorator\Profiler</item>
+                    <item name="parameters" xsi:type="array">
+                        <item name="backendPrefixes" xsi:type="array">
+                            <item name="zend" xsi:type="string">Zend_Cache_Backend_</item>
+                            <item name="cm" xsi:type="string">Cm_Cache_Backend_</item>
+                        </item>
+                    </item>
+                </item>
             </argument>
             <argument name="resource" xsi:type="object">Magento\Framework\App\Resource\Proxy</argument>
         </arguments>
