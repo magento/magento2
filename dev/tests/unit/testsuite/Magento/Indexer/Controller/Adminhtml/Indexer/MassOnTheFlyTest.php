@@ -6,7 +6,7 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
-class MassOnTheFlyTest extends \Magento\Indexer\Controller\Adminhtml\Indexer
+class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Indexer\Controller\Adminhtml\Indexer\MassOnTheFly
@@ -34,7 +34,7 @@ class MassOnTheFlyTest extends \Magento\Indexer\Controller\Adminhtml\Indexer
     protected $config;
 
     /**
-     * @var \Title
+     * @var \Magento\Framework\View\Page\Title
      */
     protected $title;
 
@@ -152,7 +152,7 @@ class MassOnTheFlyTest extends \Magento\Indexer\Controller\Adminhtml\Indexer
         $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
         $this->page = $this->getMock('\Magento\Framework\View\Result\Page', [], [], '', false);
         $this->config = $this->getMock('\Magento\Framework\View\Result\Page', [], [], '', false);
-        $this->title = $this->getMock('\Title', [], [], '', false);
+        $this->title = $this->getMock('\Magento\Framework\View\Page\Title', [], [], '', false);
         $this->messageManager = $this->getMockForAbstractClass(
             '\Magento\Framework\Message\ManagerInterface',
             ['addError', 'addSuccess'],
