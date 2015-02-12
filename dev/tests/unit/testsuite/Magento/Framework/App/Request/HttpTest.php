@@ -9,6 +9,7 @@
 
 namespace Magento\Framework\App\Request;
 use Magento\Framework\App\ScopeInterface;
+use Zend\Stdlib\Parameters;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
@@ -236,7 +237,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_model->setPostValue($post);
         $this->assertEquals($post, $this->_model->getPost()->toArray());
 
-        $this->_model->setPost(new \Zend\Stdlib\Parameters([]));
+        $this->_model->setPost(new Parameters([]));
         $this->assertEmpty($this->_model->getPost()->toArray());
 
         $post = ['post_var' => 'post_value'];
@@ -253,7 +254,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->getModel();
 
         $files = ['one' => '111', 'two' => '222'];
-        $this->_model->setFiles(new \Zend\Stdlib\Parameters($files));
+        $this->_model->setFiles(new Parameters($files));
 
         $this->assertEquals($files, $this->_model->getFiles()->toArray());
 

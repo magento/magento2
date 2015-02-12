@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\HTTP;
 
+use Zend\Stdlib\Parameters;
+
 class HeaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -19,7 +21,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\TestFramework\Request $request */
         $request = $objectManager->get('Magento\TestFramework\Request');
-        $request->setServer(new \Zend\Stdlib\Parameters(['HTTP_HOST' => 'localhost']));
+        $request->setServer(new Parameters(['HTTP_HOST' => 'localhost']));
     }
 
     public function testGetHttpHeaderMethods()

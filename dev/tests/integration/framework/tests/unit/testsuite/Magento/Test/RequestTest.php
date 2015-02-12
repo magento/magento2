@@ -5,6 +5,8 @@
  */
 namespace Magento\Test;
 
+use Zend\Stdlib\Parameters;
+
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -30,11 +32,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetServerValue()
     {
-        $this->_model->setServer(new \Zend\Stdlib\Parameters([]));
+        $this->_model->setServer(new Parameters([]));
         $this->assertSame([], $this->_model->getServer()->toArray());
         $this->assertSame(
             $this->_model,
-            $this->_model->setServer(new \Zend\Stdlib\Parameters(['test' => 'value', 'null' => null]))
+            $this->_model->setServer(new Parameters(['test' => 'value', 'null' => null]))
         );
         $this->assertSame(['test' => 'value', 'null' => null], $this->_model->getServer()->toArray());
         $this->assertEquals('value', $this->_model->getServer('test'));

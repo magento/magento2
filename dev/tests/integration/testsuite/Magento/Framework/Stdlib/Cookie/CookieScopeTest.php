@@ -11,6 +11,7 @@ namespace Magento\Framework\Stdlib\Cookie;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Zend\Stdlib\Parameters;
 
 /**
  * Test CookieScope
@@ -37,7 +38,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     public function testGetSensitiveCookieMetadataEmpty()
     {
         $serverVal = $_SERVER;
-        $this->request->setServer(new \Zend\Stdlib\Parameters(array_merge($_SERVER, ['HTTPS' => 'on'])));
+        $this->request->setServer(new Parameters(array_merge($_SERVER, ['HTTPS' => 'on'])));
         $cookieScope = $this->createCookieScope();
 
         $this->assertEquals(
@@ -47,7 +48,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
             ],
             $cookieScope->getSensitiveCookieMetadata()->__toArray());
 
-        $this->request->setServer(new \Zend\Stdlib\Parameters($serverVal));
+        $this->request->setServer(new Parameters($serverVal));
     }
 
     public function testGetPublicCookieMetadataEmpty()

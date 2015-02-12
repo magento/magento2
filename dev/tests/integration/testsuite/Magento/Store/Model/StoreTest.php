@@ -10,6 +10,7 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Zend\Stdlib\Parameters;
 
 class StoreTest extends \PHPUnit_Framework_TestCase
 {
@@ -439,7 +440,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $model = $objectManager->create('Magento\Store\Model\Store');
 
         $request = $objectManager->get('Magento\Framework\App\RequestInterface');
-        $request->setServer(new \Zend\Stdlib\Parameters(array_merge($_SERVER, $serverValues)));
+        $request->setServer(new Parameters(array_merge($_SERVER, $serverValues)));
 
         $this->assertEquals($expected, $model->isCurrentlySecure());
     }
