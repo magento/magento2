@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid">
         <arguments>
-            <argument name="urlRewriteIndex" xsi:type="object">Magento\UrlRewrite\Test\Fixture\UrlRewriteCategory</argument>
-            <argument name="urlRewriteCategory" xsi:type="object">Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex</argument>
+            <argument name="urlRewriteIndex" xsi:type="object">Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex</argument>
+            <argument name="urlRewrite" xsi:type="object">Magento\UrlRewrite\Test\Fixture\UrlRewrite</argument>
         </arguments>
     </type>
     <type name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductRedirect">
