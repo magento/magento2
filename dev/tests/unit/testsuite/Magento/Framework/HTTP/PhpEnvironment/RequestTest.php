@@ -123,4 +123,54 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             ['X-Forwarded-For', 'test', 'test'],
         ];
     }
+
+    public function testGetAliasWhenAliasExists()
+    {
+        $this->model = $this->getModel();
+        $this->model->setAlias('AliasName', 'AliasTarget');
+        $this->assertEquals('AliasTarget', $this->model->getAlias('AliasName'));
+    }
+
+    public function testGetAliasWhenAliasesIsNull()
+    {
+        $this->model = $this->getModel();
+        $this->assertNull($this->model->getAlias('someValue'));
+    }
+
+    public function testSetPostValue()
+    {
+        $this->model = $this->getModel();
+
+        $post = ['one' => '111', 'two' => '222'];
+        $this->model->setPostValue($post);
+        $this->assertEquals($post, $this->model->getPost()->toArray());
+
+        $this->model->setPost(new Parameters([]));
+        $this->assertEmpty($this->model->getPost()->toArray());
+
+        $post = ['post_var' => 'post_value'];
+        $this->model->setPostValue($post);
+        $this->model->setPostValue('post_var 2', 'post_value 2');
+        $this->assertEquals(
+            ['post_var' => 'post_value', 'post_var 2' => 'post_value 2'],
+            $this->model->getPost()->toArray()
+        );
+    }
+
+    public function testGetFiles()
+    {
+        $this->model = $this->getModel();
+
+        $files = ['one' => '111', 'two' => '222'];
+        $this->model->setFiles(new Parameters($files));
+
+        $this->assertEquals($files, $this->model->getFiles()->toArray());
+
+        foreach ($files as $key => $value) {
+            $this->assertEquals($value, $this->model->getFiles($key));
+        }
+
+        $this->assertNull($this->model->getFiles('no_such_file'));
+        $this->assertEquals('default', $this->model->getFiles('no_such_file', 'default'));
+    }
 }

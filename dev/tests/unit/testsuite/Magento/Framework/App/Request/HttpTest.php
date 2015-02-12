@@ -129,19 +129,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('one', $this->_model->getFrontName());
     }
 
-    public function testGetAliasWhenAliasExists()
-    {
-        $this->_model = $this->getModel();
-        $this->_model->setAlias('AliasName', 'AliasTarget');
-        $this->assertEquals('AliasTarget', $this->_model->getAlias('AliasName'));
-    }
-
-    public function testGetAliasWhenAliasesIsNull()
-    {
-        $this->_model = $this->getModel();
-        $this->assertNull($this->_model->getAlias('someValue'));
-    }
-
     public function testGetRouteNameWithNullValueRouteName()
     {
         $this->_model = $this->getModel();
@@ -227,43 +214,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_model->getHeaders()->clearHeaders();
         $this->_model->getHeaders()->addHeaderLine('X-Requested-With', 'NotXMLHttpRequest');
         $this->assertFalse($this->_model->isAjax());
-    }
-
-    public function testSetPostValue()
-    {
-        $this->_model = $this->getModel();
-
-        $post = ['one' => '111', 'two' => '222'];
-        $this->_model->setPostValue($post);
-        $this->assertEquals($post, $this->_model->getPost()->toArray());
-
-        $this->_model->setPost(new Parameters([]));
-        $this->assertEmpty($this->_model->getPost()->toArray());
-
-        $post = ['post_var' => 'post_value'];
-        $this->_model->setPostValue($post);
-        $this->_model->setPostValue('post_var 2', 'post_value 2');
-        $this->assertEquals(
-            ['post_var' => 'post_value', 'post_var 2' => 'post_value 2'],
-            $this->_model->getPost()->toArray()
-        );
-    }
-
-    public function testGetFiles()
-    {
-        $this->_model = $this->getModel();
-
-        $files = ['one' => '111', 'two' => '222'];
-        $this->_model->setFiles(new Parameters($files));
-
-        $this->assertEquals($files, $this->_model->getFiles()->toArray());
-
-        foreach ($files as $key => $value) {
-            $this->assertEquals($value, $this->_model->getFiles($key));
-        }
-
-        $this->assertNull($this->_model->getFiles('no_such_file'));
-        $this->assertEquals('default', $this->_model->getFiles('no_such_file', 'default'));
     }
 
     /**
