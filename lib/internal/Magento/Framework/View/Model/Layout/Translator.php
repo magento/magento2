@@ -126,6 +126,6 @@ class Translator
      */
     protected function _translateValue($value)
     {
-        return __($value);
+        return (string)new \Magento\Framework\Phrase($value);
     }
 }
