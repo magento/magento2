@@ -31,6 +31,9 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     protected $layoutFactory;
 
+    /** @var \Magento\Catalog\Model\ProductFactory */
+    protected $productFactory;
+
     /**
      * @param Action\Context $context
      * @param Builder $productBuilder
@@ -38,6 +41,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Catalog\Model\Product\Validator $productValidator
      * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -45,13 +49,15 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magento\Catalog\Model\Product\Validator $productValidator,
         \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Catalog\Model\ProductFactory $productFactory
     ) {
         $this->_dateFilter = $dateFilter;
         $this->productValidator = $productValidator;
         parent::__construct($context, $productBuilder);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->productFactory = $productFactory;
     }
 
     /**
@@ -73,13 +79,13 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
                 $productData['stock_data']['use_config_manage_stock'] = 0;
             }
             /* @var $product \Magento\Catalog\Model\Product */
-            $product = $this->_objectManager->create('Magento\Catalog\Model\Product');
+            $product = $this->productFactory->create();
             $product->setData('_edit_mode', true);
             $storeId = $this->getRequest()->getParam('store');
             if ($storeId) {
                 $product->setStoreId($storeId);
             }
-            $setId = $this->getRequest()->getParam('set');
+            $setId = $this->getRequest()->getPost('set');
             if ($setId) {
                 $product->setAttributeSetId($setId);
             }
