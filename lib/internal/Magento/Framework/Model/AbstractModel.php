@@ -576,12 +576,12 @@ abstract class AbstractModel extends \Magento\Framework\Object
      * Processing object before delete data
      *
      * @return $this
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeDelete()
     {
         if (!$this->_actionValidator->isAllowed($this)) {
-            throw new LocalizedException(__('Delete operation is forbidden for current area'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Delete operation is forbidden for current area'));
         }
 
         $this->_eventManager->dispatch('model_delete_before', ['object' => $this]);
