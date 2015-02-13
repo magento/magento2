@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\TestFramework\ObjectManager;
-
 class BundleTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config */
@@ -30,14 +28,24 @@ EOL;
 
     protected function setUp()
     {
-        $this->scopeConf = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
-        $this->conf = $this->getMock('Magento\Framework\View\Asset\Bundle\Config', [], [], '', false);
+        $this->scopeConf = $this->getMockForAbstractClass(
+            'Magento\Framework\App\Config\ScopeConfigInterface',
+            [],
+            '',
+            false
+        );
+        $this->conf = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Asset\Bundle\ConfigInterface',
+            [],
+            '',
+            false
+        );
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
     }
 
     protected function getBundle()
     {
-        $bundle = $this->bundle = new \Magento\Framework\View\Asset\Bundle(
+        $bundle = $this->bundle = new Bundle(
             $this->conf,
             $this->scopeConf
         );
@@ -61,7 +69,6 @@ EOL;
 
             $bundle->addAsset($assetMock);
         }
-
         return $bundle;
     }
 
@@ -78,7 +85,6 @@ EOL;
 
         $this->assertArrayHasKey(0, $actual);
         $this->assertEquals($this->expectedResult, $actual[0]);
-
     }
 
     public function testGetContentWithMultipleBundleParts()
@@ -94,6 +100,5 @@ EOL;
 
         $this->assertArrayHasKey(0, $actual);
         $this->assertArrayHasKey(1, $actual);
-
     }
 }

@@ -5,6 +5,9 @@
 
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App;
+use Magento\Framework\App\Config;
+
 /**
  * Bundle model
  */
@@ -42,7 +45,7 @@ class Bundle
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var Config\ScopeConfigInterface
      */
     protected $scopeConfig;
 
@@ -66,11 +69,11 @@ class Bundle
 
     /**
      * @param Bundle\ConfigInterface $config
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Config\ScopeConfigInterface $scopeConfig
      */
     function __construct(
-        \Magento\Framework\View\Asset\Bundle\ConfigInterface $config,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        Bundle\ConfigInterface $config,
+        Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->config = $config;
         $this->scopeConfig = $scopeConfig;
@@ -93,12 +96,14 @@ class Bundle
     {
         $this->numberOfBundles = $this->scopeConfig->getValue(
             self::XML_PATH_NUMBER_OF_BUNDLES,
-            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+            App\ScopeInterface::SCOPE_DEFAULT
         );
     }
 
     /**
      * @param string $type
+     *
+     * @return void
      */
     public function setType($type)
     {
@@ -106,6 +111,8 @@ class Bundle
     }
 
     /**
+     * @return string
+     *
      * @return string
      */
     public function getType()
@@ -115,6 +122,8 @@ class Bundle
 
     /**
      * @param $path
+     *
+     * @return void
      */
     public function setPath($path)
     {
@@ -133,6 +142,8 @@ class Bundle
 
     /**
      * @param LocalInterface $asset
+     *
+     * @return void
      */
     public function addAsset(LocalInterface $asset)
     {
@@ -152,6 +163,8 @@ class Bundle
 
     /**
      * Divided bundle on small parts
+     *
+     * @return void
      */
     protected function divide()
     {
@@ -161,6 +174,8 @@ class Bundle
 
     /**
      * Fill bundle with real content
+     *
+     * @return void
      */
     protected function fill()
     {
@@ -171,6 +186,8 @@ class Bundle
 
     /**
      * Convert bundle content to json
+     *
+     * @return void
      */
     protected function toJson()
     {
@@ -181,6 +198,8 @@ class Bundle
 
     /**
      * Prepare bundle for executing in js
+     *
+     * @return void
      */
     protected function wrapp()
     {

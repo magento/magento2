@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Asset;
 
 class BundleServiceTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\Bundle\Config */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\Bundle\ConfigInterface */
     protected $conf;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem */
@@ -22,7 +22,7 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->conf = $this->getMock('Magento\Framework\View\Asset\Bundle\Config', [], [], '', false);
+        $this->conf = $this->getMock('Magento\Framework\View\Asset\Bundle\ConfigInterface', [], [], '', false);
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);

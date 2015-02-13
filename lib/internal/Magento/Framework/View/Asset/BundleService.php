@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2015 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App;
 use Magento\Framework\View\Asset;
 use Magento\Tools\View\Deployer;
 
@@ -49,13 +50,13 @@ class BundleService
      * @param \Magento\Framework\Filesystem $filesystem
      * @param BundleFactory $bundleFactory
      * @param Bundle\ConfigInterface $config
-     * @param \Magento\Framework\App\State $appState
+     * @param App\State $appState
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\View\Asset\BundleFactory $bundleFactory,
-        \Magento\Framework\View\Asset\Bundle\ConfigInterface $config,
-        \Magento\Framework\App\State $appState
+        BundleFactory $bundleFactory,
+        Bundle\ConfigInterface $config,
+        App\State $appState
     ) {
         $this->filesystem = $filesystem;
         $this->bundleFactory = $bundleFactory;
@@ -135,10 +136,7 @@ class BundleService
              return false;
         }
 
-        /** @var \Magento\Framework\View\Asset\Bundle $bundle */
-        $bundle = $this->getBundle();
-        $bundle->addAsset($asset);
-
+        $this->getBundle()->addAsset($asset);
         return true;
     }
 
