@@ -12,35 +12,25 @@ class ConfigsApplyFixture extends \Magento\ToolkitFramework\Fixture
     /**
      * @var int
      */
-    protected $priority = 100;
+    protected $priority = 150;
 
     /**
      * {@inheritdoc}
      */
     public function execute()
     {
-        $configs = \Magento\ToolkitFramework\Config::getInstance()->getValue('configs', array());
-
+        $configs = \Magento\ToolkitFramework\Config::getInstance()->getValue('configs', []);
         $this->application->resetObjectManager();
         /**
          * @var \Magento\Framework\App\Config\Value $configData
          */
         $configData = $this->application->getObjectManager()->create('Magento\Framework\App\Config\Value');
-
-        foreach ($configs as $config) {
-            try {
-                $configData->setPath($config['path'])
-                    ->setScope($config['scope'])
-                    ->setScopeId($config['scopeId'])
-                    ->setValue($config['value'])
-                    ->save();
-            } catch (\Exception $e) {
-                if (strpos($e->getMessage(), '1062 Duplicate entry')) {
-                    echo 'Config value the same' . PHP_EOL;
-                } else {
-                    throw new Exception('Error update config');
-                }
-            }
+        foreach ($configs['config'] as $config) {
+            $configData->setPath($config['path'])
+                ->setScope($config['scope'])
+                ->setScopeId($config['scopeId'])
+                ->setValue($config['value'])
+                ->save();
         }
         $this->application->getObjectManager()->get('Magento\Framework\App\CacheInterface')
             ->clean([\Magento\Framework\App\Config::CACHE_TAG]);

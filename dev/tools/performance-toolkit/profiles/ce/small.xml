@@ -23,11 +23,11 @@
                 <path>admin/security/use_form_key</path>
                 <scope>default</scope>
                 <scopeId>0</scopeId>
-                <value>1</value>
+                <value>0</value>
             </config>
             <config>
                 <path>carriers/flatrate/active</path>
-                <scope>default2</scope>
+                <scope>default</scope>
                 <scopeId>0</scopeId>
                 <value>1</value>
             </config>
