@@ -402,7 +402,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
         }
 
-        return __('Please specify the quantity of product(s).');
+        return (string)__('Please specify the quantity of product(s).');
     }
 
     /**
