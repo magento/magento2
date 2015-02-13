@@ -4,8 +4,9 @@
  */
 
 define([
-    'buildStats'
-], function (buildStats) {
+    'statistician',
+    'underscore'
+], function (statistician, _) {
     'use strict';
 
     var keysOf          = Object.keys.bind(Object),
@@ -37,48 +38,27 @@ define([
         return JSON.parse(get(key));
     }
 
-    /**
-     * Overrides or extends 'target' properties with properties of futher passed objects.
-     *
-     * @param  {Object} target
-     * @return {Object}
-     */
-    function extend(target) {
-        var defs = Array.prototype.slice.call(arguments, 1),
-            keys;
-
-        defs.forEach(function (obj) {
-            keys = Object.keys(obj);
-
-            keys.forEach(function (key) {
-                target[key] = obj[key];
-            });
-        });
-
-        return target;
-    }
-
-    describe('buildStats module', function () {
+    describe('statistician module', function () {
         beforeEach(function () {
             clear('all');
             clear('used');
         });
 
-        describe('register method', function () {
+        describe('collect method', function () {
             it('merges passed object\'s keys with array under localStorage\'s \'all\' namespace', function () {
                 var merged = keysOf(firstBundle).concat(keysOf(secondBundle));
 
-                buildStats.register(firstBundle);
-                buildStats.register(secondBundle);
+                statistician.collect(firstBundle);
+                statistician.collect(secondBundle);
 
                 expect(parsed('all')).toEqual(merged);
             });
 
             it('removes duplicated entries', function () {
-                var mergedBundle = extend({}, firstBundle, secondBundle);
+                var mergedBundle = _.extend({}, firstBundle, secondBundle);
 
-                buildStats.register(firstBundle);
-                buildStats.register(mergedBundle);
+                statistician.collect(firstBundle);
+                statistician.collect(mergedBundle);
 
                 expect(parsed('all')).toEqual(keysOf(mergedBundle));
             });
@@ -88,18 +68,17 @@ define([
             it('stores passed string to array under localStorage\'s \'used\' namespace', function () {
                 var str = keysOf(firstBundle)[0];
 
-                buildStats.utilize(str);
+                statistician.utilize(str);
 
                 expect(parsed('used')).toEqual([str]);
             });
 
             it('removes duplicated entries', function () {
-                var expected    = keysOf(firstBundle),
-                    str         = expected[0];
+                var expected = keysOf(firstBundle);
 
                 set('used', stringify(expected));
 
-                buildStats.utilize(str);
+                statistician.utilize(expected[0]);
 
                 expect(parsed('used')).toEqual(expected);
             });
@@ -111,7 +90,7 @@ define([
 
                 set('all', stringify(expected));
 
-                expect(buildStats.getAll()).toEqual(expected);
+                expect(statistician.getAll()).toEqual(expected);
             });
         });
 
@@ -121,7 +100,7 @@ define([
 
                 set('used', stringify(expected));
 
-                expect(buildStats.getUsed()).toEqual(expected);
+                expect(statistician.getUsed()).toEqual(expected);
             });
         });
 
@@ -129,11 +108,11 @@ define([
             it('compares results of getAll and getUsed methods and returns the difference', function () {
                 var modules = keysOf(firstBundle);
 
-                buildStats.register(firstBundle);
+                statistician.collect(firstBundle);
 
-                buildStats.utilize(modules[0]);
+                statistician.utilize(modules[0]);
 
-                expect(buildStats.getUnused()).toEqual([modules[1]]);
+                expect(statistician.getUnused()).toEqual([modules[1]]);
             });
         });
     });
