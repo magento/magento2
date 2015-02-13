@@ -1,25 +1,29 @@
 define([
-    'tests/assets/jsbuild/config',
-    'jsbuild'
-], function (config) {
+    'tests/assets/text/config',
+    'text'
+], function (config, text) {
     'use strict';
 
     var local = config.local,
         external = config.external;
 
-    describe('jsbuild module', function () {
+    describe('extended text module', function () {
+
+        it('exports reference to the module', function () {
+            expect(text).toBeDefined();
+        });
 
         it('caches original load method', function () {
-            expect(require._load).toBeDefined();
+            expect(text._load).toBeDefined();
         });
 
         it('loads external files', function (done) {
-            spyOn(require, '_load').and.callThrough();
+            spyOn(text, '_load').and.callThrough();
 
             require([
                 external.path
             ], function (data) {
-                expect(require._load).toHaveBeenCalled();
+                expect(text._load).toHaveBeenCalled();
                 expect(data).toEqual(external.result);
 
                 done();
@@ -27,12 +31,12 @@ define([
         });
 
         it('loads internal files', function (done) {
-            spyOn(require, '_load').and.callThrough();
+            spyOn(text, '_load').and.callThrough();
 
             require([
                 local.path
             ], function (data) {
-                expect(require._load).not.toHaveBeenCalled();
+                expect(text._load).not.toHaveBeenCalled();
                 expect(data).toEqual(local.result);
 
                 done();

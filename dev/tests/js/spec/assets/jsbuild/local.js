@@ -1,5 +1,5 @@
-define([], function(){
+define([], function () {
     'use strict';
-    
-    return true;
+
+    return 'internal module';
 });
