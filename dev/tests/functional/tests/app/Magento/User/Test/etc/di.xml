@@ -11,7 +11,6 @@
             <argument name="dashboard" xsi:type="object">Magento\Backend\Test\Page\Adminhtml\Dashboard</argument>
             <argument name="adminAuth" xsi:type="object">Magento\Backend\Test\Page\AdminAuthLogin</argument>
             <argument name="user" xsi:type="object">Magento\User\Test\Fixture\User</argument>
-            <argument name="customAdmin" xsi:type="object">Magento\User\Test\Fixture\User</argument>
         </arguments>
     </type>
     <type name="Magento\User\Test\Constraint\AssertUserSuccessLogOut">
