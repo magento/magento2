@@ -27,7 +27,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Core\Model\Variable', 'Magento\Core\Model\Resource\Variable');
+        $this->_init('Magento\Core\Model\Variable', 'Magento\Variable\Model\Resource\Variable');
     }
 
     /**

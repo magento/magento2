@@ -2298,6 +2298,7 @@ return [
     ['Magento\Core\Model\App\Area\CacheIdentifierPlugin', 'Magento\PageCache\App\CacheIdentifierPlugin'],
     ['Magento\Core\Model\App\Area', 'Magento\Framework\App\Area'],
     ['Magento\Core\Model\App\Area\DesignExceptions', 'Magento\Framework\View\DesignExceptions'],
+    ['Magento\Core\Model\Resource\Variable', 'Magento\Variable\Model\Resource\Variable'],
     ['Magento\Checkout\Block\Adminhtml\Agreement', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement'],
     ['Magento\Checkout\Block\Adminhtml\Agreement\Edit', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit'],
     [

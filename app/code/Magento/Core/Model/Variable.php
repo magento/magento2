@@ -8,8 +8,8 @@ namespace Magento\Core\Model;
 /**
  * Custom variable model
  *
- * @method \Magento\Core\Model\Resource\Variable _getResource()
- * @method \Magento\Core\Model\Resource\Variable getResource()
+ * @method \Magento\Variable\Model\Resource\Variable _getResource()
+ * @method \Magento\Variable\Model\Resource\Variable getResource()
  * @method string getCode()
  * @method \Magento\Core\Model\Variable setCode(string $value)
  * @method string getName()
@@ -37,7 +37,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Core\Model\Resource\Variable $resource
+     * @param \Magento\Variable\Model\Resource\Variable $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -45,7 +45,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Core\Model\Resource\Variable $resource,
+        \Magento\Variable\Model\Resource\Variable $resource,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
@@ -61,7 +61,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Core\Model\Resource\Variable');
+        $this->_init('Magento\Variable\Model\Resource\Variable');
     }
 
     /**
