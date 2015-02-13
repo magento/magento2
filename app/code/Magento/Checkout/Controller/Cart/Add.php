@@ -144,9 +144,7 @@ class Add extends \Magento\Checkout\Controller\Cart
 
             $url = $this->_checkoutSession->getRedirectUrl(true);
 
-            if ($url) {
-                return $this->resultRedirectFactory->create()->setUrl($url);
-            } else {
+            if (!$url) {
                 $cartUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
                 $url = $this->_redirect->getRedirectUrl($cartUrl);
             }
