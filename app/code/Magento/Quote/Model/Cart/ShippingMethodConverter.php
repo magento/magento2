@@ -53,17 +53,5 @@ class ShippingMethodConverter
             ->setAmount($currency->convert($rateModel->getPrice(), $quoteCurrencyCode))
             ->setBaseAmount($rateModel->getPrice())
             ->setAvailable(empty($errorMessage));
-
-//        $data = [
-//            ShippingMethod::CARRIER_CODE => $rateModel->getCarrier(),
-//            ShippingMethod::METHOD_CODE => $rateModel->getMethod(),
-//            ShippingMethod::CARRIER_TITLE => $rateModel->getCarrierTitle(),
-//            ShippingMethod::METHOD_TITLE => $rateModel->getMethodTitle(),
-//            ShippingMethod::SHIPPING_AMOUNT => $currency->convert($rateModel->getPrice(), $quoteCurrencyCode),
-//            ShippingMethod::BASE_SHIPPING_AMOUNT => $rateModel->getPrice(),
-//            ShippingMethod::AVAILABLE => empty($errorMessage),
-//        ];
-//        $this->builder->populateWithArray($data);
-//        return $this->builder->create();
     }
 }

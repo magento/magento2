@@ -477,7 +477,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * Sets payment method code
      *
      * @param string $code
-     * @return string
+     * @return $this
      * @throws \Magento\Framework\Model\Exception
      */
     public function setCode($code)
@@ -487,7 +487,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         }
 
         $this->_code = $code;
-        return $this->_code;
+        return $this;
     }
 
     /**

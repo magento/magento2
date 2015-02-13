@@ -515,7 +515,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getConvertedAt()
     {
-        return $this->_getData(SELF::KEY_UPDATED_AT);
+        return $this->_getData(SELF::KEY_CONVERTED_AT);
     }
 
     /**
@@ -523,7 +523,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setConvertedAt($convertedAt)
     {
-        return $this->setData(SELF::KEY_UPDATED_AT, $convertedAt);
+        return $this->setData(SELF::KEY_CONVERTED_AT, $convertedAt);
     }
 
     /**
