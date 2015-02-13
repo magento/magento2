@@ -47,7 +47,7 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getRequired();
 
     /**
-     * set whether option is required
+     * Set whether option is required
      *
      * @param bool $required
      * @return $this

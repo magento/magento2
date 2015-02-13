@@ -32,7 +32,7 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getOptionId();
 
     /**
-     * set option id
+     * Set option id
      *
      * @param int $optionId
      * @return $this
@@ -62,7 +62,7 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getPosition();
 
     /**
-     * Get position
+     * Set position
      *
      * @param int $position
      * @return $this
@@ -93,7 +93,7 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getIsDefault();
 
     /**
-     * Get is default
+     * Set is default
      *
      * @param bool $isDefault
      * @return $this

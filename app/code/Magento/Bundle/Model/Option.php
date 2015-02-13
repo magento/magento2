@@ -216,7 +216,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * set whether option is required
+     * Set whether option is required
      *
      * @param bool $required
      * @return $this

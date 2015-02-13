@@ -110,7 +110,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * set option id
+     * Set option id
      *
      * @param int $optionId
      * @return $this
@@ -132,7 +132,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Get position
+     * Set position
      *
      * @param int $position
      * @return $this
@@ -154,7 +154,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Get is default
+     * Set is default
      *
      * @param bool $isDefault
      * @return $this
