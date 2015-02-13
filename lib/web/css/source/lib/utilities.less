@@ -70,15 +70,30 @@
     //  Color stops are not available in IE9 and below.
     //  Filters are enabled
     .horizontal(
-        @_start-color;
-        @_end-color;
-        @_start-percent: 0%;
-        @_end-percent: 100%
-    ) when not (@disable-filters) {
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when not (@disable-filters) and (@_background-color-position = true) {
         background-color: @_end-color;
         background-repeat: repeat-x;
         background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); //  Safari 5.1-6, Chrome 10+
-        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)", @_start-color, @_end-color)); //  IE9 and down
+    }
+
+    .horizontal(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when not (@disable-filters) and (@_background-color-position = false) {
+        background-color: @_start-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); //  Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
         filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)", @_start-color, @_end-color)); //  IE9 and down
     }
 
@@ -87,15 +102,29 @@
     //  Color stops are not available in IE9 and below.
     //  Filters are disabled
     .horizontal(
-        @_start-color;
-        @_end-color;
-        @_start-percent: 0%;
-        @_end-percent: 100%
-    ) when (@disable-filters) {
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when (@disable-filters) and (@_background-color-position = true) {
         background-color: @_end-color;
         background-repeat: repeat-x;
         background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); //  Safari 5.1-6, Chrome 10+
-        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    }
+
+    .horizontal(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when (@disable-filters) and (@_background-color-position = false) {
+        background-color: @_start-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); //  Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
     }
 
     //  Vertical gradient, from top to bottom
@@ -103,12 +132,27 @@
     //  Color stops are not available in IE9 and below.
     //  Filters are enabled
     .vertical(
-        @_start-color;
-        @_end-color;
-        @_start-percent: 0%;
-        @_end-percent: 100%
-    ) when not (@disable-filters) {
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when not (@disable-filters) and (@_background-color-position = true) {
         background-color: @_end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); //  Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)", @_start-color, @_end-color)); //  IE9 and down
+    }
+
+    .vertical(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when not (@disable-filters) and (@_background-color-position = false) {
+        background-color: @_start-color;
         background-repeat: repeat-x;
         background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); //  Safari 5.1-6, Chrome 10+
         background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
@@ -120,12 +164,26 @@
     //  Color stops are not available in IE9 and below.
     //  Filters are disabled
     .vertical(
-        @_start-color;
-        @_end-color;
-        @_start-percent: 0%;
-        @_end-percent: 100%
-    ) when (@disable-filters) {
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when (@disable-filters) and (@_background-color-position = true) {
         background-color: @_end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); //  Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    }
+
+    .vertical(
+        @_start-color,
+        @_end-color,
+        @_start-percent: 0%,
+        @_end-percent: 100%,
+        @_background-color-position: true
+    ) when (@disable-filters) and (@_background-color-position = false) {
+        background-color: @_start-color;
         background-repeat: repeat-x;
         background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent); //  Safari 5.1-6, Chrome 10+
         background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); //  Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
@@ -141,9 +199,14 @@
     @_background-gradient-start-color,
     @_background-gradient-end-color,
     @_background-gradient-direction,
-    @_background-gradient
+    @_background-gradient,
+    @_background-gradient-color-position: true
 ) when (@_background-gradient-direction = horizontal) and (@_background-gradient = true) {
-    #gradient > .horizontal(@_background-gradient-start-color, @_background-gradient-end-color);
+    #gradient > .horizontal(
+    @_start-color: @_background-gradient-start-color,
+    @_end-color: @_background-gradient-end-color,
+    @_background-color-position: @_background-gradient-color-position
+    );
 }
 
 //  Pager gradient - vertical
@@ -151,9 +214,14 @@
     @_background-gradient-start-color,
     @_background-gradient-end-color,
     @_background-gradient-direction,
-    @_background-gradient
+    @_background-gradient,
+    @_background-gradient-color-position: true
 ) when (@_background-gradient-direction = vertical) and (@_background-gradient = true) {
-    #gradient > .vertical(@_background-gradient-start-color, @_background-gradient-end-color);
+    #gradient > .vertical(
+    @_start-color: @_background-gradient-start-color,
+    @_end-color: @_background-gradient-end-color,
+    @_background-color-position: @_background-gradient-color-position
+    );
 }
 
 //
