@@ -125,10 +125,10 @@ class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $updateArray['usage_per_customer'] = $rule->getUsesPerCustomer();
         }
 
-        $ruleNewDate = new \Magento\Framework\Stdlib\DateTime\Date($rule->getToDate());
-        $ruleOldDate = new \Magento\Framework\Stdlib\DateTime\Date($rule->getOrigData('to_date'));
+        $ruleNewDate = new \DateTime($rule->getToDate());
+        $ruleOldDate = new \DateTime($rule->getOrigData('to_date'));
 
-        if ($ruleNewDate->compare($ruleOldDate)) {
+        if ($ruleNewDate != $ruleOldDate) {
             $updateArray['expiration_date'] = $rule->getToDate();
         }
 

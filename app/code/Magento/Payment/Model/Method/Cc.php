@@ -285,14 +285,9 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      */
     protected function _validateExpDate($expYear, $expMonth)
     {
-        $date = $this->_localeDate->date();
-        if (!$expYear || !$expMonth || $date->compareYear(
-            $expYear
-        ) == 1 || $date->compareYear(
-            $expYear
-        ) == 0 && $date->compareMonth(
-            $expMonth
-        ) == 1
+        $date = new \DateTime();
+        if (!$expYear || !$expMonth || (int)$date->format('Y') > $expYear
+            || (int)$date->format('Y') == $expYear && (int)$date->format('m') > $expMonth
         ) {
             return false;
         }

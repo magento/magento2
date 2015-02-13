@@ -134,7 +134,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
             'language' => $lang,
         ];
 
-        $currentDate = new \Magento\Framework\Stdlib\DateTime\Date();
+        $currentDate = (new \DateTime())->setTime(0, 0, 0);
         foreach ($this->rssModel->getProductsCollection($this->getStoreId(), $this->getCustomerGroupId()) as $item) {
             /** @var $item \Magento\Catalog\Model\Product */
             $item->setAllowedInRss(true);
@@ -153,11 +153,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
             if ($item->getSpecialToDate() && $item->getFinalPrice() <= $item->getSpecialPrice() &&
                 $item->getAllowedPriceInRss()
             ) {
-                $compareDate = $currentDate->compareDate(
-                    $item->getSpecialToDate(),
-                    \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT
-                );
-                if (-1 === $compareDate || 0 === $compareDate) {
+                if ($currentDate <= $item->getSpecialToDate()) {
                     $item->setUseSpecial(true);
                 }
             }

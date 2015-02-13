@@ -254,9 +254,9 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
             if (!$this->getState()->getUpdated()) {
                 return $this->getView()->getUpdated();
             }
-            $indexerUpdatedDate = new \Magento\Framework\Stdlib\DateTime\Date($this->getState()->getUpdated());
-            $viewUpdatedDate = new \Magento\Framework\Stdlib\DateTime\Date($this->getView()->getUpdated());
-            if ($viewUpdatedDate->compare($indexerUpdatedDate) == 1) {
+            $indexerUpdatedDate = new \DateTime($this->getState()->getUpdated());
+            $viewUpdatedDate = new \DateTime($this->getView()->getUpdated());
+            if ($viewUpdatedDate > $indexerUpdatedDate) {
                 return $this->getView()->getUpdated();
             }
         }

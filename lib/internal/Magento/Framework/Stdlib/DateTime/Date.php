@@ -26,6 +26,12 @@ class Date extends \Zend_Date implements \Magento\Framework\Stdlib\DateTime\Date
         parent::__construct($date, $part, $locale);
     }
 
+    /**
+     * Format date
+     *
+     * @param string $format
+     * @return string
+     */
     public function format($format)
     {
         return parent::toString($format);
