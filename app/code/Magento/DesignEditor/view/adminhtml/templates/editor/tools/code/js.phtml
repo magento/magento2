@@ -27,24 +27,22 @@
         </div>
     </div>
 </div>
-
-<div class="no-display" id="js-file-uploader-template">
-    <div id="{{id}}" class="file-row">
-        <span class="file-info">{{name}} ({{size}})</span>
+<script id="js-file-uploader-template" type="text/x-magento-template">
+    <div id="<%= data.id %>" class="file-row">
+        <span class="file-info"><%= data.name %> (<%= data.size %>)</span>
         <div class="progressbar-container">
             <div class="progressbar upload-progress" style="width: 0%;"></div>
         </div>
         <div class="clear"></div>
     </div>
-</div>
+</script>
 
-
-<li class="js-file item no-display" id="js-uploaded-file-template">
-    <span class="filename" title="${name}">${name}</span>
-    <a href="#" class="action-delete" title="<?php echo __('Delete File'); ?>" data-id="${id}">
+<script id="js-uploaded-file-template" type="text/x-magento-template">
+    <span class="filename" title="<%= data.name %>"><%= data.name %></span>
+    <a href="#" class="action-delete" title="<?php echo __('Delete File'); ?>" data-id="<%= data.id %>">
         <span><?php echo __('Delete File'); ?></span>
     </a>
-</li>
+</script>
 
 <li class="no-display" id="js-empty-template">
     <span class="filename"><?php echo __('We found no javascript files.') ?></span>
@@ -53,38 +51,46 @@
 <script>
 require([
     "jquery",
+    'mage/template',
     "jquery/ui",
     "jquery/file-uploader",
     "mage/translate",
     "Magento_Theme/js/custom-js-list"
-], function($){
+], function ($, mageTemplate) {
 
     $('#vde-tab-js .files-list-content .items').themeJsList({
-        templateId : '#js-uploaded-file-template',
+        templateId: '#js-uploaded-file-template',
         emptyTemplateId: '#js-empty-template',
-        refreshFileListEvent : 'refreshJsList',
+        refreshFileListEvent: 'refreshJsList',
         prefixItemId: 'js-file-'
     });
-    $('body').trigger('refreshJsList', {jsList : <?php echo $block->getFiles() ?>});
+    
+    $('body').trigger('refreshJsList', {
+        jsList: <?php echo $block->getFiles() ?>
+    });
 
-    $(document).on('click', '#vde-tab-js .js-file .action-delete', function() {
+    $(document).on('click', '#vde-tab-js .js-file .action-delete', function () {
         if (!confirm('<?php echo $block->getConfirmMessageDelete() ?>')) {
             return false;
         }
 
         $.ajax({
             url: '<?php echo $block->getJsDeleteUrl(); ?>',
-            data: {js_removed_files: [$(this).data('id')]},
+            data: {
+                js_removed_files: [$(this).data('id')]
+            },
             dataType: 'json'
-        }).done(function(data) {
+        }).done(function (data) {
             if (!data.error) {
-                $('body').trigger('refreshJsList', {jsList : data.files});
+                $('body').trigger('refreshJsList', {
+                    jsList: data.files
+                });
                 $('#vde-tab-js .files-list-content .items').trigger('refreshIframe');
             }
 
             $('#vde-tab-js .js-file .action-delete').trigger('addMessage', {
-                containerId : '#vde-tab-js-messages-placeholder',
-                message : data.message
+                containerId: '#vde-tab-js-messages-placeholder',
+                message: data.message
             });
         });
 
@@ -95,7 +101,7 @@ require([
         dataType: 'json',
         replaceFileInput: false,
         sequentialUploads: true,
-        url : '<?php echo $block->getJsUploadUrl(); ?>',
+        url: '<?php echo $block->getJsUploadUrl(); ?>',
 
         /**
          * Add data
@@ -103,18 +109,28 @@ require([
          * @param data
          */
         add: function (e, data) {
+            var progressTmpl = mageTemplate('#js-file-uploader-template'),
+                fileSize,
+                tmpl;
+
             $.each(data.files, function (index, file) {
-                data.fileId =  Math.random().toString(36).substr(2,9);
-                var progressTmpl = $('#js-file-uploader-template').children(':first').clone();
-                progressTmpl.attr('id', data.fileId);
-                var fileSize = typeof(file.size) == "undefined"
-                    ? $.mage.__('We could not detect a size.')
-                    : byteConvert(file.size);
-                var fileInfoHtml = progressTmpl.html().replace('{{size}}', fileSize)
-                    .replace('{{name}}', file.name);
-                progressTmpl.html(fileInfoHtml) ;
-                progressTmpl.appendTo('#js-file-uploader');
+                fileSize = typeof file.size == "undefined" ?
+                    $.mage.__('We could not detect a size.') :
+                    byteConvert(file.size);
+
+                data.fileId = Math.random().toString(36).substr(2, 9);
+
+                tmpl = progressTmpl({
+                    data: {
+                        name: file.name,
+                        size: fileSize,
+                        id: data.fileId
+                    }
+                });
+
+                $(tmpl).appendTo('#js-file-uploader');
             });
+
             data.submit();
         },
 
@@ -125,12 +141,14 @@ require([
          */
         done: function (e, data) {
             var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-            $(progressSelector).css('width','100%');
+            $(progressSelector).css('width', '100%');
 
             $(this).val('');
             if (!data.result.error) {
                 $(progressSelector).removeClass('upload-progress').addClass('upload-success');
-                $('#js_files_uploader').trigger('refreshJsList', {jsList : data.result.files});
+                $('#js_files_uploader').trigger('refreshJsList', {
+                    jsList: data.result.files
+                });
             } else {
                 $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
             }
@@ -147,13 +165,13 @@ require([
          * @param e
          * @param data
          */
-        progress: function(e, data) {
+        progress: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
             var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
             $(progressSelector).css('width', progress + '%');
         },
 
-        stop: function(e, data) {
+        stop: function (e, data) {
             $('.ui-sortable').trigger('refreshIframe');
         },
 
@@ -162,7 +180,7 @@ require([
          * @param e
          * @param data
          */
-        fail: function(e, data) {
+        fail: function (e, data) {
             var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
             $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
 
@@ -172,22 +190,24 @@ require([
     });
 
     $('.ui-sortable').sortable({
-        update: function( event, ui ) {
-            var jsOrder = $(this).sortable('serialize', {key: 'js_order[]'});
+        update: function (event, ui) {
+            var jsOrder = $(this).sortable('serialize', {
+                key: 'js_order[]'
+            });
             $.ajax({
                 url: '<?php echo $block->getJsReorderUrl(); ?>',
                 type: 'POST',
                 dataType: 'json',
                 data: jsOrder,
                 showLoader: false,
-                success: $.proxy(function(response) {
+                success: $.proxy(function (response) {
                     $('.ui-sortable').trigger('refreshIframe');
                     $('.ui-sortable').trigger('addMessage', {
-                        containerId : '#vde-tab-custom-messages-placeholder',
-                        message : response.message
+                        containerId: '#vde-tab-custom-messages-placeholder',
+                        message: response.message
                     });
                 }, this),
-                error: $.proxy(function() {
+                error: $.proxy(function () {
                     alert($.mage.__('Sorry, there was an unknown error.'));
                 }, this)
             });

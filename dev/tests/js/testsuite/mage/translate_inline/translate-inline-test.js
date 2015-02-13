@@ -4,7 +4,7 @@
  */
 TranslateInlineTest = TestCase('TranslateInlineTest');
 TranslateInlineTest.prototype.testInit = function() {
-    /*:DOC += <script id="translate-form-template" type="text/x-jquery-tmpl">
+    /*:DOC += <script id="translate-form-template" type="text/x-magento-template">
       </script>
       <div data-role="translate-dialog"></div>
      */
@@ -13,7 +13,7 @@ TranslateInlineTest.prototype.testInit = function() {
     translateInline.translateInline('destroy');
 };
 TranslateInlineTest.prototype.testDialogOpenOnEdit = function() {
-    /*:DOC += <script id="translate-form-template" type="text/x-jquery-tmpl">
+    /*:DOC += <script id="translate-form-template" type="text/x-magento-template">
       </script>
       <div data-role="translate-dialog"></div>
      */
@@ -31,8 +31,8 @@ TranslateInlineTest.prototype.testDialogOpenOnEdit = function() {
     translateInline.translateInline('destroy');
 };
 TranslateInlineTest.prototype.testTranslationFormTemplate = function() {
-    /*:DOC += <script id="translate-form-template" type="text/x-jquery-tmpl">
-      <form id="${id}">${newTemplateVariable}</form>
+    /*:DOC += <script id="translate-form-template" type="text/x-magento-template">
+      <form id="<%= data.id %>"><%= data.newTemplateVariable %></form>
       </script>
       <div data-role="translate-dialog"></div>
      */
@@ -58,7 +58,7 @@ TranslateInlineTest.prototype.testTranslationFormTemplate = function() {
             ajaxUrl: 'www.test.com',
             area: 'test',
             translateForm: {
-                template:'<form id="${data.id}"><input name="test" value="test" /></form>',
+                template:'<form id="<%= data.id %>"><input name="test" value="test" /></form>',
                 data:{
                     id: 'translate-form-id'
                 }
@@ -94,8 +94,8 @@ TranslateInlineTest.prototype.testTranslationFormTemplate = function() {
     translateInline.translateInline('destroy');
 };*/
 TranslateInlineTest.prototype.testDestroy = function() {
-    /*:DOC += <script id="translate-form-template" type="text/x-jquery-tmpl">
-      <form id="${id}">${newTemplateVariable}</form>
+    /*:DOC += <script id="translate-form-template" type="text/x-magento-template">
+      <form id="<%= data.id %>"><%= data.newTemplateVariable %></form>
       </script>
       <div data-role="translate-dialog"></div>
       <img id="edit-trigger-id">
@@ -103,7 +103,8 @@ TranslateInlineTest.prototype.testDestroy = function() {
     var options = {
             translateForm: {
                 data:{
-                    id: 'translate-form-id'
+                    id: 'translate-form-id',
+                    newTemplateVariable: ''
                 }
             }
         },
