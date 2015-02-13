@@ -89,6 +89,7 @@
                     <item name="entity_id" xsi:type="string">entity_id</item>
                     <item name="store_id" xsi:type="string">store_id</item>
                     <item name="visibility" xsi:type="string">visibility</item>
+                    <item name="status" xsi:type="string">status</item>
                 </item>
             </argument>
             <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>

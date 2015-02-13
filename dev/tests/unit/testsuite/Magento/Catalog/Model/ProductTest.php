@@ -383,15 +383,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testReindex($productChanged, $isScheduled, $productFlatCount, $categoryIndexerCount)
     {
         $this->model->setData('entity_id', 1);
-        $this->_catalogProduct->expects($this->once())->method('isDataForProductCategoryIndexerWasChanged')->willReturn($productChanged);
+        $this->_catalogProduct->expects($this->once())
+            ->method('isDataForProductCategoryIndexerWasChanged')
+            ->willReturn($productChanged);
+        if ($productChanged) {
+            $this->indexerRegistryMock->expects($this->exactly($productFlatCount))
+                ->method('get')
+                ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
+                ->will($this->returnValue($this->categoryIndexerMock));
+            $this->categoryIndexerMock->expects($this->any())
+                ->method('isScheduled')
+                ->will($this->returnValue($isScheduled));
+            $this->categoryIndexerMock->expects($this->exactly($categoryIndexerCount))->method('reindexRow');
+        }
         $this->productFlatProcessor->expects($this->exactly($productFlatCount))->method('reindexRow');
-        $this->indexerRegistryMock->expects($this->exactly($productFlatCount))
-            ->method('get')
-            ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
-            ->will($this->returnValue($this->categoryIndexerMock));
-        $this->categoryIndexerMock->expects($this->any())->method('isScheduled')->will($this->returnValue($isScheduled));
-        $this->categoryIndexerMock->expects($this->exactly($categoryIndexerCount))->method('reindexRow');
-
         $this->model->reindex();
     }
 
@@ -400,7 +405,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         return array(
             'set 1' => [true, false, 1, 1],
             'set 2' => [true, true, 1, 0],
-            'set 3' => [false, false, 0, 0]
+            'set 3' => [false, false, 1, 0]
         );
     }
 
@@ -465,6 +470,21 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'affected_category_ids' => [1],
                     'is_changed_categories' => true
                 ]
+            ],
+            [
+                [0 => 'catalog_product_1', 1 => 'catalog_category_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+            ],
+            [
+                [0 => 'catalog_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
+            ],
+            [
+                [0 => 'catalog_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [], 'status' => 1],
             ]
         ];
     }
