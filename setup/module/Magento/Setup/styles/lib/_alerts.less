@@ -1,0 +1,74 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+//  Colors
+
+@alert-info__background-color: @color-gray98;
+@alert-info__border-color: @color-gray80;
+
+@alert-warning__background-color: @color-lazy-sun;
+@alert-warning__border-color: @alert-warning__background-color;
+
+@alert-icon__size: 3.8rem;
+
+//
+//  Common
+//  _____________________________________________
+
+.alert {
+    margin-bottom: 3.5rem;
+    padding: 2.5rem;
+    .vendor-box-align(center);
+    .vendor-prefix-display(flex);
+    .spinner {
+        min-width: @spinner__size;
+    }
+    .ie9 & {
+        .extend__clearer();
+        .spinner {
+            float: left;
+        }
+    }
+}
+
+.alert-info {
+    background-color: @alert-info__background-color;
+    border: 1px solid @alert-info__border-color;
+}
+
+.alert-warning {
+    background-color: @alert-warning__background-color;
+    border: 1px solid @alert-warning__border-color;
+}
+
+.alert-icon {
+    margin-right: 1.5rem;
+    .ie9 & {
+        float: left;
+    }
+}
+
+[class*='icon-'] {
+    &.alert-icon {
+        font-size: @alert-icon__size;
+        min-width: @alert-icon__size;
+    }
+}
+
+.alert-text {
+    margin-bottom: 0;
+    ~ .alert-text {
+        margin-top: @paragraph__indent-bottom;
+    }
+    .ie9 & {
+        display: block;
+        margin-left: @alert-icon__size + 1.5rem;
+        margin-top: 1rem;
+    }
+}
