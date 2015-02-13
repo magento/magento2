@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Layer\Filter\Price;
 use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class Render
 {
@@ -49,7 +49,7 @@ class Render
      *
      * @param float|string $fromPrice
      * @param float|string $toPrice
-     * @return string
+     * @return float|\Magento\Framework\Phrase
      */
     public function renderRangeLabel($fromPrice, $toPrice)
     {

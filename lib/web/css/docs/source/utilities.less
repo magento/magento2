@@ -284,19 +284,44 @@
     );
 }
 
+.example-background-gradient-3-wrapper {
+    background: #ffc;
+    padding: 10px;
+}
+
+.example-background-gradient-3 {
+    .background-gradient(
+        @_background-gradient: true,
+        @_background-gradient-direction: horizontal,
+        @_background-gradient-start-color: rgba(255,255,255,0),
+        @_background-gradient-end-color: #ccf,
+        @_background-gradient-color-position: false
+    );
+}
+
 //
 //  ```
-// <div class="example-background-gradient-1">
-//      Hey! I`m gradient with vertical direction!
-//</div>
+//  <div class="example-background-gradient-1">
+//      I`m gradient with vertical direction
+//  </div>
 //  ```
 //
 
 //
 //  ```
-// <div class="example-background-gradient-2">
-//      Hey! I`m gradient with horizontal direction!
-//</div>
+//  <div class="example-background-gradient-2">
+//      I`m gradient with horizontal direction
+//  </div>
+//  ```
+//
+
+//
+//  ```
+//  <div class="example-background-gradient-3-wrapper">
+//  <div class="example-background-gradient-3">
+//      I`m gradient with horizontal direction from transparent to a color
+//  </div>
+//  </div>
 //  ```
 //
 
@@ -306,7 +331,7 @@
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
-//            <th class="vars_head">Default value </th>
+//            <th class="vars_head">Default value</th>
 //            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
@@ -333,6 +358,12 @@
 //            <td class="vars_value">''</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Gradient end color (any css color) </td>
+//        </tr>
+//        <tr>
+//            <th>@_background-gradient-color-position</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | true</td>
+//            <td>Sets the background-color fallback property. When set to 'false', the background-color property will be set to @_background-gradient-end-color. When set to 'true', the background-color property will be set to @_background-gradient-start-color</td>
 //        </tr>
 //    </table>
 //  </pre>

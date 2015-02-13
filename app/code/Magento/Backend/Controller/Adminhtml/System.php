@@ -19,6 +19,6 @@ class System extends AbstractAction
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Adminhtml::system');
+        return $this->_authorization->isAllowed('Magento_Backend::system');
     }
 }

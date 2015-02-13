@@ -25,7 +25,7 @@ class Validation extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCre
     /**
      * Return text for block`s header
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

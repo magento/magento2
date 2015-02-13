@@ -11,6 +11,6 @@
         <block class="Magento\Sales\Block\Order\Email\Shipment\Items" name="items" template="email/shipment/items.phtml">
             <block class="Magento\Framework\View\Element\RendererList" name="sales.email.order.shipment.renderers" as="renderer.list"/>
         </block>
-        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Theme::template.phtml"/>
     </body>
 </page>

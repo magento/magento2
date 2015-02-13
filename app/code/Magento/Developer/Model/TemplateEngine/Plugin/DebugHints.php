@@ -64,8 +64,8 @@ class DebugHints
         \Magento\Framework\View\TemplateEngineFactory $subject,
         \Magento\Framework\View\TemplateEngineInterface $invocationResult
     ) {
-        if ($this->_scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE) && $this->_coreData->isDevAllowed()) {
-            $showBlockHints = $this->_scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+        if ($this->_scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE) && $this->_coreData->isDevAllowed()) {
+            $showBlockHints = $this->_scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
             return $this->_objectManager->create(
                 'Magento\Developer\Model\TemplateEngine\Decorator\DebugHints',
                 ['subject' => $invocationResult, 'showBlockHints' => $showBlockHints]
