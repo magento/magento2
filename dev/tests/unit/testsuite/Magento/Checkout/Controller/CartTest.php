@@ -9,7 +9,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private $storeManagerMock;
 
@@ -91,7 +91,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setContinueShoppingUrl'])
             ->getMock();
 
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')

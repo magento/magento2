@@ -128,7 +128,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
 
         $shouldRedirectToCart = $this->_scopeConfig->getValue(
             'checkout/cart/redirect_to_cart',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         if ($shouldRedirectToCart || $this->getRequest()->getParam('in_cart')) {
