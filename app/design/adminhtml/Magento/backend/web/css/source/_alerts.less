@@ -8,7 +8,7 @@
 //  _____________________________________________
 
 //  Colors
-@alert__bg-color: @color-lazy-sunny;
+@alert__background-color: @color-lazy-sunny;
 @alert__color: @color-gray20;
 
 //  Sizes
@@ -31,7 +31,7 @@
 }
 
 .message {
-    background: @alert__bg-color;
+    background: @alert__background-color;
     color: @alert__color;
     margin-bottom: 3.5rem;
     padding: 1.8rem 4rem 1.8rem 1.9rem;
@@ -41,10 +41,10 @@
     &:before {
         background: none;
         border: 0;
-        font-family: @icon-font-admin-name;
+        font-family: @icon-font__admin-name;
         font-size: @alert__font-size;
-        font-style: @font-style-regular;
-        font-weight: @font-weight-regular;
+        font-style: @font-style__base;
+        font-weight: @font-weight__regular;
         height: auto;
         left: 1.9rem;
         line-height: inherit;

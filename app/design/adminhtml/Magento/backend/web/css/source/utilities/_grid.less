@@ -64,26 +64,26 @@
     padding-left: (@gutter / 2);
     padding-right: (@gutter / 2);
 
-    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
+    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
         float: left;
         width: percentage((@columns / @grid-columns));
     }
 }
 
 .make-m-column-offset(@columns) {
-    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
+    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
         margin-left: percentage((@columns / @grid-columns));
     }
 }
 
 .make-m-column-push(@columns) {
-    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
+    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
         left: percentage((@columns / @grid-columns));
     }
 }
 
 .make-m-column-pull(@columns) {
-    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
+    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
         right: percentage((@columns / @grid-columns));
     }
 }
@@ -98,26 +98,26 @@
     padding-left: (@gutter / 2);
     padding-right: (@gutter / 2);
 
-    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-l) {
+    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
         float: left;
         width: percentage((@columns / @grid-columns));
     }
 }
 
 .make-l-column-offset(@columns) {
-    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-l) {
+    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
         margin-left: percentage((@columns / @grid-columns));
     }
 }
 
 .make-l-column-push(@columns) {
-    @media (min-width: @screen-l) {
+    @media (min-width: @screen__l) {
         left: percentage((@columns / @grid-columns));
     }
 }
 
 .make-l-column-pull(@columns) {
-    @media (min-width: @screen-l) {
+    @media (min-width: @screen__l) {
         right: percentage((@columns / @grid-columns));
     }
 }
@@ -132,26 +132,26 @@
     padding-left: (@gutter / 2);
     padding-right: (@gutter / 2);
 
-    @media (min-width: @screen-xl) {
+    @media (min-width: @screen__xl) {
         float: left;
         width: percentage((@columns / @grid-columns));
     }
 }
 
 .make-xl-column-offset(@columns) {
-    @media (min-width: @screen-xl) {
+    @media (min-width: @screen__xl) {
         margin-left: percentage((@columns / @grid-columns));
     }
 }
 
 .make-xl-column-push(@columns) {
-    @media (min-width: @screen-xl) {
+    @media (min-width: @screen__xl) {
         left: percentage((@columns / @grid-columns));
     }
 }
 
 .make-xl-column-pull(@columns) {
-    @media (min-width: @screen-xl) {
+    @media (min-width: @screen__xl) {
         right: percentage((@columns / @grid-columns));
     }
 }

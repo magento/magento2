@@ -15,7 +15,7 @@
 
 .keyfocus * {
     &:focus {
-        box-shadow: @focus-box-shadow;
+        box-shadow: @focus__box-shadow;
     }
 }
 
@@ -27,7 +27,7 @@ object {
 }
 
 //  ToDo UI: experimantal, need to test on webkit
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     html {
         margin-left: ~'calc(100vw - 100%)';
         margin-right: 0;

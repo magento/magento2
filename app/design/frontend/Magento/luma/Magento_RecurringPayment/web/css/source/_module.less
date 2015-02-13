@@ -1,0 +1,77 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//    Common
+//--------------------------------------
+
+& when (@media-common = true) {
+
+//
+//    Product
+//--------------------------------------
+.payment-schedule {
+    margin: 20px 0 0;
+    .item-content {
+        margin: 0 0 5px;
+    }
+}
+.items-info-tabs {
+    .item {
+        line-height: @tab-control__height;
+        margin: 0 0 -1px;
+        strong {
+            .css(background, @tab-control__active__background-color);
+            border: @border-width__base solid @border-color__base;
+            display: block;
+            font-weight: @tab-control__font-weight;
+            padding: 0 20px;
+        }
+        a {
+            .css(background, @tab-control__background-color);
+            .css(color, @tab-control__color);
+            border: @border-width__base solid @border-color__base;
+            display: block;
+            font-weight: @tab-control__font-weight;
+            padding: 0 20px;
+            &:hover {
+                .css(background, @tab-control__hover__background-color);
+                .css(text-decoration, @tab-control__hover__text-decoration);
+            }
+        }
+    }
+}
+
+.payment-product-options {
+    &:extend(.abs-field-date all);
+}
+
+}
+
+//
+//    Desktop
+//--------------------------------------
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .items-info-tabs {
+        &:extend(.abs-add-clearfix-desktop all);
+        .item {
+            float: left;
+            margin: 0 @tab-control__margin-right 0 0;
+            strong {
+                border-bottom: 0;
+                margin-bottom: -1px;
+                padding: @tab-control__padding-top @tab-control__padding-right @tab-control__padding-bottom+1 @tab-control__padding-left;
+            }
+            a {
+                padding: 1px 35px;
+            }
+        }
+    }
+    .payment-product-options {
+        .control {
+            width: 200px;
+        }
+    }
+}

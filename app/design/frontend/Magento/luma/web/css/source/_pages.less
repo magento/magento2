@@ -1,0 +1,55 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//    Common
+//--------------------------------------
+
+& when (@media-common = true) {
+
+.pages {
+    .pager();
+    .action {
+        border-radius: 3px;
+        @_shadow: inset 0 1px 0 0 @color-white, inset 0 -1px 0 0 fade(@border-color__base, 30);
+        .css(box-shadow, @_shadow);
+        padding: 0 8px;
+        &.previous {
+            margin-right: 8px;
+        }
+        &.next {
+            margin-left: 8px;
+        }
+    }
+}
+
+}
+
+//
+//    Small Screen
+//--------------------------------------
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .pages {
+        & &-items {
+            display: block;
+            position: relative;
+            z-index: 1;
+            padding: 2px 40px 0;
+            white-space: normal;
+        }
+        &-item-previous {
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            top: 0;
+        }
+        &-item-next {
+            position: absolute;
+            z-index: 1;
+            right: 0;
+            top: 0;
+        }
+    }
+}

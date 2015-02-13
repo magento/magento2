@@ -7,7 +7,7 @@
 //  Dashboard
 //  _____________________________________________
 
-@dashboard__font-size-base: 1.3rem;
+@dashboard__font-size__base: 1.3rem;
 @dashboard__font-size-l: 2.4rem;
 @dashboard-tabs__padding: 2rem;
 @dashboard-tabs__background-color: @color-white;
@@ -18,7 +18,7 @@
 
 .dashboard-data {
     background: @dashboard-tabs__background-color;
-    font-size: @dashboard__font-size-base;
+    font-size: @dashboard__font-size__base;
     width: 100%;
     th,
     td {
@@ -87,7 +87,7 @@
 .dashboard-container {
     .empty-text {
         background: @dashboard-tabs__background-color;
-        font-size: @dashboard__font-size-base;
+        font-size: @dashboard__font-size__base;
     }
 }
 
@@ -148,13 +148,13 @@
 
 .dashboard-totals-label {
     display: block;
-    font-size: @dashboard__font-size-base;
-    font-weight: @font-weight-bold;
+    font-size: @dashboard__font-size__base;
+    font-weight: @font-weight__bold;
 }
 
 .dashboard-totals-value {
     font-size: @dashboard__font-size-l;
-    font-weight: @font-weight-semibold;
+    font-weight: @font-weight__semibold;
 }
 
 //
@@ -169,8 +169,8 @@
             .background-gradient(
             @_background-gradient: true,
             @_background-gradient-direction: horizontal,
-            @_background-gradient-start-color: rgba(255,255,255,0),
-            @_background-gradient-end-color: @color-white,
+            @_background-gradient-color-start: rgba(255,255,255,0),
+            @_background-gradient-color-end: @color-white,
             @_background-gradient-color-position: false
             );
             content: '';
@@ -218,7 +218,7 @@
 
 .dashboard-item-title {
     font-size: 1.8rem;
-    font-weight: @font-weight-bold;
+    font-weight: @font-weight__bold;
 }
 
 .dashboard-item-primary {
@@ -231,14 +231,14 @@
 
 .dashboard-sales-value {
     font-size: @dashboard__font-size-l;
-    font-weight: @font-weight-semibold;
+    font-weight: @font-weight__semibold;
 }
 
 //
 //  Mobile
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
 
     //
     //  Totals: Revenue, Tax, Shipping, Quantity

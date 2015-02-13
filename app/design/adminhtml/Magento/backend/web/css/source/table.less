@@ -12,10 +12,10 @@ table {
     }
 
     thead {
-        background: @grid-filters-bg;
+        background: @grid-filters-background-color;
         color: @grid-headings-color;
         .headings {
-            background: @grid-headings-bg;
+            background: @grid-headings-background-color;
         }
         a {
             color: @grid-headings-color;
@@ -37,7 +37,7 @@ table {
     }
 
     tfoot {
-        background: @grid-tfoot-bg;
+        background: @grid-tfoot-background-color;
         color: @grid-tfoot-color;
         tr {
             th,
@@ -259,7 +259,7 @@ table {
 //    Table Grid
 //--------------------------------------
 .grid {
-    background: @grid-frame-bg;
+    background: @grid-frame-background-color;
     .style18();
     padding: 15px;
 
@@ -274,7 +274,7 @@ table {
         &:hover td,
         &:nth-child(odd):hover th,
         &:nth-child(odd):hover td {
-            background-color: @grid-td-bg-hover;
+            background-color: @grid-td-background-color-hover;
             cursor: pointer;
             &.empty-text {
                 background-color: @grid-td-dark;
@@ -371,7 +371,7 @@ table {
     .col-status,
     .col-price,
     .col-position,
-    .col-base_grand_total,
+    .col__base_grand_total,
     .col-grand_total,
     .col-sort_order,
     // Reports
@@ -410,7 +410,7 @@ table {
 
     .col-actions {
         .action-select {
-            background: @form-element-bg;
+            background: @form-element-background-color;
             border-color: @grid-controls-border;
             height: 28px;
             margin: 0;
@@ -479,7 +479,7 @@ td.col-type {
     td,
     tbody tr th,
     tbody tr td {
-        background: @data-table-td-bg;
+        background: @data-table-td-background-color;
         border-width: 0;
         padding: 5px 7px;
         vertical-align: middle;
@@ -489,14 +489,14 @@ td.col-type {
         tr {
             &:nth-child(odd) th,
             &:nth-child(odd) td {
-                background: @data-table-td-bg-odd;
+                background: @data-table-td-background-color-odd;
             }
         }
         &.odd {
             tr {
                 th,
                 td {
-                    background: @data-table-td-bg-odd;
+                    background: @data-table-td-background-color-odd;
                 }
             }
         }
@@ -504,7 +504,7 @@ td.col-type {
             tr {
                 th,
                 td {
-                    background: @data-table-td-bg;
+                    background: @data-table-td-background-color;
                 }
             }
         }
@@ -527,13 +527,13 @@ td.col-type {
             &:hover tr {
                 th,
                 td {
-                    background: @data-table-td-bg-hover;
+                    background: @data-table-td-background-color-hover;
                 }
             }
         }
 
         tfoot td {
-            background: @grid-tfoot-bg;
+            background: @grid-tfoot-background-color;
             .style2();
         }
     }
@@ -650,7 +650,7 @@ td.col-type {
 //    Grid - Pager and Buttons row
 // --------------------------------------
 .grid-actions {
-    background: @grid-frame-bg;
+    background: @grid-frame-background-color;
     font-size: 13px;
     line-height: 28px;
     padding: 10px 15px;
@@ -733,7 +733,7 @@ td.col-type {
         width: 22px;
     }
     .validation-advice {
-        background: @validation-bg;
+        background: @validation-background-color;
         border: 1px solid @validation-color;
         border-radius: 3px;
         color: @validation-color;
@@ -799,8 +799,8 @@ td.col-type {
     .action-previous {
         .icon-font(
             @icon-prev,
-            @_icon-font-color: @pager-actions-color,
-            @_icon-font-color-hover: @pager-actions-color-hover,
+            @_icon-font-color: @pager-actions__color,
+            @_icon-font-color-hover: @pager-actions__color-hover,
             @_icon-font-size: 40px,
             @_icon-font-text-hide: true
         );
@@ -808,8 +808,8 @@ td.col-type {
     .action-next {
         .icon-font(
             @icon-next,
-            @_icon-font-color: @pager-actions-color,
-            @_icon-font-color-hover: @pager-actions-color-hover,
+            @_icon-font-color: @pager-actions__color,
+            @_icon-font-color-hover: @pager-actions__color-hover,
             @_icon-font-size: 40px,
             @_icon-font-text-hide: true
         );
@@ -835,7 +835,7 @@ td.col-type {
 //    Grid - Mass Action
 // --------------------------------------
 .massaction {
-    background: @grid-frame-bg;
+    background: @grid-frame-background-color;
     border-top: @grid-massaction-border;
     font-size: 13px;
     line-height: 28px;
@@ -865,7 +865,7 @@ td.col-type {
     }
     .select.validation-failed {
         border: @validation-border;
-        background: @validation-bg;
+        background: @validation-background-color;
     }
     .form-inline & {
         &:extend(.massaction-form-inline-label-reset all);
@@ -879,7 +879,7 @@ td.col-type {
 .grid-severity-major,
 .grid-severity-notice,
 .grid-severity-minor {
-    background: @grid-severity-minor-bg;
+    background: @grid-severity-minor-background-color;
     border: 1px solid @grid-severity-minor-border;
     color: @grid-severity-minor-color;
     display: block;
@@ -893,13 +893,13 @@ td.col-type {
 .grid-severity-critical,
 .grid-severity-major {
     border-color: @grid-severity-critical-border;
-    background: @grid-severity-critical-bg;
+    background: @grid-severity-critical-background-color;
     color: @grid-severity-critical-color;
 }
 
 .grid-severity-notice {
     border-color: @grid-severity-notice-border;
-    background: @grid-severity-notice-bg;
+    background: @grid-severity-notice-background-color;
     color: @grid-severity-notice-color;
 }
 
@@ -1425,7 +1425,7 @@ td.col-type {
     .col-currency-edit-rate {
         min-width: 40px;
     }
-    .col-base-currency {
+    .col__base-currency {
         font-weight: bold;
     }
     .old-rate {
