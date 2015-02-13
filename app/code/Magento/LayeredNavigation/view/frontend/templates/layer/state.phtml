@@ -41,7 +41,7 @@
                     </a>
                 <?php else: ?>
                     <a class="action remove" href="<?php echo $_filter->getRemoveUrl() ?>"
-                       title="<?php echo __('Remove This Item') ?>">
+                       title="<?php echo __('Remove')?> <?php echo $block->escapeHtml(__($_filter->getName())); ?> <?php echo $block->stripTags($_filter->getLabel()) ?>">
                         <span><?php echo __('Remove This Item') ?></span>
                     </a>
                 <?php endif; ?>

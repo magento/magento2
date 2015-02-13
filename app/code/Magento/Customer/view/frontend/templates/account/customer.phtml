@@ -9,9 +9,19 @@
 ?>
 <?php if($block->customerLoggedIn()): ?>
     <li class="customer-welcome">
-        <span class="customer-name" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
+        <span class="customer-name"
+              role="link"
+              tabindex="0"
+              data-mage-init='{"dropdown":{}}'
+              data-toggle="dropdown"
+              data-trigger-keypress-button="true">
             <span><?php echo $block->getCustomerName(); ?></span>
-            <button type="button" class="action switch"><span><?php echo __('Change')?></span></button>
+            <button type="button"
+                    class="action switch"
+                    tabindex="-1"
+                    aria-hidden="true">
+                <span><?php echo __('Change')?></span>
+            </button>
         </span>
         <?php if($block->getChildHtml()):?>
         <div class="customer-menu" data-target="dropdown">
