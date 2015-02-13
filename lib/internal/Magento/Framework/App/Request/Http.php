@@ -131,7 +131,7 @@ class Http extends Request implements RequestInterface
     {
         if ($pathInfo === null) {
             $requestUri = $this->getRequestUri();
-            if ('/' == $requestUri) {
+            if ('/' === $requestUri) {
                 return $this;
             }
 
@@ -143,7 +143,7 @@ class Http extends Request implements RequestInterface
 
             $baseUrl = $this->getBaseUrl();
             $pathInfo = substr($requestUri, strlen($baseUrl));
-            if (!empty($baseUrl) && '/' === $pathInfo) {
+            if (!empty($baseUrl) && false === $pathInfo) {
                 $pathInfo = '';
             } elseif (null === $baseUrl) {
                 $pathInfo = $requestUri;

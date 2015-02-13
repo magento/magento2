@@ -641,7 +641,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     public function setRequestUri($requestUri = null)
     {
         if ($requestUri === null) {
-            $this->requestUri = $this->detectRequestUri();
+            $requestUri = $this->detectRequestUri();
         } elseif (!is_string($requestUri)) {
             return $this;
         } else {
@@ -653,5 +653,18 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         }
         $this->requestUri = $requestUri;
         return $this;
+    }
+
+
+    /**
+     * Get base url
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        $url = urldecode(parent::getBaseUrl());
+        $url = str_replace('\\', '/', $url);
+        return $url;
     }
 }

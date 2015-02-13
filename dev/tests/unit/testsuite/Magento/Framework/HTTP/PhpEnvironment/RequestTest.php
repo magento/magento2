@@ -177,7 +177,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseUrlWithUrl()
     {
         $this->model = $this->getModel();
-        $this->model->setBaseUrl('http://test.com/one/two');
+        $this->model->setBaseUrl('http:\/test.com\one/two');
         $this->assertEquals('http://test.com/one/two', $this->model->getBaseUrl());
     }
 

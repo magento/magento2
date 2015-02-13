@@ -2060,7 +2060,7 @@ return [
     ['getRequestedControllerName', 'Magento\Framework\App\Request\Http'],
     ['getRequestedRouteName', 'Magento\Framework\App\Request\Http'],
     ['isStraight', 'Magento\Framework\App\Request\Http'],
-    ['getBaseUrl', 'Magento\Framework\App\Request\Http'],
+    ['getBaseUrl', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request'],
     ['getAliases', 'Magento\Framework\App\Request\Http'],
     ['setPathInfo', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request'],
     ['getRawBody', 'Magento\Framework\View\Context', 'getContent'],
