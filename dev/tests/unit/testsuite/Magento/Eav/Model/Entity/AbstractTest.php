@@ -5,6 +5,8 @@
  */
 namespace Magento\Eav\Model\Entity;
 
+use Magento\TestFramework\Helper\ObjectManager;
+
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -18,17 +20,15 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $arguments =  $objectManager->getConstructArguments(
+            'Magento\Eav\Model\Entity\AbstractEntity',
+            ['eavConfig' => $this->eavConfig]
+        );
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Eav\Model\Entity\AbstractEntity',
-            [
-                $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
-                $this->eavConfig,
-                $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', [], [], '', false),
-                $this->getMock('\Magento\Framework\Locale\FormatInterface'),
-                $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false),
-                $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false)
-            ]
+            $arguments
         );
     }
 
@@ -272,18 +272,23 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $data = [
-            $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
-            $eavConfig,
-            $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', [], [], '', false),
-            $this->getMock('Magento\Framework\Locale\FormatInterface'),
-            $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false),
-            $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false),
-            ['type' => $entityType, 'entityTable' => 'entityTable', 'attributesByCode' => $attributes],
-        ];
+        $objectManager = new ObjectManager($this);
+        $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $arguments =  $objectManager->getConstructArguments(
+            'Magento\Eav\Model\Entity\AbstractEntity',
+            [
+                'eavConfig' => $eavConfig,
+                'data' => [
+                    'type' => $entityType,
+                    'entityTable' => 'entityTable',
+                    'attributesByCode' => $attributes
+                ]
+            ]
+        );
+
         /** @var $model \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
         $model = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
-            ->setConstructorArgs($data)
+            ->setConstructorArgs($arguments)
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback'])
             ->getMock();
 

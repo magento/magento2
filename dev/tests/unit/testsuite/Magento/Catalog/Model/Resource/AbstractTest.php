@@ -9,6 +9,8 @@
  */
 namespace Magento\Catalog\Model\Resource;
 
+use Magento\TestFramework\Helper\ObjectManager;
+
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -41,6 +43,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testWalkAttributes()
     {
+        $objectManager = new ObjectManager($this);
+
         $code = 'test_attr';
         $set = 10;
 
@@ -78,20 +82,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $attributes[$code] = $attribute;
 
         /** @var $model \Magento\Catalog\Model\Resource\AbstractResource */
+        $arguments = $objectManager->getConstructArguments('Magento\Catalog\Model\Resource\AbstractResource');
         $model = $this->getMock(
             'Magento\Catalog\Model\Resource\AbstractResource',
             ['getAttributesByCode'],
-            [
-                $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false),
-                $this->getMock('Magento\Eav\Model\Config', [], [], '', false, false),
-                $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', [], [], '', false, false),
-                $this->getMock('Magento\Framework\Locale\FormatInterface'),
-                $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false, false),
-                $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false, false),
-                $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false),
-                $this->getMock('Magento\Catalog\Model\Factory', [], [], '', false),
-                []
-            ]
+            $arguments
         );
 
         $model->expects($this->once())->method('getAttributesByCode')->will($this->returnValue($attributes));
