@@ -14,9 +14,10 @@ $usageMessage =
 . '   -b   - branch report file' . PHP_EOL
 . '   -o   - output xml file' . PHP_EOL
 . '   -p   - percent of measurements, that will be skipped (default = 15)' . PHP_EOL
-. '   -t   - plain text report file (optional)' . PHP_EOL;
+. '   -t   - plain text report file (optional)' . PHP_EOL
+. '   -d   - threshold for improvement/degradation for plain-text report (default = 1.5)' . PHP_EOL;
 
-$args = getopt('m:b:o:p:t:');
+$args = getopt('m:b:o:p:t:d:');
 if (empty($args)) {
     echo $usageMessage;
     exit(0);
@@ -27,6 +28,7 @@ $branchFile = $args['b'];
 $outputFile = $args['o'];
 $plainReportFile = isset($args['t']) ? $args['t'] : false;
 $skipMeasurementsPercent = isset($args['p']) && $args['p'] != '' ? min(100, max(0, $args['p'])) : 15;
+$threshold = isset($args['d']) ? $args['d'] : 1.5;
 
 try {
     $mainlineResults = readResponseTimeReport($mainlineFile);
@@ -71,7 +73,7 @@ try {
                     ) :
                     '',
                 $success ?
-                    ($deviation < -1.5 ? 'improvement' : ($deviation > 1.5 ? 'DEGRADATION' : 'ok')) :
+                    ($deviation < -$threshold ? 'improvement' : ($deviation > $threshold ? 'DEGRADATION' : 'ok')) :
                     'FAILED'
             ];
         }
