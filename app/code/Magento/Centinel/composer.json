@@ -3,15 +3,16 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
-        "magento/module-checkout": "0.42.0-beta8",
-        "magento/module-core": "0.42.0-beta8",
-        "magento/module-backend": "0.42.0-beta8",
-        "magento/module-sales": "0.42.0-beta8",
-        "magento/framework": "0.42.0-beta8",
+        "magento/module-store": "0.42.0-beta7",
+        "magento/module-checkout": "0.42.0-beta7",
+        "magento/module-core": "0.42.0-beta7",
+        "magento/module-backend": "0.42.0-beta7",
+        "magento/module-sales": "0.42.0-beta7",
+        "magento/framework": "0.42.0-beta7",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.42.0-beta8",
+    "version": "0.42.0-beta7",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

@@ -93,7 +93,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->setShippingAddress($shippingAddress)
             ->setStoreId(
                 $this->objectManager
-                    ->get('Magento\Framework\Store\StoreManagerInterface')
+                    ->get('Magento\Store\Model\StoreManagerInterface')
                     ->getStore()
                     ->getId()
             )
