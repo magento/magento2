@@ -13,9 +13,9 @@ use Magento\Core\Model\string;
  * @method \Magento\Variable\Model\Resource\Variable _getResource()
  * @method \Magento\Variable\Model\Resource\Variable getResource()
  * @method string getCode()
- * @method \Magento\Core\Model\Variable setCode(string $value)
+ * @method \Magento\Variable\Model\Variable setCode(string $value)
  * @method string getName()
- * @method \Magento\Core\Model\Variable setName(string $value)
+ * @method \Magento\Variable\Model\Variable setName(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */

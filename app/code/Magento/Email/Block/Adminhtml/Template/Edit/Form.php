@@ -17,7 +17,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_variables;
 
     /**
-     * @var \Magento\Core\Model\VariableFactory
+     * @var \Magento\Variable\Model\VariableFactory
      */
     protected $_variableFactory;
 
@@ -25,7 +25,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\VariableFactory $variableFactory
+     * @param \Magento\Variable\Model\VariableFactory $variableFactory
      * @param \Magento\Email\Model\Source\Variables $variables
      * @param array $data
      */
@@ -33,7 +33,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Core\Model\VariableFactory $variableFactory,
+        \Magento\Variable\Model\VariableFactory $variableFactory,
         \Magento\Email\Model\Source\Variables $variables,
         array $data = []
     ) {
