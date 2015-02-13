@@ -284,7 +284,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         if (!$origValue) {
             $origValue = $this->_scopeConfig->getValue(
                 $pathToValue,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->getStore()
             );
         }
@@ -422,7 +422,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             ->setOrigEmail(
                 $this->_scopeConfig->getValue(
                     'trans_email/ident_general/email',
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $requestObject->getStoreId()
                 )
             )
@@ -435,7 +435,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         $originStreet2 = $this->_scopeConfig->getValue(
             Shipment::XML_PATH_STORE_ADDRESS2,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $requestObject->getStoreId()
         );
 
@@ -1265,7 +1265,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $countryParams = $this->getCountryParams(
             $this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_COUNTRY_ID,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $request->getStoreId()
             )
         );
@@ -1388,7 +1388,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $originRegion = $this->getCountryParams(
             $this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_COUNTRY_ID,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->getStore()
             )
         )->getRegion();

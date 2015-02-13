@@ -91,7 +91,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
         }
         $shipperRegionCode = $this->_scopeConfig->getValue(
             Shipment::XML_PATH_STORE_REGION_ID,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $shipmentStoreId
         );
         if (is_numeric($shipperRegionCode)) {
@@ -102,18 +102,18 @@ class Labels extends \Magento\Shipping\Model\Shipping
 
         $originStreet1 = $this->_scopeConfig->getValue(
             Shipment::XML_PATH_STORE_ADDRESS1,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $shipmentStoreId
         );
         $originStreet2 = $this->_scopeConfig->getValue(
             Shipment::XML_PATH_STORE_ADDRESS2,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $shipmentStoreId
         );
         $storeInfo = new \Magento\Framework\Object(
             (array)$this->_scopeConfig->getValue(
                 'general/store_information',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
         );
@@ -126,17 +126,17 @@ class Labels extends \Magento\Shipping\Model\Shipping
             || !$shipperRegionCode
             || !$this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_CITY,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
             || !$this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_ZIP,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
             || !$this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_COUNTRY_ID,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
         ) {
@@ -162,7 +162,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
         $request->setShipperAddressCity(
             $this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_CITY,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
         );
@@ -170,14 +170,14 @@ class Labels extends \Magento\Shipping\Model\Shipping
         $request->setShipperAddressPostalCode(
             $this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_ZIP,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
         );
         $request->setShipperAddressCountryCode(
             $this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_COUNTRY_ID,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
         );

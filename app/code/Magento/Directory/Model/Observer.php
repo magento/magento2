@@ -91,10 +91,10 @@ class Observer
         $importWarnings = [];
         if (!$this->_scopeConfig->getValue(
             self::IMPORT_ENABLE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) || !$this->_scopeConfig->getValue(
             self::CRON_STRING_PATH,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             return;
@@ -104,7 +104,7 @@ class Observer
         $rates = [];
         $service = $this->_scopeConfig->getValue(
             self::IMPORT_SERVICE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if ($service) {
             try {
@@ -132,7 +132,7 @@ class Observer
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_TEMPLATE,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             )->setTemplateOptions(
                 [
@@ -144,12 +144,12 @@ class Observer
             )->setFrom(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_IDENTITY,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             )->addTo(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_RECIPIENT,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             );
             $transport = $this->_transportBuilder->getTransport();

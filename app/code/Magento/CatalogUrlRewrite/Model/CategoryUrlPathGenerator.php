@@ -117,7 +117,7 @@ class CategoryUrlPathGenerator
         if (!isset($this->categoryUrlSuffix[$storeId])) {
             $this->categoryUrlSuffix[$storeId] = $this->scopeConfig->getValue(
                 self::XML_PATH_CATEGORY_URL_SUFFIX,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }

@@ -8,8 +8,8 @@
 
 namespace Magento\Store\Model;
 
-use Magento\Framework\Store\StoreManagerInterface;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\ObjectManager;
 
@@ -34,7 +34,7 @@ class SecureUrlTest extends \PHPUnit_Framework_TestCase
         $this->urlSecurityInfoMock = $this->getMockBuilder('Magento\Framework\Url\SecurityInfoInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')

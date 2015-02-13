@@ -140,7 +140,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
             // get all stores, required by configuration in current store scope
             $productsScope = $this->_scopeConfig->getValue(
                 'catalog/recently_products/scope',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             switch ($productsScope) {
                 case 'website':

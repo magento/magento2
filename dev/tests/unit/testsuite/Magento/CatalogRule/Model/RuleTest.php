@@ -33,7 +33,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->storeModel = $this->getMock('Magento\Store\Model\Store', ['__wakeup', 'getId'], [], '', false);
         $this->combineFactory = $this->getMock(
             'Magento\CatalogRule\Model\Rule\Condition\CombineFactory',

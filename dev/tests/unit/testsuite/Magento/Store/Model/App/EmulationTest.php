@@ -79,7 +79,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
         $this->designMock = $this->getMockBuilder('Magento\Theme\Model\Design')
             ->disableOriginalConstructor()
             ->setMethods([])->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])->getMock();
         $this->translateMock = $this->getMockBuilder('Magento\Framework\TranslateInterface')

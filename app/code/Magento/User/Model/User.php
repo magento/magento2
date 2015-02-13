@@ -214,7 +214,7 @@ class User extends AbstractModel implements StorageInterface
         $this->_roleFactory = $objectManager->get('Magento\Authorization\Model\RoleFactory');
         $this->_encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
         $this->_transportBuilder = $objectManager->get('Magento\Framework\Mail\Template\TransportBuilder');
-        $this->_storeManager = $objectManager->get('Magento\Framework\Store\StoreManagerInterface');
+        $this->_storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
     }
 
     /**

@@ -95,7 +95,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->cacheManager));
 
         $this->registry = $this->getMock('Magento\Framework\Registry');
-        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->categoryTreeResource = $this->getMock('Magento\Catalog\Model\Resource\Category\Tree', [], [], '', false);
         $this->categoryTreeFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Category\TreeFactory',

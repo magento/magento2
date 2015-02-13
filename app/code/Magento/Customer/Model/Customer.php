@@ -816,7 +816,7 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
 
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_IS_CONFIRM,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -861,13 +861,13 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->_transportBuilder->setTemplateIdentifier(
-            $this->_scopeConfig->getValue($template, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId)
+            $this->_scopeConfig->getValue($template, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
         )->setTemplateOptions(
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
             $templateParams
         )->setFrom(
-            $this->_scopeConfig->getValue($sender, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId)
+            $this->_scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
         )->addTo(
             $this->getEmail(),
             $this->getName()
@@ -910,7 +910,7 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
             $storeId = $this->getStoreId() ? $this->getStoreId() : $this->_storeManager->getStore()->getId();
             $groupId = $this->_scopeConfig->getValue(
                 GroupManagement::XML_PATH_DEFAULT_ID,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
             $this->setData('group_id', $groupId);

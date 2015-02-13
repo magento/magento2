@@ -79,7 +79,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityType')
             ->will($this->returnValue($this->entityTypeMock));
 
-        $this->storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnSelf());

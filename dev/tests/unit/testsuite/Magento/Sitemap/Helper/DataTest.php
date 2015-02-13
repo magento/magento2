@@ -6,7 +6,7 @@
 
 namespace Magento\Sitemap\Helper;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class DataTest extends \PHPUnit_Framework_TestCase

@@ -21,7 +21,7 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->storeManager = $objectManager->get('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
         $this->pathProcessor = $objectManager->get('Magento\Webapi\Model\PathProcessor');
     }
 

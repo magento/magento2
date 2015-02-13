@@ -10,7 +10,7 @@
 
 namespace Magento\Developer\Model\TemplateEngine\Plugin;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class DebugHints
 {

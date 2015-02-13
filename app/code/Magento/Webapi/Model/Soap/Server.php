@@ -104,7 +104,7 @@ class Server
         /** Enable or disable SOAP extension WSDL cache depending on Magento configuration. */
         $wsdlCacheEnabled = $this->_scopeConfig->isSetFlag(
             self::CONFIG_PATH_WSDL_CACHE_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if ($wsdlCacheEnabled) {
             ini_set('soap.wsdl_cache_enabled', '1');
@@ -136,7 +136,7 @@ class Server
     {
         $charset = $this->_scopeConfig->getValue(
             self::CONFIG_PATH_SOAP_CHARSET,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return $charset ? $charset : self::SOAP_DEFAULT_ENCODING;
     }

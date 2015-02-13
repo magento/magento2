@@ -11,8 +11,8 @@ namespace Magento\CheckoutAgreements\Model;
 use Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;
 use Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Store\StoreManagerInterface;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
 
 /**

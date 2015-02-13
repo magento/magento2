@@ -10,13 +10,13 @@ use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
 class Confirmation extends \Magento\Customer\Controller\Account
 {
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var StoreManagerInterface */
     protected $storeManager;
 
     /** @var AccountManagementInterface  */

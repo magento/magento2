@@ -42,7 +42,7 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->configMock = $this->getMockBuilder('Magento\Customer\Model\Config\Share')

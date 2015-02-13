@@ -28,7 +28,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $storeManager \Magento\Store\Model\StoreManagerInterface */
-        $storeManager = $objectManager->get('Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
         $this->_store = $storeManager->getStore();
         $this->_model = $objectManager->create('Magento\Catalog\Model\Category');
     }
@@ -96,7 +96,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         /* id from fixture */
         $this->assertContains(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId(),
             $this->_model->getStoreIds()
         );
@@ -106,7 +106,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId(),
             $this->_model->getStoreId()
         );

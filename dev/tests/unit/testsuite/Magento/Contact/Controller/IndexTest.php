@@ -71,7 +71,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             'isSetFlag'
         )->with(
             \Magento\Contact\Controller\Index::XML_PATH_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue(false)
         );

@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Block;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Cms page content block

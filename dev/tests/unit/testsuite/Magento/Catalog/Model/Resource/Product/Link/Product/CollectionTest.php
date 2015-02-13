@@ -90,7 +90,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
         $this->universalFactoryMock = $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false);
         $this->universalFactoryMock->expects($this->any())->method('create')->will($this->returnValue($entity));
-        $this->storeManagerMock = $this->getMockForAbstractClass('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $this->storeManagerMock
             ->expects($this->any())
             ->method('getStore')

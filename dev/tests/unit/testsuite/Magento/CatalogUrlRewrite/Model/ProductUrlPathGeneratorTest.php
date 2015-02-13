@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class ProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
@@ -33,7 +33,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
         $productMethods = ['__wakeup', 'getData', 'getUrlKey', 'getName', 'formatUrlKey', 'getId'];
         $this->product = $this->getMock('Magento\Catalog\Model\Product', $productMethods, [], '', false);
-        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->categoryUrlPathGenerator = $this->getMock(
             'Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator',
@@ -131,11 +131,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('category-url-path'));
         $this->storeManager->expects($this->never())->method('getStore');
         $this->scopeConfig->expects($this->once())->method('getValue')
-            ->with(
-                ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
-                $storeId
-            )
+            ->with(ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $storeId)
             ->will($this->returnValue('.html'));
 
         $this->assertEquals(

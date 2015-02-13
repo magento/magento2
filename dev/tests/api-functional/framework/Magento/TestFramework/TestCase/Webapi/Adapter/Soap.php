@@ -131,7 +131,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         $storeCode = !is_null($storeCode)
             ? (string)$storeCode
             : Bootstrap::getObjectManager()
-                ->get('Magento\Framework\Store\StoreManagerInterface')
+                ->get('Magento\Store\Model\StoreManagerInterface')
                 ->getStore()
                 ->getCode();
 

@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Baseurl extends \Magento\Framework\App\Config\Value
 {

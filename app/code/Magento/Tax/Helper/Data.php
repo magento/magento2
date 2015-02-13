@@ -537,7 +537,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             Config::CONFIG_XML_PATH_BASED_ON,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -552,7 +552,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int) $this->scopeConfig->getValue(
             Config::CONFIG_XML_PATH_APPLY_ON,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         ) == 0;
     }
@@ -567,7 +567,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int) $this->scopeConfig->getValue(
             Config::CONFIG_XML_PATH_APPLY_ON,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         ) == 1;
     }
@@ -700,7 +700,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::CONFIG_DEFAULT_CUSTOMER_TAX_CLASS,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -713,7 +713,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::CONFIG_DEFAULT_PRODUCT_TAX_CLASS,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

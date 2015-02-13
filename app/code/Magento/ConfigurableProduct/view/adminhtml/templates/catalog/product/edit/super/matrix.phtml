@@ -254,17 +254,17 @@ $productByUsedAttributes = $block->getAssociatedProducts();
         </table>
     </div>
 </div>
-<script data-template-for="variation-image" type="text/x-jquery-tmpl">
-    <img src="${url}" class="variation" data-role="image"/>
+<script data-template-for="variation-image" type="text/x-magento-template">
+    <img src="<%= data.url %>" class="variation" data-role="image"/>
 </script>
 <script>
 require([
     "jquery",
-    "jquery/template",
+    "mage/template",
     "jquery/file-uploader",
     "mage/mage",
     "mage/translate"
-], function(jQuery){
+], function(jQuery, mageTemplate){
 
 jQuery(function ($) {
     var matrix = $('[data-role=product-variations-matrix]');
@@ -274,6 +274,8 @@ jQuery(function ($) {
             dropZone: $(this).closest('[data-role=row]'),
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
             done: function (event, data) {
+                var tmpl;
+
                 if (!data.result) {
                     return;
                 }
@@ -285,8 +287,11 @@ jQuery(function ($) {
                     if (imageElement.length) {
                         imageElement.attr('src', data.result.url);
                     } else {
-                        $.tmpl(matrix.find('[data-template-for=variation-image]').html(), data.result)
-                            .prependTo(uploaderControl);
+                        tmpl = mageTemplate(matrix.find('[data-template-for=variation-image]').html());
+
+                        $(tmpl({
+                            data: data.result
+                        })).prependTo(uploaderControl);
                     }
                     parentElement.find('[name$="[image]"]').val(data.result.file);
                     parentElement.find('[data-toggle=dropdown]').show();

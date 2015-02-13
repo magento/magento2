@@ -55,7 +55,7 @@ class Street extends \Magento\Framework\App\Config\Value
         $attribute = $this->_eavConfig->getAttribute('customer_address', 'street');
         $value = $this->getValue();
         switch ($this->getScope()) {
-            case \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITES:
+            case \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES:
                 $website = $this->_storeManager->getWebsite($this->getScopeCode());
                 $attribute->setWebsite($website);
                 $attribute->load($attribute->getId());
@@ -81,7 +81,7 @@ class Street extends \Magento\Framework\App\Config\Value
     {
         $result = parent::afterDelete();
 
-        if ($this->getScope() == \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITES) {
+        if ($this->getScope() == \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES) {
             $attribute = $this->_eavConfig->getAttribute('customer_address', 'street');
             $website = $this->_storeManager->getWebsite($this->getScopeCode());
             $attribute->setWebsite($website);

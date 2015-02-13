@@ -100,7 +100,7 @@ class Observer
         // check if scheduled generation enabled
         if (!$this->_scopeConfig->isSetFlag(
             self::XML_PATH_GENERATION_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             return;
@@ -120,7 +120,7 @@ class Observer
 
         if ($errors && $this->_scopeConfig->getValue(
             self::XML_PATH_ERROR_RECIPIENT,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             $translate = $this->_translateModel->getTranslateInline();
@@ -129,7 +129,7 @@ class Observer
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_TEMPLATE,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             )->setTemplateOptions(
                 [
@@ -141,12 +141,12 @@ class Observer
             )->setFrom(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_IDENTITY,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             )->addTo(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_RECIPIENT,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             );
             $transport = $this->_transportBuilder->getTransport();

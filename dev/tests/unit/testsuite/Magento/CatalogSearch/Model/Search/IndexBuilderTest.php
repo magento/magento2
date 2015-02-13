@@ -71,7 +71,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['isSetFlag'])
             ->getMockForAbstractClass();
 
-        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')->getMock();
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(

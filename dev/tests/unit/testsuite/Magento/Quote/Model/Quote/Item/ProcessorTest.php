@@ -8,7 +8,7 @@ namespace Magento\Quote\Model\Quote\Item;
 use \Magento\Catalog\Model\Product;
 use Magento\Quote\Model\Quote\ItemFactory;
 use Magento\Quote\Model\Quote\Item;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Framework\App\State;
 use Magento\Framework\Object;
@@ -29,7 +29,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected $quoteItemFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 

@@ -765,12 +765,12 @@ class Full
         if (!isset($this->dates[$storeId])) {
             $timezone = $this->scopeConfig->getValue(
                 $this->localeDate->getDefaultTimezonePath(),
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
             $locale = $this->scopeConfig->getValue(
                 $this->localeResolver->getDefaultLocalePath(),
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
             $locale = new \Zend_Locale($locale);

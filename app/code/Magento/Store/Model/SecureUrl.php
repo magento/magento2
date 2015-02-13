@@ -5,8 +5,8 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Framework\Store\StoreManagerInterface;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
 class SecureUrl implements \Magento\Framework\App\Router\SecureUrlInterface

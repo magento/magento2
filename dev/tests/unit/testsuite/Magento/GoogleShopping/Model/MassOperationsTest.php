@@ -58,7 +58,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->notificationInterface = $this->getMock('Magento\Framework\Notification\NotifierInterface');
-        $this->storeManagerInterface = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->googleShoppingHelper = $this->getMock('Magento\GoogleShopping\Helper\Data', [], [], '', false);
         $this->googleShoppingCategoryHelper = $this->getMock('Magento\GoogleShopping\Helper\Category');

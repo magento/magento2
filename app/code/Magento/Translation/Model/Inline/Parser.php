@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Translation\Model\Inline;
+
 /**
  * This class is responsible for parsing content and applying necessary html element
  * wrapping and client scripts for inline translation.
  */
-namespace Magento\Translation\Model\Inline;
-
 class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
 {
     /**

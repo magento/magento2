@@ -102,7 +102,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $class = $this->scopeConfig->getValue(
             $this->getMethodModelConfigName($code),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         if (!$class) {
@@ -127,7 +127,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         foreach (array_keys($methods) as $code) {
             $model = $this->scopeConfig->getValue(
                 $this->getMethodModelConfigName($code),
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             );
             if (!$model) {
@@ -315,7 +315,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             \Magento\Payment\Model\Method\Free::XML_PATH_PAYMENT_FREE_ACTIVE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -330,7 +330,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             \Magento\Payment\Model\Method\Free::XML_PATH_PAYMENT_FREE_ORDER_STATUS,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -345,7 +345,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             \Magento\Payment\Model\Method\Free::XML_PATH_PAYMENT_FREE_PAYMENT_ACTION,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

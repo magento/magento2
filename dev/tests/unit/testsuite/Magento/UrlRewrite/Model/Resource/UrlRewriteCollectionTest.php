@@ -41,7 +41,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->select = $this->getMock('Zend_Db_Select', ['from', 'where'], [], '', false);
         $this->adapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',

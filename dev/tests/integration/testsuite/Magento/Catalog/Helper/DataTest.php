@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Helper;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\TaxRuleFixtureFactory;
@@ -204,7 +204,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->helper->isUsingStaticUrlsAllowed());
         $this->helper->setStoreId(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId()
         );
         $this->assertTrue($this->helper->isUsingStaticUrlsAllowed());
@@ -225,7 +225,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->helper->isUrlDirectivesParsingAllowed());
         $this->helper->setStoreId(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId()
         );
         $this->assertFalse($this->helper->isUrlDirectivesParsingAllowed());

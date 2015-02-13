@@ -44,7 +44,7 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->product->expects($this->any())->method('getCategoryCollection')
             ->will($this->returnValue($this->categoriesCollection));
-        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()->getMock();
         $this->categoriesCollection->expects($this->exactly(2))->method('addAttributeToSelect')
             ->will($this->returnSelf());

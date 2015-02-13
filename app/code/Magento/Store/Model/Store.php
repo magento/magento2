@@ -8,8 +8,7 @@ namespace Magento\Store\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Store\ScopeInterface;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Store model
@@ -725,7 +724,7 @@ class Store extends AbstractModel implements
         if ($this->_isFrontSecure === null) {
             $this->_isFrontSecure = $this->_config->isSetFlag(
                 self::XML_PATH_SECURE_IN_FRONTEND,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->getId()
             );
         }
@@ -753,7 +752,7 @@ class Store extends AbstractModel implements
 
         $secureBaseUrl = $this->_config->getValue(
             self::XML_PATH_SECURE_BASE_URL,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         if (!$secureBaseUrl) {
@@ -1130,7 +1129,7 @@ class Store extends AbstractModel implements
     public function beforeDelete()
     {
         $this->_configDataResource->clearScopeData(
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
             $this->getId()
         );
 
@@ -1188,7 +1187,7 @@ class Store extends AbstractModel implements
         if (null === $this->_frontendName) {
             $storeGroupName = (string)$this->_config->getValue(
                 'general/store_information/name',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this
             );
             $this->_frontendName = !empty($storeGroupName) ? $storeGroupName : $this->getGroup()->getName();

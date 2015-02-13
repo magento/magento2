@@ -5,7 +5,7 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Core Website model
@@ -240,7 +240,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
         if (!isset($this->_configCache[$path])) {
             $config = $this->_coreConfig->getValue(
                 $path,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
                 $this->getCode()
             );
             if (!$config) {
@@ -508,11 +508,11 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     public function beforeDelete()
     {
         $this->_configDataResource->clearScopeData(
-            \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
             $this->getId()
         );
         $this->_configDataResource->clearScopeData(
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
             $this->getStoreIds()
         );
         return parent::beforeDelete();

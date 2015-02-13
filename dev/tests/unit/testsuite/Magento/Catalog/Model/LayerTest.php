@@ -113,7 +113,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

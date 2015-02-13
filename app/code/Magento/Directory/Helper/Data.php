@@ -228,7 +228,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $value = trim(
                 $this->scopeConfig->getValue(
                     self::OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             );
             $this->_optZipCountries = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
@@ -260,10 +260,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCountriesWithStatesRequired($asJson = false)
     {
         $value = trim(
-            $this->scopeConfig->getValue(
-                self::XML_PATH_STATES_REQUIRED,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
-            )
+            $this->scopeConfig->getValue(self::XML_PATH_STATES_REQUIRED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
         );
         $countryList = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
         if ($asJson) {
@@ -281,7 +278,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (bool)$this->scopeConfig->getValue(
             self::XML_PATH_DISPLAY_ALL_STATES,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -320,7 +317,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_DEFAULT_COUNTRY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

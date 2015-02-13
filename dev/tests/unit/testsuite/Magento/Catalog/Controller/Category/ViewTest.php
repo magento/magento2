@@ -156,7 +156,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
 
         $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
 
         $this->catalogDesign = $this->getMock('Magento\Catalog\Model\Design', [], [], '', false);

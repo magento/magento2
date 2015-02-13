@@ -141,7 +141,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->getMockForAbstractClass();
         $this->localeDateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
             ->getMockForAbstractClass();

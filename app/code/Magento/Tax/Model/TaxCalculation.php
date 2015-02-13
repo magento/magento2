@@ -17,7 +17,7 @@ use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\Calculation\CalculatorFactory;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Calculation\AbstractCalculator;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
 
 /**

@@ -95,7 +95,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
         $this->rssModel = $this->getMock('Magento\Catalog\Model\Rss\Product\Special', [], [], '', false);
         $this->rssUrlBuilder = $this->getMock('Magento\Framework\App\Rss\UrlBuilderInterface');
 
-        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $store = $this->getMockBuilder('\Magento\Store\Model\Store')
             ->setMethods(['getId', 'getFrontendName', '__wakeup'])->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
@@ -209,7 +209,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
     public function testIsAllowed()
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
-            ->with('rss/catalog/special', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            ->with('rss/catalog/special', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
         $this->assertEquals(true, $this->block->isAllowed());
     }
@@ -222,7 +222,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
     public function testGetFeeds()
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
-            ->with('rss/catalog/special', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            ->with('rss/catalog/special', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
             ->with(['type' => 'special_products'])

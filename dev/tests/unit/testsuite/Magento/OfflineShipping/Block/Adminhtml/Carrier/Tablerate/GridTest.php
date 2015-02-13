@@ -41,7 +41,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

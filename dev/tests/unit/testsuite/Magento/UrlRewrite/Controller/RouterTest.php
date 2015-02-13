@@ -40,7 +40,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $this->actionFactory = $this->getMock('Magento\Framework\App\ActionFactory', [], [], '', false);
         $this->url = $this->getMock('Magento\Framework\UrlInterface');
-        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->response = $this->getMock('Magento\Framework\App\ResponseInterface', ['setRedirect', 'sendResponse']);
         $this->request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()->getMock();

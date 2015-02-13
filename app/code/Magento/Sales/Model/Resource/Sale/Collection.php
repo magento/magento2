@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Resource\Sale;
 
 use Magento\Framework\Data\Collection\EntityFactory;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Psr\Log\LoggerInterface as Logger;

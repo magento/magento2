@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model\Resource;
 
 use Magento\Framework\Data\AbstractSearchResult;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Data\SearchResultProcessorFactory;
 use Magento\Framework\Data\SearchResultProcessor;
 use Magento\Framework\DB\QueryInterface;

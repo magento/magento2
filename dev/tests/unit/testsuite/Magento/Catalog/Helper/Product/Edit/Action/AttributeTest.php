@@ -30,7 +30,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Store\StoreManagerInterface',
+            'Magento\Store\Model\StoreManagerInterface',
             [],
             '',
             false

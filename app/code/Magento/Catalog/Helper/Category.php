@@ -108,7 +108,7 @@ class Category extends AbstractHelper
             0,
             (int)$this->scopeConfig->getValue(
                 'catalog/navigation/max_depth',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $storeCategories = $category->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
@@ -171,7 +171,7 @@ class Category extends AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_USE_CATEGORY_CANONICAL_TAG,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

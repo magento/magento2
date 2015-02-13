@@ -8,8 +8,8 @@
 namespace Magento\Framework\App\Router;
 
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Store\ScopeInterface;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)

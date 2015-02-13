@@ -17,7 +17,6 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Reports\Model\Resource\Order\Collection $orderCollection
      */
     public function __construct(

@@ -50,7 +50,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->appContextHelperMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->storeManagerInterfaceMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerInterfaceMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->registryMock = $this->getMock('Magento\Framework\Registry');
         $this->sessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');

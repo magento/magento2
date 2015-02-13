@@ -107,7 +107,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->withAnyParameters()
             ->willReturn($this->searchResultProcessorMock);
         $this->storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Store\StoreManagerInterface',
+            'Magento\Store\Model\StoreManagerInterface',
             [],
             '',
             false,

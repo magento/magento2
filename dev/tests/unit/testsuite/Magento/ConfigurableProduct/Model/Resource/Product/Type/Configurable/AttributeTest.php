@@ -36,7 +36,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['isPriceGlobal'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

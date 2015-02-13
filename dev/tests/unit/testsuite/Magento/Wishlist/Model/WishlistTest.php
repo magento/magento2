@@ -108,7 +108,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->collection = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Wishlist\Collection')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->getMock();
         $this->date = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
             ->disableOriginalConstructor()

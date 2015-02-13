@@ -82,7 +82,7 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
         $folderName = \Magento\Backend\Model\Config\Backend\Image\Favicon::UPLOAD_DIR;
         $scopeConfig = $this->scopeConfig->getValue(
             'design/head/shortcut_icon',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $path = $folderName . '/' . $scopeConfig;
         $faviconUrl = $this->storeManager->getStore()

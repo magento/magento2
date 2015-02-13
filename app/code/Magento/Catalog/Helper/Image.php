@@ -154,25 +154,25 @@ class Image extends AbstractHelper
         $this->setWatermark(
             $this->scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_image",
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkImageOpacity(
             $this->scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity",
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkPosition(
             $this->scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_position",
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkSize(
             $this->scopeConfig->getValue(
                 "design/watermark/{$this->_getModel()->getDestinationSubdir()}_size",
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
 

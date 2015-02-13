@@ -10,7 +10,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Helper\Product;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Registry;

@@ -52,7 +52,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->_storeManagerMock = $this->getMock(
-            'Magento\Framework\Store\StoreManagerInterface',
+            'Magento\Store\Model\StoreManagerInterface',
             [],
             [],
             '',

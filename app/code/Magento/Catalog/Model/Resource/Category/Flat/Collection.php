@@ -11,7 +11,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Model\Resource\Db\AbstractDb;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog category flat collection

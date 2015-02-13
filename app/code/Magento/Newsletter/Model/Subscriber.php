@@ -401,7 +401,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $isConfirmNeed = $this->_scopeConfig->getValue(
             self::XML_PATH_CONFIRMATION_FLAG,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) == 1 ? true : false;
         $isOwnSubscribes = false;
 
@@ -634,10 +634,10 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         if (!$this->_scopeConfig->getValue(
             self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) || !$this->_scopeConfig->getValue(
             self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $this;
@@ -648,7 +648,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         )->setTemplateOptions(
             [
@@ -660,7 +660,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         )->addTo(
             $this->getEmail(),
@@ -687,10 +687,10 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         if (!$this->_scopeConfig->getValue(
             self::XML_PATH_SUCCESS_EMAIL_TEMPLATE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) || !$this->_scopeConfig->getValue(
             self::XML_PATH_SUCCESS_EMAIL_IDENTITY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $this;
@@ -701,7 +701,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_SUCCESS_EMAIL_TEMPLATE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         )->setTemplateOptions(
             [
@@ -713,7 +713,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_SUCCESS_EMAIL_IDENTITY,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         )->addTo(
             $this->getEmail(),
@@ -739,10 +739,10 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         }
         if (!$this->_scopeConfig->getValue(
             self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) || !$this->_scopeConfig->getValue(
             self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $this;
@@ -753,7 +753,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         )->setTemplateOptions(
             [
@@ -765,7 +765,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         )->addTo(
             $this->getEmail(),

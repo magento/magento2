@@ -93,7 +93,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ACTIVE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) &&
             $this->getConversionId() &&
             $this->getConversionLanguage() &&
@@ -157,7 +157,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int)$this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_ID,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -170,7 +170,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_LANGUAGE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -183,7 +183,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_FORMAT,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -196,7 +196,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_COLOR,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -209,7 +209,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_LABEL,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -222,7 +222,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_VALUE_TYPE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -245,7 +245,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (double)$this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_VALUE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

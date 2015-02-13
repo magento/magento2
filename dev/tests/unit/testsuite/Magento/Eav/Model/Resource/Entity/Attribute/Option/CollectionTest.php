@@ -83,7 +83,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->storeManagerMock = $this->getMock(
-            'Magento\Framework\Store\StoreManagerInterface',
+            'Magento\Store\Model\StoreManagerInterface',
             [],
             [],
             '',

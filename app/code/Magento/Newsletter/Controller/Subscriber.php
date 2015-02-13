@@ -10,7 +10,7 @@
 namespace Magento\Newsletter\Controller;
 
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Customer\Model\Url as CustomerUrl;
@@ -45,7 +45,7 @@ class Subscriber extends \Magento\Framework\App\Action\Action
      * @param Context $context
      * @param SubscriberFactory $subscriberFactory
      * @param Session $customerSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param CustomerUrl $customerUrl
      */
     public function __construct(

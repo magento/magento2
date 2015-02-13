@@ -153,7 +153,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             $scope = (int)$this->_config->getValue(
                 \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
 
             if ($object->getStoreId() != '0' && $scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE) {

@@ -85,13 +85,13 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
             throw NoSuchEntityException::singleField('storeCode', $code);
         }
         $websiteConfig = $this->_scopePool->getScope(
-            \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
             $store->getWebsite()->getCode()
         )->getSource();
         $config = array_replace_recursive($websiteConfig, $this->_initialConfig->getData("stores|{$code}"));
 
         $collection = $this->_collectionFactory->create(
-            ['scope' => \Magento\Framework\Store\ScopeInterface::SCOPE_STORES, 'scopeId' => $store->getId()]
+            ['scope' => \Magento\Store\Model\ScopeInterface::SCOPE_STORES, 'scopeId' => $store->getId()]
         );
         $dbStoreConfig = [];
         foreach ($collection as $item) {

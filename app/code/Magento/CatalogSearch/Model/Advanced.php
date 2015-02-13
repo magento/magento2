@@ -18,7 +18,7 @@ use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\Exception;
 use Magento\Framework\Registry;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog advanced search model

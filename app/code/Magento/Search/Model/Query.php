@@ -14,7 +14,7 @@ use Magento\Framework\Data\Collection\Db;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Resource\AbstractResource;
 use Magento\Framework\Registry;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Search query model
@@ -74,7 +74,7 @@ class Query extends AbstractModel implements QueryInterface
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -99,7 +99,7 @@ class Query extends AbstractModel implements QueryInterface
      * @param Registry $registry
      * @param QueryCollectionFactory $queryCollectionFactory
      * @param CollectionFactory $searchCollectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param Config $scopeConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param Db $resourceCollection
@@ -110,7 +110,7 @@ class Query extends AbstractModel implements QueryInterface
         Registry $registry,
         QueryCollectionFactory $queryCollectionFactory,
         CollectionFactory $searchCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         AbstractResource $resource = null,
         Db $resourceCollection = null,
@@ -240,7 +240,7 @@ class Query extends AbstractModel implements QueryInterface
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_MIN_QUERY_LENGTH,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
     }
@@ -254,7 +254,7 @@ class Query extends AbstractModel implements QueryInterface
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_MAX_QUERY_LENGTH,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
     }

@@ -6,7 +6,7 @@
 
 namespace Magento\Directory\Model;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
@@ -79,7 +79,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig
             ->expects($this->at(0))
             ->method('getValue')
-            ->with(Observer::IMPORT_ENABLE, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            ->with(Observer::IMPORT_ENABLE, ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(1));
         $this->scopeConfig
             ->expects($this->at(1))
@@ -89,7 +89,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig
             ->expects($this->at(2))
             ->method('getValue')
-            ->with(Observer::IMPORT_SERVICE, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            ->with(Observer::IMPORT_SERVICE, ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue('import-service'));
         $importInterfaceMock = $this->getMockBuilder('Magento\Directory\Model\Currency\Import\Webservicex')
             ->disableOriginalConstructor()

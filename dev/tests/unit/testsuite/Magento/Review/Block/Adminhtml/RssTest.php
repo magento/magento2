@@ -37,7 +37,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerInterface = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->rss = $this->getMock('Magento\Review\Model\Rss', ['__wakeUp', 'getProductCollection'], [], '', false);
         $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
         $this->objectManagerHelper = new ObjectManagerHelper($this);

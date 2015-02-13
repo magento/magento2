@@ -58,7 +58,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->_storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

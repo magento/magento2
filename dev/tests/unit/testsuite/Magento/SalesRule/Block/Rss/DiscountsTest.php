@@ -70,7 +70,7 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerInterface = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->requestInterface = $this->getMock('Magento\Framework\App\RequestInterface');
         $this->rssBuilderInterface = $this->getMock('Magento\Framework\App\Rss\UrlBuilderInterface');
         $this->urlBuilderInterface = $this->getMock('Magento\Framework\UrlInterface');

@@ -2168,7 +2168,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $storeId = $this->getStoreId();
         $minOrderActive = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/active',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if (!$minOrderActive) {
@@ -2176,17 +2176,17 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         }
         $minOrderMulti = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $minAmount = $this->_scopeConfig->getValue(
             'sales/minimum_order/amount',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $taxInclude = $this->_scopeConfig->getValue(
             'sales/minimum_order/tax_including',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
 

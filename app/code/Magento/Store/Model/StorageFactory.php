@@ -6,8 +6,6 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\Profiler;
-use Magento\Framework\Store\ScopeInterface;
-use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -119,7 +117,7 @@ class StorageFactory
                 $this->_reinitStores($storage, $arguments);
                 $useSid = $this->_scopeConfig->isSetFlag(
                     \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $storage->getStore()
                 );
                 $this->_sidResolver->setUseSessionInUrl($useSid);
@@ -295,13 +293,13 @@ class StorageFactory
          */
         $setStore = false;
         switch ($scopeType) {
-            case \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE:
+            case \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE:
                 $setStore = $store->getWebsiteId() == $curStoreObj->getWebsiteId();
                 break;
-            case \Magento\Framework\Store\ScopeInterface::SCOPE_GROUP:
+            case \Magento\Store\Model\ScopeInterface::SCOPE_GROUP:
                 $setStore = $store->getGroupId() == $curStoreObj->getGroupId();
                 break;
-            case \Magento\Framework\Store\ScopeInterface::SCOPE_STORE:
+            case \Magento\Store\Model\ScopeInterface::SCOPE_STORE:
                 $setStore = true;
                 break;
         }

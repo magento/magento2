@@ -81,7 +81,7 @@ class Price extends \Magento\ProductAlert\Controller\Add
             )->setPrice(
                 $product->getFinalPrice()
             )->setWebsiteId(
-                $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getWebsiteId()
+                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
             );
             $model->save();
             $this->messageManager->addSuccess(__('You saved the alert subscription.'));

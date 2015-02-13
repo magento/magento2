@@ -93,7 +93,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
         $tierPrices = $product->getData('tier_price');
         $websiteIdentifier = 0;
-        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
         if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
@@ -149,7 +149,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     {
         $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
         $websiteIdentifier = 0;
-        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
         if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
@@ -165,7 +165,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
 
         $priceKey = 'website_price';
-        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
         if ($value == 0) {
             $priceKey = 'price';
         }

@@ -172,7 +172,7 @@ class Design implements \Magento\Framework\View\DesignInterface
             } else {
                 $theme = (string) $this->_scopeConfig->getValue(
                     self::XML_PATH_THEME_ID,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $store
                 );
             }

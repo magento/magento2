@@ -29,7 +29,7 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
         Framework\App\Action\Context $context,
         Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
         Framework\Controller\Result\RedirectFactory $resultRedirectFactory,

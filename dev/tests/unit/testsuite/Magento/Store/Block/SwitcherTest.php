@@ -24,7 +24,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')->getMock();
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
         $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->context->expects($this->any())->method('getStoreManager')->will($this->returnValue($this->storeManager));
         $this->corePostDataHelper = $this->getMock('Magento\Core\Helper\PostData', [], [], '', false);

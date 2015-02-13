@@ -112,7 +112,7 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Store\StoreManagerInterface',
+            'Magento\Store\Model\StoreManagerInterface',
             [],
             '',
             false

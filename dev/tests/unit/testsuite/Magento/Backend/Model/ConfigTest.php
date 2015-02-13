@@ -112,7 +112,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_storeManager = $this->getMockForAbstractClass('Magento\Framework\Store\StoreManagerInterface');
+        $this->_storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
 
         $this->_model = new \Magento\Backend\Model\Config(
             $this->_appConfigMock,

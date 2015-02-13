@@ -313,14 +313,14 @@ class Email extends \Magento\Framework\Model\AbstractModel
 
         if ($this->_type == 'price' && !$this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_PRICE_TEMPLATE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         )
         ) {
             return false;
         } elseif ($this->_type == 'stock' && !$this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_STOCK_TEMPLATE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         )
         ) {
@@ -342,7 +342,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
             $block = $this->_getPriceBlock();
             $templateId = $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_PRICE_TEMPLATE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         } else {
@@ -354,7 +354,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
             $block = $this->_getStockBlock();
             $templateId = $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_STOCK_TEMPLATE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }
@@ -377,7 +377,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_IDENTITY,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             )
         )->addTo(

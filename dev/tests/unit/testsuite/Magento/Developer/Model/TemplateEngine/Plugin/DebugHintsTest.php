@@ -115,13 +115,13 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         DebugHints::XML_PATH_DEBUG_TEMPLATE_HINTS,
-                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                         null,
                         $showTemplateHints,
                     ],
                     [
                         DebugHints::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS,
-                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                         null,
                         $showBlockHints
                     ],

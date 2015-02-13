@@ -10,7 +10,7 @@ use Magento\Framework\DB\GenericMapper;
 use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Data\ObjectFactory;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 
@@ -24,7 +24,7 @@ class StockItemCriteriaMapper extends GenericMapper
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ObjectFactory $objectFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param MapperFactory $mapperFactory
      * @param Select $select
      */

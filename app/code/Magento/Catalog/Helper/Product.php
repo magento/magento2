@@ -323,7 +323,7 @@ class Product extends \Magento\Core\Helper\Url
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_USE_PRODUCT_CANONICAL_TAG,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

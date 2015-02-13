@@ -7,7 +7,7 @@ namespace Magento\Contact\Controller;
 
 use Magento\Framework\App\Action\NotFoundException;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Contact index controller
