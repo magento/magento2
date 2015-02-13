@@ -372,12 +372,16 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected function _getTZRangeExpressionForAttribute($range, $attribute, $tzFrom = '+00:00', $tzTo = null)
     {
         if (null == $tzTo) {
-            $tzTo = $this->_localeDate->scopeDate()->toString(\Zend_Date::GMT_DIFF_SEP);
+            $tzTo = $this->_localeDate->scopeDate()->format('P');
         }
         $adapter = $this->getConnection();
         $expression = $this->_getRangeExpression($range);
         $attribute = $adapter->quoteIdentifier($attribute);
-        $periodExpr = $adapter->getDateAddSql($attribute, $tzTo, \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_HOUR);
+        $periodExpr = $adapter->getDateAddSql(
+            $attribute,
+            $tzTo,
+            \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_HOUR
+        );
 
         return str_replace('{{attribute}}', $periodExpr, $expression);
     }

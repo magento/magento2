@@ -379,7 +379,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
         }
 
         $periods = $this->_getTZOffsetTransitions(
-            $this->_localeDate->scopeDate($store)->toString(\Zend_Date::TIMEZONE_NAME),
+            $this->_localeDate->scopeDate($store)->format('e'),
             $from,
             $to
         );
@@ -462,7 +462,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      */
     protected function _getStoreTimezoneUtcOffset($store = null)
     {
-        return $this->_localeDate->scopeDate($store)->toString(\Zend_Date::GMT_DIFF_SEP);
+        return $this->_localeDate->scopeDate($store)->format('P');
     }
 
     /**

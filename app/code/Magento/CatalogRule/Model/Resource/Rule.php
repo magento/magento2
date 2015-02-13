@@ -208,7 +208,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * Get catalog rules product price for specific date, website and
      * customer group
      *
-     * @param int|string $date
+     * @param \DateTime $date
      * @param int $wId
      * @param int $gId
      * @param int $pId
@@ -228,7 +228,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * Retrieve product prices by catalog rule for specific date, website and customer group
      * Collect data with  product Id => price pairs
      *
-     * @param int|string $date
+     * @param \DateTime $date
      * @param int $websiteId
      * @param int $customerGroupId
      * @param array $productIds
@@ -242,7 +242,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
             ['product_id', 'rule_price']
         )->where(
             'rule_date = ?',
-            $this->dateTime->formatDate($date, false)
+            $date->format('Y-m-d H:i:s')
         )->where(
             'website_id = ?',
             $websiteId

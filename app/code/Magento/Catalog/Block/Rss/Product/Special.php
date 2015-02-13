@@ -188,13 +188,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
                 $special = '';
                 if ($item->getUseSpecial()) {
                     $special = '<br />' . __('Special Expires On: %1', $this->formatDate(
-                        $this->dateFactory->create(
-                            [
-                                'date' => $item->getSpecialToDate(),
-                                'part' => \Magento\Framework\Stdlib\DateTime\Date::ISO_8601,
-                                'locale' => $this->localeResolver->getLocaleCode()
-                            ]
-                        ),
+                        (new \DateTime($item->getSpecialToDate())),
                         \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
                     ));
                 }

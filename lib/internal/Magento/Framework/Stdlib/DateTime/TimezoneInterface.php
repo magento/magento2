@@ -88,7 +88,7 @@ interface TimezoneInterface
      * @param   mixed $scope Information about scope
      * @param   string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface|array|null $date date in UTC
      * @param   boolean $includeTime flag for including time to date
-     * @return  \Magento\Framework\Stdlib\DateTime\DateInterface
+     * @return  \DateTime
      */
     public function scopeDate($scope = null, $date = null, $includeTime = false);
 
@@ -101,7 +101,7 @@ interface TimezoneInterface
      * @param string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface|array|null $date date in scope's timezone
      * @param boolean $includeTime flag for including time to date
      * @param null|string $format
-     * @return \Magento\Framework\Stdlib\DateTime\DateInterface
+     * @return \DateTime
      */
     public function utcDate($scope, $date, $includeTime = false, $format = null);
 
@@ -117,7 +117,7 @@ interface TimezoneInterface
     /**
      * Format date using current locale options and time zone.
      *
-     * @param \Magento\Framework\Stdlib\DateTime\DateInterface|null $date
+     * @param \DateTime|\Magento\Framework\Stdlib\DateTime\DateInterface|null $date
      * @param string $format
      * @param bool $showTime
      * @return string

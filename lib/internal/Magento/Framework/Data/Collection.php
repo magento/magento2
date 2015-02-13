@@ -18,7 +18,7 @@ use Magento\Framework\Option\ArrayInterface;
  * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library. Probably will be refactored while
  * moving \Magento\Core to library
  */
-class fCollection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
+class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
 {
     const SORT_ORDER_ASC = 'ASC';
 

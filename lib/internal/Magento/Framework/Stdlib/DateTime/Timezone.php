@@ -167,12 +167,9 @@ class Timezone implements TimezoneInterface
     public function scopeDate($scope = null, $date = null, $includeTime = false)
     {
         $timezone = $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType, $scope);
-        $date = $this->_dateFactory->create(
-            ['date' => $date, 'part' => null, 'locale' => $this->_localeResolver->getLocale()]
-        );
-        $date->setTimezone($timezone);
+        $date = new \DateTime($date, new \DateTimeZone($timezone));
         if (!$includeTime) {
-            $date->setHour(0)->setMinute(0)->setSecond(0);
+            $date->setTime(0, 0, 0);
         }
         return $date;
     }
@@ -182,25 +179,17 @@ class Timezone implements TimezoneInterface
      */
     public function formatDate($date = null, $format = TimezoneInterface::FORMAT_TYPE_SHORT, $showTime = false)
     {
-        if (!in_array($format, $this->_allowedFormats, true)) {
-            return $date;
-        }
-        if (!$date instanceof DateInterface && $date && !strtotime($date)) {
-            return '';
-        }
-        if (is_null($date)) {
-            $date = $this->date(gmdate('U'), null, null);
-        } elseif (!$date instanceof DateInterface) {
-            $date = $this->date(strtotime($date), null, null);
-        }
-
         if ($showTime) {
             $format = $this->getDateTimeFormat($format);
         } else {
             $format = $this->getDateFormat($format);
         }
 
-        return $date->toString($format);
+        if ($date instanceof DateInterface || $date instanceof \DateTime) {
+            return $date->format($format);
+        } else {
+            return (new \DateTime($date))->format($format);
+        }
     }
 
     /**
@@ -235,8 +224,7 @@ class Timezone implements TimezoneInterface
     public function utcDate($scope, $date, $includeTime = false, $format = null)
     {
         $dateObj = $this->scopeDate($scope, $date, $includeTime);
-        $dateObj->set($date, $format);
-        $dateObj->setTimezone(TimezoneInterface::DEFAULT_TIMEZONE);
+        $dateObj->setTimezone(new \DateTimeZone('UTC'));
         return $dateObj;
     }
 

@@ -477,8 +477,8 @@ class Price
         );
 
         if ($rulePrice === false) {
-            $storeTimestamp = $this->_localeDate->scopeTimeStamp($sId);
-            $rulePrice = $this->_ruleFactory->create()->getRulePrice($storeTimestamp, $wId, $gId, $productId);
+            $date = $this->_localeDate->scopeDate($sId);
+            $rulePrice = $this->_ruleFactory->create()->getRulePrice($date, $wId, $gId, $productId);
         }
 
         if ($rulePrice !== null && $rulePrice !== false) {

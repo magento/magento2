@@ -43,10 +43,6 @@ class DateTime
      */
     public function formatDate($date, $includeTime = true)
     {
-        if ($date === true) {
-            return $this->now(!$includeTime);
-        }
-
         if ($date instanceof \Magento\Framework\Stdlib\DateTime\DateInterface) {
             if ($includeTime) {
                 return $date->toString(self::DATETIME_INTERNAL_FORMAT);
