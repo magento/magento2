@@ -290,7 +290,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     /**
      * Return header text for form
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

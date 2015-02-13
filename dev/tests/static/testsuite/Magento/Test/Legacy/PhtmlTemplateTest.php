@@ -14,7 +14,7 @@ class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
         $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
         /**
-         * Test usage of methods and variables in template throught $this
+         * Test usage of methods and variables in template through $this
          *
          * @param string $file
          */
@@ -22,7 +22,7 @@ class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
                 $this->assertNotRegExp(
                     '/this->(?!helper)\S*/iS',
                     file_get_contents($file),
-                    'Access to members and methods of Block class throught $this is ' .
+                    'Access to members and methods of Block class through $this is ' .
                     'obsolete in phtml templates. Use only $block instead of $this.'
                 );
             },
