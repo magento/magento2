@@ -6,32 +6,24 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Sales\Test\Constraint\AssertOrderStatusSuccessCreateMessage">
-        <arguments>
-            <argument name="orderStatusIndex" xsi:type="object">Magento\Sales\Test\Page\Adminhtml\OrderStatusIndex</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Sales\Test\Constraint\AssertOrderStatusInGrid">
-        <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
-            <argument name="orderStatusIndex" xsi:type="object">Magento\Sales\Test\Page\Adminhtml\OrderStatusIndex</argument>
-            <argument name="orderStatus" xsi:type="object">Magento\Sales\Test\Fixture\OrderStatus</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Sales\Test\Constraint\AssertOrderStatusDuplicateStatus">
-        <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
-            <argument name="orderStatusNew" xsi:type="object">Magento\Sales\Test\Page\Adminhtml\OrderStatusNew</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage">
-        <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Sales\Test\Constraint\AssertOrderMassOnHoldSuccessMessage">
-        <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
-        </arguments>
-    </type>
+  <type name="Magento\Sales\Test\Constraint\AssertOrderStatusInGrid">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Sales\Test\Constraint\AssertOrderStatusDuplicateStatus">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Sales\Test\Constraint\AssertOrderMassOnHoldSuccessMessage">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
 </config>

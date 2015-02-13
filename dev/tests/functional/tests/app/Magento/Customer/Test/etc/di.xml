@@ -6,77 +6,34 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage">
-        <arguments>
-            <argument name="pageCustomerIndex" xsi:type="object">Magento\Customer\Test\Page\Adminhtml\CustomerIndex</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerSuccessDeleteMessage">
-        <arguments>
-            <argument name="pageCustomerIndex" xsi:type="object">Magento\Customer\Test\Page\Adminhtml\CustomerIndex</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage">
-        <arguments>
-            <argument name="registerPage" xsi:type="object">Magento\Customer\Test\Page\CustomerAccountCreate</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerInGrid">
-        <arguments>
-            <argument name="severity" xsi:type="string">middle</argument>
-            <argument name="customer" xsi:type="object">Magento\Customer\Test\Fixture\CustomerInjectable</argument>
-            <argument name="pageCustomerIndex" xsi:type="object">Magento\Customer\Test\Page\Adminhtml\CustomerIndex</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerNotInGrid">
-        <arguments>
-            <argument name="severity" xsi:type="string">middle</argument>
-            <argument name="customer" xsi:type="object">Magento\Customer\Test\Fixture\CustomerInjectable</argument>
-            <argument name="customerIndexPage" xsi:type="object">Magento\Customer\Test\Page\Adminhtml\CustomerIndex</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerForm">
-        <arguments>
-            <argument name="severity" xsi:type="string">middle</argument>
-            <argument name="customer" xsi:type="object">Magento\Customer\Test\Fixture\CustomerInjectable</argument>
-            <argument name="pageCustomerIndex" xsi:type="object">Magento\Customer\Test\Page\Adminhtml\CustomerIndex</argument>
-            <argument name="pageCustomerIndexEdit" xsi:type="object">Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerInvalidEmail">
-        <arguments>
-            <argument name="severity" xsi:type="string">middle</argument>
-            <argument name="customer" xsi:type="object">Magento\Customer\Test\Fixture\CustomerInjectable</argument>
-            <argument name="addresses" xsi:type="object">Magento\Customer\Test\Fixture\AddressInjectable</argument>
-            <argument name="pageCustomerIndexNew" xsi:type="object">Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerFailRegisterMessage">
-        <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
-            <argument name="registerPage" xsi:type="object">Magento\Customer\Test\Page\CustomerAccountCreate</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessDeleteMessage">
-        <arguments>
-            <argument name="severity" xsi:type="string">high</argument>
-            <argument name="customerGroupIndex" xsi:type="object">Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerInfoSuccessSavedMessage">
-        <arguments>
-            <argument name="customerAccountIndex" xsi:type="object">Magento\Customer\Test\Page\CustomerAccountIndex</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage">
-        <arguments>
-            <argument name="customerAccountIndex" xsi:type="object">Magento\Customer\Test\Page\CustomerAccountIndex</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses">
-        <arguments>
-            <argument name="customerAccountIndex" xsi:type="object">Magento\Customer\Test\Page\CustomerAccountIndex</argument>
-            <argument name="address" xsi:type="object">Magento\Customer\Test\Fixture\AddressInjectable</argument>
-        </arguments>
-    </type>
+  <type name="Magento\Customer\Test\Constraint\AssertCustomerInGrid">
+    <arguments>
+      <argument name="severity" xsi:type="string">middle</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Customer\Test\Constraint\AssertCustomerNotInGrid">
+    <arguments>
+      <argument name="severity" xsi:type="string">middle</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Customer\Test\Constraint\AssertCustomerForm">
+    <arguments>
+      <argument name="severity" xsi:type="string">middle</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Customer\Test\Constraint\AssertCustomerInvalidEmail">
+    <arguments>
+      <argument name="severity" xsi:type="string">middle</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Customer\Test\Constraint\AssertCustomerFailRegisterMessage">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\Customer\Test\Constraint\AssertCustomerGroupSuccessDeleteMessage">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
 </config>
