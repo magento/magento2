@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Ui\DataProvider\Page\Options;
 
-use Magento\Core\Model\PageLayout\Config\Builder;
+use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface;
 use Magento\Ui\Component\Listing\OptionsInterface;
 
 /**
@@ -14,16 +14,16 @@ use Magento\Ui\Component\Listing\OptionsInterface;
 class PageLayout implements OptionsInterface
 {
     /**
-     * @var \Magento\Core\Model\PageLayout\Config\Builder
+     * @var \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
      */
     protected $pageLayoutBuilder;
 
     /**
      * Constructor
      *
-     * @param Builder $pageLayoutBuilder
+     * @param BuilderInterface $pageLayoutBuilder
      */
-    public function __construct(Builder $pageLayoutBuilder)
+    public function __construct(BuilderInterface $pageLayoutBuilder)
     {
         $this->pageLayoutBuilder = $pageLayoutBuilder;
     }

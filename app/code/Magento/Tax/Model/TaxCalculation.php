@@ -17,7 +17,7 @@ use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\Calculation\CalculatorFactory;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Calculation\AbstractCalculator;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
 
 /**
@@ -61,7 +61,7 @@ class TaxCalculation implements TaxCalculationInterface
     protected $taxDetailsItemDataObjectFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 

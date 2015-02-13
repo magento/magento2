@@ -47,10 +47,10 @@ $data = ['fptAttribute' => [
         <input type="hidden" name="<?php echo $block->getElement()->getHtmlId(); ?>" id="<?php echo $block->getElement()->getHtmlId(); ?>" disabled="disabled">
     </div>
 
-    <script data-role="row-template" type="text/x-jquery-tmpl">
-        <tr id="<?php echo $block->getElement()->getHtmlId() ?>_weee_tax_row_${index}" data-role="fpt-item-row">
+    <script data-role="row-template" type="text/x-magento-template">
+        <tr id="<?php echo $block->getElement()->getHtmlId() ?>_weee_tax_row_<%= data.index %>" data-role="fpt-item-row">
             <td class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
-                <select name="<?php echo $block->getElement()->getName() ?>[${index}][website_id]"
+                <select name="<?php echo $block->getElement()->getName() ?>[<%= data.index %>][website_id]"
                         class="<?php echo $block->getElement()->getClass() ?> website required-entry" data-role="select-website">
                     <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
                     <option value="<?php echo $_websiteId ?>"><?php echo $_info['name'] ?><?php if (!empty($_info['currency'])): ?>[<?php echo $_info['currency'] ?>]<?php endif; ?></option>
@@ -58,26 +58,26 @@ $data = ['fptAttribute' => [
                 </select>
             </td>
             <td class="col-country">
-                <select id="<?php echo $block->getElement()->getName() ?>_weee_tax_row_${index}_country"
-                        name="<?php echo $block->getElement()->getName() ?>[${index}][country]"
+                <select id="<?php echo $block->getElement()->getName() ?>_weee_tax_row_<%= data.index %>_country"
+                        name="<?php echo $block->getElement()->getName() ?>[<%= data.index %>][country]"
                         class="<?php echo $block->getElement()->getClass() ?> country required-entry" data-role="select-country">
                     <?php foreach ($block->getCountries() as $_country): ?>
                     <option value="<?php echo $_country['value'] ?>"><?php echo htmlspecialchars($_country['label']) ?></option>
                     <?php endforeach ?>
                 </select>
-                <select id="<?php echo $block->getElement()->getName() ?>_weee_tax_row_${index}_state"
-                        name="<?php echo $block->getElement()->getName() ?>[${index}][state]"
+                <select id="<?php echo $block->getElement()->getName() ?>_weee_tax_row_<%= data.index %>_state"
+                        name="<?php echo $block->getElement()->getName() ?>[<%= data.index %>][state]"
                         class="<?php echo $block->getElement()->getClass() ?> state" disabled="" data-role="select-state">
                     <option value="0">*</option>
                 </select>
             </td>
             <td class="col-tax">
-                <input name="<?php echo $block->getElement()->getName() ?>[${index}][price]"
+                <input name="<?php echo $block->getElement()->getName() ?>[<%= data.index %>][price]"
                        class="<?php echo $block->getElement()->getClass() ?> required-entry validate-greater-than-zero"
-                       type="text" value="${value}"/>
+                       type="text" value="<%= data.value %>"/>
             </td>
             <td class="col-action">
-                <input name="<?php echo $block->getElement()->getName() ?>[${index}][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
+                <input name="<?php echo $block->getElement()->getName() ?>[<%= data.index %>][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
                 <?php echo $block->getChildHtml('delete_button') ?>
             </td>
         </tr>

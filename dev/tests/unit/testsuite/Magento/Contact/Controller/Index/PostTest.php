@@ -54,7 +54,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
     protected $_messageManager;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeManager;
 
@@ -78,7 +78,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->_request = $this->getMock('\Magento\Framework\App\Request\Http', ['getPost'], [], '', false);
         $this->_redirect = $this->getMock('\Magento\Framework\App\Response\RedirectInterface', [], [], '', false);
         $this->_view = $this->getMock('\Magento\Framework\App\ViewInterface', [], [], '', false);
-        $this->_storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
+        $this->_storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $this->_transportBuilder = $this->getMock(
             '\Magento\Framework\Mail\Template\TransportBuilder',
             [],

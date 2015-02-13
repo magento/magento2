@@ -66,7 +66,7 @@ class AclRetrieverTest extends \PHPUnit_Framework_TestCase
     public function testGetAllowedResourcesByUser()
     {
         $this->roleMock->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $expectedResources = ['Magento_Adminhtml::dashboard', 'Magento_Cms::page'];
+        $expectedResources = ['Magento_Backend::dashboard', 'Magento_Cms::page'];
         $this->assertEquals(
             $expectedResources,
             $this->aclRetriever->getAllowedResourcesByUser(UserContextInterface::USER_TYPE_INTEGRATION, 1)
@@ -115,7 +115,7 @@ class AclRetrieverTest extends \PHPUnit_Framework_TestCase
             false
         );
         $rulesMock1->expects($this->any())->method('getResourceId')->will(
-            $this->returnValue('Magento_Adminhtml::dashboard')
+            $this->returnValue('Magento_Backend::dashboard')
         );
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Authorization\Model\Rules $rulesMock1 */
         $rulesMock2 = $this->getMock(

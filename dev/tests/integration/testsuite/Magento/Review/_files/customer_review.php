@@ -26,19 +26,13 @@ $review
     ->setEntityPkValue($product->getId())
     ->setStatusId(\Magento\Review\Model\Review::STATUS_PENDING)
     ->setStoreId(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Store\StoreManagerInterface')
-            ->getStore()
-            ->getId()
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
+            ->getStore()->getId()
     )
-    ->setStores(
-        [
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Framework\Store\StoreManagerInterface')
-                ->getStore()
-                ->getId()
-        ]
-    )
+    ->setStores([
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
+            ->getStore()->getId()
+    ])
     ->save();
 
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry')->register(
