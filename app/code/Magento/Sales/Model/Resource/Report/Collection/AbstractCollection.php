@@ -24,16 +24,16 @@ class AbstractCollection extends \Magento\Reports\Model\Resource\Report\Collecti
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param null $connection
      * @param \Magento\Sales\Model\Resource\Report $resource
-     * @param \Zend_Db_Adapter_Abstract $connection
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Resource\Report $resource,
-        $connection = null
+        $connection = null,
+        \Magento\Sales\Model\Resource\Report $resource
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->setModel('Magento\Reports\Model\Item');

@@ -43,7 +43,7 @@ class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractColl
         $connection = null
     ) {
         $resource->init('sales_refunded_aggregated_order');
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
     /**

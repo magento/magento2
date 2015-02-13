@@ -9,9 +9,7 @@
 namespace Magento\Sales\Model\Resource\Report\Bestsellers;
 
 /**
- * Report bestsellers collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
 {
@@ -23,11 +21,22 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     protected $_ratingLimit = 5;
 
     /**
-     * Columns for select
+     * Selected columns
      *
      * @var array
      */
     protected $_selectedColumns = [];
+
+    /**
+     * Tables per period
+     *
+     * @var array
+     */
+    protected $tableForPeriod = [
+        'daily'   => 'sales_bestsellers_aggregated_daily',
+        'monthly' => 'sales_bestsellers_aggregated_monthly',
+        'yearly'  => 'sales_bestsellers_aggregated_yearly',
+    ];
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -45,12 +54,33 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         \Magento\Sales\Model\Resource\Report $resource,
         $connection = null
     ) {
-        $resource->init('sales_bestsellers_aggregated_daily');
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
+        $resource->init($this->getTableByAggregationPeriod('daily'));
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
     /**
-     * Retrieve columns for select
+     * Return ordered filed
+     *
+     * @return string
+     */
+    protected function getOrderedField()
+    {
+        return 'qty_ordered';
+    }
+
+    /**
+     * Return table per period
+     *
+     * @param string $period
+     * @return mixed
+     */
+    public function getTableByAggregationPeriod($period)
+    {
+        return $this->tableForPeriod[$period];
+    }
+
+    /**
+     * Retrieve selected columns
      *
      * @return array
      */
@@ -64,7 +94,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
             } else {
                 $this->_selectedColumns = [
                     'period' => sprintf('MAX(%s)', $adapter->getDateFormatSql('period', '%Y-%m-%d')),
-                    'qty_ordered' => 'SUM(qty_ordered)',
+                    $this->getOrderedField() => 'SUM(' . $this->getOrderedField() . ')',
                     'product_id' => 'product_id',
                     'product_name' => 'MAX(product_name)',
                     'product_price' => 'MAX(product_price)',
@@ -90,8 +120,8 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     {
         $adapter = $this->getConnection();
         $cols = $this->_getSelectedColumns();
-        $cols['qty_ordered'] = 'SUM(qty_ordered)';
-        $sel = $adapter->select()->from(
+        $cols[$this->getOrderedField()] = 'SUM(' . $this->getOrderedField() . ')';
+        $select = $adapter->select()->from(
             $this->getResource()->getMainTable(),
             $cols
         )->where(
@@ -103,18 +133,18 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         )->group(
             'product_id'
         )->order(
-            'qty_ordered DESC'
+            $this->getOrderedField() . ' DESC'
         )->limit(
             $this->_ratingLimit
         );
 
-        $this->_applyStoresFilterToSelect($sel);
+        $this->_applyStoresFilterToSelect($select);
 
-        return $sel;
+        return $select;
     }
 
     /**
-     * Add selected data
+     * Init collection select
      *
      * @return $this
      */
@@ -125,12 +155,12 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         // if grouping by product, not by period
         if (!$this->_period) {
             $cols = $this->_getSelectedColumns();
-            $cols['qty_ordered'] = 'SUM(qty_ordered)';
+            $cols[$this->getOrderedField()] = 'SUM(' . $this->getOrderedField() . ')';
             if ($this->_from || $this->_to) {
-                $mainTable = $this->getTable('sales_bestsellers_aggregated_daily');
+                $mainTable = $this->getTable($this->getTableByAggregationPeriod('daily'));
                 $select->from($mainTable, $cols);
             } else {
-                $mainTable = $this->getTable('sales_bestsellers_aggregated_yearly');
+                $mainTable = $this->getTable($this->getTableByAggregationPeriod('yearly'));
                 $select->from($mainTable, $cols);
             }
 
@@ -147,7 +177,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
             )->group(
                 'product_id'
             )->order(
-                'qty_ordered ' . \Magento\Framework\DB\Select::SQL_DESC
+                $this->getOrderedField() . ' ' . \Magento\Framework\DB\Select::SQL_DESC
             )->limit(
                 $this->_ratingLimit
             );
@@ -156,13 +186,13 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         }
 
         if ('year' == $this->_period) {
-            $mainTable = $this->getTable('sales_bestsellers_aggregated_yearly');
+            $mainTable = $this->getTable($this->getTableByAggregationPeriod('yearly'));
             $select->from($mainTable, $this->_getSelectedColumns());
         } elseif ('month' == $this->_period) {
-            $mainTable = $this->getTable('sales_bestsellers_aggregated_monthly');
+            $mainTable = $this->getTable($this->getTableByAggregationPeriod('monthly'));
             $select->from($mainTable, $this->_getSelectedColumns());
         } else {
-            $mainTable = $this->getTable('sales_bestsellers_aggregated_daily');
+            $mainTable = $this->getTable($this->getTableByAggregationPeriod('daily'));
             $select->from($mainTable, $this->_getSelectedColumns());
         }
         if (!$this->isTotals()) {
@@ -219,7 +249,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      * Redeclare parent method for applying filters after parent method
      * but before adding unions and calculating totals
      *
-     * @return $this
+     * @return $this|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -231,74 +261,67 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         $this->_applyStoresFilter();
 
         if ($this->_period) {
-            //
             $selectUnions = [];
 
             // apply date boundaries (before calling $this->_applyDateRangeFilter())
-            $dtFormat = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
-            $periodFrom = !is_null($this->_from) ? new \Magento\Framework\Stdlib\DateTime\Date($this->_from, $dtFormat) : null;
-            $periodTo = !is_null($this->_to) ? new \Magento\Framework\Stdlib\DateTime\Date($this->_to, $dtFormat) : null;
+            $periodFrom = !is_null($this->_from) ? new \DateTime($this->_from) : null;
+            $periodTo = !is_null($this->_to) ? new \DateTime($this->_to) : null;
             if ('year' == $this->_period) {
                 if ($periodFrom) {
                     // not the first day of the year
-                    if ($periodFrom->toValue(\Zend_Date::MONTH) != 1 || $periodFrom->toValue(\Zend_Date::DAY) != 1) {
-                        $dtFrom = $periodFrom->getDate();
+                    if ($periodFrom->diff(new \DateTime())) {};
+                    if ($periodFrom->diff(new \DateTime('0000-01-00'))->m != 0
+                        && $periodFrom->diff(new \DateTime('0000-00-01'))->d != 0) {
+                        $dtFrom = clone $periodFrom;
                         // last day of the year
-                        $dtTo = $periodFrom->getDate()->setMonth(12)->setDay(31);
-                        if (!$periodTo || $dtTo->isEarlier($periodTo)) {
+                        $dtTo = clone $periodFrom;
+                        $dtTo->setDate($dtTo->format('Y'), 12, 31);
+                        if (!$periodTo || $dtTo < $periodTo) {
                             $selectUnions[] = $this->_makeBoundarySelect(
-                                $dtFrom->toString($dtFormat),
-                                $dtTo->toString($dtFormat)
+                                $dtFrom->format('Y-m-d'),
+                                $dtTo->format('Y-m-d')
                             );
 
                             // first day of the next year
-                            $this->_from = $periodFrom->getDate()->addYear(
-                                1
-                            )->setMonth(
-                                1
-                            )->setDay(
-                                1
-                            )->toString(
-                                $dtFormat
-                            );
+                            $this->_from = clone $periodFrom;
+                            $this->_from->add(new \DateInterval('P1Y'));
+                            $this->_from->setDate($this->_from->format('Y'), 1, 1);
+                            $this->_from = $this->_from->format('Y-m-d');
                         }
                     }
                 }
 
                 if ($periodTo) {
                     // not the last day of the year
-                    if ($periodTo->toValue(\Zend_Date::MONTH) != 12 || $periodTo->toValue(\Zend_Date::DAY) != 31) {
-                        $dtFrom = $periodTo->getDate()->setMonth(1)->setDay(1);
+                    if ($periodTo->diff(new \DateTime('0000-12-00'))->m != 0
+                        && $periodTo->diff(new \DateTime('0000-00-31'))->d != 0) {
+                        $dtFrom = clone $periodTo;
+                        $dtFrom->setDate($dtFrom->format('Y'), 1, 1);
                         // first day of the year
-                        $dtTo = $periodTo->getDate();
-                        if (!$periodFrom || $dtFrom->isLater($periodFrom)) {
+                        $dtTo = clone $periodTo;
+                        if (!$periodFrom || $dtFrom > $periodFrom) {
                             $selectUnions[] = $this->_makeBoundarySelect(
-                                $dtFrom->toString($dtFormat),
-                                $dtTo->toString($dtFormat)
+                                $dtFrom->format('Y-m-d'),
+                                $dtTo->format('Y-m-d')
                             );
 
                             // last day of the previous year
-                            $this->_to = $periodTo->getDate()->subYear(
-                                1
-                            )->setMonth(
-                                12
-                            )->setDay(
-                                31
-                            )->toString(
-                                $dtFormat
-                            );
+                            $this->_to = clone $periodTo;
+                            $this->_to->sub(new \DateInterval('P1Y'));
+                            $this->_to->setDate($this->_to->format('Y'), 12, 31);
+                            $this->_to = $this->_to->format('Y-m-d');
                         }
                     }
                 }
 
                 if ($periodFrom && $periodTo) {
                     // the same year
-                    if ($periodFrom->toValue(\Zend_Date::YEAR) == $periodTo->toValue(\Zend_Date::YEAR)) {
-                        $dtFrom = $periodFrom->getDate();
-                        $dtTo = $periodTo->getDate();
+                    if ($periodFrom->diff($periodTo)->y == 0) {
+                        $dtFrom = clone $periodFrom;
+                        $dtTo = clone $periodTo;
                         $selectUnions[] = $this->_makeBoundarySelect(
-                            $dtFrom->toString($dtFormat),
-                            $dtTo->toString($dtFormat)
+                            $dtFrom->format('Y-m-d'),
+                            $dtTo->format('Y-m-d')
                         );
 
                         $this->getSelect()->where('1<>1');
@@ -307,57 +330,62 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
             } elseif ('month' == $this->_period) {
                 if ($periodFrom) {
                     // not the first day of the month
-                    if ($periodFrom->toValue(\Zend_Date::DAY) != 1) {
-                        $dtFrom = $periodFrom->getDate();
+                    if ($periodFrom->diff(new \DateTime('0000-00-01')) != 0) {
+                        $dtFrom = clone $periodFrom;
                         // last day of the month
-                        $dtTo = $periodFrom->getDate()->addMonth(1)->setDay(1)->subDay(1);
-                        if (!$periodTo || $dtTo->isEarlier($periodTo)) {
+                        $dtTo = clone $periodFrom;
+                        $dtTo->add(new \DateInterval('P1M'));
+                        $dtTo->setDate($dtTo->format('Y'), 1, 1);
+                        $dtTo->sub(new \DateInterval('P1D'));
+                        if (!$periodTo || $dtTo < $periodTo) {
                             $selectUnions[] = $this->_makeBoundarySelect(
-                                $dtFrom->toString($dtFormat),
-                                $dtTo->toString($dtFormat)
+                                $dtFrom->format('Y-m-d'),
+                                $dtTo->format('Y-m-d')
                             );
 
                             // first day of the next month
-                            $this->_from = $periodFrom->getDate()->addMonth(1)->setDay(1)->toString($dtFormat);
+                            $this->_from = clone $periodFrom;
+                            $this->_from->add(new \DateInterval('P1M'));
+                            $this->_from->setDate($this->_from->format('Y'), $this->_from->format('m'), 1);
+                            $this->_from = $this->_from->format('Y-m-d');
                         }
                     }
                 }
 
                 if ($periodTo) {
                     // not the last day of the month
-                    if ($periodTo->toValue(\Zend_Date::DAY) != $periodTo->toValue(\Zend_Date::MONTH_DAYS)) {
-                        $dtFrom = $periodTo->getDate()->setDay(1);
+                    $lastMonthDay = clone $periodTo;
+                    $lastMonthDay->setDate($periodTo->format('Y'), $periodTo->format('m'), $periodTo->format('t'));
+                    if ($periodTo->diff($lastMonthDay)->d == 0) {
+                        $dtFrom = clone $periodTo;
+                        $dtFrom->setDate($dtFrom->format('Y'), $dtFrom->format('m'), 1);
                         // first day of the month
-                        $dtTo = $periodTo->getDate();
-                        if (!$periodFrom || $dtFrom->isLater($periodFrom)) {
+                        $dtTo = clone $periodTo;
+                        if (!$periodFrom || $dtFrom > $periodFrom) {
                             $selectUnions[] = $this->_makeBoundarySelect(
-                                $dtFrom->toString($dtFormat),
-                                $dtTo->toString($dtFormat)
+                                $dtFrom->format('Y-m-d'),
+                                $dtTo->format('Y-m-d')
                             );
 
                             // last day of the previous month
-                            $this->_to = $periodTo->getDate()->setDay(1)->subDay(1)->toString($dtFormat);
+                            $this->_to = clone $periodTo;
+                            $this->_to->setDate($this->_to->format('Y'), $this->_to->format('m'), 1);
+                            $this->_to->sub(new \DateInterval('P1D'));
+                            $this->_to = $this->_to->format('Y-m-d');
                         }
                     }
                 }
 
                 if ($periodFrom && $periodTo) {
                     // the same month
-                    if ($periodFrom->toValue(
-                        \Zend_Date::YEAR
-                    ) == $periodTo->toValue(
-                        \Zend_Date::YEAR
-                    ) && $periodFrom->toValue(
-                        \Zend_Date::MONTH
-                    ) == $periodTo->toValue(
-                        \Zend_Date::MONTH
-                    )
+                    if ($periodFrom->diff($periodTo)->y == 0
+                        && $periodFrom->diff($periodTo)->m == 0
                     ) {
-                        $dtFrom = $periodFrom->getDate();
-                        $dtTo = $periodTo->getDate();
+                        $dtFrom = clone $periodFrom;
+                        $dtTo = clone $periodTo;
                         $selectUnions[] = $this->_makeBoundarySelect(
-                            $dtFrom->toString($dtFormat),
-                            $dtTo->toString($dtFormat)
+                            $dtFrom->format('Y-m-d'),
+                            $dtTo->format('Y-m-d')
                         );
 
                         $this->getSelect()->where('1<>1');
@@ -384,7 +412,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
                 $this->getSelect()->reset()->from($cloneSelect, $this->getAggregatedColumns());
             } else {
                 // add sorting
-                $this->getSelect()->order(['period ASC', 'qty_ordered DESC']);
+                $this->getSelect()->order(['period ASC', $this->getOrderedField() . ' DESC']);
             }
         }
 

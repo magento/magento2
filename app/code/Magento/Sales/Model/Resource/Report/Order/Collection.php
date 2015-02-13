@@ -50,7 +50,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         $connection = null
     ) {
         $resource->init($this->_aggregationTable);
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
     /**
