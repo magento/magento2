@@ -44,7 +44,6 @@
             <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
         <input type="file"
                name="<?php echo $_fileName; ?>"
-               aria-describedby="<?php echo $_fileName; ?>-label"
                id="<?php echo $_fileName; ?>"
                class="product-custom-option<?php echo $_option->getIsRequire() ? ' required' : '' ?>"
                <?php echo $_fileExists ? 'disabled="disabled"' : '' ?> />
