@@ -127,6 +127,19 @@ class ObjectManagerFactory
             }
         }
 
+        // set cache profiler decorator if enabled
+        if (\Magento\Framework\Profiler::isEnabled()) {
+            $cacheFactoryArguments = $diConfig->getArguments('Magento\Framework\App\Cache\Frontend\Factory');
+            $cacheFactoryArguments['decorators'][] = [
+                'class' => 'Magento\Framework\Cache\Frontend\Decorator\Profiler',
+                'parameters' => ['backendPrefixes' => ['Zend_Cache_Backend_', 'Cm_Cache_Backend_']],
+            ];
+            $cacheFactoryConfig = [
+                'Magento\Framework\App\Cache\Frontend\Factory' => ['arguments' => $cacheFactoryArguments]
+            ];
+            $diConfig->extend($cacheFactoryConfig);
+        }
+
         $this->factory = $env->getObjectManagerFactory($arguments);
 
         $sharedInstances = [
