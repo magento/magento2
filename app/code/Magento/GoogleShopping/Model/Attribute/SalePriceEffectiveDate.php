@@ -31,30 +31,30 @@ class SalePriceEffectiveDate extends \Magento\GoogleShopping\Model\Attribute\Def
         $toValue = $effectiveDateTo->getProductAttributeValue($product);
 
         $from = $to = null;
-        if (!empty($fromValue) && \Zend_Date::isDate($fromValue, \Zend_Date::ATOM)) {
-            $from = new \Magento\Framework\Stdlib\DateTime\Date($fromValue, \Zend_Date::ATOM);
+        if (!empty($fromValue)) {
+            $from = new \DateTime($fromValue);
         }
-        if (!empty($toValue) && \Zend_Date::isDate($toValue, \Zend_Date::ATOM)) {
-            $to = new \Magento\Framework\Stdlib\DateTime\Date($toValue, \Zend_Date::ATOM);
+        if (!empty($toValue)) {
+            $to = new \DateTime($toValue);
         }
 
         $dateString = null;
         // if we have from an to dates, and if these dates are correct
-        if (!is_null($from) && !is_null($to) && $from->isEarlier($to)) {
-            $dateString = $from->toString(\Zend_Date::ATOM) . '/' . $to->toString(\Zend_Date::ATOM);
+        if (!is_null($from) && !is_null($to) && $from < $to) {
+            $dateString = $from->format('Y-m-d H:i:s') . '/' . $to->format('Y-m-d H:i:s');
         }
 
         // if we have only "from" date, send "from" day
         if (!is_null($from) && is_null($to)) {
-            $dateString = $from->toString('YYYY-MM-dd');
+            $dateString = $from->format('Y-m-d');
         }
 
         // if we have only "to" date, use "now" date for "from"
         if (is_null($from) && !is_null($to)) {
-            $from = new \Magento\Framework\Stdlib\DateTime\Date();
+            $from = new \DateTime();
             // if "now" date is earlier than "to" date
-            if ($from->isEarlier($to)) {
-                $dateString = $from->toString(\Zend_Date::ATOM) . '/' . $to->toString(\Zend_Date::ATOM);
+            if ($from < $to) {
+                $dateString = $from->format('Y-m-d H:i:s') . '/' . $to->format('Y-m-d H:i:s');
             }
         }
 

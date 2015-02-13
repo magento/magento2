@@ -73,20 +73,12 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         }
         // unix timestamp given - simply instantiate date object
         if (preg_match('/^[0-9]+$/', $date)) {
-            $date = new \Magento\Framework\Stdlib\DateTime\Date((int)$date);
+            $date = new \DateTime('@' . $date);
             // international format
-        } elseif (preg_match('#^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$#', $date)) {
-            $zendDate = new \Magento\Framework\Stdlib\DateTime\Date();
-            $date = $zendDate->setIso($date);
-            // parse this date in current locale, do not apply GMT offset
         } else {
-            $date = $this->_localeDate->date(
-                $date,
-                $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT),
-                null,
-                false
-            );
+            $date = new \DateTime($date);
+            // parse this date in current locale, do not apply GMT offset
         }
-        return $date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+        return $date->format('Y-m-d H:i:s');
     }
 }

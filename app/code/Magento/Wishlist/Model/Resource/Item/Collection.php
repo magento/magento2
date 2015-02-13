@@ -445,23 +445,16 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
         $filter = [];
 
-        $now = $this->_date->date();
-        $gmtOffset = (int)$this->_date->getGmtOffset();
+        $gmtOffset = (new \DateTimeZone(date_default_timezone_get()))->getOffset(new \DateTime());
         if (isset($constraints['from'])) {
-            $lastDay = new \Magento\Framework\Stdlib\DateTime\Date(
-                $now,
-                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-            );
-            $lastDay->subSecond($gmtOffset)->subDay(intval($constraints['from']));
+            $lastDay = new \DateTime();
+            $lastDay->modify('-' . $gmtOffset . ' second')->modify('-' . $constraints['from'] . ' day');
             $filter['to'] = $lastDay;
         }
 
         if (isset($constraints['to'])) {
-            $firstDay = new \Magento\Framework\Stdlib\DateTime\Date(
-                $now,
-                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-            );
-            $firstDay->subSecond($gmtOffset)->subDay(intval($constraints['to']) + 1);
+            $firstDay = new \DateTime();
+            $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . (intval($constraints['to']) + 1) . ' day');
             $filter['from'] = $firstDay;
         }
 

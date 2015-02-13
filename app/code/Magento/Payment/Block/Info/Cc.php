@@ -77,9 +77,8 @@ class Cc extends \Magento\Payment\Block\Info
      */
     public function getCcExpDate()
     {
-        $date = $this->_localeDate->date(0);
-        $date->setYear($this->getInfo()->getCcExpYear());
-        $date->setMonth($this->getInfo()->getCcExpMonth());
+        $date = new \DateTime(new \DateTimeZone($this->_localeDate->getConfigTimezone()));
+        $date->setDate($this->getInfo()->getCcExpYear(), $this->getInfo()->getCcExpMonth(), $date->format('d'));
         return $date;
     }
 

@@ -160,8 +160,8 @@ class CcTest extends \PHPUnit_Framework_TestCase
         $this->localeDate->expects($this->any())
             ->method('date')
             ->will($this->returnValue($date));
-        $this->assertEquals($ccExpYear, $this->model->getCcExpDate()->getYear());
-        $this->assertEquals($ccExpMonth, $this->model->getCcExpDate()->getMonth());
+        $this->assertEquals($ccExpYear, $this->model->getCcExpDate()->format('Y'));
+        $this->assertEquals($ccExpMonth, $this->model->getCcExpDate()->format('m'));
     }
 
     /**
