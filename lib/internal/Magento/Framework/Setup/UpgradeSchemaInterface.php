@@ -13,9 +13,9 @@ interface UpgradeSchemaInterface
     /**
      * Upgrades DB schema for a module
      *
-     * @param ModuleSchemaResourceInterface $setup
+     * @param SchemaResourceInterface $setup
      * @param ModuleContextInterface $context
-     * @return void
+     * @return
      */
-    public function upgrade(ModuleSchemaResourceInterface $setup, ModuleContextInterface $context);
+    public function upgrade(SchemaResourceInterface $setup, ModuleContextInterface $context);
 }
