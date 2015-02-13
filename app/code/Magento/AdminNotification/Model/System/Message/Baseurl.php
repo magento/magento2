@@ -114,7 +114,7 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
     /**
      * Retrieve message text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getText()
     {

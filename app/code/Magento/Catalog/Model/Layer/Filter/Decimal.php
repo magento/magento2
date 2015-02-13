@@ -97,7 +97,7 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param   int $range
      * @param   float $value
-     * @return  string
+     * @return \Magento\Framework\Phrase
      */
     protected function _renderItemLabel($range, $value)
     {

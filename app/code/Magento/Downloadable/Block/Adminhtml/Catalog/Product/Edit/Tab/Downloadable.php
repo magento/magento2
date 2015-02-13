@@ -80,7 +80,7 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
     /**
      * Get tab label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -90,7 +90,7 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
     /**
      * Get tab title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

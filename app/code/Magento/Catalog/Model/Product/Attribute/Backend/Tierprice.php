@@ -75,7 +75,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
     /**
      * Error message when duplicates
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getDuplicateErrorMessage()
     {

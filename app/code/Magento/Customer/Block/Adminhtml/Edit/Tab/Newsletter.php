@@ -62,7 +62,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
     /**
      * Return Tab label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -72,7 +72,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
     /**
      * Return Tab title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

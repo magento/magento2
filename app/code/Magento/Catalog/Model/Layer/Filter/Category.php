@@ -112,7 +112,7 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Get filter name
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getName()
     {

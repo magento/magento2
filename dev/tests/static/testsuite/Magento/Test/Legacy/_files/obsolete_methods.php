@@ -2046,4 +2046,7 @@ return [
     ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
     ['register', 'Magento\Sendfriend\Model\Sendfriend'],
     ['_getImageHelper', 'Magento\Catalog\Model\Product'],
+    ['renderPage', 'Magento\Cms\Helper\Page'],
+    ['renderPageExtended', 'Magento\Cms\Helper\Page'],
+    ['_renderPage', 'Magento\Cms\Helper\Page'],
 ];

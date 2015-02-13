@@ -12,9 +12,46 @@ namespace Magento\Checkout\Controller\Cart;
 class Index extends \Magento\Checkout\Controller\Cart
 {
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Checkout\Model\Cart $cart
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Checkout\Model\Cart $cart,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+    ) {
+        parent::__construct(
+            $context,
+            $scopeConfig,
+            $checkoutSession,
+            $storeManager,
+            $formKeyValidator,
+            $cart,
+            $resultRedirectFactory
+        );
+        $this->resultPageFactory = $resultPageFactory;
+    }
+
+    /**
      * Shopping cart display action
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
     {
@@ -24,18 +61,16 @@ class Index extends \Magento\Checkout\Controller\Cart
             $this->cart->save();
 
             if (!$this->cart->getQuote()->validateMinimumAmount()) {
-                $currencyCode = $this->_objectManager->get(
-                    'Magento\Store\Model\StoreManagerInterface'
-                )->getStore()->getCurrentCurrencyCode();
-                $minimumAmount = $this->_objectManager->get(
-                    'Magento\Framework\Locale\CurrencyInterface'
-                )->getCurrency(
-                    $currencyCode
-                )->toCurrency(
-                    $this->_scopeConfig->getValue(
-                        'sales/minimum_order/amount',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    )
+                $currencyCode = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                    ->getStore()
+                    ->getCurrentCurrencyCode();
+                $minimumAmount = $this->_objectManager->get('Magento\Framework\Locale\CurrencyInterface')
+                    ->getCurrency($currencyCode)
+                    ->toCurrency(
+                        $this->_scopeConfig->getValue(
+                            'sales/minimum_order/amount',
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        )
                 );
 
                 $warning = $this->_scopeConfig->getValue(
@@ -73,11 +108,10 @@ class Index extends \Magento\Checkout\Controller\Cart
 
         \Magento\Framework\Profiler::start(__METHOD__ . 'cart_display');
 
-        $this->_view->loadLayout();
-        $layout = $this->_view->getLayout();
-        $layout->initMessages();
-        $this->_view->getPage()->getConfig()->getTitle()->set(__('Shopping Cart'));
-        $this->_view->renderLayout();
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getLayout()->initMessages();
+        $resultPage->getConfig()->getTitle()->set(__('Shopping Cart'));
         \Magento\Framework\Profiler::stop(__METHOD__ . 'cart_display');
+        return $resultPage;
     }
 }

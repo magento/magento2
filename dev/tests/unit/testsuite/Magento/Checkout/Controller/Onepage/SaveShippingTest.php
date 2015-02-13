@@ -58,24 +58,24 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\App\View | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $view;
-
-    /**
      * @var \Magento\Framework\App\Config | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Core\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $coreHelper;
-
-    /**
      * @var \Magento\Framework\View\LayoutFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $layoutFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Raw | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRaw;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Json | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultJson;
 
     protected function setUp()
     {
@@ -85,7 +85,6 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', ['getPost', 'isPost'], [], '', false);
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->view = $this->getMock('Magento\Framework\App\View', [], [], '', false);
         $this->quote = $this->getMock(
             'Magento\Quote\Model\Quote',
             ['__wakeup', 'getHasError', 'hasItems', 'validateMinimumAmount', 'isVirtual', 'getStoreId'],
@@ -109,7 +108,6 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             ['Magento\Checkout\Model\Type\Onepage', $this->onePage],
             ['Magento\Checkout\Model\Session', $this->checkoutSession],
-            ['Magento\Core\Helper\Data', $this->coreHelper],
         ];
         $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $this->objectManagerMock->expects($this->any())
@@ -131,16 +129,37 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())
             ->method('getEventManager')
             ->will($this->returnValue($this->eventManager));
-        $context->expects($this->once())
-            ->method('getView')
-            ->will($this->returnValue($this->view));
+
+        $this->resultRaw = $this->getMockBuilder('Magento\Framework\Controller\Result\Raw')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultRawFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultRawFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->resultRaw);
+
+        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultJsonFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->resultJson);
 
         $this->controller = $objectManager->getObject(
             'Magento\Checkout\Controller\Onepage\SaveShipping',
             [
                 'context' => $context,
                 'scopeConfig' => $this->scopeConfig,
-                'layoutFactory' => $this->layoutFactory
+                'layoutFactory' => $this->layoutFactory,
+                'resultRawFactory' => $resultRawFactory,
+                'resultJsonFactory' => $resultJsonFactory
             ]
         );
     }
@@ -150,7 +169,13 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('isPost')
             ->willReturn(false);
-        $this->controller->execute();
+        $this->resultRaw->expects($this->exactly(2))
+            ->method('setHeader')
+            ->willReturnMap([
+                ['HTTP/1.1', '403 Session Expired', false, $this->resultRaw],
+                ['Login-Required', 'true', false, $this->resultRaw]
+            ]);
+        $this->assertSame($this->resultRaw, $this->controller->execute());
     }
 
     public function testValidateMinimumAmount()
@@ -183,9 +208,6 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
             ->method('getPost')
             ->willReturn($data);
 
-        $this->coreHelper->expects($this->once())
-            ->method('jsonEncode')
-            ->with($expectedResult);
         $layout = $this->getMock(
             'Magento\Framework\View\Layout',
             ['getUpdate', 'generateXml', 'generateElements', 'getOutput', 'getBlock'],
@@ -214,14 +236,16 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
             ->willReturn($update);
         $update->expects($this->any())
             ->method('load');
-        $this->view->expects($this->any())
-            ->method('getLayout')
-            ->willReturn($layout);
         $layout->expects($this->any())
             ->method('getBlock')
             ->willReturn($block);
 
-        $this->controller->execute();
+        $this->resultJson->expects($this->once())
+            ->method('setData')
+            ->with($expectedResult)
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testValidateMinimumAmountNegative()
@@ -256,10 +280,11 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
             ->method('getPost')
             ->willReturn($data);
 
-        $this->coreHelper->expects($this->once())
-            ->method('jsonEncode')
-            ->with($expectedResult);
+        $this->resultJson->expects($this->once())
+            ->method('setData')
+            ->with($expectedResult)
+            ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 }

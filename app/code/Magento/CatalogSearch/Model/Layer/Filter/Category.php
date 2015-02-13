@@ -92,7 +92,7 @@ class Category extends AbstractFilter
     /**
      * Get filter name
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getName()
     {

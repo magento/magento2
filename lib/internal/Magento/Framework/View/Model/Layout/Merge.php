@@ -381,7 +381,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             $name = $node->getAttribute('id');
             $info = [
                 'name' => $name,
-                'label' => __((string)$node->getAttribute('label')),
+                'label' => (string)new \Magento\Framework\Phrase((string)$node->getAttribute('label')),
                 'design_abstraction' => $node->getAttribute('design_abstraction'),
             ];
             $result[$name] = $info;
@@ -780,7 +780,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         foreach ($containerNodes as $oneContainerNode) {
             $label = $oneContainerNode->getAttribute('label');
             if ($label) {
-                $result[$oneContainerNode->getAttribute('name')] = __($label);
+                $result[$oneContainerNode->getAttribute('name')] = (string)new \Magento\Framework\Phrase($label);
             }
         }
         return $result;

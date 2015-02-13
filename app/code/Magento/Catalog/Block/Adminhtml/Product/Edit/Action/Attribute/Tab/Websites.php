@@ -45,7 +45,7 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
     /**
      * Tab settings
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -53,7 +53,7 @@ class Websites extends \Magento\Backend\Block\Widget implements \Magento\Backend
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {
