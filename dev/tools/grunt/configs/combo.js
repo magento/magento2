@@ -1,0 +1,54 @@
+'use strict';
+
+var theme = require('./theme'),
+    path = require('./path');
+
+/**
+ * Define Combos for repetitive code.
+ */
+module.exports = {
+    collector: function (themeName) {
+        var cmdPlus = /^win/.test(process.platform) ? ' & ' : ' && ',
+            command = 'grunt --force clean:' + themeName + cmdPlus;
+
+        command = command + 'php -f dev/tools/Magento/Tools/Webdev/less.php --' +
+        ' --locale=' + theme[themeName].locale +
+        ' --area=' + theme[themeName].area +
+        ' --theme=' + theme[themeName].name +
+        ' --files=' + theme[themeName].files.join(',');
+
+        return command;
+    },
+
+    autopath: function (themeName) {
+        return path.pub +
+            theme[themeName].area + '/' +
+            theme[themeName].name + '/' +
+            theme[themeName].locale + '/';
+    },
+
+    lessFiles: function (themeName) {
+        var lessStringArray = [],
+            cssStringArray = [],
+            lessFiles = {},
+            i = 0;
+
+        for (i; i < theme[themeName].files.length; i++) {
+            cssStringArray[i] = path.pub +
+            theme[themeName].area + '/' +
+            theme[themeName].name + '/' +
+            theme[themeName].locale + '/' +
+            theme[themeName].files[i] + '.css';
+
+            lessStringArray[i] = path.pub +
+            theme[themeName].area + '/' +
+            theme[themeName].name + '/' +
+            theme[themeName].locale + '/' +
+            theme[themeName].files[i] + '.less';
+
+            lessFiles[cssStringArray[i]] = lessStringArray[i];
+        }
+
+        return lessFiles;
+    }
+};
