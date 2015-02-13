@@ -16,7 +16,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Getter
      *
-     * @return \Magento\Core\Model\Variable
+     * @return \Magento\Variable\Model\Variable
      */
     public function getVariable()
     {

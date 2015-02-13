@@ -9,7 +9,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @magentoDataFixture Magento/Cms/_files/block.php
-     * @magentoDataFixture Magento/Core/_files/variable.php
+     * @magentoDataFixture Magento/Variable/_files/variable.php
      * @magentoConfigFixture current_store web/unsecure/base_url http://example.com/
      * @magentoConfigFixture current_store web/unsecure/base_link_url http://example.com/
      */

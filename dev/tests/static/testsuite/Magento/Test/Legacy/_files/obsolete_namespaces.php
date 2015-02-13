@@ -77,4 +77,5 @@ return [
     ['Magento\GiftMessage\Service'],
     ['Magento\Backend\Controller\Adminhtml\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
     ['Magento\Core\Model\Resource\Variable', 'Magento\Variable\Model\Resource\Variable'],
+    ['Magento\Core\Model\Variable', 'Magento\Variable\Model\Variable'],
 ];

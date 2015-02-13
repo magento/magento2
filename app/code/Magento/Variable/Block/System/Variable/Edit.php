@@ -48,7 +48,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Getter
      *
-     * @return \Magento\Core\Model\Variable
+     * @return \Magento\Variable\Model\Variable
      */
     public function getVariable()
     {

@@ -28,11 +28,11 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Load variable by code
      *
-     * @param \Magento\Core\Model\Variable $object
+     * @param \Magento\Variable\Model\Variable $object
      * @param string $code
      * @return $this
      */
-    public function loadByCode(\Magento\Core\Model\Variable $object, $code)
+    public function loadByCode(\Magento\Variable\Model\Variable $object, $code)
     {
         if ($result = $this->getVariableByCode($code, true, $object->getStoreId())) {
             $object->setData($result);

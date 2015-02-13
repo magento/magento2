@@ -3,19 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model;
+namespace Magento\Variable\Model;
 
 class VariableTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Variable
+     * @var \Magento\Variable\Model\Variable
      */
     protected $_model;
 
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Variable'
+            'Magento\Variable\Model\Variable'
         );
     }
 
@@ -30,7 +30,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $this->_model->setData(['code' => 'test_code', 'name' => 'test_name']);
         $this->_model->save();
 
-        $variable = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Variable');
+        $variable = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Variable\Model\Variable');
         $variable->loadByCode('test_code');
         $this->assertEquals($this->_model->getName(), $variable->getName());
         $this->_model->delete();
@@ -42,8 +42,8 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $text = 'test';
         $this->_model->setData(['code' => 'test_code', 'html_value' => $html, 'plain_value' => $text]);
         $this->assertEquals($html, $this->_model->getValue());
-        $this->assertEquals($html, $this->_model->getValue(\Magento\Core\Model\Variable::TYPE_HTML));
-        $this->assertEquals($text, $this->_model->getValue(\Magento\Core\Model\Variable::TYPE_TEXT));
+        $this->assertEquals($html, $this->_model->getValue(\Magento\Variable\Model\Variable::TYPE_HTML));
+        $this->assertEquals($text, $this->_model->getValue(\Magento\Variable\Model\Variable::TYPE_TEXT));
     }
 
     public function testValidate()

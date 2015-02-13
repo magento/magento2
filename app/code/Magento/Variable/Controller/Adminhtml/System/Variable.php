@@ -90,14 +90,14 @@ class Variable extends Action
     /**
      * Initialize Variable object
      *
-     * @return \Magento\Core\Model\Variable
+     * @return \Magento\Variable\Model\Variable
      */
     protected function _initVariable()
     {
         $variableId = $this->getRequest()->getParam('variable_id', null);
         $storeId = (int)$this->getRequest()->getParam('store', 0);
-        /* @var $variable \Magento\Core\Model\Variable */
-        $variable = $this->_objectManager->create('Magento\Core\Model\Variable');
+        /* @var $variable \Magento\Variable\Model\Variable */
+        $variable = $this->_objectManager->create('Magento\Variable\Model\Variable');
         if ($variableId) {
             $variable->setStoreId($storeId)->load($variableId);
         }
