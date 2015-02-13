@@ -66,7 +66,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -129,7 +129,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Core\Helper\Data                                     $coreData
      * @param \Magento\Framework\Registry                                   $coreRegistry
      * @param Config                                                        $taxConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface                    $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager
      * @param \Magento\Framework\Locale\FormatInterface                     $localeFormat
      * @param \Magento\Eav\Model\Entity\AttributeFactory                    $attributeFactory
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory       $taxItemFactory
@@ -147,7 +147,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Registry $coreRegistry,
         Config $taxConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $taxItemFactory,

@@ -31,7 +31,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Customer\Api\GroupRepositoryInterface */
     private $_groupRepository;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface */
+    /** @var \Magento\Store\Model\StoreManagerInterface */
     private $_storeManager;
 
     /** @var \Magento\Framework\ObjectManagerInterface */

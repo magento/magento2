@@ -19,7 +19,7 @@ class CollectionFilter implements CollectionFilterInterface
     protected $catalogConfig;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -30,7 +30,7 @@ class CollectionFilter implements CollectionFilterInterface
 
     /**
      * @param Config $catalogConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Visibility $productVisibility
      */
     public function __construct(

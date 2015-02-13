@@ -26,7 +26,7 @@ class AssignThemeToStore extends \Magento\DesignEditor\Controller\Adminhtml\Syst
         $defaultStore = -1;
         $emptyStores = -2;
         if ($stores == $defaultStore) {
-            /** @var \Magento\Framework\Store\StoreManagerInterface $storeManager */
+            /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
             $storeManager = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface');
             $ids = array_keys($storeManager->getStores());
             $stores = [array_shift($ids)];

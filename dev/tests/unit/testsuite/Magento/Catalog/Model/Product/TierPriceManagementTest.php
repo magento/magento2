@@ -79,7 +79,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->websiteMock =
             $this->getMock('Magento\Store\Model\Website', ['getId', '__wakeup'], [], '', false);
         $this->productMock = $this->getMock(

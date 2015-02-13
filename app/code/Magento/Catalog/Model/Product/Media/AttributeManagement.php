@@ -17,7 +17,7 @@ class AttributeManagement implements ProductMediaAttributeManagementInterface
     private $collectionFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 

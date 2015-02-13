@@ -72,7 +72,7 @@ class Data extends AbstractHelper
     protected $filter;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -84,7 +84,7 @@ class Data extends AbstractHelper
      * @param QueryFactory $queryFactory
      * @param Escaper $escaper
      * @param FilterManager $filter
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,

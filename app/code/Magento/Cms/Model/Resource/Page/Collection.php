@@ -34,7 +34,7 @@ class Collection extends AbstractSearchResult
      * @param EntityFactoryInterface $entityFactory
      * @param ManagerInterface $eventManager
      * @param SearchResultIteratorFactory $resultIteratorFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param SearchResultProcessorFactory $searchResultProcessorFactory
      */
     public function __construct(

@@ -30,7 +30,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     /**
      * Store manager.
      *
-     * @var  \Magento\Framework\Store\StoreManagerInterface
+     * @var  \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
@@ -45,7 +45,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * Constructs a checkout agreement data object.
      *
      * @param AgreementCollectionFactory $collectionFactory Collection factory.
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager Store manager.
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager.
      * @param ScopeConfigInterface $scopeConfig Scope config.
      */
     public function __construct(

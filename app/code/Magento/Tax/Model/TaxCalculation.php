@@ -61,7 +61,7 @@ class TaxCalculation implements TaxCalculationInterface
     protected $taxDetailsItemDataObjectFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 

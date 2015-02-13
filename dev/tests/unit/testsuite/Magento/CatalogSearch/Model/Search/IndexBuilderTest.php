@@ -23,7 +23,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|MockObject */
     private $config;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface|MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|MockObject */
     private $storeManager;
 
     /** @var \Magento\Framework\Search\RequestInterface|MockObject */

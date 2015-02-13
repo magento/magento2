@@ -129,13 +129,13 @@ class Configuration implements StockConfigurationInterface
      * @param ConfigInterface $config
      * @param ScopeConfigInterface $scopeConfig
      * @param MinsaleqtyHelper $minsaleqtyHelper
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         ConfigInterface $config,
         ScopeConfigInterface $scopeConfig,
         MinsaleqtyHelper $minsaleqtyHelper,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->config = $config;
         $this->scopeConfig = $scopeConfig;

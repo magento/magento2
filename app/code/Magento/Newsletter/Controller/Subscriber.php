@@ -32,7 +32,7 @@ class Subscriber extends \Magento\Framework\App\Action\Action
     protected $_subscriberFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -45,7 +45,7 @@ class Subscriber extends \Magento\Framework\App\Action\Action
      * @param Context $context
      * @param SubscriberFactory $subscriberFactory
      * @param Session $customerSession
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param CustomerUrl $customerUrl
      */
     public function __construct(

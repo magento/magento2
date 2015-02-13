@@ -328,7 +328,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
         /**
-         * @var \Magento\Framework\Store\StoreManagerInterface
+         * @var \Magento\Store\Model\StoreManagerInterface
          * |\PHPUnit_Framework_MockObject_MockObject $storeManagerMock
          */
         $storeManagerMock = $this->getMockForAbstractClass(

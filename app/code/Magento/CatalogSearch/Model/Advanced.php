@@ -83,7 +83,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -118,7 +118,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param Config $catalogConfig
      * @param CurrencyFactory $currencyFactory
      * @param ProductFactory $productFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param ResourceProvider $resourceProvider
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)

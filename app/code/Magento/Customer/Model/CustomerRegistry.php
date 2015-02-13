@@ -44,7 +44,7 @@ class CustomerRegistry
     private $customerSecureRegistryById = [];
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
@@ -53,12 +53,12 @@ class CustomerRegistry
      *
      * @param CustomerFactory $customerFactory
      * @param CustomerSecureFactory $customerSecureFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         CustomerFactory $customerFactory,
         CustomerSecureFactory $customerSecureFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;

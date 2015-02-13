@@ -19,7 +19,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Core\Helper\PostData|\PHPUnit_Framework_MockObject_MockObject */
     protected $corePostDataHelper;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     protected function setUp()

@@ -68,7 +68,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory
      * @param mixed $sourceData
      * @param mixed $store
@@ -78,7 +78,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         \Psr\Log\LoggerInterface $logger,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory,
         $sourceData = null,
         $store = null

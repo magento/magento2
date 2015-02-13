@@ -41,7 +41,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @param Context $context
      * @param Session $catalogSession
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param QueryFactory $queryFactory
      * @param Resolver $layerResolver
      */

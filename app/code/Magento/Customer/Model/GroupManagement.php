@@ -31,7 +31,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
     const GROUP_CODE_MAX_LENGTH = 32;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -75,7 +75,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
      * @param FilterBuilder $filterBuilder
      */
     public function __construct(
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         GroupFactory $groupFactory,
         GroupRepositoryInterface $groupRepository,

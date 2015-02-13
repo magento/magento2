@@ -48,7 +48,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_dataFactoryMock;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 

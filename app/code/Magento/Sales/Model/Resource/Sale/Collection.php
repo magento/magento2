@@ -74,7 +74,7 @@ class Collection extends \Magento\Framework\Data\Collection\Db
      * @param ManagerInterface $eventManager
      * @param Order $resource
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         EntityFactory $entityFactory,

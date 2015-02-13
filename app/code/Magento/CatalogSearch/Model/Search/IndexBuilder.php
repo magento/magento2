@@ -30,14 +30,14 @@ class IndexBuilder implements IndexBuilderInterface
     private $config;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param ScopeConfigInterface $config
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(Resource $resource, ScopeConfigInterface $config, StoreManagerInterface $storeManager)
     {

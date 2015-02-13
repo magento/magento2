@@ -25,7 +25,7 @@ class Processor
     protected $quoteItemFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -36,7 +36,7 @@ class Processor
 
     /**
      * @param ItemFactory $quoteItemFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param State $appState
      */
     public function __construct(

@@ -35,7 +35,7 @@ class Group
     /** @var ProductUrlRewriteGenerator */
     protected $productUrlRewriteGenerator;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface  */
+    /** @var \Magento\Store\Model\StoreManagerInterface  */
     protected $storeManager;
 
     /**

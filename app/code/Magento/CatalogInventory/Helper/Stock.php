@@ -46,7 +46,7 @@ class Stock
 
     /**
      * @param StockRegistryInterface $stockRegistry
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param ObjectManagerInterface $objectManager
      */

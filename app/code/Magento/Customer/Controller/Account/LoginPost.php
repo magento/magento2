@@ -27,7 +27,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface */
+    /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $storeManager;
 
     /** @var AccountManagementInterface */

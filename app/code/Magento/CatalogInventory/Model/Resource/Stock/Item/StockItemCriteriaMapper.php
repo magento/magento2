@@ -24,7 +24,7 @@ class StockItemCriteriaMapper extends GenericMapper
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ObjectFactory $objectFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param MapperFactory $mapperFactory
      * @param Select $select
      */

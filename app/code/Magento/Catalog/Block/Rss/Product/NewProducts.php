@@ -29,7 +29,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     protected $rssUrlBuilder;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 

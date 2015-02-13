@@ -31,7 +31,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     protected $quoteFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 

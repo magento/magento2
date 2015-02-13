@@ -18,7 +18,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 class Data extends AbstractHelper
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -44,7 +44,7 @@ class Data extends AbstractHelper
 
     /**
      * @param Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Msrp\Model\Product\Options $productOptions
      * @param \Magento\Msrp\Model\Msrp $msrp
      * @param \Magento\Msrp\Model\Config $config

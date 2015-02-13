@@ -47,7 +47,7 @@ class Multishipping extends \Magento\Framework\Object
     protected $_session;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -146,7 +146,7 @@ class Multishipping extends \Magento\Framework\Object
      * @param \Magento\Quote\Model\Quote\Address\ToOrderAddress $quoteAddressToOrderAddress
      * @param \Magento\Quote\Model\Quote\Payment\ToOrderPayment $quotePaymentToOrderPayment
      * @param \Magento\Quote\Model\Quote\Item\ToOrderItem $quoteItemToOrderItem
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification
      * @param \Magento\Multishipping\Helper\Data $helper
      * @param OrderSender $orderSender
@@ -170,7 +170,7 @@ class Multishipping extends \Magento\Framework\Object
         \Magento\Quote\Model\Quote\Address\ToOrderAddress $quoteAddressToOrderAddress,
         \Magento\Quote\Model\Quote\Payment\ToOrderPayment $quotePaymentToOrderPayment,
         \Magento\Quote\Model\Quote\Item\ToOrderItem $quoteItemToOrderItem,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification,
         \Magento\Multishipping\Helper\Data $helper,
         OrderSender $orderSender,

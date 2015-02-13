@@ -18,7 +18,7 @@ use Magento\Store\Model\WebsiteFactory as WebsiteFactory;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Db implements \Magento\Framework\Store\StoreManagerInterface
+class Db implements \Magento\Store\Model\StoreManagerInterface
 {
     /**
      * Flag that shows that system has only one store view
