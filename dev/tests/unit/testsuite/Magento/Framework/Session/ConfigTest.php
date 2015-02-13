@@ -465,7 +465,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             [
                 'scopeConfig' => $this->configMock,
                 'validatorFactory' => $this->validatorFactoryMock,
-                'scopeType' => \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                'scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 'cacheLimiter' => \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER,
                 'lifetimePath' => 'test_web/test_cookie/test_cookie_lifetime',
                 'request' => $this->requestMock,

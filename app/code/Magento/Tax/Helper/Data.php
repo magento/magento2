@@ -73,7 +73,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -137,7 +137,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Registry                                   $coreRegistry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface            $scopeConfig
      * @param Config                                                        $taxConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface                    $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager
      * @param \Magento\Framework\Locale\FormatInterface                     $localeFormat
      * @param \Magento\Eav\Model\Entity\AttributeFactory                    $attributeFactory
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory       $taxItemFactory
@@ -156,7 +156,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         Config $taxConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $taxItemFactory,
@@ -547,7 +547,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             Config::CONFIG_XML_PATH_BASED_ON,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -562,7 +562,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int) $this->_scopeConfig->getValue(
             Config::CONFIG_XML_PATH_APPLY_ON,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         ) == 0;
     }
@@ -577,7 +577,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int) $this->_scopeConfig->getValue(
             Config::CONFIG_XML_PATH_APPLY_ON,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         ) == 1;
     }
@@ -710,7 +710,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::CONFIG_DEFAULT_CUSTOMER_TAX_CLASS,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -723,7 +723,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::CONFIG_DEFAULT_PRODUCT_TAX_CLASS,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
