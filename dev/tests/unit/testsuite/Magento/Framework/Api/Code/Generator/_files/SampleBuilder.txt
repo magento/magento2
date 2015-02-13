@@ -1,4 +1,4 @@
-namespace \Magento\Framework\Api\Code\Generator;
+namespace Magento\Framework\Api\Code\Generator;
 
 /**
  * Builder class for @see \Magento\Framework\Api\Code\Generator\Sample

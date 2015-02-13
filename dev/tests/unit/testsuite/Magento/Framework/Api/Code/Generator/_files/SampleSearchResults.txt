@@ -1,4 +1,4 @@
-namespace \Magento\Framework\Api\Code\Generator;
+namespace Magento\Framework\Api\Code\Generator;
 
 class SampleSearchResults extends \Magento\Framework\Api\SearchResults
 {

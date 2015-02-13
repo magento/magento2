@@ -34,7 +34,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Factory',
+                            'description' => $this->_getSourceClassName() . 'Factory',
                         ],
                     ],
                 ],
@@ -117,7 +117,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getSourceFactoryPropertyName()
     {
-        $parts = explode('\\', $this->_getSourceClassName());
+        $parts = explode('\\', ltrim($this->_getSourceClassName(), '\\'));
         return lcfirst(end($parts)) . 'Factory';
     }
 
@@ -127,7 +127,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getSourceResourcePropertyName() // InvoiceResource
     {
-        $parts = explode('\\', $this->_getSourceClassName());
+        $parts = explode('\\', ltrim($this->_getSourceClassName(), '\\'));
         return lcfirst(end($parts)) . "Resource";
     }
 
@@ -138,7 +138,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getSourceResourceClassName() // Invoice\Resource
     {
-        $temporary = str_replace('\\Api\\Data\\', '\\Model\\Spi\\', $this->_getSourceClassName());
+        $temporary = str_replace('\\Api\\Data\\', '\\Model\\Spi', $this->_getSourceClassName());
         $parts = explode('\\', $temporary);
         $className = array_pop($parts);
         $className = str_replace('Interface', '', $className);
@@ -180,7 +180,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 ],
                 [
                     'name' => $this->_getSourceFactoryPropertyName(),
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Factory'
+                    'type' => $this->_getSourceClassName() . 'Factory'
                 ],
                 [
                     'name' => 'resource',
@@ -205,7 +205,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'param',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Factory'
+                        'description' => $this->_getSourceClassName() . 'Factory'
                             . " \$" . $this->_getSourceFactoryPropertyName()
                     ],
                     [
@@ -270,7 +270,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'return',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getResultClassName()) . " \$entity"
+                        'description' => $this->_getResultClassName() . " \$entity"
                     ],
                 ],
             ]
@@ -295,7 +295,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'entity',
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()),
+                    'type' => $this->_getSourceClassName(),
                 ],
             ],
             'body' => $body,
@@ -304,7 +304,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . " \$entity",
+                        'description' => $this->_getSourceClassName() . " \$entity",
                     ],
                 ],
             ]
@@ -388,7 +388,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'entity',
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()),
+                    'type' => $this->_getSourceClassName(),
                 ],
             ],
             'body' => $body,
@@ -397,7 +397,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . " \$entity",
+                        'description' => $this->_getSourceClassName() . " \$entity",
                     ],
                 ],
             ]
@@ -431,7 +431,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'param',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . " \$entity",
+                        'description' => $this->_getSourceClassName() . " \$entity",
                     ],
                 ],
             ]
@@ -457,7 +457,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'entity',
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()),
+                    'type' => $this->_getSourceClassName(),
                 ],
             ],
             'body' => $body,
@@ -467,7 +467,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
 
                     [
                         'name' => 'param',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . " \$entity",
+                        'description' => $this->_getSourceClassName() . " \$entity",
                     ],
                 ],
             ]

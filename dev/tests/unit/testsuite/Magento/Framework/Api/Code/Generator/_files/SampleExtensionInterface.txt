@@ -1,0 +1,17 @@
+namespace Magento\Catalog\Api\Data;
+
+/**
+ * ExtensionInterface class for @see \Magento\Catalog\Api\Data\ProductInterface
+ */
+interface ProductExtensionInterface
+{
+    /**
+     * @return string
+     */
+    public function getStringAttribute();
+
+    /**
+     * @return \Magento\Bundle\Api\Data\OptionInterface[]
+     */
+    public function getComplexObjectAttribute();
+}

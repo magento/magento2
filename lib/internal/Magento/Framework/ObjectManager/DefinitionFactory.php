@@ -21,6 +21,7 @@ use Magento\Framework\ObjectManager\Code\Generator;
 use Magento\Framework\ObjectManager\Code\Generator\Converter as ConverterGenerator;
 use Magento\Framework\ObjectManager\Definition\Runtime;
 use Magento\Framework\ObjectManager\Profiler\Code\Generator as ProfilerGenerator;
+use Magento\Framework\Api\Code\Generator\ObjectExtensionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -119,8 +120,9 @@ class DefinitionFactory
                     MapperGenerator::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\Mapper',
                     SearchResults::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\SearchResults',
                     ConverterGenerator::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Converter',
-                    ProfilerGenerator\Logger::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger'
-                ]
+                    ProfilerGenerator\Logger::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger',
+                    ObjectExtensionInterface::ENTITY_TYPE =>
+                        'Magento\Framework\Api\Code\Generator\ObjectExtensionInterface'                ]
             );
             $autoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
             spl_autoload_register([$autoloader, 'load']);

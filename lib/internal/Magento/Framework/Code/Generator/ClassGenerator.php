@@ -201,4 +201,12 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
     {
         return new MethodGenerator();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNamespaceName()
+    {
+        return ltrim(parent::getNamespaceName(), '\\');
+    }
 }

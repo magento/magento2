@@ -80,7 +80,7 @@ class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
                     ['name' => 'param', 'description' => 'array $data'],
                     [
                         'name' => 'return',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName())
+                        'description' => $this->_getSourceClassName()
                     ],
                 ],
             ],

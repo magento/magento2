@@ -18,6 +18,7 @@ use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Proxy;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
+use Magento\Framework\Api\Code\Generator\ObjectExtensionInterface;
 
 require __DIR__ . '/../../../../../app/bootstrap.php';
 
@@ -84,6 +85,8 @@ $generator = new Generator(
         Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
         Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
         SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
+        ObjectExtensionInterface::ENTITY_TYPE =>
+            'Magento\Framework\Api\Code\Generator\ObjectExtensionInterface'
     ]
 );
 

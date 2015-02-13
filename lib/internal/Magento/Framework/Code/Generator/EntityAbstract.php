@@ -78,11 +78,11 @@ abstract class EntityAbstract
             $this->definedClasses = new DefinedClasses();
         }
 
-        $this->_sourceClassName = ltrim($sourceClassName, '\\');
+        $this->_sourceClassName = $this->_getFullyQualifiedClassName($sourceClassName);
         if ($resultClassName) {
-            $this->_resultClassName = $resultClassName;
-        } elseif ($sourceClassName) {
-            $this->_resultClassName = $this->_getDefaultResultClassName($sourceClassName);
+            $this->_resultClassName = $this->_getFullyQualifiedClassName($resultClassName);
+        } elseif ($this->_sourceClassName) {
+            $this->_resultClassName = $this->_getDefaultResultClassName($this->_sourceClassName);
         }
     }
 
@@ -138,7 +138,8 @@ abstract class EntityAbstract
      */
     protected function _getFullyQualifiedClassName($className)
     {
-        return '\\' . ltrim($className, '\\');
+        $className = ltrim($className, '\\');
+        return $className ? '\\' . $className : '';
     }
 
     /**
@@ -291,7 +292,7 @@ abstract class EntityAbstract
      */
     protected function _getClassDocBlock()
     {
-        $description = ucfirst(static::ENTITY_TYPE) . ' class for @see \\' . $this->_getSourceClassName();
+        $description = ucfirst(static::ENTITY_TYPE) . ' class for @see ' . $this->_getSourceClassName();
         return ['shortDescription' => $description];
     }
 

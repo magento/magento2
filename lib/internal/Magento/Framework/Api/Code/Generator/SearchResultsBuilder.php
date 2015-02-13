@@ -62,7 +62,7 @@ class SearchResultsBuilder extends EntityAbstract
                 ],
                 [
                     'name' => 'itemObjectBuilder',
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Builder'
+                    'type' => $this->_getSourceClassName() . 'Builder'
                 ],
             ],
             'body' => "parent::__construct(\$objectFactory, \$valueFactory, \$metadataService, " .

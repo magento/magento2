@@ -283,7 +283,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _generateCode()
     {
-        $typeName = $this->_getFullyQualifiedClassName($this->_getSourceClassName());
+        $typeName = $this->_getSourceClassName();
         $reflection = new \ReflectionClass($typeName);
 
         if ($reflection->isInterface()) {

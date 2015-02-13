@@ -22,7 +22,6 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getClassProperties()
     {
-        $qualifiedClassName = $this->_getFullyQualifiedClassName($this->_getSourceClassName());
         $properties = [
             [
                 'name' => $this->_getSourceBuilderPropertyName(),
@@ -32,7 +31,7 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' => $qualifiedClassName . 'Builder',
+                            'description' => $this->_getSourceClassName() . 'Builder',
                         ],
                     ],
                 ],
@@ -57,7 +56,7 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getSourceBuilderPropertyName()
     {
-        $parts = explode('\\', $this->_getSourceClassName());
+        $parts = explode('\\', ltrim($this->_getSourceClassName(), '\\'));
         return lcfirst(end($parts)) . 'Builder';
     }
 
@@ -73,7 +72,7 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => $this->_getSourceBuilderPropertyName(),
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Builder',
+                    'type' => $this->_getSourceClassName() . 'Builder',
                 ],
             ],
             'body' => "\$this->"
@@ -84,8 +83,7 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => '\\' . $this->_getSourceClassName()
-                            . " \$" . $this->_getSourceBuilderPropertyName(),
+                        'description' => $this->_getSourceClassName() . " \$" . $this->_getSourceBuilderPropertyName(),
                     ],
                 ],
             ]
@@ -120,7 +118,7 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'return',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()),
+                        'description' => $this->_getSourceClassName(),
                     ],
                 ],
             ],

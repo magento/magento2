@@ -14,6 +14,7 @@ use Magento\Framework\Api\Code\Generator\SearchResultsBuilder;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
+use Magento\Framework\Api\Code\Generator\ObjectExtensionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -326,7 +327,9 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
                 Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
                 Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
-                SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults'
+                SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
+                ObjectExtensionInterface::ENTITY_TYPE =>
+                    'Magento\Framework\Api\Code\Generator\ObjectExtensionInterface'
             ]
         );
         $generationAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);

@@ -14,8 +14,8 @@ use Magento\TestFramework\Helper\ObjectManager;
  */
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
-    const SOURCE_CLASS_NAME = 'Magento\Framework\ObjectManager\Code\Generator\Sample';
-    const RESULT_CLASS_NAME = 'Magento\Framework\ObjectManager\Code\Generator\SampleConverter';
+    const SOURCE_CLASS_NAME = '\Magento\Framework\ObjectManager\Code\Generator\Sample';
+    const RESULT_CLASS_NAME = '\Magento\Framework\ObjectManager\Code\Generator\SampleConverter';
 
     /**
      * @var Io | \PHPUnit_Framework_MockObject_MockObject

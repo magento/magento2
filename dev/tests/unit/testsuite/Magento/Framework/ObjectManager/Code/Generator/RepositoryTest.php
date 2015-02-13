@@ -13,8 +13,8 @@ use Magento\TestFramework\Helper\ObjectManager;
  */
 class RepositoryTest extends EntityChildTestAbstract
 {
-    const SOURCE_CLASS_NAME = 'Magento\Framework\ObjectManager\Code\Generator\Sample';
-    const RESULT_CLASS_NAME = 'Magento\Framework\ObjectManager\Code\Generator\Sample\Repository';
+    const SOURCE_CLASS_NAME = '\Magento\Framework\ObjectManager\Code\Generator\Sample';
+    const RESULT_CLASS_NAME = '\Magento\Framework\ObjectManager\Code\Generator\Sample\Repository';
     const GENERATOR_CLASS_NAME = 'Magento\Framework\ObjectManager\Code\Generator\Repository';
     const OUTPUT_FILE_NAME = 'SampleConverter.php';
 

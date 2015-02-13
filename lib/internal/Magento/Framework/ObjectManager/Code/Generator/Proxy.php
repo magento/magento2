@@ -47,7 +47,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             'visibility' => 'protected',
             'docblock' => [
                 'shortDescription' => 'Proxied instance',
-                'tags' => [['name' => 'var', 'description' => '\\' . $this->_getSourceClassName()]],
+                'tags' => [['name' => 'var', 'description' => $this->_getSourceClassName()]],
             ],
         ];
 
@@ -101,7 +101,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             "return \$this->_subject;",
             'docblock' => [
                 'shortDescription' => 'Get proxied instance',
-                'tags' => [['name' => 'return', 'description' => '\\' . $this->_getSourceClassName()]],
+                'tags' => [['name' => 'return', 'description' => $this->_getSourceClassName()]],
             ],
         ];
         $reflectionClass = new \ReflectionClass($this->_getSourceClassName());
@@ -127,7 +127,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _generateCode()
     {
-        $typeName = $this->_getFullyQualifiedClassName($this->_getSourceClassName());
+        $typeName = $this->_getSourceClassName();
         $reflection = new \ReflectionClass($typeName);
 
         if ($reflection->isInterface()) {
