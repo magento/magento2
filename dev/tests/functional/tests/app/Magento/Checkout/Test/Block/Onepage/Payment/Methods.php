@@ -7,6 +7,7 @@
 namespace Magento\Checkout\Test\Block\Onepage\Payment;
 
 use Magento\Mtf\Block\Form;
+use Magento\Payment\Test\Fixture\Cc;
 
 /**
  * Class Methods
@@ -61,10 +62,11 @@ class Methods extends Form
      * Select payment method
      *
      * @param array $payment
+     * @param Cc $creditCard
      * @throws \Exception
      * @return void
      */
-    public function selectPaymentMethod(array $payment)
+    public function selectPaymentMethod(array $payment, Cc $creditCard)
     {
         $paymentSelector = $this->_rootElement->find(sprintf($this->paymentMethodInput, $payment['method']));
         if ($paymentSelector->isVisible()) {
@@ -79,14 +81,13 @@ class Methods extends Form
         if ($payment['method'] == "purchaseorder") {
             $this->_rootElement->find($this->purchaseOrderNumber)->setValue($payment['po_number']);
         }
-        if (isset($payment['dataConfig']['payment_form_class'])) {
-            $paymentFormClass = $payment['dataConfig']['payment_form_class'];
+        if (isset($creditCard)) {
             /** @var \Magento\Payment\Test\Block\Form\Cc $formBlock */
             $formBlock = $this->blockFactory->create(
-                $paymentFormClass,
+                '\\Magento\\Payment\\Test\\Block\\Form\\Cc',
                 ['element' => $this->_rootElement->find('#payment_form_' . $payment['method'])]
             );
-            $formBlock->fill($payment['credit_card']);
+            $formBlock->fill($creditCard);
         }
     }
 
