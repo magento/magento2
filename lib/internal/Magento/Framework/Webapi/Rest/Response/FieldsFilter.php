@@ -40,7 +40,10 @@ class FieldsFilter
         if (!is_string($filter)) {
             return [];
         }
-        $filterArray = $this->parse($filter);
+        $length = strlen($filter);
+        //Permissible characters in filter string: letter, number, underscore, square brackets and comma
+        //Set $filterArray to be null if $filter is empty or has invalid characters
+        $filterArray = ($length == 0 || preg_match('/[^\w\[\],]+/', $filter)) ? null : $this->parse($filter, $length);
         if (is_null($filterArray)) {
             return [];
         }
@@ -52,6 +55,7 @@ class FieldsFilter
      * Parse filter string into associative array. Field names are returned as keys with values for scalar fields as 1.
      *
      * @param string $filterString
+     * @param int $length
      * <pre>
      *  ex. customer[id,email],addresses[city,postcode,region[region_code,region]]
      * </pre>
@@ -79,14 +83,8 @@ class FieldsFilter
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function parse($filterString)
+    protected function parse($filterString, $length)
     {
-        $length = strlen($filterString);
-        //Permissible characters in filter string: letter, number, underscore, square brackets and comma
-        if ($length == 0 || preg_match('/[^\w\[\],]+/', $filterString)) {
-            return null;
-        }
-
         $start = null;
         $current = [];
         $stack = [];
