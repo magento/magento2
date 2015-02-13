@@ -10,7 +10,7 @@
 ?>
 <?php
 /** @var \Magento\Search\Model\QueryResult[] $data */
-$data = $block->getSearchData();
+$data = $block->getItems();
 if (count($data)):?>
     <dl class="block">
         <dt class="title"><?php echo __($block->getTitle()); ?></dt>

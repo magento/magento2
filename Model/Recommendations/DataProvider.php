@@ -89,32 +89,27 @@ class DataProvider implements SuggestedQueriesInterface
     }
 
     /**
+     * @param QueryInterface $query
      * @return array
      */
     private function getSearchRecommendations(\Magento\Search\Model\QueryInterface $query)
     {
-        $productCollection = $this->searchLayer->getProductCollection();
-        $searchQueryText = $query->getQueryText();
+        $recommendations = [];
 
-        $params = ['store_id' => $productCollection->getStoreId()];
+        if ($this->isSearchRecommendationsEnabled()) {
+            $productCollection = $this->searchLayer->getProductCollection();
+            $params = ['store_id' => $productCollection->getStoreId()];
 
-        $searchRecommendationsEnabled = $this->isSearchRecommendationsEnabled();
-        $searchRecommendationsCount = $this->getSearchRecommendationsCount();
-
-        if ($searchRecommendationsCount < 1) {
-            $searchRecommendationsCount = 1;
-        }
-        if ($searchRecommendationsEnabled) {
-            /** @var \Magento\AdvancedSearch\Model\Resource\Recommendations $recommendations */
-            $recommendations = $this->recommendationsFactory->create();
-            return $recommendations->getRecommendationsByQuery(
-                $searchQueryText,
+            /** @var \Magento\AdvancedSearch\Model\Resource\Recommendations $recommendationsResource */
+            $recommendationsResource = $this->recommendationsFactory->create();
+            $recommendations = $recommendationsResource->getRecommendationsByQuery(
+                $query->getQueryText(),
                 $params,
-                $searchRecommendationsCount
+                $this->getSearchRecommendationsCount()
             );
-        } else {
-            return [];
         }
+
+        return $recommendations;
     }
 
     /**
@@ -129,7 +124,7 @@ class DataProvider implements SuggestedQueriesInterface
     }
 
     /**
-     * @return bool
+     * @return int
      */
     private function getSearchRecommendationsCount()
     {
