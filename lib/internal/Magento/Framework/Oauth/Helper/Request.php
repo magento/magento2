@@ -47,8 +47,7 @@ class Request
      */
     public function getRequestUrl($httpRequest)
     {
-        // TODO: Fix needed for $this->getRequest()->getHttpHost(). Hosts with port are not covered.
-        return $httpRequest->getScheme() . '://' . $httpRequest->getHttpHost() . $httpRequest->getRequestUri();
+        return $httpRequest->getScheme() . '://' . $httpRequest->getHttpHost(false) . $httpRequest->getRequestUri();
     }
 
     /**
