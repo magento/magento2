@@ -9,15 +9,14 @@ namespace Magento\Checkout\Controller\Onepage;
 class ShippingMethod extends \Magento\Checkout\Controller\Onepage
 {
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         if ($this->_expireAjax()) {
-            return;
+            return $this->_ajaxRedirectResponse();
         }
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
+
+        return $this->resultLayoutFactory->create();
     }
 }

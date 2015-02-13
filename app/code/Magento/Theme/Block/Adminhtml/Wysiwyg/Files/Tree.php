@@ -63,7 +63,7 @@ class Tree extends \Magento\Backend\Block\Template
     /**
      * Get root node name of tree
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getRootNodeName()
     {

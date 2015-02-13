@@ -118,7 +118,7 @@ require([
                             '<div class="fileinput-button form-buttons">'+
                                 '<span><?php echo __('Browse Files...') ?></span>' +
                                 '<input id="downloadable_link_{{id}}_sample_file" type="file" name="<?php echo $block->getFileFieldName('link_samples') ?>">' +
-                                '<script type="text/javascript">' +
+                                '<script>' +
                                 '/*<![CDATA[*/' +
                                     'linksUploader("#downloadable_link_{{id}}_sample_file", "<?php echo $block->getUploadUrl('link_samples') ?>"); ' +
                                 '/*]]>*/' +
@@ -146,7 +146,7 @@ require([
                             '<div class="fileinput-button form-buttons">'+
                                 '<span><?php echo __('Browse Files...') ?></span>' +
                                 '<input id="downloadable_link_{{id}}_file" type="file" name="<?php echo $block->getFileFieldName('links') ?>">' +
-                                '<script type="text/javascript">' +
+                                '<script>' +
                                 '/*<![CDATA[*/' +
                                     'linksUploader("#downloadable_link_{{id}}_file", "<?php echo $block->getUploadUrl('links') ?>"); ' +
                                 '/*]]>*/' +

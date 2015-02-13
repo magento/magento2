@@ -69,7 +69,9 @@ class Uploader
             return false;
         }
         if (!$this->_transferAdapter->isValid($scope)) {
-            throw new \Magento\Framework\Exception(__('Uploaded image is not valid'));
+            throw new \Magento\Framework\Exception(
+                (string)new \Magento\Framework\Phrase('Uploaded image is not valid')
+            );
         }
         $upload = $this->_uploaderFactory->create(['fileId' => $scope]);
         $upload->setAllowCreateFolders(true);
@@ -78,10 +80,10 @@ class Uploader
         $upload->setFilesDispersion(false);
 
         if (!$upload->checkAllowedExtension($upload->getFileExtension())) {
-            throw new \Magento\Framework\Exception(__('Invalid image file type.'));
+            throw new \Magento\Framework\Exception((string)new \Magento\Framework\Phrase('Invalid image file type.'));
         }
         if (!$upload->save($destinationPath)) {
-            throw new \Magento\Framework\Exception(__('Image can not be saved.'));
+            throw new \Magento\Framework\Exception((string)new \Magento\Framework\Phrase('Image can not be saved.'));
         }
         return $destinationPath . '/' . $upload->getUploadedFileName();
     }
