@@ -6,7 +6,6 @@
  */
 namespace Magento\Catalog\Api;
 
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestFramework\TestCase\WebapiAbstract
@@ -42,7 +41,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/simple/media',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
@@ -53,7 +52,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $this->updateServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/simple/media',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
@@ -63,7 +62,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         ];
         $this->deleteServiceInfo = [
             'rest' => [
-                'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
@@ -567,7 +566,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/' . $productSku . '/media/' . $imageId,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
@@ -597,7 +596,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/' . urlencode($productSku) . '/media',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
@@ -626,7 +625,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/' . urlencode($productSku) . '/media',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',

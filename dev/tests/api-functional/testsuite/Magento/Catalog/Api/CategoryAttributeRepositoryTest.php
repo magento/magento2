@@ -6,8 +6,6 @@
  */
 namespace Magento\Catalog\Api;
 
-use Magento\Webapi\Model\Rest\Config as RestConfig;
-
 class CategoryAttributeRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_NAME = 'catalogCategoryAttributeRepositoryV1';
@@ -52,7 +50,7 @@ class CategoryAttributeRepositoryTest extends \Magento\TestFramework\TestCase\We
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -84,7 +82,7 @@ class CategoryAttributeRepositoryTest extends \Magento\TestFramework\TestCase\We
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $attributeCode,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

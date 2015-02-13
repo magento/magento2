@@ -7,7 +7,6 @@
 namespace Magento\Webapi;
 
 use Magento\TestFramework\TestCase\Webapi\Adapter\Rest\CurlClient;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -36,14 +35,14 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath,
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
         $expectedMessage = '{"message":"%fieldName is a required field.","parameters":{"fieldName":"item"}}';
         try {
             $this->_webApiCall($serviceInfo, CurlClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {
-            $this->assertEquals(\Magento\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
@@ -62,14 +61,14 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $itemId,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
         $expectedMessage = '{"message":"%fieldName is a required field.","parameters":{"fieldName":"entityItem"}}';
         try {
             $this->_webApiCall($serviceInfo, CurlClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {
-            $this->assertEquals(\Magento\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),

@@ -13,7 +13,7 @@ namespace Magento\User\Block\Role\Tab;
 class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {

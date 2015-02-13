@@ -17,6 +17,7 @@
 #    include /vagrant/magento2/nginx.conf.sample;
 # }
 
+
 root $MAGE_ROOT;
 
 
@@ -46,17 +47,56 @@ location / {
         rewrite / /index.php ;
     }
 
-
     location /static/ {
+
         if ($MAGE_MODE = "production") {
             expires max;
         }
+
+        location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
+               add_header Cache-Control "public";
+               expires +1y;
+
+            if (!-f $request_filename) {
+                rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+            }
+        }
+
+        location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
+            add_header Cache-Control "no-store";
+                expires    off;
+
+            if (!-f $request_filename) {
+                   rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+            }
+
+        }
+
         if (!-f $request_filename) {
             rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
         }
     }
 
     location /media/ {
+
+        location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
+            add_header Cache-Control "public";
+            expires +1y;
+
+            if (!-f $request_filename) {
+                rewrite / /get.php;
+            }
+        }
+
+        location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
+            add_header Cache-Control "no-store";
+            expires    off;
+
+            if (!-f $request_filename) {
+                rewrite / /get.php;
+            }
+        }
+
         if (!-f $request_filename) {
             rewrite / /get.php;
         }

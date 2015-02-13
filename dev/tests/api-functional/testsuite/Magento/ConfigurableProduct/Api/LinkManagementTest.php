@@ -6,8 +6,6 @@
  */
 namespace Magento\ConfigurableProduct\Api;
 
-use Magento\Webapi\Model\Rest\Config;
-
 class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_NAME = 'configurableProductLinkManagementV1';
@@ -55,7 +53,7 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/child',
-                'httpMethod' => Config::HTTP_METHOD_POST
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -83,7 +81,7 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => sprintf($resourcePath, $productSku, $childSku),
-                'httpMethod' => Config::HTTP_METHOD_DELETE
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -104,7 +102,7 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku  . '/children',
-                'httpMethod' => Config::HTTP_METHOD_GET
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

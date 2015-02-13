@@ -29,11 +29,6 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     protected $_soapConfig;
 
     /**
-     * @var \Magento\Webapi\Helper\Data
-     */
-    protected $_helper;
-
-    /**
      * @var SimpleDataObjectConverter
      */
     protected $_converter;
@@ -46,7 +41,6 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
         $this->_soapConfig = $objectManager->get('Magento\Webapi\Model\Soap\Config');
-        $this->_helper = $objectManager->get('Magento\Webapi\Helper\Data');
         $this->_converter = $objectManager->get('Magento\Framework\Api\SimpleDataObjectConverter');
     }
 
@@ -127,11 +121,11 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         /** Sort list of services to avoid having different WSDL URLs for the identical lists of services. */
         //TODO: This may change since same resource of multiple versions may be allowed after namespace changes
         ksort($services);
-        /** @var \Magento\Framework\Store\StoreManagerInterface $storeManager */
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $storeCode = !is_null($storeCode)
             ? (string)$storeCode
             : Bootstrap::getObjectManager()
-                ->get('Magento\Framework\Store\StoreManagerInterface')
+                ->get('Magento\Store\Model\StoreManagerInterface')
                 ->getStore()
                 ->getCode();
 
@@ -214,7 +208,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         if (isset($serviceInfo['soap']['service'])) {
             $serviceName = $serviceInfo['soap']['service'];
         } elseif (isset($serviceInfo['serviceInterface'])) {
-            $serviceName = $this->_helper->getServiceName($serviceInfo['serviceInterface'], false);
+            $serviceName = $this->_soapConfig->getServiceName($serviceInfo['serviceInterface'], false);
         } else {
             throw new \LogicException("Service name cannot be identified.");
         }

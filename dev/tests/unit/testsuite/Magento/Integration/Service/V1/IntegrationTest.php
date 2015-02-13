@@ -43,7 +43,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_integrationFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Integration\Factory'
+            'Magento\Integration\Model\IntegrationFactory'
         )->disableOriginalConstructor()->getMock();
         $this->_integrationMock = $this->getMockBuilder(
             'Magento\Integration\Model\Integration'

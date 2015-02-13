@@ -13,7 +13,7 @@ use Magento\Integration\Model\Oauth\Token;
 class Provider implements TokenProviderInterface
 {
     /**
-     * @var \Magento\Integration\Model\Oauth\Consumer\Factory
+     * @var \Magento\Integration\Model\Oauth\ConsumerFactory
      */
     protected $_consumerFactory;
 
@@ -28,12 +28,12 @@ class Provider implements TokenProviderInterface
     protected $logger;
 
     /**
-     * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
+     * @param \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory
      * @param \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
+        \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory,
         \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory,
         \Psr\Log\LoggerInterface $logger
     ) {

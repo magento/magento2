@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
 {
@@ -39,7 +38,7 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
             [
                 'rest' => [
                     'resourcePath' => self::RESOURCE_PATH . $productSku . '/links/' . $linkType . '/' . $linkedSku,
-                    'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
+                    'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
                 ],
                 'soap' => [
                     'service' => self::SERVICE_NAME,
@@ -73,7 +72,7 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $productSku . '/links/' . $linkType,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

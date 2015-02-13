@@ -34,8 +34,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /** @var SimpleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
     protected $_dataObjectConverter;
 
-    /** @var \Magento\Webapi\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_serializerMock;
+    /** @var \Magento\Framework\Webapi\ServiceInputProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_serviceInputProcessorMock;
 
     /** @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $_dataObjectProcessorMock;
@@ -58,7 +58,13 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_serializerMock = $this->getMock('Magento\Webapi\Controller\ServiceArgsSerializer', [], [], '', false);
+        $this->_serviceInputProcessorMock = $this->getMock(
+            'Magento\Framework\Webapi\ServiceInputProcessor',
+            [],
+            [],
+            '',
+            false
+        );
         $this->_dataObjectProcessorMock = $this->getMock(
             'Magento\Framework\Reflection\DataObjectProcessor',
             ['getMethodReturnType'],
@@ -73,7 +79,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             $this->_apiConfigMock,
             $this->_authorizationMock,
             $this->_dataObjectConverter,
-            $this->_serializerMock,
+            $this->_serviceInputProcessorMock,
             $this->_dataObjectProcessorMock
         );
         parent::setUp();
@@ -117,7 +123,10 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $serviceMock->expects($this->once())->method($methodName)->will($this->returnValue($serviceResponse));
         $this->_objectManagerMock->expects($this->once())->method('get')->with($className)
             ->will($this->returnValue($serviceMock));
-        $this->_serializerMock->expects($this->once())->method('getInputData')->will($this->returnArgument(2));
+        $this->_serviceInputProcessorMock
+            ->expects($this->once())
+            ->method('process')
+            ->will($this->returnArgument(2));
 
         $this->_dataObjectProcessorMock->expects($this->any())->method('getMethodReturnType')
             ->with($className, $methodName)

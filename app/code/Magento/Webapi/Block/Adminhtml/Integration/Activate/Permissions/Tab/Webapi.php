@@ -28,8 +28,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /** @var \Magento\Integration\Helper\Data */
     protected $_integrationData;
 
-    /** @var WebapiHelper */
-    protected $_webapiHelper;
+    /** @var \Magento\Webapi\Model\Soap\Config */
+    protected $_config;
 
     /** @var \Magento\Core\Helper\Data  */
     protected $_coreHelper;
@@ -44,7 +44,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
-     * @param \Magento\Webapi\Helper\Data $webapiData
+     * @param \Magento\Webapi\Model\Soap\Config $config
      * @param array $data
      */
     public function __construct(
@@ -55,27 +55,27 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
-        \Magento\Webapi\Helper\Data $webapiData,
+        \Magento\Webapi\Model\Soap\Config $config,
         array $data = []
     ) {
         $this->_rootResource = $rootResource;
         $this->_resourceProvider = $resourceProvider;
         $this->_integrationData = $integrationData;
-        $this->_webapiHelper = $webapiData;
+        $this->_config = $config;
         $this->_coreHelper = $coreHelper;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
      * Set the selected resources, which is an array of resource ids. If everything is allowed, the
-     * array will contain just the root resource id, which is "Magento_Adminhtml::all".
+     * array will contain just the root resource id, which is "Magento_Backend::all".
      *
      * @return void
      */
     protected function _construct()
     {
         parent::_construct();
-        $this->_selectedResources = $this->_webapiHelper->getSelectedResources();
+        $this->_selectedResources = $this->_config->getSelectedResources();
     }
 
     /**
@@ -139,7 +139,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Return an array of selected resource ids. If everything is allowed then iterate through all
      * available resources to generate a comprehensive array of all resource ids, rather than just
-     * returning "Magento_Adminhtml::all".
+     * returning "Magento_Backend::all".
      *
      * @return string
      */

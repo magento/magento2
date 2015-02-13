@@ -19,9 +19,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $_configMock;
 
-    /** @var \Magento\Webapi\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_helperMock;
-
     /**
      * Set up helper.
      */
@@ -34,32 +31,31 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $classReflection = $this->getMock(
-            'Magento\Webapi\Model\Config\ClassReflector',
+            'Magento\Webapi\Model\Soap\Config\ClassReflector',
             ['reflectClassMethods'],
             [],
             '',
             false
         );
         $classReflection->expects($this->any())->method('reflectClassMethods')->will($this->returnValue([]));
-        $this->_helperMock = $this->getMock('Magento\Webapi\Helper\Data', [], [], '', false);
         $this->_configMock = $this->getMock('Magento\Webapi\Model\Config', [], [], '', false);
         $servicesConfig = [
             'services' => [
-                'Magento\Framework\Module\Service\FooV1Interface' => [
-                    'someMethod' => [
+                'Magento\Customer\Api\AccountManagementInterface' => [
+                    'activate' => [
                         'resources' => [
                             [
-                                'Magento_TestModule1::resource1',
+                                'Magento_Customer::manage',
                             ],
                         ],
                         'secure' => false,
                     ],
                 ],
-                'Magento\Framework\Module\Service\BarV1Interface' => [
-                    'someMethod' => [
+                'Magento\Customer\Api\CustomerRepositoryInterface' => [
+                    'getById' => [
                         'resources' => [
                             [
-                                'Magento_TestModule1::resource2',
+                                'Magento_Customer::customer',
                             ],
                         ],
                         'secure' => false,
@@ -69,18 +65,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->_configMock->expects($this->once())->method('getServices')->will($this->returnValue($servicesConfig));
-        $this->_helperMock->expects(
-            $this->any()
-        )->method(
-            'getServiceName'
-        )->will(
-            $this->returnValueMap(
-                [
-                    ['Magento\Framework\Module\Service\FooV1Interface', true, 'moduleFooV1'],
-                    ['Magento\Framework\Module\Service\BarV1Interface', true, 'moduleBarV1'],
-                ]
-            )
-        );
+
+        /**
+         * @var $registryMock \Magento\Framework\Registry
+         */
+        $registryMock = $this->getMockBuilder('Magento\Framework\Registry')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         /**
          * @var $cacheMock \Magento\Webapi\Model\Cache\Type
          */
@@ -92,8 +84,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $fileSystemMock,
             $this->_configMock,
             $classReflection,
-            $this->_helperMock,
-            $cacheMock
+            $cacheMock,
+            $registryMock
         );
         parent::setUp();
     }
@@ -103,41 +95,90 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             [
                 'methods' => [
-                    'someMethod' => [
-                        'method' => 'someMethod',
+                    'activate' => [
+                        'method' => 'activate',
                         'inputRequired' => '',
                         'isSecure' => '',
-                        'resources' => [['Magento_TestModule1::resource1']],
+                        'resources' => [['Magento_Customer::manage']],
                     ],
                 ],
-                'class' => 'Magento\Framework\Module\Service\FooV1Interface',
+                'class' => 'Magento\Customer\Api\AccountManagementInterface',
             ],
         ];
-        $result = $this->_soapConfig->getRequestedSoapServices(['moduleFooV1', 'moduleBarV2', 'moduleBazV1']);
+        $result = $this->_soapConfig->getRequestedSoapServices(['customerAccountManagementV1', 'moduleBarV2', 'moduleBazV1']);
         $this->assertEquals($expectedResult, $result);
     }
 
     public function testGetServiceMethodInfo()
     {
         $expectedResult = [
-            'class' => 'Magento\Framework\Module\Service\BarV1Interface',
-            'method' => 'someMethod',
+            'class' => 'Magento\Customer\Api\CustomerRepositoryInterface',
+            'method' => 'getById',
             'isSecure' => false,
-            'resources' => [['Magento_TestModule1::resource2']],
+            'resources' => [['Magento_Customer::customer']],
         ];
         $methodInfo = $this->_soapConfig->getServiceMethodInfo(
-            'moduleBarV1SomeMethod',
-            ['moduleBarV1', 'moduleBazV1']
+            'customerCustomerRepositoryV1GetById',
+            ['customerCustomerRepositoryV1', 'moduleBazV1']
         );
         $this->assertEquals($expectedResult, $methodInfo);
     }
 
     public function testGetSoapOperation()
     {
-        $expectedResult = 'moduleFooV1SomeMethod';
+        $expectedResult = 'customerAccountManagementV1Activate';
         $soapOperation = $this->_soapConfig
-            ->getSoapOperation('Magento\Framework\Module\Service\FooV1Interface', 'someMethod');
+            ->getSoapOperation('Magento\Customer\Api\AccountManagementInterface', 'activate');
         $this->assertEquals($expectedResult, $soapOperation);
+    }
+    /**
+     * Test identifying service name parts including subservices using class name.
+     *
+     * @dataProvider serviceNamePartsDataProvider
+     */
+    public function testGetServiceNameParts($className, $preserveVersion, $expected)
+    {
+        $actual = $this->_soapConfig->getServiceName($className, $preserveVersion);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Dataprovider for serviceNameParts
+     *
+     * @return string
+     */
+    public function serviceNamePartsDataProvider()
+    {
+        return [
+            ['Magento\Customer\Api\AccountManagementInterface', false, 'customerAccountManagement'],
+            [
+                'Magento\Customer\Api\AddressRepositoryInterface',
+                true,
+                'customerAddressRepositoryV1'
+            ],
+        ];
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @dataProvider dataProviderForTestGetServiceNamePartsInvalidName
+     */
+    public function testGetServiceNamePartsInvalidName($interfaceClassName)
+    {
+        $this->_soapConfig->getServiceName($interfaceClassName);
+    }
+
+    public function dataProviderForTestGetServiceNamePartsInvalidName()
+    {
+        return [
+            ['BarV1Interface'], // Missed vendor, module, 'Service'
+            ['Service\\V1Interface'], // Missed vendor and module
+            ['Magento\\Foo\\Service\\BarVxInterface'], // Version number should be a number
+            ['Magento\\Foo\\Service\\BarInterface'], // Version missed
+            ['Magento\\Foo\\Service\\BarV1'], // 'Interface' missed
+            ['Foo\\Service\\BarV1Interface'], // Module missed
+            ['Foo\\BarV1Interface'] // Module and 'Service' missed
+        ];
     }
 }
 

@@ -11,7 +11,7 @@ use Magento\Integration\Model\Oauth\Token as TokenModel;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\User\Model\User as UserModel;
-use Magento\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
  * api-functional test for \Magento\Integration\Service\V1\AdminTokenService.
@@ -59,7 +59,7 @@ class AdminTokenServiceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_ADMIN_TOKEN,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
         $requestData = [
@@ -85,7 +85,7 @@ class AdminTokenServiceTest extends WebapiAbstract
             $serviceInfo = [
                 'rest' => [
                     'resourcePath' => self::RESOURCE_PATH_ADMIN_TOKEN,
-                    'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+                    'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
                 ],
             ];
             $requestData = ['username' => '', 'password' => ''];
@@ -103,7 +103,7 @@ class AdminTokenServiceTest extends WebapiAbstract
             $serviceInfo = [
                 'rest' => [
                     'resourcePath' => self::RESOURCE_PATH_CUSTOMER_TOKEN,
-                    'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+                    'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
                 ],
             ];
             $requestData = ['username' => $customerUserName, 'password' => $password];

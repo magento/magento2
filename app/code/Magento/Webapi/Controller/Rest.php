@@ -8,14 +8,15 @@ namespace Magento\Webapi\Controller;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Webapi\Controller\Rest\Request as RestRequest;
-use Magento\Webapi\Controller\Rest\Response as RestResponse;
-use Magento\Webapi\Controller\Rest\Response\DataObjectConverter;
-use Magento\Webapi\Controller\Rest\Response\PartialResponseProcessor;
+use Magento\Framework\Webapi\ErrorProcessor;
+use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\ServiceOutputProcessor;
+use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Framework\Webapi\Rest\Response as RestResponse;
+use Magento\Framework\Webapi\Rest\Response\FieldsFilter;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
 use Magento\Webapi\Model\Config\Converter;
-use Magento\Webapi\Model\PathProcessor;
 
 /**
  * Front controller for WebAPI REST area.
@@ -62,9 +63,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $_authorization;
 
     /**
-     * @var ServiceArgsSerializer
+     * @var ServiceInputProcessor
      */
-    protected $_serializer;
+    protected $serviceInputProcessor;
 
     /**
      * @var ErrorProcessor
@@ -82,9 +83,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $areaList;
 
     /**
-     * @var PartialResponseProcessor
+     * @var FieldsFilter
      */
-    protected $partialResponseProcessor;
+    protected $fieldsFilter;
 
     /**
      * @var \Magento\Framework\Session\Generic
@@ -97,9 +98,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $userContext;
 
     /**
-     * @var DataObjectConverter $dataObjectConverter
+     * @var ServiceOutputProcessor $serviceOutputProcessor
      */
-    protected $dataObjectConverter;
+    protected $serviceOutputProcessor;
 
     /**
      * Initialize dependencies
@@ -110,13 +111,13 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
      * @param AuthorizationInterface $authorization
-     * @param ServiceArgsSerializer $serializer
+     * @param ServiceInputProcessor $serviceInputProcessor
      * @param ErrorProcessor $errorProcessor
      * @param PathProcessor $pathProcessor
      * @param \Magento\Framework\App\AreaList $areaList
-     * @param PartialResponseProcessor $partialResponseProcessor
+     * @param FieldsFilter $fieldsFilter
      * @param UserContextInterface $userContext
-     * @param DataObjectConverter $dataObjectConverter
+     * @param ServiceOutputProcessor $serviceOutputProcessor
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -128,13 +129,13 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\State $appState,
         AuthorizationInterface $authorization,
-        ServiceArgsSerializer $serializer,
+        ServiceInputProcessor $serviceInputProcessor,
         ErrorProcessor $errorProcessor,
         PathProcessor $pathProcessor,
         \Magento\Framework\App\AreaList $areaList,
-        PartialResponseProcessor $partialResponseProcessor,
+        FieldsFilter $fieldsFilter,
         UserContextInterface $userContext,
-        DataObjectConverter $dataObjectConverter
+        ServiceOutputProcessor $serviceOutputProcessor
     ) {
         $this->_router = $router;
         $this->_request = $request;
@@ -142,13 +143,13 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->_objectManager = $objectManager;
         $this->_appState = $appState;
         $this->_authorization = $authorization;
-        $this->_serializer = $serializer;
+        $this->serviceInputProcessor = $serviceInputProcessor;
         $this->_errorProcessor = $errorProcessor;
         $this->_pathProcessor = $pathProcessor;
         $this->areaList = $areaList;
-        $this->partialResponseProcessor = $partialResponseProcessor;
+        $this->fieldsFilter = $fieldsFilter;
         $this->userContext = $userContext;
-        $this->dataObjectConverter = $dataObjectConverter;
+        $this->serviceOutputProcessor = $serviceOutputProcessor;
     }
 
     /**
@@ -167,24 +168,24 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $this->checkPermissions();
             $route = $this->getCurrentRoute();
             if ($route->isSecure() && !$this->_request->isSecure()) {
-                throw new \Magento\Webapi\Exception(__('Operation allowed only in HTTPS'));
+                throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
             }
             /** @var array $inputData */
             $inputData = $this->_request->getRequestData();
             $serviceMethodName = $route->getServiceMethod();
             $serviceClassName = $route->getServiceClass();
             $inputData = $this->overrideParams($inputData, $route->getParameters());
-            $inputParams = $this->_serializer->getInputData($serviceClassName, $serviceMethodName, $inputData);
+            $inputParams = $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
             $service = $this->_objectManager->get($serviceClassName);
             /** @var \Magento\Framework\Api\AbstractExtensibleObject $outputData */
             $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
-            $outputData = $this->dataObjectConverter->processServiceOutput(
+            $outputData = $this->serviceOutputProcessor->process(
                 $outputData,
                 $serviceClassName,
                 $serviceMethodName
             );
-            if ($this->_request->getParam(PartialResponseProcessor::FILTER_PARAMETER) && is_array($outputData)) {
-                $outputData = $this->partialResponseProcessor->filter($outputData);
+            if ($this->_request->getParam(FieldsFilter::FILTER_PARAMETER) && is_array($outputData)) {
+                $outputData = $this->fieldsFilter->filter($outputData);
             }
             $this->_response->prepareResponse($outputData);
         } catch (\Exception $e) {

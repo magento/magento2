@@ -12,7 +12,7 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Url;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -142,7 +142,7 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
         $this->markTestSkipped('Cannot be unit tested with the auto generated builder dependencies');
         $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
         $this->redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface');
-        $this->responseMock = $this->getMock('Magento\Webapi\Controller\Response');
+        $this->responseMock = $this->getMock('Magento\Framework\Webapi\Response');
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
 
         $this->urlMock = $this->getMock('Magento\Framework\Url', [], [], '', false);

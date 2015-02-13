@@ -823,13 +823,13 @@ return [
     ['Mage_Core_Model_Session_Abstract_Varien'],
     ['Mage_Core_Model_Session_Abstract_Zend'],
     ['Magento\Core\Model\Source\Email\Variables', 'Magento\Email\Model\Source\Variables'],
-    ['Magento\Core\Model\Store\ListInterface', 'Magento\Framework\Store\StoreManagerInterface'],
-    ['Magento\Core\Model\Store\StorageInterface', 'Magento\Framework\Store\StoreManagerInterface'],
+    ['Magento\Core\Model\Store\ListInterface', 'Magento\Store\Model\StoreManagerInterface'],
+    ['Magento\Core\Model\Store\StorageInterface', 'Magento\Store\Model\StoreManagerInterface'],
     ['Mage_Core_Model_Store_Group_Limitation'],
     ['Mage_Core_Model_Store_Limitation'],
     ['Magento\Core\Model\Variable\Observer'],
     ['Mage_Core_Model_Website_Limitation'],
-    ['Mage_Core_Model_Layout_Data', 'Magento\Core\Model\Layout\Update'],
+    ['Mage_Core_Model_Layout_Data', 'Magento\Widget\Model\Layout\Update'],
     ['Mage_Core_Model_Theme_Customization_Link'],
     ['Mage_Customer_Block_Account'],
     ['Mage_Customer_Block_Account_Navigation'],
@@ -1594,7 +1594,6 @@ return [
     ['Magento\Core\Model\View\Url\Config', 'Magento\Framework\View\Url\Config'],
     ['Magento\Core\Model\View\Config', 'Magento\Framework\View\Config'],
     ['Magento\Core\Model\Image\Factory', 'Magento\Framework\Image\Factory'],
-    ['Magento\Store\Model\StoreManagerInterface', 'Magento\Framework\Store\StoreManagerInterface'],
     ['Magento\Core\Model\Theme\Image', 'Magento\Framework\View\Design\Theme\Image'],
     ['Magento\Core\Model\Theme\FlyweightFactory', 'Magento\Framework\View\Design\Theme\FlyweightFactory'],
     ['Magento\Core\Model\Image\AdapterFactory', 'Magento\Framework\Image\AdapterFactory'],
@@ -2227,8 +2226,7 @@ return [
     ['Magento\Core\Model\Resource\Website', 'Magento\Store\Model\Resource\Website'],
     ['Magento\Core\Model\Resource\Website\Collection', 'Magento\Store\Model\Resource\Website\Collection'],
     ['Magento\Core\Model\Resource\Website\Grid\Collection', 'Magento\Store\Model\Resource\Website\Grid\Collection'],
-    ['Magento\Core\Model\ScopeInterface', 'Magento\Framework\Store\ScopeInterface'],
-    ['Magento\Store\Model\ScopeInterface', 'Magento\Framework\Store\ScopeInterface'],
+    ['Magento\Core\Model\ScopeInterface', 'Magento\Store\Model\ScopeInterface'],
     ['Magento\Core\Model\Store', 'Magento\Store\Model\Store'],
     ['Magento\Store\Model\Exception', 'Magento\Framework\Model\Exception, Magento\Framework\App\InitException'],
     ['Magento\Core\Model\Store\Group', 'Magento\Store\Model\Group'],
@@ -2244,7 +2242,9 @@ return [
     ['Magento\BaseScopeInterface', 'Magento\Framework\App\ScopeInterface'],
     ['Magento\BaseScopeResolverInterface', 'Magento\Framework\App\ScopeResolverInterface'],
     ['Magento\Framework\Locale\ScopeConfigInterface'],
-    ['Magento\Framework\StoreManagerInterface', 'Magento\Framework\Store\StoreManagerInterface'],
+    ['Magento\Framework\StoreManagerInterface', 'Magento\Store\Model\StoreManagerInterface'],
+    ['Magento\Framework\Store\StoreManagerInterface', 'Magento\Store\Model\StoreManagerInterface'],
+    ['Magento\Framework\Store\ScopeInterface', 'Magento\Store\Model\ScopeInterface'],
     ['Magento\Core\Model\Module\Output\Config', 'Magento\Framework\Module\Output\Config'],
     ['Magento\Core\Model\Resource\Setup\Context', 'Magento\Framework\Module\Setup\Context'],
     ['Magento\Core\Model\Resource\Setup\Migration', 'Magento\Framework\Module\Setup\Migration'],
@@ -2917,4 +2917,70 @@ return [
     ['Magento\Core\Block\RequireCookie', 'Magento\Cookie\Block\RequireCookie'],
     ['Magento\Core\Controller\Index\NoCookies', 'Magento\Cookie\Controller\Index\NoCookies'],
     ['Magento\Core\Model\Asset\Config', 'Magento\Framework\View\Asset\Config'],
+    ['Magento\Core\Model\Layout\Merge', 'Magento\Framework\View\Model\Layout\Merge'],
+    ['Magento\Core\Model\Layout\Translator', 'Magento\Framework\View\Model\Layout\Translator'],
+    ['Magento\Core\Model\Layout\Update\Validator', 'Magento\Framework\View\Model\Layout\Update\Validator'],
+    ['Magento\Core\Model\PageLayout\Config\Builder', 'Magento\Theme\Model\PageLayout\Config\Builder'],
+    ['Magento\Core\Model\Layout\DepersonalizePlugin', 'Magento\PageCache\Model\Layout\DepersonalizePlugin'],
+    ['Magento\Core\Model\Layout\Link', 'Magento\Widget\Model\Layout\Link'],
+    ['Magento\Core\Model\Layout\Update', 'Magento\Widget\Model\Layout\Update'],
+    ['Magento\Core\Model\Resource\Layout\Link', 'Magento\Widget\Model\Resource\Layout\Link'],
+    ['Magento\Core\Model\Resource\Layout\Link\Collection', 'Magento\Widget\Model\Resource\Layout\Link\Collection'],
+    ['Magento\Core\Model\Resource\Layout\Update', 'Magento\Widget\Model\Resource\Layout\Update'],
+    ['Magento\Core\Model\Resource\Layout\Update\Collection', 'Magento\Widget\Model\Resource\Layout\Update\Collection'],
+    ['Magento\Integration\Model\Oauth\Consumer\Factory', 'Magento\Integration\Model\Oauth\ConsumerFactory'],
+    ['Magento\Integration\Model\Oauth\Nonce\Factory', 'Magento\Integration\Model\Oauth\NonceFactory'],
+    ['Magento\Integration\Model\Manager', 'Magento\Integration\Model\ConfigBasedIntegrationManager'],
+    ['Magento\Integration\Model\Integration\Factory', 'Magento\Integration\Model\IntegrationFactory'],
+    ['Magento\Webapi\Model\PathProcessor', 'Magento\Webapi\Controller\PathProcessor'],
+    ['Magento\Webapi\Helper\Data', 'Magento\Webapi\Model\Soap\Config'],
+    ['Magento\Webapi\Model\Config\ClassReflector', 'Magento\Webapi\Model\Soap\Config\ClassReflector'],
+    ['Magento\Webapi\Model\Soap\Server\Factory', 'Magento\Webapi\Model\Soap\ServerFactory'],
+    ['Magento\Webapi\Model\Soap\Wsdl\Factory', 'Magento\Webapi\Model\Soap\WsdlFactory'],
+    [
+        'Magento\Webapi\Controller\Rest\Request\Deserializer\Json',
+        'Magneto\Framework\Webapi\Rest\Request\Deserializer\Json'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Request\Deserializer\Xml',
+        'Magneto\Framework\Webapi\Rest\Request\Deserializer\Xml'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Request\Deserializer\Factory',
+        'Magneto\Framework\Webapi\Rest\Request\DeserializerFactory'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Request\DeserializerInterface',
+        'Magento\Framework\Webapi\Rest\Request\DeserializerInterface'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\Renderer\Json',
+        'Magneto\Framework\Webapi\Rest\Response\Renderer\Json'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\Renderer\Xml',
+        'Magneto\Framework\Webapi\Rest\Response\Renderer\Xml'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\PartialResponseProcessor',
+        'Magneto\Framework\Webapi\Rest\Response\FieldsFilter'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\Renderer\Factory',
+        'Magneto\Framework\Webapi\Rest\Response\RendererFactory'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\RendererInterface',
+        'Magneto\Framework\Webapi\Rest\Response\RendererInterface'
+    ],
+    ['Magento\Webapi\Controller\Rest\Request', 'Magneto\Framework\Webapi\Rest\Request'],
+    ['Magento\Webapi\Controller\Rest\Response', 'Magneto\Framework\Webapi\Rest\Response'],
+    ['Magento\Webapi\Controller\ErrorProcessor', 'Magneto\Framework\Webapi\ErrorProcessor'],
+    ['Magento\Webapi\Exception', 'Magneto\Framework\Webapi\Exception'],
+    ['Magento\Webapi\Controller\Request', 'Magneto\Framework\Webapi\Request'],
+    ['Magento\Webapi\Controller\Response', 'Magneto\Framework\Webapi\Response'],
+    ['Magento\Webapi\Controller\ServiceArgsSerializer', 'Magneto\Framework\Webapi\ServiceInputProcessor'],
+    ['Magento\Webapi\Controller\Rest\Response\DataObjectConverter', 'Magneto\Framework\Webapi\ServiceOutputProcessor'],
+
+
 ];

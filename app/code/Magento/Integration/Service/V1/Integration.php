@@ -6,7 +6,7 @@
 namespace Magento\Integration\Service\V1;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Integration\Model\Integration\Factory as IntegrationFactory;
+use Magento\Integration\Model\IntegrationFactory;
 use Magento\Integration\Service\V1\OauthInterface as IntegrationOauthService;
 
 /**

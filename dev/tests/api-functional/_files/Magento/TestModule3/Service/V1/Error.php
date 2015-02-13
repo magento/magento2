@@ -80,7 +80,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function webapiException()
     {
-        throw new \Magento\Webapi\Exception('Service not found', 5555, \Magento\Webapi\Exception::HTTP_NOT_FOUND);
+        throw new \Magento\Framework\Webapi\Exception('Service not found', 5555, \Magento\Framework\Webapi\Exception::HTTP_NOT_FOUND);
     }
 
     /**

@@ -138,7 +138,7 @@ class Route extends \Zend_Controller_Router_Route
      * Matches a Request with parts defined by a map. Assigns and
      * returns an array of variables on a successful match.
      *
-     * @param \Magento\Webapi\Controller\Request $request
+     * @param \Magento\Framework\Webapi\Request $request
      * @param boolean $partial Partial path matching
      * @return array|bool An array of assigned values or a boolean false on a mismatch
      */

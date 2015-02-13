@@ -34,7 +34,7 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
     protected $integrationService;
 
     /**
-     * @var \Magento\Webapi\Controller\Request
+     * @var \Magento\Framework\Webapi\Request
      */
     protected $request;
 
@@ -42,7 +42,7 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->request = $this->getMockBuilder('Magento\Webapi\Controller\Request')
+        $this->request = $this->getMockBuilder('Magento\Framework\Webapi\Request')
             ->disableOriginalConstructor()
             ->setMethods(['getHeader'])
             ->getMock();

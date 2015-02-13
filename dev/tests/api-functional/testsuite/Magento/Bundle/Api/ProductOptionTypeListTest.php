@@ -6,8 +6,6 @@
  */
 namespace Magento\Bundle\Api;
 
-use Magento\Webapi\Model\Rest\Config;
-
 class ProductOptionTypeListTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_READ_NAME = 'bundleProductOptionTypeListV1';
@@ -35,7 +33,7 @@ class ProductOptionTypeListTest extends \Magento\TestFramework\TestCase\WebapiAb
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,
