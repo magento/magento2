@@ -3,42 +3,47 @@
 //  * See COPYING.txt for license details.
 //  */
 
-.uncheckedClass {
-  padding: 5px 5px 5px 5px;
-  width:480px;
-  font-weight: normal;
+.multiSelect {
+  .selected {
+    width: 430px;
+    background-color: #d9edf7;
+    padding: 5px;
+  }
+  .notSelected{
+    width: 430px;
+    padding: 5px;
+  }
+  .form-label {
+    font-size: 1.8rem;
+  }
 }
 
-.checkedClass {
-  padding: 5px 5px 5px 5px;
-  background-color:#d9edf7;
-  width:480px;
-  font-weight: normal;
+.form-legend-expand {
+  margin: 1px;
 }
 
-.disabledClass {
-  padding: 5px 5px 5px 5px;
-  color: #707070;
-  width:480px;
-  font-weight: normal;
+.alert-text {
+  margin: 5px;
+  display: block;
 }
 
-.multiSelect{
-  padding : 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  overflow-y: scroll;
-  width:500px;
-  height:300px;
+.alert-info {
+  .form-legend-expand {
+    margin: 5px;
+    font-size: 1.4rem;
+    display: inline;
+  }
 }
 
-::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 8px;
+.icon-failed-round{
+  margin: 2px;
+  position: relative;
 }
-
-::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: rgba(0,0,0,.5);
-  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+  .multiSelect {
+    padding-left: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    overflow-y: scroll;
+    width: 450px;
+    height: 300px;
 }

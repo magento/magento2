@@ -20,7 +20,7 @@
 
 <h2 class="page-title">{{$state.current.header}}</h2>
 
-<form role="form">
+<form name="customizeStore" role="form">
 
     <div class="row form-row">
         <div class="col-m-3">
@@ -121,27 +121,74 @@
         >
         Advanced Modules Configurations
     </legend>
-
     <div ng-show="store.advanced.expanded" class="form-group">
-        <div ng-show="store.errorMessage !== '' && store.errorMessage !== false " class="col-sm-10  error-container">
-            <input type="checkbox" ng-model="store.force" ng-click="toggleForce()">&nbsp; Skip dependency check for individual modules
+        <div
+            class="alert-info"
+            ng-show="store.errorMessage !== ''&& store.errorMessage !== false"
+            >
+            <span class="alert-text">
+                <input
+                        id="skipDependency"
+                        class="form-el-checkbox"
+                        type="checkbox"
+                        ng-model="store.force"
+                        ng-click="toggleForce()"
+                >
+                <label class="form-label" for="skipDependency">
+                    Skip dependency check for individual modules
+                </label>
+            </span>
+            <span class="icon-failed-round"></span>
+            <span
+                  class="form-legend-expand"
+                  ng-click="expandError()"
+                  ng-class="{'expanded' : store.errorFlag}">
+                An error has occurred. {{store.errorFlag ? 'Hide' : 'Show';}} details.
+            </span>
+            <span class="alert-text"
+                  ng-show="store.errorMessage !== '' && store.errorFlag === true"
+                  ng-bind-html="store.errorMessage">
+            </span>
         </div>
-        <div ng-show="store.errorMessage !== '' && store.errorMessage !== false " class="col-sm-10 error-container animate-show text-danger glyphicon glyphicon-remove-sign"> An error has occurred. <a href="#" class="text-danger" style="text-decoration: none;" ng-click="expandError()">Click to see detailed error.</a><span class="caret"></span>
+        <div class="alert alert-info" ng-show="loading">
+            <span class="spinner">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+            </span>
+            <p class="alert-text">Validating Constraints for enabling/disabling modules...
+            </p>
         </div>
-        <div ng-show="store.errorMessage !== '' && store.errorFlag === true" class="col-sm-10 error-container animate-show text-danger glyphicon glyphicon-remove-sign" ng-bind-html="store.errorMessage">
-        </div>
-        <div class="col-sm-8" ng-show="loading"><p style="color:blue">Validating Constraints for enabling/disabling modules...<img src="pub/images/ajax-loader.gif"/></div>
         <div>&nbsp;</div>
-        <div class="col-sm-10 form-group">
-            <input type="checkbox"
+        <div class="form-label">
+            <input id="selectAll" type="checkbox"
+               class="form-el-checkbox"
                ng-model="store.selectAll"
-               ng-click="toggleAllModules()">&nbsp;Select All
-        </div>
-        <div class="form-group multiSelect">
-            <label class="col-md-7 uncheckedClass" ng-repeat="module in store.allModules"  ng-class="{'disabledClass': (store.disabledModules.indexOf(module) > -1) && (store.selectedModules.indexOf(module) > -1), 'checkedClass':  (store.selectedModules.indexOf(module) > -1)}">
-                <input class="moduleCheckbox" type="checkbox" ng-click="toggleModule(module)" ng-disabled="store.disabledModules.indexOf(module) > -1"  ng-checked="store.selectedModules.indexOf(module) > -1" name="{{module}}"> {{module}}<br/>
+               ng-click="toggleAllModules()">
+            <label class="form-label" for="selectAll">
+               Select All
             </label>
         </div>
+        <div>&nbsp;</div>
+        <div class="multiSelect">
+            <label class="custom" ng-repeat="module in store.allModules" >
+               <div ng-class="store.selectedModules.indexOf(module) > -1 ? 'selected' : 'notSelected'; ">
+                <input
+                    class="form-el-checkbox"
+                    type="checkbox"
+                    ng-click="toggleModule(module)"
+                    ng-disabled="store.disabledModules.indexOf(module) > -1"
+                    ng-checked="store.selectedModules.indexOf(module) > -1"
+                    id="{{module}}"
+                >
+                    <label class="form-label"
+                           for="{{module}}"
+                           >
+                        {{module}}
+                    </label>
+               </div>
+            </label>
+        </div>
+        <div>&nbsp;</div>
         <div class="form-group">
             {{store.selectedModules.length}} out of {{store.allModules.length}} selected.
         </div>

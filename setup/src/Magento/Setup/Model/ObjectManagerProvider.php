@@ -51,12 +51,6 @@ class ObjectManagerProvider
     public function get()
     {
         if (null === $this->objectManager) {
-//            if (!$this->deploymentConfig->isAvailable()) {
-//                throw new \Magento\Setup\Exception(
-//                    "Can't instantiate object manager due to absence of deployment configuration. "
-//                    . "Please, install the deployment configuration first"
-//                );
-//            }
             $initParams = $this->serviceLocator->get(InitParamListener::BOOTSTRAP_PARAM);
             $factory = Bootstrap::createObjectManagerFactory(BP, $initParams);
             $this->objectManager = $factory->create($initParams);
