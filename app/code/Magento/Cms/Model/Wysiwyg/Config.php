@@ -51,7 +51,7 @@ class Config extends \Magento\Framework\Object
     protected $_assetRepo;
 
     /**
-     * @var \Magento\Core\Model\Variable\Config
+     * @var \Magento\Variable\Model\Variable\Config
      */
     protected $_variableConfig;
 
@@ -94,7 +94,7 @@ class Config extends \Magento\Framework\Object
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Core\Model\Variable\Config $variableConfig
+     * @param \Magento\Variable\Model\Variable\Config $variableConfig
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
@@ -107,7 +107,7 @@ class Config extends \Magento\Framework\Object
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Core\Model\Variable\Config $variableConfig,
+        \Magento\Variable\Model\Variable\Config $variableConfig,
         \Magento\Widget\Model\Widget\Config $widgetConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,

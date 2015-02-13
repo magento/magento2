@@ -11,7 +11,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Variable;
+namespace Magento\Variable\Model\Variable;
 
 class Config
 {

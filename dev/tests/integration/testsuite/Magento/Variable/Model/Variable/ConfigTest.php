@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Core\Model\Variable;
+namespace Magento\Variable\Model\Variable;
 
 /**
  * @magentoAppArea adminhtml
@@ -14,14 +14,14 @@ namespace Magento\Core\Model\Variable;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Variable\Config
+     * @var \Magento\Variable\Model\Variable\Config
      */
     protected $_model;
 
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Variable\Config'
+            'Magento\Variable\Model\Variable\Config'
         );
     }
 

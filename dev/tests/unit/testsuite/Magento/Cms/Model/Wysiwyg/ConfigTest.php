@@ -31,7 +31,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $authorizationMock;
 
     /**
-     * @var \Magento\Core\Model\Variable\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Variable\Model\Variable\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $variableConfigMock;
 
@@ -76,7 +76,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->authorizationMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->variableConfigMock = $this->getMockBuilder('Magento\Core\Model\Variable\Config')
+        $this->variableConfigMock = $this->getMockBuilder('Magento\Variable\Model\Variable\Config')
             ->disableOriginalConstructor()
             ->getMock();
         $this->widgetConfigMock = $this->getMockBuilder('Magento\Widget\Model\Widget\Config')
