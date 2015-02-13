@@ -7,12 +7,11 @@
 namespace Magento\Webapi\Routing;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 /**
  * Class to test overriding request body identifier property with id passed in url path parameter
  *
- * Refer to \Magento\Webapi\Controller\Rest\Request::overrideRequestBodyIdWithPathParam
+ * Refer to \Magento\Framework\Webapi\Rest\Request::overrideRequestBodyIdWithPathParam
  */
 class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
 {
@@ -52,7 +51,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $itemId,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
         $item = $this->itemBuilder
@@ -76,7 +75,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $firstItemId . '/nestedResource/' . $secondItemId,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
         $item = $this->itemBuilder
@@ -98,7 +97,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $itemId,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
         $item = $this->itemBuilder
@@ -125,7 +124,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $itemId,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
         $requestData = ['entityItem' => ['entityId' => $incorrectItemId, 'name' => 'test']];
@@ -146,7 +145,7 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
             'rest' => [
                 'resourcePath' => "/{$this->_version}/TestModule5/OverrideService/" . $firstItemId
                     . '/nestedResource/' . $secondItemId,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
 

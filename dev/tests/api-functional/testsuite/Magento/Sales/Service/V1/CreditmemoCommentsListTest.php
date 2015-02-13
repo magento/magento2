@@ -7,7 +7,6 @@ namespace Magento\Sales\Service\V1;
 
 use Magento\Sales\Api\Data\CreditmemoCommentInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 /**
  * Class CreditmemoCommentsListTest
@@ -43,7 +42,7 @@ class CreditmemoCommentsListTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/creditmemo/' . $creditmemo->getId() . '/comments',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

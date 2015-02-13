@@ -18,7 +18,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
 
     const VALUE_TOKEN_TYPE = 'access';
 
-    /** @var \Magento\Integration\Model\Oauth\Consumer\Factory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\Oauth\ConsumerFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_consumerFactory;
 
     /** @var \Magento\Integration\Model\Oauth\Token\Provider|\PHPUnit_Framework_MockObject_MockObject */
@@ -49,7 +49,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_consumerFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Consumer\Factory'
+            'Magento\Integration\Model\Oauth\ConsumerFactory'
         )->disableOriginalConstructor()->getMock();
         $this->_tokenProviderMock = $this->getMockBuilder(
             'Magento\Integration\Model\Oauth\Token\Provider'

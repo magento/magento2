@@ -15,7 +15,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**  @var \Magento\Webapi\Model\Soap\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $_soapConfigMock;
 
-    /**  @var \Magento\Webapi\Model\Soap\Wsdl\Factory|\PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \Magento\Webapi\Model\Soap\WsdlFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_wsdlFactoryMock;
 
     /** @var \Magento\Webapi\Model\Cache\Type|\PHPUnit_Framework_MockObject_MockObject */
@@ -52,7 +52,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ]
         )->getMock();
         $this->_wsdlFactoryMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Soap\Wsdl\Factory'
+            'Magento\Webapi\Model\Soap\WsdlFactory'
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
@@ -170,7 +170,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * Test exception for handle
      *
-     * @expectedException        \Magento\Webapi\Exception
+     * @expectedException        \Magento\Framework\Webapi\Exception
      * @expectedExceptionMessage exception message
      */
     public function testHandleWithException()
@@ -198,7 +198,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         )->method(
             '_collectCallInfo'
         )->will(
-            $this->throwException(new \Magento\Webapi\Exception($exceptionMsg))
+            $this->throwException(new \Magento\Framework\Webapi\Exception($exceptionMsg))
         );
 
         $this->assertEquals($genWSDL, $wsdlGeneratorMock->generate($requestedService, 'http://magento.host'));

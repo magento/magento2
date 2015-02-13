@@ -12,9 +12,9 @@
 $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\User\Model\User');
 $model->setFirstname("John")
     ->setLastname("Doe")
-    ->setUsername('adminUser')
+    ->setUsername('adminUser2')
     ->setPassword(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD)
-    ->setEmail('adminUser@example.com')
+    ->setEmail('adminUser2@example.com')
     ->setRoleType('G')
     ->setResourceId('Magento_Backend::all')
     ->setPrivileges("")

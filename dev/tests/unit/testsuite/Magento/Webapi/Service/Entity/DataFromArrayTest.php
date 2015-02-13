@@ -5,13 +5,13 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-use Magento\Webapi\Controller\ServiceArgsSerializer;
+use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Webapi\Service\Entity\TestService;
 
 class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ServiceArgsSerializer */
-    protected $serializer;
+    /** @var ServiceInputProcessor */
+    protected $serviceInputProcessor;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $attributeValueBuilder;
@@ -39,8 +39,8 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serializer = $objectManager->getObject(
-            'Magento\Webapi\Controller\ServiceArgsSerializer',
+        $this->serviceInputProcessor = $objectManager->getObject(
+            'Magento\Framework\Webapi\ServiceInputProcessor',
             [
                 'typeProcessor' => $typeProcessor,
                 'builderFactory' => $objectFactory,
@@ -54,7 +54,8 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     public function testSimpleProperties()
     {
         $data = ['entityId' => 15, 'name' => 'Test'];
-        $result = $this->serializer->getInputData('\\Magento\\Webapi\\Service\\Entity\\TestService', 'simple', $data);
+        $result = $this->serviceInputProcessor
+            ->process('\\Magento\\Webapi\\Service\\Entity\\TestService', 'simple', $data);
         $this->assertNotNull($result);
         $this->assertEquals(15, $result[0]);
         $this->assertEquals('Test', $result[1]);
@@ -63,7 +64,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     public function testNonExistentPropertiesWithDefaultArgumentValue()
     {
         $data = [];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'simpleDefaultValue',
             $data
@@ -79,7 +80,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     public function testNonExistentPropertiesWithoutDefaultArgumentValue()
     {
         $data = [];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'simple',
             $data
@@ -90,7 +91,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     public function testNestedDataProperties()
     {
         $data = ['nested' => ['details' => ['entityId' => 15, 'name' => 'Test']]];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'nestedData',
             $data
@@ -114,7 +115,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     public function testSimpleArrayProperties()
     {
         $data = ['ids' => [1, 2, 3, 4]];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'simpleArray',
             $data
@@ -132,7 +133,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     public function testAssociativeArrayProperties()
     {
         $data = ['associativeArray' => ['key' => 'value', 'key_two' => 'value_two']];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'associativeArray',
             $data
@@ -150,7 +151,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     public function testAssociativeArrayPropertiesWithItem()
     {
         $data = ['associativeArray' => ['item' => 'value']];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'associativeArray',
             $data
@@ -167,7 +168,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     public function testAssociativeArrayPropertiesWithItemArray()
     {
         $data = ['associativeArray' => ['item' => ['value1','value2']]];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'associativeArray',
             $data
@@ -190,7 +191,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
                 ['entityId' => 15, 'name' => 'Second'],
             ],
         ];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'dataArray',
             $data
@@ -216,7 +217,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     public function testNestedSimpleArrayProperties()
     {
         $data = ['arrayData' => ['ids' => [1, 2, 3, 4]]];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'nestedSimpleArray',
             $data
@@ -239,7 +240,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
         $data = [
             'associativeArrayData' => ['associativeArray' => ['key' => 'value', 'key2' => 'value2']],
         ];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'nestedAssociativeArray',
             $data
@@ -264,7 +265,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
                 'items' => [['entityId' => 1, 'name' => 'First'], ['entityId' => 2, 'name' => 'Second']],
             ],
         ];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'nestedDataArray',
             $data
@@ -327,7 +328,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $result = $this->serializer->getInputData(
+        $result = $this->serviceInputProcessor->process(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'ObjectWithCustomAttributesMethod',
             $data

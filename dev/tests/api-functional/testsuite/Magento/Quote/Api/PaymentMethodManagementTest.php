@@ -5,8 +5,6 @@
  */
 namespace Magento\Quote\Api;
 
-use Magento\Webapi\Model\Rest\Config as RestConfig;
-
 class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
@@ -36,7 +34,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -73,7 +71,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -109,7 +107,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -148,7 +146,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -186,7 +184,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -222,7 +220,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/payment-methods',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -256,7 +254,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

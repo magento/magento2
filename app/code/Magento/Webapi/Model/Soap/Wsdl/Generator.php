@@ -8,6 +8,7 @@ namespace Magento\Webapi\Model\Soap\Wsdl;
 
 use Magento\Webapi\Model\Soap\Fault;
 use Magento\Webapi\Model\Soap\Wsdl;
+use Magento\Webapi\Model\Soap\WsdlFactory;
 
 /**
  * WSDL generator.
@@ -19,7 +20,7 @@ class Generator
     /**
      * WSDL factory instance.
      *
-     * @var Factory
+     * @var WsdlFactory
      */
     protected $_wsdlFactory;
 
@@ -52,14 +53,14 @@ class Generator
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Model\Soap\Config $apiConfig
-     * @param Factory $wsdlFactory
+     * @param WsdlFactory $wsdlFactory
      * @param \Magento\Webapi\Model\Cache\Type $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Webapi\Model\Soap\Config $apiConfig,
-        Factory $wsdlFactory,
+        WsdlFactory $wsdlFactory,
         \Magento\Webapi\Model\Cache\Type $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -106,7 +107,7 @@ class Generator
      * @param array $requestedServices
      * @param string $endPointUrl
      * @return string
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Webapi\Exception
      */
     protected function _generate($requestedServices, $endPointUrl)
     {

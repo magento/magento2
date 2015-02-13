@@ -10,7 +10,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $_storeManagerMock;
 
-    /** @var \Magento\Integration\Model\Oauth\Consumer\Factory */
+    /** @var \Magento\Integration\Model\Oauth\ConsumerFactory */
     protected $_consumerFactory;
 
     /** @var \Magento\Integration\Model\Oauth\Consumer */
@@ -40,7 +40,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_consumerFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Consumer\Factory'
+            'Magento\Integration\Model\Oauth\ConsumerFactory'
         )->disableOriginalConstructor()->getMock();
         $this->_consumerMock = $this->getMockBuilder(
             'Magento\Integration\Model\Oauth\Consumer'

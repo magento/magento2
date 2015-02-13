@@ -32,7 +32,7 @@
     <type name="Magento\Webapi\Controller\Soap">
         <arguments>
             <argument name="soapServer" xsi:type="object">Magento\Webapi\Model\Soap\Server\Proxy</argument>
-            <argument name="errorProcessor" xsi:type="object">Magento\Webapi\Controller\ErrorProcessor\Proxy</argument>
+            <argument name="errorProcessor" xsi:type="object">Magento\Framework\Webapi\ErrorProcessor\Proxy</argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Webapi\Model\WebapiRoleLocator" />

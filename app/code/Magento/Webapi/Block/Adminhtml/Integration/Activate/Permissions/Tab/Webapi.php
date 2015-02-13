@@ -28,8 +28,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /** @var \Magento\Integration\Helper\Data */
     protected $_integrationData;
 
-    /** @var WebapiHelper */
-    protected $_webapiHelper;
+    /** @var \Magento\Webapi\Model\Soap\Config */
+    protected $_config;
 
     /** @var \Magento\Core\Helper\Data  */
     protected $_coreHelper;
@@ -44,7 +44,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
-     * @param \Magento\Webapi\Helper\Data $webapiData
+     * @param \Magento\Webapi\Model\Soap\Config $config
      * @param array $data
      */
     public function __construct(
@@ -55,13 +55,13 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
-        \Magento\Webapi\Helper\Data $webapiData,
+        \Magento\Webapi\Model\Soap\Config $config,
         array $data = []
     ) {
         $this->_rootResource = $rootResource;
         $this->_resourceProvider = $resourceProvider;
         $this->_integrationData = $integrationData;
-        $this->_webapiHelper = $webapiData;
+        $this->_config = $config;
         $this->_coreHelper = $coreHelper;
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -75,7 +75,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected function _construct()
     {
         parent::_construct();
-        $this->_selectedResources = $this->_webapiHelper->getSelectedResources();
+        $this->_selectedResources = $this->_config->getSelectedResources();
     }
 
     /**

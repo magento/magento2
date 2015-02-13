@@ -6,7 +6,6 @@
 namespace Magento\Sales\Service\V1;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config;
 
 /**
  * Class OrderGetStatusTest
@@ -44,7 +43,7 @@ class OrderGetStatusTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => sprintf(self::RESOURCE_PATH, $order->getId()),
-                'httpMethod' => Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,

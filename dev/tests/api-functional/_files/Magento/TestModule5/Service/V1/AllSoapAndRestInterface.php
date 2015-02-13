@@ -12,7 +12,7 @@ interface AllSoapAndRestInterface
      *
      * @param int $entityId
      * @return \Magento\TestModule5\Service\V1\Entity\AllSoapAndRest
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function item($entityId);
 

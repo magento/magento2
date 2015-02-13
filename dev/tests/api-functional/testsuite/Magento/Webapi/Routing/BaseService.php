@@ -6,7 +6,7 @@
 namespace Magento\Webapi\Routing;
 
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Webapi\Exception as WebapiException;
+use Magento\Framework\Webapi\Exception as WebapiException;
 
 /**
  * Base class for all Service based routing tests

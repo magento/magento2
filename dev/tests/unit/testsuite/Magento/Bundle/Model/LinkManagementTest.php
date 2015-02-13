@@ -195,7 +195,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Webapi\Exception
+     * @expectedException \Magento\Framework\Webapi\Exception
      * @expectedExceptionCode 403
      */
     public function testGetChildrenException()
@@ -560,7 +560,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Webapi\Exception
+     * @expectedException \Magento\Framework\Webapi\Exception
      * @expectedExceptionCode 403
      */
     public function testRemoveChildForbidden()

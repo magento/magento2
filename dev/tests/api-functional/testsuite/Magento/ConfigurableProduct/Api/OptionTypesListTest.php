@@ -6,8 +6,6 @@
  */
 namespace Magento\ConfigurableProduct\Api;
 
-use Magento\Webapi\Model\Rest\Config;
-
 class OptionTypesListTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_READ_NAME = 'configurableProductOptionTypesListV1';
@@ -29,7 +27,7 @@ class OptionTypesListTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => str_replace(':productSku/', '', self::RESOURCE_PATH) . 'types',
-                'httpMethod'   => Config::HTTP_METHOD_GET
+                'httpMethod'   => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET
             ],
             'soap' => [
                 'service'        => self::SERVICE_READ_NAME,

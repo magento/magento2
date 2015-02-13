@@ -30,12 +30,12 @@ class SoapTest extends \PHPUnit_Framework_TestCase
     protected $_requestMock;
 
     /**
-     * @var \Magento\Webapi\Controller\Response
+     * @var \Magento\Framework\Webapi\Response
      */
     protected $_responseMock;
 
     /**
-     * @var \Magento\Webapi\Controller\ErrorProcessor
+     * @var \Magento\Framework\Webapi\ErrorProcessor
      */
     protected $_errorProcessorMock;
 
@@ -63,11 +63,11 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getParam', 'getRequestedServices'])
             ->getMock();
-        $this->_responseMock = $this->getMockBuilder('Magento\Webapi\Controller\Response')
+        $this->_responseMock = $this->getMockBuilder('Magento\Framework\Webapi\Response')
             ->disableOriginalConstructor()
             ->setMethods(['clearHeaders', 'setHeader', 'sendResponse'])
             ->getMock();
-        $this->_errorProcessorMock = $this->getMockBuilder('Magento\Webapi\Controller\ErrorProcessor')
+        $this->_errorProcessorMock = $this->getMockBuilder('Magento\Framework\Webapi\ErrorProcessor')
             ->disableOriginalConstructor()
             ->setMethods(['maskException'])
             ->getMock();
@@ -89,7 +89,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $this->_soapServerMock->expects($this->any())->method('setWSDL')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setEncoding')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setReturnResponse')->will($this->returnSelf());
-        $pathProcessorMock = $this->getMock('Magento\Webapi\Model\PathProcessor', [], [], '', false);
+        $pathProcessorMock = $this->getMock('Magento\Webapi\Controller\PathProcessor', [], [], '', false);
         $areaListMock = $this->getMock('Magento\Framework\App\AreaList', [], [], '', false);
         $areaMock = $this->getMock('Magento\Framework\App\AreaInterface');
         $areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($areaMock));
@@ -135,7 +135,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
     public function testDispatchWithException()
     {
         $exceptionMessage = 'some error message';
-        $exception = new \Magento\Webapi\Exception($exceptionMessage);
+        $exception = new \Magento\Framework\Webapi\Exception($exceptionMessage);
         $this->_soapServerMock->expects($this->any())->method('handle')->will($this->throwException($exception));
         $this->_errorProcessorMock->expects(
             $this->any()

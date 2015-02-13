@@ -16,7 +16,7 @@ class Generator implements NonceGeneratorInterface
     protected $_oauthHelper;
 
     /**
-     * @var  \Magento\Integration\Model\Oauth\Nonce\Factory
+     * @var  \Magento\Integration\Model\Oauth\NonceFactory
      */
     protected $_nonceFactory;
 
@@ -37,13 +37,13 @@ class Generator implements NonceGeneratorInterface
 
     /**
      * @param \Magento\Framework\Oauth\Helper\Oauth $oauthHelper
-     * @param \Magento\Integration\Model\Oauth\Nonce\Factory $nonceFactory
+     * @param \Magento\Integration\Model\Oauth\NonceFactory $nonceFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param int $nonceLength - Length of the generated nonce
      */
     public function __construct(
         \Magento\Framework\Oauth\Helper\Oauth $oauthHelper,
-        \Magento\Integration\Model\Oauth\Nonce\Factory $nonceFactory,
+        \Magento\Integration\Model\Oauth\NonceFactory $nonceFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         $nonceLength = \Magento\Framework\Oauth\Helper\Oauth::LENGTH_NONCE
     ) {

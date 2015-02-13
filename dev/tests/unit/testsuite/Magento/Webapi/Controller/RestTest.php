@@ -24,12 +24,12 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected $_restController;
 
     /**
-     * @var \Magento\Webapi\Controller\Rest\Request
+     * @var \Magento\Framework\Webapi\Rest\Request
      */
     protected $_requestMock;
 
     /**
-     * @var \Magento\Webapi\Controller\Rest\Response
+     * @var \Magento\Framework\Webapi\Rest\Response
      */
     protected $_responseMock;
 
@@ -69,9 +69,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected $areaListMock;
 
     /**
-     * @var \Magento\Webapi\Controller\ServiceArgsSerializer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\ServiceInputProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $serializerMock;
+    protected $serviceInputProcessorMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -94,9 +94,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
 
     protected function mockArguments()
     {
-        $this->_requestMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Request')
+        $this->_requestMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Request')
             ->setMethods(['isSecure', 'getRequestData'])->disableOriginalConstructor()->getMock();
-        $this->_responseMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Response')
+        $this->_responseMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Response')
             ->setMethods(['sendResponse', 'getHeaders', 'prepareResponse'])->disableOriginalConstructor()->getMock();
         $this->_routerMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router')->setMethods(['match'])
             ->disableOriginalConstructor()->getMock();
@@ -124,11 +124,11 @@ class RestTest extends \PHPUnit_Framework_TestCase
 
         $layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
             ->disableOriginalConstructor()->getMock();
-        $errorProcessorMock = $this->getMock('Magento\Webapi\Controller\ErrorProcessor', [], [], '', false);
+        $errorProcessorMock = $this->getMock('Magento\Framework\Webapi\ErrorProcessor', [], [], '', false);
         $errorProcessorMock->expects($this->any())->method('maskException')->will($this->returnArgument(0));
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->serializerMock = $this->getMockBuilder('\Magento\Webapi\Controller\ServiceArgsSerializer')
-            ->disableOriginalConstructor()->setMethods(['getInputData'])->getMock();
+        $this->serviceInputProcessorMock = $this->getMockBuilder('\Magento\Framework\Webapi\ServiceInputProcessor')
+            ->disableOriginalConstructor()->setMethods(['process'])->getMock();
         $this->areaListMock = $this->getMock('\Magento\Framework\App\AreaList', [], [], '', false);
         $this->areaMock = $this->getMock('Magento\Framework\App\AreaInterface');
         $this->areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($this->areaMock));
@@ -144,7 +144,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
                     'layout' => $layoutMock,
                     'oauthService' => $this->_oauthServiceMock,
                     'authorization' => $this->_authorizationMock,
-                    'serializer' => $this->serializerMock,
+                    'serviceInputProcessor' => $this->serviceInputProcessorMock,
                     'errorProcessor' => $errorProcessorMock,
                     'areaList' => $this->areaListMock,
                     'userContext' => $this->userContextMock,
@@ -179,7 +179,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue([]));
         $this->_requestMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRequest));
         $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
-        $this->serializerMock->expects($this->any())->method('getInputData')->will($this->returnValue([]));
+        $this->serviceInputProcessorMock->expects($this->any())->method('process')->will($this->returnValue([]));
         $this->_restController->dispatch($this->_requestMock);
         $this->assertFalse($this->_responseMock->isException());
     }
@@ -213,7 +213,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_responseMock->isException());
         $exceptionArray = $this->_responseMock->getException();
         $this->assertEquals('Operation allowed only in HTTPS', $exceptionArray[0]->getMessage());
-        $this->assertEquals(\Magento\Webapi\Exception::HTTP_BAD_REQUEST, $exceptionArray[0]->getHttpCode());
+        $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $exceptionArray[0]->getHttpCode());
     }
 
     public function testAuthorizationFailed()
@@ -251,8 +251,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->userContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($userId));
         $this->userContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($userType));
 
-        // serializer should expect overridden params
-        $this->serializerMock->expects($this->once())->method('getInputData')
+        // serviceInputProcessor should expect overridden params
+        $this->serviceInputProcessorMock->expects($this->once())->method('process')
             ->with(
                 $this->equalTo('Magento\Webapi\Controller\TestService'),
                 $this->equalTo('testMethod'),

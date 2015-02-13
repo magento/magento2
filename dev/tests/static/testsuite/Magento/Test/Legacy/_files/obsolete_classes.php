@@ -2928,4 +2928,59 @@ return [
     ['Magento\Core\Model\Resource\Layout\Link\Collection', 'Magento\Widget\Model\Resource\Layout\Link\Collection'],
     ['Magento\Core\Model\Resource\Layout\Update', 'Magento\Widget\Model\Resource\Layout\Update'],
     ['Magento\Core\Model\Resource\Layout\Update\Collection', 'Magento\Widget\Model\Resource\Layout\Update\Collection'],
+    ['Magento\Integration\Model\Oauth\Consumer\Factory', 'Magento\Integration\Model\Oauth\ConsumerFactory'],
+    ['Magento\Integration\Model\Oauth\Nonce\Factory', 'Magento\Integration\Model\Oauth\NonceFactory'],
+    ['Magento\Integration\Model\Manager', 'Magento\Integration\Model\ConfigBasedIntegrationManager'],
+    ['Magento\Integration\Model\Integration\Factory', 'Magento\Integration\Model\IntegrationFactory'],
+    ['Magento\Webapi\Model\PathProcessor', 'Magento\Webapi\Controller\PathProcessor'],
+    ['Magento\Webapi\Helper\Data', 'Magento\Webapi\Model\Soap\Config'],
+    ['Magento\Webapi\Model\Config\ClassReflector', 'Magento\Webapi\Model\Soap\Config\ClassReflector'],
+    ['Magento\Webapi\Model\Soap\Server\Factory', 'Magento\Webapi\Model\Soap\ServerFactory'],
+    ['Magento\Webapi\Model\Soap\Wsdl\Factory', 'Magento\Webapi\Model\Soap\WsdlFactory'],
+    [
+        'Magento\Webapi\Controller\Rest\Request\Deserializer\Json',
+        'Magneto\Framework\Webapi\Rest\Request\Deserializer\Json'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Request\Deserializer\Xml',
+        'Magneto\Framework\Webapi\Rest\Request\Deserializer\Xml'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Request\Deserializer\Factory',
+        'Magneto\Framework\Webapi\Rest\Request\DeserializerFactory'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Request\DeserializerInterface',
+        'Magento\Framework\Webapi\Rest\Request\DeserializerInterface'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\Renderer\Json',
+        'Magneto\Framework\Webapi\Rest\Response\Renderer\Json'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\Renderer\Xml',
+        'Magneto\Framework\Webapi\Rest\Response\Renderer\Xml'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\PartialResponseProcessor',
+        'Magneto\Framework\Webapi\Rest\Response\FieldsFilter'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\Renderer\Factory',
+        'Magneto\Framework\Webapi\Rest\Response\RendererFactory'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\RendererInterface',
+        'Magneto\Framework\Webapi\Rest\Response\RendererInterface'
+    ],
+    ['Magento\Webapi\Controller\Rest\Request', 'Magneto\Framework\Webapi\Rest\Request'],
+    ['Magento\Webapi\Controller\Rest\Response', 'Magneto\Framework\Webapi\Rest\Response'],
+    ['Magento\Webapi\Controller\ErrorProcessor', 'Magneto\Framework\Webapi\ErrorProcessor'],
+    ['Magento\Webapi\Exception', 'Magneto\Framework\Webapi\Exception'],
+    ['Magento\Webapi\Controller\Request', 'Magneto\Framework\Webapi\Request'],
+    ['Magento\Webapi\Controller\Response', 'Magneto\Framework\Webapi\Response'],
+    ['Magento\Webapi\Controller\ServiceArgsSerializer', 'Magneto\Framework\Webapi\ServiceInputProcessor'],
+    ['Magento\Webapi\Controller\Rest\Response\DataObjectConverter', 'Magneto\Framework\Webapi\ServiceOutputProcessor'],
+
+
 ];

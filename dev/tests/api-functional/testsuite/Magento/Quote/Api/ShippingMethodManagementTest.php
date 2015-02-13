@@ -8,7 +8,6 @@ namespace Magento\Quote\Api;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class ShippingMethodManagementTest extends WebapiAbstract
 {
@@ -37,7 +36,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
         return [
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $this->quote->getId() . '/selected-shipping-method',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -207,7 +206,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
         return $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-shipping-method',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -228,7 +227,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
         return [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/shipping-methods',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

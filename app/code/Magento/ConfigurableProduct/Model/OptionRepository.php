@@ -240,7 +240,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      *
      * @param string $productSku
      * @return \Magento\Catalog\Model\Product
-     * @throws InputException
+     * @throws \Magento\Webapi\Exception
      */
     private function getProduct($productSku)
     {
