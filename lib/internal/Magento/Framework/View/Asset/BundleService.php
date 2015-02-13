@@ -7,8 +7,10 @@ namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App;
+use Magento\Framework\Filesystem;
+use Magento\Framework\View\ConfigInterface;
 use Magento\Framework\View\Asset;
-use Magento\Tools\View\Deployer;
+use Magento\Framework\View\Design\Theme\ListInterface;
 
 /**
  * BundleService model
@@ -17,7 +19,7 @@ class BundleService
 {
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     protected $filesystem;
 
@@ -34,7 +36,7 @@ class BundleService
     /**
      * @var ConfigInterface
      */
-    protected $config;
+    protected $viewConfig;
 
     /**
      * @var LocalInterface
@@ -42,26 +44,34 @@ class BundleService
     protected $asset;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var App\State
      */
     protected $appState;
 
     /**
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @var ListInterface
+     */
+    protected $themeList;
+
+    /**
+     * @param Filesystem $filesystem
      * @param BundleFactory $bundleFactory
-     * @param Bundle\ConfigInterface $config
+     * @param ConfigInterface $config
      * @param App\State $appState
+     * @param ListInterface $themeList
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
+        Filesystem $filesystem,
         BundleFactory $bundleFactory,
-        Bundle\ConfigInterface $config,
-        App\State $appState
+        ConfigInterface $config,
+        App\State $appState,
+        ListInterface $themeList
     ) {
         $this->filesystem = $filesystem;
         $this->bundleFactory = $bundleFactory;
-        $this->config = $config;
+        $this->viewConfig = $config;
         $this->appState = $appState;
+        $this->themeList = $themeList;
     }
 
     /**
@@ -99,13 +109,13 @@ class BundleService
     {
         $asset = $this->getAsset();
         $area = $this->getContext()->getAreaCode();
-        if (in_array($asset->getFilePath(), $this->config->getExcludedFiles($area))) {
+        if (in_array($asset->getFilePath(), $this->getConfig()->getExcludedFiles($area))) {
             return true;
         }
 
         // check if file in excluded directory
         $assetDirectory  = dirname($asset->getFilePath());
-        foreach ($this->config->getExcludedDir($area) as $dir) {
+        foreach ($this->getConfig()->getExcludedDir($area) as $dir) {
             if (strpos($assetDirectory, $dir) !== false) {
                 return true;
             }
@@ -214,5 +224,19 @@ class BundleService
         }
 
         return true;
+    }
+
+    /**
+     * @return \Magento\Framework\Config\View
+     */
+    protected function getConfig()
+    {
+        return $this->viewConfig->getViewConfig([
+            'area' => $this->getContext()->getAreaCode(),
+            'themeModel' => $this->themeList->getThemeByFullPath(
+                $this->getContext()->getAreaCode() . '/' . $this->getContext()->getThemePath()
+            )
+        ]);
+
     }
 }

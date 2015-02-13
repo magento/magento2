@@ -88,7 +88,6 @@
     <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Null"/>
     <preference for="Magento\Framework\App\Resource\ConnectionAdapterInterface" type="Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
-    <preference for="Magento\Framework\View\Asset\Bundle\ConfigInterface" type="Magento\Framework\View\Asset\Bundle\Config"/>
     <type name="Magento\Framework\App\View\Asset\Bundle\Config\Reader">
         <arguments>
             <argument name="fileResolver" xsi:type="object">Magento\Framework\App\View\Asset\Bundle\Config\FileResolver</argument>

@@ -55,7 +55,6 @@ class Deployer
      * @param Deployer\Log $logger
      * @param Version\StorageInterface $versionStorage
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\View\Asset\BundleService $bundleService
      * @param bool $isDryRun
      */
     public function __construct(
@@ -63,14 +62,12 @@ class Deployer
         Deployer\Log $logger,
         Version\StorageInterface $versionStorage,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\View\Asset\BundleService $bundleService,
         $isDryRun = false
     ) {
         $this->filesUtil = $filesUtil;
         $this->logger = $logger;
         $this->versionStorage = $versionStorage;
         $this->dateTime = $dateTime;
-        $this->bundleService = $bundleService;
         $this->isDryRun = $isDryRun;
     }
 
@@ -172,6 +169,7 @@ class Deployer
         $objectManager->configure($configLoader->load($areaCode));
         $this->assetRepo = $objectManager->get('Magento\Framework\View\Asset\Repository');
         $this->assetPublisher = $objectManager->get('Magento\Framework\App\View\Asset\Publisher');
+        $this->bundleService = $objectManager->get('Magento\Framework\View\Asset\BundleService');
     }
 
     /**
@@ -204,7 +202,7 @@ class Deployer
             if ($this->isDryRun) {
                 $asset->getContent();
             } else {
-                $this->assetPublisher->publish($asset);
+                //$this->assetPublisher->publish($asset);
                 $this->bundleService->collect($asset);
             }
             $this->count++;

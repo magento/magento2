@@ -195,7 +195,7 @@
         <var name="product_summary_image_size">58</var>         <!-- New Product image size used for summary block-->
     </vars>
     <exclude>
-        <frontend>
+        <area name="frontend">
             <item type="file">mage/captcha.js</item>
             <item type="file">mage/dropdown_old.js</item>
             <item type="file">mage/list.js</item>
@@ -216,8 +216,8 @@
             <item type="directory">mage/backend</item>
             <item type="directory">requirejs</item>
             <item type="directory">prototype</item>
-        </frontend>
-        <adminhtml>
+        </area>
+        <area name="adminhtml">
             <item type="file">mage/common.js</item>
             <item type="file">mage/cookies.js</item>
             <item type="file">mage/dataPost.js</item>
@@ -252,6 +252,6 @@
             <item type="file">matchMedia.js</item>
             <item type="directory">requirejs</item>
             <item type="directory">prototype</item>
-        </adminhtml>
+        </area>
     </exclude>
 </view>
