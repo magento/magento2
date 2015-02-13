@@ -209,7 +209,7 @@ return [
         'resource="test_Value::value"/></menu></config>',
         [
             "Element 'add', attribute 'resource': [facet 'pattern'] The value 'test_Value::value' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'add', attribute 'resource': 'test_Value::value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -220,7 +220,7 @@ return [
         'resource="Test_value::value"/></menu></config>',
         [
             "Element 'add', attribute 'resource': [facet 'pattern'] The value 'Test_value::value' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'add', attribute 'resource': 'Test_value::value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -231,7 +231,7 @@ return [
         'resource="M#$%23_value::value"/></menu></config>',
         [
             "Element 'add', attribute 'resource': [facet 'pattern'] The value 'M#$%23_value::value' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'add', attribute 'resource': 'M#$%23_value::value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -242,7 +242,7 @@ return [
         'resource="_value::value"/></menu></config>',
         [
             "Element 'add', attribute 'resource': [facet 'pattern'] The value '_value::value' is not accepted by " .
-            "the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'add', attribute 'resource': '_value::value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -253,7 +253,7 @@ return [
         '</menu></config>',
         [
             "Element 'add', attribute 'resource': [facet 'pattern'] The value 'Magento_::value' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'add', attribute 'resource': 'Magento_::value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -264,7 +264,7 @@ return [
         'resource="Test_Value:value"/></menu></config>',
         [
             "Element 'add', attribute 'resource': [facet 'pattern'] The value 'Test_Value:value' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'add', attribute 'resource': 'Test_Value:value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -275,7 +275,7 @@ return [
         'resource="Test_Value::"/></menu></config>',
         [
             "Element 'add', attribute 'resource': [facet 'pattern'] The value 'Test_Value::' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'add', attribute 'resource': 'Test_Value::' " .
             "is not a valid value of the atomic type 'typeResource'."
         ],
@@ -608,7 +608,7 @@ return [
         'resource="test_Value::value"/></menu></config>',
         [
             "Element 'update', attribute 'resource': [facet 'pattern'] The value 'test_Value::value' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'update', attribute 'resource': 'test_Value::value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -618,7 +618,7 @@ return [
         'resource="Test_value::value"/></menu></config>',
         [
             "Element 'update', attribute 'resource': [facet 'pattern'] The value 'Test_value::value' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'update', attribute 'resource': 'Test_value::value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -628,7 +628,7 @@ return [
         'resource="M#$%23_value::value"/></menu></config>',
         [
             "Element 'update', attribute 'resource': [facet 'pattern'] The value 'M#$%23_value::value' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'update', attribute 'resource': 'M#$%23_value::value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -638,7 +638,7 @@ return [
         'resource="_value::value"/></menu></config>',
         [
             "Element 'update', attribute 'resource': [facet 'pattern'] The value '_value::value' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'update', attribute 'resource': '_value::value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -648,7 +648,7 @@ return [
         'resource="Magento_::value"/></menu></config>',
         [
             "Element 'update', attribute 'resource': [facet 'pattern'] The value 'Magento_::value' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'update', attribute 'resource': 'Magento_::value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -658,7 +658,7 @@ return [
         'resource="Test_Value:value"/></menu></config>',
         [
             "Element 'update', attribute 'resource': [facet 'pattern'] The value 'Test_Value:value' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'update', attribute 'resource': 'Test_Value:value' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
@@ -668,7 +668,7 @@ return [
         'resource="Test_Value::"/></menu></config>',
         [
             "Element 'update', attribute 'resource': [facet 'pattern'] The value 'Test_Value::' is not " .
-            "accepted by the pattern '[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
+            "accepted by the pattern '[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.",
             "Element 'update', attribute 'resource': 'Test_Value::' is not a valid value of the atomic " .
             "type 'typeResource'."
         ],
