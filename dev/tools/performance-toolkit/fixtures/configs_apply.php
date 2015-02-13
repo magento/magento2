@@ -21,12 +21,13 @@ class ConfigsApplyFixture extends \Magento\ToolkitFramework\Fixture
     {
         $configs = \Magento\ToolkitFramework\Config::getInstance()->getValue('configs', []);
         $this->application->resetObjectManager();
-        /**
-         * @var \Magento\Framework\App\Config\Value $configData
-         */
-        $configData = $this->application->getObjectManager()->create('Magento\Framework\App\Config\Value');
+
         foreach ($configs['config'] as $config) {
-            $configData->setPath($config['path'])
+            /**
+             * @var \Magento\Framework\App\Config\Value $configData
+             */
+            $configData = $this->application->getObjectManager()->create('Magento\Framework\App\Config\Value');
+            $configData->setPatho($cnfig['path'])
                 ->setScope($config['scope'])
                 ->setScopeId($config['scopeId'])
                 ->setValue($config['value'])
