@@ -63,7 +63,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'isSetFlag'
         )->with(
             \Magento\GoogleOptimizer\Helper\Data::XML_PATH_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         )->will(
             $this->returnValue($isExperimentsEnabled)
@@ -95,7 +95,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'isSetFlag'
         )->with(
             \Magento\GoogleOptimizer\Helper\Data::XML_PATH_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         )->will(
             $this->returnValue($isExperimentsEnabled)

@@ -39,7 +39,7 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->storeId = 1;
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $storeMock->expects($this->any())
             ->method('getId')

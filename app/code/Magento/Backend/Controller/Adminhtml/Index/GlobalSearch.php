@@ -44,7 +44,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
     {
         $items = [];
 
-        if (!$this->_authorization->isAllowed('Magento_Adminhtml::global_search')) {
+        if (!$this->_authorization->isAllowed('Magento_Backend::global_search')) {
             $items[] = [
                 'id' => 'error',
                 'type' => __('Error'),

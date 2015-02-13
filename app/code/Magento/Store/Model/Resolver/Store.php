@@ -8,14 +8,14 @@ namespace Magento\Store\Model\Resolver;
 class Store implements \Magento\Framework\App\ScopeResolverInterface
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Framework\Store\StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
     }
@@ -32,5 +32,15 @@ class Store implements \Magento\Framework\App\ScopeResolverInterface
         }
 
         return $scope;
+    }
+
+    /**
+     * Retrieve a list of available stores
+     *
+     * @return \Magento\Store\Model\Store[]
+     */
+    public function getScopes()
+    {
+        return $this->_storeManager->getStores();
     }
 }

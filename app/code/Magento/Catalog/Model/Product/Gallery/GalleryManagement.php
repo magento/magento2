@@ -33,7 +33,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     ];
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -73,7 +73,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     protected $attributeRepository;
 
     /**
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param MediaConfig $mediaConfig
@@ -84,7 +84,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaGallery
      */
     public function __construct(
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         MediaConfig $mediaConfig,

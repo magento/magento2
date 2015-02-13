@@ -6,10 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\View\Layout">
-        <plugin name="core-session-depersonalize"
-                type="Magento\Core\Model\Layout\DepersonalizePlugin" sortOrder="1"/>
-    </type>
     <type name="Magento\Framework\App\FrontController">
         <plugin name="requestPreprocessor" type="Magento\Store\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
     </type>
