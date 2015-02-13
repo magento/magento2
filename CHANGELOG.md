@@ -1,3 +1,34 @@
+0.42.0-beta8
+=============
+* Various improvements:
+    * Existing Builders were replaced with DataFactories in Customer and Tax modules
+    * Refactored controller actions in the Checkout and CMS modules
+    * Increased coverage with static tests for `.phtml` files
+    * Moved Cookie related functionality from the `Theme` and `Core` modules into a new `Cookie` module
+    * Moved minfication configuration settings to the `View` library level
+* UI improvements:
+    * Restyled installation wizard
+    * Prepared styles for Dashboard in Backend area
+* Framework improvements:
+    * `setCustomAttribute` and `setCustomAttributes` methods were added to `ExtensibleDataInterface`
+    * Setter methods added to data object interfaces
+    * `Builders` were replaced with `Factories`
+    * Added `DataObjectHelper.php` which contains the common set of methods of all builders
+    * Refactored `__()` to return `Phrase` object
+    * Allowed usage of `LocalizedException` on the framework's library level
+    * Added expiration/lifetime management of frontend resources
+    * Unified MTF configurations format for Framework, TestCase variations and TestCase scenario configurations
+* Fixed bugs:
+    * Fixed an issue with product reviews list paging
+    * Fixed an issue when sold products were not displayed in Bestsellers
+    * Fixed an issue with image rendering on the CMS page on Frontend when `webserver rewrites = no`
+* GitHub requests:
+    * [#790](https://github.com/magento/magento2/issues/790) -- Magento API fails in a CGI env (zf1 issue)
+    * [#909](https://github.com/magento/magento2/issues/909) -- Manage Titles in popup window front-end issue
+    * [#996](https://github.com/magento/magento2/issues/996) -- Pager block should support url "fragment".
+    * [#985](https://github.com/magento/magento2/pull/985) -- Allow camelcase in vendorname for menus
+    * [#1025](https://github.com/magento/magento2/pull/1025) -- Wrong parameter for getting base url for 'media' path in "Image" form element.
+
 0.42.0-beta7
 =============
 * Various improvements:
