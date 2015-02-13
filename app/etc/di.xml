@@ -879,6 +879,7 @@
     </type>
     <type name="Magento\Framework\Session\Validator">
         <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
             <argument name="skippedUserAgentList" xsi:type="array">
                 <item name="flash" xsi:type="string">Shockwave Flash</item>
                 <item name="flash_mac" xsi:type="string"><![CDATA[Adobe Flash Player\s{1,}\w{1,10}]]></item>
