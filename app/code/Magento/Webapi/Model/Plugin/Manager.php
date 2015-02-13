@@ -10,10 +10,10 @@ use Magento\Integration\Service\V1\AuthorizationServiceInterface as IntegrationA
 use Magento\Webapi\Model\IntegrationConfig;
 
 /**
- * Plugin for Magento\Framework\Module\Setup model to manage resource permissions of
+ * Plugin for \Magento\Integration\Model\Manager model to manage resource permissions of
  * integration installed from config file
  */
-class Setup
+class Manager
 {
     /**
      * API Integration config
@@ -54,14 +54,14 @@ class Setup
     /**
      * Process integration resource permissions after the integration is created
      *
-     * @param \Magento\Integration\Model\Resource\Setup $subject
+     * @param \Magento\Integration\Model\Manager $subject
      * @param string[] $integrationNames Name of integrations passed as array from the invocation chain
      *
      * @return string[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterInitIntegrationProcessing(
-        \Magento\Integration\Model\Resource\Setup $subject,
+    public function afterProcessIntegrationConfig(
+        \Magento\Integration\Model\Manager $subject,
         $integrationNames
     ) {
         if (empty($integrationNames)) {
