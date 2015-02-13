@@ -88,11 +88,6 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
     protected $_date;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    protected $_localeDate;
-
-    /**
      * Problem factory
      *
      * @var \Magento\Newsletter\Model\ProblemFactory
@@ -134,7 +129,6 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Newsletter\Model\Template\Filter $templateFilter,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Newsletter\Model\ProblemFactory $problemFactory,
@@ -145,7 +139,6 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
         parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
         $this->_templateFilter = $templateFilter;
         $this->_date = $date;
-        $this->_localeDate = $localeDate;
         $this->_templateFactory = $templateFactory;
         $this->_problemFactory = $problemFactory;
         $this->_subscribersCollection = $subscriberCollectionFactory->create();
@@ -184,10 +177,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
         if (is_null($startAt) || $startAt == '') {
             $this->setQueueStartAt(null);
         } else {
-            $format = $this->_localeDate->getDateTimeFormat(
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
-            );
-            $time = $this->_localeDate->date($startAt, $format)->getTimestamp();
+            $time = (new \DateTime($startAt))->getTimestamp();
             $this->setQueueStartAt($this->_date->gmtDate(null, $time));
         }
         return $this;
