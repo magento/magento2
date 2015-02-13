@@ -22,7 +22,12 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->conf = $this->getMock('Magento\Framework\View\Asset\Bundle\ConfigInterface', [], [], '', false);
+        $this->conf = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Asset\Bundle\ConfigInterface',
+            [],
+            '',
+            false
+        );
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
