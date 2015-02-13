@@ -20,7 +20,7 @@ class InstallData implements InstallDataInterface
 	public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
 	{
 		$installer = $setup->createMigrationSetup();
-		$installer->startSetup();
+		$setup->startSetup();
 		
 		$installer->appendClassAliasReplace(
 		    'core_config_data',
@@ -41,12 +41,12 @@ class InstallData implements InstallDataInterface
 		/**
 		 * Delete rows by condition from authorization_rule
 		 */
-		$tableName = $installer->getTable('authorization_rule');
+		$tableName = $setup->getTable('authorization_rule');
 		if ($tableName) {
-		    $installer->getConnection()->delete($tableName, ['resource_id = ?' => 'admin/system/tools/compiler']);
+		    $setup->getConnection()->delete($tableName, ['resource_id = ?' => 'admin/system/tools/compiler']);
 		}
 		
-		$installer->endSetup();
+		$setup->endSetup();
 		
 	}
 }

@@ -312,7 +312,7 @@ EOD;
         }
 
         $installer = $setup->createMigrationSetup();
-        $installer->startSetup();
+        $setup->startSetup();
 
         $installer->appendClassAliasReplace(
             'cms_block',
@@ -345,7 +345,7 @@ EOD;
 
         $installer->doUpdateClassAliases();
 
-        $installer->endSetup();
+        $setup->endSetup();
 
         $cookieRestriction = $this->createPage()->load('privacy-policy-cookie-restriction-mode', 'identifier');
 

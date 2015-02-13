@@ -8,6 +8,7 @@
 
 namespace Magento\CatalogRule\Setup;
 
+use Magento\Framework\Module\Setup\MigrationFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataResourceInterface;
@@ -20,7 +21,7 @@ class InstallData implements InstallDataInterface
 	public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
 	{
 		$installer = $setup->createMigrationSetup();
-		$installer->startSetup();
+		$setup->startSetup();
 		
 		$installer->appendClassAliasReplace(
 		    'catalogrule',
@@ -38,8 +39,8 @@ class InstallData implements InstallDataInterface
 		);
 		
 		$installer->doUpdateClassAliases();
-		
-		$installer->endSetup();
+
+		$setup->endSetup();
 		
 	}
 }
