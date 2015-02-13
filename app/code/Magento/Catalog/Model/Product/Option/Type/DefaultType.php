@@ -190,7 +190,7 @@ class DefaultType extends \Magento\Framework\Object
      */
     public function getConfigData($key)
     {
-        return $this->_scopeConfig->getValue('catalog/custom_options/' . $key, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue('catalog/custom_options/' . $key, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**

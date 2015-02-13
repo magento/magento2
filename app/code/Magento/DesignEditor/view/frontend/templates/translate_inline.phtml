@@ -66,8 +66,8 @@ require([
             var dialogVde = $('#translate-dialog');
 
             $textTranslations.translateInlineVde({
-                img: '<?php echo $block->getViewFileUrl('Magento_Core::translate_edit_icon.png') ?>',
-                imgHover: '<?php echo $block->getViewFileUrl('Magento_Core::translate_edit_icon_hover.png') ?>',
+                img: '<?php echo $block->getViewFileUrl('Magento_Translation::translate_edit_icon.png') ?>',
+                imgHover: '<?php echo $block->getViewFileUrl('Magento_Translation::translate_edit_icon_hover.png') ?>',
                 translateMode: '<?php echo $block->getTranslateMode() ?>',
                 onClick: function(e, widget) {
                     $body.removeClass('trnslate-inline-' + widget.options.translateMode + '-area');
@@ -82,8 +82,8 @@ require([
             });
 
             $imageTranslations.translateInlineImageVde({
-                img: '<?php echo $block->getViewFileUrl('Magento_Core::translate_edit_icon.png') ?>',
-                imgHover: '<?php echo $block->getViewFileUrl('Magento_Core::translate_edit_icon_hover.png') ?>',
+                img: '<?php echo $block->getViewFileUrl('Magento_Translation::translate_edit_icon.png') ?>',
+                imgHover: '<?php echo $block->getViewFileUrl('Magento_Translation::translate_edit_icon_hover.png') ?>',
                 translateMode: '<?php echo $block->getTranslateMode() ?>',
                 onClick: function(e, widget) {
                     $body.removeClass('trnslate-inline-' + widget.options.translateMode + '-area');
@@ -98,8 +98,8 @@ require([
             });
 
             $scriptTranslations.translateInlineScriptVde({
-                img: '<?php echo $block->getViewFileUrl('Magento_Core::translate_edit_icon.png') ?>',
-                imgHover: '<?php echo $block->getViewFileUrl('Magento_Core::translate_edit_icon_hover.png') ?>',
+                img: '<?php echo $block->getViewFileUrl('Magento_Translation::translate_edit_icon.png') ?>',
+                imgHover: '<?php echo $block->getViewFileUrl('Magento_Translation::translate_edit_icon_hover.png') ?>',
                 translateMode: '<?php echo $block->getTranslateMode() ?>',
                 onClick: function(e, widget) {
                     $body.removeClass('trnslate-inline-' + widget.options.translateMode + '-area');

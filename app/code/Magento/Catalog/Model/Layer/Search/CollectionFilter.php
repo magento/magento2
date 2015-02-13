@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Layer\CollectionFilterInterface;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class CollectionFilter implements CollectionFilterInterface
 {
@@ -19,7 +19,7 @@ class CollectionFilter implements CollectionFilterInterface
     protected $catalogConfig;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -30,7 +30,7 @@ class CollectionFilter implements CollectionFilterInterface
 
     /**
      * @param Config $catalogConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param Visibility $productVisibility
      */
     public function __construct(
