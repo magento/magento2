@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Store\Test\Repository\StoreGroup">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Store\Test\Repository\StoreGroup">
         <dataset name="default">
             <field name="website_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">main_website</item>
@@ -27,5 +27,5 @@
                 <item name="dataSet" xsi:type="string">default_category</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

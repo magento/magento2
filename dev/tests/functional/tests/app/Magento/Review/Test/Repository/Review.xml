@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Review\Test\Repository\ReviewInjectable">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Review\Test\Repository\ReviewInjectable">
         <dataset name="review_for_simple_product_with_rating">
             <field name="status_id" xsi:type="string">Approved</field>
             <field name="select_stores" xsi:type="array">
@@ -38,5 +38,5 @@
                 <item name="dataSet" xsi:type="string">catalogProductSimple::default</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

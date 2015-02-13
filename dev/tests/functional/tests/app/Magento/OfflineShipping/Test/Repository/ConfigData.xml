@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Core\Test\Repository\ConfigData">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Core\Test\Repository\ConfigData">
         <dataset name="freeshipping">
             <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>
@@ -40,5 +40,5 @@
             <field path="carriers/flatrate/handling_type" scope="carriers" scope_id="1" label="Fixed" xsi:type="string">F</field>
             <field path="carriers/flatrate/specificerrmsg" scope="carriers" scope_id="1" label="" xsi:type="string">This shipping method is not available. To use this shipping method, please contact us.</field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\GoogleShopping\Test\Repository\GoogleShoppingAttribute">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\GoogleShopping\Test\Repository\GoogleShoppingAttribute">
         <dataset name="default">
             <field name="target_country" xsi:type="string">United States</field>
             <field name="attribute_set_id" xsi:type="array">
@@ -14,5 +14,5 @@
             </field>
             <field name="category" xsi:type="string">Apparel &amp; Accessories</field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

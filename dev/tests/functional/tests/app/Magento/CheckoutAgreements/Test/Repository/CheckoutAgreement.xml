@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\CheckoutAgreements\Test\Repository\CheckoutAgreement">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\CheckoutAgreements\Test\Repository\CheckoutAgreement">
         <dataset name="term_disabled_text">
             <field name="name" xsi:type="string">TermDisabledTextName%isolation%</field>
             <field name="is_active" xsi:type="string">Disabled</field>
@@ -48,5 +48,5 @@
             <field name="content" xsi:type="string">TestMessage%isolation%</field>
             <field name="content_height" xsi:type="string" />
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>
