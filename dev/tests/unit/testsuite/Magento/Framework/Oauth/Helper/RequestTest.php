@@ -1,7 +1,5 @@
 <?php
 /**
- * Test WebAPI authentication helper.
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,45 +8,29 @@ namespace Magento\Framework\Oauth\Helper;
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Oauth\Helper\Request */
-    protected $_oauthHelper;
+    protected $oauthRequestHelper;
 
-    /**
-     * Sets up
-     */
     protected function setUp()
     {
-        $this->_oauthHelper = new Request();
+        $this->oauthRequestHelper = new Request();
     }
 
-    /**
-     * Tears down
-     */
     protected function tearDown()
     {
-        unset($this->_oauthHelper);
+        unset($this->oauthRequestHelper);
     }
 
     /**
-     * Tests method prepareErrorResponse
-     *
      * @dataProvider dataProviderForPrepareErrorResponseTest
-     * @param $exception
-     * @param $response
-     * @param $expected
      */
     public function testPrepareErrorResponse($exception, $response, $expected)
     {
         /* @var $response \Zend_Controller_Response_Http */
-        $errorResponse = $this->_oauthHelper->prepareErrorResponse($exception, $response);
+        $errorResponse = $this->oauthRequestHelper->prepareErrorResponse($exception, $response);
         $this->assertEquals(['oauth_problem' => $expected[0]], $errorResponse);
         $this->assertEquals($expected[1], $response->getHttpResponseCode());
     }
 
-    /**
-     * Provides data for PrepareErrorResponseTest
-     *
-     * @return array
-     */
     public function dataProviderForPrepareErrorResponseTest()
     {
         return [
@@ -74,13 +56,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests method getRequestUrl
-     *
      * @dataProvider  hostsDataProvider
-     * @param $url
-     * @param $host
-     * @param $trimPort
-     * @return string
      */
     public function testGetRequestUrl($url, $host)
     {
@@ -96,14 +72,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $httpRequestMock->expects($this->any())->method('getScheme')->will($this->returnValue('http'));
         $httpRequestMock->expects($this->any())->method('getRequestUri')->will($this->returnValue('/'));
 
-        $this->assertEquals($url, $this->_oauthHelper->getRequestUrl($httpRequestMock));
+        $this->assertEquals($url, $this->oauthRequestHelper->getRequestUrl($httpRequestMock));
     }
 
-    /**
-     * Provides hosts info for tests
-     *
-     * @return array
-     */
     public function hostsDataProvider()
     {
         return  [
