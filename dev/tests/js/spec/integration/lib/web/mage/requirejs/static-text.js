@@ -1,5 +1,5 @@
 define([
-    'tests/assets/static-text/config',
+    'tests/assets/text/config',
     'text'
 ], function (config, text) {
     'use strict';
