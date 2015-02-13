@@ -67,7 +67,16 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
         $this->appState->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
-        $this->assertFalse($this->object->publish($this->getAsset()));
+
+        $asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
+        $asset->expects($this->never())
+            ->method('getPath')
+            ->will($this->returnValue('some/file.ext'));
+        $asset->expects($this->never())
+            ->method('getContent')
+            ->will($this->returnValue('content'));
+
+        $this->assertFalse($this->object->publish($asset));
     }
 
     public function testPublishExistsBefore()
@@ -79,7 +88,16 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
             ->method('isExist')
             ->with('some/file.ext')
             ->will($this->returnValue(true));
-        $this->assertTrue($this->object->publish($this->getAsset()));
+
+        $asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
+        $asset->expects($this->once())
+            ->method('getPath')
+            ->will($this->returnValue('some/file.ext'));
+        $asset->expects($this->never())
+            ->method('getContent')
+            ->will($this->returnValue('content'));
+
+        $this->assertTrue($this->object->publish($asset));
     }
 
     public function testPublish()
@@ -92,32 +110,19 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
             ->with('some/file.ext')
             ->will($this->returnValue(false));
 
-        $this->rootDirWrite->expects($this->once())
-            ->method('getRelativePath')
-            ->with('/root/some/file.ext')
-            ->will($this->returnValue('some/file.ext'));
-        $this->rootDirWrite->expects($this->once())
-            ->method('copyFile')
-            ->with('some/file.ext', 'some/file.ext', $this->staticDirWrite)
+        $this->staticDirWrite->expects($this->once())
+            ->method('writeFile')
+            ->with('some/file.ext', 'content')
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->object->publish($this->getAsset()));
-    }
-
-    /**
-     * Create an asset mock
-     *
-     * @return \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getAsset()
-    {
         $asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
-        $asset->expects($this->any())
+        $asset->expects($this->exactly(2))
             ->method('getPath')
             ->will($this->returnValue('some/file.ext'));
-        $asset->expects($this->any())
-            ->method('getSourceFile')
-            ->will($this->returnValue('/root/some/file.ext'));
-        return $asset;
+        $asset->expects($this->once())
+            ->method('getContent')
+            ->will($this->returnValue('content'));
+
+        $this->object->publish($asset);
     }
 }

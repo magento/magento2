@@ -15,17 +15,25 @@ class Bundle
     const BUNDLE_TYPE_JS = 'js';
 
     const BUNDLE_TYPE_HTML = 'html';
-    
-    /** @var string */
+
+    /**
+     * @var string
+     */
     protected $bundlePath;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $numberOfBundles;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $assets = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $bundle = [];
 
     /**
@@ -38,7 +46,9 @@ class Bundle
      */
     protected $scopeConfig;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $type;
 
     /**
@@ -54,11 +64,10 @@ class Bundle
      */
     protected static $availableTypes = [self::BUNDLE_TYPE_JS, self::BUNDLE_TYPE_HTML];
 
-    public static function isValidType($type)
-    {
-        return in_array($type, self::$availableTypes);
-    }
-
+    /**
+     * @param Bundle\ConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     */
     function __construct(
         \Magento\Framework\View\Asset\Bundle\ConfigInterface $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -68,13 +77,24 @@ class Bundle
         $this->init();
     }
 
+    /**
+     * @param string $type
+     * @return bool
+     */
+    public static function isValidType($type)
+    {
+        return in_array($type, self::$availableTypes);
+    }
+
+    /**
+     * @return void
+     */
     protected function init()
     {
-        $this->numberOfBundles = 1;
-        //$this->numberOfBundles = $this->scopeConfig->getValue(
-        //    self::XML_PATH_NUMBER_OF_BUNDLES,
-        //    \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
-        //);
+        $this->numberOfBundles = $this->scopeConfig->getValue(
+            self::XML_PATH_NUMBER_OF_BUNDLES,
+            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+        );
     }
 
     /**
@@ -165,7 +185,7 @@ class Bundle
     protected function wrapp()
     {
         foreach ($this->bundle as &$part) {
-           $part = "require.config({\n" .
+            $part = "require.config({\n" .
             "    config: {\n" .
             "        '" . $this->getJsName() . "':" . $part . "\n" .
             "    }\n" .
@@ -173,29 +193,37 @@ class Bundle
         }
     }
 
-    public function addInitJs()
+    /**
+     * @return bool
+     */
+    protected function addInitJs()
     {
         if ($this->getType() != self::BUNDLE_TYPE_HTML) {
             return false;
         }
-        foreach ($this->bundle as &$part) {
-            $part = "require.config({\n" .
-                    "    bundles: {\n" .
-                    "        'mage/requirejs/static': [\n" .
-                    "            'jsbuild',\n" .
-                    "            'buildTools',\n" .
-                    "            'text'\n" .
-                    "        ]\n" .
-                    "    },\n" .
-                    "    deps: [\n" .
-                    "        'jsbuild'\n" .
-                    "    ]\n" .
-                    "});\n" .
-                    $part;
-            break;
-        }
+
+        $part = reset($this->bundle);
+        $part = "require.config({\n" .
+                "    bundles: {\n" .
+                "        'mage/requirejs/static': [\n" .
+                "            'jsbuild',\n" .
+                "            'buildTools',\n" .
+                "            'text'\n" .
+                "        ]\n" .
+                "    },\n" .
+                "    deps: [\n" .
+                "        'jsbuild'\n" .
+                "    ]\n" .
+                "});\n" .
+                $part;
+        $this->bundle[0] = $part;
+
+        return true;
     }
 
+    /**
+     * @return string
+     */
     public function getJsName()
     {
         return $this->bundleNames[$this->getType()];

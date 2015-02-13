@@ -26,7 +26,7 @@ class BundleService
     protected $bundles = [];
 
     /**
-     * @var \Magento\Framework\View\Asset\BundleFactory
+     * @var BundleFactory
      */
     protected $bundleFactory;
 
@@ -35,22 +35,32 @@ class BundleService
      */
     protected $config;
 
-    /** @var LocalInterface */
+    /**
+     * @var LocalInterface
+     */
     protected $asset;
+
+    /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $appState;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param BundleFactory $bundleFactory
      * @param Bundle\ConfigInterface $config
+     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\BundleFactory $bundleFactory,
-        \Magento\Framework\View\Asset\Bundle\ConfigInterface $config
+        \Magento\Framework\View\Asset\Bundle\ConfigInterface $config,
+        \Magento\Framework\App\State $appState
     ) {
         $this->filesystem = $filesystem;
         $this->bundleFactory = $bundleFactory;
         $this->config = $config;
+        $this->appState = $appState;
     }
 
     /**
@@ -65,7 +75,6 @@ class BundleService
 
     /**
      * @return LocalInterface
-     * @throws \InvalidArgumentException
      */
     protected function getAsset()
     {
@@ -89,19 +98,28 @@ class BundleService
     {
         $asset = $this->getAsset();
         $area = $this->getContext()->getAreaCode();
-        //if (in_array($asset->getFilePath(), $this->config->getExcludedFiles($area))) {
-        //    return true;
-        //}
-        //
-        //// check if file in excluded directory
-        //$assetDirectory  = dirname($asset->getFilePath());
-        //foreach ($this->config->getExcludedDir($area) as $dir) {
-        //    if (strpos($assetDirectory, $dir) !== false) {
-        //        return true;
-        //    }
-        //}
+        if (in_array($asset->getFilePath(), $this->config->getExcludedFiles($area))) {
+            return true;
+        }
 
+        // check if file in excluded directory
+        $assetDirectory  = dirname($asset->getFilePath());
+        foreach ($this->config->getExcludedDir($area) as $dir) {
+            if (strpos($assetDirectory, $dir) !== false) {
+                return true;
+            }
+        }
         return false;
+    }
+
+    /**
+     * Check if app state is production mode
+     *
+     * @return bool
+     */
+    protected function isProductionMode()
+    {
+        return $this->appState->getMode() === \Magento\Framework\App\State::MODE_PRODUCTION;
     }
 
     /**
@@ -113,7 +131,7 @@ class BundleService
     public function collect(LocalInterface $asset)
     {
         $this->setAsset($asset);
-        if (!$this->isValidAsset()) {
+        if (!($this->isValidAsset() && $this->isProductionMode())) {
              return false;
         }
 
@@ -138,7 +156,7 @@ class BundleService
     /**
      * Return bundle
      *
-     * @return \Magento\Framework\View\Asset\Bundle|bool
+     * @return Bundle
      */
     protected function getBundle()
     {
@@ -149,7 +167,7 @@ class BundleService
     /**
      * Create bundle
      *
-     * @return \Magento\Framework\View\Asset\Bundle
+     * @return Bundle
      */
     protected function createBundle()
     {
@@ -170,14 +188,14 @@ class BundleService
     {
         $path = $this->getContext()->getPath();
         if ($this->getAsset()->getModule() != '') {
-            $bundleName = '/bundle';
+            $bundleName = 'bundle';
             if ($this->getAsset()->getContentType() == 'html') {
-                $bundleName = '/bundle-html';
+                $bundleName = 'bundle-html';
             }
         } else {
-            $bundleName = '/lib-bundle';
+            $bundleName = 'lib-bundle';
         }
-        $path .= $bundleName;
+        $path .= '/' . $bundleName;
         return $path;
     }
 
@@ -191,7 +209,7 @@ class BundleService
         $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
 
         foreach ($this->bundles as $bundle) {
-            /** @var \Magento\Framework\View\Asset\Bundle $bundle */
+            /** @var Bundle $bundle */
             foreach ($bundle->getContent() as $index => $part) {
                 $dir->writeFile($bundle->getPath() . "$index.js", $part);
             }
