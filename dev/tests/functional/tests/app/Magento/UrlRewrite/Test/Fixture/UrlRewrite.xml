@@ -5,26 +5,26 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="urlRewrite" module="Magento_UrlRewrite" type="virtual" entity_type="url_rewrite" collection="Magento\UrlRewrite\Model\Resource\UrlRewriteCollection" identifier="request_path" repository_class="Magento\UrlRewrite\Test\Repository\UrlRewrite" handler_interface="Magento\UrlRewrite\Test\Handler\UrlRewrite\UrlRewriteInterface" class="Magento\UrlRewrite\Test\Fixture\UrlRewrite">
     <dataset name="default">
         <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
         <field name="request_path" xsi:type="string">test_request%isolation%</field>
     </dataset>
-    <field name="id" backend_type="virtual"/>
-    <field name="store_id" backend_type="varchar" is_required="1" source="Magento\UrlRewrite\Test\Fixture\UrlRewrite\StoreId" input="select">
+    <field name="id"/>
+    <field name="store_id" is_required="1" source="Magento\UrlRewrite\Test\Fixture\UrlRewrite\StoreId">
       <default_value xsi:type="string">Main Website/Main Website Store/Default Store View</default_value>
     </field>
-    <field name="redirect_type" backend_type="int" is_required="0" input="select"/>
-    <field name="request_path" backend_type="varchar" is_required="1" input="text">
+    <field name="redirect_type" is_required="0"/>
+    <field name="request_path" is_required="1">
       <default_value xsi:type="string">test_request%isolation%</default_value>
     </field>
-    <field name="entity_type" backend_type="varchar" is_required="0" input="text">
+    <field name="entity_type" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="target_path" backend_type="varchar" is_required="1" input="text" source="Magento\UrlRewrite\Test\Fixture\UrlRewrite\TargetPath">
+    <field name="target_path" is_required="1" source="Magento\UrlRewrite\Test\Fixture\UrlRewrite\TargetPath">
       <default_value xsi:type="string">target_path%isolation%</default_value>
     </field>
-    <field name="description" backend_type="varchar" is_required="0" input="text"/>
+    <field name="description" is_required="0"/>
   </fixture>
 </config>

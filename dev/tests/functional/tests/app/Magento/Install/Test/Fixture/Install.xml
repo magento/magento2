@@ -5,26 +5,26 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="install" module="Magento_Install" type="virtual" entity_type="install" repository_class="Magento\Install\Test\Repository\Install" handler_interface="Magento\Install\Test\Handler\Install\InstallInterface" class="Magento\Install\Test\Fixture\Install">
-    <field name="dbHost" backend_type="virtual"/>
-    <field name="dbUser" backend_type="virtual"/>
-    <field name="dbPassword" backend_type="virtual"/>
-    <field name="dbName" backend_type="virtual"/>
-    <field name="web" backend_type="virtual"/>
-    <field name="admin" backend_type="virtual"/>
-    <field name="adminUsername" backend_type="virtual"/>
-    <field name="adminEmail" backend_type="virtual"/>
-    <field name="adminPassword" backend_type="virtual"/>
-    <field name="adminConfirm" backend_type="virtual"/>
-    <field name="apacheRewrites" backend_type="virtual"/>
-    <field name="dbTablePrefix" backend_type="virtual"/>
-    <field name="keyOwn" backend_type="virtual"/>
-    <field name="httpsAdmin" backend_type="virtual"/>
-    <field name="https" backend_type="virtual"/>
-    <field name="httpsFront" backend_type="virtual"/>
-    <field name="keyValue" backend_type="virtual"/>
-    <field name="language" backend_type="virtual"/>
-    <field name="language" backend_type="virtual"/>
+    <field name="dbHost"/>
+    <field name="dbUser"/>
+    <field name="dbPassword"/>
+    <field name="dbName"/>
+    <field name="web"/>
+    <field name="admin"/>
+    <field name="adminUsername"/>
+    <field name="adminEmail"/>
+    <field name="adminPassword"/>
+    <field name="adminConfirm"/>
+    <field name="apacheRewrites"/>
+    <field name="dbTablePrefix"/>
+    <field name="keyOwn"/>
+    <field name="httpsAdmin"/>
+    <field name="https"/>
+    <field name="httpsFront"/>
+    <field name="keyValue"/>
+    <field name="language"/>
+    <field name="language"/>
   </fixture>
 </config>

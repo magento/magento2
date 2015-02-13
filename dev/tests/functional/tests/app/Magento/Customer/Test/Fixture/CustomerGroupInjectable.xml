@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="customerGroupInjectable" module="Magento_Customer" type="flat" entity_type="customer_group" collection="Magento\Customer\Model\Resource\Group\Collection" repository_class="Magento\Customer\Test\Repository\CustomerGroupInjectable" handler_interface="Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface" class="Magento\Customer\Test\Fixture\CustomerGroupInjectable">
     <dataset name="default">
         <field name="customer_group_code" xsi:type="string">customer_code_%isolation%</field>
@@ -13,14 +13,14 @@
             <item name="dataSet" xsi:type="string">customer_tax_class</item>
         </field>
     </dataset>
-    <field name="code" backend_type="varchar" is_required="1" input="text">
+    <field name="code" is_required="1">
       <default_value xsi:type="string">customer_code_%isolation%</default_value>
     </field>
-    <field name="tax_class" backend_type="varchar" is_required="1" input="select" source="Magento\Customer\Test\Fixture\CustomerGroup\TaxClassIds">
+    <field name="tax_class" is_required="1" source="Magento\Customer\Test\Fixture\CustomerGroup\TaxClassIds">
       <default_value xsi:type="array">
                 <item name="dataSet" xsi:type="string">customer_tax_class</item>
             </default_value>
     </field>
-    <field name="customer_group_id" backend_type="virtual"/>
+    <field name="customer_group_id"/>
   </fixture>
 </config>

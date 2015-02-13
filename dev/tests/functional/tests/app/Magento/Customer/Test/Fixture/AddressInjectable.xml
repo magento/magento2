@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="addressInjectable" module="Magento_Customer" type="eav" entity_type="customer_address" collection="Magento\Customer\Model\Resource\Address\Collection" repository_class="Magento\Customer\Test\Repository\AddressInjectable" handler_interface="Magento\Customer\Test\Handler\AddressInjectable\AddressInjectableInterface" class="Magento\Customer\Test\Fixture\AddressInjectable">
     <dataset name="default">
         <field name="firstname" xsi:type="string">John</field>
@@ -19,70 +19,70 @@
         <field name="country_id" xsi:type="string">United States</field>
         <field name="telephone" xsi:type="string">555-55-555-55</field>
     </dataset>
-    <field name="city" backend_type="varchar" is_required="1" input="text">
+    <field name="city" is_required="1">
       <default_value xsi:type="string">Culver City</default_value>
     </field>
-    <field name="default_billing" backend_type="varchar" is_required="1" input="checkbox">
+    <field name="default_billing" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="default_shipping" backend_type="varchar" is_required="1" input="checkbox">
+    <field name="default_shipping" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="company" backend_type="varchar" is_required="0" input="text">
+    <field name="company" is_required="0">
       <default_value xsi:type="string">Magento %isolation%</default_value>
     </field>
-    <field name="country_id" backend_type="varchar" is_required="1" input="select">
+    <field name="country_id" is_required="1">
       <default_value xsi:type="string">United States</default_value>
     </field>
-    <field name="fax" backend_type="varchar" is_required="0" input="text">
+    <field name="fax" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="firstname" backend_type="varchar" is_required="1" input="text">
+    <field name="firstname" is_required="1">
       <default_value xsi:type="string">John</default_value>
     </field>
-    <field name="lastname" backend_type="varchar" is_required="1" input="text">
+    <field name="lastname" is_required="1">
       <default_value xsi:type="string">Doe</default_value>
     </field>
-    <field name="email" backend_type="varchar" is_required="1" input="text">
+    <field name="email" is_required="1">
       <default_value xsi:type="string">John.Doe%isolation%@example.com</default_value>
     </field>
-    <field name="middlename" backend_type="varchar" is_required="0" input="text">
+    <field name="middlename" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="postcode" backend_type="varchar" is_required="0" input="text">
+    <field name="postcode" is_required="0">
       <default_value xsi:type="string">90230</default_value>
     </field>
-    <field name="prefix" backend_type="varchar" is_required="0" input="text">
+    <field name="prefix" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="region" backend_type="varchar" is_required="0" input="text">
+    <field name="region" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="region_id" backend_type="int" is_required="0" input="hidden">
+    <field name="region_id" is_required="0">
       <default_value xsi:type="string">California</default_value>
     </field>
-    <field name="street" backend_type="text" is_required="1" input="multiline">
+    <field name="street" is_required="1">
       <default_value xsi:type="string">6161 West Centinela Avenue</default_value>
     </field>
-    <field name="suffix" backend_type="varchar" is_required="0" input="text">
+    <field name="suffix" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="telephone" backend_type="varchar" is_required="1" input="text">
+    <field name="telephone" is_required="1">
       <default_value xsi:type="string">555-55-555-55</default_value>
     </field>
-    <field name="vat_id" backend_type="varchar" is_required="0" input="text">
+    <field name="vat_id" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="vat_is_valid" backend_type="int" is_required="0" input="text">
+    <field name="vat_is_valid" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="vat_request_date" backend_type="varchar" is_required="0" input="text">
+    <field name="vat_request_date" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="vat_request_id" backend_type="varchar" is_required="0" input="text">
+    <field name="vat_request_id" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="vat_request_success" backend_type="int" is_required="0" input="text">
+    <field name="vat_request_success" is_required="0">
       <default_value xsi:type="null"/>
     </field>
   </fixture>

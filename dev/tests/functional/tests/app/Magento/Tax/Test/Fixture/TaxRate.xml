@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="taxRate" module="Magento_Tax" type="flat" entity_type="tax_calculation_rate" collection="Magento\Tax\Model\Resource\Calculation\Rate\Collection" identifier="code" repository_class="Magento\Tax\Test\Repository\TaxRate" handler_interface="Magento\Tax\Test\Handler\TaxRate\TaxRateInterface" class="Magento\Tax\Test\Fixture\TaxRate">
     <dataset name="default">
         <field name="code" xsi:type="string">Tax Rate %isolation%</field>
@@ -14,33 +14,33 @@
         <field name="tax_postcode" xsi:type="string">*</field>
         <field name="tax_region_id" xsi:type="string">California</field>
     </dataset>
-    <field name="tax_calculation_rate_id" backend_type="int" is_required="1" input="">
+    <field name="tax_calculation_rate_id" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="tax_country_id" backend_type="varchar" is_required="" input="">
+    <field name="tax_country_id" is_required="">
       <default_value xsi:type="string">United States</default_value>
     </field>
-    <field name="tax_region_id" backend_type="int" is_required="" input="">
+    <field name="tax_region_id" is_required="">
       <default_value xsi:type="string">California</default_value>
     </field>
-    <field name="tax_postcode" backend_type="varchar" is_required="" input="">
+    <field name="tax_postcode" is_required="">
       <default_value xsi:type="string">*</default_value>
     </field>
-    <field name="code" backend_type="varchar" is_required="" input="">
+    <field name="code" is_required="">
       <default_value xsi:type="string">Tax Rate %isolation%</default_value>
     </field>
-    <field name="rate" backend_type="decimal" is_required="" input="">
+    <field name="rate" is_required="">
       <default_value xsi:type="number">10</default_value>
     </field>
-    <field name="zip_is_range" backend_type="smallint" is_required="" input="">
+    <field name="zip_is_range" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="zip_from" backend_type="int" is_required="" input="">
+    <field name="zip_from" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="zip_to" backend_type="int" is_required="" input="">
+    <field name="zip_to" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="id" backend_type="virtual"/>
+    <field name="id"/>
   </fixture>
 </config>

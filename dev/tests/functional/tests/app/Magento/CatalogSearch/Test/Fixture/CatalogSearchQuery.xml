@@ -5,39 +5,39 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="catalogSearchQuery" module="Magento_CatalogSearch" type="flat" entity_type="search_query" collection="Magento\Search\Model\Resource\Query\Collection" repository_class="Magento\CatalogSearch\Test\Repository\CatalogSearchQuery" handler_interface="Magento\CatalogSearch\Test\Handler\CatalogSearchQuery\CatalogSearchQueryInterface" class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery">
-    <field name="query_id" backend_type="int" is_required="1" input="">
+    <field name="query_id" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="query_text" backend_type="varchar" is_required="" input="" source="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery\QueryText">
+    <field name="query_text" is_required="" source="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery\QueryText">
       <default_value xsi:type="null"/>
     </field>
-    <field name="num_results" backend_type="int" is_required="" input="">
+    <field name="num_results" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="popularity" backend_type="int" is_required="" input="">
+    <field name="popularity" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="redirect" backend_type="varchar" is_required="" input="">
+    <field name="redirect" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="synonym_for" backend_type="varchar" is_required="" input="">
+    <field name="synonym_for" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="store_id" backend_type="smallint" is_required="" input="">
+    <field name="store_id" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="display_in_terms" backend_type="smallint" is_required="" input="">
+    <field name="display_in_terms" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="is_active" backend_type="smallint" is_required="" input="">
+    <field name="is_active" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="is_processed" backend_type="smallint" is_required="" input="">
+    <field name="is_processed" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="updated_at" backend_type="timestamp" is_required="" input="">
+    <field name="updated_at" is_required="">
       <default_value xsi:type="null"/>
     </field>
   </fixture>

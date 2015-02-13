@@ -5,162 +5,162 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="cart" module="Magento_Checkout" type="flat" entity_type="quote" collection="Magento\Checkout\Model\Resource\Cart" repository_class="Magento\Checkout\Test\Repository\Cart" handler_interface="Magento\Checkout\Test\Handler\Cart\CartInterface" class="Magento\Checkout\Test\Fixture\Cart">
-    <field name="entity_id" backend_type="int" is_required="1" input="">
+    <field name="entity_id" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="store_id" backend_type="smallint" is_required="" input="">
+    <field name="store_id" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="created_at" backend_type="timestamp" is_required="" input="">
+    <field name="created_at" is_required="">
       <default_value xsi:type="string">CURRENT_TIMESTAMP</default_value>
     </field>
-    <field name="updated_at" backend_type="timestamp" is_required="" input="">
+    <field name="updated_at" is_required="">
       <default_value xsi:type="string">0000-00-00 00:00:00</default_value>
     </field>
-    <field name="converted_at" backend_type="timestamp" is_required="" input="">
+    <field name="converted_at" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="is_active" backend_type="smallint" is_required="" input="">
+    <field name="is_active" is_required="">
       <default_value xsi:type="string">1</default_value>
     </field>
-    <field name="is_virtual" backend_type="smallint" is_required="" input="">
+    <field name="is_virtual" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_multi_shipping" backend_type="smallint" is_required="" input="">
+    <field name="is_multi_shipping" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="items" backend_type="virtual" source="Magento\Checkout\Test\Fixture\Cart\Items"/>
-    <field name="items_count" backend_type="int" is_required="" input="">
+    <field name="items" source="Magento\Checkout\Test\Fixture\Cart\Items"/>
+    <field name="items_count" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="items_qty" backend_type="decimal" is_required="" input="">
+    <field name="items_qty" is_required="">
       <default_value xsi:type="string">0.0000</default_value>
     </field>
-    <field name="orig_order_id" backend_type="int" is_required="" input="">
+    <field name="orig_order_id" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="store_to_base_rate" backend_type="decimal" is_required="" input="">
+    <field name="store_to_base_rate" is_required="">
       <default_value xsi:type="string">0.0000</default_value>
     </field>
-    <field name="store_to_quote_rate" backend_type="decimal" is_required="" input="">
+    <field name="store_to_quote_rate" is_required="">
       <default_value xsi:type="string">0.0000</default_value>
     </field>
-    <field name="base_currency_code" backend_type="varchar" is_required="" input="">
+    <field name="base_currency_code" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="store_currency_code" backend_type="varchar" is_required="" input="">
+    <field name="store_currency_code" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="quote_currency_code" backend_type="varchar" is_required="" input="">
+    <field name="quote_currency_code" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="grand_total" backend_type="decimal" is_required="" input="">
+    <field name="grand_total" is_required="">
       <default_value xsi:type="string">0.0000</default_value>
     </field>
-    <field name="base_grand_total" backend_type="decimal" is_required="" input="">
+    <field name="base_grand_total" is_required="">
       <default_value xsi:type="string">0.0000</default_value>
     </field>
-    <field name="checkout_method" backend_type="varchar" is_required="" input="">
+    <field name="checkout_method" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="customer_id" backend_type="int" is_required="" input="">
+    <field name="customer_id" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="customer_tax_class_id" backend_type="int" is_required="" input="">
+    <field name="customer_tax_class_id" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="customer_group_id" backend_type="int" is_required="" input="">
+    <field name="customer_group_id" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="customer_email" backend_type="varchar" is_required="" input="">
+    <field name="customer_email" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="customer_prefix" backend_type="varchar" is_required="" input="">
+    <field name="customer_prefix" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="customer_firstname" backend_type="varchar" is_required="" input="">
+    <field name="customer_firstname" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="customer_middlename" backend_type="varchar" is_required="" input="">
+    <field name="customer_middlename" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="customer_lastname" backend_type="varchar" is_required="" input="">
+    <field name="customer_lastname" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="customer_suffix" backend_type="varchar" is_required="" input="">
+    <field name="customer_suffix" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="customer_dob" backend_type="datetime" is_required="" input="">
+    <field name="customer_dob" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="customer_note" backend_type="varchar" is_required="" input="">
+    <field name="customer_note" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="customer_note_notify" backend_type="smallint" is_required="" input="">
+    <field name="customer_note_notify" is_required="">
       <default_value xsi:type="string">1</default_value>
     </field>
-    <field name="customer_is_guest" backend_type="smallint" is_required="" input="">
+    <field name="customer_is_guest" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="remote_ip" backend_type="varchar" is_required="" input="">
+    <field name="remote_ip" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="applied_rule_ids" backend_type="varchar" is_required="" input="">
+    <field name="applied_rule_ids" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="reserved_order_id" backend_type="varchar" is_required="" input="">
+    <field name="reserved_order_id" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="password_hash" backend_type="varchar" is_required="" input="">
+    <field name="password_hash" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="coupon_code" backend_type="varchar" is_required="" input="">
+    <field name="coupon_code" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="global_currency_code" backend_type="varchar" is_required="" input="">
+    <field name="global_currency_code" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="base_to_global_rate" backend_type="decimal" is_required="" input="">
+    <field name="base_to_global_rate" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="base_to_quote_rate" backend_type="decimal" is_required="" input="">
+    <field name="base_to_quote_rate" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="customer_taxvat" backend_type="varchar" is_required="" input="">
+    <field name="customer_taxvat" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="customer_gender" backend_type="varchar" is_required="" input="">
+    <field name="customer_gender" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="subtotal" backend_type="decimal" is_required="" input="">
+    <field name="subtotal" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="base_subtotal" backend_type="decimal" is_required="" input="">
+    <field name="base_subtotal" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="subtotal_with_discount" backend_type="decimal" is_required="" input="">
+    <field name="subtotal_with_discount" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="base_subtotal_with_discount" backend_type="decimal" is_required="" input="">
+    <field name="base_subtotal_with_discount" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="is_changed" backend_type="int" is_required="" input="">
+    <field name="is_changed" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="trigger_recollec" backend_type="smallint" is_required="" input="">
+    <field name="trigger_recollec" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="ext_shipping_info" backend_type="text" is_required="" input="">
+    <field name="ext_shipping_info" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="is_persistent" backend_type="smallint" is_required="" input="">
+    <field name="is_persistent" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="gift_message_id" backend_type="int" is_required="" input="">
+    <field name="gift_message_id" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="checkout_data" backend_type="virtual" group="" source="Magento\Checkout\Test\Fixture\Cart\CheckoutData"/>
+    <field name="checkout_data" group="" source="Magento\Checkout\Test\Fixture\Cart\CheckoutData"/>
   </fixture>
 </config>

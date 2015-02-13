@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="review" module="Magento_Review" type="composite" collection="Magento\Review\Model\Resource\Review\Collection" repository_class="Magento\Review\Test\Repository\Review" handler_interface="Magento\Review\Test\Handler\Review\ReviewInterface" class="Magento\Review\Test\Fixture\Review">
     <dataset name="default">
         <field name="status_id" xsi:type="string">Approved</field>
@@ -24,47 +24,47 @@
         </field>
         <field name="type" xsi:type="string">Administrator</field>
     </dataset>
-    <field name="review_id" backend_type="bigint" is_required="" input="">
+    <field name="review_id" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="created_at" backend_type="timestamp" is_required="" input="">
+    <field name="created_at" is_required="">
       <default_value xsi:type="string">CURRENT_TIMESTAMP</default_value>
     </field>
-    <field name="entity_id" backend_type="smallint" is_required="" input="" source="Magento\Review\Test\Fixture\Review\EntityId">
+    <field name="entity_id" is_required="" source="Magento\Review\Test\Fixture\Review\EntityId">
       <default_value xsi:type="array">
                 <item name="dataSet" xsi:type="string">catalogProductSimple::default</item>
             </default_value>
     </field>
-    <field name="entity_pk_value" backend_type="int" is_required="" input="">
+    <field name="entity_pk_value" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="status_id" backend_type="smallint" is_required="" input="">
+    <field name="status_id" is_required="">
       <default_value xsi:type="string">Approved</default_value>
     </field>
-    <field name="detail_id" backend_type="bigint" is_required="1" input="">
+    <field name="detail_id" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="store_id" backend_type="smallint" is_required="" input="">
+    <field name="store_id" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="title" backend_type="varchar" is_required="" input="">
+    <field name="title" is_required="">
       <default_value xsi:type="string">Summary review %isolation%</default_value>
     </field>
-    <field name="detail" backend_type="text" is_required="" input="">
+    <field name="detail" is_required="">
       <default_value xsi:type="string">Text review %isolation%</default_value>
     </field>
-    <field name="nickname" backend_type="varchar" is_required="" input="">
+    <field name="nickname" is_required="">
       <default_value xsi:type="string">Guest customer %isolation%</default_value>
     </field>
-    <field name="customer_id" backend_type="int" is_required="" input="">
+    <field name="customer_id" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="select_stores" backend_type="virtual" is_required="1" input="multiselectgrouplist">
+    <field name="select_stores" is_required="1">
       <default_value xsi:type="array">
                 <item name="0" xsi:type="string">Main Website/Main Website Store/Default Store View</item>
             </default_value>
     </field>
-    <field name="ratings" backend_type="virtual" source="Magento\Review\Test\Fixture\Review\Ratings">
+    <field name="ratings" source="Magento\Review\Test\Fixture\Review\Ratings">
       <default_value xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="dataSet" xsi:type="string">visibleOnDefaultWebsite</item>
@@ -72,7 +72,7 @@
                 </item>
             </default_value>
     </field>
-    <field name="type" backend_type="string" is_required="" input="">
+    <field name="type" is_required="">
       <default_value xsi:type="string">Administrator</default_value>
     </field>
   </fixture>

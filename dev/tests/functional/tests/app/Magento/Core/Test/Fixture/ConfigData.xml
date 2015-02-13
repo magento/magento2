@@ -5,22 +5,22 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="configData" module="Magento_Core" type="flat" entity_type="core_config_data" collection="Magento\Core\Model\Resource\Config\Data\Collection" repository_class="Magento\Core\Test\Repository\ConfigData" handler_interface="Magento\Core\Test\Handler\ConfigData\ConfigDataInterface" class="Magento\Core\Test\Fixture\ConfigData">
-    <field name="section" backend_type="virtual"/>
-    <field name="config_id" backend_type="int" is_required="1" input="">
+    <field name="section"/>
+    <field name="config_id" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="scope" backend_type="varchar" is_required="" input="">
+    <field name="scope" is_required="">
       <default_value xsi:type="string">default</default_value>
     </field>
-    <field name="scope_id" backend_type="int" is_required="" input="">
+    <field name="scope_id" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="path" backend_type="varchar" is_required="" input="">
+    <field name="path" is_required="">
       <default_value xsi:type="string">general</default_value>
     </field>
-    <field name="value" backend_type="text" is_required="" input="">
+    <field name="value" is_required="">
       <default_value xsi:type="null"/>
     </field>
   </fixture>

@@ -5,31 +5,31 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="rating" module="Magento_Review" type="flat" entity_type="rating" collection="Magento\Review\Model\Resource\Rating\Collection" identifier="rating_code" repository_class="Magento\Review\Test\Repository\Rating" handler_interface="Magento\Review\Test\Handler\Rating\RatingInterface" class="Magento\Review\Test\Fixture\Rating">
     <dataset name="default">
         <field name="rating_code" xsi:type="string">Rating %isolation%</field>
         <field name="stores" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
         <field name="is_active" xsi:type="string">Yes</field>
     </dataset>
-    <field name="rating_id" backend_type="smallint" is_required="1" input="">
+    <field name="rating_id" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="entity_id" backend_type="smallint" is_required="" input="">
+    <field name="entity_id" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="rating_code" backend_type="varchar" is_required="" input="" group="rating_information">
+    <field name="rating_code" is_required="" group="rating_information">
       <default_value xsi:type="string">Rating %isolation%</default_value>
     </field>
-    <field name="position" backend_type="smallint" is_required="" input="" group="rating_information">
+    <field name="position" is_required="" group="rating_information">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_active" backend_type="smallint" is_required="" input="" group="rating_information">
+    <field name="is_active" is_required="" group="rating_information">
       <default_value xsi:type="string">Yes</default_value>
     </field>
-    <field name="stores" backend_type="virtual" group="rating_information">
+    <field name="stores" group="rating_information">
       <default_value xsi:type="string">Main Website/Main Website Store/Default Store View</default_value>
     </field>
-    <field name="options" backend_type="virtual" group="rating_information"/>
+    <field name="options" group="rating_information"/>
   </fixture>
 </config>

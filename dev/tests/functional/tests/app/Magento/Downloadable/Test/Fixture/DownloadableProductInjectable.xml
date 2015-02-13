@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="downloadableProductInjectable" module="Magento_Downloadable" type="eav" entity_type="catalog_product" product_type="downloadable" collection="Magento\Catalog\Model\Resource\Product\Collection" identifier="sku" repository_class="Magento\Downloadable\Test\Repository\DownloadableProductInjectable" handler_interface="Magento\Downloadable\Test\Handler\DownloadableProductInjectable\DownloadableProductInjectableInterface" class="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable">
     <dataset name="default">
         <field name="name" xsi:type="string">DownloadableProduct_%isolation%</field>
@@ -36,203 +36,203 @@
         </item>
         <item name="input_prefix" xsi:type="string">product</item>
     </data_config>
-    <field name="category_ids" backend_type="static" is_required="0" input="text" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds">
+    <field name="category_ids" is_required="0" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds">
       <default_value xsi:type="null"/>
     </field>
-    <field name="cost" backend_type="decimal" is_required="0" input="price">
+    <field name="cost" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="created_at" backend_type="static" is_required="1" input="text">
+    <field name="created_at" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="custom_design" backend_type="varchar" is_required="0" input="select">
+    <field name="custom_design" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="custom_design_from" backend_type="datetime" is_required="0" input="date">
+    <field name="custom_design_from" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="custom_design_to" backend_type="datetime" is_required="0" input="date">
+    <field name="custom_design_to" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="custom_layout_update" backend_type="text" is_required="0" input="textarea">
+    <field name="custom_layout_update" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="description" backend_type="text" is_required="0" input="textarea" group="product-details">
+    <field name="description" is_required="0" group="product-details">
       <default_value xsi:type="string">This is description for downloadable product</default_value>
     </field>
-    <field name="gallery" backend_type="varchar" is_required="0" input="gallery">
+    <field name="gallery" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="gift_message_available" backend_type="varchar" is_required="0" input="select">
+    <field name="gift_message_available" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="group_price" backend_type="decimal" is_required="0" input="text" group="advanced-pricing" source="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\GroupPriceOptions">
+    <field name="group_price" is_required="0" group="advanced-pricing" source="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\GroupPriceOptions">
       <default_value xsi:type="null"/>
     </field>
-    <field name="has_options" backend_type="static" is_required="0" input="text">
+    <field name="has_options" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="image" backend_type="varchar" is_required="0" input="media_image">
+    <field name="image" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="image_label" backend_type="varchar" is_required="0" input="text">
+    <field name="image_label" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="is_returnable" backend_type="varchar" is_required="0" input="select">
+    <field name="is_returnable" is_required="0">
       <default_value xsi:type="number">2</default_value>
     </field>
-    <field name="links_exist" backend_type="int" is_required="0" input="">
+    <field name="links_exist" is_required="0">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="links_purchased_separately" backend_type="int" is_required="1" input="">
+    <field name="links_purchased_separately" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="links_title" backend_type="varchar" is_required="1" input="">
+    <field name="links_title" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="media_gallery" backend_type="varchar" is_required="0" input="gallery">
+    <field name="media_gallery" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="meta_description" backend_type="varchar" is_required="0" input="textarea">
+    <field name="meta_description" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="meta_keyword" backend_type="text" is_required="0" input="textarea">
+    <field name="meta_keyword" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="meta_title" backend_type="varchar" is_required="0" input="text">
+    <field name="meta_title" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="minimal_price" backend_type="decimal" is_required="0" input="price">
+    <field name="minimal_price" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="msrp" backend_type="decimal" is_required="0" input="price">
+    <field name="msrp" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="msrp_display_actual_price_type" backend_type="varchar" is_required="0" input="select">
+    <field name="msrp_display_actual_price_type" is_required="0">
       <default_value xsi:type="number">4</default_value>
     </field>
-    <field name="name" backend_type="varchar" is_required="1" input="text" group="product-details">
+    <field name="name" is_required="1" group="product-details">
       <default_value xsi:type="string">DownloadableProduct_%isolation%</default_value>
     </field>
-    <field name="news_from_date" backend_type="datetime" is_required="0" input="date">
+    <field name="news_from_date" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="news_to_date" backend_type="datetime" is_required="0" input="date">
+    <field name="news_to_date" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="old_id" backend_type="int" is_required="0" input="text">
+    <field name="old_id" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="options_container" backend_type="varchar" is_required="0" input="select">
+    <field name="options_container" is_required="0">
       <default_value xsi:type="string">container2</default_value>
     </field>
-    <field name="page_layout" backend_type="varchar" is_required="0" input="select">
+    <field name="page_layout" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="price" backend_type="decimal" is_required="1" input="price" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\Price">
+    <field name="price" is_required="1" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\Price">
       <default_value xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
             </default_value>
     </field>
-    <field name="stock_data" input="text" group="advanced-inventory"/>
-    <field name="quantity_and_stock_status" backend_type="int" is_required="0" input="select" group="product-details">
+    <field name="stock_data" group="advanced-inventory"/>
+    <field name="quantity_and_stock_status" is_required="0" group="product-details">
       <default_value xsi:type="array">
                 <item name="qty" xsi:type="number">1</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </default_value>
     </field>
-    <field name="related_tgtr_position_behavior" backend_type="int" is_required="0" input="text">
+    <field name="related_tgtr_position_behavior" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="related_tgtr_position_limit" backend_type="int" is_required="0" input="text">
+    <field name="related_tgtr_position_limit" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="required_options" backend_type="static" is_required="0" input="text">
+    <field name="required_options" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="samples_title" backend_type="varchar" is_required="1" input="">
+    <field name="samples_title" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="short_description" backend_type="text" is_required="0" input="textarea" group="autosettings">
+    <field name="short_description" is_required="0" group="autosettings">
       <default_value xsi:type="string">This is short description for downloadable product</default_value>
     </field>
-    <field name="downloadable" backend_type="virtual" is_required="0" group="downloadable_information"/>
-    <field name="downloadable_items" backend_type="text" is_required="0" input="text" group="downloadable_information" source="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\Links">
+    <field name="downloadable" is_required="0" group="downloadable_information"/>
+    <field name="downloadable_items" is_required="0" group="downloadable_information" source="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\Links">
       <default_value xsi:type="array">
                 <item name="preset" xsi:type="string">default</item>
             </default_value>
     </field>
-    <field name="downloadable_sample" backend_type="text" is_required="0" input="text" group="downloadable_information" source="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\Samples">
+    <field name="downloadable_sample" is_required="0" group="downloadable_information" source="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\Samples">
       <default_value xsi:type="string">dafault</default_value>
     </field>
-    <field name="sku" backend_type="static" is_required="1" input="text" group="product-details">
+    <field name="sku" is_required="1" group="product-details">
       <default_value xsi:type="string">DownloadableProduct_%isolation%</default_value>
     </field>
-    <field name="small_image" backend_type="varchar" is_required="0" input="media_image">
+    <field name="small_image" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="small_image_label" backend_type="varchar" is_required="0" input="text">
+    <field name="small_image_label" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="special_from_date" backend_type="datetime" is_required="0" input="date">
+    <field name="special_from_date" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="special_price" backend_type="decimal" is_required="0" group="advanced-pricing">
+    <field name="special_price" is_required="0" group="advanced-pricing">
       <default_value xsi:type="number">10</default_value>
     </field>
-    <field name="special_to_date" backend_type="datetime" is_required="0" input="date">
+    <field name="special_to_date" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="status" backend_type="int" is_required="0" input="select" group="product-details">
+    <field name="status" is_required="0" group="product-details">
       <default_value xsi:type="string">1</default_value>
     </field>
-    <field name="tax_class_id" backend_type="int" is_required="0" input="select" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass">
+    <field name="tax_class_id" is_required="0" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass">
       <default_value xsi:type="array">
                 <item name="dataSet" xsi:type="string">taxable_goods</item>
             </default_value>
     </field>
-    <field name="thumbnail" backend_type="varchar" is_required="0" input="media_image">
+    <field name="thumbnail" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="thumbnail_label" backend_type="varchar" is_required="0" input="text">
+    <field name="thumbnail_label" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="tier_price" backend_type="decimal" is_required="0" input="text" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions">
+    <field name="tier_price" is_required="0" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions">
       <default_value xsi:type="string">default</default_value>
     </field>
-    <field name="updated_at" backend_type="static" is_required="1" input="text">
+    <field name="updated_at" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="upsell_tgtr_position_behavior" backend_type="int" is_required="0" input="text">
+    <field name="upsell_tgtr_position_behavior" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="upsell_tgtr_position_limit" backend_type="int" is_required="0" input="text">
+    <field name="upsell_tgtr_position_limit" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="url_key" backend_type="varchar" is_required="0" input="text" group="search-engine-optimization">
+    <field name="url_key" is_required="0" group="search-engine-optimization">
       <default_value xsi:type="string">downloadableproduct_%isolation%</default_value>
     </field>
-    <field name="url_path" backend_type="varchar" is_required="0" input="text">
+    <field name="url_path" is_required="0">
       <default_value xsi:type="null"/>
     </field>
-    <field name="visibility" backend_type="int" is_required="0" input="select" group="autosettings">
+    <field name="visibility" is_required="0" group="autosettings">
       <default_value xsi:type="number">4</default_value>
     </field>
-    <field name="weight" backend_type="decimal" is_required="0" input="weight" group="product-details">
+    <field name="weight" is_required="0" group="product-details">
       <default_value xsi:type="null"/>
     </field>
-    <field name="custom_options" backend_type="virtual" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions">
+    <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions">
       <default_value xsi:type="string">default</default_value>
     </field>
-    <field name="id" backend_type="virtual"/>
-    <field name="is_virtual" backend_type="virtual" group="product-details">
+    <field name="id"/>
+    <field name="is_virtual" group="product-details">
       <default_value xsi:type="string">Yes</default_value>
     </field>
-    <field name="website_ids" backend_type="virtual" group="websites">
+    <field name="website_ids" group="websites">
       <default_value xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </default_value>
     </field>
-    <field name="checkout_data" backend_type="virtual" group="null" source="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\CheckoutData"/>
+    <field name="checkout_data" group="null" source="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\CheckoutData"/>
   </fixture>
 </config>

@@ -5,124 +5,124 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/datafixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="catalogProductAttribute" module="Magento_Catalog" type="composite" collection="Magento\Catalog\Model\Resource\Attribute" repository_class="Magento\Catalog\Test\Repository\CatalogProductAttribute" handler_interface="Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface" class="Magento\Catalog\Test\Fixture\CatalogProductAttribute">
     <dataset name="default">
         <field name="frontend_label" xsi:type="string">attribute_label%isolation%</field>
         <field name="frontend_input" xsi:type="string">Text Field</field>
         <field name="is_required" xsi:type="string">No</field>
     </dataset>
-    <field name="attribute_id" backend_type="smallint" is_required="1" input="">
+    <field name="attribute_id" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="entity_type_id" backend_type="smallint" is_required="" input="">
+    <field name="entity_type_id" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="attribute_code" backend_type="varchar" is_required="" input="" group="advanced-properties">
+    <field name="attribute_code" is_required="" group="advanced-properties">
       <default_value xsi:type="null"/>
     </field>
-    <field name="attribute_model" backend_type="varchar" is_required="" input="">
+    <field name="attribute_model" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="backend_model" backend_type="varchar" is_required="" input="">
+    <field name="backend_model" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="backend_type" backend_type="varchar" is_required="" input="">
+    <field name="backend_type" is_required="">
       <default_value xsi:type="string">static</default_value>
     </field>
-    <field name="backend_table" backend_type="varchar" is_required="" input="">
+    <field name="backend_table" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="frontend_model" backend_type="varchar" is_required="" input="">
+    <field name="frontend_model" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="frontend_input" backend_type="varchar" is_required="" input="select" group="properties">
+    <field name="frontend_input" is_required="" group="properties">
       <default_value xsi:type="string">Text Field</default_value>
     </field>
-    <field name="frontend_label" backend_type="varchar" is_required="" input="" group="properties">
+    <field name="frontend_label" is_required="" group="properties">
       <default_value xsi:type="string">attribute_label%isolation%</default_value>
     </field>
-    <field name="manage_frontend_label" backend_type="varchar" is_required="" input="" group="manage-labels">
+    <field name="manage_frontend_label" is_required="" group="manage-labels">
       <default_value xsi:type="null"/>
     </field>
-    <field name="frontend_class" backend_type="varchar" is_required="" input="">
+    <field name="frontend_class" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="source_model" backend_type="varchar" is_required="" input="">
+    <field name="source_model" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="is_required" backend_type="smallint" is_required="" input="select" group="properties">
+    <field name="is_required" is_required="" group="properties">
       <default_value xsi:type="string">No</default_value>
     </field>
-    <field name="is_user_defined" backend_type="smallint" is_required="" input="">
+    <field name="is_user_defined" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_unique" backend_type="smallint" is_required="" input="" group="advanced-properties">
+    <field name="is_unique" is_required="" group="advanced-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="note" backend_type="varchar" is_required="" input="">
+    <field name="note" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="frontend_input_renderer" backend_type="varchar" is_required="" input="">
+    <field name="frontend_input_renderer" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="is_global" backend_type="smallint" is_required="" input="" group="advanced-properties">
+    <field name="is_global" is_required="" group="advanced-properties">
       <default_value xsi:type="string">1</default_value>
     </field>
-    <field name="is_visible" backend_type="smallint" is_required="" input="">
+    <field name="is_visible" is_required="">
       <default_value xsi:type="string">1</default_value>
     </field>
-    <field name="is_searchable" backend_type="smallint" is_required="" input="" group="frontend-properties">
+    <field name="is_searchable" is_required="" group="frontend-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_filterable" backend_type="smallint" is_required="" input="" group="frontend-properties">
+    <field name="is_filterable" is_required="" group="frontend-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_comparable" backend_type="smallint" is_required="" input="" group="frontend-properties">
+    <field name="is_comparable" is_required="" group="frontend-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_visible_on_front" backend_type="smallint" is_required="" input="" group="frontend-properties">
+    <field name="is_visible_on_front" is_required="" group="frontend-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_html_allowed_on_front" backend_type="smallint" is_required="" input="" group="frontend-properties">
+    <field name="is_html_allowed_on_front" is_required="" group="frontend-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_used_for_price_rules" backend_type="smallint" is_required="" input="" group="frontend-properties">
+    <field name="is_used_for_price_rules" is_required="" group="frontend-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_filterable_in_search" backend_type="smallint" is_required="" input="" group="frontend-properties">
+    <field name="is_filterable_in_search" is_required="" group="frontend-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="used_in_product_listing" backend_type="smallint" is_required="" input="" group="frontend-properties">
+    <field name="used_in_product_listing" is_required="" group="frontend-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="used_for_sort_by" backend_type="smallint" is_required="" input="" group="frontend-properties">
+    <field name="used_for_sort_by" is_required="" group="frontend-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="apply_to" backend_type="varchar" is_required="" input="">
+    <field name="apply_to" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="is_visible_in_advanced_search" backend_type="smallint" is_required="" input="" group="frontend-properties">
+    <field name="is_visible_in_advanced_search" is_required="" group="frontend-properties">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="position" backend_type="int" is_required="" input="">
+    <field name="position" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_wysiwyg_enabled" backend_type="smallint" is_required="" input="">
+    <field name="is_wysiwyg_enabled" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="is_used_for_promo_rules" backend_type="smallint" is_required="" input="">
+    <field name="is_used_for_promo_rules" is_required="">
       <default_value xsi:type="number">0</default_value>
     </field>
-    <field name="search_weight" backend_type="smallint" is_required="" input="">
+    <field name="search_weight" is_required="">
       <default_value xsi:type="string">1</default_value>
     </field>
-    <field name="options" backend_type="smallint" is_required="" input="" source="Magento\Catalog\Test\Fixture\CatalogProductAttribute\Options">
+    <field name="options" is_required="" source="Magento\Catalog\Test\Fixture\CatalogProductAttribute\Options">
       <default_value xsi:type="null"/>
     </field>
-    <field name="default_value_text" backend_type="text" group="advanced-properties"/>
-    <field name="default_value_textarea" backend_type="text" group="advanced-properties"/>
-    <field name="default_value_date" backend_type="text" group="advanced-properties" source="Magento\Backend\Test\Fixture\Source\Date"/>
-    <field name="default_value_yesno" backend_type="text" group="advanced-properties"/>
+    <field name="default_value_text" group="advanced-properties"/>
+    <field name="default_value_textarea" group="advanced-properties"/>
+    <field name="default_value_date" group="advanced-properties" source="Magento\Backend\Test\Fixture\Source\Date"/>
+    <field name="default_value_yesno" group="advanced-properties"/>
   </fixture>
 </config>
