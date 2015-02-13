@@ -28,7 +28,7 @@ class Pool
      * @param PreProcessorFactory $processorFactory
      * @param array $preProcessors
      */
-    public function __construct(PreProcessorFactory $processorFactory, array $preProcessors = null)
+    public function __construct(PreProcessorFactory $processorFactory, array $preProcessors = [])
     {
         $this->processorFactory = $processorFactory;
         $this->preProcessors = $preProcessors;

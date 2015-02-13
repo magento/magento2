@@ -202,7 +202,7 @@ class Deployer
             if ($this->isDryRun) {
                 $asset->getContent();
             } else {
-                //$this->assetPublisher->publish($asset);
+                $this->assetPublisher->publish($asset);
                 $this->bundleService->collect($asset);
             }
             $this->count++;
