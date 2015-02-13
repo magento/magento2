@@ -10,16 +10,17 @@
 <script>
 require([
     "jquery",
+    'mage/template',
     "jquery/file-uploader",
     "Magento_Theme/js/sortable",
     "mage/translate"
-], function($){
+], function ($, mageTemplate) {
 
     $('#js_files_uploader').fileupload({
         dataType: 'json',
         replaceFileInput: false,
         sequentialUploads: true,
-        url : '<?php echo $block->getJsUploadUrl(); ?>',
+        url: '<?php echo $block->getJsUploadUrl(); ?>',
 
         /**
          * Add data
@@ -27,17 +28,26 @@ require([
          * @param data
          */
         add: function (e, data) {
+            var progressTmpl = mageTemplate('#js-file-uploader-template'),
+                fileSize,
+                tmpl;
+
             $.each(data.files, function (index, file) {
-                data.fileId =  Math.random().toString(36).substr(2,9);
-                var progressTmpl = $('#js-file-uploader-template').children(':first').clone();
-                progressTmpl.attr('id', data.fileId);
-                var fileSize = typeof(file.size) == "undefined"
-                    ? $.mage.__('We cannot detect a size.')
-                    : byteConvert(file.size);
-                var fileInfoHtml = progressTmpl.html().replace('{{size}}', fileSize)
-                    .replace('{{name}}', file.name);
-                progressTmpl.html(fileInfoHtml) ;
-                progressTmpl.appendTo('#js-file-uploader');
+                fileSize = typeof file.size == "undefined" ?
+                    $.mage.__('We could not detect a size.') :
+                    byteConvert(file.size);
+
+                data.fileId = Math.random().toString(36).substr(2, 9);
+
+                tmpl = progressTmpl({
+                    data: {
+                        name: file.name,
+                        size: fileSize,
+                        id: data.fileId
+                    }
+                });
+
+                $(tmpl).appendTo('#js-file-uploader');
             });
 
             var uploadButton = $('#js_uploader_button');
@@ -60,7 +70,7 @@ require([
             $('#no-js-files-found').remove();
 
             var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-            $(progressSelector).css('width','100%');
+            $(progressSelector).css('width', '100%');
 
             $(this).val('');
 
@@ -68,7 +78,9 @@ require([
                 $(progressSelector).removeClass('upload-progress').addClass('upload-success');
 
                 $('#' + data.fileId).delay(2000).fadeOut(2000);
-                $('body').trigger('refreshJsList', {jsList : data.result.files});
+                $('body').trigger('refreshJsList', {
+                    jsList: data.result.files
+                });
             } else {
                 $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
             }
@@ -81,7 +93,7 @@ require([
          * @param e
          * @param data
          */
-        progress: function(e, data) {
+        progress: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
             var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
             $(progressSelector).css('width', progress + '%');
@@ -92,7 +104,7 @@ require([
          * @param e
          * @param data
          */
-        fail: function(e, data) {
+        fail: function (e, data) {
             var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
             $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
 

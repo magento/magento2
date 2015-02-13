@@ -25,21 +25,21 @@
             <button type="submit" class="action search-global-action" title="<?php echo __('Search') ?>"><span><?php echo __('Search') ?></span></button>
         </div>
     </form>
-    <script data-template="search-suggest" type="text/x-jquery-tmpl">
+    <script data-template="search-suggest" type="text/x-magento-template">
         <ul class="dropdown-menu search-global-menu">
-        {{if items.length}}
-            {{each items}}
+        <% if (data.items.length) { %>
+            <% _.each(data.items, function(value){ %>
             <li class="item"
-                {{html optionData($value)}}
+                <%= data.optionData(value) %>
                 >
-                <a href="${$value.url}" class="title">${$value.name}</a>
-                <div class="type">${$value.type}</div>
-                ${$value.description || ""}
+                <a href="<%= value.url %>" class="title"><%= value.name %></a>
+                <div class="type"><%= value.type %></div>
+                <%= value.description || "" %>
             </li>
-            {{/each}}
-        {{else}}
+            <% }); %>
+        <% } else { %>
             <li><span class="mage-suggest-no-records"><?php echo __('No records found.') ?></span></li>
-        {{/if}}
+        <% } %>
         </ul>
     </script>
 </div>
