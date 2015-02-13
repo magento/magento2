@@ -485,13 +485,13 @@ button {
 }
 
 .page-footer {
-    &-wrapper {
-        background-color: @color-light;
-        margin-top: auto;
+    background-color: @color-light;
+    margin-top: auto;
+    &-content {
+        padding: 15px 0;
+        &:extend(._layout-width all);
+        .clearer();
     }
-    padding: 15px 0;
-    &:extend(._layout-width all);
-    .clearer();
 }
 
 .footer-legal {

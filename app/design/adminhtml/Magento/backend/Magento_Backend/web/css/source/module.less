@@ -206,17 +206,14 @@
 }
 
 .locale-switcher {
-    &-field {
-        white-space: nowrap;
-        float: left;
-        .control,
-        .label {
-            vertical-align: middle;
-            margin: 0 10px 0 0;
-            display: inline-block;
-        }
+    white-space: nowrap;
+    float: left;
+    .label {
+        vertical-align: middle;
+        margin: 0 10px 0 0;
+        display: inline-block;
     }
-    &-select {
+    .form-el-select {
         .css(appearance, none, 1);
         appearance: none;
         border: 1px solid #ada89e;
@@ -227,7 +224,7 @@
         padding-right:29px;
         text-indent: .01px;
         text-overflow: '';
-        &::-ms-expand{
+        &::-ms-expand {
           display:none;
         }
         .lt-ie10 & {
@@ -235,11 +232,18 @@
             padding-right: 4px;
         }
     }
+    .form-select-label {
+        display: inline-block;
+    }
 }
 @-moz-document url-prefix() {
     .locale-switcher-select {
         background-image: none;
     }
+}
+
+.link-copyright {
+    display: none;
 }
 
 @-moz-document url-prefix() {

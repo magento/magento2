@@ -31,18 +31,23 @@
     @font-style: normal
 );
 
+html,
+body {
+    height: 100%;
+}
+
 html {
     font-size: 62.5%;
 }
 
 body {
     .typography(
-        @_font-size: @font-size-base,
-        @_color: @color-base,
-        @_font-family: @font-family-base,
-        @_font-weight: @font-weight-base,
-        @_line-height: @line-height-base,
-        @_font-style: @font-style-base
+    @_font-size: @font-size-base,
+    @_color: @color-base,
+    @_font-family: @font-family-base,
+    @_font-weight: @font-weight-base,
+    @_line-height: @line-height-base,
+    @_font-style: @font-style-base
     );
 }
 
@@ -51,39 +56,39 @@ body {
 //  ---------------------------------------------
 
 h1 {
-    .typography(
-        @_font-size: 2.8rem,
-        @_color: @color-dark-brownie,
-        @_font-weight: @font-weight-regular,
-        @_line-height: 3.4rem,
-        @_font-family: false,
-        @_font-style: false
-    );
     margin: 0 0 2rem;
+    .typography(
+    @_font-size: 2.8rem,
+    @_color: @color-dark-brownie,
+    @_font-weight: @font-weight-regular,
+    @_line-height: 3.4rem,
+    @_font-family: false,
+    @_font-style: false
+    );
 }
 
 h2 {
-    .typography(
-        @_font-size: 2rem,
-        @_color: @color-dark-brownie,
-        @_font-weight: @font-weight-regular,
-        @_line-height: 2.5rem,
-        @_font-family: false,
-        @_font-style: false
-    );
     margin: 0 0 2rem;
+    .typography(
+    @_font-size: 2rem,
+    @_color: @color-dark-brownie,
+    @_font-weight: @font-weight-regular,
+    @_line-height: 2.5rem,
+    @_font-family: false,
+    @_font-style: false
+    );
 }
 
 h3 {
-    .typography(
-        @_font-size: 1.7rem,
-        @_color: @color-dark-brownie,
-        @_font-weight: @font-weight-semibold,
-        @_line-height: 2.2rem,
-        @_font-family: false,
-        @_font-style: false
-    );
     margin: 0 0 2rem;
+    .typography(
+    @_font-size: 1.7rem,
+    @_color: @color-dark-brownie,
+    @_font-weight: @font-weight-semibold,
+    @_line-height: 2.2rem,
+    @_font-family: false,
+    @_font-style: false
+    );
 }
 
 h4,
