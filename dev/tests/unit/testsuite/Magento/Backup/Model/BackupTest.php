@@ -48,11 +48,4 @@ class BackupTest extends \PHPUnit_Framework_TestCase
         $backup->setTime($time);
         $this->assertEquals($contents, $backup->output());
     }
-
-    public function provider()
-    {
-        return [
-            [true, ]
-        ];
-    }
-} 
+}

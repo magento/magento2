@@ -162,8 +162,6 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             throw new NotFoundException();
         }
 
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
-        $resultRaw = $this->resultRawFactory->create();
         if ($plain) {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
             switch (strtolower($extension)) {
@@ -184,20 +182,22 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $contentLength = $stat['size'];
             $contentModify = $stat['mtime'];
 
+            /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+            $resultRaw = $this->resultRawFactory->create();
             $resultRaw->setHttpResponseCode(200)
                 ->setHeader('Pragma', 'public', true)
                 ->setHeader('Content-type', $contentType, true)
                 ->setHeader('Content-Length', $contentLength)
                 ->setHeader('Last-Modified', date('r', $contentModify));
             $resultRaw->setContents($directory->readFile($fileName));
+            return $resultRaw;
         } else {
             $name = pathinfo($path, PATHINFO_BASENAME);
-            $this->_response = $this->_fileFactory->create(
+            $this->_fileFactory->create(
                 $name,
                 ['type' => 'filename', 'value' => $fileName],
                 DirectoryList::MEDIA
             );
         }
-        return $resultRaw;
     }
 }

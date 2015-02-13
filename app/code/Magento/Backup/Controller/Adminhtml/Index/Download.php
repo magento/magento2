@@ -73,7 +73,7 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
 
         $fileName = $this->_objectManager->get('Magento\Backup\Helper\Data')->generateBackupDownloadName($backup);
 
-        $this->_response = $this->_fileFactory->create(
+        $this->_fileFactory->create(
             $fileName,
             null,
             DirectoryList::VAR_DIR,
