@@ -17,11 +17,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="directory_setup" xsi:type="string">Magento\Directory\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

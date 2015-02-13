@@ -18,13 +18,6 @@
             <argument name="weeeData" xsi:type="object">Magento\Weee\Helper\Data\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="weee_setup" xsi:type="string">Magento\Weee\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
 
     <type name="Magento\Framework\Pricing\Adjustment\Collection">
         <arguments>

@@ -6,13 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="groupedproduct_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Quote\Model\Quote\Item\RelatedProducts">
         <arguments>
             <argument name="relatedProductTypes" xsi:type="array">

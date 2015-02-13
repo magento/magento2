@@ -48,13 +48,6 @@
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="customer_setup" xsi:type="string">Magento\Customer\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Customer\Api\Data\CustomerDataBuilder" shared="false">
         <arguments>
             <argument name="metadataService" xsi:type="object">\Magento\Customer\Api\CustomerMetadataInterface</argument>

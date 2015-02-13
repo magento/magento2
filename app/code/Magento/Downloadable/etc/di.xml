@@ -16,13 +16,6 @@
             <argument name="typeSwitcherLabel" xsi:type="string">Virtual / Downloadable</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="downloadable_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Product\CartConfiguration">
         <plugin name="Downloadable" type="Magento\Downloadable\Model\Product\CartConfiguration\Plugin\Downloadable" />
     </type>

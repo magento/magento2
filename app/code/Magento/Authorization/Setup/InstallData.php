@@ -1,0 +1,81 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Authorization\Setup;
+
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
+use Magento\Authorization\Model\UserContextInterface;
+
+class InstallData implements InstallDataInterface
+{
+    /**
+     * @var AuthorizationFactory
+     */
+    private $authFactory;
+
+    /**
+     * @param AuthorizationFactory $authFactory
+     */
+    public function __construct(AuthorizationFactory $authFactory)
+    {
+        $this->authFactory = $authFactory;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
+    {
+        $roleCollection = $this->authFactory->createRoleCollection()
+            ->addFieldToFilter('parent_id', 0)
+            ->addFieldToFilter('tree_level', 1)
+            ->addFieldToFilter('role_type', RoleGroup::ROLE_TYPE)
+            ->addFieldToFilter('user_id', 0)
+            ->addFieldToFilter('user_type', UserContextInterface::USER_TYPE_ADMIN)
+            ->addFieldToFilter('role_name', 'Administrators');
+
+        if ($roleCollection->count() == 0) {
+            $admGroupRole = $this->authFactory->createRole()->setData(
+                [
+                    'parent_id' => 0,
+                    'tree_level' => 1,
+                    'sort_order' => 1,
+                    'role_type' => RoleGroup::ROLE_TYPE,
+                    'user_id' => 0,
+                    'user_type' => UserContextInterface::USER_TYPE_ADMIN,
+                    'role_name' => 'Administrators',
+                ]
+            )->save();
+        } else {
+            foreach ($roleCollection as $item) {
+                $admGroupRole = $item;
+                break;
+            }
+        }
+
+        $rulesCollection = $this->authFactory->createRulesCollection()
+            ->addFieldToFilter('role_id', $admGroupRole->getId())
+            ->addFieldToFilter('resource_id', 'all');
+
+        if ($rulesCollection->count() == 0) {
+            $this->authFactory->createRules()->setData(
+                [
+                    'role_id' => $admGroupRole->getId(),
+                    'resource_id' => 'Magento_Adminhtml::all',
+                    'privileges' => null,
+                    'permission' => 'allow',
+                ]
+            )->save();
+        } else {
+            /** @var \Magento\Authorization\Model\Rules $rule */
+            foreach ($rulesCollection as $rule) {
+                $rule->setData('resource_id', 'Magento_Adminhtml::all')->save();
+            }
+        }
+    }
+}

@@ -135,13 +135,6 @@
             <argument name="options" xsi:type="string">5,10,15,20,25</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="catalog_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Helper\Product\Compare">
         <arguments>
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>

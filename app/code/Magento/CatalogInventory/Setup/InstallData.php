@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\CatalogInventory\Setup;
+
+use Magento\Eav\Setup\EavSetup;
+use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
+
+class InstallData implements InstallDataInterface 
+{
+    /**
+     * @var EavSetupFactory
+     */
+    private $eavSetupFactory;
+
+    /**
+     * @param EavSetupFactory $eavSetupFactory
+     */
+    public function __construct(EavSetupFactory $eavSetupFactory)
+    {
+        $this->eavSetupFactory = $eavSetupFactory;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
+    {
+        $setup->getConnection()
+            ->insertForce(
+                $setup->getTable('cataloginventory_stock'),
+                ['stock_id' => 1, 'stock_name' => 'Default']
+            );
+
+        /** @var EavSetup $eavSetup */
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $groupName = 'Product Details';
+        $entityTypeId = $eavSetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        $attributeSetId = $eavSetup->getAttributeSetId($entityTypeId, 'Default');
+
+        $attribute = $eavSetup->getAttribute($entityTypeId, 'quantity_and_stock_status');
+        if ($attribute) {
+            $eavSetup->addAttributeToGroup($entityTypeId, $attributeSetId, $groupName, $attribute['attribute_id'], 60);
+            $eavSetup->updateAttribute($entityTypeId, $attribute['attribute_id'], 'default_value', 1);
+        }
+    }
+}

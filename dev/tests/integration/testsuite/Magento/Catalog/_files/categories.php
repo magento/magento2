@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+/** @var \Magento\Catalog\Setup\CategorySetup $installer */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Setup',
+    'Magento\Catalog\Setup\CategorySetup',
     ['resourceName' => 'catalog_setup']
 );
 

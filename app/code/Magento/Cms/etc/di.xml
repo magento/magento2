@@ -45,15 +45,8 @@
                 </item>
             </argument>
             <argument name="dirs" xsi:type="array">
-                <item name="exclude" xsi:type="string"></item>
-                <item name="include" xsi:type="string"></item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="cms_setup" xsi:type="string">Magento\Cms\Model\Resource\Setup</item>
+                <item name="exclude" xsi:type="string"/>
+                <item name="include" xsi:type="string"/>
             </argument>
         </arguments>
     </type>

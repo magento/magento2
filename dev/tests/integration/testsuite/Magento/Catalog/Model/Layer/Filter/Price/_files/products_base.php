@@ -10,9 +10,9 @@
 
 $testCases = include __DIR__ . '/_algorithm_base_data.php';
 
-/** @var $installer \Magento\Catalog\Model\Resource\Setup */
+/** @var $installer \Magento\Catalog\Setup\CategorySetup */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Setup',
+    'Magento\Catalog\Setup\CategorySetup',
     ['resourceName' => 'catalog_setup']
 );
 /**

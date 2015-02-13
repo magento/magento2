@@ -16,11 +16,4 @@
             <argument name="resourceHelper" xsi:type="object">Magento\GoogleShopping\Model\Resource\Helper</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="googleshopping_setup" xsi:type="string">Magento\GoogleShopping\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Setup;
 
+use Magento\Framework\Module\Setup\Migration;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataResourceInterface;
@@ -12,14 +13,14 @@ use Magento\Framework\Setup\ModuleDataResourceInterface;
 class InstallData implements InstallDataInterface
 {
     /**
-     * @var CustomerFactory
+     * @var CustomerSetupFactory
      */
     private $customerSetupFactory;
 
     /**
-     * @param CustomerFactory $customerSetupFactory
+     * @param CustomerSetupFactory $customerSetupFactory
      */
-    public function __construct(CustomerFactory $customerSetupFactory)
+    public function __construct(CustomerSetupFactory $customerSetupFactory)
     {
         $this->customerSetupFactory = $customerSetupFactory;
     }
@@ -29,7 +30,7 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
     {
-        /** @var Customer $customerSetup */
+        /** @var CustomerSetup $customerSetup */
         $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
 
         $setup->startSetup();
@@ -159,8 +160,8 @@ class InstallData implements InstallDataInterface
         $migrationSetup->appendClassAliasReplace(
             'customer_eav_attribute',
             'data_model',
-            \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
-            \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+            Migration::ENTITY_TYPE_MODEL,
+            Migration::FIELD_CONTENT_TYPE_PLAIN,
             ['attribute_id']
         );
         $migrationSetup->doUpdateClassAliases();
