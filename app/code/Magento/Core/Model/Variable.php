@@ -145,7 +145,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      */
     public function getVariablesOptionArray($withGroup = false)
     {
-        /* @var $collection \Magento\Core\Model\Resource\Variable\Collection */
+        /* @var $collection \Magento\Variable\Model\Resource\Variable\Collection */
         $collection = $this->getCollection();
         $variables = [];
         foreach ($collection->toOptionArray() as $variable) {

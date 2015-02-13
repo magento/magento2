@@ -76,4 +76,5 @@ return [
     ['Magento\Checkout\Service'],
     ['Magento\GiftMessage\Service'],
     ['Magento\Backend\Controller\Adminhtml\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
+    ['Magento\Core\Model\Resource\Variable', 'Magento\Variable\Model\Resource\Variable'],
 ];

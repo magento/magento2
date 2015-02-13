@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Variable;
+namespace Magento\Variable\Model\Resource\Variable;
 
 /**
  * Custom variable collection

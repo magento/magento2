@@ -14,7 +14,7 @@
         <entity name="core_variable" />
         <entity name="core_variable_value" />
     </entities>
-    <collection>Magento\Core\Model\Resource\Variable\Collection</collection>
+    <collection>Magento\Variable\Model\Resource\Variable\Collection</collection>
     <handler_interface>Magento\Core\Test\Handler\SystemVariable\SystemVariableInterface</handler_interface>
     <dataset name="default">
         <field name="code" xsi:type="string">variableCode%isolation%</field>
