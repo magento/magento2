@@ -74,7 +74,7 @@ interface CategoryTreeInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function getPosition();
 
     /**
-     * Get category position
+     * Set category position
      *
      * @param int $position
      * @return $this
