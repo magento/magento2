@@ -9,7 +9,9 @@ module.exports = function (grunt) {
 
     //  Required plugins
     //  _____________________________________________
-    var specRunner = require('./dev/tests/js/framework/spec_runner')(grunt);
+
+    var specRunner = require('./dev/tests/js/framework/spec_runner')(grunt),
+        svgo = require('imagemin-svgo');
 
     require('./dev/tools/grunt/tasks/mage-minify')(grunt);
 
@@ -20,8 +22,6 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt, {
         pattern: ['grunt-*', '!grunt-template-jasmine-requirejs']
     });
-
-    var svgo = require('imagemin-svgo');
 
     //  Configuration
     //  _____________________________________________
@@ -318,7 +318,8 @@ module.exports = function (grunt) {
 
         cssmin: {
             options: {
-                report: 'gzip'
+                report: 'gzip',
+                keepSpecialComments: 0
             },
             setup: {
                 files: {
@@ -339,6 +340,20 @@ module.exports = function (grunt) {
             },
             setup: {
                 src: '<%= path.css.setup %>/setup.css'
+            }
+        },
+
+        //  Concatenation
+        //  ---------------------------------------------
+
+        concat: {
+            options: {
+                stripBanners: true,
+                banner: '/**\n * Copyright © <%= grunt.template.today("yyyy") %> Magento. All rights reserved.\n * See COPYING.txt for license details.\n */\n'
+            },
+            setup: {
+                src: '<%= path.css.setup %>/setup.css',
+                dest: '<%= path.css.setup %>/setup.css'
             }
         },
 
@@ -480,6 +495,11 @@ module.exports = function (grunt) {
                     areaDir: 'frontend',
                     theme: 'blank'
                 }
+            },
+            lib: {
+                options: {
+                    port: 8080
+                }
             }
         },
 
@@ -488,6 +508,8 @@ module.exports = function (grunt) {
                 template: require('grunt-template-jasmine-requirejs'),
                 ignoreEmpty: true
             },
+            'lib-unit':               specRunner.configure('unit', 'lib', 8080),
+            'lib-integration':        specRunner.configure('integration', 'lib', 8080),
             'backend-unit':           specRunner.configure('unit', 'adminhtml', 8000),
             'backend-integration':    specRunner.configure('integration', 'adminhtml', 8000),
             'frontend-unit':          specRunner.configure('unit', 'frontend', 3000),
@@ -538,7 +560,8 @@ module.exports = function (grunt) {
             grunt.task.run([
                 'less:' + component,
                 'autoprefixer:' + component,
-                'cssmin:' + component
+                'cssmin:' + component,
+                'concat:' + component
             ]);
         }
         if (component == undefined) {
@@ -550,16 +573,19 @@ module.exports = function (grunt) {
     //  ---------------------------------------------
     
     grunt.registerTask('spec', [
+        'specRunner:lib',
         'specRunner:backend',
         'specRunner:frontend'
     ]);
 
     grunt.registerTask('unit', [
+        'jasmine:lib-unit',
         'jasmine:backend-unit',
         'jasmine:frontend-unit'
     ]);
 
     grunt.registerTask('integration', [
+        'jasmine:lib-integration',
         'jasmine:backend-integration',
         'jasmine:frontend-integration'
     ]);

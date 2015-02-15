@@ -37,7 +37,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -198,7 +198,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(
                 $flagName,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->storeMock
             )
             ->will($this->returnValue($returnValue));

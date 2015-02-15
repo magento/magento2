@@ -79,7 +79,7 @@ class Template extends \Magento\Framework\View\Element\Template
 
         return !$this->_scopeConfig->isSetFlag(
             'advanced/modules_disable_output/' . $moduleName,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

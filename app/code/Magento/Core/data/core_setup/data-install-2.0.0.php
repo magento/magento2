@@ -15,13 +15,6 @@ $installer->appendClassAliasReplace(
     \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     ['config_id']
 );
-$installer->appendClassAliasReplace(
-    'core_layout_update',
-    'xml',
-    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_BLOCK,
-    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_XML,
-    ['layout_update_id']
-);
 $installer->doUpdateClassAliases();
 
 /**

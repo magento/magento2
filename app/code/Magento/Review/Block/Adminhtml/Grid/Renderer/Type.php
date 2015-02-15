@@ -16,7 +16,7 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * Render review type
      *
      * @param \Magento\Framework\Object $row
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function render(\Magento\Framework\Object $row)
     {

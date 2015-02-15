@@ -18,7 +18,11 @@ require(['prototype'], function(){
         add : function () {
             this.index++;
             var data = {index:this.index};
-            Element.insert($('track_row_container'), {bottom: this.template.evaluate(data)});
+            Element.insert($('track_row_container'), {
+                bottom: this.template({
+                    data: data
+                })
+            });
             $('trackingC' + this.index).disabled = false;
             $('trackingT' + this.index).disabled = false;
             $('trackingN' + this.index).disabled = false;
@@ -57,6 +61,20 @@ require(['prototype'], function(){
 
 });
 </script>
+<script id="track_row_template" type="text/x-magento-template">
+    <tr>
+        <td class="col-carrier">
+            <select name="tracking[<%= data.index %>][carrier_code]" id="trackingC<%= data.index %>" class="select carrier" disabled="disabled">
+                <?php foreach ($block->getCarriers() as $_code => $_name): ?>
+                    <option value="<?php echo $_code ?>"><?php echo $block->escapeHtml($_name) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </td>
+        <td class="col-title"><input class="input-text number-title" type="text" name="tracking[<%= data.index %>][title]" id="trackingT<%= data.index %>" value="" disabled="disabled" /></td>
+        <td class="col-number"><input class="input-text required-entry" type="text" name="tracking[<%= data.index %>][number]" id="trackingN<%= data.index %>" value="" disabled="disabled" /></td>
+        <td class="col-delete last"><a href="#" class="action- delete" onclick="trackingControl.deleteRow(event);return false"><span><?php echo __('Delete') ?></span></a></td>
+    </tr>
+</script>
 <table cellspacing="0" class="data-table" id="tracking_numbers_table">
     <thead>
     <tr class="headings">
@@ -72,25 +90,16 @@ require(['prototype'], function(){
     </tr>
     </tfoot>
     <tbody id="track_row_container">
-    <tr id="track_row_template" class="template no-display">
-        <td class="col-carrier">
-            <select name="tracking[__index__][carrier_code]" id="trackingC__index__" class="select carrier" disabled="disabled">
-                <?php foreach ($block->getCarriers() as $_code => $_name): ?>
-                    <option value="<?php echo $_code ?>"><?php echo $block->escapeHtml($_name) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </td>
-        <td class="col-title"><input class="input-text number-title" type="text" name="tracking[__index__][title]" id="trackingT__index__" value="" disabled="disabled" /></td>
-        <td class="col-number"><input class="input-text required-entry" type="text" name="tracking[__index__][number]" id="trackingN__index__" value="" disabled="disabled" /></td>
-        <td class="col-delete last"><a href="#" class="action- delete" onclick="trackingControl.deleteRow(event);return false"><span><?php echo __('Delete') ?></span></a></td>
-    </tr>
     </tbody>
 </table>
 <script>
-require(['prototype'], function(){
+require([
+    'mage/template',
+    'prototype'
+], function (mageTemplate) {
 
     //<![CDATA[
-    trackingControl.template = new Template('<tr>' + $('track_row_template').innerHTML.replace(/__index__/g, '#{index}') + '<\/tr>');
+    trackingControl.template = mageTemplate('#track_row_template');
     //]]>
 
 });

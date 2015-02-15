@@ -44,11 +44,11 @@ class Config
     ) {
         $emailLimitInConfig = (int)$scopeConfig->getValue(
             self::XML_PATH_SHARING_EMAIL_LIMIT,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $textLimitInConfig = (int)$scopeConfig->getValue(
             self::XML_PATH_SHARING_TEXT_LIMIT,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $this->_sharingEmailLimit = $emailLimitInConfig ?: self::SHARING_EMAIL_LIMIT;
         $this->_sharignTextLimit = $textLimitInConfig ?: self::SHARING_TEXT_LIMIT;

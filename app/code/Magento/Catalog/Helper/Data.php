@@ -98,7 +98,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -110,11 +110,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_templateFilterFactory;
 
     /**
-     * Tax class key builder
+     * Tax class key factory
      *
-     * @var \Magento\Tax\Api\Data\TaxClassKeyDataBuilder
+     * @var \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory
      */
-    protected $_taxClassKeyBuilder;
+    protected $_taxClassKeyFactory;
 
     /**
      * Tax helper
@@ -124,18 +124,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_taxConfig;
 
     /**
-     * Quote details builder
+     * Quote details factory
      *
-     * @var \Magento\Tax\Api\Data\QuoteDetailsDataBuilder
+     * @var \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory
      */
-    protected $_quoteDetailsBuilder;
+    protected $_quoteDetailsFactory;
 
     /**
-     * Quote details item builder
+     * Quote details item factory
      *
-     * @var \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder
+     * @var \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory
      */
-    protected $_quoteDetailsItemBuilder;
+    protected $_quoteDetailsItemFactory;
 
     /**
      * @var CustomerSession
@@ -168,7 +168,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Framework\Stdlib\String $string
      * @param Category $catalogCategory
@@ -177,10 +177,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory
      * @param string $templateFilterModel
-     * @param \Magento\Tax\Api\Data\TaxClassKeyDataBuilder $taxClassKeyBuilder
+     * @param \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyFactory
      * @param Config $taxConfig
-     * @param \Magento\Tax\Api\Data\QuoteDetailsDataBuilder $quoteDetailsBuilder
-     * @param \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder
+     * @param \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory $quoteDetailsFactory
+     * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $quoteDetailsItemFactory
      * @param \Magento\Tax\Api\TaxCalculationInterface $taxCalculationService
      * @param CustomerSession $customerSession
      * @param PriceCurrencyInterface $priceCurrency
@@ -190,7 +190,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Framework\Stdlib\String $string,
         Category $catalogCategory,
@@ -199,10 +199,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory,
         $templateFilterModel,
-        \Magento\Tax\Api\Data\TaxClassKeyDataBuilder $taxClassKeyBuilder,
+        \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyFactory,
         \Magento\Tax\Model\Config $taxConfig,
-        \Magento\Tax\Api\Data\QuoteDetailsDataBuilder $quoteDetailsBuilder,
-        \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder,
+        \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory $quoteDetailsFactory,
+        \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $quoteDetailsItemFactory,
         \Magento\Tax\Api\TaxCalculationInterface $taxCalculationService,
         CustomerSession $customerSession,
         PriceCurrencyInterface $priceCurrency,
@@ -218,10 +218,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_scopeConfig = $scopeConfig;
         $this->_coreRegistry = $coreRegistry;
         $this->_templateFilterModel = $templateFilterModel;
-        $this->_taxClassKeyBuilder = $taxClassKeyBuilder;
+        $this->_taxClassKeyFactory = $taxClassKeyFactory;
         $this->_taxConfig = $taxConfig;
-        $this->_quoteDetailsBuilder = $quoteDetailsBuilder;
-        $this->_quoteDetailsItemBuilder = $quoteDetailsItemBuilder;
+        $this->_quoteDetailsFactory = $quoteDetailsFactory;
+        $this->_quoteDetailsItemFactory = $quoteDetailsItemFactory;
         $this->_taxCalculationService = $taxCalculationService;
         $this->_customerSession = $customerSession;
         $this->priceCurrency = $priceCurrency;
@@ -388,7 +388,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_PRICE_SCOPE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -411,7 +411,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->isSetFlag(
             self::CONFIG_USE_STATIC_URLS,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_storeId
         );
     }
@@ -425,7 +425,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->isSetFlag(
             self::CONFIG_PARSE_URL_DIRECTIVES,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_storeId
         );
     }
@@ -449,7 +449,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->isSetFlag(
             self::XML_PATH_DISPLAY_PRODUCT_COUNT,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -501,27 +501,29 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 $billingAddressDataObject = $billingAddress->getDataModel();
             }
 
-            $item = $this->_quoteDetailsItemBuilder->setQuantity(1)
+            $taxClassKey = $this->_taxClassKeyFactory->create();
+            $taxClassKey->setType(TaxClassKeyInterface::TYPE_ID)
+                ->setValue($product->getTaxClassId());
+
+            $customerTaxClassKey = $this->_taxClassKeyFactory->create();
+            $customerTaxClassKey->setType(TaxClassKeyInterface::TYPE_ID)
+                ->setValue($ctc);
+
+            $item = $this->_quoteDetailsItemFactory->create();
+            $item->setQuantity(1)
                 ->setCode($product->getSku())
                 ->setShortDescription($product->getShortDescription())
-                ->setTaxClassKey(
-                    $this->_taxClassKeyBuilder->setType(TaxClassKeyInterface::TYPE_ID)
-                        ->setValue($product->getTaxClassId())
-                        ->create()
-                )->setTaxIncluded($priceIncludesTax)
+                ->setTaxClassKey($taxClassKey)
+                ->setIsTaxIncluded($priceIncludesTax)
                 ->setType('product')
-                ->setUnitPrice($price)
-                ->create();
-            $quoteDetails = $this->_quoteDetailsBuilder
-                ->setShippingAddress($shippingAddressDataObject)
+                ->setUnitPrice($price);
+
+            $quoteDetails = $this->_quoteDetailsFactory->create();
+            $quoteDetails->setShippingAddress($shippingAddressDataObject)
                 ->setBillingAddress($billingAddressDataObject)
-                ->setCustomerTaxClassKey(
-                    $this->_taxClassKeyBuilder->setType(TaxClassKeyInterface::TYPE_ID)
-                        ->setValue($ctc)
-                        ->create()
-                )->setItems([$item])
-                ->setCustomerId($this->_customerSession->getCustomerId())
-                ->create();
+                ->setCustomerTaxClassKey($customerTaxClassKey)
+                ->setItems([$item])
+                ->setCustomerId($this->_customerSession->getCustomerId());
 
             $storeId = null;
             if ($store) {

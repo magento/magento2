@@ -43,7 +43,7 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -51,7 +51,7 @@ class View extends \Magento\Backend\Block\Template implements TabInterface
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

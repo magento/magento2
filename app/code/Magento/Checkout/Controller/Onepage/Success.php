@@ -11,23 +11,22 @@ class Success extends \Magento\Checkout\Controller\Onepage
     /**
      * Order success action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $session = $this->getOnepage()->getCheckout();
         if (!$this->_objectManager->get('Magento\Checkout\Model\Session\SuccessValidator')->isValid()) {
-            $this->_redirect('checkout/cart');
-            return;
+            return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
         $session->clearQuote();
         //@todo: Refactor it to match CQRS
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getLayout()->initMessages();
         $this->_eventManager->dispatch(
             'checkout_onepage_controller_success_action',
             ['order_ids' => [$session->getLastOrderId()]]
         );
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }
