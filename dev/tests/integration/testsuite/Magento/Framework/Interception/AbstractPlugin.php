@@ -52,19 +52,20 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
             $definitions
         );
         $interceptionDefinitions = new Definition\Runtime();
+        $sharedInstances = [
+            'Magento\Framework\Config\CacheInterface'                      => $cache,
+            'Magento\Framework\Config\ScopeInterface'                      => $configScope,
+            'Magento\Framework\Config\ReaderInterface'                     => $this->_configReader,
+            'Magento\Framework\ObjectManager\RelationsInterface'           => $relations,
+            'Magento\Framework\ObjectManager\ConfigInterface'              => $config,
+            'Magento\Framework\Interception\ObjectManager\ConfigInterface' => $config,
+            'Magento\Framework\ObjectManager\DefinitionInterface'          => $definitions,
+            'Magento\Framework\Interception\DefinitionInterface'           => $interceptionDefinitions
+        ];
         $this->_objectManager = new \Magento\Framework\ObjectManager\ObjectManager(
             $factory,
             $config,
-            [
-                'Magento\Framework\Config\CacheInterface'                      => $cache,
-                'Magento\Framework\Config\ScopeInterface'                      => $configScope,
-                'Magento\Framework\Config\ReaderInterface'                     => $this->_configReader,
-                'Magento\Framework\ObjectManager\RelationsInterface'           => $relations,
-                'Magento\Framework\ObjectManager\ConfigInterface'              => $config,
-                'Magento\Framework\Interception\ObjectManager\ConfigInterface' => $config,
-                'Magento\Framework\ObjectManager\DefinitionInterface'          => $definitions,
-                'Magento\Framework\Interception\DefinitionInterface'           => $interceptionDefinitions
-            ]
+            $sharedInstances
         );
         $factory->setObjectManager($this->_objectManager);
         $config->setInterceptionConfig($interceptionConfig);
