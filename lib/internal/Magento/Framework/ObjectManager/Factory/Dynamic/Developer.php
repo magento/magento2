@@ -60,31 +60,31 @@ class Developer extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
     /**
      * Create instance with call time arguments
      *
-     * @param string $type
+     * @param string $requestedType
      * @param array $arguments
      * @return object
      * @throws \Exception
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function create($type, array $arguments = [])
+    public function create($requestedType, array $arguments = [])
     {
-        $type = $this->config->getInstanceType($type);
+        $type = $this->config->getInstanceType($requestedType);
         $parameters = $this->definitions->getParameters($type);
         if ($parameters == null) {
             return new $type();
         }
-        if (isset($this->creationStack[$type])) {
+        if (isset($this->creationStack[$requestedType])) {
             $lastFound = end($this->creationStack);
             $this->creationStack = [];
-            throw new \LogicException("Circular dependency: {$type} depends on {$lastFound} and vice versa.");
+            throw new \LogicException("Circular dependency: {$requestedType} depends on {$lastFound} and vice versa.");
         }
-        $this->creationStack[$type] = $type;
+        $this->creationStack[$requestedType] = $requestedType;
         try {
-            $args = $this->_resolveArguments($type, $parameters, $arguments);
-            unset($this->creationStack[$type]);
+            $args = $this->_resolveArguments($requestedType, $parameters, $arguments);
+            unset($this->creationStack[$requestedType]);
         } catch (\Exception $e) {
-            unset($this->creationStack[$type]);
+            unset($this->creationStack[$requestedType]);
             throw $e;
         }
 

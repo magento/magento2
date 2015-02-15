@@ -45,17 +45,17 @@ class Compiled extends AbstractFactory
     /**
      * Create instance with call time arguments
      *
-     * @param string $type
+     * @param string $requestedType
      * @param array $arguments
      * @return object
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function create($type, array $arguments = [])
+    public function create($requestedType, array $arguments = [])
     {
         /** @TODO get rid of ltrim() usage and place it to client code */
-        $args = $this->config->getArguments($type);
-        $type = $this->config->getInstanceType($type);
+        $args = $this->config->getArguments($requestedType);
+        $type = $this->config->getInstanceType($requestedType);
         if ($args === null) {
             return new $type();
         }

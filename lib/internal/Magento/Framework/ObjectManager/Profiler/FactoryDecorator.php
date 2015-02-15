@@ -41,10 +41,10 @@ class FactoryDecorator implements \Magento\Framework\ObjectManager\FactoryInterf
     /**
      * {@inheritdoc}
      */
-    public function create($type, array $arguments = [])
+    public function create($requestedType, array $arguments = [])
     {
-        $this->log->startCreating($type);
-        $result = $this->subject->create($type, $arguments);
+        $this->log->startCreating($requestedType);
+        $result = $this->subject->create($requestedType, $arguments);
         $loggerClassName = get_class($result) . "\\Logger";
         $wrappedResult = new $loggerClassName($result, $this->log);
         $this->log->stopCreating($result);
