@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Environment;
 
-require '_files/CompiledTesting.php';
+require 'CompiledTesting.php';
 
 class CompiledTest extends \PHPUnit_Framework_TestCase
 {
