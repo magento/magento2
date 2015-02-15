@@ -326,7 +326,7 @@ class Element extends \SimpleXMLElement
      */
     public function appendChild($source)
     {
-        if ($source->children()) {
+        if ($source->count()) {
             $child = $this->addChild($source->getName());
         } else {
             $child = $this->addChild($source->getName(), $this->xmlentities($source));
