@@ -11,7 +11,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Url\DecoderInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
@@ -27,7 +27,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface */
+    /** @var StoreManagerInterface */
     protected $storeManager;
 
     /** @var AccountManagementInterface */
@@ -101,7 +101,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
             if ($this->_getSession()->isLoggedIn()) {
                 if (!$this->scopeConfig->isSetFlag(
                     CustomerUrl::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
                 ) {
                     $referer = $this->getRequest()->getParam(CustomerUrl::REFERER_QUERY_PARAM_NAME);

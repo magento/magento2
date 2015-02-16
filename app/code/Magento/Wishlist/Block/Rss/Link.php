@@ -64,7 +64,7 @@ class Link extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->isSetFlag(
             'rss/wishlist/active',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

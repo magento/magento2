@@ -34,7 +34,7 @@
     </div>
     <?php endif; ?>
     <div class="control" id="input-box-<?php echo $_fileName ?>"
-             data-mage-init='{"fileOption":{
+             data-mage-init='{"priceOptionFile":{
                 "fileName":"<?php echo $_fileName ?>",
                 "fileNamed":"<?php echo $_fileNamed ?>",
                 "fieldNameAction":"<?php echo $_fieldNameAction ?>",
@@ -44,7 +44,6 @@
             <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
         <input type="file"
                name="<?php echo $_fileName; ?>"
-               aria-describedby="<?php echo $_fileName; ?>-label"
                id="<?php echo $_fileName; ?>"
                class="product-custom-option<?php echo $_option->getIsRequire() ? ' required' : '' ?>"
                <?php echo $_fileExists ? 'disabled="disabled"' : '' ?> />
