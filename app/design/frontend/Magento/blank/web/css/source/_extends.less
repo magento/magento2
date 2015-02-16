@@ -19,7 +19,7 @@
 .abs-action-link-button {
     .button();
     .link-as-button();
-    .css(border-radius, @button-border-radius);
+    .css(border-radius, @button__border-radius);
 }
 
 //
@@ -165,7 +165,7 @@
             .heading(h4);
         }
         display: inline-block;
-        margin: 0 0 @indent-xs-base;
+        margin: 0 0 @indent__xs;
         > .action {
             font-weight: 400;
             margin-left: @indent__s;
@@ -266,7 +266,7 @@
     width: auto;
     position: absolute;
     top: 31px;
-    left: @indent-s-base;
+    left: @indent__s;
     margin-left: 70%;
 }
 
@@ -299,7 +299,7 @@
                 > .secondary {
                     .action {
                         &.add {
-                            margin-top: @indent-l-base;
+                            margin-top: @indent__l;
                         }
                     }
                     float: left;
@@ -314,7 +314,7 @@
     }
     .message {
         &.notice {
-            margin: @indent-l-base 0 0;
+            margin: @indent__l 0 0;
         }
     }
     .additional {
@@ -501,7 +501,7 @@
     );
     &:after {
         position: absolute;
-        right: @indent-xs-base;
+        right: @indent__xs;
         top: 0;
     }
 }
@@ -620,7 +620,7 @@
     );
     &:after {
         position: absolute;
-        right: -@indent-s-base;
+        right: -@indent__s;
         top: 3px;
     }
     &-expanded {
@@ -745,7 +745,7 @@
         &:extend(.abs-icon-add all);
         &:before {
             margin-left: -17px;
-            margin-right: @indent-xs-base;
+            margin-right: @indent__xs;
         }
     }
 }
@@ -759,7 +759,7 @@
         border-bottom: @border-width__base solid @border-color__base;
         cursor: pointer;
         margin-bottom: 0;
-        padding: @indent-s-base @indent-xl-base @indent-s-base @layout-width-xs-indent;
+        padding: @indent__s @indent__xl @indent__s @layout__width-xs-indent;
         position: relative;
         .icon-font(
             @_icon-font-content: @icon-down,
@@ -770,7 +770,7 @@
         );
         &:after {
             position: absolute;
-            right: @indent-s-base;
+            right: @indent__s;
             top: 0;
         }
         &.active {
@@ -895,7 +895,7 @@
             border-radius: 3px;
             font-weight: bold;
             &:active {
-                .css(box-shadow, @button-shadow);
+                .css(box-shadow, @button__shadow);
             }
         }
         &.update {
@@ -904,11 +904,11 @@
                 @_icon-font-size: 32px,
                 @_icon-font-line-height: 16px
             );
-            padding-left: @indent-xs-base;
+            padding-left: @indent__xs;
         }
     }
 }
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-shopping-cart-items-mobile {
         .actions {
             text-align: center;
@@ -917,7 +917,7 @@
             &.update,
             &.continue,
             &.clear {
-                margin: 0 auto @indent-s-base;
+                margin: 0 auto @indent__s;
             }
             &.update,
             &.clear {
@@ -926,7 +926,7 @@
         }
     }
 }
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-shopping-cart-items-desktop {
         float: left;
         width: 73%;
@@ -939,7 +939,7 @@
                 float: left;
             }
             &.clear {
-                margin-right: @indent-s-base;
+                margin-right: @indent__s;
             }
         }
     }
