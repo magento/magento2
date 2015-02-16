@@ -58,7 +58,7 @@ class Product extends AbstractResource
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
      * @param Category $catalogCategory
@@ -71,7 +71,7 @@ class Product extends AbstractResource
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory,
         Category $catalogCategory,

@@ -15,7 +15,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Container
     /**
      * @var string
      */
-    protected $_blockGroup = 'Magento_Adminhtml';
+    protected $_blockGroup = 'Magento_Backend';
 
     /**
      * @return void

@@ -15,7 +15,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -38,14 +38,14 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         $resourcePrefix = null
     ) {
@@ -132,7 +132,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $scope = (int)$this->_config->getValue(
             \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         if ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE

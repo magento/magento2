@@ -53,7 +53,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_productResource;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -86,7 +86,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sitemap\Helper\Data $sitemapData
      * @param \Magento\Catalog\Model\Resource\Product $productResource
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute
@@ -99,7 +99,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute,

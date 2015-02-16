@@ -7,7 +7,7 @@
 namespace Magento\CatalogInventory\Model\Resource;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Stock resource model
@@ -74,7 +74,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -183,7 +183,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             foreach ($configMap as $field => $const) {
                 $this->{$field} = (int) $this->_scopeConfig->getValue(
                     $const,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
             }
 

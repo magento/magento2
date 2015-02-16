@@ -11,7 +11,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Stdlib\String;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\Query as SearchQuery;
 use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\Resource\Query\Collection;
@@ -79,7 +79,7 @@ class Data extends AbstractHelper
     protected $filter;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -92,7 +92,7 @@ class Data extends AbstractHelper
      * @param QueryFactory $queryFactory
      * @param Escaper $escaper
      * @param FilterManager $filter
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
@@ -192,7 +192,7 @@ class Data extends AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             SearchQuery::XML_PATH_MIN_QUERY_LENGTH,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -207,7 +207,7 @@ class Data extends AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             SearchQuery::XML_PATH_MAX_QUERY_LENGTH,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

@@ -26,7 +26,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -39,13 +39,13 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
         $data = []
     ) {

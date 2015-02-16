@@ -78,7 +78,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -89,7 +89,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Product $productResource
      * @param \Magento\Catalog\Model\Category $catalogCategory
@@ -98,7 +98,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         Product $productResource,
         \Magento\Catalog\Model\Category $catalogCategory,

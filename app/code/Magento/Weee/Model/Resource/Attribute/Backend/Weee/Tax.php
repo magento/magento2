@@ -13,18 +13,18 @@ namespace Magento\Weee\Model\Resource\Attribute\Backend\Weee;
 class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         $resourcePrefix = null
     ) {
         $this->_storeManager = $storeManager;

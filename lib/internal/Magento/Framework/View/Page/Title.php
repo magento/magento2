@@ -92,10 +92,10 @@ class Title
     {
         $preparedTitle = $this->scopeConfig->getValue(
             'design/head/title_prefix',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) . ' ' . $title . ' ' . $this->scopeConfig->getValue(
             'design/head/title_suffix',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return trim($preparedTitle);
     }
@@ -109,7 +109,7 @@ class Title
     {
         $defaultTitle = $this->scopeConfig->getValue(
             'design/head/default_title',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return $this->addConfigValues($defaultTitle);
     }

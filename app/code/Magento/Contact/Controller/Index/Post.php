@@ -45,7 +45,7 @@ class Post extends \Magento\Contact\Controller\Index
                 throw new \Exception();
             }
 
-            $storeScope = \Magento\Framework\Store\ScopeInterface::SCOPE_STORE;
+            $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
             $transport = $this->_transportBuilder
                 ->setTemplateIdentifier($this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, $storeScope))
                 ->setTemplateOptions(

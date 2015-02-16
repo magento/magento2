@@ -122,7 +122,7 @@ class Online extends \Magento\Framework\Model\AbstractModel
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_UPDATE_FREQUENCY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -136,7 +136,7 @@ class Online extends \Magento\Framework\Model\AbstractModel
         $value = intval(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_ONLINE_INTERVAL,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         if (!$value) {

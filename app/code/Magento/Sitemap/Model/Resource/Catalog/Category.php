@@ -29,7 +29,7 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_attributesCache = [];
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -40,13 +40,13 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Category $categoryResource
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Category $categoryResource,
         $resourcePrefix = null
     ) {
