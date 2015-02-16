@@ -16,8 +16,7 @@ $objectManager->create('Magento\Mtf\Util\Generate\Fixture', ['fieldsProvider' =>
 
 // Generate repositories
 $magentoObjectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-$collectionProvider = $magentoObjectManager->create('\Magento\Mtf\Util\Generate\Repository\CollectionProvider');
-$objectManager->create('Magento\Mtf\Util\Generate\Repository', ['collectionProvider' => $collectionProvider])->launch();
+$objectManager->create('Magento\Mtf\Util\Generate\Repository')->launch();
 
 // Generate factories for old end-to-end tests
 $magentoObjectManager->create('Magento\Mtf\Util\Generate\Factory')->launch();
