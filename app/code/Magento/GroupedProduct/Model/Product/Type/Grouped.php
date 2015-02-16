@@ -364,7 +364,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                             }
 
                             if (!isset($_result[0])) {
-                                return __('We cannot process the item.');
+                                return __('We cannot process the item.')->render();
                             }
 
                             if ($isStrictProcessMode) {
@@ -402,7 +402,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
         }
 
-        return __('Please specify the quantity of product(s).')->__toString();
+        return __('Please specify the quantity of product(s).')->render();
     }
 
     /**
