@@ -87,10 +87,8 @@
                 }
             }
             .fieldset.estimate {
-                >.legend {
-                    &:extend(.abs-visually-hidden all);
-                }
-                >.legend + br {
+                > .legend,
+                > .legend + br {
                     &:extend(.abs-no-display all);
                 }
             }
@@ -190,6 +188,9 @@
         .table-wrapper {
             margin-bottom: 0;
         }
+        .table-caption {
+            &:extend(.abs-no-display all);
+        }
     }
 
     //  Products table
@@ -264,8 +265,6 @@
                 display: inline-block;
                 font-weight: @font-weight__regular;
                 margin-top: -6px;
-                overflow: hidden;
-                text-overflow: ellipsis;
             }
         }
         .gift-registry-name-label {
@@ -354,6 +353,11 @@
             }
             .item .col.item {
                 padding-bottom: 0;
+            }
+        }
+        &-container {
+            .form-cart {
+                &:extend(.abs-shopping-cart-items-mobile all);
             }
         }
     }

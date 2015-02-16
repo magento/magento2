@@ -18,7 +18,7 @@
 //--------------------------------------
 .action-primary {
     .button-primary();
-    border-radius: @button__border-radius;
+    .css(border-radius, @button-border-radius);
 }
 
 //
@@ -26,35 +26,36 @@
 //--------------------------------------
 .abs-revert-to-action-secondary {
     &:extend(.abs-revert-secondary-color all);
-    //&:extend(.abs-revert-secondary-size all);
-    border-radius: @button__border-radius;
-    .css(box-shadow, @button__shadow);
-    &:active,
-    &:focus {
-        .css(box-shadow, @button__shadow-active);
+    .css(border-radius, @button-border-radius);
+    &:not(:focus) {
+        .css(box-shadow, @button-shadow);
+    }
+    &:active {
+        .css(box-shadow, @button-shadow-active);
     }
 }
 
 //
 //    Link as a button
 //--------------------------------------
-.action-link-button {
-  .button();
-  .link-as-button();
-  border-radius: @button__border-radius;
+.abs-action-link-button {
+    .button();
+    .link-as-button();
+    .css(border-radius, @button-border-radius);
 }
 
 //
 //   Button as a link
 //--------------------------------------
 .abs-action-button-as-link {
-    .button-as-link();
+    .button-as-link(
+        @_margin: false
+    );
     border-radius: 0;
-    font-weight: @font-weight__regular;
-    .css(box-shadow, none);
+    .css(font-weight, @font-weight-base);
     &:active,
-    &:focus {
-        .css(box-shadow, none);
+    &:not(:focus) {
+        box-shadow: none;
     }
 }
 
@@ -189,7 +190,7 @@
     }
     padding-bottom: 12px;
     margin-bottom: 15px;
-    border-bottom: 1px solid @secondary__color;
+    .css(border-bottom, 1px solid @color-secondary);
     .font-size(18);
 }
 
@@ -291,12 +292,11 @@
 //    Action with icon remove with text
 //--------------------------------------
 .abs-action-remove {
-    .button-reset();
-    &:extend(.abs-like-link all);
+    &:extend(.abs-action-button-as-link all);
     width: auto;
     line-height: normal;
     position: absolute;
-    top: 34px; // 6px
+    top: 34px;
     margin-left: 73%;
 }
 
@@ -319,17 +319,13 @@
                 width: 70%;
             }
         }
-        .additional {
-            margin-top: 55px;
-            position: relative;
-            .action.remove {
-                &:extend(.abs-action-remove all);
-            }
-        }
         .actions-toolbar {
+            &:extend(.abs-add-clearfix all);
             > .secondary {
-                .action.add {
-                    margin-top: @indent__l;
+                .action {
+                    &.add {
+                        margin-top: @indent-l-base;
+                    }
                 }
                 float: left;
             }
@@ -339,8 +335,19 @@
                 margin: 0;
             }
         }
-        .message {
-            margin: @indent__l 0 0;
+    }
+    .additional {
+        margin-top: 55px;
+        position: relative;
+    }
+    .action {
+        &.remove {
+            &:extend(.abs-action-remove all);
+        }
+    }
+    .message {
+        &.notice {
+            margin: @indent-l-base 0 0;
         }
     }
 }
@@ -357,8 +364,10 @@
                 }
             }
             .additional {
-                .action.remove {
-                    &:extend(.abs-action-remove-desktop all);
+                .action {
+                    &.remove {
+                        &:extend(.abs-action-remove-desktop all);
+                    }
                 }
             }
         }
@@ -370,7 +379,7 @@
 //--------------------------------------
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-margin-for-forms-desktop {
-        margin-left: @form-field-type-label-inline__width;
+        .css(margin-left, @form-field-type-inline-label-width);
     }
 }
 
@@ -580,7 +589,7 @@
 .abs-methods-shipping-title {
     .font-size(16);
     margin-bottom: 15px;
-    font-weight: @font-weight__semibold;
+    .css(font-weight, @font-weight-semibold);
 }
 
 //
@@ -591,7 +600,7 @@
         tbody > tr {
             &:extend(.abs-add-clearfix-mobile all);
             &:not(:last-child) {
-                border-bottom: @border-width__base solid @border-color__base;
+                .css(border-bottom, @border-width-base solid @border-color-base);
             }
             > td.col {
                 &.item {
@@ -683,20 +692,20 @@
 //    Abstract toggle title block
 //--------------------------------------
 @abs-toggling-title: {
-    border-top: @border-width__base solid @border-color__base;
+    .css(border-top, @border-width-base solid @border-color-base);
     cursor: pointer;
     margin-bottom: 0;
     position: relative;
     &:after {
         position: absolute;
-        right: 20px;
-        top: 10px;
+        right: @indent-base;
+        top: @indent-s-base;
     }
 };
 
 .abs-toggling-title {
     @abs-toggling-title();
-    padding: 10px 40px 10px @mobile-cart-padding;
+    .css(padding, @indent-s-base @indent-xl-base @indent-s-base @mobile-cart-padding);
     .icon-font(
         @icon-down,
         @_icon-font-size: 12px,
@@ -711,8 +720,8 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-toggling-title-mobile {
         @abs-toggling-title();
-        border-bottom: @border-width__base solid @border-color__base;
-        padding: 10px 40px 10px @layout__width-xs-indent;
+        .css(border-bottom, @border-width-base solid @border-color-base);
+        .css(padding, @indent-s-base @indent-xl-base @indent-s-base @layout-width-xs-indent);
         .icon-font(
             @icon-down,
             @_icon-font-size: 12px,
@@ -746,7 +755,7 @@
     }
     .content {
         display: none;
-        padding: 5px @mobile-cart-padding 23px;
+        .css(padding, 5px @mobile-cart-padding 23px);
         position: relative;
     }
     &.active {
@@ -833,9 +842,9 @@
         .font-size(22);
         .css(font-weight, @font-weight__light);
     }
-    .css(margin-bottom, @indent__m);
-    .css(padding-bottom, @indent__s);
-    border-bottom: 1px solid @account-title-border-color;
+    .css(margin-bottom, @indent-m-base);
+    .css(padding-bottom, @indent-s-base);
+    .css(border-bottom, 1px solid @account-title-border-color);
 }
 
 //
@@ -957,7 +966,7 @@
 .abs-tax-total {
     cursor: pointer;
     position: relative;
-    padding-right: 10px;
+    padding-right: @indent-s-base;
     .icon-font(
         @icon-down,
         @_icon-font-size: 8px,
@@ -1016,8 +1025,8 @@
         content: "";
         display: inline-block;
         height: 12px;
-        margin: 0 10px;
-        border-left: 1px solid @primary__color__light;
+        margin: 0 @indent-s-base;
+        .css(border-left, 1px solid @color-primary-light);
         vertical-align: -1px;
     }
     &:last-child {
@@ -1097,7 +1106,7 @@
         &:extend(.abs-icon-add all);
         &:before {
             margin-left: -17px;
-            margin-right: 5px;
+            margin-right: @indent-xs-base;
         }
     }
 }
@@ -1129,11 +1138,11 @@
 //    Status
 //--------------------------------------
 .abs-status {
-    border: 2px solid @border-color__base;
+    .css(border, 2px solid @border-color-base);
     border-radius: 3px;
     display: inline-block;
     margin: 3px 0 0;
-    padding: 2px 10px;
+    padding: 2px @indent-s-base;
     text-transform: uppercase;
     vertical-align: top;
 }
@@ -1141,7 +1150,7 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-status-desktop {
         margin-top: 6px;
-        padding: 5px 10px;
+        padding: @indent-xs-base @indent-s-base;
     }
 }
 
@@ -1238,7 +1247,7 @@
             z-index: 1;
         }
         .toolbar-amount {
-            line-height: @pager__line-height;
+            .css(line-height, @pager-line-height);
             padding: 0;
         }
         .pages {
@@ -1273,7 +1282,7 @@
 //    Shopping cart items
 //--------------------------------------
 .abs-shopping-cart-items {
-    margin-bottom: 20px;
+    margin-bottom: @indent-base;
     .actions.main {
         .continue,
         .clear {
@@ -1325,8 +1334,8 @@
         );
         &:before {
             position: absolute;
-            top: 5px;
-            left: @indent__s;
+            top: @indent-xs-base;
+            left: @indent-s-base;
             margin-left: 85%;
             z-index: 0;
         }

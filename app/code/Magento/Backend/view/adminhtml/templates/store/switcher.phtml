@@ -25,7 +25,7 @@
                data-role="website-id" data-param="<?php echo $block->getWebsiteVarName() ?>"
                value="<?php echo $block->escapeHtml($block->getWebsiteId()) ?>"
                onchange="switchScope(this);"<?php echo $block->getUiId()?> />
-        <button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
+        <button type="button" class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
             <span><?php echo $block->getCurrentSelectionName() ?></span>
         </button>
         <ul class="dropdown-menu" data-role="stores-list">
@@ -113,7 +113,7 @@
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             <?php endforeach; ?>
-            <?php if ($block->getShowManageStoresLink() && $block->getAuthorization()->isAllowed('Magento_Adminhtml::store')): ?>
+            <?php if ($block->getShowManageStoresLink() && $block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
                 <li class="dropdown-toolbar">
                     <a href="<?php echo $block->getUrl('*/system_store') ?>"><?php echo __('Stores Configuration') ?></a>
                 </li>

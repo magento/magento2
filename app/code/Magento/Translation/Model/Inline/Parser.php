@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Translation\Model\Inline;
+
 /**
  * This class is responsible for parsing content and applying necessary html element
  * wrapping and client scripts for inline translation.
  */
-namespace Magento\Translation\Model\Inline;
-
 class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
 {
     /**
@@ -95,7 +95,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     protected $_resourceFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -122,7 +122,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Initialize base inline translation model
      *
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Translation\Model\Resource\StringFactory $resource
      * @param \Zend_Filter_Interface $inputFilter
      * @param \Magento\Framework\App\State $appState
@@ -131,7 +131,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      */
     public function __construct(
         \Magento\Translation\Model\Resource\StringFactory $resource,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Zend_Filter_Interface $inputFilter,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\App\Cache\TypeListInterface $appCache,

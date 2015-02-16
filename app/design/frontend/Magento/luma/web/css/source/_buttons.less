@@ -12,27 +12,36 @@
 //
 //    Using buttons mixins
 //--------------------------------------
+button,
+a.action.primary {
+    .css(border-radius, @button-border-radius);
+}
+
 button {
-    border-radius: @button__border-radius;
-    .css(box-shadow, @button__shadow);
-    &:active,
-    &:focus {
-        .css(box-shadow, @button__shadow-active);
+    &:not(.primary) {
+        .css(box-shadow, @button-shadow);
+        &:active {
+            .css(box-shadow, @button-shadow-active);
+        }
+    }
+}
+
+body {
+    &:not(.keyfocus) {
+        button {
+            &:focus {
+                box-shadow: none;
+            }
+        }
     }
 }
 
 a.action.primary {
     .link-as-button();
-    border-radius: @button__border-radius;
 }
 
 .action.primary {
     .button-primary();
-    .css(box-shadow, none);
-    &:active,
-    &:focus {
-        .css(box-shadow, none);
-    }
 }
 
 }

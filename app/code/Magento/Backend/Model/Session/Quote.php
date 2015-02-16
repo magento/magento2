@@ -65,7 +65,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
     protected $quoteRepository;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -86,7 +86,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GroupManagementInterface $groupManagement
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -102,7 +102,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
         CustomerRepositoryInterface $customerRepository,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         GroupManagementInterface $groupManagement
     ) {
         $this->customerRepository = $customerRepository;

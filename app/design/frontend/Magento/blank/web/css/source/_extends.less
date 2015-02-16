@@ -19,11 +19,7 @@
 .abs-action-link-button {
     .button();
     .link-as-button();
-    border-radius: @button__border-radius;
-    &:active,
-    &:focus {
-        box-shadow: none;
-    }
+    .css(border-radius, @button-border-radius);
 }
 
 //
@@ -169,7 +165,7 @@
             .heading(h4);
         }
         display: inline-block;
-        margin: 0 0 5px;
+        margin: 0 0 @indent-xs-base;
         > .action {
             font-weight: 400;
             margin-left: @indent__s;
@@ -266,15 +262,12 @@
 //    Action with icon remove with text
 //--------------------------------------
 .abs-action-remove {
-    .button-reset();
-    .link();
-    cursor: pointer;
+    &:extend(.abs-action-button-as-link all);
     width: auto;
-    line-height: normal;
     position: absolute;
-    top: 31px; // 6px
-    left: 10px;
-    margin-left: 70%; // margin-left: @form-field-type-label-inline__width + 50%;
+    top: 31px;
+    left: @indent-s-base;
+    margin-left: 70%;
 }
 
 //
@@ -293,24 +286,24 @@
 .abs-add-fields {
     .fieldset {
         margin-bottom: 50px;
-        > .field:not(.choice) {
-            > .control {
-                width: 70%;
-            }
-        }
-        .additional {
-            margin-top: 55px;
-            position: relative;
-            .action.remove {
-                &:extend(.abs-action-remove all);
+        .field {
+            &:not(.choice) {
+                .control {
+                    width: 70%;
+                }
             }
         }
         .actions-toolbar {
-            > .secondary {
-                .action.add {
-                    margin-top: @indent__l;
+            &:not(:first-child) {
+                &:extend(.abs-add-clearfix all);
+                > .secondary {
+                    .action {
+                        &.add {
+                            margin-top: @indent-l-base;
+                        }
+                    }
+                    float: left;
                 }
-                float: left;
             }
         }
         .fields {
@@ -318,8 +311,19 @@
                 margin: 0;
             }
         }
-        .message {
-            margin: @indent__l 0 0;
+    }
+    .message {
+        &.notice {
+            margin: @indent-l-base 0 0;
+        }
+    }
+    .additional {
+        margin-top: 55px;
+        position: relative;
+    }
+    .action {
+        &.remove {
+            &:extend(.abs-action-remove all);
         }
     }
 }
@@ -330,14 +334,18 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-add-fields-desktop {
         .fieldset {
-            > .field:not(.choice) {
-                > .control {
-                    width: 50%;
+            .field {
+                &:not(.choice) {
+                    .control {
+                        width: 50%;
+                    }
                 }
             }
             .additional {
-                .action.remove {
-                    &:extend(.abs-action-remove-desktop all);
+                .action {
+                    &.remove {
+                        &:extend(.abs-action-remove-desktop all);
+                    }
                 }
             }
         }
@@ -493,7 +501,7 @@
     );
     &:after {
         position: absolute;
-        right: 5px;
+        right: @indent-xs-base;
         top: 0;
     }
 }
@@ -540,10 +548,16 @@
 //   Button as a link
 //--------------------------------------
 .abs-action-button-as-link {
-    .button-as-link();
+    .button-as-link(
+        @_margin: false
+    );
     border-radius: 0;
     font-weight: @font-weight__regular;
     font-size: inherit;
+    &:active,
+    &:not(:focus) {
+        box-shadow: none;
+    }
 }
 
 //
@@ -606,7 +620,7 @@
     );
     &:after {
         position: absolute;
-        right: -10px;
+        right: -@indent-s-base;
         top: 3px;
     }
     &-expanded {
@@ -731,7 +745,7 @@
         &:extend(.abs-icon-add all);
         &:before {
             margin-left: -17px;
-            margin-right: 5px;
+            margin-right: @indent-xs-base;
         }
     }
 }
@@ -745,7 +759,7 @@
         border-bottom: @border-width__base solid @border-color__base;
         cursor: pointer;
         margin-bottom: 0;
-        padding: 10px 40px 10px @layout__width-xs-indent;
+        padding: @indent-s-base @indent-xl-base @indent-s-base @layout-width-xs-indent;
         position: relative;
         .icon-font(
             @_icon-font-content: @icon-down,
@@ -756,7 +770,7 @@
         );
         &:after {
             position: absolute;
-            right: 10px;
+            right: @indent-s-base;
             top: 0;
         }
         &.active {
@@ -867,9 +881,6 @@
 //    Shopping cart items
 //--------------------------------------
 .abs-shopping-cart-items {
-    .actions.main {
-        text-align: center;
-    }
     .action {
         &.continue {
             .link-as-button();
@@ -884,7 +895,7 @@
             border-radius: 3px;
             font-weight: bold;
             &:active {
-                box-shadow: inset 0 3px 1px rgba(0,0,0,.29);
+                .css(box-shadow, @button-shadow);
             }
         }
         &.update {
@@ -893,38 +904,42 @@
                 @_icon-font-size: 32px,
                 @_icon-font-line-height: 16px
             );
-            padding-left: 5px;
-        }
-        &.update,
-        &.continue,
-        &.clear {
-            margin: 0 auto 10px;
-        }
-        &.update,
-        &.clear {
-            display: block;
+            padding-left: @indent-xs-base;
         }
     }
 }
-
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
+    .abs-shopping-cart-items-mobile {
+        .actions {
+            text-align: center;
+        }
+        .action {
+            &.update,
+            &.continue,
+            &.clear {
+                margin: 0 auto @indent-s-base;
+            }
+            &.update,
+            &.clear {
+                display: block;
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-shopping-cart-items-desktop {
         float: left;
         width: 73%;
         position: relative;
         .actions {
-            text-align: left;
+            text-align: right;
         }
         .action {
             &.continue {
                 float: left;
             }
-            &.update {
-                float: right;
-            }
             &.clear {
-                float: right;
-                margin-right: 10px;
+                margin-right: @indent-s-base;
             }
         }
     }
