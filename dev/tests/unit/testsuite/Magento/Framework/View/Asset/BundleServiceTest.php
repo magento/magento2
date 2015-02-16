@@ -37,7 +37,7 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->bundleFactory = $this->getMock('Magento\Framework\View\Asset\BundleFactory', [], [], '', false);
+        $this->bundleFactory = $this->getMock('Magento\Framework\View\Asset\BundleFactory', ['create'], [], '', false);
         $this->list = $this->getMockForAbstractClass(
             'Magento\Framework\View\Design\Theme\ListInterface',
             [],
