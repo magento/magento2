@@ -183,16 +183,6 @@
 .image .action-delete[disabled],
 .fieldset-wrapper-title .actions .action-delete[disabled],
 .address-list-item-actions .action-delete[disabled],
-// [class^=" catalog-product-"] .page-actions .action-back,
-// [class^=" catalog-product-"] .page-actions .action-back:hover,
-// [class^=" catalog-product-"] .page-actions .action-back:active,
-// [class^=" catalog-product-"] .page-actions .action-back.active,
-// [class^=" catalog-product-"] .page-actions .action-back[disabled],
-// [class^=" newsletter-"] .page-actions .action-back,
-// [class^=" newsletter-"] .page-actions .action-back:hover,
-// [class^=" newsletter-"] .page-actions .action-back:active,
-// [class^=" newsletter-"] .page-actions .action-back.active,
-// [class^=" newsletter-"] .page-actions .action-back[disabled],
 .notifications [class^="action-"],
 .notifications [class^="action-"]:hover,
 .notifications [class^="action-"]:active,
@@ -203,11 +193,6 @@
 .notification .action-close:active,
 .notification .action-close.active,
 .notification .action-close[disabled]
-// .sales-order-create-index .page-actions-inner .cancel,
-// .sales-order-create-index .page-actions-inner .cancel:hover,
-// .sales-order-create-index .page-actions-inner .cancel:active,
-// .sales-order-create-index .page-actions-inner .cancel.active,
-// .sales-order-create-index .page-actions-inner .cancel[disabled]
  {
     border: 0;
     border-radius: 0;
@@ -698,6 +683,7 @@ fieldset.field [class^='fields-group-'] .field .control {
 
 .control > input {
     width: 100%;
+    padding: 4px 10px;
 }
 
 .control > input[type="button"] {
@@ -746,23 +732,25 @@ fieldset.field [class^='fields-group-'] .field .control {
     Form Validation
 -------------------------------------- */
 label.mage-error {
+    border: 1px solid #e22626;
     display: block;
-    color: red;
-    text-align: left;
-    clear: both;
-    margin: 3px 0 0;
+    margin: 2px 0 0;
+    padding: 6px 10px 10px;
+    background: #fff8d6;
+    color: #555;
+    font-size: 12px;
+    font-weight: 500;
+    box-sizing: border-box;
 }
 
 textarea.mage-error,
 select.mage-error,
 input.mage-error {
-    border-color: #fa7973 !important;
-    box-shadow: 0 0 8px rgba(250, 121, 115, .6) !important;
+    border-color: #e22626 !important;
 }
 
 input.mage-error ~ .addafter {
-    border-color: #fa7973 !important;
-    box-shadow: 0 0 8px rgba(250, 121, 115, .6) !important;
+    border-color: #e22626 !important;
 }
 
 /*
@@ -973,7 +961,10 @@ input.mage-error ~ .addafter {
 .with-note .note,
 .field .note,
 .data-table .note {
-    .style19();
+    color: #303030;
+    font-size: 12px;
+    font-weight: 400;
+    margin: 5px 0;
 }
 
 .fieldset .field .options-list {
@@ -1204,6 +1195,9 @@ input.mage-error ~ .addafter {
     input {
         border-width: 1px 0 1px 1px;
         ~ .addafter strong {
+            .field-price & {
+                font-size: 18px;
+            }
             display: inline-block;
             background: #fff;
             line-height: 24px;
@@ -1211,7 +1205,9 @@ input.mage-error ~ .addafter {
             padding-left: 4px;
             padding-right: 4px;
             position: relative;
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: 400;
+            color: #858585;
             top: 0;
         }
         &:focus ~ .addafter {

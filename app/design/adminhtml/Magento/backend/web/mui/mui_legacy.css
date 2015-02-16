@@ -2118,37 +2118,6 @@ span.required {
 }
 
 /*
-    Field with note
--------------------------------------- */
-.with-note {
-}
-
-.with-note .note,
-.field .note,
-.data-table .note {
-    font-size: 11px;
-    padding-left: 15px;
-    margin: 5px 0;
-    color: #666;
-}
-
-.with-note .note:before,
-.field .note:before,
-.data-table .note:before {
-    position: absolute;
-    margin: 4px 0 0 -14px;
-    content: '';
-    display: inline-block;
-    vertical-align: top;
-    font-size: 0;
-    line-height: 0;
-    width: 0;
-    border-bottom: 5px solid #666;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-}
-
-/*
     Form tooltip
 -------------------------------------- */
 .with-tooltip.choice {
