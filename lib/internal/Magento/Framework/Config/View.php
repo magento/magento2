@@ -107,7 +107,7 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     protected function _getIdAttributes()
     {
-        return ['/view/vars' => 'module', '/view/vars/var' => 'name', '/view/exclude/item' => 'type'];
+        return ['/view/vars' => 'module', '/view/vars/var' => 'name', '/view/exclude/item' => ['type', 'item']];
     }
 
     /**
