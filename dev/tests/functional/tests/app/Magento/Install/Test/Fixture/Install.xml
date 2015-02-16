@@ -1,94 +1,30 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
-         class="Magento\Install\Test\Fixture\Install">
-    <module>Magento_Install</module>
-    <type>virtual</type>
-    <entity_type>install</entity_type>
-    <repository_class>Magento\Install\Test\Repository\Install</repository_class>
-    <handler_interface>Magento\Install\Test\Handler\Install\InstallInterface</handler_interface>
-    <fields>
-        <field name="dbHost">
-            <attribute_code>dbHost</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="dbUser">
-            <attribute_code>dbUser</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="dbPassword">
-           <attribute_code>dbPassword</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="dbName">
-            <attribute_code>dbName</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="web">
-             <attribute_code>web</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="admin">
-            <attribute_code>admin</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="adminUsername">
-            <attribute_code>adminUsername</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="adminEmail">
-            <attribute_code>adminEmail</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="adminPassword">
-            <attribute_code>adminPassword</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="adminConfirm">
-            <attribute_code>adminConfirm</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="apacheRewrites">
-            <attribute_code>apacheRewrites</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="dbTablePrefix">
-            <attribute_code>dbTablePrefix</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="keyOwn">
-            <attribute_code>keyOwn</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="httpsAdmin">
-            <attribute_code>httpsAdmin</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="https">
-            <attribute_code>https</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="httpsFront">
-            <attribute_code>httpsFront</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="keyValue">
-            <attribute_code>keyValue</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="language">
-            <attribute_code>language</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="currency">
-            <attribute_code>language</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-    </fields>
-</fixture>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+  <fixture name="install" module="Magento_Install" type="virtual" entity_type="install" repository_class="Magento\Install\Test\Repository\Install" handler_interface="Magento\Install\Test\Handler\Install\InstallInterface" class="Magento\Install\Test\Fixture\Install">
+    <field name="dbHost"/>
+    <field name="dbUser"/>
+    <field name="dbPassword"/>
+    <field name="dbName"/>
+    <field name="web"/>
+    <field name="admin"/>
+    <field name="adminUsername"/>
+    <field name="adminEmail"/>
+    <field name="adminPassword"/>
+    <field name="adminConfirm"/>
+    <field name="apacheRewrites"/>
+    <field name="dbTablePrefix"/>
+    <field name="keyOwn"/>
+    <field name="httpsAdmin"/>
+    <field name="https"/>
+    <field name="httpsFront"/>
+    <field name="keyValue"/>
+    <field name="language"/>
+    <field name="language"/>
+  </fixture>
+</config>
