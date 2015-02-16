@@ -17,17 +17,16 @@ class ConfigsApplyFixture extends \Magento\ToolkitFramework\Fixture
     /**
      * {@inheritdoc}
      */
-    public function execute()
+        public function execute()
     {
-        $configs = \Magento\ToolkitFramework\Config::getInstance()->getValue('configs', []);
+        $configs = \Magento\ToolkitFramework\Config::getInstance()->getValue('configs', array());
         $this->application->resetObjectManager();
-
+        /**
+         * @var \Magento\Framework\App\Config\Value $configData
+         */
         foreach ($configs['config'] as $config) {
-            /**
-             * @var \Magento\Framework\App\Config\Value $configData
-             */
             $configData = $this->application->getObjectManager()->create('Magento\Framework\App\Config\Value');
-            $configData->setPatho($cnfig['path'])
+            $configData->setPath($config['path'])
                 ->setScope($config['scope'])
                 ->setScopeId($config['scopeId'])
                 ->setValue($config['value'])
