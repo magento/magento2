@@ -72,20 +72,14 @@ class AdminTokenService implements AdminTokenServiceInterface
     public function createAdminAccessToken($username, $password)
     {
         $this->validatorHelper->validateCredentials($username, $password);
-        try {
-            $this->userModel->login($username, $password);
-            if (!$this->userModel->getId()) {
-                /*
-                 * This message is same as one thrown in \Magento\Backend\Model\Auth to keep the behavior consistent.
-                 * Constant cannot be created in Auth Model since it uses legacy translation that doesn't support it.
-                 * Need to make sure that this is refactored once exception handling is updated in Auth Model.
-                 */
-                throw new AuthenticationException('Please correct the user name or password.');
-            }
-        } catch (\Magento\Backend\Model\Auth\Exception $e) {
-            throw new AuthenticationException($e->getMessage(), [], $e);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            throw new LocalizedException($e->getMessage(), [], $e);
+        $this->userModel->login($username, $password);
+        if (!$this->userModel->getId()) {
+            /*
+             * This message is same as one thrown in \Magento\Backend\Model\Auth to keep the behavior consistent.
+             * Constant cannot be created in Auth Model since it uses legacy translation that doesn't support it.
+             * Need to make sure that this is refactored once exception handling is updated in Auth Model.
+             */
+            throw new AuthenticationException('Please correct the user name or password.');
         }
         return $this->tokenModelFactory->create()->createAdminToken($this->userModel->getId())->getToken();
     }

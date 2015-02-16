@@ -66,8 +66,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
-     * @expectedExceptionMessage Class name and class type already exists.
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage A class with the same name already exists for ClassType PRODUCT.
      */
     public function testSaveThrowsExceptionIfGivenTaxClassNameIsNotUnique()
     {
