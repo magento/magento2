@@ -7,21 +7,15 @@ namespace Magento\Framework\Api\Code\Generator;
 
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
-use Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * Code generator for data object extension interfaces.
  */
-class ObjectExtensionInterface extends \Magento\Framework\Code\Generator\EntityAbstract
+class ObjectExtensionInterface extends \Magento\Framework\Api\Code\Generator\ObjectExtension
 {
     const ENTITY_TYPE = 'extensionInterface';
 
     const EXTENSION_INTERFACE_SUFFIX = 'ExtensionInterface';
-
-    /**
-     * @var \Magento\Framework\Api\Config\Reader
-     */
-    protected $configReader;
 
     /**
      * Initialize dependencies.
@@ -44,45 +38,14 @@ class ObjectExtensionInterface extends \Magento\Framework\Code\Generator\EntityA
         if (!$classGenerator) {
             $classGenerator = new \Magento\Framework\Code\Generator\InterfaceGenerator();
         }
-        $sourceClassName .= 'Interface';
-        $this->configReader = $configReader;
         parent::__construct(
+            $configReader,
             $sourceClassName,
             $resultClassName,
             $ioObject,
             $classGenerator,
             $definedClasses
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _getDefaultConstructorDefinition()
-    {
-        return [];
-    }
-
-    /**
-     * Returns list of methods for class generator
-     *
-     * @return array
-     */
-    protected function _getClassMethods()
-    {
-        $customAttributes = $this->configReader->read();
-        $dataInterface = ltrim($this->_getSourceClassName(), '\\');
-        $methods = [];
-        if (isset($customAttributes[$dataInterface])) {
-            foreach ($customAttributes[$dataInterface] as $attributeName => $attributeType) {
-                $methodName = 'get' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase($attributeName);
-                $methods[] = [
-                    'name' => $methodName,
-                    'docblock' => ['tags' => [['name' => 'return', 'description' => $attributeType]]],
-                ];
-            }
-        }
-        return $methods;
     }
 
     /**

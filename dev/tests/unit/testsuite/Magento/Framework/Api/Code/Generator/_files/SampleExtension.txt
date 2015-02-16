@@ -1,0 +1,53 @@
+namespace Magento\Catalog\Api\Data;
+
+/**
+ * Extension class for @see \Magento\Catalog\Api\Data\ProductInterface
+ */
+class ProductExtension implements \Magento\Catalog\Api\Data\ProductExtensionInterface
+{
+    /**
+     * @var string
+     */
+    protected $stringAttribute = null;
+
+    /**
+     * @var \Magento\Bundle\Api\Data\OptionInterface[]
+     */
+    protected $complexObjectAttribute = null;
+
+    /**
+     * @return string
+     */
+    public function getStringAttribute()
+    {
+        return $this->stringAttribute;
+    }
+
+    /**
+     * @param string $stringAttribute
+     * @return $this
+     */
+    public function setStringAttribute($stringAttribute)
+    {
+        $this->stringAttribute = $stringAttribute;
+        return $this;
+    }
+
+    /**
+     * @return \Magento\Bundle\Api\Data\OptionInterface[]
+     */
+    public function getComplexObjectAttribute()
+    {
+        return $this->complexObjectAttribute;
+    }
+
+    /**
+     * @param \Magento\Bundle\Api\Data\OptionInterface[] $complexObjectAttribute
+     * @return $this
+     */
+    public function setComplexObjectAttribute($complexObjectAttribute)
+    {
+        $this->complexObjectAttribute = $complexObjectAttribute;
+        return $this;
+    }
+}

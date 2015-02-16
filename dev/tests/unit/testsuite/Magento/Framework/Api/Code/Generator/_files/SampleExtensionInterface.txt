@@ -11,7 +11,19 @@ interface ProductExtensionInterface
     public function getStringAttribute();
 
     /**
+     * @param string $stringAttribute
+     * @return $this
+     */
+    public function setStringAttribute($stringAttribute);
+
+    /**
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
      */
     public function getComplexObjectAttribute();
+
+    /**
+     * @param \Magento\Bundle\Api\Data\OptionInterface[] $complexObjectAttribute
+     * @return $this
+     */
+    public function setComplexObjectAttribute($complexObjectAttribute);
 }
