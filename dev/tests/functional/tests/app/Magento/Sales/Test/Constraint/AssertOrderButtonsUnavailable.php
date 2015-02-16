@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Constraint;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -25,14 +25,14 @@ class AssertOrderButtonsUnavailable extends AbstractConstraint
      * Assert that buttons from dataSet are not present on page
      *
      * @param OrderIndex $orderIndex
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @param OrderInjectable $order
      * @param string $orderButtonsUnavailable
      * @return void
      */
     public function processAssert(
         OrderIndex $orderIndex,
-        OrderView $orderView,
+        SalesOrderView $orderView,
         OrderInjectable $order,
         $orderButtonsUnavailable
     ) {

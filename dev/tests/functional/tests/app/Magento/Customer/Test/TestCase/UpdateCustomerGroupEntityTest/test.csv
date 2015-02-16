@@ -1,5 +1,0 @@
-"customerGroup/data/tax_class_id/dataSet";"customerGroup/data/customer_group_code";"constraint"
-"retail_customer";"GroupName%isolation%";"assertCustomerGroupSuccessSaveMessage, assertCustomerGroupInGrid, assertCustomerGroupOnCustomerForm, assertCustomerGroupForm"
-"-";"General ";"assertCustomerGroupAlreadyExists"
-"customer_tax_class";"Group Name %isolation%";"assertCustomerGroupSuccessSaveMessage, assertCustomerGroupInGrid, assertCustomerGroupOnCustomerForm, assertCustomerGroupForm"
-"customer_tax_class";"Group#Name%isolation%";"assertCustomerGroupSuccessSaveMessage, assertCustomerGroupInGrid, assertCustomerGroupOnCustomerForm, assertCustomerGroupForm"
