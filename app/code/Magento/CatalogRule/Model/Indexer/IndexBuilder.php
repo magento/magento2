@@ -563,7 +563,7 @@ class IndexBuilder
      * @param int $websiteId
      * @param int|null $productId
      * @return \Zend_Db_Statement_Interface
-     * @throws \Magento\Eav\Exception
+     * @throws \Magento\Framework\Exception\EavException
      */
     protected function getRuleProductsStmt($websiteId, $productId = null)
     {

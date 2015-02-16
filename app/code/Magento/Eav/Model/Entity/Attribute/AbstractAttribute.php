@@ -6,6 +6,7 @@
 
 namespace Magento\Eav\Model\Entity\Attribute;
 
+use Magento\Framework\Exception\EavException;
 use Magento\Framework\Api\AttributeValueFactory;
 
 /**
@@ -173,7 +174,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param  string|int|\Magento\Eav\Model\Entity\Type $entityType
      * @param  string $code
      * @return $this
-     * @throws \Magento\Eav\Exception
+     * @throws EavException
      */
     public function loadByCode($entityType, $code)
     {
@@ -187,7 +188,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             $entityTypeId = $entityType->getId();
         }
         if (empty($entityTypeId)) {
-            throw new \Magento\Eav\Exception(__('Invalid entity supplied'));
+            throw new EavException(__('Invalid entity supplied'));
         }
         $this->_getResource()->loadByCode($this, $entityTypeId, $code);
         $this->_afterLoad();
@@ -442,7 +443,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Retrieve backend instance
      *
      * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws EavException
      */
     public function getBackend()
     {
@@ -452,7 +453,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             }
             $backend = $this->_universalFactory->create($this->getBackendModel());
             if (!$backend) {
-                throw new \Magento\Eav\Exception(__('Invalid backend model specified: ' . $this->getBackendModel()));
+                throw new EavException(__('Invalid backend model specified: ' . $this->getBackendModel()));
             }
             $this->_backend = $backend->setAttribute($this);
         }
@@ -481,7 +482,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Retrieve source instance
      *
      * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws EavException
      */
     public function getSource()
     {
@@ -491,7 +492,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             }
             $source = $this->_universalFactory->create($this->getSourceModel());
             if (!$source) {
-                throw new \Magento\Eav\Exception(
+                throw new EavException(
                     __(
                         'Source model "%1" not found for attribute "%2"',
                         $this->getSourceModel(),

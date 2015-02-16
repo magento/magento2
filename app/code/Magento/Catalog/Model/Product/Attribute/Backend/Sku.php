@@ -43,19 +43,24 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Validate SKU
      *
      * @param Product $object
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
+     * @throws \Magento\Framework\Exception\EavException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validate($object)
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
         $value = $object->getData($attrCode);
         if ($this->getAttribute()->getIsRequired() && strlen($value) === 0) {
-            throw new \Magento\Eav\Exception(__('The value of attribute "%1" must be set', $attrCode));
+            throw new \Magento\Framework\Exception\EavException(
+                __('The value of attribute "%1" must be set', $attrCode)
+            );
         }
 
         if ($this->string->strlen($object->getSku()) > self::SKU_MAX_LENGTH) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('SKU length should be %1 characters maximum.', self::SKU_MAX_LENGTH));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('SKU length should be %1 characters maximum.', self::SKU_MAX_LENGTH)
+            );
         }
         return true;
     }

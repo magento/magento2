@@ -5,6 +5,8 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
+use Magento\Framework\Exception\EavException;
+
 /**
  * Entity/Attribute/Model - attribute backend abstract
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -211,8 +213,8 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      * Validate object
      *
      * @param \Magento\Framework\Object $object
-     * @throws \Magento\Eav\Exception
      * @return bool
+     * @throws EavException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate($object)
@@ -221,7 +223,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         $attrCode = $attribute->getAttributeCode();
         $value = $object->getData($attrCode);
         if ($attribute->getIsVisible() && $attribute->getIsRequired() && $attribute->isValueEmpty($value)) {
-            throw new \Magento\Eav\Exception(__('The value of attribute "%1" must be set', $attrCode));
+            throw new EavException(__('The value of attribute "%1" must be set', $attrCode));
         }
 
         if ($attribute->getIsUnique()
@@ -234,7 +236,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         if ($attribute->getIsUnique()) {
             if (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $object)) {
                 $label = $attribute->getFrontend()->getLabel();
-                throw new \Magento\Eav\Exception(__('The value of attribute "%1" must be unique', $label));
+                throw new EavException(__('The value of attribute "%1" must be unique', $label));
             }
         }
 

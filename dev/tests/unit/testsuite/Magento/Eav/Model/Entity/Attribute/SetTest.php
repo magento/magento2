@@ -51,7 +51,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->getResource()->expects($this->any())->method('validate')->will($this->returnValue(false));
 
-        $this->setExpectedException('Magento\Eav\Exception', $exceptionMessage);
+        $this->setExpectedException('Magento\Framework\Exception\EavException', $exceptionMessage);
         $this->_model->setAttributeSetName($attributeSetName);
         $this->_model->validate();
     }
