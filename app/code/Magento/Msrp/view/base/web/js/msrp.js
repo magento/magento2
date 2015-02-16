@@ -4,39 +4,60 @@
  */
 define([
     'jquery',
+    'underscore',
     'jquery/ui',
     'mage/dropdown'
-], function ($) {
+], function ($, _) {
     'use strict';
 
+    var openDropDown = null;
     $.widget('mage.addToCart', {
         options: {
             showAddToCart: true,
-            cartForm: '.form.map.checkout'
+            submitUrl: '',
+            singleOpenDropDown: true,
+            dialog: {}, // Options for mage/dropdown
+            dialogDelay: 500, // Delay in ms after resize dropdown shown again
+
+            // Selectors
+            cartForm: '.form.map.checkout',
+            cartButtonId: '', // better to be cartButton
+            popupId: '', // better to be popup
+            realPrice: '',
+            msrpPrice: '',
+            helpLinkId: '', // better to be helpLink
+            addToCartButton: '',
+
+            // Text options
+            productName: '',
+            addToCartUrl: ''
         },
+
+        openDropDown: null,
 
         /**
          * Creates widget instance
          * @private
          */
         _create: function () {
-            $(this.options.cartButtonId).on('click', $.proxy(function () {
-                this._addToCartSubmit();
-            }, this));
+            $(this.options.cartButtonId).on('click', this._addToCartSubmit.bind(this));
 
-            $(this.options.popupId).on('click', $.proxy(function () {
+            $(this.options.popupId).on('click', function () {
+                var dialog;
+
                 if (this.options.submitUrl) {
                     location.href = this.options.submitUrl;
                 } else {
-                    $(this.options.popupCartButtonId).off('click');
-                    $(this.options.popupCartButtonId).on('click', $.proxy(function () {
-                        this._addToCartSubmit();
-                    }, this));
+                    $(this.options.popupCartButtonId)
+                        .off('click')
+                        .on('click', this._addToCartSubmit.bind(this));
                     $('#map-popup-heading-price').text(this.options.productName);
-                    $('#map-popup-price').html($(this.options.realPrice));
+                    $('#map-popup-price').html($(this.options.realPrice).html().trim());
                     $('#map-popup-msrp > span.price').html(this.options.msrpPrice);
+
                     this.element.trigger('reloadPrice');
-                    var dialog = $('#map-popup-click-for-price');
+
+                    dialog = $('#map-popup-click-for-price');
                     this._popupDialog(dialog, this.options.popupId);
 
                     if (this.options.addToCartUrl) {
@@ -49,43 +70,76 @@ define([
 
                     return false;
                 }
-            }, this));
+            }.bind(this));
 
-            $(this.options.helpLinkId).on('click', $.proxy(function () {
+            $(this.options.helpLinkId).on('click', function () {
                 $('#map-popup-heading-what-this').text(this.options.productName);
-                var dialog = $('#map-popup-what-this');
-                this._popupDialog(dialog, this.options.helpLinkId);
+                this._popupDialog($('#map-popup-what-this'), this.options.helpLinkId);
 
                 return false;
-            }, this));
+            }.bind(this));
         },
 
         /**
          * Handler for dialog popup
-         * @param {jQuery} target
-         * @param {Function} trigger
+         * @param {jQuery} elementTarget
+         * @param {jQuery} elementTrigger
          * @private
          */
-        _popupDialog: function (target, trigger) {
-            if (!target.hasClass('ui-dialog-content')) {
-                target.dropdownDialog({
-                    appendTo: '.column.main',
-                    dialogContentClass: 'active',
-                    timeout: '2000',
-                    autoPosition: true,
-                    'dialogClass': 'popup'
-                });
-            }
-            $('.mage-dropdown-dialog > .ui-dialog-content').dropdownDialog('close');
-            target.dropdownDialog('option', 'position', {
-                my: 'right+50% top',
-                collision: 'none',
-                at: 'center bottom',
-                of: trigger
-            });
-            target.dropdownDialog('option', 'triggerTarget', trigger);
-            target.dropdownDialog('open');
+        _popupDialog: function (elementTarget, elementTrigger) {
+            var target = $(elementTarget),
+                trigger = $(elementTrigger).length ? $(elementTrigger).parent() : $('body'),
+                counter = 0,
+                options;
 
+            options = {
+                appendTo: 'body',
+                dialogContentClass: 'active',
+                closeOnMouseLeave: false,
+                autoPosition: true,
+                'dialogClass': 'popup map-popup',
+                position: {
+                    my: 'left top',
+                    collision: 'flipfit none',
+                    at: 'left bottom',
+                    within: 'body',
+                    of: trigger
+                },
+                triggerTarget: trigger
+            };
+            options = _.extend(options, this.options.dialog);
+
+            if (openDropDown && openDropDown.is(':data(mage-dropdownDialog)')) {
+                openDropDown.dropdownDialog('close');
+            }
+
+            if (this.options.singleOpenDropDown) {
+                this.openDropDown = openDropDown;
+            }
+            openDropDown = target
+                .dropdownDialog(options)
+                .dropdownDialog('open')
+                .off('dropdowndialogclose')
+                .on('dropdowndialogclose', function () {
+                    if (!counter) {
+                        openDropDown = null;
+                        $(window).off('resize');
+                    }
+                });
+
+            $(window)
+                .resize(_.debounce(function () {
+                    if (openDropDown) {
+                        counter--;
+                        openDropDown.dropdownDialog('open');
+                    }
+                }, this.options.dialogDelay))
+                .resize(_.debounce(function () {
+                    if (openDropDown) {
+                        counter++;
+                        openDropDown.dropdownDialog('close');
+                    }
+                }, this.options.dialogDelay, true));
         },
 
         /**
