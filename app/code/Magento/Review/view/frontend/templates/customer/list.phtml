@@ -5,9 +5,9 @@
  */
 
 // @codingStandardsIgnoreFile
-
+/** @var \Magento\Review\Block\Customer\ListCustomer $block */
 ?>
-<?php if ($block->getCollection() && $block->count()): ?>
+<?php if ($block->getReviews() && count($block->getReviews())): ?>
     <div class="table-wrapper reviews">
         <table class="data table table-reviews" id="my-reviews-table">
             <caption class="table-caption"><?php echo __('Product Reviews') ?></caption>
@@ -21,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($block->getCollection() as $_review): ?>
+                <?php foreach ($block->getReviews() as $_review): ?>
                 <tr>
                     <td data-th="<?php echo $block->escapeHtml(__('Created')) ?>" class="col date"><?php echo $block->dateFormat($_review->getReviewCreatedAt()); ?></td>
                     <td data-th="<?php echo $block->escapeHtml(__('Product Name')) ?>" class="col item">

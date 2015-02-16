@@ -2046,4 +2046,5 @@ return [
     ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
     ['register', 'Magento\Sendfriend\Model\Sendfriend'],
     ['_getImageHelper', 'Magento\Catalog\Model\Product'],
+    ['isReviewOwner', 'Magento\Review\Block\Customer\View'],
 ];

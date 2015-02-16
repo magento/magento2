@@ -112,10 +112,6 @@ class Add extends Action\Action implements IndexInterface
                 $referer = $this->_redirect->getRefererUrl();
             }
 
-            /**
-             *  Set referer to avoid referring to the compare popup window
-             */
-            $session->setAddActionReferer($referer);
 
             /** @var $helper \Magento\Wishlist\Helper\Data */
             $helper = $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();

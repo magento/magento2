@@ -112,6 +112,7 @@ class Form extends \Magento\Framework\View\Element\Template
         $this->httpContext = $httpContext;
         $this->customerUrl = $customerUrl;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

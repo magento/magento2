@@ -12,7 +12,7 @@
 /** @var $block \Magento\Review\Block\Customer\Recent */
 ?>
 
-<?php if ($block->getCollection() && $block->count()): ?>
+<?php if ($block->getReviews() && count($block->getReviews())): ?>
 <div class="block block-reviews-dashboard">
     <div class="block-title">
         <strong><?php echo __('My Recent Reviews') ?></strong>
@@ -20,7 +20,7 @@
     </div>
     <div class="block-content">
         <ol class="items">
-        <?php foreach ($block->getCollection() as $_review): ?>
+        <?php foreach ($block->getReviews() as $_review): ?>
             <li class="item">
                 <strong class="product-name"><a href="<?php echo $block->getReviewUrl($_review->getReviewId()) ?>"><?php echo $block->escapeHtml($_review->getName()) ?></a></strong>
                 <?php if ($_review->getSum()): ?>

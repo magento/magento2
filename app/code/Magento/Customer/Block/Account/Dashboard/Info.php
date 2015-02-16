@@ -84,7 +84,7 @@ class Info extends \Magento\Framework\View\Element\Template
      */
     public function getChangePasswordUrl()
     {
-        return $this->_urlBuilder->getUrl('*/account/edit/changepass/1');
+        return $this->_urlBuilder->getUrl('customer/account/edit/changepass/1');
     }
 
     /**
@@ -132,5 +132,17 @@ class Info extends \Magento\Framework\View\Element\Template
     protected function _createSubscriber()
     {
         return $this->_subscriberFactory->create();
+    }
+
+    /**
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if ($this->currentCustomer->getCustomerId()) {
+            return parent::_toHtml();
+        } else {
+            return '';
+        }
     }
 }

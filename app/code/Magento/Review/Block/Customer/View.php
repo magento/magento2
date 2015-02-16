@@ -79,11 +79,11 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
         $this->_voteFactory = $voteFactory;
         $this->_ratingFactory = $ratingFactory;
         $this->currentCustomer = $currentCustomer;
-
         parent::__construct(
             $context,
             $data
         );
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -200,16 +200,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
-     * Check whether current customer is review owner
-     *
-     * @return bool
-     */
-    public function isReviewOwner()
-    {
-        return ($this->getReviewData()->getCustomerId() == $this->currentCustomer->getCustomerId());
-    }
-
-    /**
      * Get product reviews summary
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -226,5 +216,17 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
             $this->_reviewFactory->create()->getEntitySummary($product, $this->_storeManager->getStore()->getId());
         }
         return parent::getReviewsSummaryHtml($product, $templateType, $displayIfNoReviews);
+    }
+
+    /**
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if ($this->currentCustomer->getCustomerId()) {
+            return parent::_toHtml();
+        } else {
+            return '';
+        }
     }
 }

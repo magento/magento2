@@ -29,7 +29,7 @@
     <div class="review-details">
         <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
             <div class="title">
-                <strong><?php echo($block->isReviewOwner()) ? __('Your Review') : __('Review'); ?></strong>
+                <strong><?php echo __('Your Review'); ?></strong>
             </div>
             <div class="customer-review-rating">
                 <?php foreach ($block->getRating() as $_rating): ?>
