@@ -48,7 +48,7 @@ class SaveTest extends \Magento\Theme\Controller\Adminhtml\System\Design\ThemeTe
             ->with('js_order')
             ->will($this->returnValue($jsOrder));
 
-        $this->_request->expects($this->once(5))->method('getPost')->will($this->returnValue(true));
+        $this->_request->expects($this->once(5))->method('getPostValue')->will($this->returnValue(true));
 
         $themeMock = $this->getMock(
             'Magento\Theme\Model\Theme',

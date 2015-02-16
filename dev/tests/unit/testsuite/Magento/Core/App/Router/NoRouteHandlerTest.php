@@ -39,6 +39,7 @@ class NoRouteHandlerTest extends \Magento\Test\BaseTestCase
             'setModuleName',
             'setControllerName',
             'getCookie',
+            'isSecure',
         ];
         $this->requestMock = $this->getMock(
             'Magento\Framework\App\RequestInterface',

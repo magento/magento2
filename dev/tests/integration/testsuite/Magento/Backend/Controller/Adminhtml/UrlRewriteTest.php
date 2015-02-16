@@ -20,7 +20,7 @@ class UrlRewriteTest extends \Magento\Backend\Utility\Controller
         $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Model\Page');
         $page->load('page_design_blank', 'identifier');
 
-        $this->getRequest()->setPost(
+        $this->getRequest()->setPostValue(
             [
                 'description' => 'Some URL rewrite description',
                 'options' => 'R',

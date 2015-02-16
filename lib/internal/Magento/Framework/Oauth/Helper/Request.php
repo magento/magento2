@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Oauth\Helper;
 
+use Magento\Framework\App\RequestInterface;
+
 class Request
 {
     /**#@+
@@ -25,7 +27,7 @@ class Request
     /**
      * Process HTTP request object and prepare for token validation
      *
-     * @param \Zend_Controller_Request_Http $httpRequest
+     * @param RequestInterface $httpRequest
      * @return array
      */
     public function prepareRequest($httpRequest)
@@ -33,7 +35,7 @@ class Request
         $oauthParams = $this->_processRequest(
             $httpRequest->getHeader('Authorization'),
             $httpRequest->getHeader(\Zend_Http_Client::CONTENT_TYPE),
-            $httpRequest->getRawBody(),
+            $httpRequest->getContent(),
             $this->getRequestUrl($httpRequest)
         );
         return $oauthParams;
@@ -42,7 +44,7 @@ class Request
     /**
      * Compute the request Url from the Http request
      *
-     * @param \Zend_Controller_Request_Http $httpRequest
+     * @param RequestInterface $httpRequest
      * @return string
      */
     public function getRequestUrl($httpRequest)

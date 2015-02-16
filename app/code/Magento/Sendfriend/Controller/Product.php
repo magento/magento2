@@ -81,7 +81,7 @@ class Product extends \Magento\Framework\App\Action\Action
             if ($this->getRequest()->getActionName() == 'sendemail') {
                 $session->setBeforeAuthUrl($this->_url->getUrl('sendfriend/product/send', ['_current' => true]));
                 $this->_objectManager->get('Magento\Catalog\Model\Session')
-                    ->setSendfriendFormData($request->getPost());
+                    ->setSendfriendFormData($request->getPostValue());
             }
         }
         return parent::dispatch($request);

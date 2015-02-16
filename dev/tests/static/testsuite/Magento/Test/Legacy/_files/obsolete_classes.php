@@ -2917,6 +2917,7 @@ return [
     ['Magento\Core\Block\RequireCookie', 'Magento\Cookie\Block\RequireCookie'],
     ['Magento\Core\Controller\Index\NoCookies', 'Magento\Cookie\Controller\Index\NoCookies'],
     ['Magento\Core\Model\Asset\Config', 'Magento\Framework\View\Asset\Config'],
+    ['Magento\Framework\App\Http\RequestInterface'],
     ['Magento\Core\Model\Layout\Merge', 'Magento\Framework\View\Model\Layout\Merge'],
     ['Magento\Core\Model\Layout\Translator', 'Magento\Framework\View\Model\Layout\Translator'],
     ['Magento\Core\Model\Layout\Update\Validator', 'Magento\Framework\View\Model\Layout\Update\Validator'],

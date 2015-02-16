@@ -73,7 +73,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
                 'getActionName',
                 'setModuleName',
                 'getModuleName',
-                'getCookie'
+                'getCookie',
+                'isSecure',
             ]
         );
         $contextMock = $this->getMock('\Magento\Framework\App\Helper\Context', [], [], '', false);

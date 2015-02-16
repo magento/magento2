@@ -26,6 +26,8 @@ class FirebugTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('Remove it when MAGETWO-33495 is done.');
+
         $this->_response = $this->getMockBuilder(
             '\Magento\Framework\App\Response\Http'
         )->setMethods(

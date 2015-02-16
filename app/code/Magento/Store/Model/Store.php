@@ -330,7 +330,7 @@ class Store extends AbstractModel implements
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\Http\RequestInterface $request,
+        \Magento\Framework\App\RequestInterface $request,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
@@ -757,9 +757,10 @@ class Store extends AbstractModel implements
 
         $uri = \Zend_Uri::factory($secureBaseUrl);
         $port = $uri->getPort();
-        $isSecure = $uri->getScheme() == 'https' && isset(
-            $_SERVER['SERVER_PORT']
-        ) && $port == $_SERVER['SERVER_PORT'];
+        $serverPort = $this->_request->getServer('SERVER_PORT');
+        $isSecure = $uri->getScheme() == 'https'
+            && isset($serverPort)
+            && $port == $serverPort;
         return $isSecure;
     }
 
@@ -1064,7 +1065,7 @@ class Store extends AbstractModel implements
             parse_str($storeParsedUrl['query'], $storeParsedQuery);
         }
 
-        $currQuery = $this->_request->getQuery();
+        $currQuery = $this->_request->getQueryValue();
         if (isset(
             $currQuery[$sidQueryParam]
         ) && !empty($currQuery[$sidQueryParam]) && $this->_getSession()->getSessionIdForHost(

@@ -30,7 +30,7 @@ class ConfigTest extends \Magento\Backend\Utility\Controller
         $defaultHost = Bootstrap::getObjectManager()->create('Magento\Framework\Url')->getBaseUrl();
         $newHost = 'm2test123.loc';
         $request = $this->getRequest();
-        $request->setPost(
+        $request->setPostValue(
             ['groups' =>
                 ['unsecure' =>
                     ['fields' =>
