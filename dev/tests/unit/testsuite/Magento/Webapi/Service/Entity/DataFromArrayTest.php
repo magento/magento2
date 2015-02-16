@@ -34,10 +34,8 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attributeValueBuilder = $this->getMockBuilder('Magento\Framework\Api\AttributeDataBuilder')
-            ->setMethods(['setAttributeCode', 'setValue', 'create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var \Magento\Framework\Api\AttributeDataBuilder */
+        $this->attributeValueBuilder = $objectManager->getObject('Magento\Framework\Api\AttributeDataBuilder');
 
         $this->serviceInputProcessor = $objectManager->getObject(
             'Magento\Framework\Webapi\ServiceInputProcessor',
@@ -54,8 +52,11 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     public function testSimpleProperties()
     {
         $data = ['entityId' => 15, 'name' => 'Test'];
-        $result = $this->serviceInputProcessor
-            ->process('\\Magento\\Webapi\\Service\\Entity\\TestService', 'simple', $data);
+        $result = $this->serviceInputProcessor->process(
+            'Magento\Webapi\Service\Entity\TestService',
+            'simple',
+            $data
+        );
         $this->assertNotNull($result);
         $this->assertEquals(15, $result[0]);
         $this->assertEquals('Test', $result[1]);
@@ -65,7 +66,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     {
         $data = [];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'simpleDefaultValue',
             $data
         );
@@ -81,7 +82,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     {
         $data = [];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'simple',
             $data
         );
@@ -92,7 +93,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     {
         $data = ['nested' => ['details' => ['entityId' => 15, 'name' => 'Test']]];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'nestedData',
             $data
         );
@@ -116,7 +117,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     {
         $data = ['ids' => [1, 2, 3, 4]];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'simpleArray',
             $data
         );
@@ -134,7 +135,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     {
         $data = ['associativeArray' => ['key' => 'value', 'key_two' => 'value_two']];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'associativeArray',
             $data
         );
@@ -152,7 +153,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     {
         $data = ['associativeArray' => ['item' => 'value']];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'associativeArray',
             $data
         );
@@ -169,7 +170,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     {
         $data = ['associativeArray' => ['item' => ['value1','value2']]];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'associativeArray',
             $data
         );
@@ -192,7 +193,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'dataArray',
             $data
         );
@@ -218,7 +219,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     {
         $data = ['arrayData' => ['ids' => [1, 2, 3, 4]]];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'nestedSimpleArray',
             $data
         );
@@ -241,7 +242,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
             'associativeArrayData' => ['associativeArray' => ['key' => 'value', 'key2' => 'value2']],
         ];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'nestedAssociativeArray',
             $data
         );
@@ -266,7 +267,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'nestedDataArray',
             $data
         );
@@ -295,11 +296,12 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
      * Covers object with custom attributes
      *
      * @dataProvider customAttributesDataProvider
+     * @param $customAttributeType
+     * @param $customAttributeValue
+     * @param $attributeCode
      */
-    public function testCustomAttributesProperties($customAttributeType, $customAttributeValue)
+    public function testCustomAttributesProperties($customAttributeType, $inputData, $expectedObject)
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-
         $this->serviceConfigReader->expects($this->any())->method('read')->willReturn(
             [
                 'Magento\Webapi\Service\Entity\ObjectWithCustomAttributes' => [
@@ -308,42 +310,14 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $dataObject = $objectManager->getObject(
-            'Magento\Framework\Api\AttributeValue',
-            ['data' => ['attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE, 'value' => $customAttributeValue]]
-        );
-
-        $this->attributeValueBuilder->expects($this->any())->method('create')->willReturn($dataObject);
-        $this->attributeValueBuilder->expects($this->any())->method('setValue')->willReturn(
-            $this->attributeValueBuilder
-        );
-        $this->attributeValueBuilder->expects($this->any())->method('setAttributeCode')->willReturn(
-            $this->attributeValueBuilder
-        );
-
-        $data = [
-            'param' => [
-                'customAttributes' => [
-                    ['attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE, 'value' => $customAttributeValue]
-                ]
-            ]
-        ];
         $result = $this->serviceInputProcessor->process(
-            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'Magento\Webapi\Service\Entity\TestService',
             'ObjectWithCustomAttributesMethod',
-            $data
+            $inputData
         );
 
-        /** @var \Magento\Framework\Api\AttributeValue $obj */
-        $obj = $result[0];
-
-        $this->assertEquals(
-            $customAttributeValue,
-            $obj->getCustomAttribute(TestService::CUSTOM_ATTRIBUTE_CODE)->getValue()
-        );
-        $this->assertEquals(
-            TestService::CUSTOM_ATTRIBUTE_CODE,
-            $obj->getCustomAttribute(TestService::CUSTOM_ATTRIBUTE_CODE)->getAttributeCode());
+        $this->assertTrue($result[0] instanceof \Magento\Webapi\Service\Entity\ObjectWithCustomAttributes);
+        $this->assertEquals($expectedObject, $result[0]);
     }
 
     /**
@@ -355,13 +329,145 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'customAttributeInteger' => [
-                'type' => 'integer[]',
-                'value' => [TestService::DEFAULT_VALUE]
+                'customAttributeType' => 'integer',
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            [
+                                'attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE,
+                                'value' => TestService::DEFAULT_VALUE
+                            ]
+                        ]
+                    ]
+                ],
+                'expectedObject'=>  $this->getObjectWithCustomAttributes('integer', TestService::DEFAULT_VALUE),
+            ],
+            'customAttributeIntegerCamelCaseCode' => [
+                'customAttributeType' => 'integer',
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            [
+                                'attributeCode' => TestService::CUSTOM_ATTRIBUTE_CODE,
+                                'value' => TestService::DEFAULT_VALUE
+                            ]
+                        ]
+                    ]
+                ],
+                'expectedObject'=>  $this->getObjectWithCustomAttributes('integer', TestService::DEFAULT_VALUE),
             ],
             'customAttributeObject' => [
-                'type' => '\Magento\Webapi\Service\Entity\SimpleArray',
-                'value' => ['ids' => [1, 2, 3, 4]]
+                'customAttributeType' => 'Magento\Webapi\Service\Entity\SimpleArray',
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            ['attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE, 'value' => ['ids' => [1, 2, 3, 4]]]
+                        ]
+                    ]
+                ],
+                'expectedObject'=>  $this->getObjectWithCustomAttributes('SimpleArray', ['ids' => [1, 2, 3, 4]]),
+            ],
+            'customAttributeArrayOfObjects' => [
+                'customAttributeType' => 'Magento\Webapi\Service\Entity\Simple[]',
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            ['attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE, 'value' => [
+                                ['entityId' => 14, 'name' => 'First'],
+                                ['entityId' => 15, 'name' => 'Second'],
+                            ]]
+                        ]
+                    ]
+                ],
+                'expectedObject'=>  $this->getObjectWithCustomAttributes('Simple[]', [
+                    ['entityId' => 14, 'name' => 'First'],
+                    ['entityId' => 15, 'name' => 'Second'],
+                ]),
+            ],
+            'customAttributeNonExistentCustomAttributeCode' => [
+                'customAttributeType' => 'integer',
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            [
+                                'non_existent_attribute_code_' => TestService::CUSTOM_ATTRIBUTE_CODE,
+                                'value' => TestService::DEFAULT_VALUE
+                            ]
+                        ]
+                    ]
+                ],
+                'expectedObject'=>   $this->getObjectWithCustomAttributes('emptyData')
+            ],
+            'customAttributeObjectNonExistentCustomAttributeCodeValue' => [
+                'customAttributeType' => 'Magento\Webapi\Service\Entity\SimpleArray',
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            ['attribute_code' => 'nonExistentAttributeCode', 'value' => ['ids' => [1, 2, 3, 4]]]
+                        ]
+                    ]
+                ],
+                'expectedObject'=>   $this->getObjectWithCustomAttributes('emptyData')
             ],
         ];
+    }
+
+    /**
+     * Return object with custom attributes
+     *
+     * @param $type
+     * @param array $value
+     * @return null|object
+     */
+    protected function getObjectWithCustomAttributes($type, $value = [])
+    {
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $customAttributeValue = null;
+        switch($type) {
+            case 'integer':
+                $customAttributeValue = $value;
+                break;
+            case 'SimpleArray':
+                $customAttributeValue = $objectManager->getObject(
+                    'Magento\Webapi\Service\Entity\SimpleArray',
+                    ['data' => $value]
+                );
+                break;
+            case 'Simple[]':
+                $dataObjectSimple1 = $objectManager->getObject(
+                    'Magento\Webapi\Service\Entity\Simple',
+                    ['data' => $value[0]]
+                );
+                $dataObjectSimple2 = $objectManager->getObject(
+                    'Magento\Webapi\Service\Entity\Simple',
+                    ['data' => $value[1]]
+                );
+                $customAttributeValue = [$dataObjectSimple1, $dataObjectSimple2];
+                break;
+            case 'emptyData':
+                return $objectManager->getObject(
+                    'Magento\Webapi\Service\Entity\ObjectWithCustomAttributes',
+                    ['data' => []]
+
+                );
+            default:
+                return null;
+        }
+        return $objectManager->getObject(
+            'Magento\Webapi\Service\Entity\ObjectWithCustomAttributes',
+            ['data' => [
+                'custom_attributes' => [
+                    TestService::CUSTOM_ATTRIBUTE_CODE => $objectManager->getObject(
+                        'Magento\Framework\Api\AttributeValue',
+                        ['data' =>
+                            [
+                                'attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE,
+                                'value' => $customAttributeValue
+                            ]
+                        ]
+                    )
+                ]
+            ]]
+        );
     }
 }

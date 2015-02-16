@@ -96,7 +96,7 @@ class TestService
      * @param \Magento\Webapi\Service\Entity\ObjectWithCustomAttributes $param
      * @return \Magento\Webapi\Service\Entity\ObjectWithCustomAttributes
      */
-    public function ObjectWithCustomAttributesMethod(\Magento\Webapi\Service\Entity\ObjectWithCustomAttributes $param)
+    public function objectWithCustomAttributesMethod(\Magento\Webapi\Service\Entity\ObjectWithCustomAttributes $param)
     {
         return $param;
     }

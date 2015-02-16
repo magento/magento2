@@ -56,7 +56,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider  hostsDataProvider
+     * @dataProvider hostsDataProvider
      */
     public function testGetRequestUrl($url, $host)
     {
