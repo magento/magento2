@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2015 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Asset;
@@ -57,20 +58,17 @@ class BundleService
      * @param Filesystem $filesystem
      * @param BundleFactory $bundleFactory
      * @param View\ConfigInterface $config
-     * @param App\State $appState
      * @param ListInterface $themeList
      */
     public function __construct(
         Filesystem $filesystem,
         BundleFactory $bundleFactory,
         View\ConfigInterface $config,
-        App\State $appState,
         ListInterface $themeList
     ) {
         $this->filesystem = $filesystem;
         $this->bundleFactory = $bundleFactory;
         $this->viewConfig = $config;
-        $this->appState = $appState;
         $this->themeList = $themeList;
     }
 
@@ -121,15 +119,6 @@ class BundleService
         return false;
     }
 
-    /**
-     * Check if app state is production mode
-     *
-     * @return bool
-     */
-    protected function isProductionMode()
-    {
-        return $this->appState->getMode() === \Magento\Framework\App\State::MODE_PRODUCTION;
-    }
 
     /**
      * Collect bundle
@@ -140,7 +129,7 @@ class BundleService
     public function collect(LocalInterface $asset)
     {
         $this->setAsset($asset);
-        if (!($this->isValidAsset() && $this->isProductionMode())) {
+        if (!($this->isValidAsset())) {
              return false;
         }
 

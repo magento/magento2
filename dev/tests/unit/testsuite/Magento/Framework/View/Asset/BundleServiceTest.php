@@ -14,9 +14,6 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem */
     protected $filesystem;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State */
-    protected $appState;
-
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\BundleFactory */
     protected $bundleFactory;
 
@@ -36,7 +33,6 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->bundleFactory = $this->getMock('Magento\Framework\View\Asset\BundleFactory', ['create'], [], '', false);
         $this->list = $this->getMockForAbstractClass(
             'Magento\Framework\View\Design\Theme\ListInterface',
@@ -49,7 +45,7 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        unset($this->conf, $this->asset, $this->filesystem, $this->appState, $this->bundleFactory, $this->viewConf);
+        unset($this->conf, $this->asset, $this->filesystem, $this->bundleFactory, $this->viewConf);
     }
 
     protected function getBundleService()
@@ -58,7 +54,6 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
             $this->filesystem,
             $this->bundleFactory,
             $this->conf,
-            $this->appState,
             $this->list
         );
     }
@@ -74,50 +69,6 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getContentType')
             ->willReturn('undefined');
-
-        $this->assertFalse($this->getBundleService()->collect($assetMock));
-    }
-
-    public function testCollectWithDefaultAppStateMode()
-    {
-        $assetMock = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
-        $context = $this->getMock('Magento\Framework\View\Asset\File\FallbackContext', [], [], '', false);
-        $context
-            ->expects($this->atLeastOnce())
-            ->method('getAreaCode')
-            ->willReturn('frontend');
-
-        $assetMock
-            ->expects($this->any())
-            ->method('getModule')
-            ->willReturn(substr(md5(5), 0, 2));
-        $assetMock
-            ->expects($this->once())
-            ->method('getContentType')
-            ->willReturn('js');
-        $assetMock
-            ->expects($this->atLeastOnce())
-            ->method('getContext')
-            ->willReturn($context);
-
-        $this->appState
-            ->expects($this->once())
-            ->method('getMode')
-            ->willReturn('default');
-
-        $this->viewConf
-            ->expects($this->once())
-            ->method('getExcludedFiles')
-            ->willReturn([]);
-        $this->viewConf
-            ->expects($this->once())
-            ->method('getExcludedDir')
-            ->willReturn([]);
-
-        $this->conf
-            ->expects($this->atLeastOnce())
-            ->method('getViewConfig')
-            ->willReturn($this->viewConf);
 
         $this->assertFalse($this->getBundleService()->collect($assetMock));
     }
@@ -155,11 +106,6 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
-
-        $this->appState
-            ->expects($this->once())
-            ->method('getMode')
-            ->willReturn('production');
 
         $this->viewConf
             ->expects($this->once())
@@ -245,11 +191,6 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getExcludedDir')
             ->willReturn([]);
-
-        $this->appState
-            ->expects($this->once())
-            ->method('getMode')
-            ->willReturn('production');
 
         $this->conf
             ->expects($this->atLeastOnce())

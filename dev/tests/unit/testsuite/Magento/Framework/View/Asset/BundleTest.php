@@ -22,6 +22,26 @@ require.config({
 });
 
 EOL;
+    protected $expectedHtmlTypeResult = <<<EOL
+require.config({
+    bundles: {
+        'mage/requirejs/static': [
+            'jsbuild',
+            'buildTools',
+            'text'
+        ]
+    },
+    deps: [
+        'jsbuild'
+    ]
+});
+require.config({
+    config: {
+        'text':{"cf/cf":"Content","c4/c4":"Content","c8/c8":"Content","ec/ec":"Content","a8/a8":"Content","e4/e4":"Content","16/16":"Content","8f/8f":"Content","c9/c9":"Content","45/45":"Content"}
+    }
+});
+
+EOL;
 
     protected function setUp()
     {
@@ -34,10 +54,10 @@ EOL;
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
     }
 
-    protected function getBundle()
+    protected function getBundle($type)
     {
         $bundle = $this->bundle = new Bundle($this->scopeConf);
-        $bundle->setType('js');
+        $bundle->setType($type);
 
         for ($i = 0; $i < 10; $i++) {
             $assetMock = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
@@ -66,12 +86,27 @@ EOL;
             ->method('getValue')
             ->willReturn(1);
 
-        $actual = $this->getBundle()->getContent();
+        $actual = $this->getBundle('js')->getContent();
 
         $this->assertInternalType('array', $actual);
 
         $this->assertArrayHasKey(0, $actual);
         $this->assertEquals($this->expectedResult, $actual[0]);
+    }
+
+    public function testGetContentWithHtmlAssetType()
+    {
+        $this->scopeConf
+            ->expects($this->once())
+            ->method('getValue')
+            ->willReturn(1);
+
+        $actual = $this->getBundle('html')->getContent();
+
+        $this->assertInternalType('array', $actual);
+
+        $this->assertArrayHasKey(0, $actual);
+        $this->assertEquals($this->expectedHtmlTypeResult, $actual[0]);
     }
 
     public function testGetContentWithMultipleBundleParts()
@@ -81,7 +116,7 @@ EOL;
             ->method('getValue')
             ->willReturn(2);
 
-        $actual = $this->getBundle()->getContent();
+        $actual = $this->getBundle('js')->getContent();
 
         $this->assertInternalType('array', $actual);
 
