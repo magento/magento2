@@ -44,23 +44,18 @@ class DateTime
     public function formatDate($date, $includeTime = true)
     {
         if ($date instanceof \Magento\Framework\Stdlib\DateTime\DateInterface) {
-            if ($includeTime) {
-                return $date->format(self::DATETIME_INTERNAL_FORMAT);
-            } else {
-                return $date->format(self::DATE_INTERNAL_FORMAT);
-            }
-        }
-
-        if (empty($date)) {
+            $format = $includeTime ? self::DATETIME_INTERNAL_FORMAT : self::DATE_INTERNAL_FORMAT;
+            return $date->format($format);
+        } elseif (empty($date)) {
             return null;
-        }
-
-        if (!is_numeric($date)) {
+        } elseif ($date === true) {
             $date = (new \DateTime())->getTimestamp();
+        } elseif (!is_numeric($date)) {
+            $date = (new \DateTime($date))->getTimestamp();
         }
 
         $format = $includeTime ? self::DATETIME_PHP_FORMAT : self::DATE_PHP_FORMAT;
-        return (new \DateTime('@' . $date))->format($format);
+        return (new \DateTime())->setTimestamp($date)->format($format);
     }
 
     /**

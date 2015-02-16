@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
+
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
@@ -49,7 +50,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     public function getHtml()
     {
         $htmlId = $this->mathRandom->getUniqueHash($this->_getHtmlId());
-        $format = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $format = $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_SHORT);
         $html = '<div class="range" id="' .
             $htmlId .
             '_range"><div class="range-line date">' .
@@ -127,9 +128,9 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     public function getEscapedValue($index = null)
     {
         $value = $this->getValue($index);
-        if ($value instanceof \Zend_Date) {
-            return $value->toString(
-                $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+        if ($value instanceof \DateTime) {
+            return $value->format(
+                $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_SHORT)
             );
         }
         return $value;
@@ -192,7 +193,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
      * Convert given date to default (UTC) timezone
      *
      * @param string $date
-     * @return \Magento\Framework\Stdlib\DateTime\Date|null
+     * @return \DateTime|null
      */
     protected function _convertDate($date)
     {
@@ -203,6 +204,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             )
         );
         $simpleRes = new \DateTime($date, $adminTimeZone);
+        $simpleRes->setTime(0, 0, 0);
         $simpleRes->setTimezone(new \DateTimeZone('UTC'));
         return $simpleRes;
     }
