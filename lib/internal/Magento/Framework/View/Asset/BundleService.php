@@ -5,11 +5,11 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App;
-use Magento\Framework\Filesystem;
-use Magento\Framework\View\ConfigInterface;
+use Magento\Framework\View;
 use Magento\Framework\View\Asset;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Design\Theme\ListInterface;
 
 /**
@@ -34,7 +34,7 @@ class BundleService
     protected $bundleFactory;
 
     /**
-     * @var ConfigInterface
+     * @var View\ConfigInterface
      */
     protected $viewConfig;
 
@@ -56,14 +56,14 @@ class BundleService
     /**
      * @param Filesystem $filesystem
      * @param BundleFactory $bundleFactory
-     * @param ConfigInterface $config
+     * @param View\ConfigInterface $config
      * @param App\State $appState
      * @param ListInterface $themeList
      */
     public function __construct(
         Filesystem $filesystem,
         BundleFactory $bundleFactory,
-        ConfigInterface $config,
+        View\ConfigInterface $config,
         App\State $appState,
         ListInterface $themeList
     ) {

@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Asset;
 
 class BundleServiceTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\Bundle\ConfigInterface */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\ConfigInterface */
     protected $conf;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem */
@@ -20,10 +20,16 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\BundleFactory */
     protected $bundleFactory;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\ListInterface */
+    protected $list;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\ConfigInterface */
+    protected $viewConf;
+
     protected function setUp()
     {
         $this->conf = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Asset\Bundle\ConfigInterface',
+            'Magento\Framework\View\ConfigInterface',
             [],
             '',
             false
@@ -32,11 +38,18 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->bundleFactory = $this->getMock('Magento\Framework\View\Asset\BundleFactory', [], [], '', false);
+        $this->list = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Design\Theme\ListInterface',
+            [],
+            '',
+            false
+        );
+        $this->viewConf = $this->getMock('Magento\Framework\Config\View', [], [], '', false);
     }
 
     protected function tearDown()
     {
-        unset($this->conf, $this->asset, $this->filesystem, $this->appState, $this->bundleFactory);
+        unset($this->conf, $this->asset, $this->filesystem, $this->appState, $this->bundleFactory, $this->viewConf);
     }
 
     protected function getBundleService()
@@ -45,7 +58,8 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
             $this->filesystem,
             $this->bundleFactory,
             $this->conf,
-            $this->appState
+            $this->appState,
+            $this->list
         );
     }
 
@@ -69,7 +83,7 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
         $assetMock = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $context = $this->getMock('Magento\Framework\View\Asset\File\FallbackContext', [], [], '', false);
         $context
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getAreaCode')
             ->willReturn('frontend');
 
@@ -82,7 +96,7 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getContentType')
             ->willReturn('js');
         $assetMock
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
 
@@ -91,24 +105,30 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->willReturn('default');
 
-        $this->conf
+        $this->viewConf
             ->expects($this->once())
             ->method('getExcludedFiles')
             ->willReturn([]);
-        $this->conf
+        $this->viewConf
             ->expects($this->once())
             ->method('getExcludedDir')
             ->willReturn([]);
 
+        $this->conf
+            ->expects($this->atLeastOnce())
+            ->method('getViewConfig')
+            ->willReturn($this->viewConf);
+
         $this->assertFalse($this->getBundleService()->collect($assetMock));
     }
+
     public function testCollect()
     {
         $assetMock = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $bundle = $this->getMock('Magento\Framework\View\Asset\Bundle', [], [], '', false);
         $context = $this->getMock('Magento\Framework\View\Asset\File\FallbackContext', [], [], '', false);
         $context
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getAreaCode')
             ->willReturn('frontend');
 
@@ -122,7 +142,6 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
             ->method('setType')
             ->with('js')
             ->willReturn(true);
-
 
         $assetMock
             ->expects($this->any())
@@ -142,14 +161,19 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->willReturn('production');
 
-        $this->conf
+        $this->viewConf
             ->expects($this->once())
             ->method('getExcludedFiles')
             ->willReturn([]);
-        $this->conf
+        $this->viewConf
             ->expects($this->once())
             ->method('getExcludedDir')
             ->willReturn([]);
+
+        $this->conf
+            ->expects($this->atLeastOnce())
+            ->method('getViewConfig')
+            ->willReturn($this->viewConf);
 
         $this->bundleFactory
             ->expects($this->once())
@@ -177,7 +201,7 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
         $bundle = $this->getMock('Magento\Framework\View\Asset\Bundle', [], [], '', false);
         $context = $this->getMock('Magento\Framework\View\Asset\File\FallbackContext', [], [], '', false);
         $context
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getAreaCode')
             ->willReturn('frontend');
 
@@ -213,19 +237,24 @@ class BundleServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getContext')
             ->willReturn($context);
 
+        $this->viewConf
+            ->expects($this->once())
+            ->method('getExcludedFiles')
+            ->willReturn([]);
+        $this->viewConf
+            ->expects($this->once())
+            ->method('getExcludedDir')
+            ->willReturn([]);
+
         $this->appState
             ->expects($this->once())
             ->method('getMode')
             ->willReturn('production');
 
         $this->conf
-            ->expects($this->once())
-            ->method('getExcludedFiles')
-            ->willReturn([]);
-        $this->conf
-            ->expects($this->once())
-            ->method('getExcludedDir')
-            ->willReturn([]);
+            ->expects($this->atLeastOnce())
+            ->method('getViewConfig')
+            ->willReturn($this->viewConf);
 
         $this->bundleFactory
             ->expects($this->once())

@@ -6,7 +6,6 @@
 namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App;
-use Magento\Framework\App\Config;
 
 /**
  * Bundle model
@@ -40,12 +39,7 @@ class Bundle
     protected $bundle = [];
 
     /**
-     * @var ConfigInterface
-     */
-    protected $config;
-
-    /**
-     * @var Config\ScopeConfigInterface
+     * @var App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
 
@@ -68,14 +62,11 @@ class Bundle
     protected static $availableTypes = [self::BUNDLE_TYPE_JS, self::BUNDLE_TYPE_HTML];
 
     /**
-     * @param Bundle\ConfigInterface $config
-     * @param Config\ScopeConfigInterface $scopeConfig
+     * @param App\Config\ScopeConfigInterface $scopeConfig
      */
     function __construct(
-        Bundle\ConfigInterface $config,
-        Config\ScopeConfigInterface $scopeConfig
+        App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->config = $config;
         $this->scopeConfig = $scopeConfig;
         $this->init();
     }
@@ -250,6 +241,7 @@ class Bundle
 
     /**
      * Get bundle content
+     *
      *
      * @return array
      */

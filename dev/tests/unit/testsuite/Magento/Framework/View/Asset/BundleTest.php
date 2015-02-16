@@ -11,9 +11,6 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config */
     protected $scopeConf;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\Bundle\Config */
-    protected $conf;
-
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\Bundle */
     protected $bundle;
 
@@ -34,22 +31,12 @@ EOL;
             '',
             false
         );
-        $this->conf = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Asset\Bundle\ConfigInterface',
-            [],
-            '',
-            false
-        );
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
     }
 
     protected function getBundle()
     {
-        $bundle = $this->bundle = new Bundle(
-            $this->conf,
-            $this->scopeConf
-        );
-
+        $bundle = $this->bundle = new Bundle($this->scopeConf);
         $bundle->setType('js');
 
         for ($i = 0; $i < 10; $i++) {
