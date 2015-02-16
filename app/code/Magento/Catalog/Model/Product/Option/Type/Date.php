@@ -159,8 +159,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $timestamp += 60 * 60 * $value['hour'] + 60 * $value['minute'];
             }
 
-            $date = new \Magento\Framework\Stdlib\DateTime\Date($timestamp);
-            $result = $date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+            $date = new \DateTime('@' . $timestamp);
+            $result = $date->format('Y-m-d H:i:s');
 
             // Save date in internal format to avoid locale date bugs
             $this->_setInternalInRequest($result);
@@ -239,13 +239,12 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
-        $timestamp = strtotime($optionValue);
-        if ($timestamp === false || $timestamp == -1) {
+        try {
+            $date = new \DateTime($optionValue);
+        } catch (\Exception $e) {
             return null;
         }
-
-        $date = new \Magento\Framework\Stdlib\DateTime\Date($timestamp);
-        return $date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+        return $date->format('Y-m-d H:i:s');
     }
 
     /**

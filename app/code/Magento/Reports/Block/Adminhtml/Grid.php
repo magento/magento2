@@ -92,14 +92,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
             if (!isset($data['report_from'])) {
                 // getting all reports from 2001 year
-                $date = new \Magento\Framework\Stdlib\DateTime\Date(mktime(0, 0, 0, 1, 1, 2001));
-                $data['report_from'] = $date->toString($this->_localeDate->getDateFormat('short'));
+                $date = new \DateTime('@' . mktime(0, 0, 0, 1, 1, 2001));
+                $data['report_from'] = $date->format($this->_localeDate->getDateFormat('short'));
             }
 
             if (!isset($data['report_to'])) {
                 // getting all reports from 2001 year
-                $date = new \Magento\Framework\Stdlib\DateTime\Date();
-                $data['report_to'] = $date->toString($this->_localeDate->getDateFormat('short'));
+                $date = new \DateTime();
+                $data['report_to'] = $date->format($this->_localeDate->getDateFormat('short'));
             }
 
             $this->_setFilterValues($data);

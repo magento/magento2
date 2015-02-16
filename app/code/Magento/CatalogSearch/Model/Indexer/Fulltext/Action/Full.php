@@ -775,16 +775,15 @@ class Full
             );
             $locale = new \Zend_Locale($locale);
 
-            $dateObj = new \Magento\Framework\Stdlib\DateTime\Date(null, null, $locale);
-            $dateObj->setTimezone($timezone);
+            $dateObj = new \DateTime();
+            $dateObj->setTimezone(new \DateTimeZone($timezone));
             $this->dates[$storeId] = [$dateObj, $locale->getTranslation(null, 'date', $locale)];
         }
 
         if (!$this->dateTime->isEmptyDate($date)) {
             list($dateObj, $format) = $this->dates[$storeId];
-            $dateObj->setDate($date, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
-
-            return $dateObj->toString($format);
+            /** @var \DateTime $dateObj */
+            return $dateObj->format($format);
         }
 
         return null;

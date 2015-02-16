@@ -127,9 +127,11 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     public function getEscapedValue($index = null)
     {
         $value = $this->getValue($index);
-        if ($value instanceof \Zend_Date) {
-            return $value->toString(
-                $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+        if ($value instanceof \DateTime) {
+            return $value->format(
+                $this->_localeDate->getDateFormat(
+                    \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                )
             );
         }
         return $value;
@@ -143,7 +145,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     {
         if ($index) {
             if ($data = $this->getData('value', 'orig_' . $index)) {
-                //date('Y-m-d', strtotime($data));
                 return $data;
             }
             return null;

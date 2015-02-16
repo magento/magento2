@@ -1281,12 +1281,4 @@ interface DateInterface
      * @return  integer  seconds difference between GMT timezone and timezone when object was instantiated
      */
     public function getGmtOffset();
-
-    /**
-     * Format date
-     *
-     * @param string $format
-     * @return string
-     */
-    public function format($format);
 }

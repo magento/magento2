@@ -173,8 +173,8 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      * @param string $table
      * @param string $column
      * @param string $whereColumn
-     * @param null|string $from
-     * @param null|string $to
+     * @param null|string|\DateTime $from
+     * @param null|string|\DateTime $to
      * @param array $additionalWhere
      * @param string $alias
      * @return \Magento\Framework\DB\Select
@@ -340,26 +340,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
     }
 
     /**
-     * Check range dates and transforms it to strings
-     *
-     * @param mixed &$dateFrom
-     * @param mixed &$dateTo
-     * @return $this
-     */
-    protected function _checkDates(&$dateFrom, &$dateTo)
-    {
-        if ($dateFrom !== null) {
-            $dateFrom = $this->dateTime->formatDate($dateFrom);
-        }
-
-        if ($dateTo !== null) {
-            $dateTo = $this->dateTime->formatDate($dateTo);
-        }
-
-        return $this;
-    }
-
-    /**
      * Retrieve query for attribute with timezone conversion
      *
      * @param string|array $table
@@ -469,15 +449,15 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      * Retrieve date in UTC timezone
      *
      * @param mixed $date
-     * @return null|\Magento\Framework\Stdlib\DateTime\DateInterface
+     * @return null|\DateTime
      */
     protected function _dateToUtc($date)
     {
         if ($date === null) {
             return null;
         }
-        $dateUtc = new \Magento\Framework\Stdlib\DateTime\Date($date);
-        $dateUtc->setTimezone('Etc/UTC');
-        return $dateUtc;
+        $dateUtc = new \DateTime($date);
+        $dateUtc->setTimezone(new \DateTimeZone('UTC'));
+        return $dateUtc->format('Y-m-d H:i:s');
     }
 }

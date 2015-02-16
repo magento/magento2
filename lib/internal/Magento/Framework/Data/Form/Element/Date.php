@@ -17,7 +17,7 @@ use Magento\Framework\Stdlib\DateTime;
 class Date extends AbstractElement
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Date
+     * @var \DateTime
      */
     protected $_value;
 
@@ -64,40 +64,25 @@ class Date extends AbstractElement
      * Format and locale must be compatible with \Magento\Framework\Stdlib\DateTime\Date
      *
      * @param mixed $value
-     * @param string $format
-     * @param string $locale
      * @return $this
      */
-    public function setValue($value, $format = null, $locale = null)
+    public function setValue($value)
     {
         if (empty($value)) {
             $this->_value = '';
             return $this;
         }
-        if ($value instanceof \Magento\Framework\Stdlib\DateTime\DateInterface) {
+        if ($value instanceof \DateTimeInterface) {
             $this->_value = $value;
             return $this;
         }
         if (preg_match('/^[0-9]+$/', $value)) {
-            $this->_value = new \Magento\Framework\Stdlib\DateTime\Date($this->_toTimestamp($value));
-            //$this->_value = new \Magento\Framework\Stdlib\DateTime\Date((int)value);
+            $this->_value = new \DateTime('@' . $this->_toTimestamp($value));
             return $this;
         }
-        // last check, if input format was set
-        if (null === $format) {
-            $format = DateTime::DATETIME_INTERNAL_FORMAT;
-            if ($this->getInputFormat()) {
-                $format = $this->getInputFormat();
-            }
-        }
-        // last check, if locale was set
-        if (null === $locale) {
-            if (!($locale = $this->getLocale())) {
-                $locale = null;
-            }
-        }
+
         try {
-            $this->_value = new \Magento\Framework\Stdlib\DateTime\Date($value, $format, $locale);
+            $this->_value = new \DateTime($value);
         } catch (\Exception $e) {
             $this->_value = '';
         }
@@ -121,7 +106,7 @@ class Date extends AbstractElement
             $format .= ($format && $this->getTimeFormat()) ? ' ' : '';
             $format .= $this->getTimeFormat() ? $this->getTimeFormat() : '';
         }
-        return $this->_value->toString($format);
+        return $this->_value->format($format);
     }
 
     /**

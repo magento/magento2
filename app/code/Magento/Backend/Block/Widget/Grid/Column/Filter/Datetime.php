@@ -163,8 +163,8 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     {
         if ($this->getColumn()->getFilterTime()) {
             $value = $this->getValue($index);
-            if ($value instanceof \Zend_Date) {
-                return $value->toString(
+            if ($value instanceof \DateTime) {
+                return $value->format(
                     $this->_localeDate->getDateTimeFormat(
                         \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
                     )

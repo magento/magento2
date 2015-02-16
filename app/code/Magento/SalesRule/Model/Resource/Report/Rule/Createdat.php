@@ -52,8 +52,6 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
         $from = $this->_dateToUtc($from);
         $to = $this->_dateToUtc($to);
 
-        $this->_checkDates($from, $to);
-
         $table = $this->getMainTable();
         $sourceTable = $this->getTable('sales_order');
         $adapter = $this->_getWriteAdapter();
