@@ -128,7 +128,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->object = new Collection(
             $this->entityFactory, $this->loggerMock, $this->fetchStrategy,
-            $this->eventManager, $this->reportResource, $this->ruleFactory
+            $this->eventManager, $this->ruleFactory, $this->reportResource
         );
     }
 
