@@ -61,15 +61,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
 
     const XML_PATH_GENERATE_HUMAN_FRIENDLY_ID = 'customer/create_account/generate_human_friendly_id';
 
-    /**
-     * Codes of exceptions related to customer model
-     */
-    const EXCEPTION_EMAIL_NOT_CONFIRMED = 1;
-
-    const EXCEPTION_INVALID_EMAIL_OR_PASSWORD = 2;
-
-    const EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN = 4;
-
     const SUBSCRIBED_YES = 'yes';
 
     const SUBSCRIBED_NO = 'no';
@@ -373,14 +364,12 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
         $this->loadByEmail($login);
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('This account is not confirmed.'),
-                self::EXCEPTION_EMAIL_NOT_CONFIRMED
+                __('This account is not confirmed.')
             );
         }
         if (!$this->validatePassword($password)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Invalid login or password.'),
-                self::EXCEPTION_INVALID_EMAIL_OR_PASSWORD
+                __('Invalid login or password.')
             );
         }
         $this->_eventManager->dispatch(
@@ -1262,8 +1251,7 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Invalid password reset token.'),
-                self::EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN
+                __('Invalid password reset token.')
             );
         }
         $this->_getResource()->changeResetPasswordLinkToken($this, $passwordLinkToken);

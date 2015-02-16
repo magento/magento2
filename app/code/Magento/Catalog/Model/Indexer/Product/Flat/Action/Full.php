@@ -27,7 +27,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
                 $this->_reindex($store->getId());
             }
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage(), [], $e);
         }
         return $this;
     }
