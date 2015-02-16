@@ -32,7 +32,7 @@ define([
      * Returns JSON.parsed value extracted from localStorage by 'key' key.
      *
      * @param  {String} key
-     * @return {*}
+     * @returns {*}
      */
     function parsed(key) {
         return JSON.parse(get(key));
@@ -45,7 +45,7 @@ define([
         });
 
         describe('collect method', function () {
-            it('merges passed object\'s keys with array under localStorage\'s \'all\' namespace', function () {
+            it('merges passed object\'s keys with array under localStorage\'s "all" namespace', function () {
                 var merged = keysOf(firstBundle).concat(keysOf(secondBundle));
 
                 statistician.collect(firstBundle);
@@ -65,7 +65,7 @@ define([
         });
 
         describe('utilize method', function () {
-            it('stores passed string to array under localStorage\'s \'used\' namespace', function () {
+            it('stores passed string to array under localStorage\'s "used" namespace', function () {
                 var str = keysOf(firstBundle)[0];
 
                 statistician.utilize(str);
@@ -85,7 +85,7 @@ define([
         });
 
         describe('getAll method', function () {
-            it('returns JSON.parsed content of localStorage\'s \'all\' namespace', function () {
+            it('returns JSON.parsed content of localStorage\'s "all" namespace', function () {
                 var expected = keysOf(firstBundle);
 
                 set('all', stringify(expected));
@@ -95,7 +95,7 @@ define([
         });
 
         describe('getUsed method', function () {
-            it('returns JSON.parsed content of localStorage\'s \'used\' namespace', function () {
+            it('returns JSON.parsed content of localStorage\'s "used" namespace', function () {
                 var expected = keysOf(secondBundle);
 
                 set('used', stringify(expected));
@@ -113,6 +113,18 @@ define([
                 statistician.utilize(modules[0]);
 
                 expect(statistician.getUnused()).toEqual([modules[1]]);
+            });
+        });
+
+        describe('clear method', function () {
+            it('clears "used" and "all" namespaces of localStorage', function () {
+                localStorage.setItem('all', 'someString');
+                localStorage.setItem('used', 'someString');
+
+                statistician.clear();
+
+                expect(localStorage.getItem('all')).toEqual(null);
+                expect(localStorage.getItem('used')).toEqual(null);
             });
         });
     });
