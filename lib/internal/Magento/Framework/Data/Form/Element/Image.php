@@ -11,10 +11,12 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
+use Magento\Framework\UrlInterface;
+
 class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $_urlBuilder;
 
@@ -22,14 +24,14 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param UrlInterface $urlBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\UrlInterface $urlBuilder,
+        UrlInterface $urlBuilder,
         $data = []
     ) {
         $this->_urlBuilder = $urlBuilder;
@@ -50,7 +52,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
             $url = $this->_getUrl();
 
             if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
-                $url = $this->_urlBuilder->getBaseUrl('media') . $url;
+                $url = $this->_urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA]) . $url;
             }
 
             $html = '<a href="' .
@@ -93,7 +95,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
     {
         $html = '';
         if ($this->getValue()) {
-            $label = __('Delete Image');
+            $label = (string)new \Magento\Framework\Phrase('Delete Image');
             $html .= '<span class="delete-image">';
             $html .= '<input type="checkbox"' .
                 ' name="' .

@@ -18,19 +18,19 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($resource);
         $this->_scopeConfig = $scopeConfig;
@@ -140,7 +140,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
             // get all stores, required by configuration in current store scope
             $productsScope = $this->_scopeConfig->getValue(
                 'catalog/recently_products/scope',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             switch ($productsScope) {
                 case 'website':

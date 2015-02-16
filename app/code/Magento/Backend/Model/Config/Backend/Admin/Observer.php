@@ -32,7 +32,7 @@ class Observer
     protected $_response;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -48,7 +48,7 @@ class Observer
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\App\ResponseInterface $response,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_backendData = $backendData;
         $this->_coreRegistry = $coreRegistry;

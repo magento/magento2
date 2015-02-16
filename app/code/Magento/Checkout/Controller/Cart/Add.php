@@ -27,21 +27,31 @@ class Add extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param CustomerCart $cart
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         CustomerCart $cart,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         ProductRepositoryInterface $productRepository
     ) {
-        parent::__construct($context, $scopeConfig, $checkoutSession, $storeManager, $formKeyValidator, $cart);
+        parent::__construct(
+            $context,
+            $scopeConfig,
+            $checkoutSession,
+            $storeManager,
+            $formKeyValidator,
+            $cart,
+            $resultRedirectFactory
+        );
         $this->productRepository = $productRepository;
     }
 
@@ -54,7 +64,7 @@ class Add extends \Magento\Checkout\Controller\Cart
     {
         $productId = (int)$this->getRequest()->getParam('product');
         if ($productId) {
-            $storeId = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getId();
+            $storeId = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId();
             try {
                 return $this->productRepository->getById($productId, false, $storeId);
             } catch (NoSuchEntityException $e) {
@@ -67,7 +77,7 @@ class Add extends \Magento\Checkout\Controller\Cart
     /**
      * Add product to shopping cart action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -88,8 +98,7 @@ class Add extends \Magento\Checkout\Controller\Cart
              * Check product availability
              */
             if (!$product) {
-                $this->_goBack();
-                return;
+                return $this->goBack();
             }
 
             $this->cart->addProduct($product, $params);
@@ -117,7 +126,7 @@ class Add extends \Magento\Checkout\Controller\Cart
                     );
                     $this->messageManager->addSuccess($message);
                 }
-                $this->_goBack();
+                return $this->goBack(null, $product);
             }
         } catch (\Magento\Framework\Model\Exception $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
@@ -134,16 +143,57 @@ class Add extends \Magento\Checkout\Controller\Cart
             }
 
             $url = $this->_checkoutSession->getRedirectUrl(true);
-            if ($url) {
-                $this->getResponse()->setRedirect($url);
-            } else {
+
+            if (!$url) {
                 $cartUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
-                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($cartUrl));
+                $url = $this->_redirect->getRedirectUrl($cartUrl);
             }
+
+            return $this->goBack($url);
+
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot add this item to your shopping cart'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->_goBack();
+            return $this->goBack();
         }
+    }
+
+    /**
+     * Resolve response
+     *
+     * @param string $backUrl
+     * @param \Magento\Catalog\Model\Product $product
+     * @return $this|\Magento\Framework\Controller\Result\Redirect
+     */
+    protected function goBack($backUrl = null, $product = null)
+    {
+        if (!$this->getRequest()->isAjax()) {
+            return parent::_goBack($backUrl);
+        }
+
+        $result = [];
+
+        if ($backUrl || $backUrl = $this->getBackUrl()) {
+            $result['backUrl'] = $backUrl;
+        } else {
+            $this->_view->loadLayout(['default'], true, true, false);
+            $layout = $this->_view->getLayout();
+
+            $result['messages'] = $layout->getBlock('global_messages')->toHtml();
+
+            if ($this->_checkoutSession->getCartWasUpdated()) {
+                $result['minicart'] = $layout->getBlock('minicart')->toHtml();
+            }
+
+            if ($product && !$product->getIsSalable()) {
+                $result['product'] = [
+                    'statusText' => __('Out of stock')
+                ];
+            }
+        }
+
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+        );
     }
 }

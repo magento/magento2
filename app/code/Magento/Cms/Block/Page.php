@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Block;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Cms page content block
@@ -26,7 +26,7 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -48,7 +48,7 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Cms\Model\Page $page
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param array $data
@@ -57,7 +57,7 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
         \Magento\Framework\View\Element\Context $context,
         \Magento\Cms\Model\Page $page,
         \Magento\Cms\Model\Template\FilterProvider $filterProvider,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Cms\Model\PageFactory $pageFactory,
         \Magento\Framework\View\Page\Config $pageConfig,
         array $data = []
