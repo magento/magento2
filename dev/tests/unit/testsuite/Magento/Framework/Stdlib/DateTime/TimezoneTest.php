@@ -156,12 +156,8 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
 
     public function testUtcDate()
     {
-        $this->dateFactory->expects($this->any())->method('create')
-            ->with(['date' => 1347260470, 'part' => null, 'locale' => $this->locale])
-            ->will($this->returnValue(new \Magento\Framework\Stdlib\DateTime\Date(1347260470, null, $this->locale)));
-
-        $date = $this->timezone->utcDate(\Magento\Core\Helper\Data::XML_PATH_DEFAULT_TIMEZONE, 1347260470);
-        $this->assertSame('UTC', $date->getTimezone());
+        $date = $this->timezone->utcDate(\Magento\Core\Helper\Data::XML_PATH_DEFAULT_TIMEZONE, date('now'));
+        $this->assertSame('UTC', $date->getTimezone()->getName());
     }
 
     public function testIsScopeDateInInterval()
