@@ -66,16 +66,24 @@ class Save extends \Magento\User\Controller\Adminhtml\User
         } catch (\Magento\Framework\Validator\ValidatorException $e) {
             $messages = $e->getMessages();
             $this->messageManager->addMessages($messages);
-
-            if (empty($messages)) {
-                if ($e->getMessage()) {
-                    $this->messageManager->addError($e->getMessage());
-                }
+            $this->redirectToEdit($model, $data);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) { //
+            if ($e->getMessage()) {
+                $this->messageManager->addError($e->getMessage());
             }
-            $this->_getSession()->setUserData($data);
-            $arguments = $model->getId() ? ['user_id' => $model->getId()] : [];
-            $arguments = array_merge($arguments, ['_current' => true]);
-            $this->_redirect('adminhtml/*/edit', $arguments);
+            $this->redirectToEdit($model, $data);
         }
+    }
+
+    /**
+     * @param \Magento\User\Model\User $model
+     * @param array $data
+     */
+    protected function redirectToEdit(\Magento\User\Model\User $model, array $data)
+    {
+        $this->_getSession()->setUserData($data);
+        $arguments = $model->getId() ? ['user_id' => $model->getId()] : [];
+        $arguments = array_merge($arguments, ['_current' => true]);
+        $this->_redirect('adminhtml/*/edit', $arguments);
     }
 }
