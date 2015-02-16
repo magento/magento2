@@ -55,7 +55,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         $connection = null
     ) {
         $resource->init($this->getTableByAggregationPeriod('daily'));
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
     }
 
     /**
@@ -269,9 +269,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
             if ('year' == $this->_period) {
                 if ($periodFrom) {
                     // not the first day of the year
-                    if ($periodFrom->diff(new \DateTime())) {};
-                    if ($periodFrom->diff(new \DateTime('0000-01-00'))->m != 0
-                        && $periodFrom->diff(new \DateTime('0000-00-01'))->d != 0) {
+                    if ($periodFrom->format('m') != 1 || $periodFrom->format('d') != 1) {
                         $dtFrom = clone $periodFrom;
                         // last day of the year
                         $dtTo = clone $periodFrom;
@@ -284,7 +282,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
 
                             // first day of the next year
                             $this->_from = clone $periodFrom;
-                            $this->_from->add(new \DateInterval('P1Y'));
+                            $this->_from->modify('+1 year');
                             $this->_from->setDate($this->_from->format('Y'), 1, 1);
                             $this->_from = $this->_from->format('Y-m-d');
                         }
@@ -293,8 +291,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
 
                 if ($periodTo) {
                     // not the last day of the year
-                    if ($periodTo->diff(new \DateTime('0000-12-00'))->m != 0
-                        && $periodTo->diff(new \DateTime('0000-00-31'))->d != 0) {
+                    if ($periodTo->format('m') != 12 || $periodTo->format('d') != 31) {
                         $dtFrom = clone $periodTo;
                         $dtFrom->setDate($dtFrom->format('Y'), 1, 1);
                         // first day of the year
@@ -307,7 +304,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
 
                             // last day of the previous year
                             $this->_to = clone $periodTo;
-                            $this->_to->sub(new \DateInterval('P1Y'));
+                            $this->_to->modify('-1 year');
                             $this->_to->setDate($this->_to->format('Y'), 12, 31);
                             $this->_to = $this->_to->format('Y-m-d');
                         }
@@ -316,7 +313,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
 
                 if ($periodFrom && $periodTo) {
                     // the same year
-                    if ($periodFrom->diff($periodTo)->y == 0) {
+                    if ($periodTo->format('Y') == $periodFrom->format('Y')) {
                         $dtFrom = clone $periodFrom;
                         $dtTo = clone $periodTo;
                         $selectUnions[] = $this->_makeBoundarySelect(
@@ -330,13 +327,13 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
             } elseif ('month' == $this->_period) {
                 if ($periodFrom) {
                     // not the first day of the month
-                    if ($periodFrom->diff(new \DateTime('0000-00-01')) != 0) {
+                    if ($periodFrom->format('d') != 1) {
                         $dtFrom = clone $periodFrom;
                         // last day of the month
                         $dtTo = clone $periodFrom;
-                        $dtTo->add(new \DateInterval('P1M'));
-                        $dtTo->setDate($dtTo->format('Y'), 1, 1);
-                        $dtTo->sub(new \DateInterval('P1D'));
+                        $dtTo->modify('+1 month');
+                        $dtTo->setDate($dtTo->format('Y'), $dtTo->format('m'), 1);
+                        $dtTo->modify('-1 day');
                         if (!$periodTo || $dtTo < $periodTo) {
                             $selectUnions[] = $this->_makeBoundarySelect(
                                 $dtFrom->format('Y-m-d'),
@@ -345,7 +342,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
 
                             // first day of the next month
                             $this->_from = clone $periodFrom;
-                            $this->_from->add(new \DateInterval('P1M'));
+                            $this->_from->modify('+1 month');
                             $this->_from->setDate($this->_from->format('Y'), $this->_from->format('m'), 1);
                             $this->_from = $this->_from->format('Y-m-d');
                         }
@@ -354,9 +351,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
 
                 if ($periodTo) {
                     // not the last day of the month
-                    $lastMonthDay = clone $periodTo;
-                    $lastMonthDay->setDate($periodTo->format('Y'), $periodTo->format('m'), $periodTo->format('t'));
-                    if ($periodTo->diff($lastMonthDay)->d == 0) {
+                    if ($periodTo->format('d') != $periodTo->format('t')) {
                         $dtFrom = clone $periodTo;
                         $dtFrom->setDate($dtFrom->format('Y'), $dtFrom->format('m'), 1);
                         // first day of the month
@@ -370,7 +365,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
                             // last day of the previous month
                             $this->_to = clone $periodTo;
                             $this->_to->setDate($this->_to->format('Y'), $this->_to->format('m'), 1);
-                            $this->_to->sub(new \DateInterval('P1D'));
+                            $this->_to->modify('-1 day');
                             $this->_to = $this->_to->format('Y-m-d');
                         }
                     }
@@ -378,8 +373,8 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
 
                 if ($periodFrom && $periodTo) {
                     // the same month
-                    if ($periodFrom->diff($periodTo)->y == 0
-                        && $periodFrom->diff($periodTo)->m == 0
+                    if ($periodTo->format('Y') == $periodFrom->format('Y') &&
+                        $periodTo->format('m') == $periodFrom->format('m')
                     ) {
                         $dtFrom = clone $periodFrom;
                         $dtTo = clone $periodTo;

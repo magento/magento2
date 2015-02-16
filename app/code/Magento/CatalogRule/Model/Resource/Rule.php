@@ -242,7 +242,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
             ['product_id', 'rule_price']
         )->where(
             'rule_date = ?',
-            $date->format('Y-m-d H:i:s')
+            $date->format('Y-m-d')
         )->where(
             'website_id = ?',
             $websiteId

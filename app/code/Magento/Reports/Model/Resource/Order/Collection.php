@@ -454,8 +454,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
                 break;
         }
 
-        $dateStart->setTimezone('Etc/UTC');
-        $dateEnd->setTimezone('Etc/UTC');
+        $dateStart->setTimezone(new \DateTimeZone('Etc/UTC'));
+        $dateEnd->setTimezone(new \DateTimeZone('Etc/UTC'));
 
         if ($returnObjects) {
             return [$dateStart, $dateEnd];

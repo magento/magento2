@@ -41,13 +41,14 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             $datetimeTo = $value['to'];
 
             //calculate end date considering timezone specification
+            /** @var $datetimeTo \DateTime */
             $datetimeTo->setTimezone(
                 $this->_scopeConfig->getValue(
                     $this->_localeDate->getDefaultTimezonePath(),
                     \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             );
-            $datetimeTo->addDay(1)->subSecond(1);
+            $datetimeTo->modify('+1 day')->modify('-1 second');
             $datetimeTo->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
         }
         return $value;
@@ -57,41 +58,26 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
      * Convert given date to default (UTC) timezone
      *
      * @param string $date
-     * @param string $locale
-     * @return \Magento\Framework\Stdlib\DateTime\Date|null
+     * @return \DateTime|null
      */
-    protected function _convertDate($date, $locale)
+    protected function _convertDate($date)
     {
         if ($this->getColumn()->getFilterTime()) {
             try {
-                $dateObj = $this->_localeDate->date(null, null, $locale, false);
-
-                //set default timezone for store (admin)
-                $dateObj->setTimezone(
+                $adminTimeZone = new \DateTimeZone(
                     $this->_scopeConfig->getValue(
                         $this->_localeDate->getDefaultTimezonePath(),
                         \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     )
                 );
-
-                //set date with applying timezone of store
-                $dateObj->set(
-                    $date,
-                    $this->_localeDate->getDateTimeFormat(
-                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
-                    ),
-                    $locale
-                );
-
-                //convert store date to default date in UTC timezone without DST
-                $dateObj->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
-
-                return $dateObj;
+                $simpleRes = new \DateTime($date, $adminTimeZone);
+                $simpleRes->setTimezone(new \DateTimeZone('UTC'));
+                return $simpleRes;
             } catch (\Exception $e) {
                 return null;
             }
         }
-        return parent::_convertDate($date, $locale);
+        return parent::_convertDate($date);
     }
 
     /**

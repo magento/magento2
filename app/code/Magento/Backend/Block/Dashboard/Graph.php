@@ -222,8 +222,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             true
         );
 
-        $dateStart->setTimezone($timezoneLocal);
-        $dateEnd->setTimezone($timezoneLocal);
+        $dateStart->setTimezone(new \DateTimeZone($timezoneLocal));
+        $dateEnd->setTimezone(new \DateTimeZone($timezoneLocal));
 
         $dates = [];
         $datas = [];
