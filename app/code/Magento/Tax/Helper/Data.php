@@ -12,9 +12,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Customer\Model\Address;
 use Magento\Tax\Model\Config;
-use Magento\Tax\Api\Data\QuoteDetailsDataBuilder;
-use Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder;
-use Magento\Tax\Api\Data\TaxClassKeyDataBuilder;
 use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Tax\Api\OrderTaxManagementInterface;
@@ -76,7 +73,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -106,20 +103,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_localeResolver;
 
     /**
-     * Quote details builder
-     *
-     * @var QuoteDetailsBuilder
-     */
-    protected $quoteDetailsBuilder;
-
-    /**
-     * Quote details item builder
-     *
-     * @var QuoteDetailsItemDataBuilder
-     */
-    protected $quoteDetailsItemBuilder;
-
-    /**
      * Tax calculation service
      *
      * @var TaxCalculationInterface
@@ -130,13 +113,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var CustomerSession
      */
     protected $customerSession;
-
-    /**
-     * TaxClassKey builder
-     *
-     * @var TaxClassKeyDataBuilder
-     */
-    protected $taxClassKeyBuilder;
 
     /**
      * \Magento\Catalog\Helper\Data
@@ -161,15 +137,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Registry                                   $coreRegistry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface            $scopeConfig
      * @param Config                                                        $taxConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface                    $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager
      * @param \Magento\Framework\Locale\FormatInterface                     $localeFormat
      * @param \Magento\Eav\Model\Entity\AttributeFactory                    $attributeFactory
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory       $taxItemFactory
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory
      * @param \Magento\Framework\Locale\ResolverInterface                   $localeResolver
-     * @param QuoteDetailsDataBuilder                                       $quoteDetailsBuilder
-     * @param QuoteDetailsItemDataBuilder                                   $quoteDetailsItemBuilder
-     * @param TaxClassKeyDataBuilder                                        $taxClassKeyBuilder
      * @param TaxCalculationInterface                                       $taxCalculation
      * @param CustomerSession                                               $customerSession
      * @param \Magento\Catalog\Helper\Data                                  $catalogHelper
@@ -183,15 +156,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         Config $taxConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $taxItemFactory,
         \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        QuoteDetailsDataBuilder $quoteDetailsBuilder,
-        QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder,
-        TaxClassKeyDataBuilder $taxClassKeyBuilder,
         TaxCalculationInterface $taxCalculation,
         CustomerSession $customerSession,
         \Magento\Catalog\Helper\Data $catalogHelper,
@@ -210,9 +180,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_taxItemFactory = $taxItemFactory;
         $this->_orderTaxCollectionFactory = $orderTaxCollectionFactory;
         $this->_localeResolver = $localeResolver;
-        $this->quoteDetailsBuilder = $quoteDetailsBuilder;
-        $this->quoteDetailsItemBuilder = $quoteDetailsItemBuilder;
-        $this->taxClassKeyBuilder = $taxClassKeyBuilder;
         $this->taxCalculation = $taxCalculation;
         $this->customerSession = $customerSession;
         $this->catalogHelper = $catalogHelper;
@@ -580,7 +547,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             Config::CONFIG_XML_PATH_BASED_ON,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -595,7 +562,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int) $this->_scopeConfig->getValue(
             Config::CONFIG_XML_PATH_APPLY_ON,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         ) == 0;
     }
@@ -610,7 +577,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int) $this->_scopeConfig->getValue(
             Config::CONFIG_XML_PATH_APPLY_ON,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         ) == 1;
     }
@@ -743,7 +710,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::CONFIG_DEFAULT_CUSTOMER_TAX_CLASS,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -756,7 +723,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::CONFIG_DEFAULT_PRODUCT_TAX_CLASS,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

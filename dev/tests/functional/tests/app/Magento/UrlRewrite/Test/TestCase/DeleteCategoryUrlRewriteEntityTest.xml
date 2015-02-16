@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="DeleteCategoryUrlRewriteEntityTest">
+        <variation name="DeleteCategoryUrlRewriteEntityTestVariation1">
+            <data name="urlRewrite/data/target_path/entity">catalog/category/view/id/%category::default%</data>
+            <data name="urlRewrite/data/redirect_type">No</data>
+            <data name="urlRewrite/data/request_path">-</data>
+            <data name="constraint">assertUrlRewriteDeletedMessage, assertPageByUrlRewriteIsNotFound</data>
+        </variation>
+        <variation name="DeleteCategoryUrlRewriteEntityTestVariation2">
+            <data name="urlRewrite/data/target_path/entity">catalog/category/view/id/%category::default%</data>
+            <data name="urlRewrite/data/redirect_type">No</data>
+            <data name="urlRewrite/data/request_path">example%isolation%.html</data>
+            <data name="constraint">assertUrlRewriteDeletedMessage, assertPageByUrlRewriteIsNotFound</data>
+        </variation>
+    </testCase>
+</config>

@@ -14,29 +14,28 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $addressModel;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressDataBuilder
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
      */
-    protected $addressBuilder;
+    protected $addressFactory;
 
     protected function setUp()
     {
         $this->addressModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Customer\Model\Address'
         );
-        $this->addressBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\AddressDataBuilder'
+        $this->addressFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Api\Data\AddressInterfaceFactory'
         );
     }
 
     public function testUpdateDataSetDataOnEmptyModel()
     {
         /** @var \Magento\Customer\Model\Data\Address $addressData */
-        $addressData = $this->addressBuilder
+        $addressData = $this->addressFactory->create()
             ->setId(1)
             ->setCity('CityX')
             ->setCompany('CompanyX')
-            ->setPostcode('77777')
-            ->create();
+            ->setPostcode('77777');
         $addressData = $this->addressModel->updateData($addressData)->getDataModel();
 
         $this->assertEquals(1, $addressData->getId());
@@ -48,21 +47,19 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testUpdateDataOverrideExistingData()
     {
         /** @var \Magento\Customer\Model\Data\Address $addressData */
-        $addressData = $this->addressBuilder
+        $addressData = $this->addressFactory->create()
             ->setId(2)
             ->setCity('CityY')
             ->setCompany('CompanyY')
-            ->setPostcode('88888')
-            ->create();
+            ->setPostcode('88888');
         $this->addressModel->updateData($addressData);
 
         /** @var \Magento\Customer\Model\Data\Address $addressData */
-        $updatedAddressData = $this->addressBuilder
+        $updatedAddressData = $this->addressFactory->create()
             ->setId(3)
             ->setCity('CityZ')
             ->setCompany('CompanyZ')
-            ->setPostcode('99999')
-            ->create();
+            ->setPostcode('99999');
         $updatedAddressData = $this->addressModel->updateData($updatedAddressData)->getDataModel();
 
         $this->assertEquals(3, $updatedAddressData->getId());

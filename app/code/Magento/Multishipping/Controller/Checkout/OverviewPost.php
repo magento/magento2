@@ -26,6 +26,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
@@ -33,10 +34,17 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
         \Magento\Customer\Model\Session $customerSession,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $accountManagement,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->formKeyValidator = $formKeyValidator;
-        parent::__construct($context, $customerSession, $customerRepository, $accountManagement);
+        parent::__construct(
+            $context,
+            $customerSession,
+            $customerRepository,
+            $accountManagement,
+            $resultRedirectFactory
+        );
     }
 
     /**

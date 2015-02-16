@@ -19,7 +19,7 @@
         <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Advanced</label>
             <tab>advanced</tab>
-            <resource>Magento_Adminhtml::advanced</resource>
+            <resource>Magento_Backend::advanced</resource>
             <group id="modules_disable_output" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Disable Modules Output</label>
                 <frontend_model>Magento\Backend\Block\System\Config\Form\Fieldset\Modules\DisableOutput</frontend_model>
@@ -29,7 +29,7 @@
             <class>separator-top</class>
             <label>Store Email Addresses</label>
             <tab>general</tab>
-            <resource>Magento_Adminhtml::trans_email</resource>
+            <resource>Magento_Backend::trans_email</resource>
             <group id="ident_custom1" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Custom Email 1</label>
                 <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -99,7 +99,7 @@
         <section id="design" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Design</label>
             <tab>general</tab>
-            <resource>Magento_Adminhtml::config_design</resource>
+            <resource>Magento_Backend::config_design</resource>
             <group id="theme" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Design Theme</label>
                 <field id="theme_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -153,7 +153,7 @@
         <section id="dev" translate="label" type="text" sortOrder="920" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Developer</label>
             <tab>advanced</tab>
-            <resource>Magento_Adminhtml::dev</resource>
+            <resource>Magento_Backend::dev</resource>
             <group id="restrict" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Developer Client Restrictions</label>
                 <field id="allow_ips" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -236,7 +236,7 @@
         <section id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>General</label>
             <tab>general</tab>
-            <resource>Magento_Adminhtml::config_general</resource>
+            <resource>Magento_Backend::config_general</resource>
             <group id="country" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Country Options</label>
                 <field id="allow" translate="label" type="multiselect" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -321,7 +321,7 @@
             <class>separator-top</class>
             <label>System</label>
             <tab>advanced</tab>
-            <resource>Magento_Adminhtml::config_system</resource>
+            <resource>Magento_Backend::config_system</resource>
             <group id="smtp" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Mail Sending Settings</label>
                 <field id="disable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -375,7 +375,7 @@
         <section id="admin" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
             <label>Admin</label>
             <tab>advanced</tab>
-            <resource>Magento_Adminhtml::config_admin</resource>
+            <resource>Magento_Backend::config_admin</resource>
             <group id="emails" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Admin User Emails</label>
                 <field id="forgot_email_template" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -458,7 +458,7 @@
         <section id="web" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Web</label>
             <tab>general</tab>
-            <resource>Magento_Adminhtml::web</resource>
+            <resource>Magento_Backend::web</resource>
             <group id="url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Url Options</label>
                 <field id="use_store" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -552,33 +552,6 @@
                 </field>
                 <field id="no_route" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default No-route URL</label>
-                </field>
-            </group>
-            <group id="cookie" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Default Cookie Settings</label>
-                <field id="cookie_lifetime" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Cookie Lifetime</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Cookie\Lifetime</backend_model>
-                </field>
-                <field id="cookie_path" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Cookie Path</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Cookie\Path</backend_model>
-                </field>
-                <field id="cookie_domain" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Cookie Domain</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Cookie\Domain</backend_model>
-                </field>
-                <field id="cookie_httponly" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Use HTTP Only</label>
-                    <comment>
-                        <![CDATA[<strong style="color:red">Warning</strong>:  Do not set to "No". User security could be compromised.]]>
-                    </comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="cookie_restriction" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Cookie Restriction Mode</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Cookie</backend_model>
                 </field>
             </group>
             <group id="session" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">

@@ -8,8 +8,9 @@ $groupRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->
     'Magento\Customer\Api\GroupRepositoryInterface'
 );
 
-$groupBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Customer\Api\Data\GroupDataBuilder'
+$groupFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Customer\Api\Data\GroupInterfaceFactory'
 );
-$groupBuilder->setCode('custom_group')->setTaxClassId(3);
-$groupRepository->save($groupBuilder->create());
+$groupDataObject = $groupFactory->create();
+$groupDataObject->setCode('custom_group')->setTaxClassId(3);
+$groupRepository->save($groupDataObject);

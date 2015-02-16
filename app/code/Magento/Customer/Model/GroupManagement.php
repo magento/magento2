@@ -12,9 +12,9 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Customer\Api\Data\GroupDataBuilder;
+use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Model\GroupFactory;
 
 /**
@@ -31,7 +31,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
     const GROUP_CODE_MAX_LENGTH = 32;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -51,9 +51,9 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
     protected $groupRepository;
 
     /**
-     * @var GroupDataBuilder
+     * @var GroupInterfaceFactory
      */
-    protected $groupBuilder;
+    protected $groupDataFactory;
 
     /**
      * @var SearchCriteriaBuilder
@@ -70,16 +70,16 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param GroupFactory $groupFactory
      * @param GroupRepositoryInterface $groupRepository
-     * @param GroupDataBuilder $groupBuilder
+     * @param GroupInterfaceFactory $groupDataFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      */
     public function __construct(
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         GroupFactory $groupFactory,
         GroupRepositoryInterface $groupRepository,
-        GroupDataBuilder $groupBuilder,
+        GroupInterfaceFactory $groupDataFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder
     ) {
@@ -87,7 +87,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
         $this->scopeConfig = $scopeConfig;
         $this->groupFactory = $groupFactory;
         $this->groupRepository = $groupRepository;
-        $this->groupBuilder = $groupBuilder;
+        $this->groupDataFactory = $groupDataFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
     }
@@ -117,7 +117,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
         try {
             $groupId = $this->scopeConfig->getValue(
                 self::XML_PATH_DEFAULT_ID,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         } catch (\Magento\Framework\App\InitException $e) {
@@ -165,7 +165,8 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
      */
     public function getAllCustomersGroup()
     {
-        return $this->groupBuilder->setId(self::CUST_GROUP_ALL)
-            ->create();
+        $groupDataObject = $this->groupDataFactory->create();
+        $groupDataObject->setId(self::CUST_GROUP_ALL);
+        return $groupDataObject;
     }
 }

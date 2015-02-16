@@ -102,7 +102,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getId'
         )->will(
-            $this->returnValue('Magento_Adminhtml::system_acl_roles')
+            $this->returnValue('Magento_Backend::system_acl_roles')
         );
         $mockItem->expects($this->any())->method('getAction')->will($this->returnValue('adminhtml/user_role'));
 
@@ -111,7 +111,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         )->method(
             'get'
         )->with(
-            $this->equalTo('Magento_Adminhtml::system_acl_roles')
+            $this->equalTo('Magento_Backend::system_acl_roles')
         )->will(
             $this->returnValue($mockItem)
         );
@@ -132,7 +132,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         )->with(
             \Magento\Backend\Model\Url::XML_PATH_STARTUP_MENU_ITEM
         )->will(
-            $this->returnValue('Magento_Adminhtml::system_acl_roles')
+            $this->returnValue('Magento_Backend::system_acl_roles')
         );
 
         $this->_coreDataMock = $this->getMock('Magento\Core\Helper\Data', ['getHash'], [], '', false);

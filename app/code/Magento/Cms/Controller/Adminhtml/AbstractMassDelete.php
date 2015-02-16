@@ -38,14 +38,32 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
     protected $model = 'Magento\Framework\Model\AbstractModel';
 
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        parent::__construct($context);
+    }
+
+    /**
      * Execute action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $data = $this->getRequest()->getParam('massaction', '[]');
         $data = json_decode($data, true);
+        $resultRedirect = $this->resultRedirectFactory->create();
 
         try {
             if (isset($data['all_selected']) && $data['all_selected'] === true) {
@@ -58,13 +76,12 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
                 $this->selectedDelete($data['selected']);
             } else {
                 $this->messageManager->addError(__('Please select item(s).'));
-                $this->_redirect(static::REDIRECT_URL);
             }
         } catch (\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         }
 
-        $this->_redirect(static::REDIRECT_URL);
+        return $resultRedirect->setPath(static::REDIRECT_URL);
     }
 
     /**
