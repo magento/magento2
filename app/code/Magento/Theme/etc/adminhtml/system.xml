@@ -61,7 +61,7 @@
                 <label>Header</label>
                 <field id="logo_src" translate="label" type="image" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo Image</label>
-                    <comment>Allowed file types:PNG, GIF, JPG, JPEG.</comment>
+                    <comment>Allowed file types:PNG, GIF, JPG, JPEG, SVG.</comment>
                     <backend_model>Magento\Backend\Model\Config\Backend\Image\Logo</backend_model>
                     <base_url type="media" scope_info="1">logo</base_url>
                 </field>

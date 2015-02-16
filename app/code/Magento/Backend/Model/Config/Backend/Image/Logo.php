@@ -37,4 +37,14 @@ class Logo extends \Magento\Backend\Model\Config\Backend\Image
     {
         return true;
     }
+
+    /**
+     * Getter for allowed extensions of uploaded files.
+     *
+     * @return string[]
+     */
+    protected function _getAllowedExtensions()
+    {
+        return ['jpg', 'jpeg', 'gif', 'png', 'svg'];
+    }
 }
