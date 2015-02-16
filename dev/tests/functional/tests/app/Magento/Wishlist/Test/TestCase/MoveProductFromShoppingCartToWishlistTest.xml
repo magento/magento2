@@ -5,31 +5,47 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="MoveProductFromShoppingCartToWishlistTest">
-        <variation name="MoveProductFromShoppingCartToWishlistTestVariation1">
-            <data name="product">catalogProductSimple::default</data>
-            <data name="constraint">assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty</data>
-        </variation>
-        <variation name="MoveProductFromShoppingCartToWishlistTestVariation2">
-            <data name="product">catalogProductVirtual::default</data>
-            <data name="constraint">assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty</data>
-        </variation>
-        <variation name="MoveProductFromShoppingCartToWishlistTestVariation3">
-            <data name="product">downloadableProduct::with_two_separately_links</data>
-            <data name="constraint">assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty, assertProductDetailsInWishlist</data>
-        </variation>
-        <variation name="MoveProductFromShoppingCartToWishlistTestVariation4">
-            <data name="product">configurableProduct::default</data>
-            <data name="constraint">assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty, assertProductDetailsInWishlist</data>
-        </variation>
-        <variation name="MoveProductFromShoppingCartToWishlistTestVariation5">
-            <data name="product">bundleProduct::bundle_dynamic_product</data>
-            <data name="constraint">assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty, assertProductDetailsInWishlist</data>
-        </variation>
-        <variation name="MoveProductFromShoppingCartToWishlistTestVariation6">
-            <data name="product">bundleProduct::bundle_fixed_product</data>
-            <data name="constraint">assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty, assertProductDetailsInWishlist</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="MoveProductFromShoppingCartToWishlistTest">
+    <variation name="MoveProductFromShoppingCartToWishlistTestVariation1" firstConstraint="assertMoveProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">catalogProductSimple::default</data>
+      <constraint name="assertMoveProductToWishlistSuccessMessage" next="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductIsPresentInWishlist" next="assertCartIsEmpty" prev="assertMoveProductToWishlistSuccessMessage"/>
+      <constraint name="assertCartIsEmpty" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="MoveProductFromShoppingCartToWishlistTestVariation2" firstConstraint="assertMoveProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">catalogProductVirtual::default</data>
+      <constraint name="assertMoveProductToWishlistSuccessMessage" next="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductIsPresentInWishlist" next="assertCartIsEmpty" prev="assertMoveProductToWishlistSuccessMessage"/>
+      <constraint name="assertCartIsEmpty" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="MoveProductFromShoppingCartToWishlistTestVariation3" firstConstraint="assertMoveProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links</data>
+      <constraint name="assertMoveProductToWishlistSuccessMessage" next="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductIsPresentInWishlist" next="assertCartIsEmpty" prev="assertMoveProductToWishlistSuccessMessage"/>
+      <constraint name="assertCartIsEmpty" next="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductDetailsInWishlist" prev="assertCartIsEmpty"/>
+    </variation>
+    <variation name="MoveProductFromShoppingCartToWishlistTestVariation4" firstConstraint="assertMoveProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">configurableProduct::default</data>
+      <constraint name="assertMoveProductToWishlistSuccessMessage" next="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductIsPresentInWishlist" next="assertCartIsEmpty" prev="assertMoveProductToWishlistSuccessMessage"/>
+      <constraint name="assertCartIsEmpty" next="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductDetailsInWishlist" prev="assertCartIsEmpty"/>
+    </variation>
+    <variation name="MoveProductFromShoppingCartToWishlistTestVariation5" firstConstraint="assertMoveProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+      <constraint name="assertMoveProductToWishlistSuccessMessage" next="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductIsPresentInWishlist" next="assertCartIsEmpty" prev="assertMoveProductToWishlistSuccessMessage"/>
+      <constraint name="assertCartIsEmpty" next="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductDetailsInWishlist" prev="assertCartIsEmpty"/>
+    </variation>
+    <variation name="MoveProductFromShoppingCartToWishlistTestVariation6" firstConstraint="assertMoveProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">bundleProduct::bundle_fixed_product</data>
+      <constraint name="assertMoveProductToWishlistSuccessMessage" next="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductIsPresentInWishlist" next="assertCartIsEmpty" prev="assertMoveProductToWishlistSuccessMessage"/>
+      <constraint name="assertCartIsEmpty" next="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductDetailsInWishlist" prev="assertCartIsEmpty"/>
+    </variation>
+  </testCase>
 </config>

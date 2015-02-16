@@ -5,15 +5,15 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="DeleteProductFromCustomerWishlistOnBackendTest">
-        <variation name="DeleteProductFromCustomerWishlistOnBackendTestVariation1">
-            <data name="product">configurableProduct::default</data>
-            <data name="constraint">assertProductsIsAbsentInWishlist</data>
-        </variation>
-        <variation name="DeleteProductFromCustomerWishlistOnBackendTestVariation2">
-            <data name="product">catalogProductSimple::simple_for_composite_products</data>
-            <data name="constraint">assertProductsIsAbsentInWishlist</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteProductFromCustomerWishlistOnBackendTest">
+    <variation name="DeleteProductFromCustomerWishlistOnBackendTestVariation1" firstConstraint="assertProductsIsAbsentInWishlist" method="test">
+      <data name="product" xsi:type="string">configurableProduct::default</data>
+      <constraint name="assertProductsIsAbsentInWishlist"/>
+    </variation>
+    <variation name="DeleteProductFromCustomerWishlistOnBackendTestVariation2" firstConstraint="assertProductsIsAbsentInWishlist" method="test">
+      <data name="product" xsi:type="string">catalogProductSimple::simple_for_composite_products</data>
+      <constraint name="assertProductsIsAbsentInWishlist"/>
+    </variation>
+  </testCase>
 </config>
