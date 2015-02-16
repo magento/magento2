@@ -45,8 +45,8 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Store\Model\StoreManagerInterface $config,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         $resourcePrefix = null
     ) {
         $this->_currencyFactory = $currencyFactory;
