@@ -21,7 +21,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      * If header with specified name was not found returns false.
      *
      * @param string $name
-     * @return \Zend\Http\Header\Interface|bool
+     * @return \Zend\Http\Header\HeaderInterface|bool
      */
     public function getHeader($name)
     {
