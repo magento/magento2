@@ -2212,7 +2212,7 @@ return [
     ['Magento\Core\App\Response\Redirect', 'Magento\Store\App\Response\Redirect'],
     ['Magento\Core\Block\Store\Switcher', 'Magento\Store\Block\Store\Switcher'],
     ['Magento\Core\Block\Switcher', 'Magento\Store\Block\Switcher'],
-    ['Magento\Core\Helper\Cookie', 'Magento\Store\Helper\Cookie'],
+    ['Magento\Core\Helper\Cookie', 'Magento\Cookie\Helper\Cookie'],
     ['Magento\Store\Helper\Cookie', 'Magento\Cookie\Helper\Cookie'],
     ['Magento\Core\Model\BaseScopeResolver'],
     ['Magento\Core\Model\Config\Scope\Processor\Placeholder', 'Magento\Store\Model\Config\Processor\Placeholder'],
