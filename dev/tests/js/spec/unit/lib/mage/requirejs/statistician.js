@@ -38,13 +38,13 @@ define([
         return JSON.parse(get(key));
     }
 
-    describe('statistician module', function () {
+    describe('mage/requirejs/statistician', function () {
         beforeEach(function () {
             clear('all');
             clear('used');
         });
 
-        describe('collect method', function () {
+        describe('"collect" method', function () {
             it('merges passed object\'s keys with array under localStorage\'s "all" namespace', function () {
                 var merged = keysOf(firstBundle).concat(keysOf(secondBundle));
 
@@ -64,7 +64,7 @@ define([
             });
         });
 
-        describe('utilize method', function () {
+        describe('"utilize" method', function () {
             it('stores passed string to array under localStorage\'s "used" namespace', function () {
                 var str = keysOf(firstBundle)[0];
 
@@ -84,7 +84,7 @@ define([
             });
         });
 
-        describe('getAll method', function () {
+        describe('"getAll" method', function () {
             it('returns JSON.parsed content of localStorage\'s "all" namespace', function () {
                 var expected = keysOf(firstBundle);
 
@@ -94,7 +94,7 @@ define([
             });
         });
 
-        describe('getUsed method', function () {
+        describe('"getUsed" method', function () {
             it('returns JSON.parsed content of localStorage\'s "used" namespace', function () {
                 var expected = keysOf(secondBundle);
 
@@ -104,7 +104,7 @@ define([
             });
         });
 
-        describe('getUnused method', function () {
+        describe('"getUnused" method', function () {
             it('compares results of getAll and getUsed methods and returns the difference', function () {
                 var modules = keysOf(firstBundle);
 
@@ -116,7 +116,7 @@ define([
             });
         });
 
-        describe('clear method', function () {
+        describe('"clear" method', function () {
             it('clears "used" and "all" namespaces of localStorage', function () {
                 localStorage.setItem('all', 'someString');
                 localStorage.setItem('used', 'someString');
