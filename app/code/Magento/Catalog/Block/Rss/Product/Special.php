@@ -56,11 +56,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     protected $msrpHelper;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateFactory
-     */
-    private $dateFactory;
-
-    /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
     private $localeResolver;
@@ -74,7 +69,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Model\Rss\Product\Special $rssModel
      * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
-     * @param \Magento\Framework\Stdlib\DateTime\DateFactory $dateFactory
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -88,7 +82,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\Rss\Product\Special $rssModel,
         \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
-        \Magento\Framework\Stdlib\DateTime\DateFactory $dateFactory,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = []
     ) {
@@ -101,7 +94,6 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
         $this->httpContext = $httpContext;
         $this->storeManager = $context->getStoreManager();
         parent::__construct($context, $data);
-        $this->dateFactory = $dateFactory;
         $this->localeResolver = $localeResolver;
     }
 

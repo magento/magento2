@@ -139,27 +139,10 @@ class CcTest extends \PHPUnit_Framework_TestCase
             ->method('getCcExpYear')->will($this->returnValue($ccExpYear));
         $this->model->setData('info', $paymentInfo);
 
-        $date = $this->getMock(
-            'Magento\Framework\Stdlib\DateTime\TimezoneInterface',
-            [
-                'setYear', 'getYear', 'setMonth', 'getMonth', 'getDefaultTimezonePath', 'getDefaultTimezone',
-                'getDateFormat', 'getDateFormatWithLongYear', 'getTimeFormat', 'getDateTimeFormat', 'date',
-                'scopeDate', 'utcDate', 'scopeTimeStamp', 'formatDate', 'formatTime', 'getConfigTimezone',
-                'isScopeDateInInterval'
-            ],
-            [],
-            '',
-            false
-        );
-        $date->expects($this->any())
-            ->method('getYear')
-            ->willReturn($ccExpYear);
-        $date->expects($this->any())
-            ->method('getMonth')
-            ->willReturn($ccExpMonth);
-        $this->localeDate->expects($this->any())
-            ->method('date')
-            ->will($this->returnValue($date));
+        $this->localeDate->expects($this->exactly(2))
+            ->method('getConfigTimezone')
+            ->willReturn('America/Los_Angeles');
+
         $this->assertEquals($ccExpYear, $this->model->getCcExpDate()->format('Y'));
         $this->assertEquals($ccExpMonth, $this->model->getCcExpDate()->format('m'));
     }

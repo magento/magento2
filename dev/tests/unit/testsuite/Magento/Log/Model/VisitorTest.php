@@ -122,14 +122,12 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
     public function testGetFirstVisitAt()
     {
         $time = time();
-        $this->dateTime->expects($this->once())->method('now')->will($this->returnValue($time));
         $this->assertEquals($time, $this->visitor->getFirstVisitAt());
     }
 
     public function testGetLastVisitAt()
     {
         $time = time();
-        $this->dateTime->expects($this->once())->method('now')->will($this->returnValue($time));
         $this->assertEquals($time, $this->visitor->getLastVisitAt());
     }
 

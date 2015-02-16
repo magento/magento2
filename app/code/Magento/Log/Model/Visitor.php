@@ -153,7 +153,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     public function getFirstVisitAt()
     {
         if (!$this->hasData('first_visit_at')) {
-            $this->setData('first_visit_at', (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
+            $this->setData('first_visit_at', (new \DateTime())->getTimestamp());
         }
         return $this->getData('first_visit_at');
     }
@@ -166,7 +166,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     public function getLastVisitAt()
     {
         if (!$this->hasData('last_visit_at')) {
-            $this->setData('last_visit_at', (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
+            $this->setData('last_visit_at', (new \DateTime())->getTimestamp());
         }
         return $this->getData('last_visit_at');
     }
