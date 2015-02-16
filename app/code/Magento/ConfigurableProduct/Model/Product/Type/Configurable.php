@@ -774,7 +774,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                     }
 
                     if (!isset($_result[0])) {
-                        return __('Cannot add the item to shopping cart');
+                        return __('Cannot add the item to shopping cart')->render();
                     }
 
                     /**
@@ -809,7 +809,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
         }
 
-        return (string)$this->getSpecifyOptionMessage();
+        return $this->getSpecifyOptionMessage()->render();
     }
 
     /**
