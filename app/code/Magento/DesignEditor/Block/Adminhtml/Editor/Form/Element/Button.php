@@ -33,7 +33,7 @@ class Button extends \Magento\Framework\Data\Form\Element\AbstractElement
             );
         }
         $html .= sprintf(
-            '<button id="%s" %s %s><span>%s</span></button>',
+            '<button type="button" id="%s" %s %s><span>%s</span></button>',
             $this->getHtmlId(),
             $this->_getUiId(),
             $this->serialize($this->getHtmlAttributes()),

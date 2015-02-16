@@ -12,7 +12,7 @@
 <section class="vde-tools">
     <header class="vde-tools-header">
         <div class="vde-tools-header-inner">
-            <button class="action-close" title="<?php echo __('Close Panel'); ?>">
+            <button type="button" class="action-close" title="<?php echo __('Close Panel'); ?>">
                 <span><?php echo __('Close Panel'); ?></span>
             </button>
         </div>
@@ -62,15 +62,16 @@
         </div>
     </footer>
 </section>
-
-<div class="vde-message no-display" id="vde-message-template">
-    <div class="message-inner">
-        <div class="message-content">${message}</div>
-        <button class="action-close" title="<?php echo __('Close Message'); ?>">
-            <span><?php echo __('Close Message'); ?></span>
-        </button>
+<script id="vde-message-template" type="text/x-magento-template">
+    <div class="vde-message">
+        <div class="message-inner">
+            <div class="message-content"><%= data.message %></div>
+            <button type="button" class="action-close" title="<?php echo __('Close Message'); ?>">
+                <span><?php echo __('Close Message'); ?></span>
+            </button>
+        </div>
     </div>
-</div>
+</script>
 
 <script>
 require([

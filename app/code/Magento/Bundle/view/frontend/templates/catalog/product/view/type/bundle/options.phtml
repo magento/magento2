@@ -24,8 +24,7 @@ require([
     $(function() {
         $('#product_addtocart_form').priceBundle({
             optionConfig:<?php echo $block->getJsonConfig()?>,
-            controlContainer: '.field.option',
-            qtyFieldSelector: '.input-text.qty'
+            controlContainer: '.field.option'
         });
     });
 });

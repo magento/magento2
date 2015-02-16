@@ -46,7 +46,7 @@ class Date extends \Magento\Framework\View\Element\Template
             '",' : '') .
             '
                         buttonText: "' .
-            __(
+            (string)new \Magento\Framework\Phrase(
                 'Select Date'
             ) .
             '"

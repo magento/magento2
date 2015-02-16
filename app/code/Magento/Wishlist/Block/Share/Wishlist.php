@@ -78,7 +78,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Retrieve Page Header
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeader()
     {

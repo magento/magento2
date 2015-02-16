@@ -170,14 +170,14 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
 
         /* Init \Magento\Core\Model\Resource\Layout\Collection model  */
         $this->_updateFactory = $this->getMock(
-            'Magento\Core\Model\Layout\UpdateFactory',
+            'Magento\Widget\Model\Layout\UpdateFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->_update = $this->getMock(
-            'Magento\Core\Model\Layout\Update',
+            'Magento\Widget\Model\Layout\Update',
             ['__wakeup', 'getCollection'],
             [],
             '',
@@ -185,7 +185,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->_updateFactory->expects($this->at(0))->method('create')->will($this->returnValue($this->_update));
         $this->_updateCollection = $this->getMock(
-            'Magento\Core\Model\Resource\Layout\Collection',
+            'Magento\Widget\Model\Resource\Layout\Update\Collection',
             ['addThemeFilter', 'delete', 'getIterator'],
             [],
             '',
@@ -201,14 +201,14 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
 
         /* Init Link an Link_Collection model */
         $this->_link = $this->getMock(
-            'Magento\Core\Model\Layout\Link',
+            'Magento\Widget\Model\Layout\Link',
             ['__wakeup', 'getCollection'],
             [],
             '',
             false
         );
         $this->_linkCollection = $this->getMock(
-            'Magento\Core\Model\Resource\Layout\Link\Collection',
+            'Magento\Widget\Model\Resource\Layout\Link\Collection',
             ['addThemeFilter', 'getIterator'],
             [],
             '',
@@ -281,7 +281,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         $this->_linkCollection->expects($this->once())->method('addThemeFilter');
 
         $targetLinkOne = $this->getMock(
-            'Magento\Core\Model\Layout\Link',
+            'Magento\Widget\Model\Layout\Link',
             ['__wakeup', 'setId', 'setThemeId', 'save', 'setLayoutUpdateId'],
             [],
             '',
@@ -289,7 +289,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         );
         $targetLinkOne->setData(['id' => 1, 'layout_update_id' => 1]);
         $targetLinkTwo = $this->getMock(
-            'Magento\Core\Model\Layout\Link',
+            'Magento\Widget\Model\Layout\Link',
             ['__wakeup', 'setId', 'setThemeId', 'save', 'setLayoutUpdateId'],
             [],
             '',
@@ -311,7 +311,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         $this->_linkCollection->expects($this->any())->method('getIterator')->will($linkReturnValues);
 
         $targetUpdateOne = $this->getMock(
-            'Magento\Core\Model\Layout\Update',
+            'Magento\Widget\Model\Layout\Update',
             ['__wakeup', 'setId', 'load', 'save'],
             [],
             '',
@@ -319,7 +319,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         );
         $targetUpdateOne->setData(['id' => 1]);
         $targetUpdateTwo = $this->getMock(
-            'Magento\Core\Model\Layout\Update',
+            'Magento\Widget\Model\Layout\Update',
             ['__wakeup', 'setId', 'load', 'save'],
             [],
             '',

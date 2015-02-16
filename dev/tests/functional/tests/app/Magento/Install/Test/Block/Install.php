@@ -26,21 +26,21 @@ class Install extends Block
      *
      * @var string
      */
-    protected $adminInfo = "//*[@id='admin-info']";
+    protected $adminInfo = '#admin-info';
 
     /**
      * Database info block.
      *
      * @var string
      */
-    protected $dbInfo = "//*[@id='db-info']";
+    protected $dbInfo = '#db-info';
 
     /**
      * 'Launch Magento Admin' button.
      *
      * @var string
      */
-    protected $launchAdmin = "//*[@type='button']";
+    protected $launchAdmin = '.btn-large.btn-prime';
 
     /**
      * Click on 'Install Now' button.
@@ -50,43 +50,53 @@ class Install extends Block
     public function clickInstallNow()
     {
         $this->_rootElement->find($this->installNow, Locator::SELECTOR_XPATH)->click();
-        $this->waitForElementVisible($this->launchAdmin, Locator::SELECTOR_XPATH);
+        $this->waitForElementVisible($this->launchAdmin, Locator::SELECTOR_CSS);
     }
 
     /**
      * Get admin info.
      *
-     * @return string
+     * @return array
      */
     public function getAdminInfo()
     {
-        $adminData = [];
-        $rows = $this->_rootElement->getElements('#admin-info .row');
-        foreach ($rows as $row) {
-            $dataRow = $row->getElements('div');
-            $key = strtolower(str_replace(' ', '_', str_replace(':', '', $dataRow[0]->getText())));
-            $adminData[$key] = $dataRow[1]->getText();
-        }
-
-        return $adminData;
+        return $this->getTableDataByCssLocator($this->adminInfo);
     }
 
     /**
      * Get database info.
      *
-     * @return string
+     * @return array
      */
     public function getDbInfo()
     {
-        $dbData = [];
-        $rows = $this->_rootElement->getElements('#db-info .row');
-        foreach ($rows as $row) {
-            $dataRow = $row->getElements('div');
-            $key = strtolower(str_replace(' ', '_', str_replace(':', '', $dataRow[0]->getText())));
-            $dbData[$key] = $dataRow[1]->getText();
+        return $this->getTableDataByCssLocator($this->dbInfo);
+    }
+
+    /**
+     * Get table data by correspondent div css selector.
+     * Data inside the table must be presented via <dt>/<dd>/<dl> tags due to actual HTML5 standard.
+     *
+     * @param string $selector
+     * @return array
+     */
+    protected function getTableDataByCssLocator($selector)
+    {
+        $data = [];
+        $keys = [];
+        $definitionTitles = $this->_rootElement->getElements($selector . ' dt');
+        foreach ($definitionTitles as $dt) {
+            $keys[] = strtolower(str_replace(' ', '_', str_replace(':', '', $dt->getText())));
+        }
+        reset($keys);
+
+        $definitionDescriptions = $this->_rootElement->getElements($selector . ' dd');
+        foreach ($definitionDescriptions as $dd) {
+            $data[current($keys)] = $dd->getText();
+            next($keys);
         }
 
-        return $dbData;
+        return $data;
     }
 
     /**
