@@ -32,7 +32,7 @@ class ObserverTest extends \Magento\TestFramework\TestCase\AbstractController
         ];
         $this->getRequest()->setPost($post);
         $this->dispatch('backend/admin');
-        $this->assertContains(__('Incorrect CAPTCHA'), $this->getResponse()->getBody());
+        $this->assertContains((string)__('Incorrect CAPTCHA'), $this->getResponse()->getBody());
     }
 
     /**
@@ -46,7 +46,7 @@ class ObserverTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testCaptchaIsRequiredAfterFailedLoginAttempts()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->setCurrentStore(
             0
         );

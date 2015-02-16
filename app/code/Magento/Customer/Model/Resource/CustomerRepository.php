@@ -48,16 +48,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     protected $customerMetadata;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressDataBuilder
-     */
-    protected $addressBuilder;
-
-    /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
-     */
-    protected $customerBuilder;
-
-    /**
      * @var \Magento\Customer\Api\Data\CustomerSearchResultsDataBuilder
      */
     protected $searchResultsBuilder;
@@ -68,7 +58,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     protected $eventManager;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -84,11 +74,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param \Magento\Customer\Model\Resource\AddressRepository $addressRepository
      * @param \Magento\Customer\Model\Resource\Customer $customerResourceModel
      * @param \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata
-     * @param \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder
-     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
      * @param \Magento\Customer\Api\Data\CustomerSearchResultsDataBuilder $searchResultsDataBuilder
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -99,11 +87,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         \Magento\Customer\Model\Resource\AddressRepository $addressRepository,
         \Magento\Customer\Model\Resource\Customer $customerResourceModel,
         \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata,
-        \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder,
-        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
         \Magento\Customer\Api\Data\CustomerSearchResultsDataBuilder $searchResultsDataBuilder,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
     ) {
         $this->customerFactory = $customerFactory;
@@ -112,8 +98,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->addressRepository = $addressRepository;
         $this->customerResourceModel = $customerResourceModel;
         $this->customerMetadata = $customerMetadata;
-        $this->addressBuilder = $addressBuilder;
-        $this->customerBuilder = $customerBuilder;
         $this->searchResultsBuilder = $searchResultsDataBuilder;
         $this->eventManager = $eventManager;
         $this->storeManager = $storeManager;
@@ -127,11 +111,14 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
         $this->validate($customer);
+        $origAddresses = $customer->getAddresses();
+        $customer->setAddresses([]);
         $customerData = $this->extensibleDataObjectConverter->toNestedArray(
-            $this->customerBuilder->populate($customer)->setAddresses([])->create(),
+            $customer,
             [],
             '\Magento\Customer\Api\Data\CustomerInterface'
         );
+        $customer->setAddresses($origAddresses);
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
@@ -177,11 +164,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
             $savedAddressIds = [];
             foreach ($customer->getAddresses() as $address) {
-                $address = $this->addressBuilder
-                    ->populate($address)
-                    ->setCustomerId($customerId)
-                    ->setRegion($address->getRegion())
-                    ->create();
+                $address->setCustomerId($customerId)
+                    ->setRegion($address->getRegion());
                 $this->addressRepository->save($address);
                 if ($address->getId()) {
                     $savedAddressIds[] = $address->getId();

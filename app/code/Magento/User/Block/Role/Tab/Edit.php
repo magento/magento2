@@ -78,7 +78,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Get tab label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {

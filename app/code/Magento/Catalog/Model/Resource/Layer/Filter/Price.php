@@ -33,7 +33,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
     private $session;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
@@ -42,14 +42,14 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Customer\Model\Session $session
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Customer\Model\Session $session,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->layer = $layerResolver->get();
         $this->session = $session;
