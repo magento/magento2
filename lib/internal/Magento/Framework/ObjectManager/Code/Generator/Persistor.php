@@ -138,8 +138,8 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getSourceResourceClassName() // Invoice\Resource
     {
-        $temporary = str_replace('\\Api\\Data\\', '\\Model\\Spi', $this->_getSourceClassName());
-        $parts = explode('\\', $temporary);
+        $temporary = str_replace('\\Api\\Data\\', '\\Model\\Spi\\', $this->_getSourceClassName());
+        $parts = explode('\\', ltrim($temporary, '\\'));
         $className = array_pop($parts);
         $className = str_replace('Interface', '', $className);
         return '\\' . implode('\\', $parts) . '\\' . $className . 'ResourceInterface';
