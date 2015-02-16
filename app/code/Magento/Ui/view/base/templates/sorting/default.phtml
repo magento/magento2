@@ -10,7 +10,10 @@
  */
 
 ?>
-
-<script data-mage-init='{ "Magento_Ui/js/listing/sorting": "" }' type="application/json">
-    <?php echo $block->getConfigBuilder()->toJson($block->getConfig()); ?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/listing/sorting": <?php echo $block->getConfigBuilder()->toJson($block->getConfig()); ?>
+        }
+    }
 </script>
