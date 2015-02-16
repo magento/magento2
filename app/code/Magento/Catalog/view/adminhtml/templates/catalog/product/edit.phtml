@@ -16,7 +16,7 @@
 <div class="product-actions">
     <div id="product-template-suggest-container" class="suggest-expandable">
         <div class="action-dropdown">
-            <button class="action-toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
+            <button type="button" class="action-toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
                 <span><?php echo $block->getAttributeSetName()?></span>
             </button>
             <ul class="dropdown-menu">
@@ -54,6 +54,7 @@
     <?php echo $block->getChildHtml('product-type-tabs') ?>
     <input type="hidden" id="product_type_id" value="<?php echo $block->getProduct()->getTypeId()?>"/>
     <input type="hidden" id="attribute_set_id" value="<?php echo $block->getProduct()->getAttributeSetId()?>"/>
+    <button type="submit" class="hidden"></button>
 <?php if ($block->getUseContainer()): ?>
 </form>
 <?php endif; ?>

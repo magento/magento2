@@ -53,7 +53,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     /**
      * Store manager to emulate design
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -95,7 +95,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Newsletter\Model\Template\Filter $filter
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -109,7 +109,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\App\Emulation $appEmulation,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\Filter $filter,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -335,7 +335,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     {
         return !$this->_scopeConfig->isSetFlag(
             \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) && $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
     }
 }

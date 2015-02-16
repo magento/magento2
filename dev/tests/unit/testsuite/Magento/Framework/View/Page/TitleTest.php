@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Page;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class TitleTest extends \PHPUnit_Framework_TestCase
 {

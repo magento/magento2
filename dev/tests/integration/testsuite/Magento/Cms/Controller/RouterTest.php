@@ -29,10 +29,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\UrlInterface'),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Model\PageFactory'),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             ),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )
         );
     }
