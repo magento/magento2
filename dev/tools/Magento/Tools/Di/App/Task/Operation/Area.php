@@ -19,9 +19,9 @@ class Area implements OperationInterface
     private $areaList;
 
     /**
-     * @var ClassesScanner
+     * @var \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area
      */
-    private $classesScanner;
+    private $areaInstancesNamesList;
 
     /**
      * @var Config\Reader
@@ -40,20 +40,20 @@ class Area implements OperationInterface
 
     /**
      * @param App\AreaList $areaList
-     * @param ClassesScanner $classesScanner
+     * @param \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area $instancesNamesList
      * @param Config\Reader $configReader
      * @param Config\WriterInterface $configWriter
      * @param array $data
      */
     public function __construct(
         App\AreaList $areaList,
-        ClassesScanner $classesScanner,
+        \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area $areaInstancesNamesList,
         Config\Reader $configReader,
         Config\WriterInterface $configWriter,
         $data = []
     ) {
         $this->areaList = $areaList;
-        $this->classesScanner = $classesScanner;
+        $this->areaInstancesNamesList = $areaInstancesNamesList;
         $this->configReader = $configReader;
         $this->configWriter = $configWriter;
         $this->data = $data;
@@ -91,7 +91,7 @@ class Area implements OperationInterface
     protected function getDefinitionsCollection($path)
     {
         $definitions = new DefinitionsCollection();
-        foreach ($this->classesScanner->getList($path) as $className => $constructorArguments) {
+        foreach ($this->areaInstancesNamesList->getList($path) as $className => $constructorArguments) {
             $definitions->addDefinition($className, $constructorArguments);
         }
         return $definitions;
