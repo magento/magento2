@@ -9,8 +9,6 @@ namespace Magento\Wishlist\Test\TestCase;
 use Magento\Customer\Test\Fixture\Customer;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create customer
  * 2. Create composite products
@@ -56,7 +54,6 @@ class ConfigureProductInCustomerWishlistOnFrontendTest extends AbstractWishlistT
      */
     public function test(Customer $customer, $product)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-32815');
         // Preconditions
         $product = $this->createProducts($product)[0];
         $this->loginCustomer($customer);
