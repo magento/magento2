@@ -15,9 +15,6 @@ use Magento\Framework\View\Result\Page as ResultPage;
  */
 class View extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    // List of exceptions throwable during prepareAndRender() method
-    public $ERR_BAD_CONTROLLER_INTERFACE = 2;
-
     /**
      * List of catalog product session message groups
      *
@@ -183,6 +180,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Action\Action $controller
      * @param null|\Magento\Framework\Object $params
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return \Magento\Catalog\Helper\Product\View
      */
     public function prepareAndRender(ResultPage $resultPage, $productId, $controller, $params = null)
@@ -218,8 +216,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             $resultPage->getLayout()->initMessages($this->messageGroups);
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Bad controller interface for showing product'),
-                $this->ERR_BAD_CONTROLLER_INTERFACE
+                __('Bad controller interface for showing product')
             );
         }
         return $this;
