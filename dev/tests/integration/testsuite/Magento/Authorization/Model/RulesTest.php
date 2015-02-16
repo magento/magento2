@@ -29,7 +29,7 @@ class RulesTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model
             ->setRoleType('G')
-            ->setResourceId('Magento_Adminhtml::all')
+            ->setResourceId('Magento_Backend::all')
             ->setPrivileges("")
             ->setAssertId(0)
             ->setRoleId(1)
@@ -44,7 +44,7 @@ class RulesTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitialUserPermissions()
     {
-        $expectedDefaultPermissions = ['Magento_Adminhtml::all'];
+        $expectedDefaultPermissions = ['Magento_Backend::all'];
         $this->_checkExistingPermissions($expectedDefaultPermissions);
     }
 
@@ -54,9 +54,9 @@ class RulesTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAllowForAllResources()
     {
-        $resources = ['Magento_Adminhtml::all'];
+        $resources = ['Magento_Backend::all'];
         $this->_model->setRoleId(1)->setResources($resources)->saveRel();
-        $expectedPermissions = ['Magento_Adminhtml::all'];
+        $expectedPermissions = ['Magento_Backend::all'];
         $this->_checkExistingPermissions($expectedPermissions);
     }
 

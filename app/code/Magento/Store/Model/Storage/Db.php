@@ -18,7 +18,7 @@ use Magento\Store\Model\WebsiteFactory as WebsiteFactory;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Db implements \Magento\Framework\Store\StoreManagerInterface
+class Db implements \Magento\Store\Model\StoreManagerInterface
 {
     /**
      * Flag that shows that system has only one store view
@@ -534,7 +534,7 @@ class Db implements \Magento\Framework\Store\StoreManagerInterface
     {
         return (bool)$this->_scopeConfig->getValue(
             \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 }
