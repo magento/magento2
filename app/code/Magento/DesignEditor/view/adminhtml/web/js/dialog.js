@@ -5,10 +5,9 @@
 /*jshint jquery:true*/
 define([
     "jquery",
-    "jquery/ui",
-    "mage/translate",
-    "jquery/template"
-], function($){
+    'mage/template',
+    "jquery/ui"
+], function($, mageTemplate){
 
     $.widget('vde.dialog', $.ui.dialog, {
         options: {
@@ -47,6 +46,8 @@ define([
                     return ['success', 'error', 'info'].indexOf(type) != -1;
                 },
                 _prepareMessage: function(message, type) {
+                    var tmpl = mageTemplate('<div class="<%= data.classes %>"><%= data.message %></div>');
+
                     if (typeof message != 'string' && message.message && message.type) {
                         type = message.type;
                         message = message.message;
@@ -65,7 +66,10 @@ define([
                             classes: classes.join(' '),
                             message: message
                         };
-                        message = $.tmpl('<div class="${classes}">${message}</div>', vars);
+                        
+                        message = $(tmpl({
+                            data: vars
+                        }));
                     }
                     return message;
                 }

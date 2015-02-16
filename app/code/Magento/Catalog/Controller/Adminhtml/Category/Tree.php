@@ -49,7 +49,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
         if ($storeId) {
             if (!$categoryId) {
                 $store = $this->_objectManager
-                    ->get('Magento\Framework\Store\StoreManagerInterface')
+                    ->get('Magento\Store\Model\StoreManagerInterface')
                     ->getStore($storeId);
                 $rootId = $store->getRootCategoryId();
                 $this->getRequest()->setParam('id', $rootId);
