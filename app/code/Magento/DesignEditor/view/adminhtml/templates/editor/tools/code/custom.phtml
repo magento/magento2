@@ -22,7 +22,7 @@
             <div class="uploaded-css">
                 <div class="file-row">
                     <span id="custom-file-name" class="label"><?php echo $block->getCustomFileName() ?></span>
-                    <button data-action="delete" class="action-delete" title="<?php echo __('Delete File'); ?>">
+                    <button type="button" data-action="delete" class="action-delete" title="<?php echo __('Delete File'); ?>">
                         <span><?php echo __('Delete File'); ?></span>
                     </button>
                     <button data-action="download" class="action-download" title="<?php echo __('Download File'); ?>">
@@ -33,10 +33,10 @@
         </div>
     </div>
     <div class="manage-assets-buttons">
-        <button data-manage="images" class="action-image-assets" title="<?php echo __('Image Assets'); ?>">
+        <button type="button" data-manage="images" class="action-image-assets" title="<?php echo __('Image Assets'); ?>">
             <span><?php echo __('Image Assets'); ?></span>
         </button>
-        <button data-manage="fonts" class="action-font-assets" title="<?php echo __('Font Assets'); ?>">
+        <button type="button" data-manage="fonts" class="action-font-assets" title="<?php echo __('Font Assets'); ?>">
             <span><?php echo __('Font Assets'); ?></span>
         </button>
     </div>
@@ -45,7 +45,7 @@
     <div class="textarea-container">
         <textarea name="custom_code" id="custom_code" cols="30" rows="10"><?php echo $block->getCustomCssContent() ?></textarea>
     </div>
-    <button data-action="update" class="action-update primary" title="<?php echo __('Update'); ?>">
+    <button type="button" data-action="update" class="action-update primary" title="<?php echo __('Update'); ?>">
         <span><?php echo __('Update'); ?></span>
     </button>
 </div>
