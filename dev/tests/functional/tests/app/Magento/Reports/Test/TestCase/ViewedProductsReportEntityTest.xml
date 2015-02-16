@@ -5,37 +5,37 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="ViewedProductsReportEntityTest">
-        <variation name="ViewedProductsReportEntityTestVariation1">
-            <data name="description">view products on front and verify they all reflected in Year report</data>
-            <data name="total">2, 1</data>
-            <data name="products">catalogProductSimple::default, catalogProductVirtual::default</data>
-            <data name="viewsReport/period_type">Year</data>
-            <data name="viewsReport/from">m/d/Y -1 year</data>
-            <data name="viewsReport/to">m/d/Y</data>
-            <data name="viewsReport/show_empty_rows">No</data>
-            <data name="constraint">assertProductViewsReportTotalResult</data>
-        </variation>
-        <variation name="ViewedProductsReportEntityTestVariation2">
-            <data name="description">view products on front and verify they all reflected in Month report</data>
-            <data name="total">1, 1</data>
-            <data name="products">downloadableProduct::default, bundleProduct::bundle_dynamic_product</data>
-            <data name="viewsReport/period_type">Month</data>
-            <data name="viewsReport/from">m/d/Y</data>
-            <data name="viewsReport/to">m/d/Y</data>
-            <data name="viewsReport/show_empty_rows">No</data>
-            <data name="constraint">assertProductViewsReportTotalResult</data>
-        </variation>
-        <variation name="ViewedProductsReportEntityTestVariation3">
-            <data name="description">view products on front and verify they all reflected in Day report</data>
-            <data name="total">1, 1</data>
-            <data name="products">configurableProduct::default, groupedProduct::default</data>
-            <data name="viewsReport/period_type">Day</data>
-            <data name="viewsReport/from">m/d/Y -1 day</data>
-            <data name="viewsReport/to">m/d/Y +1 day</data>
-            <data name="viewsReport/show_empty_rows">Yes</data>
-            <data name="constraint">assertProductViewsReportTotalResult</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="ViewedProductsReportEntityTest">
+    <variation name="ViewedProductsReportEntityTestVariation1" firstConstraint="assertProductViewsReportTotalResult" method="test">
+      <data name="description" xsi:type="string">view products on front and verify they all reflected in Year report</data>
+      <data name="total" xsi:type="string">2, 1</data>
+      <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
+      <data name="viewsReport/period_type" xsi:type="string">Year</data>
+      <data name="viewsReport/from" xsi:type="string">m/d/Y -1 year</data>
+      <data name="viewsReport/to" xsi:type="string">m/d/Y</data>
+      <data name="viewsReport/show_empty_rows" xsi:type="string">No</data>
+      <constraint name="assertProductViewsReportTotalResult"/>
+    </variation>
+    <variation name="ViewedProductsReportEntityTestVariation2" firstConstraint="assertProductViewsReportTotalResult" method="test">
+      <data name="description" xsi:type="string">view products on front and verify they all reflected in Month report</data>
+      <data name="total" xsi:type="string">1, 1</data>
+      <data name="products" xsi:type="string">downloadableProduct::default, bundleProduct::bundle_dynamic_product</data>
+      <data name="viewsReport/period_type" xsi:type="string">Month</data>
+      <data name="viewsReport/from" xsi:type="string">m/d/Y</data>
+      <data name="viewsReport/to" xsi:type="string">m/d/Y</data>
+      <data name="viewsReport/show_empty_rows" xsi:type="string">No</data>
+      <constraint name="assertProductViewsReportTotalResult"/>
+    </variation>
+    <variation name="ViewedProductsReportEntityTestVariation3" firstConstraint="assertProductViewsReportTotalResult" method="test">
+      <data name="description" xsi:type="string">view products on front and verify they all reflected in Day report</data>
+      <data name="total" xsi:type="string">1, 1</data>
+      <data name="products" xsi:type="string">configurableProduct::default, groupedProduct::default</data>
+      <data name="viewsReport/period_type" xsi:type="string">Day</data>
+      <data name="viewsReport/from" xsi:type="string">m/d/Y -1 day</data>
+      <data name="viewsReport/to" xsi:type="string">m/d/Y +1 day</data>
+      <data name="viewsReport/show_empty_rows" xsi:type="string">Yes</data>
+      <constraint name="assertProductViewsReportTotalResult"/>
+    </variation>
+  </testCase>
 </config>

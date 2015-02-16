@@ -5,40 +5,42 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="CheckoutWithGiftMessagesTest">
-        <variation name="CheckoutWithGiftMessagesTestVariation1">
-            <data name="products">catalogProductSimple::default, catalogProductVirtual::default</data>
-            <data name="customer/dataSet">customer_US</data>
-            <data name="billingAddress/dataSet">customer_US</data>
-            <data name="checkoutMethod">login</data>
-            <data name="shipping/shipping_service">Flat Rate</data>
-            <data name="shipping/shipping_method">Fixed</data>
-            <data name="giftMessage/data/allow_gift_options">Yes</data>
-            <data name="giftMessage/data/allow_gift_messages_for_order">Yes</data>
-            <data name="giftMessage/data/allow_gift_options_for_items">-</data>
-            <data name="giftMessage/data/sender">John Doe</data>
-            <data name="giftMessage/data/recipient">Jane Doe</data>
-            <data name="giftMessage/data/message">text_gift_message</data>
-            <data name="payment/method">cashondelivery</data>
-            <data name="constraint">assertOrderSuccessPlacedMessage, assertGiftMessageInFrontendOrder</data>
-            <data name="issue">Bug: MAGETWO-33079</data>
-        </variation>
-        <variation name="CheckoutWithGiftMessagesTestVariation2">
-            <data name="products">catalogProductSimple::default, catalogProductVirtual::default</data>
-            <data name="customer/dataSet">customer_US</data>
-            <data name="billingAddress/dataSet">customer_US</data>
-            <data name="checkoutMethod">login</data>
-            <data name="shipping/shipping_service">Flat Rate</data>
-            <data name="shipping/shipping_method">Fixed</data>
-            <data name="giftMessage/data/allow_gift_options">Yes</data>
-            <data name="giftMessage/data/allow_gift_messages_for_order">-</data>
-            <data name="giftMessage/data/allow_gift_options_for_items">Yes</data>
-            <data name="giftMessage/data/sender">John Doe</data>
-            <data name="giftMessage/data/recipient">Jane Doe</data>
-            <data name="giftMessage/data/message">text_gift_message</data>
-            <data name="payment/method">cashondelivery</data>
-            <data name="constraint">assertOrderSuccessPlacedMessage, assertGiftMessageInFrontendOrderItems</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="CheckoutWithGiftMessagesTest">
+    <variation name="CheckoutWithGiftMessagesTestVariation1" firstConstraint="assertOrderSuccessPlacedMessage" method="test">
+      <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
+      <data name="customer/dataSet" xsi:type="string">customer_US</data>
+      <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+      <data name="checkoutMethod" xsi:type="string">login</data>
+      <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+      <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+      <data name="giftMessage/data/allow_gift_options" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/allow_gift_messages_for_order" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/allow_gift_options_for_items" xsi:type="string">-</data>
+      <data name="giftMessage/data/sender" xsi:type="string">John Doe</data>
+      <data name="giftMessage/data/recipient" xsi:type="string">Jane Doe</data>
+      <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
+      <data name="payment/method" xsi:type="string">cashondelivery</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-33079</data>
+      <constraint name="assertOrderSuccessPlacedMessage" next="assertGiftMessageInFrontendOrder"/>
+      <constraint name="assertGiftMessageInFrontendOrder" prev="assertOrderSuccessPlacedMessage"/>
+    </variation>
+    <variation name="CheckoutWithGiftMessagesTestVariation2" firstConstraint="assertOrderSuccessPlacedMessage" method="test">
+      <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
+      <data name="customer/dataSet" xsi:type="string">customer_US</data>
+      <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+      <data name="checkoutMethod" xsi:type="string">login</data>
+      <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+      <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+      <data name="giftMessage/data/allow_gift_options" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/allow_gift_messages_for_order" xsi:type="string">-</data>
+      <data name="giftMessage/data/allow_gift_options_for_items" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/sender" xsi:type="string">John Doe</data>
+      <data name="giftMessage/data/recipient" xsi:type="string">Jane Doe</data>
+      <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
+      <data name="payment/method" xsi:type="string">cashondelivery</data>
+      <constraint name="assertOrderSuccessPlacedMessage" next="assertGiftMessageInFrontendOrderItems"/>
+      <constraint name="assertGiftMessageInFrontendOrderItems" prev="assertOrderSuccessPlacedMessage"/>
+    </variation>
+  </testCase>
 </config>

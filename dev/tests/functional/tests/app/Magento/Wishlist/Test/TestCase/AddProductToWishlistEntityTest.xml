@@ -5,37 +5,51 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="AddProductToWishlistEntityTest">
-        <variation name="AddProductToWishlistEntityTestVariation1">
-            <data name="product">catalogProductSimple::default</data>
-            <data name="constraint">assertAddProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertProductIsPresentInCustomerBackendWishlist</data>
-        </variation>
-        <variation name="AddProductToWishlistEntityTestVariation2">
-            <data name="product">catalogProductVirtual::default</data>
-            <data name="constraint">assertAddProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertProductIsPresentInCustomerBackendWishlist</data>
-        </variation>
-        <variation name="AddProductToWishlistEntityTestVariation3">
-            <data name="product">downloadableProduct::with_two_separately_links</data>
-            <data name="constraint">assertAddProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertProductIsPresentInCustomerBackendWishlist</data>
-        </variation>
-        <variation name="AddProductToWishlistEntityTestVariation4">
-            <data name="product">groupedProduct::three_simple_products</data>
-            <data name="constraint">assertAddProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertProductIsPresentInCustomerBackendWishlist</data>
-        </variation>
-        <variation name="AddProductToWishlistEntityTestVariation5">
-            <data name="product">configurableProduct::default</data>
-            <data name="constraint">assertAddProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertProductIsPresentInCustomerBackendWishlist</data>
-        </variation>
-        <variation name="AddProductToWishlistEntityTestVariation6">
-            <data name="product">bundleProduct::bundle_dynamic_product</data>
-            <data name="constraint">assertAddProductToWishlistSuccessMessage, assertProductDetailsInWishlist, assertProductIsPresentInCustomerBackendWishlist</data>
-            <data name="issue">Bug: MAGETWO-33952</data>
-        </variation>
-        <variation name="AddProductToWishlistEntityTestVariation7">
-            <data name="product">bundleProduct::bundle_fixed_product</data>
-            <data name="constraint">assertAddProductToWishlistSuccessMessage, assertProductDetailsInWishlist, assertProductIsPresentInCustomerBackendWishlist</data>
-            <data name="issue">Bug: MAGETWO-33952</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="AddProductToWishlistEntityTest">
+    <variation name="AddProductToWishlistEntityTestVariation1" firstConstraint="assertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">catalogProductSimple::default</data>
+      <constraint name="assertAddProductToWishlistSuccessMessage" next="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductIsPresentInWishlist" next="assertProductIsPresentInCustomerBackendWishlist" prev="assertAddProductToWishlistSuccessMessage"/>
+      <constraint name="assertProductIsPresentInCustomerBackendWishlist" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation2" firstConstraint="assertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">catalogProductVirtual::default</data>
+      <constraint name="assertAddProductToWishlistSuccessMessage" next="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductIsPresentInWishlist" next="assertProductIsPresentInCustomerBackendWishlist" prev="assertAddProductToWishlistSuccessMessage"/>
+      <constraint name="assertProductIsPresentInCustomerBackendWishlist" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation3" firstConstraint="assertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links</data>
+      <constraint name="assertAddProductToWishlistSuccessMessage" next="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductIsPresentInWishlist" next="assertProductIsPresentInCustomerBackendWishlist" prev="assertAddProductToWishlistSuccessMessage"/>
+      <constraint name="assertProductIsPresentInCustomerBackendWishlist" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation4" firstConstraint="assertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">groupedProduct::three_simple_products</data>
+      <constraint name="assertAddProductToWishlistSuccessMessage" next="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductIsPresentInWishlist" next="assertProductIsPresentInCustomerBackendWishlist" prev="assertAddProductToWishlistSuccessMessage"/>
+      <constraint name="assertProductIsPresentInCustomerBackendWishlist" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation5" firstConstraint="assertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">configurableProduct::default</data>
+      <constraint name="assertAddProductToWishlistSuccessMessage" next="assertProductIsPresentInWishlist"/>
+      <constraint name="assertProductIsPresentInWishlist" next="assertProductIsPresentInCustomerBackendWishlist" prev="assertAddProductToWishlistSuccessMessage"/>
+      <constraint name="assertProductIsPresentInCustomerBackendWishlist" prev="assertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation6" firstConstraint="assertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-33952</data>
+      <constraint name="assertAddProductToWishlistSuccessMessage" next="assertProductDetailsInWishlist"/>
+      <constraint name="assertProductDetailsInWishlist" next="assertProductIsPresentInCustomerBackendWishlist" prev="assertAddProductToWishlistSuccessMessage"/>
+      <constraint name="assertProductIsPresentInCustomerBackendWishlist" prev="assertProductDetailsInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation7" firstConstraint="assertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">bundleProduct::bundle_fixed_product</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-33952</data>
+      <constraint name="assertAddProductToWishlistSuccessMessage" next="assertProductDetailsInWishlist"/>
+      <constraint name="assertProductDetailsInWishlist" next="assertProductIsPresentInCustomerBackendWishlist" prev="assertAddProductToWishlistSuccessMessage"/>
+      <constraint name="assertProductIsPresentInCustomerBackendWishlist" prev="assertProductDetailsInWishlist"/>
+    </variation>
+  </testCase>
 </config>

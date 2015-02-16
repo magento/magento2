@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\TestStep;
 
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
@@ -18,15 +18,15 @@ class ReorderStep implements TestStepInterface
     /**
      * Order View Page
      *
-     * @var OrderView
+     * @var SalesOrderView
      */
     protected $orderView;
 
     /**
      * @construct
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      */
-    public function __construct(OrderView $orderView)
+    public function __construct(SalesOrderView $orderView)
     {
         $this->orderView = $orderView;
     }

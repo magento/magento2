@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\TestStep;
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 
@@ -28,7 +28,7 @@ class SubmitOrderStep implements TestStepInterface
     /**
      * Sales order view.
      *
-     * @var OrderView
+     * @var SalesOrderView
      */
     protected $orderView;
 
@@ -42,7 +42,7 @@ class SubmitOrderStep implements TestStepInterface
     /**
      * @constructor
      * @param OrderCreateIndex $orderCreateIndex
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @param FixtureFactory $fixtureFactory
      * @param Customer $customer
      * @param Address $billingAddress
@@ -50,7 +50,7 @@ class SubmitOrderStep implements TestStepInterface
      */
     public function __construct(
         OrderCreateIndex $orderCreateIndex,
-        OrderView $orderView,
+        SalesOrderView $orderView,
         FixtureFactory $fixtureFactory,
         Customer $customer,
         Address $billingAddress,

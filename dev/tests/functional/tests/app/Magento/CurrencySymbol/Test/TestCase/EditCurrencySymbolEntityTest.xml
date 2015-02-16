@@ -5,28 +5,34 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="EditCurrencySymbolEntityTest">
-        <variation name="EditCurrencySymbolEntityTestVariation1">
-            <data name="configData">config_currency_symbols_usd_and_uah</data>
-            <data name="currencySymbol/data/code">UAH</data>
-            <data name="currencySymbol/data/inherit_custom_currency_symbol">No</data>
-            <data name="currencySymbol/data/custom_currency_symbol">custom</data>
-            <data name="constraint">assertCurrencySymbolSuccessSaveMessage, assertCurrencySymbolOnProductPage, assertCurrencySymbolOnCatalogPage</data>
-        </variation>
-        <variation name="EditCurrencySymbolEntityTestVariation2">
-            <data name="configData">config_currency_symbols_usd_and_uah</data>
-            <data name="currencySymbol/data/code">UAH</data>
-            <data name="currencySymbol/data/inherit_custom_currency_symbol">No</data>
-            <data name="currencySymbol/data/custom_currency_symbol">&amp;</data>
-            <data name="constraint">assertCurrencySymbolSuccessSaveMessage, assertCurrencySymbolOnProductPage, assertCurrencySymbolOnCatalogPage</data>
-        </variation>
-        <variation name="EditCurrencySymbolEntityTestVariation3">
-            <data name="configData">config_currency_symbols_usd_and_uah</data>
-            <data name="currencySymbol/data/code">UAH</data>
-            <data name="currencySymbol/data/inherit_custom_currency_symbol">No</data>
-            <data name="currencySymbol/data/custom_currency_symbol">%</data>
-            <data name="constraint">assertCurrencySymbolSuccessSaveMessage, assertCurrencySymbolOnProductPage, assertCurrencySymbolOnCatalogPage</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="EditCurrencySymbolEntityTest">
+    <variation name="EditCurrencySymbolEntityTestVariation1" firstConstraint="assertCurrencySymbolSuccessSaveMessage" method="test">
+      <data name="configData" xsi:type="string">config_currency_symbols_usd_and_uah</data>
+      <data name="currencySymbol/data/code" xsi:type="string">UAH</data>
+      <data name="currencySymbol/data/inherit_custom_currency_symbol" xsi:type="string">No</data>
+      <data name="currencySymbol/data/custom_currency_symbol" xsi:type="string">custom</data>
+      <constraint name="assertCurrencySymbolSuccessSaveMessage" next="assertCurrencySymbolOnProductPage"/>
+      <constraint name="assertCurrencySymbolOnProductPage" next="assertCurrencySymbolOnCatalogPage" prev="assertCurrencySymbolSuccessSaveMessage"/>
+      <constraint name="assertCurrencySymbolOnCatalogPage" prev="assertCurrencySymbolOnProductPage"/>
+    </variation>
+    <variation name="EditCurrencySymbolEntityTestVariation2" firstConstraint="assertCurrencySymbolSuccessSaveMessage" method="test">
+      <data name="configData" xsi:type="string">config_currency_symbols_usd_and_uah</data>
+      <data name="currencySymbol/data/code" xsi:type="string">UAH</data>
+      <data name="currencySymbol/data/inherit_custom_currency_symbol" xsi:type="string">No</data>
+      <data name="currencySymbol/data/custom_currency_symbol" xsi:type="string">&amp;</data>
+      <constraint name="assertCurrencySymbolSuccessSaveMessage" next="assertCurrencySymbolOnProductPage"/>
+      <constraint name="assertCurrencySymbolOnProductPage" next="assertCurrencySymbolOnCatalogPage" prev="assertCurrencySymbolSuccessSaveMessage"/>
+      <constraint name="assertCurrencySymbolOnCatalogPage" prev="assertCurrencySymbolOnProductPage"/>
+    </variation>
+    <variation name="EditCurrencySymbolEntityTestVariation3" firstConstraint="assertCurrencySymbolSuccessSaveMessage" method="test">
+      <data name="configData" xsi:type="string">config_currency_symbols_usd_and_uah</data>
+      <data name="currencySymbol/data/code" xsi:type="string">UAH</data>
+      <data name="currencySymbol/data/inherit_custom_currency_symbol" xsi:type="string">No</data>
+      <data name="currencySymbol/data/custom_currency_symbol" xsi:type="string">%</data>
+      <constraint name="assertCurrencySymbolSuccessSaveMessage" next="assertCurrencySymbolOnProductPage"/>
+      <constraint name="assertCurrencySymbolOnProductPage" next="assertCurrencySymbolOnCatalogPage" prev="assertCurrencySymbolSuccessSaveMessage"/>
+      <constraint name="assertCurrencySymbolOnCatalogPage" prev="assertCurrencySymbolOnProductPage"/>
+    </variation>
+  </testCase>
 </config>
