@@ -55,4 +55,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         new \Magento\Framework\Config\View([file_get_contents(__DIR__ . '/_files/view_invalid.xml')]);
     }
+
+    public function testGetExcludedFiles()
+    {
+        $this->assertEquals(2, count($this->_model->getExcludedFiles()));
+    }
+
+    public function testGetExcludedDir()
+    {
+        $this->assertEquals(1, count($this->_model->getExcludedDir()));
+    }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
+    <exclude>
+        <item type="file">mage/common.js</item>
+        <item type="file">mage/cookies.js</item>
+        <item type="file">mage/dataPost.js</item>
+        <item type="file">mage/decorate.js</item>
+        <item type="file">mage/deletable-item.js</item>
+        <item type="file">mage/dialog.js</item>
+        <item type="file">mage/dropdown.js</item>
+        <item type="file">mage/dropdowns.js</item>
+        <item type="file">mage/fieldset-controls.js</item>
+        <item type="file">mage/gallery-fullscreen.js</item>
+        <item type="file">mage/gallery.js</item>
+        <item type="file">mage/item-table.js</item>
+        <item type="file">mage/list.js</item>
+        <item type="file">mage/loader.js</item>
+        <item type="file">mage/menu.js</item>
+        <item type="file">mage/popup-window.js</item>
+        <item type="file">mage/redirect-url.js</item>
+        <item type="file">mage/sticky.js</item>
+        <item type="file">mage/terms.js</item>
+        <item type="file">mage/toggle.js</item>
+        <item type="file">mage/tooltip.js</item>
+        <item type="file">mage/translate-inline-vde.js</item>
+        <item type="file">mage/webapi.js</item>
+        <item type="file">mage/zoom.js</item>
+        <item type="file">mage/validation/dob-rule.js</item>
+        <item type="file">mage/validation/validation.js</item>
+        <item type="file">jquery/jquery.parsequery.js</item>
+        <item type="file">jquery/jquery.mobile.custom.js</item>
+        <item type="file">jquery/jquery-ui.js</item>
+        <item type="file">jquery/jquery.js</item>
+        <item type="file">jquery/autocomplete/jquery.autocomplete.js</item>
+        <item type="file">matchMedia.js</item>
+        <item type="directory">requirejs</item>
+        <item type="directory">prototype</item>
+    </exclude>
+</view>

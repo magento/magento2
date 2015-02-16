@@ -107,15 +107,13 @@ class BundleService
      */
     protected function isExcluded()
     {
-        $asset = $this->getAsset();
-        $area = $this->getContext()->getAreaCode();
-        if (in_array($asset->getFilePath(), $this->getConfig()->getExcludedFiles($area))) {
+        if (in_array($this->getAsset()->getFilePath(), $this->getConfig()->getExcludedFiles())) {
             return true;
         }
 
         // check if file in excluded directory
-        $assetDirectory  = dirname($asset->getFilePath());
-        foreach ($this->getConfig()->getExcludedDir($area) as $dir) {
+        $assetDirectory  = dirname($this->getAsset()->getFilePath());
+        foreach ($this->getConfig()->getExcludedDir() as $dir) {
             if (strpos($assetDirectory, $dir) !== false) {
                 return true;
             }

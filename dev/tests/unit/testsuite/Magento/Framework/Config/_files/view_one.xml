@@ -12,4 +12,7 @@
     <vars module="Two">
         <var name="one">Value One</var>
     </vars>
+    <exclude>
+        <item type="file">first_file</item>
+    </exclude>
 </view>

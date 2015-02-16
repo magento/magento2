@@ -43,13 +43,10 @@ class View extends \Magento\Framework\Config\AbstractXml
                     }
                     break;
                 case 'exclude':
-                    /** @var $areaNode \DOMElement */
-                    foreach ($childNode->getElementsByTagName('area') as $areaNode) {
-                        $areaName = $areaNode->getAttribute('name');
-                        foreach ($areaNode->getElementsByTagName('item') as $itemNode) {
-                            $itemType = $itemNode->getAttribute('type');
-                            $result[$childNode->tagName][$areaName][$itemType][] = $itemNode->nodeValue;
-                        }
+                    /** @var $itemNode \DOMElement */
+                    foreach ($childNode->getElementsByTagName('item') as $itemNode) {
+                        $itemType = $itemNode->getAttribute('type');
+                        $result[$childNode->tagName][$itemType][] = $itemNode->nodeValue;
                     }
                     break;
             }
@@ -110,42 +107,39 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     protected function _getIdAttributes()
     {
-        return ['/view/vars' => 'module', '/view/vars/var' => 'name', '/view/exclude/area' => 'name'];
+        return ['/view/vars' => 'module', '/view/vars/var' => 'name', '/view/exclude/item' => 'type'];
     }
 
     /**
      * Get excluded file list
      *
-     * @param string $area
      * @return array
      */
-    public function getExcludedFiles($area)
+    public function getExcludedFiles()
     {
-        $items = $this->getItems($area);
+        $items = $this->getItems();
         return isset($items['file']) ? $items['file'] : [];
     }
 
     /**
      * Get excluded directory list
      *
-     * @param string $area
      * @return array
      */
-    public function getExcludedDir($area)
+    public function getExcludedDir()
     {
-        $items = $this->getItems($area);
+        $items = $this->getItems();
         return isset($items['directory']) ? $items['directory'] : [];
     }
 
     /**
-     * Get a list of excludes in scope of specified area
+     * Get a list of excludes
      *
-     * @param string $area
      * @return array
      */
-    protected function getItems($area)
+    protected function getItems()
     {
-        return isset($this->_data['exclude'][$area]) ? $this->_data['exclude'][$area] : [];
+        return isset($this->_data['exclude']) ? $this->_data['exclude'] : [];
     }
 
 }

@@ -8,7 +8,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="view">
         <xs:complexType>
-            <xs:sequence>
+            <xs:choice maxOccurs="unbounded">
                 <xs:element name="vars" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:sequence>
@@ -30,7 +30,7 @@
                     </xs:unique>
                 </xs:element>
                 <xs:element name="exclude" minOccurs="0" maxOccurs="1" type="excludeType"/>
-            </xs:sequence>
+            </xs:choice>
         </xs:complexType>
         <xs:unique name="varsModuleIdentifier">
             <xs:selector xpath="vars"/>
@@ -39,21 +39,8 @@
     </xs:element>
     <xs:complexType name="excludeType">
         <xs:sequence>
-            <xs:element name="area" type="areaType" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="areaType">
-        <xs:sequence>
             <xs:element name="item" type="itemType" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute name="name" use="required">
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="frontend"/>
-                    <xs:enumeration value="adminhtml"/>
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
     </xs:complexType>
     <xs:complexType name="itemType">
         <xs:simpleContent>
