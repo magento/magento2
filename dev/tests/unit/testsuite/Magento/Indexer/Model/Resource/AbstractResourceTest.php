@@ -28,7 +28,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     protected $_categoryCollectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeManagerMock;
 
@@ -53,7 +53,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $this->_categoryCollectionFactoryMock = $this->getMockBuilder(
             'Magento\Catalog\Model\Resource\Category\CollectionFactory'
         )->disableOriginalConstructor()->getMock();
-        $this->_storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->_catalogConfigMock = $this->getMockBuilder('Magento\Catalog\Model\Config')
             ->disableOriginalConstructor()
             ->getMock();

@@ -44,7 +44,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\File::__construct
+     * covers \Magento\Framework\Data\Form\Element\File::__construct
      */
     public function testConstruct()
     {
