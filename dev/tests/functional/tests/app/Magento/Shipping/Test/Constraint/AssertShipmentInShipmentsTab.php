@@ -8,7 +8,7 @@ namespace Magento\Shipping\Test\Constraint;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -24,14 +24,14 @@ class AssertShipmentInShipmentsTab extends AbstractConstraint
     /**
      * Assert that shipment is present in the Shipments tab with correct shipped items quantity
      *
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @param OrderIndex $orderIndex
      * @param OrderInjectable $order
      * @param array $ids
      * @return void
      */
     public function processAssert(
-        OrderView $orderView,
+        SalesOrderView $orderView,
         OrderIndex $orderIndex,
         OrderInjectable $order,
         array $ids
