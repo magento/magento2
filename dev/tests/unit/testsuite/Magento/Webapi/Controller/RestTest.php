@@ -54,6 +54,11 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected $_serviceMock;
 
     /**
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_appStateMock;
+
+    /**
      * @var \Magento\Framework\Oauth\OauthInterface
      */
     protected $_oauthServiceMock;
@@ -79,9 +84,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected $areaMock;
 
     /**
-     * @var \Magento\Authorization\Model\UserContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Webapi\Controller\Rest\ParamsOverrider|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $userContextMock;
+    protected $paramsOverriderMock;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
@@ -112,8 +117,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
         $this->_authorizationMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')
             ->disableOriginalConstructor()->getMock();
-        $this->userContextMock = $this->getMockBuilder('Magento\Authorization\Model\UserContextInterface')
-            ->disableOriginalConstructor()->setMethods(['getUserId'])->getMockForAbstractClass();
+        $this->paramsOverriderMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\ParamsOverrider')
+            ->setMethods(['overrideParams'])
+            ->disableOriginalConstructor()->getMock();
         $this->dataObjectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
             ->disableOriginalConstructor()->setMethods(['getMethodReturnType'])->getMockForAbstractClass();
     }
@@ -147,7 +153,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
                     'serviceInputProcessor' => $this->serviceInputProcessorMock,
                     'errorProcessor' => $errorProcessorMock,
                     'areaList' => $this->areaListMock,
-                    'userContext' => $this->userContextMock,
+                    'paramsOverrider' => $this->paramsOverriderMock,
                     'dataObjectProcessor' => $this->dataObjectProcessorMock
                 ]
             );
@@ -162,6 +168,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectProcessorMock->expects($this->any())->method('getMethodReturnType')
             ->with(self::SERVICE_ID, self::SERVICE_METHOD)
             ->will($this->returnValue('null'));
+        $this->paramsOverriderMock->expects($this->any())->method('overrideParams')->will($this->returnValue([]));
         parent::setUp();
     }
 
@@ -231,86 +238,6 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_responseMock->isException());
         $exceptionArray = $this->_responseMock->getException();
         $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());
-    }
-
-    /**
-     * @param array $requestData Data from the request
-     * @param array $parameters Data from config about which parameters to override
-     * @param array $expectedOverriddenParams Result of overriding $requestData when applying rules from $parameters
-     * @param int $userId The id of the user invoking the request
-     * @param int $userType The type of user invoking the request
-     *
-     * @dataProvider overrideParmasDataProvider
-     */
-    public function testOverrideParams($requestData, $parameters, $expectedOverriddenParams, $userId, $userType)
-    {
-        $this->_routeMock->expects($this->once())->method('getParameters')->will($this->returnValue($parameters));
-        $this->_routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
-        $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
-        $this->_requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue($requestData));
-        $this->userContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($userId));
-        $this->userContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($userType));
-
-        // serviceInputProcessor should expect overridden params
-        $this->serviceInputProcessorMock->expects($this->once())->method('process')
-            ->with(
-                $this->equalTo('Magento\Webapi\Controller\TestService'),
-                $this->equalTo('testMethod'),
-                $this->equalTo($expectedOverriddenParams)
-            );
-
-        $this->_restController->dispatch($this->_requestMock);
-    }
-
-    /**
-     * @return array
-     */
-    public function overrideParmasDataProvider()
-    {
-        return [
-            'force false, value present' => [
-                ['Name1' => 'valueIn'],
-                ['Name1' => ['force' => false, 'value' => 'valueOverride']],
-                ['Name1' => 'valueIn'],
-                1,
-                UserContextInterface::USER_TYPE_INTEGRATION,
-            ],
-            'force true, value present' => [
-                ['Name1' => 'valueIn'],
-                ['Name1' => ['force' => true, 'value' => 'valueOverride']],
-                ['Name1' => 'valueOverride'],
-                1,
-                UserContextInterface::USER_TYPE_INTEGRATION,
-            ],
-            'force true, value not present' => [
-                ['Name1' => 'valueIn'],
-                ['Name2' => ['force' => true, 'value' => 'valueOverride']],
-                ['Name1' => 'valueIn', 'Name2' => 'valueOverride'],
-                1,
-                UserContextInterface::USER_TYPE_INTEGRATION,
-            ],
-            'force false, value not present' => [
-                ['Name1' => 'valueIn'],
-                ['Name2' => ['force' => false, 'value' => 'valueOverride']],
-                ['Name1' => 'valueIn', 'Name2' => 'valueOverride'],
-                1,
-                UserContextInterface::USER_TYPE_INTEGRATION,
-            ],
-            'force true, value present, override value is %customer_id%' => [
-                ['Name1' => 'valueIn'],
-                ['Name1' => ['force' => true, 'value' => '%customer_id%']],
-                ['Name1' => '1234'],
-                1234,
-                UserContextInterface::USER_TYPE_CUSTOMER,
-            ],
-            'force true, value present, override value is %customer_id%, not a customer' => [
-                ['Name1' => 'valueIn'],
-                ['Name1' => ['force' => true, 'value' => '%customer_id%']],
-                ['Name1' => '%customer_id%'],
-                1234,
-                UserContextInterface::USER_TYPE_INTEGRATION,
-            ],
-        ];
     }
 }
 
