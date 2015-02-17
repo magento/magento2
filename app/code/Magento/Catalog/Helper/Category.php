@@ -39,7 +39,7 @@ class Category extends AbstractHelper
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -65,7 +65,7 @@ class Category extends AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
      * @param CategoryRepositoryInterface $categoryRepository
@@ -73,7 +73,7 @@ class Category extends AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Data\CollectionFactory $dataCollectionFactory,
         CategoryRepositoryInterface $categoryRepository
@@ -118,7 +118,7 @@ class Category extends AbstractHelper
             0,
             (int)$this->_scopeConfig->getValue(
                 'catalog/navigation/max_depth',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $storeCategories = $category->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
@@ -181,7 +181,7 @@ class Category extends AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_USE_CATEGORY_CANONICAL_TAG,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

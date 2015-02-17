@@ -19,7 +19,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $instances = [];
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -48,13 +48,13 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     /**
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Resource\Category $categoryResource
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\Data\CategoryDataBuilder $dataBuilder
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Category $categoryResource,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\Data\CategoryDataBuilder $dataBuilder
     ) {
         $this->categoryFactory = $categoryFactory;

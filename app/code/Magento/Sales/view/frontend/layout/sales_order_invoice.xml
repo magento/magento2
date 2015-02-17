@@ -37,6 +37,6 @@
         <referenceContainer name="sales.order.info.buttons">
             <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
         </referenceContainer>
-        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Theme::template.phtml"/>
     </body>
 </page>

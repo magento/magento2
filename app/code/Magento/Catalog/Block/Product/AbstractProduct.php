@@ -585,4 +585,17 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
         }
         return $price;
     }
+
+    /**
+     * Whether redirect to cart enabled
+     *
+     * @return bool
+     */
+    public function isRedirectToCartEnabled()
+    {
+        return $this->_scopeConfig->getValue(
+            'checkout/cart/redirect_to_cart',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
 }
