@@ -11,33 +11,207 @@
 //  Variables
 //  _____________________________________________
 
-@menu-item__font-size: 1rem;
-@menu-item__color: @color-white;
 @menu__background-color: @color-very-dark-grayish-orange;
+
+@menu-item__font-size: 1rem;
+@menu-item__color: @color-gray65-lighten;
+@menu-item__active__color: @color-ivory;
+@menu-item__active__background-color: @color-brownie-almost;
+
+@menu-item-icon__height: 2.2rem;
+
+@menu-line-before__height: 1px;
+@menu-line-before__background-color: @color-brownie-vanilla;
 
 //
 
-.admin__menu {
+.menu-wrapper {
     background-color: @menu__background-color;
     height: 100%;
     left: 0;
+    padding: 1.2rem 0;
     position: fixed;
     top: 0;
     width: @menu__width;
     z-index: @menu__z-index;
+    .logo {
+        display: block;
+        margin-bottom: 1.8rem;
+        position: relative;
+        text-align: center;
+        &:hover {
+            .logo-img {
+                -webkit-filter: brightness(1.1);
+                        filter: brightness(1.1);
+            }
+        }
+        &:active {
+            .logo-img {
+                transform: scale(.95);
+            }
+        }
+        .logo-img {
+            transition: -webkit-filter .2s linear,
+                                filter .2s linear,
+                        transform .1s linear;
+        }
+    }
+}
+
+.admin__menu {
+    position: relative;
     ul {
         > li {
             display: block;
-            float: none;
+            text-align: center;
         }
     }
     .level-0 {
+        &:first-child {
+            > a {
+                position: relative;
+                //  Separator between logo and menu
+                &:after {
+                    @_menu-separator__width: 68%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    background-color: @menu-line-before__background-color;
+                    content: '';
+                    display: block;
+                    height: @menu-line-before__height;
+                    width: @_menu-separator__width;
+                    margin-left: (100% - @_menu-separator__width) / 2;
+                }
+                &.active {
+                  &:after {
+                      display: none;
+                  }
+                }
+            }
+        }
         > a {
-            display: block;
-            text-transform: uppercase;
-            text-decoration: none;
-            font-size: @menu-item__font-size;
             color: @menu-item__color;
+            display: block;
+            font-size: @menu-item__font-size;
+            min-height: 6.2rem;
+            padding-top: 1.2rem;
+            padding-right: .5rem;
+            padding-left: .5rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: background-color .1s linear;
+            &.active {
+                background-color: @menu-item__active__background-color;
+                color: @menu-item__active__color;
+            }
+            &.hover,
+            &:hover {
+                color: @menu-item__active__color;
+                background-color: @menu-item__active__background-color;
+            }
+            &:before {
+                &:extend(.abs-icon all);
+                content: @icon-logo__content; // ToDo UI: change it to node icon
+                display: block;
+                font-family: @icons-admin__font-name;
+                font-size: 2.2rem;
+                margin-bottom: .3rem;
+                height: @menu-item-icon__height;
+            }
+        }
+    }
+
+    //
+    //  Menu icons
+    //  ---------------------------------------------
+
+    .item-dashboard {
+        > a {
+            &:before {
+                @_menu-item-dashboard__size: 1.8rem;
+                padding-top: @menu-item-icon__height - @_menu-item-dashboard__size;
+                font-size: @_menu-item-dashboard__size;
+                content: @icon-dashboard__content;
+            }
+        }
+    }
+
+    .item-sales {
+        > a {
+            &:before {
+                content: @icon-sales__content;
+            }
+        }
+    }
+
+    .item-catalog {
+        > a {
+            &:before {
+                content: @icon-product__content;
+            }
+        }
+    }
+
+    .item-customer {
+        > a {
+            &:before {
+                position: relative;
+                @_menu-item-dashboard__size: 2.6rem;
+                top: @menu-item-icon__height - @_menu-item-dashboard__size;
+                font-size: @_menu-item-dashboard__size;
+                content: @icon-customers__content;
+            }
+        }
+    }
+
+    .item-marketing {
+        > a {
+            &:before {
+                @_menu-item-dashboard__size: 2rem;
+                padding-top: @menu-item-icon__height - @_menu-item-dashboard__size;
+                font-size: @_menu-item-dashboard__size;
+                content: @icon-promotions__content;
+            }
+        }
+    }
+
+    .item-content {
+        > a {
+            &:before {
+                position: relative;
+                @_menu-item-dashboard__size: 2.4rem;
+                top: @menu-item-icon__height - @_menu-item-dashboard__size;
+                font-size: @_menu-item-dashboard__size;
+                content: @icon-cms__content;
+            }
+        }
+    }
+
+    .item-report {
+        > a {
+            &:before {
+                content: @icon-reports__content;
+            }
+        }
+    }
+
+    .item-stores {
+        > a {
+            &:before {
+                @_menu-item-dashboard__size: 1.9rem;
+                padding-top: @menu-item-icon__height - @_menu-item-dashboard__size;
+                font-size: @_menu-item-dashboard__size;
+                content: @icon-stores__content;
+            }
+        }
+    }
+
+    .item-system {
+        > a {
+            &:before {
+                content: @icon-systems__content;
+            }
         }
     }
 

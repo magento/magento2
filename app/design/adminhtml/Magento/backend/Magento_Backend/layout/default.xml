@@ -22,5 +22,16 @@
         <css src="css/styles-migration.css"/> <!--New styles scope -->
     </head>
 
-    <body/>
+    <body>
+        <referenceContainer name="page.wrapper">
+
+            <container name="menu.wrapper.scope" htmlClass="admin__scope" before="-" htmlTag="div">
+                <container name="menu.wrapper" htmlClass="menu-wrapper" before="-" htmlTag="div"/>
+            </container>
+        </referenceContainer>
+
+        <move element="page.menu" destination="menu.wrapper" />
+        <move element="logo" before="-" destination="menu.wrapper" />
+
+        </body>
 </page>

@@ -7,6 +7,23 @@
 //  Admin Theme Icons
 //  _____________________________________________
 
+//
+//  Variables
+//  ---------------------------------------------
+
+@icon-cms__content: '\e602';
+@icon-customers__content: '\e603';
+@icon-dashboard__content: '\e604';
+@icon-logo__content: '\e606';
+@icon-product__content: '\e608';
+@icon-promotions__content: '\e609';
+@icon-reports__content: '\e60a';
+@icon-sales__content: '\e60b';
+@icon-stores__content: '\e60d';
+@icon-systems__content: '\e610';
+
+//
+
 .font-face(
     @family-name: @icons-admin__font-name,
     @font-path: @icons-admin__font-name-path,
@@ -27,10 +44,7 @@
 [class^='icon-']:before,
 [class*=' icon-']:before {
     font-family: @icons-admin__font-name;
-    -webkit-font-smoothing: antialiased;
-    font-style: normal;
-    font-weight: normal;
-    speak: none;
+    &:extend(.abs-icon all);
 }
 
 .icon-info {
@@ -257,7 +271,7 @@
 
 .icon-icon-system-config {
     &:before {
-        content: '\e610';
+        content: @icon-systems__content;
     }
 }
 
@@ -293,13 +307,13 @@
 
 .icon-product {
     &:before {
-        content: '\e608';
+        content: @icon-product__content;
     }
 }
 
 .icon-logo {
     &:before {
-        content: '\e606';
+        content: @icon-logo__content;
     }
 }
 
@@ -317,19 +331,19 @@
 
 .icon-cms {
     &:before {
-        content: '\e602';
+        content: @icon-cms__content;
     }
 }
 
 .icon-customers {
     &:before {
-        content: '\e603';
+        content: @icon-customers__content;
     }
 }
 
 .icon-dashboard {
     &:before {
-        content: '\e604';
+        content: @icon-dashboard__content;
     }
 }
 
@@ -341,19 +355,19 @@
 
 .icon-promotions {
     &:before {
-        content: '\e609';
+        content: @icon-promotions__content;
     }
 }
 
 .icon-reports {
     &:before {
-        content: '\e60a';
+        content: @icon-reports__content;
     }
 }
 
 .icon-sales {
     &:before {
-        content: '\e60b';
+        content: @icon-sales__content;
     }
 }
 
@@ -365,7 +379,7 @@
 
 .icon-stores {
     &:before {
-        content: '\e60d';
+        content: @icon-stores__content;
     }
 }
 

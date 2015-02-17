@@ -11,7 +11,9 @@
 <?php switch ($block->getShowPart()):
     case 'logo': ?>
         <?php $edition = $block->getEdition() ? 'data-edition="' . $block->getEdition() . '"' : ''; ?>
-        <a href="<?php echo $block->getHomeLink() ?>" <?php echo $edition; ?> class="logo" title="<?php echo __('Magento Admin Panel') ?>"><span><?php echo __('Magento Admin Panel') ?></span></a>
+        <a href="<?php echo $block->getHomeLink() ?>" <?php echo $edition; ?> class="logo" title="<?php echo __('Magento Admin Panel') ?>">
+            <img class="logo-img" src="<?php echo $this->getViewFileUrl('images/magento-icon.svg') ?>" alt="<?php echo __('Magento Admin Panel') ?>"/>
+        </a>
     <?php break; ?>
     <?php case 'user': ?>
         <div class="admin-user">

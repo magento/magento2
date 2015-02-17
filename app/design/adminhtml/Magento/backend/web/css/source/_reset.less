@@ -6,7 +6,11 @@
 .normalize();
 
 * {
-    box-sizing: border-box;
+    box-sizing: inherit;
+    &:before,
+    &:after {
+        box-sizing: inherit;
+    }
     &:focus {
         box-shadow: none;
         outline: 0;
@@ -27,10 +31,10 @@ object {
 }
 
 //  ToDo UI: experimantal, need to test on webkit
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    html {
-        margin-left: ~'calc(100vw - 100%)';
-        margin-right: 0;
-        overflow: auto;
-    }
-}
+//.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+//    html {
+//        margin-left: ~'calc(100vw - 100%)';
+//        margin-right: 0;
+//        overflow: auto;
+//    }
+//}
