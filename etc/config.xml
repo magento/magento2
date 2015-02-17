@@ -9,6 +9,9 @@
     <default>
         <catalog>
             <search>
+                <search_suggestion_enabled>1</search_suggestion_enabled>
+                <search_suggestion_count>2</search_suggestion_count>
+                <search_suggestion_count_results_enabled>0</search_suggestion_count_results_enabled>
                 <search_recommendations_enabled>1</search_recommendations_enabled>
                 <search_recommendations_count>5</search_recommendations_count>
                 <search_recommendations_count_results_enabled>0</search_recommendations_count_results_enabled>
