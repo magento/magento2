@@ -31,7 +31,7 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
      * Get next id
      *
      * @return string
-     * @throws \Magento\Framework\Exception\EavException
+     * @throws \Magento\Eav\Exception
      */
     public function getNextId()
     {
@@ -52,9 +52,7 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
         for ($i = $lid; $i >= 0; $i--) {
             $p = strpos($chars, $lastId[$i]);
             if (false === $p) {
-                throw new \Magento\Framework\Exception\EavException(
-                    __('Invalid character encountered in increment ID: %1', $lastId)
-                );
+                throw new \Magento\Eav\Exception(__('Invalid character encountered in increment ID: %1', $lastId));
             }
             if ($bumpNextChar) {
                 $p++;

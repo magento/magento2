@@ -135,14 +135,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Processing object before save data
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @throws \Magento\Framework\Exception\EavException
+     * @throws \Magento\Eav\Exception
      */
     public function beforeSave()
     {
         try {
             $this->attrLockValidator->validate($this);
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
-            throw new \Magento\Framework\Exception\EavException($exception->getMessage());
+            throw new \Magento\Eav\Exception($exception->getMessage());
         }
 
         $this->setData('modulePrefix', self::MODULE_NAME);

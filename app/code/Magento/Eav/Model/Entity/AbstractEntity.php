@@ -14,7 +14,7 @@ use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Exception\EavException;
+use Magento\Eav\Exception as EavException;
 
 /**
  * Entity/Attribute/Model - entity abstract

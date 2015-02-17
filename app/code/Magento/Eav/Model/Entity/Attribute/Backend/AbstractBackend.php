@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
-use Magento\Framework\Exception\EavException;
+use Magento\Eav\Exception as EavException;
 
 /**
  * Entity/Attribute/Model - attribute backend abstract

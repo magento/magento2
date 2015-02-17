@@ -6,7 +6,7 @@
 
 namespace Magento\Eav\Model\Entity\Attribute;
 
-use Magento\Framework\Exception\EavException;
+use Magento\Eav\Exception as EavException;
 use Magento\Framework\Api\AttributeValueFactory;
 
 /**

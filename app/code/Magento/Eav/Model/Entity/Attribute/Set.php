@@ -20,7 +20,7 @@
 namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Eav\Model\Entity\Type;
-use Magento\Framework\Exception\EavException;
+use Magento\Eav\Exception as EavException;
 use Magento\Framework\Api\AttributeValueFactory;
 
 /**
@@ -255,9 +255,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         }
 
         if (!$this->_getResource()->validate($this, $attributeSetName)) {
-            throw new EavException(
-                __('An attribute set with the "%1" name already exists.', $attributeSetName)
-            );
+            throw new EavException(__('An attribute set with the "%1" name already exists.', $attributeSetName));
         }
 
         return true;

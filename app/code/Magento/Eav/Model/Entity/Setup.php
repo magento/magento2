@@ -7,7 +7,7 @@
  */
 namespace Magento\Eav\Model\Entity;
 
-use Magento\Framework\Exception\EavException;
+use Magento\Eav\Exception as EavException;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

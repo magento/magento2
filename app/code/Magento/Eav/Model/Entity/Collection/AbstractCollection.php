@@ -6,7 +6,7 @@
 namespace Magento\Eav\Model\Entity\Collection;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\EavException;
+use Magento\Eav\Exception as EavException;
 
 /**
  * Entity/Attribute/Model - collection abstract
