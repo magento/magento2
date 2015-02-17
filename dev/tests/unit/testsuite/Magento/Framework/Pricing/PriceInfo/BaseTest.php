@@ -99,7 +99,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Pricing\PriceInfo\Base::getAdjustments
+     * covers \Magento\Framework\Pricing\PriceInfo\Base::getAdjustments
      */
     public function testGetAdjustments()
     {
@@ -108,7 +108,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Pricing\PriceInfo\Base::getAdjustment
+     * covers \Magento\Framework\Pricing\PriceInfo\Base::getAdjustment
      */
     public function testGetAdjustment()
     {
