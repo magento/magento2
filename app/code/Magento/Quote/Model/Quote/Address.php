@@ -1588,7 +1588,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function setRegion($region)
     {
-        return $this->setData(self::REGION, $region);
+        return $this->setData(self::KEY_REGION, $region);
     }
 
     /**
@@ -1596,7 +1596,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function setRegionId($regionId)
     {
-        return $this->setData(self::REGION_ID, $regionId);
+        return $this->setData(self::KEY_REGION_ID, $regionId);
     }
 
     /**
@@ -1604,7 +1604,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function setRegionCode($regionCode)
     {
-        return $this->setData(self::REGION_CODE, $regionCode);
+        return $this->setData(self::KEY_REGION_CODE, $regionCode);
     }
     //@codeCoverageIgnoreEnd
 }

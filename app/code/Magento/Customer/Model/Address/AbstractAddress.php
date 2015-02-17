@@ -232,7 +232,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
     /**
      * Alias for a street setter. To be used though setDataUsingMethod('street_full', $value).
      *
-     * @param string|string[] $street
+     * @param string[] $street
      * @return $this
      */
     public function setStreetFull(array $street = null)
@@ -243,7 +243,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
     /**
      * Non-magic setter for a street field
      *
-     * @param string|string[] $street
+     * @param string[] $street
      * @return $this
      */
     public function setStreet(array $street = null)

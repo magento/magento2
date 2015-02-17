@@ -16,11 +16,11 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
 
     const KEY_ID = 'id';
 
-    const REGION_ID = 'region_id';
+    const KEY_REGION_ID = 'region_id';
 
-    const REGION_CODE = 'region_code';
+    const KEY_REGION_CODE = 'region_code';
 
-    const REGION = 'region';
+    const KEY_REGION = 'region';
 
     const KEY_CUSTOMER_ID = 'customer_id';
 

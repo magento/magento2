@@ -486,7 +486,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getRealProductType()
     {
-        return $this->_getData(SELF::KEY_PRODUCT_TYPE);
+        return $this->_getData(self::KEY_PRODUCT_TYPE);
     }
 
     /**
@@ -865,7 +865,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getItemId()
     {
-        return $this->getData(SELF::KEY_ITEM_ID);
+        return $this->getData(self::KEY_ITEM_ID);
     }
 
     /**
@@ -873,7 +873,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setItemId($itemID)
     {
-        return $this->setData(SELF::KEY_ITEM_ID, $itemID);
+        return $this->setData(self::KEY_ITEM_ID, $itemID);
     }
 
     /**
@@ -881,7 +881,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getSku()
     {
-        return $this->getData(SELF::KEY_SKU);
+        return $this->getData(self::KEY_SKU);
     }
 
     /**
@@ -889,7 +889,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setSku($sku)
     {
-        return $this->setData(SELF::KEY_SKU, $sku);
+        return $this->setData(self::KEY_SKU, $sku);
     }
 
     /**
@@ -897,7 +897,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getQty()
     {
-        return $this->getData(SELF::KEY_QTY);
+        return $this->getData(self::KEY_QTY);
     }
 
     /**
@@ -909,8 +909,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function setQty($qty)
     {
         $qty = $this->_prepareQty($qty);
-        $oldQty = $this->_getData(SELF::KEY_QTY);
-        $this->setData(SELF::KEY_QTY, $qty);
+        $oldQty = $this->_getData(self::KEY_QTY);
+        $this->setData(self::KEY_QTY, $qty);
 
         $this->_eventManager->dispatch('sales_quote_item_qty_set_after', ['item' => $this]);
 
@@ -919,7 +919,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         }
 
         if ($this->getUseOldQty()) {
-            $this->setData(SELF::KEY_QTY, $oldQty);
+            $this->setData(self::KEY_QTY, $oldQty);
         }
 
         return $this;
@@ -930,7 +930,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getName()
     {
-        return $this->getData(SELF::KEY_NAME);
+        return $this->getData(self::KEY_NAME);
     }
 
     /**
@@ -938,7 +938,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setName($name)
     {
-        return $this->setData(SELF::KEY_NAME, $name);
+        return $this->setData(self::KEY_NAME, $name);
     }
 
     /**
@@ -946,7 +946,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getPrice()
     {
-        return $this->getData(SELF::KEY_PRICE);
+        return $this->getData(self::KEY_PRICE);
     }
 
     /**
@@ -954,7 +954,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setPrice($price)
     {
-        return $this->setData(SELF::KEY_PRICE, $price);
+        return $this->setData(self::KEY_PRICE, $price);
     }
 
     /**
@@ -964,7 +964,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getProductType()
     {
-        $option = $this->getOptionByCode(SELF::KEY_PRODUCT_TYPE);
+        $option = $this->getOptionByCode(self::KEY_PRODUCT_TYPE);
         if ($option) {
             return $option->getValue();
         }
@@ -973,7 +973,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             return $product->getTypeId();
         }
         // $product should always exist or there will be an error in getProduct()
-        return $this->_getData(SELF::KEY_PRODUCT_TYPE);
+        return $this->_getData(self::KEY_PRODUCT_TYPE);
     }
 
     /**
@@ -981,7 +981,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setProductType($productType)
     {
-        return $this->setData(SELF::KEY_PRODUCT_TYPE, $productType);
+        return $this->setData(self::KEY_PRODUCT_TYPE, $productType);
     }
 
     /**
@@ -989,7 +989,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getQuoteId()
     {
-        return $this->getData(SELF::KEY_QUOTE_ID);
+        return $this->getData(self::KEY_QUOTE_ID);
     }
 
     /**
@@ -997,7 +997,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setQuoteId($quoteId)
     {
-        return $this->setData(SELF::KEY_QUOTE_ID, $quoteId);
+        return $this->setData(self::KEY_QUOTE_ID, $quoteId);
     }
     //@codeCoverageIgnoreEnd
 }

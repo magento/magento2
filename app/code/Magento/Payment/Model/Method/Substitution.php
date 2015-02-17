@@ -40,26 +40,4 @@ class Substitution extends AbstractMethod
     {
         return $this->getInfoInstance()->getAdditionalInformation(self::INFO_KEY_TITLE);
     }
-
-    /**
-     * Set payment method code
-     *
-     * @param string $code
-     * @return $this
-     */
-    public function setCode($code)
-    {
-        return $this->setData(self::CODE, $code);
-    }
-
-    /**
-     * Set payment method title
-     *
-     * @param string $title
-     * @return $this
-     */
-    public function setTitle($title)
-    {
-        return $this->getInfoInstance()->setAdditionalInformation(self::INFO_KEY_TITLE, $title);
-    }
 }

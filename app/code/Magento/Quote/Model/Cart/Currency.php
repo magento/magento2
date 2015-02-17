@@ -16,7 +16,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function getGlobalCurrencyCode()
     {
-        return $this->getData(SELF::KEY_GLOBAL_CURRENCY_CODE);
+        return $this->getData(self::KEY_GLOBAL_CURRENCY_CODE);
     }
 
     /**
@@ -24,7 +24,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function getBaseCurrencyCode()
     {
-        return $this->getData(SELF::KEY_BASE_CURRENCY_CODE);
+        return $this->getData(self::KEY_BASE_CURRENCY_CODE);
     }
 
     /**
@@ -32,7 +32,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function getStoreCurrencyCode()
     {
-        return $this->getData(SELF::KEY_STORE_CURRENCY_CODE);
+        return $this->getData(self::KEY_STORE_CURRENCY_CODE);
     }
 
     /**
@@ -40,7 +40,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function getQuoteCurrencyCode()
     {
-        return $this->getData(SELF::KEY_QUOTE_CURRENCY_CODE);
+        return $this->getData(self::KEY_QUOTE_CURRENCY_CODE);
     }
 
     /**
@@ -48,7 +48,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function getStoreToBaseRate()
     {
-        return $this->getData(SELF::KEY_STORE_TO_BASE_RATE);
+        return $this->getData(self::KEY_STORE_TO_BASE_RATE);
     }
 
     /**
@@ -56,7 +56,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function getStoreToQuoteRate()
     {
-        return $this->getData(SELF::KEY_STORE_TO_QUOTE_RATE);
+        return $this->getData(self::KEY_STORE_TO_QUOTE_RATE);
     }
 
     /**
@@ -64,7 +64,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function getBaseToGlobalRate()
     {
-        return $this->getData(SELF::KEY_BASE_TO_GLOBAL_RATE);
+        return $this->getData(self::KEY_BASE_TO_GLOBAL_RATE);
     }
 
     /**
@@ -72,7 +72,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function getBaseToQuoteRate()
     {
-        return $this->getData(SELF::KEY_BASE_TO_QUOTE_RATE);
+        return $this->getData(self::KEY_BASE_TO_QUOTE_RATE);
     }
 
     /**
@@ -83,7 +83,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function setGlobalCurrencyCode($globalCurrencyCode)
     {
-        return $this->setData(SELF::KEY_GLOBAL_CURRENCY_CODE, $globalCurrencyCode);
+        return $this->setData(self::KEY_GLOBAL_CURRENCY_CODE, $globalCurrencyCode);
     }
 
     /**
@@ -94,7 +94,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function setBaseCurrencyCode($baseCurrencyCode)
     {
-        return $this->setData(SELF::KEY_BASE_CURRENCY_CODE, $baseCurrencyCode);
+        return $this->setData(self::KEY_BASE_CURRENCY_CODE, $baseCurrencyCode);
     }
 
     /**
@@ -105,7 +105,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function setStoreCurrencyCode($storeCurrencyCode)
     {
-        return $this->setData(SELF::KEY_STORE_CURRENCY_CODE, $storeCurrencyCode);
+        return $this->setData(self::KEY_STORE_CURRENCY_CODE, $storeCurrencyCode);
     }
 
     /**
@@ -116,7 +116,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function setQuoteCurrencyCode($quoteCurrencyCode)
     {
-        return $this->setData(SELF::KEY_QUOTE_CURRENCY_CODE, $quoteCurrencyCode);
+        return $this->setData(self::KEY_QUOTE_CURRENCY_CODE, $quoteCurrencyCode);
     }
 
     /**
@@ -127,7 +127,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function setStoreToBaseRate($storeToBaseRate)
     {
-        return $this->setData(SELF::KEY_STORE_TO_BASE_RATE, $storeToBaseRate);
+        return $this->setData(self::KEY_STORE_TO_BASE_RATE, $storeToBaseRate);
     }
 
     /**
@@ -138,7 +138,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function setStoreToQuoteRate($storeToQuoteRate)
     {
-        return $this->setData(SELF::KEY_STORE_TO_QUOTE_RATE, $storeToQuoteRate);
+        return $this->setData(self::KEY_STORE_TO_QUOTE_RATE, $storeToQuoteRate);
     }
 
     /**
@@ -149,7 +149,7 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function setBaseToGlobalRate($baseToGlobalRate)
     {
-        return $this->setData(SELF::KEY_BASE_TO_GLOBAL_RATE, $baseToGlobalRate);
+        return $this->setData(self::KEY_BASE_TO_GLOBAL_RATE, $baseToGlobalRate);
     }
 
     /**
@@ -160,6 +160,6 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
      */
     public function setBaseToQuoteRate($baseToQuoteRate)
     {
-        return $this->setData(SELF::KEY_BASE_TO_QUOTE_RATE, $baseToQuoteRate);
+        return $this->setData(self::KEY_BASE_TO_QUOTE_RATE, $baseToQuoteRate);
     }
 }

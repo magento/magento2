@@ -455,7 +455,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getCurrency()
     {
-        $currency = $this->getData(SELF::KEY_CURRENCY);
+        $currency = $this->getData(self::KEY_CURRENCY);
         if (!$currency) {
             $currency = $this->currencyFactory->create()
                 ->setGlobalCurrencyCode($this->getGlobalCurrencyCode())
@@ -475,7 +475,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setCurrency(\Magento\Quote\Api\Data\CurrencyInterface $currency = null)
     {
-        return $this->setData(SELF::KEY_CURRENCY, $currency);
+        return $this->setData(self::KEY_CURRENCY, $currency);
     }
 
     /**
@@ -483,7 +483,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getItems()
     {
-        return $this->_getData(SELF::KEY_ITEMS);
+        return $this->_getData(self::KEY_ITEMS);
     }
 
     /**
@@ -491,7 +491,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setItems(array $items = null)
     {
-        return $this->setData(SELF::KEY_ITEMS, $items);
+        return $this->setData(self::KEY_ITEMS, $items);
     }
 
     /**
@@ -507,7 +507,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getUpdatedAt()
     {
-        return $this->_getData(SELF::KEY_UPDATED_AT);
+        return $this->_getData(self::KEY_UPDATED_AT);
     }
 
     /**
@@ -515,7 +515,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getConvertedAt()
     {
-        return $this->_getData(SELF::KEY_CONVERTED_AT);
+        return $this->_getData(self::KEY_CONVERTED_AT);
     }
 
     /**
@@ -523,7 +523,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setConvertedAt($convertedAt)
     {
-        return $this->setData(SELF::KEY_CONVERTED_AT, $convertedAt);
+        return $this->setData(self::KEY_CONVERTED_AT, $convertedAt);
     }
 
     /**
@@ -531,7 +531,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getIsActive()
     {
-        return $this->_getData(SELF::KEY_IS_ACTIVE);
+        return $this->_getData(self::KEY_IS_ACTIVE);
     }
 
     /**
@@ -539,7 +539,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setIsActive($isActive)
     {
-        return $this->setData(SELF::KEY_IS_ACTIVE, $isActive);
+        return $this->setData(self::KEY_IS_ACTIVE, $isActive);
     }
 
     /**
@@ -547,7 +547,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getItemsCount()
     {
-        return $this->_getData(SELF::KEY_ITEMS_COUNT);
+        return $this->_getData(self::KEY_ITEMS_COUNT);
     }
 
     /**
@@ -555,7 +555,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setItemsCount($itemsCount)
     {
-        return $this->setData(SELF::KEY_ITEMS_COUNT, $itemsCount);
+        return $this->setData(self::KEY_ITEMS_COUNT, $itemsCount);
     }
 
     /**
@@ -563,7 +563,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getItemsQty()
     {
-        return $this->_getData(SELF::KEY_ITEMS_QTY);
+        return $this->_getData(self::KEY_ITEMS_QTY);
     }
 
     /**
@@ -571,7 +571,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setItemsQty($itemsQty)
     {
-        return $this->setData(SELF::KEY_ITEMS_QTY, $itemsQty);
+        return $this->setData(self::KEY_ITEMS_QTY, $itemsQty);
     }
 
     /**
@@ -579,7 +579,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getOrigOrderId()
     {
-        return $this->_getData(SELF::KEY_ORIG_ORDER_ID);
+        return $this->_getData(self::KEY_ORIG_ORDER_ID);
     }
 
     /**
@@ -587,7 +587,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setOrigOrderId($origOrderId)
     {
-        return $this->setData(SELF::KEY_ORIG_ORDER_ID, $origOrderId);
+        return $this->setData(self::KEY_ORIG_ORDER_ID, $origOrderId);
     }
 
     /**
@@ -595,7 +595,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getReservedOrderId()
     {
-        return $this->_getData(SELF::KEY_RESERVED_ORDER_ID);
+        return $this->_getData(self::KEY_RESERVED_ORDER_ID);
     }
 
     /**
@@ -603,7 +603,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setReservedOrderId($reservedOrderId)
     {
-        return $this->setData(SELF::KEY_RESERVED_ORDER_ID, $reservedOrderId);
+        return $this->setData(self::KEY_RESERVED_ORDER_ID, $reservedOrderId);
     }
 
     /**
@@ -611,7 +611,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getCustomerIsGuest()
     {
-        return $this->_getData(SELF::KEY_CUSTOMER_IS_GUEST);
+        return $this->_getData(self::KEY_CUSTOMER_IS_GUEST);
     }
 
     /**
@@ -619,7 +619,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setCustomerIsGuest($customerIsGuest)
     {
-        return $this->setData(SELF::KEY_CUSTOMER_IS_GUEST, $customerIsGuest);
+        return $this->setData(self::KEY_CUSTOMER_IS_GUEST, $customerIsGuest);
     }
 
     /**
@@ -627,7 +627,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getCustomerNote()
     {
-        return $this->_getData(SELF::KEY_CUSTOMER_NOTE);
+        return $this->_getData(self::KEY_CUSTOMER_NOTE);
     }
 
     /**
@@ -635,7 +635,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setCustomerNote($customerNote)
     {
-        return $this->setData(SELF::KEY_CUSTOMER_NOTE, $customerNote);
+        return $this->setData(self::KEY_CUSTOMER_NOTE, $customerNote);
     }
 
     /**
@@ -643,7 +643,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getCustomerNoteNotify()
     {
-        return $this->_getData(SELF::KEY_CUSTOMER_NOTE_NOTIFY);
+        return $this->_getData(self::KEY_CUSTOMER_NOTE_NOTIFY);
     }
 
     /**
@@ -651,7 +651,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setCustomerNoteNotify($customerNoteNotify)
     {
-        return $this->setData(SELF::KEY_CUSTOMER_NOTE_NOTIFY, $customerNoteNotify);
+        return $this->setData(self::KEY_CUSTOMER_NOTE_NOTIFY, $customerNoteNotify);
     }
     //@codeCoverageIgnoreEnd
 
@@ -1024,7 +1024,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->setCustomerTaxClassId($taxClassId);
         }
 
-        return $this->getData(SELF::KEY_CUSTOMER_TAX_CLASS_ID);
+        return $this->getData(self::KEY_CUSTOMER_TAX_CLASS_ID);
     }
 
     /**
@@ -1032,7 +1032,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setCustomerTaxClassId($customerTaxClassId)
     {
-        return $this->setData(SELF::KEY_CUSTOMER_TAX_CLASS_ID, $customerTaxClassId);
+        return $this->setData(self::KEY_CUSTOMER_TAX_CLASS_ID, $customerTaxClassId);
     }
 
     /**
@@ -2467,7 +2467,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if ($this->getCustomerId() && !$originalMethod) {
             return self::CHECKOUT_METHOD_LOGIN_IN;
         }
-        return $this->_getData(SELF::KEY_CHECKOUT_METHOD);
+        return $this->_getData(self::KEY_CHECKOUT_METHOD);
     }
 
     /**
@@ -2478,7 +2478,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function setCheckoutMethod($checkoutMethod)
     {
-        return $this->setData(SELF::KEY_CHECKOUT_METHOD, $checkoutMethod);
+        return $this->setData(self::KEY_CHECKOUT_METHOD, $checkoutMethod);
     }
 
     /**
