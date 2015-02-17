@@ -5,118 +5,126 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="CreateCustomerBackendEntityTest">
-        <variation name="CreateCustomerBackendEntityTestVariation1">
-            <data name="customer/data/website_id">Main Website</data>
-            <data name="customer/data/group_id/dataSet">General</data>
-            <data name="customer/data/prefix">-</data>
-            <data name="customer/data/firstname">John%isolation%</data>
-            <data name="customer/data/middlename">-</data>
-            <data name="customer/data/lastname">Doe%isolation%</data>
-            <data name="customer/data/suffix">-</data>
-            <data name="customer/data/email">JohnDoe%isolation%@example.com</data>
-            <data name="customer/data/dob">-</data>
-            <data name="customer/data/taxvat">-</data>
-            <data name="customer/data/gender">-</data>
-            <data name="address/data/firstname">-</data>
-            <data name="address/data/lastname">-</data>
-            <data name="address/data/street">-</data>
-            <data name="address/data/city">-</data>
-            <data name="address/data/country_id">-</data>
-            <data name="address/data/region_id">-</data>
-            <data name="address/data/postcode">-</data>
-            <data name="address/data/telephone">-</data>
-            <data name="constraint">assertCustomerSuccessSaveMessage, assertCustomerInGrid, assertCustomerForm</data>
-        </variation>
-        <variation name="CreateCustomerBackendEntityTestVariation2">
-            <data name="customer/data/website_id">Admin</data>
-            <data name="customer/data/group_id/dataSet">Wholesale</data>
-            <data name="customer/data/prefix">M</data>
-            <data name="customer/data/firstname">John%isolation%</data>
-            <data name="customer/data/middlename">Jack</data>
-            <data name="customer/data/lastname">Doe%isolation%</data>
-            <data name="customer/data/suffix">S</data>
-            <data name="customer/data/email">JohnDoe%isolation%@example.com</data>
-            <data name="customer/data/dob">03/16/2004</data>
-            <data name="customer/data/taxvat">-</data>
-            <data name="customer/data/gender">Male</data>
-            <data name="address/data/firstname">-</data>
-            <data name="address/data/lastname">-</data>
-            <data name="address/data/street">-</data>
-            <data name="address/data/city">-</data>
-            <data name="address/data/country_id">-</data>
-            <data name="address/data/region_id">-</data>
-            <data name="address/data/postcode">-</data>
-            <data name="address/data/telephone">-</data>
-            <data name="constraint">assertCustomerSuccessSaveMessage, assertCustomerInGrid, assertCustomerForm</data>
-            <data name="issue">Bug: MAGETWO-31689</data>
-        </variation>
-        <variation name="CreateCustomerBackendEntityTestVariation3">
-            <data name="customer/data/website_id">Main Website</data>
-            <data name="customer/data/group_id/dataSet">General</data>
-            <data name="customer/data/prefix">-</data>
-            <data name="customer/data/firstname">John%isolation%</data>
-            <data name="customer/data/middlename">-</data>
-            <data name="customer/data/lastname">Doe%isolation%</data>
-            <data name="customer/data/suffix">-</data>
-            <data name="customer/data/email">JohnDoe%isolation%@example.com</data>
-            <data name="customer/data/dob">-</data>
-            <data name="customer/data/taxvat">-</data>
-            <data name="customer/data/gender">-</data>
-            <data name="address/data/firstname">Joe</data>
-            <data name="address/data/lastname">Doe</data>
-            <data name="address/data/street">1 Main Street</data>
-            <data name="address/data/city">Culver City</data>
-            <data name="address/data/country_id">United States</data>
-            <data name="address/data/region_id">California</data>
-            <data name="address/data/postcode">90230</data>
-            <data name="address/data/telephone">3109450345</data>
-            <data name="constraint">assertCustomerSuccessSaveMessage, assertCustomerInGrid, assertCustomerForm</data>
-        </variation>
-        <variation name="CreateCustomerBackendEntityTestVariation4">
-            <data name="customer/data/website_id">Main Website</data>
-            <data name="customer/data/group_id/dataSet">Retailer</data>
-            <data name="customer/data/prefix">-</data>
-            <data name="customer/data/firstname">John%isolation%</data>
-            <data name="customer/data/middlename">-</data>
-            <data name="customer/data/lastname">Doe%isolation%</data>
-            <data name="customer/data/suffix">-</data>
-            <data name="customer/data/email">JohnDoe%isolation%@example.ccc</data>
-            <data name="customer/data/dob">-</data>
-            <data name="customer/data/taxvat">-</data>
-            <data name="customer/data/gender">-</data>
-            <data name="address/data/firstname">-</data>
-            <data name="address/data/lastname">-</data>
-            <data name="address/data/street">-</data>
-            <data name="address/data/city">-</data>
-            <data name="address/data/country_id">-</data>
-            <data name="address/data/region_id">-</data>
-            <data name="address/data/postcode">-</data>
-            <data name="address/data/telephone">-</data>
-            <data name="constraint">assertCustomerInvalidEmail</data>
-        </variation>
-        <variation name="CreateCustomerBackendEntityTestVariation5">
-            <data name="customer/data/website_id">Main Website</data>
-            <data name="customer/data/group_id/dataSet">General</data>
-            <data name="customer/data/prefix">-</data>
-            <data name="customer/data/firstname">Thomas%isolation%</data>
-            <data name="customer/data/middlename">-</data>
-            <data name="customer/data/lastname">Oster%isolation%</data>
-            <data name="customer/data/suffix">-</data>
-            <data name="customer/data/email">Thomas%isolation%@example.com</data>
-            <data name="customer/data/dob">-</data>
-            <data name="customer/data/taxvat">5250008057</data>
-            <data name="customer/data/gender">-</data>
-            <data name="address/data/firstname">Thomas</data>
-            <data name="address/data/lastname">Oster</data>
-            <data name="address/data/street">Chmielna 113</data>
-            <data name="address/data/city">Bielsko-Biala</data>
-            <data name="address/data/country_id">Poland</data>
-            <data name="address/data/region_id">-</data>
-            <data name="address/data/postcode">43-310 </data>
-            <data name="address/data/telephone">799885616</data>
-            <data name="constraint">assertCustomerSuccessSaveMessage, assertCustomerInGrid, assertCustomerForm</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="CreateCustomerBackendEntityTest">
+    <variation name="CreateCustomerBackendEntityTestVariation1" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+      <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/prefix" xsi:type="string">-</data>
+      <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">-</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">-</data>
+      <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+      <data name="customer/data/dob" xsi:type="string">-</data>
+      <data name="customer/data/taxvat" xsi:type="string">-</data>
+      <data name="customer/data/gender" xsi:type="string">-</data>
+      <data name="address/data/firstname" xsi:type="string">-</data>
+      <data name="address/data/lastname" xsi:type="string">-</data>
+      <data name="address/data/street" xsi:type="string">-</data>
+      <data name="address/data/city" xsi:type="string">-</data>
+      <data name="address/data/country_id" xsi:type="string">-</data>
+      <data name="address/data/region_id" xsi:type="string">-</data>
+      <data name="address/data/postcode" xsi:type="string">-</data>
+      <data name="address/data/telephone" xsi:type="string">-</data>
+      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerInGrid"/>
+      <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessSaveMessage"/>
+      <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
+    </variation>
+    <variation name="CreateCustomerBackendEntityTestVariation2" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+      <data name="customer/data/website_id" xsi:type="string">Admin</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">Wholesale</data>
+      <data name="customer/data/prefix" xsi:type="string">M</data>
+      <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">Jack</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">S</data>
+      <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+      <data name="customer/data/dob" xsi:type="string">03/16/2004</data>
+      <data name="customer/data/taxvat" xsi:type="string">-</data>
+      <data name="customer/data/gender" xsi:type="string">Male</data>
+      <data name="address/data/firstname" xsi:type="string">-</data>
+      <data name="address/data/lastname" xsi:type="string">-</data>
+      <data name="address/data/street" xsi:type="string">-</data>
+      <data name="address/data/city" xsi:type="string">-</data>
+      <data name="address/data/country_id" xsi:type="string">-</data>
+      <data name="address/data/region_id" xsi:type="string">-</data>
+      <data name="address/data/postcode" xsi:type="string">-</data>
+      <data name="address/data/telephone" xsi:type="string">-</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-31689</data>
+      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerInGrid"/>
+      <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessSaveMessage"/>
+      <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
+    </variation>
+    <variation name="CreateCustomerBackendEntityTestVariation3" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+      <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/prefix" xsi:type="string">-</data>
+      <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">-</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">-</data>
+      <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+      <data name="customer/data/dob" xsi:type="string">-</data>
+      <data name="customer/data/taxvat" xsi:type="string">-</data>
+      <data name="customer/data/gender" xsi:type="string">-</data>
+      <data name="address/data/firstname" xsi:type="string">Joe</data>
+      <data name="address/data/lastname" xsi:type="string">Doe</data>
+      <data name="address/data/street" xsi:type="string">1 Main Street</data>
+      <data name="address/data/city" xsi:type="string">Culver City</data>
+      <data name="address/data/country_id" xsi:type="string">United States</data>
+      <data name="address/data/region_id" xsi:type="string">California</data>
+      <data name="address/data/postcode" xsi:type="string">90230</data>
+      <data name="address/data/telephone" xsi:type="string">3109450345</data>
+      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerInGrid"/>
+      <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessSaveMessage"/>
+      <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
+    </variation>
+    <variation name="CreateCustomerBackendEntityTestVariation4" firstConstraint="assertCustomerInvalidEmail" method="test">
+      <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">Retailer</data>
+      <data name="customer/data/prefix" xsi:type="string">-</data>
+      <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">-</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">-</data>
+      <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.ccc</data>
+      <data name="customer/data/dob" xsi:type="string">-</data>
+      <data name="customer/data/taxvat" xsi:type="string">-</data>
+      <data name="customer/data/gender" xsi:type="string">-</data>
+      <data name="address/data/firstname" xsi:type="string">-</data>
+      <data name="address/data/lastname" xsi:type="string">-</data>
+      <data name="address/data/street" xsi:type="string">-</data>
+      <data name="address/data/city" xsi:type="string">-</data>
+      <data name="address/data/country_id" xsi:type="string">-</data>
+      <data name="address/data/region_id" xsi:type="string">-</data>
+      <data name="address/data/postcode" xsi:type="string">-</data>
+      <data name="address/data/telephone" xsi:type="string">-</data>
+      <constraint name="assertCustomerInvalidEmail"/>
+    </variation>
+    <variation name="CreateCustomerBackendEntityTestVariation5" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+      <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/prefix" xsi:type="string">-</data>
+      <data name="customer/data/firstname" xsi:type="string">Thomas%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">-</data>
+      <data name="customer/data/lastname" xsi:type="string">Oster%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">-</data>
+      <data name="customer/data/email" xsi:type="string">Thomas%isolation%@example.com</data>
+      <data name="customer/data/dob" xsi:type="string">-</data>
+      <data name="customer/data/taxvat" xsi:type="string">5250008057</data>
+      <data name="customer/data/gender" xsi:type="string">-</data>
+      <data name="address/data/firstname" xsi:type="string">Thomas</data>
+      <data name="address/data/lastname" xsi:type="string">Oster</data>
+      <data name="address/data/street" xsi:type="string">Chmielna 113</data>
+      <data name="address/data/city" xsi:type="string">Bielsko-Biala</data>
+      <data name="address/data/country_id" xsi:type="string">Poland</data>
+      <data name="address/data/region_id" xsi:type="string">-</data>
+      <data name="address/data/postcode" xsi:type="string">43-310 </data>
+      <data name="address/data/telephone" xsi:type="string">799885616</data>
+      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerInGrid"/>
+      <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessSaveMessage"/>
+      <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
+    </variation>
+  </testCase>
 </config>

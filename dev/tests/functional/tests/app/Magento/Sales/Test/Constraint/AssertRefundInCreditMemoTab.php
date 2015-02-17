@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Constraint;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\CreditMemos\Grid;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -25,14 +25,14 @@ class AssertRefundInCreditMemoTab extends AbstractConstraint
     /**
      * Assert that refund is present in the tab with ID and refunded amount(depending on full/partial refund)
      *
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @param OrderIndex $orderIndex
      * @param OrderInjectable $order
      * @param array $ids
      * @return void
      */
     public function processAssert(
-        OrderView $orderView,
+        SalesOrderView $orderView,
         OrderIndex $orderIndex,
         OrderInjectable $order,
         array $ids

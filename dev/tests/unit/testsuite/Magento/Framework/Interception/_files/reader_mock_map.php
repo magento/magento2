@@ -35,6 +35,14 @@ return [
                         'instance' => 'Magento\Framework\Interception\Custom\Module\Model\ItemContainerPlugin\Simple',
                     ],
                 ],
+            ],
+            'Magento\Framework\Interception\Custom\Module\Model\StartingBackslash' => [
+                'plugins' => [
+                    'simple_plugin' => [
+                        'sortOrder' => 20,
+                        'instance' => '\Magento\Framework\Interception\Custom\Module\Model\StartingBackslash\Plugin',
+                    ],
+                ],
             ]
         ]
     ],

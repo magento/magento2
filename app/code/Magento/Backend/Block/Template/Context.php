@@ -66,7 +66,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Backend\Model\Session $backendSession
@@ -99,7 +99,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\View\TemplateEnginePool $enginePool,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Backend\Model\Session $backendSession,
@@ -143,7 +143,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     /**
      * Get store manager
      *
-     * @return \Magento\Framework\Store\StoreManagerInterface
+     * @return \Magento\Store\Model\StoreManagerInterface
      */
     public function getStoreManager()
     {

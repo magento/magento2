@@ -265,7 +265,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -289,7 +289,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -1244,7 +1244,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         $this->_addUrlRewrite = true;
         $useCategoryUrl = $this->_scopeConfig->getValue(
             \Magento\Catalog\Helper\Product::XML_PATH_PRODUCT_URL_USE_CATEGORY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
         if ($useCategoryUrl) {

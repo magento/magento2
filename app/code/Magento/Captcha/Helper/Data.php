@@ -55,7 +55,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -66,14 +66,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param Filesystem $filesystem
      * @param \Magento\Captcha\Model\CaptchaFactory $factory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         Filesystem $filesystem,
         \Magento\Captcha\Model\CaptchaFactory $factory
@@ -117,7 +117,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_config->getValue(
             'customer/captcha/' . $key,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

@@ -143,14 +143,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if (!isset($formData['tax_country_id'])) {
             $formData['tax_country_id'] = $this->_scopeConfig->getValue(
                 \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
 
         if (!isset($formData['tax_region_id'])) {
             $formData['tax_region_id'] = $this->_scopeConfig->getValue(
                 \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
 
@@ -197,7 +197,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if (!isset($formData['tax_postcode'])) {
             $formData['tax_postcode'] = $this->_scopeConfig->getValue(
                 \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_POSTCODE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
 
