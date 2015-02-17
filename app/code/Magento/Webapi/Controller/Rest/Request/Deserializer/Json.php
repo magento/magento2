@@ -52,9 +52,8 @@ class Json implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterf
             if ($this->_appState->getMode() !== State::MODE_DEVELOPER) {
                 throw new \Magento\Webapi\Exception(__('Decoding error.'));
             } else {
-                throw new \Magento\Webapi\Exception(
-                    __('Decoding error: %1%2%3%4', PHP_EOL, $e->getMessage(), PHP_EOL, $e->getTraceAsString())
-                );
+                $phrase = __('Decoding error: %1%2%3%4', PHP_EOL, $e->getMessage(), PHP_EOL, $e->getTraceAsString());
+                throw new \Magento\Webapi\Exception((string)$phrase);
             }
         }
         return $decodedBody;
