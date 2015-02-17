@@ -3,47 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* Action "Back" as cross  */
-/*[class^=" catalog-product-"] .page-actions .action-back,
-[class^=" catalog-product-"] .page-actions .action-back:hover,
-[class^=" catalog-product-"] .page-actions .action-back:active,
-[class^=" newsletter-"] .page-actions .action-back,
-[class^=" newsletter-"] .page-actions .action-back:hover,
-[class^=" newsletter-"] .page-actions .action-back:active {
-    overflow: hidden;
-    padding: 5px 6px 3px;
-    margin-left: 12px;
-    color: #7a7976;;
-}
-
-[class^=" catalog-product-"] .page-actions .action-back:hover,
-[class^=" newsletter-"] .page-actions .action-back:hover {
-    color: #000;
-}
-
-[class^=" catalog-product-"] .page-actions .action-back.mage-error,
-[class^=" newsletter-"] .page-actions .action-back.mage-error {
-    color: #b57c72;
-}
-
-[class^=" catalog-product-"] .page-actions .action-back:before,
-[class^=" newsletter-"] .page-actions .action-back:before {
-    display: inline-block;
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    content: '\e07d';
-    font-size: 16px;
-}
-
-[class^=" catalog-product-"] .page-actions .action-back span,
-[class^=" newsletter-"] .page-actions .action-back span {
-    display: inline-block;
-    overflow: hidden;
-    text-indent: -999em;
-}*/
 .product-actions {
     padding: 5px 18px;
 }
@@ -480,9 +439,7 @@
 .field-msrp label.mage-error,
 .field-weight label.mage-error,
 .field-quantity_and_stock_status label.mage-error {
-    position: absolute;
-    left: 0;
-    top: 30px;
+    position: static;
 }
 
 /* Change Attribute Set */
@@ -515,11 +472,6 @@ div.removed,
 #product_options_container_top .add-select-row ~ label.mage-error {
     display: block;
     margin: 5px 0 0;
-}
-
-.eq-ie8 #product_options_container_top .fieldset,
-.eq-ie8 #product_options_container_top .fieldset-alt {
-    margin-bottom: 0;
 }
 
 /*
