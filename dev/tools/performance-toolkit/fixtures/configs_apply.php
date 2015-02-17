@@ -17,7 +17,7 @@ class ConfigsApplyFixture extends \Magento\ToolkitFramework\Fixture
     /**
      * {@inheritdoc}
      */
-        public function execute()
+    public function execute()
     {
         $configs = \Magento\ToolkitFramework\Config::getInstance()->getValue('configs', array());
         $this->application->resetObjectManager();
