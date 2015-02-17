@@ -508,12 +508,20 @@
     <type name="Magento\Framework\App\StaticResource">
         <arguments>
             <argument name="response" xsi:type="object" shared="false">Magento\Core\Model\File\Storage\Response</argument>
-            <argument name="publisher" xsi:type="object">symlinkPublisher</argument>
+            <argument name="publisher" xsi:type="object">developerPublisher</argument>
         </arguments>
     </type>
-    <virtualType name="symlinkPublisher" type="Magento\Framework\App\View\Asset\Publisher">
+    <virtualType name="developerPublisher" type="Magento\Framework\App\View\Asset\Publisher">
         <arguments>
-            <argument name="publisher" xsi:type="object">Magento\Framework\App\View\Asset\Publisher\Symlink</argument>
+            <argument name="materializationStrategyFactory" xsi:type="object">developerMaterialization</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="developerMaterialization" type="Magento\Framework\App\View\Asset\MaterializationStrategy\Factory">
+        <arguments>
+            <argument name="strategiesList" xsi:type="array">
+                <item name="view_preprocessed" xsi:type="object">Magento\Framework\App\View\Asset\MaterializationStrategy\Symlink</item>
+                <item name="default" xsi:type="object">Magento\Framework\App\View\Asset\MaterializationStrategy\Copy</item>
+            </argument>
         </arguments>
     </virtualType>
     <virtualType name="fallbackResolverSimpleWithGroupedCache" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple">

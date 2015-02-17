@@ -20,20 +20,20 @@ class Publisher
     protected $filesystem;
 
     /**
-     * @var Publisher\PublisherInterface
+     * @var MaterializationStrategy\Factory
      */
-    private $publisher;
+    private $materializationStrategyFactory;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param Publisher\PublisherInterface $publisher
+     * @param MaterializationStrategy\Factory $materializationStrategyFactory
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        Publisher\PublisherInterface $publisher
+        MaterializationStrategy\Factory $materializationStrategyFactory
     ) {
         $this->filesystem = $filesystem;
-        $this->publisher = $publisher;
+        $this->materializationStrategyFactory = $materializationStrategyFactory;
     }
 
     /**
@@ -61,6 +61,7 @@ class Publisher
         $rootDir = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $rootDir->getRelativePath($asset->getSourceFile());
         $destination = $asset->getPath();
-        return $this->publisher->publishFile($rootDir, $targetDir, $source, $destination);
+        $strategy = $this->materializationStrategyFactory->create($asset);
+        return $strategy->publishFile($rootDir, $targetDir, $source, $destination);
     }
 }

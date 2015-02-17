@@ -4,11 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\View\Asset\Publisher;
+namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\View\Asset;
 
-class Symlink implements PublisherInterface
+interface StrategyInterface
 {
     /**
      * Publish file
@@ -24,7 +25,13 @@ class Symlink implements PublisherInterface
         WriteInterface $targetDir,
         $sourcePath,
         $destinationPath
-    ) {
-        return $rootDir->createSymlink($sourcePath, $destinationPath, $targetDir);
-    }
+    );
+
+    /**
+     * Whether the strategy can be applied
+     *
+     * @param Asset\LocalInterface $asset
+     * @return bool
+     */
+    public function isSupported(Asset\LocalInterface $asset);
 }
