@@ -34,6 +34,8 @@ class Copy implements StrategyInterface
      *
      * @param Asset\LocalInterface $asset
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isSupported(Asset\LocalInterface $asset)
     {

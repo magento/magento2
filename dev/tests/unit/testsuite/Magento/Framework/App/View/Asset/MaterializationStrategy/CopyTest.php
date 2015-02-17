@@ -4,11 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\View\Asset\Publisher;
+namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 
-
-class SymlinkTest extends \PHPUnit_Framework_TestCase
+class CopyTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Copy
+     */
+    private $copyPublisher;
+
+    public function setUp()
+    {
+        $this->copyPublisher = new Copy;
+    }
+
     public function testPublishFile()
     {
         $rootDir = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
@@ -18,15 +27,21 @@ class SymlinkTest extends \PHPUnit_Framework_TestCase
         $sourcePath = 'source/path/file';
         $destinationPath = 'destination/path/file';
 
-        $copyPublisher = new Symlink;
         $rootDir->expects($this->once())
-            ->method('createSymlink')
+            ->method('copyFile')
             ->with(
                 $sourcePath,
                 $destinationPath,
                 $targetDir
             )->willReturn(true);
 
-        $this->assertTrue($copyPublisher->publishFile($rootDir, $targetDir, $sourcePath, $destinationPath));
+        $this->assertTrue($this->copyPublisher->publishFile($rootDir, $targetDir, $sourcePath, $destinationPath));
+    }
+
+    public function testIsSupported()
+    {
+        $asset = $this->getMockBuilder('Magento\Framework\View\Asset\LocalInterface')
+            ->getMock();
+        $this->assertTrue($this->copyPublisher->isSupported($asset));
     }
 }

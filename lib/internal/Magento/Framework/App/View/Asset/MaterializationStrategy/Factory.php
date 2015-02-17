@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Asset;
 
 class Factory
@@ -13,9 +14,9 @@ class Factory
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
-    protected $_objectManager;
+    protected $objectManager;
 
     /**
      * Strategies list
@@ -30,12 +31,12 @@ class Factory
     const DEFAULT_STRATEGY = 'Magento\Framework\App\View\Asset\MaterializationStrategy\Copy';
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param StrategyInterface[] $strategiesList
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $strategiesList = [])
+    public function __construct(ObjectManagerInterface $objectManager, $strategiesList = [])
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
         $this->strategiesList = $strategiesList;
     }
 
@@ -50,7 +51,7 @@ class Factory
     public function create(Asset\LocalInterface $asset)
     {
         if (empty($this->strategiesList)) {
-            $this->strategiesList[] = $this->_objectManager->get(self::DEFAULT_STRATEGY);
+            $this->strategiesList[] = $this->objectManager->get(self::DEFAULT_STRATEGY);
         }
 
         foreach ($this->strategiesList as $strategy) {

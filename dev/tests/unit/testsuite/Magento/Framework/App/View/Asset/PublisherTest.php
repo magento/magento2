@@ -37,21 +37,21 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
     private $object;
 
     /**
-     * @var Publisher\PublisherInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var MaterializationStrategy\Factory |\PHPUnit_Framework_MockObject_MockObject
      */
-    private $publisherFile;
+    private $materializationStrategyFactory;
 
     protected function setUp()
     {
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->publisherFile = $this->getMock(
-            'Magento\Framework\App\View\Asset\Publisher\PublisherInterface',
+        $this->materializationStrategyFactory = $this->getMock(
+            'Magento\Framework\App\View\Asset\MaterializationStrategy\Factory',
             [],
             [],
             '',
             false
         );
-        $this->object = new Publisher($this->filesystem, $this->publisherFile);
+        $this->object = new Publisher($this->filesystem, $this->materializationStrategyFactory);
 
         $this->rootDirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $this->staticDirRead = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
@@ -83,12 +83,23 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
             ->method('isExist')
             ->with('some/file.ext')
             ->will($this->returnValue(false));
+        $materializationStrategy = $this->getMock(
+            'Magento\Framework\App\View\Asset\MaterializationStrategy\StrategyInterface',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->rootDirWrite->expects($this->once())
             ->method('getRelativePath')
             ->with('/root/some/file.ext')
             ->will($this->returnValue('some/file.ext'));
-        $this->publisherFile->expects($this->once())
+        $this->materializationStrategyFactory->expects($this->once())
+            ->method('create')
+            ->with($this->getAsset())
+            ->will($this->returnValue($materializationStrategy));
+        $materializationStrategy->expects($this->once())
             ->method('publishFile')
             ->with($this->rootDirWrite, $this->staticDirWrite, 'some/file.ext', 'some/file.ext')
             ->will($this->returnValue(true));
