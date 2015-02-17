@@ -7,6 +7,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
+        <css src="mui/mui_legacy.css"/>
         <css src="css/styles-old.css"/>
         <css src="Magento_Theme::prototype/magento.css"/>
 
