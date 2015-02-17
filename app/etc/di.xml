@@ -338,7 +338,7 @@
                 <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
                 <item name="helper" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod</item>
             </argument>
-            <argument name="discriminator" xsi:type="const">Magento\Core\Model\Layout\Merge::TYPE_ATTRIBUTE</argument>
+            <argument name="discriminator" xsi:type="const">Magento\Framework\View\Model\Layout\Merge::TYPE_ATTRIBUTE</argument>
         </arguments>
     </virtualType>
     <virtualType name="layoutArgumentGeneratorInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater">
