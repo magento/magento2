@@ -43,13 +43,17 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             //calculate end date considering timezone specification
             /** @var $datetimeTo \DateTime */
             $datetimeTo->setTimezone(
-                $this->_scopeConfig->getValue(
-                    $this->_localeDate->getDefaultTimezonePath(),
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                new \DateTimeZone(
+                    $this->_scopeConfig->getValue(
+                        $this->_localeDate->getDefaultTimezonePath(),
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    )
                 )
             );
             $datetimeTo->modify('+1 day')->modify('-1 second');
-            $datetimeTo->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
+            $datetimeTo->setTimezone(
+                new \DateTimeZone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE)
+            );
         }
         return $value;
     }
