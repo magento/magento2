@@ -8,6 +8,11 @@ namespace Magento\Tools\Di\Definition\Serializer;
 class Igbinary implements SerializerInterface
 {
     /**
+     * Serializer name
+     */
+    const NAME  = 'igbinary';
+
+    /**
      * Igbinary constructor
      */
     public function __construct()
