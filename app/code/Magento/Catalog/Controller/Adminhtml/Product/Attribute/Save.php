@@ -9,7 +9,7 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-use Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException;
+use \Magento\Framework\Exception\AlreadyExistsException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

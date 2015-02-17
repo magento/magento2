@@ -90,6 +90,8 @@ class ValidatorFile extends Validator
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_File_Transfer_Exception
+     * @throws \Magento\Framework\Validator\ValidatorException
+     * @throws \Magento\Framework\Exception\Product\HasRequiredOptionsException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate($processingParams, $option)
@@ -99,24 +101,24 @@ class ValidatorFile extends Validator
         try {
             $runValidation = $option->getIsRequire() || $upload->isUploaded($file);
             if (!$runValidation) {
-                throw new RunValidationException(
+                throw new \Magento\Framework\Validator\ValidatorException(
                     __('Validation failed. Required options were not filled or file was not uploaded.')
                 );
             }
 
             $fileInfo = $upload->getFileInfo($file)[$file];
             $fileInfo['title'] = $fileInfo['name'];
-        } catch (RunValidationException $r) {
+        } catch (\Magento\Framework\Validator\ValidatorException $r) {
             throw $r;
         } catch (\Exception $e) {
             // when file exceeds the upload_max_filesize, $_FILES is empty
             if ($this->validateContentLength()) {
                 $value = $this->fileSize->getMaxFileSizeInMb();
-                throw new LargeSizeException(
+                throw new \Magento\Framework\Exception\File\LargeSizeException(
                     __("The file you uploaded is larger than %1 Megabytes allowed by server", $value)
                 );
             } else {
-                throw new OptionRequiredException(__('Option required.'));
+                throw new \Magento\Framework\Exception\Product\HasRequiredOptionsException(__('Option required.'));
             }
         }
 
@@ -185,10 +187,12 @@ class ValidatorFile extends Validator
             $errors = $this->getValidatorErrors($upload->getErrors(), $fileInfo, $option);
 
             if (count($errors) > 0) {
-                throw new Exception(implode("\n", $errors));
+                throw new \Magento\Framework\Exception\File\ValidatorException(implode("\n", $errors));
             }
         } else {
-            throw new Exception(__('Please specify the product\'s required option(s).'));
+            throw new \Magento\Framework\Exception\File\ValidatorException(
+                __('Please specify the product\'s required option(s).')
+            );
         }
         return $userValue;
     }

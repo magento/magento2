@@ -125,7 +125,7 @@ abstract class Validator
      * @param \Magento\Catalog\Model\Product\Option $option
      * @param array $fileFullPath
      * @return \Zend_File_Transfer_Adapter_Http|\Zend_Validate $object
-     * @throws NotImageException
+     * @throws \Magento\Framework\Exception\InputException
      */
     protected function buildImageValidator($object, $option, $fileFullPath = null)
     {
@@ -139,7 +139,7 @@ abstract class Validator
         }
         if (count($dimensions) > 0) {
             if (!is_null($fileFullPath) && !$this->isImage($fileFullPath)) {
-                throw new NotImageException(__('This is not an image.'));
+                throw new \Magento\Framework\Exception\InputException(__('This is not an image.'));
             }
             $object->addValidator(new \Zend_Validate_File_ImageSize($dimensions));
         }

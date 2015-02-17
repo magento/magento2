@@ -221,10 +221,10 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $value = $this->validatorFile->setProduct($this->getProduct())
                 ->validate($this->_getProcessingParams(), $option);
             $this->setUserValue($value);
-        } catch (File\LargeSizeException $largeSizeException) {
+        } catch (\Magento\Framework\Exception\File\LargeSizeException $largeSizeException) {
             $this->setIsValid(false);
             throw new LocalizedException($largeSizeException->getMessage());
-        } catch (File\OptionRequiredException $e) {
+        } catch (\Magento\Framework\Exception\Product\HasRequiredOptionsException $e) {
             switch ($this->getProcessMode()) {
                 case \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL:
                     throw new LocalizedException(__('Please specify the product\'s required option(s).'));
@@ -233,9 +233,9 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     $this->setUserValue(null);
                     break;
             }
-        } catch (File\RunValidationException $e) {
+        } catch (\Magento\Framework\Validator\ValidatorException $e) {
             $this->setUserValue(null);
-        } catch (File\Exception $e) {
+        } catch (\Magento\Framework\Exception\File\ValidatorException $e) {
             $this->setIsValid(false);
             throw new LocalizedException($e->getMessage());
         } catch (\Exception $e) {

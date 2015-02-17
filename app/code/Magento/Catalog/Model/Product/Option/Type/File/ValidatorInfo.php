@@ -85,7 +85,7 @@ class ValidatorInfo extends Validator
         $validatorChain = $this->validateFactory->create();
         try {
             $validatorChain = $this->buildImageValidator($validatorChain, $option, $this->fileFullPath);
-        } catch (NotImageException $notImage) {
+        } catch (\Magento\Framework\Exception\InputException $notImage) {
             return false;
         }
 

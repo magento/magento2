@@ -3,8 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Catalog\Model\Product\Option\Type\File;
+namespace Magento\Framework\Exception\File;
 
 class LargeSizeException extends \Magento\Framework\Exception\LocalizedException
 {

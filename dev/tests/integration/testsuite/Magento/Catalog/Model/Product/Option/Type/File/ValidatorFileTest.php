@@ -38,7 +38,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Catalog\Model\Product\Option\Type\File\RunValidationException
+     * @expectedException \Magento\Framework\Validator\ValidatorException
      * @return void
      */
     public function testRunValidationException()
@@ -53,7 +53,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Catalog\Model\Product\Option\Type\File\LargeSizeException
+     * @expectedException \Magento\Framework\Exception\File\LargeSizeException
      * @expectedExceptionMessage The file you uploaded is larger than 2 Megabytes allowed by server
      * @return void
      */
@@ -75,7 +75,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Catalog\Model\Product\Option\Type\File\OptionRequiredException
+     * @expectedException \Magento\Framework\Exception\Product\HasRequiredOptionsException
      * @return void
      */
     public function testOptionRequiredException()
@@ -95,7 +95,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Catalog\Model\Product\Option\Type\File\Exception
+     * @expectedException \Magento\Framework\Exception\File\ValidatorException
      * @expectedExceptionMessage Please specify the product's required option(s).
      * @return void
      */
@@ -118,7 +118,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     public function testInvalidateFile()
     {
         $this->setExpectedException(
-            '\Magento\Catalog\Model\Product\Option\Type\File\Exception',
+            '\Magento\Framework\Exception\File\ValidatorException',
             "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "Maximum allowed image size for 'MediaOption' is 2000x2000 px.\n"
