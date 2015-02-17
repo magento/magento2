@@ -8,7 +8,7 @@ namespace Magento\Reports\Setup;
 
 use Magento\Cms\Model\PageFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 class InstallData implements \Magento\Framework\Setup\InstallDataInterface
 {
@@ -28,7 +28,7 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
     /**
      * {@inheritdoc}
      */
-    public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
         /*

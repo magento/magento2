@@ -55,6 +55,6 @@ class SetupFactoryTest extends \PHPUnit_Framework_TestCase
             $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface'),
             'sampleModuleName'
         );
-        $this->assertInstanceOf('Magento\Framework\Setup\ModuleSchemaResourceInterface', $setupModule);
+        $this->assertInstanceOf('Magento\Framework\Setup\ModuleSchemaSetupInterface', $setupModule);
     }
 }

@@ -8,10 +8,10 @@
 namespace Magento\Setup\Module;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Module\Setup\SetupCache;
 
-class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataResourceInterface
+class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSetupInterface
 {
     /**
      * Call afterApplyAllUpdates method flag
@@ -72,7 +72,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
      */
     public function __construct(
         \Magento\Framework\Module\Setup\Context $context,
-        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataSetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         parent::__construct($context->getResourceModel(), $connectionName);
         $this->_eventManager = $context->getEventManager();

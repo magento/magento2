@@ -13,7 +13,7 @@ use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 class CategorySetup extends EavSetup
 {
@@ -25,14 +25,14 @@ class CategorySetup extends EavSetup
     private $categoryFactory;
 
     /**
-     * @param ModuleDataResourceInterface $setup
+     * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
      * @param CategoryFactory $categoryFactory
      */
     public function __construct(
-        ModuleDataResourceInterface $setup,
+        ModuleDataSetupInterface $setup,
         Context $context,
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory,

@@ -8,11 +8,11 @@
 namespace Magento\Framework\Module\Updater;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 class SetupFactory
 {
-    const INSTANCE_TYPE = 'Magento\Framework\Setup\ModuleDataResourceInterface';
+    const INSTANCE_TYPE = '\Magento\Framework\Setup\ModuleDataSetupInterface';
 
     /**
      * @var ObjectManagerInterface
@@ -37,7 +37,7 @@ class SetupFactory
     /**
      * @param string $resourceName
      * @param string $moduleName
-     * @return ModuleDataResourceInterface
+     * @return ModuleDataSetupInterface
      * @throws \LogicException
      */
     public function create($resourceName, $moduleName)

@@ -11,7 +11,7 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
 
 class CustomerSetup extends EavSetup
@@ -22,14 +22,14 @@ class CustomerSetup extends EavSetup
     protected $eavConfig;
 
     /**
-     * @param ModuleDataResourceInterface $setup
+     * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
      * @param Config $eavConfig
      */
     public function __construct(
-        ModuleDataResourceInterface $setup,
+        ModuleDataSetupInterface $setup,
         Context $context,
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory,

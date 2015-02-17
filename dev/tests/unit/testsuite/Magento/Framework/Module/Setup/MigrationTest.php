@@ -139,7 +139,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
      */
     public function testAppendClassAliasReplace()
     {
-        $setupMock = $this->getMockForAbstractClass('Magento\Framework\Setup\ModuleDataResourceInterface');
+        $setupMock = $this->getMockForAbstractClass('\Magento\Framework\Setup\ModuleDataSetupInterface');
         $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $migrationData = $this->getMock('Magento\Framework\Module\Setup\MigrationData', [], [], '', false);
 
@@ -194,7 +194,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         $this->_actualUpdateResult = [];
         $tableRowsCount = count($tableData);
 
-        $setupMock = $this->getMockForAbstractClass('Magento\Framework\Setup\ModuleDataResourceInterface');
+        $setupMock = $this->getMockForAbstractClass('\Magento\Framework\Setup\ModuleDataSetupInterface');
         $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $migrationData = $this->getMock('Magento\Framework\Module\Setup\MigrationData', [], [], '', false);
 

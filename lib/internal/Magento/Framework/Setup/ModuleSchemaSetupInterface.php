@@ -8,7 +8,7 @@ namespace Magento\Framework\Setup;
 /**
  * DB schema resource interface for a module
  */
-interface ModuleSchemaResourceInterface extends SchemaResourceInterface
+interface ModuleSchemaSetupInterface extends SchemaSetupInterface
 {
     /**
      * Applies module recurring post schema updates

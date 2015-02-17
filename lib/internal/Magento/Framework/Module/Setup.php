@@ -7,10 +7,10 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\Setup\ModuleDataResourceInterface;
-use Magento\Framework\Setup\ResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SetupInterface;
 
-class Setup implements ResourceInterface
+class Setup implements SetupInterface
 {
     /**
      * Setup Connection
@@ -46,7 +46,7 @@ class Setup implements ResourceInterface
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataSetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->resourceModel = $resource;
         $this->connectionName = $connectionName;

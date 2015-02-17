@@ -8,7 +8,7 @@ namespace Magento\Framework\Setup;
 /**
  * DB data resource interface for a module
  */
-interface ModuleDataResourceInterface extends ResourceInterface
+interface ModuleDataSetupInterface extends SetupInterface
 {
     const DEFAULT_SETUP_CONNECTION = 'core_setup';
 

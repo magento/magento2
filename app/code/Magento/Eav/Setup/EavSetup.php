@@ -9,7 +9,7 @@ use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\CacheInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -32,7 +32,7 @@ class EavSetup
     private $attributeMapper;
 
     /**
-     * @var ModuleDataResourceInterface
+     * @var ModuleDataSetupInterface
      */
     private $setup;
 
@@ -65,13 +65,13 @@ class EavSetup
     private $_defaultAttributeSetName = 'Default';
 
     /**
-     * @param ModuleDataResourceInterface $setup
+     * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
      */
     public function __construct(
-        ModuleDataResourceInterface $setup,
+        ModuleDataSetupInterface $setup,
         Context $context,
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory
@@ -83,7 +83,7 @@ class EavSetup
     }
 
     /**
-     * @return ModuleDataResourceInterface
+     * @return ModuleDataSetupInterface
      */
     public function getSetup()
     {

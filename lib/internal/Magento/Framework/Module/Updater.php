@@ -59,7 +59,7 @@ class Updater
                 $moduleContext = new \Magento\Setup\Model\ModuleContext($dataVer);
                 if ($dataVer !== false) {
                     $status = version_compare($configVer, $dataVer);
-                    if ($status == \Magento\Framework\Setup\ModuleDataResourceInterface::VERSION_COMPARE_GREATER) {
+                    if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
                         $moduleUpgrader = $moduleInstallerUpgraderFactory->createDataUpgrader($moduleName);
                         if ($moduleUpgrader) {
                             $moduleUpgrader->upgrade($this->setup, $moduleContext);

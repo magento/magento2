@@ -33,9 +33,9 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var \Magento\Framework\Setup\ModuleDataResourceInterface $installer */
+        /** @var \Magento\Framework\Setup\ModuleDataSetupInterface $installer */
         $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Setup\ModuleDataResourceInterface',
+            '\Magento\Framework\Setup\ModuleDataSetupInterface',
             [
                 'resourceName' => 'core_setup',
                 'moduleName' => 'Magento_Core'

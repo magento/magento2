@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Module;
 
-use Magento\Framework\Setup\ModuleSchemaResourceInterface;
+use Magento\Framework\Setup\ModuleSchemaSetupInterface;
 use Magento\Setup\Model\LoggerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

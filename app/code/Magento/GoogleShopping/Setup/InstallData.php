@@ -11,7 +11,7 @@ namespace Magento\GoogleShopping\Setup;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\GoogleShopping\Model\ConfigFactory;
 
 class InstallData implements InstallDataInterface
@@ -39,7 +39,7 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      */
-    public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         if ($this->moduleManager->isEnabled('Magento_GoogleBase')) {
             $typesInsert = $setup->getConnection()->select()->from(
