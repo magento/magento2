@@ -23,11 +23,6 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
      */
     private $moduleResource;
 
-    /**
-     * @var \Magento\Framework\Module\ResourceResolverInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $resourceResolver;
-
     protected function setUp()
     {
         $this->moduleList = $this->getMockForAbstractClass('Magento\Framework\Module\ModuleListInterface');
@@ -44,12 +39,10 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
 
         $this->_outputConfig = $this->getMockForAbstractClass('Magento\Framework\Module\Output\ConfigInterface');
         $this->moduleResource = $this->getMockForAbstractClass('\Magento\Framework\Module\ResourceInterface');
-        $this->resourceResolver = $this->getMockForAbstractClass('\Magento\Framework\Module\ResourceResolverInterface');
 
         $this->dbVersionInfo = new DbVersionInfo(
             $this->moduleList,
-            $this->moduleResource,
-            $this->resourceResolver
+            $this->moduleResource
         );
     }
 
@@ -128,11 +121,6 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
         $this->moduleResource->expects($this->any())
             ->method('getDbVersion')
             ->will($this->returnValue(2));
-
-        $this->resourceResolver->expects($this->any())->method('getResourceList')->will($this->returnValueMap([
-                    ['Module_One', ['Module_One']],
-                    ['Module_Two', ['Module_Two']],
-                ]));
 
         $expectedErrors = [
             [

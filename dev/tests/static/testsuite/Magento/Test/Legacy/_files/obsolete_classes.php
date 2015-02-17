@@ -1352,8 +1352,6 @@ return [
     ['Magento\Core\Model\Module\Declaration\FileResolver'],
     ['Magento\Core\Model\Module\Declaration\SchemaLocator'],
     ['Magento\Core\Model\Module\Dir\ReverseResolver'],
-    ['Magento\Core\Model\Module\ResourceResolver'],
-    ['Magento\Core\Model\Module\ResourceResolverInterface'],
     ['Magento\Core\Model\Resource\SetupInterface'],
     ['Magento\Core\Model\Db\UpdaterInterface'],
     ['Magento\Core\Model\Router\NoRouteHandlerInterface'],

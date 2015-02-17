@@ -33,30 +33,21 @@ class DbVersionInfo
     private $moduleResource;
 
     /**
-     * @var ResourceResolverInterface
-     */
-    private $resourceResolver;
-
-    /**
      * @param ModuleListInterface $moduleList
      * @param ResourceInterface $moduleResource
-     * @param ResourceResolverInterface $resourceResolver
      */
     public function __construct(
         ModuleListInterface $moduleList,
-        ResourceInterface $moduleResource,
-        ResourceResolverInterface $resourceResolver
+        ResourceInterface $moduleResource
     ) {
         $this->moduleList = $moduleList;
         $this->moduleResource = $moduleResource;
-        $this->resourceResolver = $resourceResolver;
     }
 
     /**
      * Check if DB schema is up to date
      *
      * @param string $moduleName
-     * @param string $resourceName
      * @return bool
      */
     public function isSchemaUpToDate($moduleName)
@@ -67,7 +58,6 @@ class DbVersionInfo
 
     /**
      * @param string $moduleName
-     * @param string $resourceName
      * @return bool
      */
     public function isDataUpToDate($moduleName)
@@ -86,14 +76,12 @@ class DbVersionInfo
     {
         $errors = [];
         foreach ($this->moduleList->getNames() as $moduleName) {
-            foreach ($this->resourceResolver->getResourceList($moduleName) as $resourceName) {
-                if (!$this->isSchemaUpToDate($moduleName)) {
-                    $errors[] = $this->getSchemaInfo($moduleName, $resourceName);
-                }
+            if (!$this->isSchemaUpToDate($moduleName)) {
+                $errors[] = $this->getSchemaInfo($moduleName);
+            }
 
-                if (!$this->isDataUpToDate($moduleName)) {
-                    $errors[] = $this->getDataInfo($moduleName, $resourceName);
-                }
+            if (!$this->isDataUpToDate($moduleName)) {
+                $errors[] = $this->getDataInfo($moduleName);
             }
         }
         return $errors;
@@ -103,12 +91,11 @@ class DbVersionInfo
      * Check if DB schema is up to date, version info if it is not.
      *
      * @param string $moduleName
-     * @param string $resourceName
      * @return string[] Contains current and needed version strings
      */
-    private function getSchemaInfo($moduleName, $resourceName)
+    private function getSchemaInfo($moduleName)
     {
-        $dbVer = $this->moduleResource->getDbVersion($resourceName); // version saved in DB
+        $dbVer = $this->moduleResource->getDbVersion($moduleName); // version saved in DB
         $module = $this->moduleList->getOne($moduleName);
         $configVer = $module['setup_version'];
         $dbVer = $dbVer ?: 'none';
@@ -124,12 +111,11 @@ class DbVersionInfo
      * Get error data for an out-of-date schema or data.
      *
      * @param string $moduleName
-     * @param string $resourceName
      * @return string[]
      */
-    private function getDataInfo($moduleName, $resourceName)
+    private function getDataInfo($moduleName)
     {
-        $dataVer = $this->moduleResource->getDataVersion($resourceName);
+        $dataVer = $this->moduleResource->getDataVersion($moduleName);
         $module = $this->moduleList->getOne($moduleName);
         $configVer = $module['setup_version'];
         $dataVer = $dataVer ?: 'none';

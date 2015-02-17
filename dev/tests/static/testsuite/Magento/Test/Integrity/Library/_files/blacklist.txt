@@ -57,7 +57,6 @@ lib/internal/Magento/Framework/View/Element/Context.php
 lib/internal/Magento/Framework/View/Element/Template/Context.php
 lib/internal/Magento/Framework/View/Element/Redirect.php
 
-lib/internal/Magento/Framework/App/Module/ResourceResolver.php
 lib/internal/Magento/Framework/Event/Invoker/InvokerDefault.php
 lib/internal/Magento/Framework/Phrase/Renderer/Translate.php
 lib/internal/Magento/Framework/Backup/Snapshot.php
