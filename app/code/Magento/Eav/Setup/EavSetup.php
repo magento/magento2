@@ -48,7 +48,7 @@ class EavSetup
      *
      * @var array
      */
-    public $defaultGroupIdAssociations = ['General' => 1];
+    private $defaultGroupIdAssociations = ['General' => 1];
 
     /**
      * Default attribute group name
@@ -189,7 +189,7 @@ class EavSetup
         }
 
         $this->addAttributeSet($code, $this->_defaultAttributeSetName);
-        $this->addAttributeGroup($code, $defaultGroup, $this->_generalGroupName);
+        $this->addAttributeGroup($code, $this->_defaultGroupName, $this->_generalGroupName);
 
         return $this;
     }

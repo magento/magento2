@@ -175,10 +175,15 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
 
         if ($this->setupCache->has($table, $parentId, $rowId)) {
             if (is_array($field)) {
-                $newRowData = array_merge(
-                    $this->setupCache->get($table, $parentId, $rowId),
-                    $field
-                );
+                $oldRowData = $this->setupCache->get($table, $parentId, $rowId);
+                if (is_array($oldRowData)) {
+                    $newRowData = array_merge(
+                        $oldRowData,
+                        $field
+                    );
+                } else {
+                    $newRowData = $field;
+                }
             } else {
                 $newRowData = $value;
             }

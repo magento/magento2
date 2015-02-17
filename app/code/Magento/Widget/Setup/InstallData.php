@@ -20,7 +20,7 @@ class InstallData implements InstallDataInterface
 	public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
 	{
 		$installer = $setup->createMigrationSetup();
-		$installer->startSetup();
+		$setup->startSetup();
 		
 		$installer->appendClassAliasReplace(
 		    'widget_instance',
@@ -30,8 +30,8 @@ class InstallData implements InstallDataInterface
 		    ['instance_id']
 		);
 		$installer->doUpdateClassAliases();
-		
-		$installer->endSetup();
+
+		$setup->endSetup();
 		
 	}
 }
