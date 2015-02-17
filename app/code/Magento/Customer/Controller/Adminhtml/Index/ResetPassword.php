@@ -35,7 +35,7 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
             $resultRedirect->setPath('customer/index');
             return $resultRedirect;
         } catch (\Magento\Framework\Validator\ValidatorException $exception) {
-            $messages = $exception->getMessages();
+            $messages = $exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR);
             if (!count($messages)) {
                 $messages = $exception->getMessage();
             }

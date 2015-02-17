@@ -12,7 +12,7 @@ class ValidatorException extends \Magento\Framework\Exception\InputException
     /**
      * @var array
      */
-    protected $_messages;
+    protected $messages = [];
 
     /**
      * Constructor
@@ -29,29 +29,46 @@ class ValidatorException extends \Magento\Framework\Exception\InputException
         array $messages = []
     ) {
         if (!empty($messages)) {
-            $this->_messages = $messages;
             $message = '';
-            foreach ($this->_messages as $propertyMessages) {
+            foreach ($messages as $propertyMessages) {
                 foreach ($propertyMessages as $propertyMessage) {
                     if ($message) {
                         $message .= PHP_EOL;
                     }
                     $message .= $propertyMessage;
+                    $this->addMessage(new \Magento\Framework\Message\Error($propertyMessage));
                 }
             }
-        } else {
-            $this->_messages = [$message];
         }
         parent::__construct($message, $params, $cause);
     }
 
     /**
-     * Get validation error messages
-     *
+     * @param \Magento\Framework\Message\AbstractMessage $message
+     * @return $this
+     */
+    public function addMessage(\Magento\Framework\Message\AbstractMessage $message)
+    {
+        if (!isset($this->messages[$message->getType()])) {
+            $this->messages[$message->getType()] = [];
+        }
+        $this->messages[$message->getType()][] = $message;
+        return $this;
+    }
+
+    /**
+     * @param string $type
      * @return array
      */
-    public function getMessages()
+    public function getMessages($type = '')
     {
-        return $this->_messages;
+        if ('' == $type) {
+            $arrRes = [];
+            foreach ($this->messages as $messages) {
+                $arrRes = array_merge($arrRes, $messages);
+            }
+            return $arrRes;
+        }
+        return isset($this->messages[$type]) ? $this->messages[$type] : [];
     }
 }
