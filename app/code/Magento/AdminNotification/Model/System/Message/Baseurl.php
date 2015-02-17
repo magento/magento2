@@ -21,7 +21,7 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
     protected $_config;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -32,13 +32,13 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory
     ) {
@@ -114,7 +114,7 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
     /**
      * Retrieve message text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getText()
     {

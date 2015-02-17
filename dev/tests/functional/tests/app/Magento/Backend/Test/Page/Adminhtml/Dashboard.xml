@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" ?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
@@ -11,5 +11,6 @@
     <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title" strategy="css selector"/>
     <block name="mainBlock" class="Magento\Backend\Test\Block\Page\Main" locator=".dashboard-main" strategy="css selector"/>
     <block name="menuBlock" class="Magento\Backend\Test\Block\Menu" locator=".navigation" strategy="css selector"/>
+    <block name="storeStatsBlock" class="Magento\Backend\Test\Block\Dashboard\StoreStats" locator=".dashboard-store-stats" strategy="css selector"/>
   </page>
 </config>

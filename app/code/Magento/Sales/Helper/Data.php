@@ -24,7 +24,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\OrderIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -50,7 +50,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -65,7 +65,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -80,7 +80,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -95,7 +95,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -110,7 +110,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -125,7 +125,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -140,7 +140,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity::XML_PATH_EMAIL_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

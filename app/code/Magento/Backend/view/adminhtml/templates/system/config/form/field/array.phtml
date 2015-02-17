@@ -37,13 +37,16 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
     <input type="hidden" name="<?php echo $block->getElement()->getName(); ?>[__empty]" value="" />
 
     <script>
-        require(['prototype'], function(){
+        require([
+            'mage/template',
+            'prototype'
+        ], function (mageTemplate) {
         // create row creator
         var arrayRow<?php echo $_htmlId ?> = {
 
             // define row prototypeJS template
-            template: new Template(
-                    '<tr id="#{_id}">'
+            template: mageTemplate(
+                    '<tr id="<%= _id %>">'
                     <?php foreach ($block->getColumns() as $columnName => $column): ?>
                             + '<td>'
                             + '<?php echo $block->renderCellTemplate($columnName)?>'
@@ -51,10 +54,10 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                         <?php endforeach; ?>
 
                     <?php if ($block->isAddAfter()): ?>
-                            + '<td><button class="action- add" type="button" id="addAfterBtn#{_id}"><span><?php echo __('Add after'); ?><\/span><\/button><\/td>'
+                            + '<td><button class="action- add" type="button" id="addAfterBtn<%= _id %>"><span><?php echo __('Add after'); ?><\/span><\/button><\/td>'
                         <?php endif; ?>
 
-                            + '<td class="col-actions"><button onclick="arrayRow<?php echo $_htmlId ?>.del(\'#{_id}\')" class="action- delete" type="button"><span><?php echo __('Delete'); ?><\/span><\/button><\/td>'
+                            + '<td class="col-actions"><button onclick="arrayRow<?php echo $_htmlId ?>.del(\'<%= _id %>\')" class="action- delete" type="button"><span><?php echo __('Delete'); ?><\/span><\/button><\/td>'
                             +'<\/tr>'
             ),
 
@@ -77,9 +80,9 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
 
             // Insert new row after specified row or at the bottom
             if (insertAfterId) {
-            Element.insert($(insertAfterId), {after: this.template.evaluate(templateValues)});
+            Element.insert($(insertAfterId), {after: this.template(templateValues)});
         } else {
-            Element.insert($('addRow<?php echo $_htmlId ?>'), {bottom: this.template.evaluate(templateValues)});
+            Element.insert($('addRow<?php echo $_htmlId ?>'), {bottom: this.template(templateValues)});
         }
 
         // Fill controls with data

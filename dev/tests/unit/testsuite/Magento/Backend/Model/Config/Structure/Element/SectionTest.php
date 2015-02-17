@@ -85,7 +85,7 @@ class SectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->_authorizationMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
         $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
-        $this->_model->setData(['resource' => 'Magento_Adminhtml::all'], 'scope');
+        $this->_model->setData(['resource' => 'Magento_Backend::all'], 'scope');
         $this->_model->isVisible();
     }
 }

@@ -8,7 +8,7 @@
 
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection */
 ?>
-<script id="bundle-option-selection-box-template" type="text/x-jquery-tmpl">
+<script id="bundle-option-selection-box-template" type="text/x-magento-template">
     <table class="data-table">
         <thead>
             <tr class="headings">
@@ -30,33 +30,33 @@
         </tbody>
     </table>
 </script>
-<script id="bundle-option-selection-row-template" type="text/x-jquery-tmpl">
+<script id="bundle-option-selection-row-template" type="text/x-magento-template">
     <td class="col-draggable">
         <span data-role="draggable-handle" class="draggable-handle"></span>
-        <input type="hidden" id="<?php echo $block->getFieldId() ?>_id_{{index}}"
-               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][selection_id]"
-               value="{{selection_id}}"/>
-        <input type="hidden" name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][option_id]"
-               value="{{option_id}}"/>
+        <input type="hidden" id="<?php echo $block->getFieldId() ?>_id<%= data.index %>"
+               name="<?php echo $block->getFieldName() ?>[<%= data.parentIndex %>][<%= data.index %>][selection_id]"
+               value="<%= data.selection_id %>"/>
+        <input type="hidden" name="<?php echo $block->getFieldName() ?>[<%= data.parentIndex %>][<%= data.index %>][option_id]"
+               value="<%= data.option_id %>"/>
         <input type="hidden" class="product"
-               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][product_id]"
-               value="{{product_id}}"/>
-        <input type="hidden" name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][delete]"
+               name="<?php echo $block->getFieldName() ?>[<%= data.parentIndex %>][<%= data.index %>][product_id]"
+               value="<%= data.product_id %>"/>
+        <input type="hidden" name="<?php echo $block->getFieldName() ?>[<%= data.parentIndex %>][<%= data.index %>][delete]"
                value="" class="delete"/>
     </td>
     <td class="col-default">
-        <input onclick="bSelection.checkGroup(event)" type="{{option_type}}" class="default"
-               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][is_default]"
-               value="1" {{checked}} />
+        <input onclick="bSelection.checkGroup(event)" type="<%= data.option_type %>" class="default"
+               name="<?php echo $block->getFieldName() ?>[<%= data.parentIndex %>][<%= data.index %>][is_default]"
+               value="1" <%= data.checked %> />
     </td>
-    <td class="col-name">{{name}}</td>
-    <td class="col-sku">{{sku}}</td>
+    <td class="col-name"><%= data.name %></td>
+    <td class="col-sku"><%= data.sku %></td>
 <?php if ($block->getCanReadPrice() !== false): ?>
     <td class="col-price price-type-box">
-        <input id="<?php echo $block->getFieldId() ?>_{{index}}_price_value"
+        <input id="<?php echo $block->getFieldId() ?>_<%= data.index %>_price_value"
                class="input-text required-entry validate-zero-or-greater" type="text"
-               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][selection_price_value]"
-               value="{{selection_price_value}}"
+               name="<?php echo $block->getFieldName() ?>[<%= data.parentIndex %>][<%= data.index %>][selection_price_value]"
+               value="<%= data.selection_price_value %>"
             <?php if ($block->getCanEditPrice() === false): ?>
                disabled="disabled"
             <?php endif; ?>/>
@@ -66,19 +66,19 @@
         <div><?php echo $block->getCheckboxScopeHtml() ?></div>
     </td>
 <?php else: ?>
-    <input type="hidden" id="<?php echo $block->getFieldId(); ?>_{{index}}_price_value"
-           name="<?php echo $block->getFieldName(); ?>[{{parentIndex}}][{{index}}][selection_price_value]" value="0" />
-    <input type="hidden" id="<?php echo $block->getFieldId(); ?>_{{index}}_price_type"
-           name="<?php echo $block->getFieldName(); ?>[{{parentIndex}}][{{index}}][selection_price_type]" value="0" />
+    <input type="hidden" id="<?php echo $block->getFieldId(); ?>_<%= data.index %>_price_value"
+           name="<?php echo $block->getFieldName(); ?>[<%= data.parentIndex %>][<%= data.index %>][selection_price_value]" value="0" />
+    <input type="hidden" id="<?php echo $block->getFieldId(); ?>_<%= data.index %>_price_type"
+           name="<?php echo $block->getFieldName(); ?>[<%= data.parentIndex %>][<%= data.index %>][selection_price_type]" value="0" />
     <?php if ($block->isUsedWebsitePrice()): ?>
-    <input type="hidden" id="<?php echo $block->getFieldId(); ?>_{{index}}_price_scope"
-           name="<?php echo $block->getFieldName(); ?>[{{parentIndex}}][{{index}}][default_price_scope]" value="1" />
+    <input type="hidden" id="<?php echo $block->getFieldId(); ?>_<%= data.index %>_price_scope"
+           name="<?php echo $block->getFieldName(); ?>[<%= data.parentIndex %>][<%= data.index %>][default_price_scope]" value="1" />
     <?php endif; ?>
 <?php endif; ?>
     <td class="col-qty">
         <input class="input-text required-entry validate-greater-zero-based-on-option validate-zero-or-greater" type="text"
-               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][selection_qty]"
-               value="{{selection_qty}}" />
+               name="<?php echo $block->getFieldName() ?>[<%= data.parentIndex %>][<%= data.index %>][selection_qty]"
+               value="<%= data.selection_qty %>" />
     </td>
     <td class="col-uqty qty-box">
         <input type="checkbox" class="is-user-defined-qty" checked="checked" />
@@ -86,8 +86,8 @@
     </td>
     <td class="col-order type-order" style="display:none">
         <input class="input-text required-entry validate-zero-or-greater" type="text"
-               name="<?php echo $block->getFieldName() ?>[{{parentIndex}}][{{index}}][position]"
-               value="{{position}}" />
+               name="<?php echo $block->getFieldName() ?>[<%= data.parentIndex %>][<%= data.index %>][position]"
+               value="<%= data.position %>" />
     </td>
     <td class="col-actions">
         <span title="Delete Row">
@@ -96,7 +96,10 @@
     </td>
 </script>
 <script>
-require(['jquery'], function(jQuery){
+require([
+    'jquery',
+    'mage/template'
+], function(jQuery, mageTemplate){
 var bundleTemplateBox = jQuery('#bundle-option-selection-box-template').html(),
     bundleTemplateRow = jQuery('#bundle-option-selection-row-template').html();
 
@@ -104,7 +107,6 @@ Bundle.Selection = Class.create();
 Bundle.Selection.prototype = {
     idLabel : '<?php echo $block->getFieldId() ?>',
     scopePrice : <?php echo (int)$block->isUsedWebsitePrice() ?>,
-    templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
     templateBox : '',
     templateRow : '',
     itemsCount : 0,
@@ -115,9 +117,9 @@ Bundle.Selection.prototype = {
     selectionSearchUrl: '<?php echo $block->getSelectionSearchUrl() ?>',
 
     initialize : function() {
-        this.templateBox = '<div class="tier form-list" id="' + this.idLabel + '_box_{{parentIndex}}">' + bundleTemplateBox + '</div>';
+        this.templateBox = '<div class="tier form-list" id="' + this.idLabel + '_box_<%= data.parentIndex %>">' + bundleTemplateBox + '</div>';
 
-        this.templateRow = '<tr class="selection" id="' + this.idLabel + '_row_{{index}}">' + bundleTemplateRow + '</tr>';
+        this.templateRow = '<tr class="selection" id="' + this.idLabel + '_row_<%= data.index %>">' + bundleTemplateRow + '</tr>';
     },
 
     gridUpdateCallback: function () {
@@ -177,11 +179,14 @@ Bundle.Selection.prototype = {
             data.checked = 'checked="checked"';
         }
 
-        this.template = new Template(this.templateRow, this.templateSyntax);
+        this.template = mageTemplate(this.templateRow);
         var tbody = $$('#' + this.idLabel + '_box_' + parentIndex + ' tbody');
 
         // replace <script to avoid evalScripts() execution
-        var escapedHTML = this.template.evaluate(data).replace(/<(\/?)script/g, '&lt;$1script');
+        var escapedHTML = this.template({
+            data: data
+        }).replace(/<(\/?)script/g, '&lt;$1script');
+        
         Element.insert(tbody[0], {bottom: escapedHTML});
 
         if (data.selection_price_type) {
@@ -263,9 +268,13 @@ Bundle.Selection.prototype = {
 
     addBox : function (parentIndex) {
         var div = $(bOption.idLabel + '_' + parentIndex).down('.fieldset-alt');
-        this.template = new Template(this.templateBox, this.templateSyntax);
+        this.template = mageTemplate(this.templateBox);
         var data = {'parentIndex' : parentIndex};
-        Element.insert(div, {'after':this.template.evaluate(data)});
+        Element.insert(div, {
+            'after': this.template({
+                data: data
+            })
+        });
     },
 
     remove : function(event) {

@@ -4,10 +4,10 @@
  */
 /*jshint jquery:true*/
 define([
-    "jquery",
-    "jquery/ui",
-    "jquery/template"
-], function($){
+    'jquery',
+    'mage/template',
+    'jquery/ui'
+], function($, mageTemplate){
 
     $.widget('vde.vdeMessage', {
         options: {
@@ -81,14 +81,16 @@ define([
          * @param containerId
          * @private
          */
-        _addMessage: function (message, containerId)
-        {
-            var messageTemplate = $($(this.options.messageTemplateId).clone());
-            messageTemplate.removeAttr('id');
-            messageTemplate.attr('class', ($(this.options.messageTemplateId).attr('class')));
-            messageTemplate.html(messageTemplate.tmpl({message: message}));
-            messageTemplate.removeClass('no-display');
-            messageTemplate.appendTo(containerId);
+        _addMessage: function (message, containerId) {
+            var messageTemplate = mageTemplate(this.options.messageTemplateId);
+
+            messageTemplate = mageTemplate({
+                data: {
+                    message: message
+                }
+            });
+
+            $(messageTemplate).appendTo(containerId);
         }
     });
 

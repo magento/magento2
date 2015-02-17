@@ -129,7 +129,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_productFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -149,7 +149,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory
      * @param \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -170,7 +170,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory,
         \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,

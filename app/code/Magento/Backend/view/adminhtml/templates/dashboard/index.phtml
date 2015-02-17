@@ -68,41 +68,34 @@ window.changeDiagramsPeriod = function(periodObj) {
 });
 </script>
 <?php endif; ?>
- <div class="dashboard-container">
-     <div class="dashboard-inner">
-         <div class="dashboard-main">
-            <div class="dashboard-diagram-container">
-                <?php echo $block->getChildHtml('diagrams') ?>
-                <?php if (is_array($block->getChildBlock('diagrams')->getTabsIds())) : ?>
-                    <div id="diagram_tab_content" class="dashboard-diagram-tab-content"></div>
-                <?php endif; ?>
-            </div>
-            <?php echo $block->getChildHtml('totals') ?>
-             <div class="dashboard-store-stats">
-                 <?php echo $block->getChildHtml('grids') ?>
-                 <div id="grid_tab_content" class="dashboard-store-stats-content"></div>
-             </div>
-         </div>
-         <div class="dashboard-secondary">
-            <?php echo $block->getChildHtml('sales') ?>
-            <div class="dashboard-item">
-                <header class="dashboard-item-header">
-                    <h3 class="title"><?php echo __('Last 5 Orders') ?></h3>
-                </header>
-                <?php echo $block->getChildHtml('lastOrders'); ?>
-            </div>
-            <div class="dashboard-item">
-                <header class="dashboard-item-header">
-                    <h3 class="title"><?php echo __('Last 5 Search Terms') ?></h3>
-                </header>
-                <?php echo $block->getChildHtml('lastSearches'); ?>
-            </div>
-            <div class="dashboard-item">
-                <header class="dashboard-item-header">
-                    <h3 class="title"><?php echo __('Top 5 Search Terms') ?></h3>
-                </header>
-                <?php echo $block->getChildHtml('topSearches'); ?>
-            </div>
-         </div>
-     </div>
- </div>
+<div class="dashboard-container row">
+    <div class="dashboard-main col-m-8 col-m-push-4">
+        <div class="dashboard-diagram-container">
+            <?php echo $block->getChildHtml('diagrams') ?>
+            <?php if (is_array($block->getChildBlock('diagrams')->getTabsIds())) : ?>
+                <div id="diagram_tab_content" class="dashboard-diagram-tab-content"></div>
+            <?php endif; ?>
+        </div>
+        <?php echo $block->getChildHtml('totals') ?>
+        <div class="dashboard-store-stats">
+            <?php echo $block->getChildHtml('grids') ?>
+            <div id="grid_tab_content" class="dashboard-store-stats-content"></div>
+            <?php echo $block->getChildHtml('refresh_statistics') ?>
+        </div>
+    </div>
+    <div class="dashboard-secondary col-m-4 col-m-pull-8">
+        <?php echo $block->getChildHtml('sales') ?>
+        <div class="dashboard-item">
+            <div class="dashboard-item-title"><?php echo __('Last Orders') ?></div>
+            <?php echo $block->getChildHtml('lastOrders'); ?>
+        </div>
+        <div class="dashboard-item">
+            <div class="dashboard-item-title"><?php echo __('Last Search Terms') ?></div>
+            <?php echo $block->getChildHtml('lastSearches'); ?>
+        </div>
+        <div class="dashboard-item">
+            <div class="dashboard-item-title"><?php echo __('Top Search Terms') ?></div>
+            <?php echo $block->getChildHtml('topSearches'); ?>
+        </div>
+    </div>
+</div>
