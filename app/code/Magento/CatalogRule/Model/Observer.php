@@ -287,7 +287,7 @@ class Observer
                 $productIds
             );
             foreach ($productIds as $productId) {
-                $key = implode('|', [$date, $websiteId, $groupId, $productId]);
+                $key = implode('|', [$date->format('Y-m-d H:i:s'), $websiteId, $groupId, $productId]);
                 $this->_rulePrices[$key] = isset($rulePrices[$productId]) ? $rulePrices[$productId] : false;
             }
         }
