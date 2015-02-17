@@ -79,6 +79,8 @@ interface ModuleDataResourceInterface extends ResourceInterface
     public function afterApplyAllUpdates();
 
     /**
+     * Gets event manager
+     *
      * @return \Magento\Framework\Event\ManagerInterface
      */
     public function getEventManager();

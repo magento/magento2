@@ -30,28 +30,11 @@ class EavSetup
      * @var PropertyMapperInterface
      */
     private $attributeMapper;
+
     /**
      * @var ModuleDataResourceInterface
      */
     private $setup;
-
-    /**
-     * @param ModuleDataResourceInterface $setup
-     * @param Context $context
-     * @param CacheInterface $cache
-     * @param CollectionFactory $attrGroupCollectionFactory
-     */
-    public function __construct(
-        ModuleDataResourceInterface $setup,
-        Context $context,
-        CacheInterface $cache,
-        CollectionFactory $attrGroupCollectionFactory
-    ) {
-        $this->cache = $cache;
-        $this->attrGroupCollectionFactory = $attrGroupCollectionFactory;
-        $this->attributeMapper = $context->getAttributeMapper();
-        $this->setup = $setup;
-    }
 
     /**
      * General Attribute Group Name
@@ -80,6 +63,24 @@ class EavSetup
      * @var string
      */
     private $_defaultAttributeSetName = 'Default';
+
+    /**
+     * @param ModuleDataResourceInterface $setup
+     * @param Context $context
+     * @param CacheInterface $cache
+     * @param CollectionFactory $attrGroupCollectionFactory
+     */
+    public function __construct(
+        ModuleDataResourceInterface $setup,
+        Context $context,
+        CacheInterface $cache,
+        CollectionFactory $attrGroupCollectionFactory
+    ) {
+        $this->cache = $cache;
+        $this->attrGroupCollectionFactory = $attrGroupCollectionFactory;
+        $this->attributeMapper = $context->getAttributeMapper();
+        $this->setup = $setup;
+    }
 
     /**
      * @return ModuleDataResourceInterface
