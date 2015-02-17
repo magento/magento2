@@ -37,7 +37,7 @@ class NoRouteHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\Backend\App\Router\NoRouteHandler::process
+     * covers Magento\Backend\App\Router\NoRouteHandler::process
      */
     public function testProcessWithBackendAreaFrontName()
     {
@@ -86,7 +86,7 @@ class NoRouteHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\Backend\App\Router\NoRouteHandler::process
+     * covers Magento\Backend\App\Router\NoRouteHandler::process
      */
     public function testProcessWithoutAreaFrontName()
     {

@@ -49,7 +49,7 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
+     * covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
      *
      * @param $postData array|string
      * @param array $convertedData
@@ -84,7 +84,7 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
+     * covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
      */
     public function testAroundDispatchWhenMassactionPrepareKeyRequestNotExists()
     {

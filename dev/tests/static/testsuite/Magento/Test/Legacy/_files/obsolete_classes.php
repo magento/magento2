@@ -2930,6 +2930,7 @@ return [
     ['Magento\Core\Model\Resource\Layout\Link\Collection', 'Magento\Widget\Model\Resource\Layout\Link\Collection'],
     ['Magento\Core\Model\Resource\Layout\Update', 'Magento\Widget\Model\Resource\Layout\Update'],
     ['Magento\Core\Model\Resource\Layout\Update\Collection', 'Magento\Widget\Model\Resource\Layout\Update\Collection'],
+    ['Magento\Backend\Model\View', 'Magento\Framework\App\View'],
     ['Zend_Controller_Router_Route'],
     ['Zend_Controller_Router_Route_Interface'],
     ['Zend_Controller_Response_Abstract', 'Magento\Framework\HTTP\PhpEnvironment\Response'],

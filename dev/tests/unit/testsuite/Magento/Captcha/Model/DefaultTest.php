@@ -136,7 +136,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Model\DefaultModel::getBlockName
+     * covers \Magento\Captcha\Model\DefaultModel::getBlockName
      */
     public function testGetBlockName()
     {
@@ -144,7 +144,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Model\DefaultModel::isRequired
+     * covers \Magento\Captcha\Model\DefaultModel::isRequired
      */
     public function testIsRequired()
     {
@@ -152,7 +152,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Model\DefaultModel::isCaseSensitive
+     * covers \Magento\Captcha\Model\DefaultModel::isCaseSensitive
      */
     public function testIsCaseSensitive()
     {
@@ -163,7 +163,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Model\DefaultModel::getFont
+     * covers \Magento\Captcha\Model\DefaultModel::getFont
      */
     public function testGetFont()
     {
@@ -171,8 +171,8 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Model\DefaultModel::getTimeout
-     * @covers \Magento\Captcha\Model\DefaultModel::getExpiration
+     * covers \Magento\Captcha\Model\DefaultModel::getTimeout
+     * covers \Magento\Captcha\Model\DefaultModel::getExpiration
      */
     public function testGetTimeout()
     {
@@ -180,7 +180,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Model\DefaultModel::isCorrect
+     * covers \Magento\Captcha\Model\DefaultModel::isCorrect
      */
     public function testIsCorrect()
     {
@@ -193,7 +193,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Model\DefaultModel::getImgSrc
+     * covers \Magento\Captcha\Model\DefaultModel::getImgSrc
      */
     public function testGetImgSrc()
     {
@@ -204,7 +204,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Model\DefaultModel::logAttempt
+     * covers \Magento\Captcha\Model\DefaultModel::logAttempt
      */
     public function testLogAttempt()
     {
@@ -221,7 +221,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Model\DefaultModel::getWord
+     * covers \Magento\Captcha\Model\DefaultModel::getWord
      */
     public function testGetWord()
     {

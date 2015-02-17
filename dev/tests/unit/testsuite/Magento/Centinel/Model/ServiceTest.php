@@ -12,8 +12,8 @@ namespace Magento\Centinel\Model;
 class ServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Centinel\Model\Service::getAuthenticationStartUrl
-     * @covers \Magento\Centinel\Model\Service::_getUrl
+     * covers \Magento\Centinel\Model\Service::getAuthenticationStartUrl
+     * covers \Magento\Centinel\Model\Service::_getUrl
      */
     public function testGetAuthenticationStartUrl()
     {
