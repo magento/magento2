@@ -52,4 +52,22 @@ class Request extends \Zend_Controller_Request_Http implements \Magento\Framewor
     {
         return $this->_cookieReader->getCookie($name, $default);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Added CGI environment support.
+     */
+    public function getHeader($header)
+    {
+        $headerValue = parent::getHeader($header);
+        if ($headerValue == false) {
+            /** Workaround for hhvm environment */
+            $header = 'REDIRECT_HTTP_' . strtoupper(str_replace('-', '_', $header));
+            if (isset($_SERVER[$header])) {
+                $headerValue = $_SERVER[$header];
+            }
+        }
+        return $headerValue;
+    }
 }
