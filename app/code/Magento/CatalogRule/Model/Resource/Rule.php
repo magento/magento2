@@ -234,7 +234,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param array $productIds
      * @return array
      */
-    public function getRulePrices($date, $websiteId, $customerGroupId, $productIds)
+    public function getRulePrices(\DateTime $date, $websiteId, $customerGroupId, $productIds)
     {
         $adapter = $this->_getReadAdapter();
         $select = $adapter->select()->from(
