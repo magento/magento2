@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Model;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Core\Model\string;
 
 /**
  * Custom variable model
