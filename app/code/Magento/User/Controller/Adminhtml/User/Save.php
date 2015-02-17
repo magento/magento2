@@ -1,10 +1,11 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User;
+
+use Magento\Framework\Exception\AuthenticationException;
 
 class Save extends \Magento\User\Controller\Adminhtml\User
 {
@@ -55,7 +56,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             && !empty($data[$currentUserPasswordField]) && is_string($data[$currentUserPasswordField]);
         try {
             if (!($isCurrentUserPasswordValid && $currentUser->verifyIdentity($data[$currentUserPasswordField]))) {
-                throw new \Magento\Backend\Model\Auth\Exception(
+                throw new AuthenticationException(
                     __('You have entered an invalid password for current user.')
                 );
             }

@@ -119,7 +119,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $cronExpression
-     * @expectedException \Magento\Cron\Exception
+     * @expectedException \Magento\Framework\Exception\CronException
      * @dataProvider setCronExprExceptionDataProvider
      */
     public function testSetCronExprException($cronExpression)
@@ -278,7 +278,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $cronExpressionPart
-     * @expectedException \Magento\Cron\Exception
+     * @expectedException \Magento\Framework\Exception\CronException
      * @dataProvider matchCronExpressionExceptionDataProvider
      */
     public function testMatchCronExpressionException($cronExpressionPart)

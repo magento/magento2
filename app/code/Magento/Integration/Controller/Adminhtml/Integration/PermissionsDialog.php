@@ -6,7 +6,7 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
-use Magento\Integration\Exception as IntegrationException;
+use Magento\Framework\Exception\IntegrationException;
 
 class PermissionsDialog extends \Magento\Integration\Controller\Adminhtml\Integration
 {

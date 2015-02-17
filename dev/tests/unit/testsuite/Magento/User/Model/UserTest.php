@@ -368,7 +368,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->with($password, $this->_model->getPassword())
             ->will($this->returnValue(true));
         $this->_model->setIsActive(false);
-        $this->setExpectedException('Magento\Backend\Model\Auth\Exception', 'This account is inactive.');
+        $this->setExpectedException('Magento\\Framework\\Exception\\AuthenticationException', 'This account is inactive.');
         $this->_model->verifyIdentity($password);
     }
 
@@ -382,7 +382,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->_model->setIsActive(true);
         $this->_resourceMock->expects($this->once())->method('hasAssigned2Role')->will($this->returnValue(false));
-        $this->setExpectedException('Magento\Backend\Model\Auth\Exception', 'Access denied.');
+        $this->setExpectedException('Magento\\Framework\\Exception\\AuthenticationException', 'Access denied.');
         $this->_model->verifyIdentity($password);
     }
 }

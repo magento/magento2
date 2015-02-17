@@ -6,7 +6,7 @@
 
 namespace Magento\Cron\Model;
 
-use Magento\Cron\Exception;
+use Magento\Framework\Exception\CronException;
 
 /**
  * Crontab schedule model
@@ -80,13 +80,13 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     /**
      * @param string $expr
      * @return $this
-     * @throws Exception
+     * @throws CronException
      */
     public function setCronExpr($expr)
     {
         $e = preg_split('#\s+#', $expr, null, PREG_SPLIT_NO_EMPTY);
         if (sizeof($e) < 5 || sizeof($e) > 6) {
-            throw new Exception('Invalid cron expression: ' . $expr);
+            throw new CronException('Invalid cron expression: ' . $expr);
         }
 
         $this->setCronExprArr($e);
@@ -127,7 +127,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * @param string $expr
      * @param int $num
      * @return bool
-     * @throws Exception
+     * @throws CronException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -152,10 +152,10 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         if (strpos($expr, '/') !== false) {
             $e = explode('/', $expr);
             if (sizeof($e) !== 2) {
-                throw new Exception("Invalid cron expression, expecting 'match/modulus': " . $expr);
+                throw new CronException('Invalid cron expression, expecting \'match/modulus\': ' . $expr);
             }
             if (!is_numeric($e[1])) {
-                throw new Exception("Invalid cron expression, expecting numeric modulus: " . $expr);
+                throw new CronException('Invalid cron expression, expecting numeric modulus: ' . $expr);
             }
             $expr = $e[0];
             $mod = $e[1];
@@ -171,7 +171,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             // handle range
             $e = explode('-', $expr);
             if (sizeof($e) !== 2) {
-                throw new Exception("Invalid cron expression, expecting 'from-to' structure: " . $expr);
+                throw new CronException('Invalid cron expression, expecting \'from-to\' structure: ' . $expr);
             }
 
             $from = $this->getNumeric($e[0]);
@@ -183,7 +183,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($from === false || $to === false) {
-            throw new Exception("Invalid cron expression: " . $expr);
+            throw new CronException('Invalid cron expression: ' . $expr);
         }
 
         return $num >= $from && $num <= $to && $num % $mod === 0;

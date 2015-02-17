@@ -49,7 +49,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Backend\Model\Auth\Exception
+     * @expectedException \Magento\Framework\Exception\AuthenticationException
      * @expectedExceptionMessage Please correct the user name or password.
      */
     public function testLoginFailed()

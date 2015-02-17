@@ -12,6 +12,7 @@ use Magento\Integration\Model\Oauth\Consumer\Factory as ConsumerFactory;
 use Magento\Integration\Model\Oauth\Token as OauthTokenModel;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenFactory;
 use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
+use Magento\Framework\Exception\IntegrationException;
 
 /**
  * Integration oAuth service.
@@ -258,13 +259,13 @@ class Oauth implements OauthInterface
      *
      * @param int $consumerId
      * @return ConsumerModel
-     * @throws \Magento\Integration\Exception
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
     protected function _loadConsumerById($consumerId)
     {
         $consumer = $this->_consumerFactory->create()->load($consumerId);
         if (!$consumer->getId()) {
-            throw new \Magento\Integration\Exception(__("Consumer with ID '%1' does not exist.", $consumerId));
+            throw new IntegrationException(__("Consumer with ID '%1' does not exist.", $consumerId));
         }
         return $consumer;
     }

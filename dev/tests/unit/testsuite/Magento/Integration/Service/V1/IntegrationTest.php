@@ -147,7 +147,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Integration\Exception
+     * @expectedException \Magento\Framework\Exception\IntegrationException
      * @expectedExceptionMessage Integration with name 'Integration Name' exists.
      */
     public function testCreateIntegrationAlreadyExistsException()
@@ -242,7 +242,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Integration\Exception
+     * @expectedException \Magento\Framework\Exception\IntegrationException
      * @expectedExceptionMessage Integration with name 'Another Integration Name' exists.
      */
     public function testUpdateException()
@@ -295,7 +295,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Integration\Exception
+     * @expectedException \Magento\Framework\Exception\IntegrationException
      * @expectedExceptionMessage Integration with ID '1' does not exist.
      */
     public function testGetException()
@@ -383,7 +383,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Integration\Exception
+     * @expectedException \Magento\Framework\Exception\IntegrationException
      * @expectedExceptionMessage Integration with ID '1' does not exist.
      */
     public function testDeleteException()

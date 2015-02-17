@@ -11,7 +11,7 @@
  */
 namespace Magento\Directory\Model;
 
-use Magento\Directory\Exception;
+use Magento\Framework\Exception\InputException;
 use Magento\Directory\Model\Currency\Filter;
 
 /**
@@ -172,7 +172,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $toCurrency
      * @return float
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function getRate($toCurrency)
     {
@@ -181,7 +181,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         } elseif ($toCurrency instanceof \Magento\Directory\Model\Currency) {
             $code = $toCurrency->getCurrencyCode();
         } else {
-            throw new Exception(__('Please correct the target currency.'));
+            throw new InputException(__('Please correct the target currency.'));
         }
         $rates = $this->getRates();
         if (!isset($rates[$code])) {
@@ -196,7 +196,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $toCurrency
      * @return float
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function getAnyRate($toCurrency)
     {
@@ -205,7 +205,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         } elseif ($toCurrency instanceof \Magento\Directory\Model\Currency) {
             $code = $toCurrency->getCurrencyCode();
         } else {
-            throw new Exception(__('Please correct the target currency.'));
+            throw new InputException(__('Please correct the target currency.'));
         }
         $rates = $this->getRates();
         if (!isset($rates[$code])) {

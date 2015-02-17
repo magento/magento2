@@ -6,6 +6,8 @@
  */
 namespace Magento\Checkout\Controller\Onepage;
 
+use Magento\Framework\Exception\PaymentException;
+
 class SaveOrder extends \Magento\Checkout\Controller\Onepage
 {
     /**
@@ -59,7 +61,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             $redirectUrl = $this->getOnepage()->getCheckout()->getRedirectUrl();
             $result['success'] = true;
             $result['error'] = false;
-        } catch (\Magento\Payment\Model\Info\Exception $e) {
+        } catch (PaymentException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {
                 $result['error_messages'] = $message;

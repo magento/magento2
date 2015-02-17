@@ -7,6 +7,7 @@ namespace Magento\User\Model;
 
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Admin user model
@@ -539,8 +540,8 @@ class User extends AbstractModel implements StorageInterface
      * @param string $password
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Backend\Model\Auth\Exception
-     * @throws \Magento\Backend\Model\Auth\Plugin\Exception
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws \Magento\Framework\Exception\Plugin\AuthenticationException
      */
     public function authenticate($username, $password)
     {
@@ -578,17 +579,17 @@ class User extends AbstractModel implements StorageInterface
      *
      * @param string $password
      * @return bool
-     * @throws \Magento\Backend\Model\Auth\Exception
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function verifyIdentity($password)
     {
         $result = false;
         if ($this->_encryptor->validateHash($password, $this->getPassword())) {
             if ($this->getIsActive() != '1') {
-                throw new \Magento\Backend\Model\Auth\Exception(__('This account is inactive.'));
+                throw new AuthenticationException(__('This account is inactive.'));
             }
             if (!$this->hasAssigned2Role($this->getId())) {
-                throw new \Magento\Backend\Model\Auth\Exception(__('Access denied.'));
+                throw new AuthenticationException(__('Access denied.'));
             }
             $result = true;
         }

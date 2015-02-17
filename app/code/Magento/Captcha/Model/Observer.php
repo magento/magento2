@@ -264,7 +264,7 @@ class Observer
      * Check Captcha On User Login Backend Page
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @throws \Magento\Backend\Model\Auth\Plugin\Exception
+     * @throws \Magento\Framework\Exception\Plugin\AuthenticationException
      * @return $this
      */
     public function checkUserLoginBackend($observer)
@@ -275,7 +275,7 @@ class Observer
         if ($captchaModel->isRequired($login)) {
             if (!$captchaModel->isCorrect($this->_getCaptchaString($this->_request, $formId))) {
                 $captchaModel->logAttempt($login);
-                throw new \Magento\Backend\Model\Auth\Plugin\Exception(__('Incorrect CAPTCHA.'));
+                throw new \Magento\Framework\Exception\Plugin\AuthenticationException(__('Incorrect CAPTCHA.'));
             }
         }
         $captchaModel->logAttempt($login);

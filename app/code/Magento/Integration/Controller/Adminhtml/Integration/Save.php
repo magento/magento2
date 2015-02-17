@@ -7,7 +7,7 @@
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
-use Magento\Integration\Exception as IntegrationException;
+use Magento\Framework\Exception\IntegrationException;
 
 class Save extends \Magento\Integration\Controller\Adminhtml\Integration
 {
