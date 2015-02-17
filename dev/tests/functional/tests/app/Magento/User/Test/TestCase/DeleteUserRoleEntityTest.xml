@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteUserRoleEntityTest">
+    <variation name="DeleteUserRoleEntityTestVariation1" firstConstraint="assertImpossibleDeleteYourOwnRole" method="test">
+      <constraint name="assertImpossibleDeleteYourOwnRole" next="assertRoleInGrid"/>
+      <constraint name="assertRoleInGrid" prev="assertImpossibleDeleteYourOwnRole"/>
+    </variation>
+    <variation name="DeleteUserRoleEntityTestVariation2" firstConstraint="assertRoleSuccessDeleteMessage" method="test">
+      <data name="isDefaultUser" xsi:type="string">1</data>
+      <constraint name="assertRoleSuccessDeleteMessage" next="assertRoleNotInGrid"/>
+      <constraint name="assertRoleNotInGrid" prev="assertRoleSuccessDeleteMessage"/>
+    </variation>
+  </testCase>
+</config>

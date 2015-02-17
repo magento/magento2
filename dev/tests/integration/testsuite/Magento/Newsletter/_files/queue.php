@@ -14,8 +14,8 @@ $template = $objectManager->create('Magento\Newsletter\Model\Template');
 $template->load('fixture_tpl', 'template_code');
 $templateId = $template->getId();
 
-$currentStore = $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getId();
-$otherStore = $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore('fixturestore')->getId();
+$currentStore = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId();
+$otherStore = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore('fixturestore')->getId();
 
 /** @var $queue \Magento\Newsletter\Model\Queue */
 $queue = $objectManager->create('Magento\Newsletter\Model\Queue');

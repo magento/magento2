@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="UpdateStoreGroupEntityTest">
+    <variation name="UpdateStoreGroupEntityTestVariation1" firstConstraint="assertStoreGroupSuccessSaveMessage" method="test">
+      <data name="storeGroupOrigin/dataSet" xsi:type="string">custom</data>
+      <data name="storeGroup/data/website_id/dataSet" xsi:type="string">main_website</data>
+      <data name="storeGroup/data/name" xsi:type="string">store_name_updated_%isolation%</data>
+      <data name="storeGroup/data/root_category_id/dataSet" xsi:type="string">default_category</data>
+      <constraint name="assertStoreGroupSuccessSaveMessage" next="assertStoreGroupInGrid"/>
+      <constraint name="assertStoreGroupInGrid" next="assertStoreGroupForm" prev="assertStoreGroupSuccessSaveMessage"/>
+      <constraint name="assertStoreGroupForm" next="assertStoreGroupOnStoreViewForm" prev="assertStoreGroupInGrid"/>
+      <constraint name="assertStoreGroupOnStoreViewForm" prev="assertStoreGroupForm"/>
+    </variation>
+    <variation name="UpdateStoreGroupEntityTestVariation2" firstConstraint="assertStoreGroupSuccessSaveMessage" method="test">
+      <data name="storeGroupOrigin/dataSet" xsi:type="string">custom</data>
+      <data name="storeGroup/data/website_id/dataSet" xsi:type="string">custom_website</data>
+      <data name="storeGroup/data/name" xsi:type="string">store_name_updated_%isolation%</data>
+      <data name="storeGroup/data/root_category_id/dataSet" xsi:type="string">root_category</data>
+      <constraint name="assertStoreGroupSuccessSaveMessage" next="assertStoreGroupInGrid"/>
+      <constraint name="assertStoreGroupInGrid" next="assertStoreGroupForm" prev="assertStoreGroupSuccessSaveMessage"/>
+      <constraint name="assertStoreGroupForm" next="assertStoreGroupOnStoreViewForm" prev="assertStoreGroupInGrid"/>
+      <constraint name="assertStoreGroupOnStoreViewForm" prev="assertStoreGroupForm"/>
+    </variation>
+  </testCase>
+</config>

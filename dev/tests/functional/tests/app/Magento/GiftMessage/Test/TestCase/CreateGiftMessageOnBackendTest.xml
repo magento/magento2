@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="CreateGiftMessageOnBackendTest">
+    <variation name="CreateGiftMessageOnBackendTestVariation1" firstConstraint="assertOrderSuccessCreateMessage" method="test">
+      <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
+      <data name="customer/dataSet" xsi:type="string">customer_US</data>
+      <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+      <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+      <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+      <data name="giftMessage/data/allow_gift_options" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/allow_gift_messages_for_order" xsi:type="string">-</data>
+      <data name="giftMessage/data/allow_gift_options_for_items" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/sender" xsi:type="string">John Doe</data>
+      <data name="giftMessage/data/recipient" xsi:type="string">Jane Doe</data>
+      <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
+      <data name="giftMessage/data/items/dataSets" xsi:type="string">default, default</data>
+      <data name="payment/method" xsi:type="string">cashondelivery</data>
+      <constraint name="assertOrderSuccessCreateMessage" next="assertGiftMessageInBackendOrder"/>
+      <constraint name="assertGiftMessageInBackendOrder" next="assertGiftMessageInFrontendOrderItems" prev="assertOrderSuccessCreateMessage"/>
+      <constraint name="assertGiftMessageInFrontendOrderItems" prev="assertGiftMessageInBackendOrder"/>
+    </variation>
+    <variation name="CreateGiftMessageOnBackendTestVariation2" firstConstraint="assertOrderSuccessCreateMessage" method="test">
+      <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
+      <data name="customer/dataSet" xsi:type="string">customer_US</data>
+      <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+      <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+      <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+      <data name="giftMessage/data/allow_gift_options" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/allow_gift_messages_for_order" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/allow_gift_options_for_items" xsi:type="string">-</data>
+      <data name="giftMessage/data/sender" xsi:type="string">John Doe</data>
+      <data name="giftMessage/data/recipient" xsi:type="string">Jane Doe</data>
+      <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
+      <data name="giftMessage/data/items/dataSets" xsi:type="string">-</data>
+      <data name="payment/method" xsi:type="string">cashondelivery</data>
+      <constraint name="assertOrderSuccessCreateMessage" next="assertGiftMessageInBackendOrder"/>
+      <constraint name="assertGiftMessageInBackendOrder" next="assertGiftMessageInFrontendOrder" prev="assertOrderSuccessCreateMessage"/>
+      <constraint name="assertGiftMessageInFrontendOrder" prev="assertGiftMessageInBackendOrder"/>
+    </variation>
+    <variation name="CreateGiftMessageOnBackendTestVariation3" firstConstraint="assertOrderSuccessCreateMessage" method="test">
+      <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
+      <data name="customer/dataSet" xsi:type="string">customer_US</data>
+      <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+      <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+      <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+      <data name="giftMessage/data/allow_gift_options" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/allow_gift_messages_for_order" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/allow_gift_options_for_items" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/sender" xsi:type="string">John Doe</data>
+      <data name="giftMessage/data/recipient" xsi:type="string">Jane Doe</data>
+      <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
+      <data name="giftMessage/data/items/dataSets" xsi:type="string">default, default</data>
+      <data name="payment/method" xsi:type="string">cashondelivery</data>
+      <constraint name="assertOrderSuccessCreateMessage" next="assertGiftMessageInBackendOrder"/>
+      <constraint name="assertGiftMessageInBackendOrder" next="assertGiftMessageInFrontendOrder" prev="assertOrderSuccessCreateMessage"/>
+      <constraint name="assertGiftMessageInFrontendOrder" next="assertGiftMessageInFrontendOrderItems" prev="assertGiftMessageInBackendOrder"/>
+      <constraint name="assertGiftMessageInFrontendOrderItems" prev="assertGiftMessageInFrontendOrder"/>
+    </variation>
+  </testCase>
+</config>

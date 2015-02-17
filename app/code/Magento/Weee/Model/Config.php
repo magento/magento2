@@ -60,7 +60,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -75,7 +75,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_PRODUCT_LIST,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -90,7 +90,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_SALES,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -105,7 +105,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_EMAIL,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -120,7 +120,7 @@ class Config
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_FPT_INCLUDE_IN_SUBTOTAL,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -135,7 +135,7 @@ class Config
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_FPT_TAXABLE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -150,7 +150,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

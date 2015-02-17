@@ -34,9 +34,9 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     protected $groupRepository;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
-    protected $customerBuilder;
+    protected $customerDataFactory;
 
     /**
      * @var \Magento\Customer\Helper\Address
@@ -61,34 +61,43 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     protected $addressMapper;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
-     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
+     * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Registry $registry
      * @param Mapper $addressMapper
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         AccountManagementInterface $accountManagement,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
-        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
+        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
         \Magento\Customer\Helper\Address $addressHelper,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Registry $registry,
         Mapper $addressMapper,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
         $this->accountManagement = $accountManagement;
         $this->groupRepository = $groupRepository;
-        $this->customerBuilder = $customerBuilder;
+        $this->customerDataFactory = $customerDataFactory;
         $this->addressHelper = $addressHelper;
         $this->dateTime = $dateTime;
         $this->addressMapper = $addressMapper;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct($context, $data);
     }
 
@@ -98,9 +107,11 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     public function getCustomer()
     {
         if (!$this->customer) {
-            $this->customer = $this->customerBuilder->populateWithArray(
+            $this->customer = $this->customerDataFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $this->customer,
                 $this->_backendSession->getCustomerData()['account']
-            )->create();
+            );
         }
         return $this->customer;
     }
@@ -141,7 +152,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     {
         return $this->_scopeConfig->getValue(
             $this->_localeDate->getDefaultTimezonePath(),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->getCustomer()->getStoreId()
         );
     }
@@ -161,7 +172,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getIsConfirmedStatus()
     {
@@ -188,7 +199,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return string|null
+     * @return \Magento\Framework\Phrase|string
      */
     public function getBillingAddressHtml()
     {

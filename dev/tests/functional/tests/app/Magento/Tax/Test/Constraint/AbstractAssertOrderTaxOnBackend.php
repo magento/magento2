@@ -7,7 +7,7 @@
 namespace Magento\Tax\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceNew;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
@@ -21,7 +21,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
     /**
      * Order View Page.
      *
-     * @var OrderView
+     * @var SalesOrderView
      */
     protected $orderView;
 
@@ -76,7 +76,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
      * @param array $prices
      * @param InjectableFixture $product
      * @param OrderIndex $orderIndex
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @param OrderInvoiceNew $orderInvoiceNew
      * @param OrderCreditMemoNew $orderCreditMemoNew
      * @return void
@@ -85,7 +85,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
         array $prices,
         InjectableFixture $product,
         OrderIndex $orderIndex,
-        OrderView $orderView,
+        SalesOrderView $orderView,
         OrderInvoiceNew $orderInvoiceNew,
         OrderCreditMemoNew $orderCreditMemoNew
     ) {

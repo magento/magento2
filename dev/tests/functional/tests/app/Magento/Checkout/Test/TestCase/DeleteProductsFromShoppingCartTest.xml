@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteProductsFromShoppingCartTest">
+    <variation name="DeleteProductsFromShoppingCartTestVariation1" firstConstraint="assertCartIsEmpty" method="test">
+      <data name="productsData" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+      <constraint name="assertCartIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromShoppingCartTestVariation2" firstConstraint="assertCartIsEmpty" method="test">
+      <data name="productsData" xsi:type="string">bundleProduct::bundle_fixed_product</data>
+      <constraint name="assertCartIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromShoppingCartTestVariation3" firstConstraint="assertCartIsEmpty" method="test">
+      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
+      <constraint name="assertCartIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromShoppingCartTestVariation4" firstConstraint="assertCartIsEmpty" method="test">
+      <data name="productsData" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+      <constraint name="assertCartIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromShoppingCartTestVariation5" firstConstraint="assertCartIsEmpty" method="test">
+      <data name="productsData" xsi:type="string">configurableProductInjectable::default</data>
+      <constraint name="assertCartIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromShoppingCartTestVariation6" firstConstraint="assertCartIsEmpty" method="test">
+      <data name="productsData" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
+      <constraint name="assertCartIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromShoppingCartTestVariation7" firstConstraint="assertCartIsEmpty" method="test">
+      <data name="productsData" xsi:type="string">groupedProductInjectable::three_simple_products</data>
+      <constraint name="assertCartIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromShoppingCartTestVariation8" firstConstraint="assertCartIsEmpty" method="test">
+      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
+      <constraint name="assertCartIsEmpty"/>
+    </variation>
+  </testCase>
+</config>

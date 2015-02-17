@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="CreateAdminUserRoleEntityTest">
+    <variation name="CreateAdminUserRoleEntityTestVariation1" firstConstraint="assertRoleSuccessSaveMessage" method="test">
+      <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>
+      <data name="role/data/resource_access" xsi:type="string">Custom</data>
+      <data name="role/data/roles_resources" xsi:type="string">Sales</data>
+      <constraint name="assertRoleSuccessSaveMessage" next="assertRoleInGrid"/>
+      <constraint name="assertRoleInGrid" prev="assertRoleSuccessSaveMessage"/>
+    </variation>
+    <variation name="CreateAdminUserRoleEntityTestVariation2" firstConstraint="assertRoleSuccessSaveMessage" method="test">
+      <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>
+      <data name="role/data/resource_access" xsi:type="string">All</data>
+      <data name="role/data/roles_resources" xsi:type="string">-</data>
+      <constraint name="assertRoleSuccessSaveMessage" next="assertRoleInGrid"/>
+      <constraint name="assertRoleInGrid" prev="assertRoleSuccessSaveMessage"/>
+    </variation>
+  </testCase>
+</config>

@@ -1,3 +1,0 @@
-"website/dataSet";"createBackup";"constraint"
-"custom_website";"Yes";"assertWebsiteSuccessDeleteAndBackupMessages, assertWebsiteNotInGrid, assertBackupInGrid"
-"custom_website";"No";"assertWebsiteSuccessDeleteMessage, assertWebsiteNotInGrid"

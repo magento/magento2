@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="ProductTypeSwitchingOnCreationTest">
+    <variation name="ProductTypeSwitchingOnCreationTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="createProduct" xsi:type="string">simple</data>
+      <data name="product" xsi:type="string">configurableProductInjectable::default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
+      <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
+      <constraint name="assertConfigurableProductForm" next="assertConfigurableProductPage" prev="assertChildProductsInGrid"/>
+      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertConfigurableProductForm"/>
+      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
+      <constraint name="assertConfigurableProductInCart" next="assertChildProductIsNotDisplayedSeparately" prev="assertProductInStock"/>
+      <constraint name="assertChildProductIsNotDisplayedSeparately" prev="assertConfigurableProductInCart"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="createProduct" xsi:type="string">simple</data>
+      <data name="product" xsi:type="string">catalogProductVirtual::default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="createProduct" xsi:type="string">configurable</data>
+      <data name="product" xsi:type="string">catalogProductSimple::default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="createProduct" xsi:type="string">configurable</data>
+      <data name="product" xsi:type="string">catalogProductVirtual::default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="createProduct" xsi:type="string">virtual</data>
+      <data name="product" xsi:type="string">catalogProductSimple::default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="createProduct" xsi:type="string">virtual</data>
+      <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
+      <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
+      <constraint name="assertConfigurableProductForm" next="assertConfigurableProductPage" prev="assertChildProductsInGrid"/>
+      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertConfigurableProductForm"/>
+      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
+      <constraint name="assertConfigurableProductInCart" next="assertChildProductIsNotDisplayedSeparately" prev="assertProductInStock"/>
+      <constraint name="assertChildProductIsNotDisplayedSeparately" prev="assertConfigurableProductInCart"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="createProduct" xsi:type="string">virtual</data>
+      <data name="product" xsi:type="string">downloadableProductInjectable::default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductInStock" prev="assertDownloadableProductForm"/>
+      <constraint name="assertProductInStock" prev="assertProductPage"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="createProduct" xsi:type="string">downloadable</data>
+      <data name="product" xsi:type="string">catalogProductSimple::default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="createProduct" xsi:type="string">downloadable</data>
+      <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
+      <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
+      <constraint name="assertConfigurableProductForm" next="assertConfigurableProductPage" prev="assertChildProductsInGrid"/>
+      <constraint name="assertConfigurableProductPage" next="assertProductInStock" prev="assertConfigurableProductForm"/>
+      <constraint name="assertProductInStock" next="assertConfigurableProductInCart" prev="assertConfigurableProductPage"/>
+      <constraint name="assertConfigurableProductInCart" next="assertChildProductIsNotDisplayedSeparately" prev="assertProductInStock"/>
+      <constraint name="assertChildProductIsNotDisplayedSeparately" prev="assertConfigurableProductInCart"/>
+    </variation>
+  </testCase>
+</config>

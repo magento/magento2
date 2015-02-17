@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
-use Magento\Customer\Api\Data\CustomerDataBuilder;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Controller\RegistryConstants;
 
 /**
@@ -22,8 +22,8 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\Registry */
     private $_coreRegistry;
 
-    /** @var  CustomerDataBuilder */
-    private $_customerBuilder;
+    /** @var  CustomerInterfaceFactory */
+    private $_customerFactory;
 
     /** @var  \Magento\Customer\Api\CustomerRepositoryInterface */
     private $_customerRepository;
@@ -31,7 +31,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Customer\Api\GroupRepositoryInterface */
     private $_groupRepository;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface */
+    /** @var \Magento\Store\Model\StoreManagerInterface */
     private $_storeManager;
 
     /** @var \Magento\Framework\ObjectManagerInterface */
@@ -52,13 +52,13 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_storeManager = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface');
+        $this->_storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
         $this->_context = $this->_objectManager->get(
             'Magento\Backend\Block\Template\Context',
             ['storeManager' => $this->_storeManager]
         );
 
-        $this->_customerBuilder = $this->_objectManager->get('Magento\Customer\Api\Data\CustomerDataBuilder');
+        $this->_customerFactory = $this->_objectManager->get('Magento\Customer\Api\Data\CustomerInterfaceFactory');
         $this->_coreRegistry = $this->_objectManager->get('Magento\Framework\Registry');
         $this->_customerRepository = $this->_objectManager->get(
             'Magento\Customer\Api\CustomerRepositoryInterface'
@@ -162,7 +162,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             ->getDefaultTimezonePath();
         $timezone = $this->_context->getScopeConfig()->getValue(
             $defaultTimeZonePath,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_loadCustomer()->getStoreId()
         );
         $this->assertEquals($timezone, $this->_block->getStoreCreateDateTimezone());
@@ -184,7 +184,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     {
         $password = 'password';
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
-        $customer = $this->_customerBuilder->setConfirmation(
+        $customer = $this->_customerFactory->create()->setConfirmation(
             true
         )->setFirstname(
             'firstname'
@@ -192,7 +192,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             'lastname'
         )->setEmail(
             'email@email.com'
-        )->create();
+        );
         $customer = $this->_customerRepository->save($customer, $password);
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customer->getId());
         $this->assertEquals('Confirmation Not Required', $this->_block->getIsConfirmedStatus());
@@ -235,13 +235,13 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     private function _createCustomer()
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
-        $customer = $this->_customerBuilder->setFirstname(
+        $customer = $this->_customerFactory->create()->setFirstname(
             'firstname'
         )->setLastname(
             'lastname'
         )->setEmail(
             'email@email.com'
-        )->create();
+        );
         $data = ['account' => $this->_dataObjectProcessor
             ->buildOutputDataArray($customer, 'Magento\Customer\Api\Data\CustomerInterface'), ];
         $this->_context->getBackendSession()->setCustomerData($data);

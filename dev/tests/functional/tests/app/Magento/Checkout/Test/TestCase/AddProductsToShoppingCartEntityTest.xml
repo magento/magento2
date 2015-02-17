@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="AddProductsToShoppingCartEntityTest">
+    <variation name="AddProductsToShoppingCartEntityTestVariation1" firstConstraint="assertPriceInShoppingCart" method="test">
+      <data name="productsData" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+      <data name="cart/data/grand_total" xsi:type="string">200</data>
+      <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
+      <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
+      <constraint name="assertSubtotalInShoppingCart" next="assertCartItemsOptions" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="assertCartItemsOptions" next="assertGrandTotalInShoppingCart" prev="assertSubtotalInShoppingCart"/>
+      <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
+    </variation>
+    <variation name="AddProductsToShoppingCartEntityTestVariation2" firstConstraint="assertPriceInShoppingCart" method="test">
+      <data name="productsData" xsi:type="string">bundleProduct::bundle_fixed_product</data>
+      <data name="cart/data/grand_total" xsi:type="string">756</data>
+      <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
+      <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
+      <constraint name="assertSubtotalInShoppingCart" next="assertCartItemsOptions" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="assertCartItemsOptions" next="assertGrandTotalInShoppingCart" prev="assertSubtotalInShoppingCart"/>
+      <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
+    </variation>
+    <variation name="AddProductsToShoppingCartEntityTestVariation3" firstConstraint="assertPriceInShoppingCart" method="test">
+      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
+      <data name="cart/data/grand_total" xsi:type="string">340</data>
+      <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
+      <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
+      <constraint name="assertSubtotalInShoppingCart" next="assertCartItemsOptions" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="assertCartItemsOptions" next="assertGrandTotalInShoppingCart" prev="assertSubtotalInShoppingCart"/>
+      <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
+    </variation>
+    <variation name="AddProductsToShoppingCartEntityTestVariation4" firstConstraint="assertPriceInShoppingCart" method="test">
+      <data name="productsData" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+      <data name="cart/data/grand_total" xsi:type="string">50</data>
+      <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
+      <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
+      <constraint name="assertSubtotalInShoppingCart" next="assertCartItemsOptions" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="assertCartItemsOptions" next="assertGrandTotalInShoppingCart" prev="assertSubtotalInShoppingCart"/>
+      <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
+    </variation>
+    <variation name="AddProductsToShoppingCartEntityTestVariation5" firstConstraint="assertPriceInShoppingCart" method="test">
+      <data name="productsData" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="cart/data/grand_total" xsi:type="string">516</data>
+      <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
+      <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
+      <constraint name="assertSubtotalInShoppingCart" next="assertCartItemsOptions" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="assertCartItemsOptions" next="assertGrandTotalInShoppingCart" prev="assertSubtotalInShoppingCart"/>
+      <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
+    </variation>
+    <variation name="AddProductsToShoppingCartEntityTestVariation6" firstConstraint="assertPriceInShoppingCart" method="test">
+      <data name="productsData" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
+      <data name="cart/data/grand_total" xsi:type="string">46</data>
+      <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
+      <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
+      <constraint name="assertSubtotalInShoppingCart" next="assertCartItemsOptions" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="assertCartItemsOptions" next="assertGrandTotalInShoppingCart" prev="assertSubtotalInShoppingCart"/>
+      <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
+    </variation>
+    <variation name="AddProductsToShoppingCartEntityTestVariation7" firstConstraint="assertPriceInShoppingCart" method="test">
+      <data name="productsData" xsi:type="string">groupedProductInjectable::three_simple_products</data>
+      <data name="cart/data/grand_total" xsi:type="string">1920</data>
+      <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
+      <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
+      <constraint name="assertSubtotalInShoppingCart" next="assertCartItemsOptions" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="assertCartItemsOptions" next="assertGrandTotalInShoppingCart" prev="assertSubtotalInShoppingCart"/>
+      <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
+    </variation>
+    <variation name="AddProductsToShoppingCartEntityTestVariation8" firstConstraint="assertPriceInShoppingCart" method="test">
+      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
+      <data name="cart/data/grand_total" xsi:type="string">3272</data>
+      <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
+      <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
+      <constraint name="assertSubtotalInShoppingCart" next="assertCartItemsOptions" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="assertCartItemsOptions" next="assertGrandTotalInShoppingCart" prev="assertSubtotalInShoppingCart"/>
+      <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
+    </variation>
+  </testCase>
+</config>

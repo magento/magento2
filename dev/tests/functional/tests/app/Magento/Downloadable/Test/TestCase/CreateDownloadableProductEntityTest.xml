@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="CreateDownloadableProductEntityTest">
+    <variation name="CreateDownloadableProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">100</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">1</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">Default Category</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductVisibleInCategory" prev="assertProductInGrid"/>
+      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertDownloadableProductForm"/>
+      <constraint name="assertProductPage" next="assertProductInStock" prev="assertProductVisibleInCategory"/>
+      <constraint name="assertProductInStock" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">1</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">category %isolation%</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">default</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductVisibleInCategory" prev="assertProductInGrid"/>
+      <constraint name="assertProductVisibleInCategory" next="assertDownloadableSamplesData" prev="assertDownloadableProductForm"/>
+      <constraint name="assertDownloadableSamplesData" next="assertDownloadableLinksData" prev="assertProductVisibleInCategory"/>
+      <constraint name="assertDownloadableLinksData" prev="assertDownloadableSamplesData"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">33</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">category %isolation%</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertDownloadableProductForm"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductCustomOptionsOnProductPage" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductCustomOptionsOnProductPage" next="assertProductVisibleInCategory" prev="assertDownloadableProductForm"/>
+      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductCustomOptionsOnProductPage"/>
+      <constraint name="assertProductPage" next="assertDownloadableLinksData" prev="assertProductVisibleInCategory"/>
+      <constraint name="assertDownloadableLinksData" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">55</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">with_three_samples</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">with_three_links</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">two_options</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductCustomOptionsOnProductPage"/>
+      <constraint name="assertProductCustomOptionsOnProductPage" next="assertProductInGrid" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductCustomOptionsOnProductPage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductVisibleInCategory" prev="assertProductInGrid"/>
+      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertDownloadableProductForm"/>
+      <constraint name="assertProductPage" next="assertDownloadableLinksData" prev="assertProductVisibleInCategory"/>
+      <constraint name="assertDownloadableLinksData" next="assertProductInStock" prev="assertProductPage"/>
+      <constraint name="assertProductInStock" next="assertProductSearchableBySku" prev="assertDownloadableLinksData"/>
+      <constraint name="assertProductSearchableBySku" prev="assertProductInStock"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">100</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">50</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">Default Category</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductOutOfStock"/>
+      <constraint name="assertProductOutOfStock" next="assertProductInGrid" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductOutOfStock"/>
+      <constraint name="assertDownloadableProductForm" prev="assertProductInGrid"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">9999</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">Default Category</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">123</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">No</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">123</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductOutOfStock" prev="assertProductInGrid"/>
+      <constraint name="assertProductOutOfStock" prev="assertDownloadableProductForm"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">98</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">None</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">Default Category</data>
+      <data name="product/data/description" xsi:type="string">This is description for downloadable product</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" prev="assertDownloadableProductForm"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">57</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">category %isolation%</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">This is short description for downloadable product</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">default</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">with_three_links</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductCustomOptionsOnProductPage" prev="assertDownloadableProductForm"/>
+      <constraint name="assertProductCustomOptionsOnProductPage" next="assertDownloadableSamplesData" prev="assertProductPage"/>
+      <constraint name="assertDownloadableSamplesData" next="assertDownloadableLinksData" prev="assertProductCustomOptionsOnProductPage"/>
+      <constraint name="assertDownloadableLinksData" prev="assertDownloadableSamplesData"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">65</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">11</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">category %isolation%</data>
+      <data name="product/data/description" xsi:type="string">This is description for downloadable product</data>
+      <data name="product/data/short_description" xsi:type="string">This is short description for downloadable product</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">default</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">with_three_links</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductPage"/>
+      <constraint name="assertProductPage" next="assertProductInGrid" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductPage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductCustomOptionsOnProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductCustomOptionsOnProductPage" next="assertDownloadableSamplesData" prev="assertDownloadableProductForm"/>
+      <constraint name="assertDownloadableSamplesData" next="assertDownloadableLinksData" prev="assertProductCustomOptionsOnProductPage"/>
+      <constraint name="assertDownloadableLinksData" prev="assertDownloadableSamplesData"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation10" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">65</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">11</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">category %isolation%</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">default</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">with_three_links</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertDownloadableLinksData" prev="assertDownloadableProductForm"/>
+      <constraint name="assertDownloadableLinksData" next="assertProductCustomOptionsOnProductPage" prev="assertProductPage"/>
+      <constraint name="assertProductCustomOptionsOnProductPage" prev="assertDownloadableLinksData"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation11" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">100</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">Default Category</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertDownloadableProductForm"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductVisibleInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertDownloadableProductForm"/>
+      <constraint name="assertProductPage" prev="assertProductVisibleInCategory"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation12" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">category %isolation%</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">5</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductSpecialPriceOnProductPage" prev="assertDownloadableProductForm"/>
+      <constraint name="assertProductSpecialPriceOnProductPage" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation13" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">365</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">23</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">category %isolation%</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">default</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductGroupedPriceOnProductPage" prev="assertDownloadableProductForm"/>
+      <constraint name="assertProductGroupedPriceOnProductPage" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateDownloadableProductEntityTestVariation14" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">250</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">65</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/is_virtual" xsi:type="string">Yes</data>
+      <data name="product/data/category" xsi:type="string">category %isolation%</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
+      <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
+      <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
+      <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">default</data>
+      <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertDownloadableProductForm" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductTierPriceOnProductPage" prev="assertDownloadableProductForm"/>
+      <constraint name="assertProductTierPriceOnProductPage" prev="assertProductPage"/>
+    </variation>
+  </testCase>
+</config>

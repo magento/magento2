@@ -13,7 +13,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     /**
      * Store manager object
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -44,12 +44,12 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     protected $storesWithInvalidDiscountSettings;
 
     /**
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Tax\Model\Config $taxConfig
      */
     public function __construct(
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Tax\Model\Config $taxConfig
     ) {

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="UpdateAdminUserRoleEntityTest">
+    <variation name="UpdateAdminUserRoleEntityTestVariation1" firstConstraint="assertRoleSuccessSaveMessage" method="test">
+      <data name="user/dataSet" xsi:type="string">custom_admin_with_default_role</data>
+      <data name="role/data/rolename" xsi:type="string">NewAdminRole%isolation%</data>
+      <data name="role/data/resource_access" xsi:type="string">-</data>
+      <data name="role/data/roles_resources" xsi:type="string">-</data>
+      <data name="role/data/in_role_users/dataSet" xsi:type="string">-</data>
+      <constraint name="assertRoleSuccessSaveMessage" next="assertRoleInGrid"/>
+      <constraint name="assertRoleInGrid" next="assertUserSuccessLogOut" prev="assertRoleSuccessSaveMessage"/>
+      <constraint name="assertUserSuccessLogOut" next="assertUserSuccessLogin" prev="assertRoleInGrid"/>
+      <constraint name="assertUserSuccessLogin" prev="assertUserSuccessLogOut"/>
+    </variation>
+    <variation name="UpdateAdminUserRoleEntityTestVariation2" firstConstraint="assertRoleSuccessSaveMessage" method="test">
+      <data name="user/dataSet" xsi:type="string">default</data>
+      <data name="role/data/rolename" xsi:type="string">-</data>
+      <data name="role/data/resource_access" xsi:type="string">Custom</data>
+      <data name="role/data/roles_resources" xsi:type="string">Sales</data>
+      <data name="role/data/in_role_users/dataSet" xsi:type="string">custom_admin</data>
+      <constraint name="assertRoleSuccessSaveMessage" next="assertRoleInGrid"/>
+      <constraint name="assertRoleInGrid" next="assertUserSuccessLogOut" prev="assertRoleSuccessSaveMessage"/>
+      <constraint name="assertUserSuccessLogOut" next="assertUserSuccessLogin" prev="assertRoleInGrid"/>
+      <constraint name="assertUserSuccessLogin" next="assertUserRoleSalesRestrictedAccess" prev="assertUserSuccessLogOut"/>
+      <constraint name="assertUserRoleSalesRestrictedAccess" prev="assertUserSuccessLogin"/>
+    </variation>
+  </testCase>
+</config>

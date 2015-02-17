@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteUsedInConfigurableProductAttributeTest">
+    <variation name="DeleteUsedInConfigurableProductAttributeTestVariation1" firstConstraint="assertUsedSuperAttributeImpossibleDeleteMessages" method="test">
+      <data name="product/dataSet" xsi:type="string">one_variation</data>
+      <constraint name="assertUsedSuperAttributeImpossibleDeleteMessages" next="assertProductAttributeInGrid"/>
+      <constraint name="assertProductAttributeInGrid" next="assertConfigurableProductForm" prev="assertUsedSuperAttributeImpossibleDeleteMessages"/>
+      <constraint name="assertConfigurableProductForm" prev="assertProductAttributeInGrid"/>
+    </variation>
+  </testCase>
+</config>

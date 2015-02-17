@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteCategoryEntityTest">
+    <variation name="DeleteCategoryEntityTestVariation1" firstConstraint="assertCategorySuccessDeleteMessage" method="test">
+      <data name="category/dataSet" xsi:type="string">root_category</data>
+      <constraint name="assertCategorySuccessDeleteMessage" next="assertCategoryAbsenceOnBackend"/>
+      <constraint name="assertCategoryAbsenceOnBackend" prev="assertCategorySuccessDeleteMessage"/>
+    </variation>
+    <variation name="DeleteCategoryEntityTestVariation2" firstConstraint="assertCategorySuccessDeleteMessage" method="test">
+      <data name="category/dataSet" xsi:type="string">root_subcategory</data>
+      <constraint name="assertCategorySuccessDeleteMessage" next="assertUrlRewriteCategoryNotInGrid"/>
+      <constraint name="assertUrlRewriteCategoryNotInGrid" next="assertCategoryAbsenceOnBackend" prev="assertCategorySuccessDeleteMessage"/>
+      <constraint name="assertCategoryAbsenceOnBackend" next="assertCategoryAbsenceOnFrontend" prev="assertUrlRewriteCategoryNotInGrid"/>
+      <constraint name="assertCategoryAbsenceOnFrontend" prev="assertCategoryAbsenceOnBackend"/>
+    </variation>
+  </testCase>
+</config>

@@ -30,6 +30,6 @@ class Config implements \Magento\Framework\View\Url\ConfigInterface
      */
     public function getValue($path)
     {
-        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 }

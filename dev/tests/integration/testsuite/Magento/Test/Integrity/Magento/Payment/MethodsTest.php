@@ -25,7 +25,7 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Element\BlockFactory'
         );
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore()->getId();
         /** @var $model \Magento\Payment\Model\MethodInterface */
         if (empty($methodClass)) {
@@ -60,20 +60,20 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
             if ($model->canUseInternal()) {
                 try {
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                        'Magento\Framework\Store\StoreManagerInterface'
+                        'Magento\Store\Model\StoreManagerInterface'
                     )->getStore()->setId(
                         \Magento\Store\Model\Store::DEFAULT_STORE_ID
                     );
                     $block->setArea('adminhtml');
                     $this->assertFileExists($block->getTemplateFile(), $message);
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                        'Magento\Framework\Store\StoreManagerInterface'
+                        'Magento\Store\Model\StoreManagerInterface'
                     )->getStore()->setId(
                         $storeId
                     );
                 } catch (\Exception $e) {
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                        'Magento\Framework\Store\StoreManagerInterface'
+                        'Magento\Store\Model\StoreManagerInterface'
                     )->getStore()->setId(
                         $storeId
                     );
