@@ -143,6 +143,7 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
 
         $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
+            ->setMethods(['setData'])
             ->getMock();
         $resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
             ->disableOriginalConstructor()
