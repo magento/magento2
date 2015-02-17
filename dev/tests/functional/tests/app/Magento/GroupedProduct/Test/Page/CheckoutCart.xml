@@ -1,18 +1,14 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="checkout/cart/index" module="Magento_Checkout">
-    <blocks>
-        <cartBlock>
-            <renders>
-                <grouped>
-                    <class>Magento\GroupedProduct\Test\Block\Checkout\Cart</class>
-                </grouped>
-            </renders>
-        </cartBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CheckoutCart" mca="checkout/cart/index">
+    <block name="cartBlock">
+      <render name="grouped" class="Magento\GroupedProduct\Test\Block\Checkout\Cart"/>
+    </block>
+  </page>
+</config>

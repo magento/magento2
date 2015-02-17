@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="sales/creditmemo" module="Magento_Sales">
-    <blocks>
-        <creditMemoGrid>
-            <class>Magento\Sales\Test\Block\Adminhtml\CreditMemo\Grid</class>
-            <locator>[data-grid-id="sales_creditmemo_grid"]</locator>
-            <strategy>css selector</strategy>
-        </creditMemoGrid>
-        <messagesBlock>
-            <class>Magento\Core\Test\Block\Messages</class>
-            <locator>#messages</locator>
-            <strategy>css selector</strategy>
-        </messagesBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CreditMemoIndex" area="Adminhtml" mca="sales/creditmemo" module="Magento_Sales">
+    <block name="creditMemoGrid" class="Magento\Sales\Test\Block\Adminhtml\CreditMemo\Grid" locator="[data-grid-id='sales_creditmemo_grid']" strategy="css selector"/>
+    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>
+  </page>
+</config>

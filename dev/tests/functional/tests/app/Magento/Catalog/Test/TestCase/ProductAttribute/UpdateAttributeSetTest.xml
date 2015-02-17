@@ -5,14 +5,18 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
-    <testCase name="UpdateAttributeSetTest">
-        <variation name="UpdateAttributeSetTestVariation1">
-            <data name="attributeSet/data/attribute_set_name">ProductTemplateEdit1%isolation%</data>
-            <data name="attributeSet/data/group">Custom-group%isolation%</data>
-            <data name="attributeSetOriginal/dataSet">custom_attribute_set</data>
-            <data name="productAttributeOriginal/dataSet">attribute_type_text_field</data>
-            <data name="constraint">assertProductTemplateSuccessSaveMessage, assertProductTemplateForm, assertProductTemplateInGrid, assertProductTemplateOnProductForm, assertProductTemplateGroupOnProductForm</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="UpdateAttributeSetTest">
+    <variation name="UpdateAttributeSetTestVariation1" firstConstraint="assertProductTemplateSuccessSaveMessage" method="test">
+      <data name="attributeSet/data/attribute_set_name" xsi:type="string">ProductTemplateEdit1%isolation%</data>
+      <data name="attributeSet/data/group" xsi:type="string">Custom-group%isolation%</data>
+      <data name="attributeSetOriginal/dataSet" xsi:type="string">custom_attribute_set</data>
+      <data name="productAttributeOriginal/dataSet" xsi:type="string">attribute_type_text_field</data>
+      <constraint name="assertProductTemplateSuccessSaveMessage" next="assertProductTemplateForm"/>
+      <constraint name="assertProductTemplateForm" next="assertProductTemplateInGrid" prev="assertProductTemplateSuccessSaveMessage"/>
+      <constraint name="assertProductTemplateInGrid" next="assertProductTemplateOnProductForm" prev="assertProductTemplateForm"/>
+      <constraint name="assertProductTemplateOnProductForm" next="assertProductTemplateGroupOnProductForm" prev="assertProductTemplateInGrid"/>
+      <constraint name="assertProductTemplateGroupOnProductForm" prev="assertProductTemplateOnProductForm"/>
+    </variation>
+  </testCase>
 </config>
