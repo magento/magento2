@@ -180,8 +180,8 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
-     * @covers \Magento\Framework\Interception\PluginList\PluginList::_inheritPlugins
+     * covers \Magento\Framework\Interception\PluginList\PluginList::getNext
+     * covers \Magento\Framework\Interception\PluginList\PluginList::_inheritPlugins
      */
     public function testInheritPluginsWithNonExistingClass()
     {
@@ -193,8 +193,8 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
-     * @covers \Magento\Framework\Interception\PluginList\PluginList::_loadScopedData
+     * covers \Magento\Framework\Interception\PluginList\PluginList::getNext
+     * covers \Magento\Framework\Interception\PluginList\PluginList::_loadScopedData
      */
     public function testLoadScopedDataCached()
     {

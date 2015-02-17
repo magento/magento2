@@ -5,11 +5,13 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="ActivateIntegrationEntityTest">
-        <variation name="ActivateIntegrationEntityTestVariation1">
-            <data name="integration/dataSet">default_with_all_resources</data>
-            <data name="constraint">assertIntegrationResourcesPopup, assertIntegrationTokensPopup, assertIntegrationSuccessActivationMessage</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="ActivateIntegrationEntityTest">
+    <variation name="ActivateIntegrationEntityTestVariation1" firstConstraint="assertIntegrationResourcesPopup" method="test">
+      <data name="integration/dataSet" xsi:type="string">default_with_all_resources</data>
+      <constraint name="assertIntegrationResourcesPopup" next="assertIntegrationTokensPopup"/>
+      <constraint name="assertIntegrationTokensPopup" next="assertIntegrationSuccessActivationMessage" prev="assertIntegrationResourcesPopup"/>
+      <constraint name="assertIntegrationSuccessActivationMessage" prev="assertIntegrationTokensPopup"/>
+    </variation>
+  </testCase>
 </config>

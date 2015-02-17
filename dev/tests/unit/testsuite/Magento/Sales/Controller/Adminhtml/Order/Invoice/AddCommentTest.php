@@ -95,7 +95,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->viewMock = $this->getMockBuilder('Magento\Backend\Model\View')
+        $this->viewMock = $this->getMockBuilder('Magento\Framework\App\View')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

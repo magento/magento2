@@ -78,7 +78,7 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\SalesRule\Model\Rule\Action\Discount\CartFixed::calculate
+     * covers \Magento\SalesRule\Model\Rule\Action\Discount\CartFixed::calculate
      */
     public function testCalculate()
     {

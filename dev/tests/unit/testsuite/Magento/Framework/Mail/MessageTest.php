@@ -24,8 +24,8 @@ class MessageTest extends \PHPUnit_Framework_TestCase
      * @param string $messageType
      * @param string $method
      *
-     * @covers \Magento\Framework\Mail\Message::setBody
-     * @covers \Magento\Framework\Mail\Message::setMessageType
+     * covers \Magento\Framework\Mail\Message::setBody
+     * covers \Magento\Framework\Mail\Message::setMessageType
      * @dataProvider setBodyDataProvider
      */
     public function testSetBody($messageType, $method)
@@ -60,8 +60,8 @@ class MessageTest extends \PHPUnit_Framework_TestCase
      * @param string $messageType
      * @param string $method
      *
-     * @covers \Magento\Framework\Mail\Message::getBody
-     * @covers \Magento\Framework\Mail\Message::setMessageType
+     * covers \Magento\Framework\Mail\Message::getBody
+     * covers \Magento\Framework\Mail\Message::setMessageType
      * @dataProvider getBodyDataProvider
      */
     public function testGetBody($messageType, $method)

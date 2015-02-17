@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Constraint;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -25,11 +25,11 @@ class AssertUnholdButton extends AbstractConstraint
      * Assert that 'Unhold' button present on order page
      *
      * @param OrderIndex $orderIndex
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @param OrderInjectable $order
      * @return void
      */
-    public function processAssert(OrderIndex $orderIndex, OrderView $orderView, OrderInjectable $order)
+    public function processAssert(OrderIndex $orderIndex, SalesOrderView $orderView, OrderInjectable $order)
     {
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);

@@ -5,13 +5,16 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="UpdateWebsiteEntityTest">
-        <variation name="UpdateWebsiteEntityTestVariation1">
-            <data name="websiteOrigin/dataSet">custom_website</data>
-            <data name="website/data/name">website_upd%isolation%</data>
-            <data name="website/data/code">code_upd%isolation%</data>
-            <data name="constraint">assertWebsiteSuccessSaveMessage, assertWebsiteInGrid, assertWebsiteForm, assertWebsiteOnStoreForm</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="UpdateWebsiteEntityTest">
+    <variation name="UpdateWebsiteEntityTestVariation1" firstConstraint="assertWebsiteSuccessSaveMessage" method="test">
+      <data name="websiteOrigin/dataSet" xsi:type="string">custom_website</data>
+      <data name="website/data/name" xsi:type="string">website_upd%isolation%</data>
+      <data name="website/data/code" xsi:type="string">code_upd%isolation%</data>
+      <constraint name="assertWebsiteSuccessSaveMessage" next="assertWebsiteInGrid"/>
+      <constraint name="assertWebsiteInGrid" next="assertWebsiteForm" prev="assertWebsiteSuccessSaveMessage"/>
+      <constraint name="assertWebsiteForm" next="assertWebsiteOnStoreForm" prev="assertWebsiteInGrid"/>
+      <constraint name="assertWebsiteOnStoreForm" prev="assertWebsiteForm"/>
+    </variation>
+  </testCase>
 </config>

@@ -1,26 +1,14 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="review/product/index" module="Magento_Review">
-    <blocks>
-        <messagesBlock>
-            <class>Magento\Core\Test\Block\Messages</class>
-            <locator>#messages</locator>
-            <strategy>css selector</strategy>
-        </messagesBlock>
-        <reviewGrid>
-            <class>Magento\Review\Test\Block\Adminhtml\Grid</class>
-            <locator>#reviwGrid</locator>
-            <strategy>css selector</strategy>
-        </reviewGrid>
-        <reviewActions>
-            <class>Magento\Backend\Test\Block\GridPageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </reviewActions>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="ReviewIndex" area="Adminhtml" mca="review/product/index" module="Magento_Review">
+    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>
+    <block name="reviewGrid" class="Magento\Review\Test\Block\Adminhtml\Grid" locator="#reviwGrid" strategy="css selector"/>
+    <block name="reviewActions" class="Magento\Backend\Test\Block\GridPageActions" locator=".page-main-actions" strategy="css selector"/>
+  </page>
+</config>

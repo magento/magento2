@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Constraint;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -24,12 +24,12 @@ class AssertCreditMemoButton extends AbstractConstraint
     /**
      * Assert that 'Credit Memo' button is present on order's page
      *
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @param OrderIndex $orderIndex
      * @param OrderInjectable $order
      * @return void
      */
-    public function processAssert(OrderView $orderView, OrderIndex $orderIndex, OrderInjectable $order)
+    public function processAssert(SalesOrderView $orderView, OrderIndex $orderIndex, OrderInjectable $order)
     {
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
