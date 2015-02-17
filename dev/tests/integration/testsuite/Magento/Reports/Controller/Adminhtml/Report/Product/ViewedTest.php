@@ -23,7 +23,7 @@ class ViewedTest extends \Magento\Backend\Utility\Controller
     public function testExecuteWithoutError()
     {
         $this->dispatch('backend/reports/report_product/viewed/filter/' .
-            'cGVyaW9kX3R5cGU9ZGF5JmZyb209NDY0NjQmdG89NDY0NjQ2JnNob3dfZW1wdHlfcm93cz0w/');
+            'cGVyaW9kX3R5cGU9ZGF5JmZyb209MDIlMkYxJTJGMjAxNSZ0bz0wMiUyRjE2JTJGMjAxNSZzaG93X2VtcHR5X3Jvd3M9MA');
         $actual = $this->getResponse()->getBody();
         $this->assertContains('Product Views Report', $actual);
         $this->assertNotContains('An error occurred while showing the product views report.', $actual);
