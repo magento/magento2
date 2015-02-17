@@ -23,7 +23,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     protected $backup;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface||\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
@@ -120,8 +120,8 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $this->backup->expects($this->once())->method('getTime')->willReturn($time);
         $this->backup->expects($this->exactly($existsCount))->method('exists')->willReturn($exists);
 
-        $this->request->expects($this->at(0))->method('getParam')->with('time')->will($this->returnValue($time));
-        $this->request->expects($this->at(1))->method('getParam')->with('type')->will($this->returnValue($type));
+        $this->request->expects($this->any())->method('getParam')
+            ->will($this->returnValueMap([['time', null, $time], ['type', null, $type]]));
 
         $context = $this->getMock('\Magento\Backend\App\Action\Context', [], [], '', false);
         $context->expects($this->once())->method('getRequest')->willReturn($this->request);
