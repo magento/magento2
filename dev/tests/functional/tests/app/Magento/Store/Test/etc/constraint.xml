@@ -1,84 +1,34 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<constraint>
-    <assertStoreGroupSuccessSaveMessage module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreGroupSuccessSaveMessage>
-    <assertStoreGroupInGrid module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreGroupInGrid>
-    <assertStoreGroupForm module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreGroupForm>
-    <assertStoreGroupOnStoreViewForm module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreGroupOnStoreViewForm>
-    <assertStoreGroupSuccessDeleteMessage module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreGroupSuccessDeleteMessage>
-    <assertStoreGroupNotInGrid module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreGroupNotInGrid>
-    <assertStoreGroupSuccessDeleteAndBackupMessages module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreGroupSuccessDeleteAndBackupMessages>
-    <assertStoreSuccessSaveMessage module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreSuccessSaveMessage>
-    <assertStoreInGrid module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreInGrid>
-    <assertStoreBackend module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreBackend>
-    <assertStoreFrontend module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreFrontend>
-    <assertStoreNotOnFrontend module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreNotOnFrontend>
-    <assertWebsiteSuccessSaveMessage module="Magento_Store">
-        <severity>low</severity>
-    </assertWebsiteSuccessSaveMessage>
-    <assertWebsiteInGrid module="Magento_Store">
-        <severity>low</severity>
-    </assertWebsiteInGrid>
-    <assertWebsiteOnStoreForm module="Magento_Store">
-        <severity>low</severity>
-    </assertWebsiteOnStoreForm>
-    <assertWebsiteForm module="Magento_Store">
-        <severity>low</severity>
-    </assertWebsiteForm>
-    <assertWebsiteSuccessDeleteAndBackupMessages module="Magento_Store">
-        <severity>low</severity>
-    </assertWebsiteSuccessDeleteAndBackupMessages>
-    <assertWebsiteSuccessDeleteMessage module="Magento_Store">
-        <severity>low</severity>
-    </assertWebsiteSuccessDeleteMessage>
-    <assertWebsiteNotInGrid module="Magento_Store">
-        <severity>low</severity>
-    </assertWebsiteNotInGrid>
-    <assertStoreForm module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreForm>
-    <assertStoreSuccessDeleteMessage module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreSuccessDeleteMessage>
-    <assertStoreSuccessDeleteMessage module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreSuccessDeleteMessage>
-    <assertStoreNotInGrid module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreNotInGrid>
-    <assertStoreNotOnFrontend module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreNotOnFrontend>
-    <assertStoreSuccessDeleteAndBackupMessages module="Magento_Store">
-        <severity>low</severity>
-    </assertStoreSuccessDeleteAndBackupMessages>
-</constraint>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/constraints.xsd">
+    <constraint name="assertStoreGroupSuccessSaveMessage" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreGroupInGrid" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreGroupForm" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreGroupOnStoreViewForm" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreGroupSuccessDeleteMessage" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreGroupNotInGrid" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreGroupSuccessDeleteAndBackupMessages" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreSuccessSaveMessage" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreInGrid" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreBackend" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreFrontend" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreNotOnFrontend" module="Magento_Store" severity="low"/>
+    <constraint name="assertWebsiteSuccessSaveMessage" module="Magento_Store" severity="low"/>
+    <constraint name="assertWebsiteInGrid" module="Magento_Store" severity="low"/>
+    <constraint name="assertWebsiteOnStoreForm" module="Magento_Store" severity="low"/>
+    <constraint name="assertWebsiteForm" module="Magento_Store" severity="low"/>
+    <constraint name="assertWebsiteSuccessDeleteAndBackupMessages" module="Magento_Store" severity="low"/>
+    <constraint name="assertWebsiteSuccessDeleteMessage" module="Magento_Store" severity="low"/>
+    <constraint name="assertWebsiteNotInGrid" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreForm" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreSuccessDeleteMessage" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreSuccessDeleteMessage" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreNotInGrid" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreNotOnFrontend" module="Magento_Store" severity="low"/>
+    <constraint name="assertStoreSuccessDeleteAndBackupMessages" module="Magento_Store" severity="low"/>
+</config>

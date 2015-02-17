@@ -5,11 +5,11 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="RevokeAllAccessTokensForAdminWithoutTokensTest">
-        <variation name="RevokeAllAccessTokensForAdminWithoutTokensTestVariation1">
-            <data name="user/dataSet">custom_admin</data>
-            <data name="constraint">assertAccessTokensErrorRevokeMessage</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="RevokeAllAccessTokensForAdminWithoutTokensTest">
+    <variation name="RevokeAllAccessTokensForAdminWithoutTokensTestVariation1" firstConstraint="assertAccessTokensErrorRevokeMessage" method="test">
+      <data name="user/dataSet" xsi:type="string">custom_admin</data>
+      <constraint name="assertAccessTokensErrorRevokeMessage"/>
+    </variation>
+  </testCase>
 </config>

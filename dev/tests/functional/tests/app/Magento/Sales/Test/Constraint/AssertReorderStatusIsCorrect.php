@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Constraint;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -27,14 +27,14 @@ class AssertReorderStatusIsCorrect extends AbstractConstraint
      * @param string $previousOrderStatus
      * @param OrderInjectable $order
      * @param OrderIndex $salesOrder
-     * @param OrderView $salesOrderView
+     * @param SalesOrderView $salesOrderView
      * @return void
      */
     public function processAssert(
         $previousOrderStatus,
         OrderInjectable $order,
         OrderIndex $salesOrder,
-        OrderView $salesOrderView
+        SalesOrderView $salesOrderView
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
