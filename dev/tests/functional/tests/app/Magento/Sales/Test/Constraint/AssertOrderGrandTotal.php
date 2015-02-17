@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -23,14 +23,14 @@ class AssertOrderGrandTotal extends AbstractConstraint
     /**
      * Assert that Order Grand Total is correct on order page in backend
      *
-     * @param OrderView $salesOrderView
+     * @param SalesOrderView $salesOrderView
      * @param string $orderId
      * @param OrderIndex $salesOrder
      * @param string $grandTotal
      * @return void
      */
     public function processAssert(
-        OrderView $salesOrderView,
+        SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
         $orderId,
         $grandTotal

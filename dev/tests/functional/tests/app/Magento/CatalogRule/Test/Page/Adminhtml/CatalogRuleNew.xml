@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="catalog_rule/promo_catalog/new" module="Magento_CatalogRule">
-    <blocks>
-        <formPageActions>
-            <class>Magento\CatalogRule\Test\Block\Adminhtml\FormPageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </formPageActions>
-        <editForm>
-            <class>Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\PromoForm</class>
-            <locator>[id="page:main-container"]</locator>
-            <strategy>css selector</strategy>
-        </editForm>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CatalogRuleNew" area="Adminhtml" mca="catalog_rule/promo_catalog/new" module="Magento_CatalogRule">
+    <block name="formPageActions" class="Magento\CatalogRule\Test\Block\Adminhtml\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
+    <block name="editForm" class="Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\PromoForm" locator="[id='page:main-container']" strategy="css selector"/>
+  </page>
+</config>

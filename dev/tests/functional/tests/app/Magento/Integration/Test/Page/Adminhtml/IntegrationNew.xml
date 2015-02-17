@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="admin/integration/new" module="Magento_Integration">
-    <blocks>
-        <formPageActions>
-            <class>Magento\Integration\Test\Block\Adminhtml\Integration\Edit\IntegrationFormPageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </formPageActions>
-        <integrationForm>
-            <class>Magento\Integration\Test\Block\Adminhtml\Integration\Edit\IntegrationForm</class>
-            <locator>[id="page:main-container"]</locator>
-            <strategy>css selector</strategy>
-        </integrationForm>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="IntegrationNew" area="Adminhtml" mca="admin/integration/new" module="Magento_Integration">
+    <block name="formPageActions" class="Magento\Integration\Test\Block\Adminhtml\Integration\Edit\IntegrationFormPageActions" locator=".page-main-actions" strategy="css selector"/>
+    <block name="integrationForm" class="Magento\Integration\Test\Block\Adminhtml\Integration\Edit\IntegrationForm" locator="[id='page:main-container']" strategy="css selector"/>
+  </page>
+</config>

@@ -5,15 +5,19 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
-    <testCase name="DeleteCategoryEntityTest">
-        <variation name="DeleteCategoryEntityTestVariation1">
-            <data name="category/dataSet">root_category</data>
-            <data name="constraint">assertCategorySuccessDeleteMessage, assertCategoryAbsenceOnBackend</data>
-        </variation>
-        <variation name="DeleteCategoryEntityTestVariation2">
-            <data name="category/dataSet">root_subcategory</data>
-            <data name="constraint">assertCategorySuccessDeleteMessage, assertUrlRewriteCategoryNotInGrid, assertCategoryAbsenceOnBackend, assertCategoryAbsenceOnFrontend</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteCategoryEntityTest">
+    <variation name="DeleteCategoryEntityTestVariation1" firstConstraint="assertCategorySuccessDeleteMessage" method="test">
+      <data name="category/dataSet" xsi:type="string">root_category</data>
+      <constraint name="assertCategorySuccessDeleteMessage" next="assertCategoryAbsenceOnBackend"/>
+      <constraint name="assertCategoryAbsenceOnBackend" prev="assertCategorySuccessDeleteMessage"/>
+    </variation>
+    <variation name="DeleteCategoryEntityTestVariation2" firstConstraint="assertCategorySuccessDeleteMessage" method="test">
+      <data name="category/dataSet" xsi:type="string">root_subcategory</data>
+      <constraint name="assertCategorySuccessDeleteMessage" next="assertUrlRewriteCategoryNotInGrid"/>
+      <constraint name="assertUrlRewriteCategoryNotInGrid" next="assertCategoryAbsenceOnBackend" prev="assertCategorySuccessDeleteMessage"/>
+      <constraint name="assertCategoryAbsenceOnBackend" next="assertCategoryAbsenceOnFrontend" prev="assertUrlRewriteCategoryNotInGrid"/>
+      <constraint name="assertCategoryAbsenceOnFrontend" prev="assertCategoryAbsenceOnBackend"/>
+    </variation>
+  </testCase>
 </config>

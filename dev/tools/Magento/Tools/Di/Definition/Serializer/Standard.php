@@ -8,6 +8,11 @@ namespace Magento\Tools\Di\Definition\Serializer;
 class Standard implements SerializerInterface
 {
     /**
+     * Serializer name
+     */
+    const NAME  = 'standard';
+
+    /**
      * Serialize input data
      *
      * @param mixed $data
