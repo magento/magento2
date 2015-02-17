@@ -41,9 +41,10 @@ body {
     .vendor-prefix-display(flex);
     .vendor-prefix-flex-direction(column);
     min-height: 100%;
-    width: 100%;
     max-width: 100%;
     min-width: @layout__min-width + 2 * @layout-indent__width;
+    margin-left: 8.8rem; // migration styles -> @menu__width
+    box-sizing: border-box;
     & > * {
         .vendor-prefix-flex-grow(0);
         .vendor-prefix-flex-shrink(0);
@@ -310,7 +311,7 @@ body {
         );
         .action.toggle {
             .button-reset();
-            color: @color-link;
+            color: @link__color;
             line-height: normal;
             margin-top: 2px;
             vertical-align: middle;

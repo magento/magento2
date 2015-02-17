@@ -4,46 +4,12 @@
 //  */
 
 //
-//  Variables
+//  Admin Theme Icons
 //  _____________________________________________
 
-//
-//  Icons
-//  ---------------------------------------------
-
-@icon-info: '\e61a';
-@icon-error: '\e632';
-@icon-check-mage: '\e62d';
-
-//
-//  Admin Theme Icons
-//  ---------------------------------------------
-
 .font-face(
-    @family-name: @icon-font__admin-name,
-    @font-path: @icon-font__admin-path,
-    @font-weight: normal,
-    @font-style: normal
-);
-
-//
-//  Blank Theme Icons
-//  ---------------------------------------------
-
-.font-face(
-    @family-name: @icon-font__blank-name,
-    @font-path: @icon-font__blank-path,
-    @font-weight: normal,
-    @font-style: normal
-);
-
-//
-//  MUI Icons
-//  ---------------------------------------------
-
-.font-face(
-    @family-name: @icon-font__mui-name,
-    @font-path: @icon-font__mui-path,
+    @family-name: @icons-admin__font-name,
+    @font-path: @icons-admin__font-name-path,
     @font-weight: normal,
     @font-style: normal
 );
@@ -51,7 +17,7 @@
 //  Use the following CSS code if you want to use data attributes for inserting your icons
 [data-icon]:before {
     content: attr(data-icon);
-    font-family: @icon-font__admin-name;
+    font-family: @icons-admin__font-name;
     -webkit-font-smoothing: antialiased;
     font-weight: normal;
     speak: none;
@@ -60,241 +26,359 @@
 //  Use the following CSS code if you want to have a class per icon
 [class^='icon-']:before,
 [class*=' icon-']:before {
-    font-family: @icon-font__admin-name;
+    font-family: @icons-admin__font-name;
     -webkit-font-smoothing: antialiased;
     font-style: normal;
     font-weight: normal;
     speak: none;
 }
 
-.icon-info:before {
-    content: @icon-info;
+.icon-info {
+    &:before {
+        content: '\e61a';
+    }
 }
 
-.icon-lock:before {
-    content: '\e61b';
+.icon-lock {
+    &:before {
+        content: '\e61b';
+    }
 }
 
-.icon-loop:before {
-    content: '\e61c';
+.icon-loop {
+    &:before {
+        content: '\e61c';
+    }
 }
 
-.icon-plus:before {
-    content: '\e61d';
+.icon-plus {
+    &:before {
+        content: '\e61d';
+    }
 }
 
-.icon-recover:before {
-    content: '\e61e';
+.icon-recover {
+    &:before {
+        content: '\e61e';
+    }
 }
 
-.icon-refresh:before {
-    content: '\e61f';
+.icon-refresh {
+    &:before {
+        content: '\e61f';
+    }
 }
 
-.icon-remove-small:before {
-    content: '\e620';
+.icon-remove-small {
+    &:before {
+        content: '\e620';
+    }
 }
 
-.icon-retweet:before {
-    content: '\e621';
+.icon-retweet {
+    &:before {
+        content: '\e621';
+    }
 }
 
-.icon-unlocked:before {
-    content: '\e622';
+.icon-unlocked {
+    &:before {
+        content: '\e622';
+    }
 }
 
-.icon-warning:before {
-    content: '\e623';
+.icon-warning {
+    &:before {
+        content: '\e623';
+    }
 }
 
-.icon-arrow-left:before {
-    content: '\e624';
+.icon-arrow-left {
+    &:before {
+        content: '\e624';
+    }
 }
 
-.icon-arrow-right:before {
-    content: '\e625';
+.icon-arrow-right {
+    &:before {
+        content: '\e625';
+    }
 }
 
-.icon-back-arrow:before {
-    content: '\e626';
+.icon-back-arrow {
+    &:before {
+        content: '\e626';
+    }
 }
 
-.icon-calendar:before {
-    content: '\e627';
+.icon-calendar {
+    &:before {
+        content: '\e627';
+    }
 }
 
-.icon-caret-down:before {
-    content: '\e628';
+.icon-caret-down {
+    &:before {
+        content: '\e628';
+    }
 }
 
-.icon-caret-left:before {
-    content: '\e629';
+.icon-caret-left {
+    &:before {
+        content: '\e629';
+    }
 }
 
-.icon-caret-right:before {
-    content: '\e62a';
+.icon-caret-right {
+    &:before {
+        content: '\e62a';
+    }
 }
 
-.icon-caret-up:before {
-    content: '\e62b';
+.icon-caret-up {
+    &:before {
+        content: '\e62b';
+    }
 }
 
-.icon-ccw:before {
-    content: '\e62c';
+.icon-ccw {
+    &:before {
+        content: '\e62c';
+    }
 }
 
-.icon-check-mage:before {
-    content: @icon-check-mage;
+.icon-check-mage {
+    &:before {
+        content: '\e62d';
+    }
 }
 
-.icon-clock:before {
-    content: '\e62e';
+.icon-clock {
+    &:before {
+        content: '\e62e';
+    }
 }
 
-.icon-close-mage:before {
-    content: '\e62f';
+.icon-close-mage {
+    &:before {
+        content: '\e62f';
+    }
 }
 
-.icon-delete:before {
-    content: '\e630';
+.icon-delete {
+    &:before {
+        content: '\e630';
+    }
 }
 
-.icon-edit:before {
-    content: '\e631';
+.icon-edit {
+    &:before {
+        content: '\e631';
+    }
 }
 
-.icon-error:before {
-    content: @icon-error;
+.icon-error {
+    &:before {
+        content: '\e632';
+    }
 }
 
-.icon-help:before {
-    content: '\e633';
+.icon-help {
+    &:before {
+        content: '\e633';
+    }
 }
 
-.icon-history:before {
-    content: '\e634';
+.icon-history {
+    &:before {
+        content: '\e634';
+    }
 }
 
-.icon-icon-gripper:before {
-    content: '\e617';
+.icon-icon-not-installed {
+    &:before {
+        content: '\e638';
+    }
 }
 
-.icon-icon-forward:before {
-    content: '\e618';
+.icon-icon-disabled {
+    &:before {
+        content: '\e639';
+    }
 }
 
-.icon-icon-backward:before {
-    content: '\e619';
+.icon-icon-enable {
+    &:before {
+        content: '\e637';
+    }
 }
 
-.icon-icon-expand-close:before {
-    content: '\e615';
+.icon-icon-export {
+    &:before {
+        content: '\e635';
+    }
 }
 
-.icon-icon-expand-open:before {
-    content: '\e616';
+.icon-icon-import {
+    &:before {
+        content: '\e636';
+    }
 }
 
-.icon-icon-system-config:before {
-    content: '\e610';
+.icon-icon-gripper {
+    &:before {
+        content: '\e617';
+    }
 }
 
-.icon-icon-home:before {
-    content: '\e611';
+.icon-icon-forward {
+    &:before {
+        content: '\e618';
+    }
 }
 
-.icon-icon-lego:before {
-    content: '\e612';
+.icon-icon-backward {
+    &:before {
+        content: '\e619';
+    }
 }
 
-.icon-icon-tool:before {
-    content: '\e613';
+.icon-icon-expand-close {
+    &:before {
+        content: '\e615';
+    }
 }
 
-.icon-icon-upgrade:before {
-    content: '\e614';
+.icon-icon-expand-open {
+    &:before {
+        content: '\e616';
+    }
 }
 
-.icon-notification:before {
-    content: '\e607';
+.icon-icon-system-config {
+    &:before {
+        content: '\e610';
+    }
 }
 
-.icon-product:before {
-    content: '\e608';
+.icon-icon-home {
+    &:before {
+        content: '\e611';
+    }
 }
 
-.icon-logo:before {
-    content: '\e606';
+.icon-icon-lego {
+    &:before {
+        content: '\e612';
+    }
 }
 
-.icon-account:before {
-    content: '\e600';
+.icon-icon-tool {
+    &:before {
+        content: '\e613';
+    }
 }
 
-.icon-arrowdown:before {
-    content: '\e601';
+.icon-icon-upgrade {
+    &:before {
+        content: '\e614';
+    }
 }
 
-.icon-cms:before {
-    content: '\e602';
+.icon-notification-02 {
+    &:before {
+        content: '\e607';
+    }
 }
 
-.icon-customers:before {
-    content: '\e603';
+.icon-product {
+    &:before {
+        content: '\e608';
+    }
 }
 
-.icon-dashboard:before {
-    content: '\e604';
+.icon-logo {
+    &:before {
+        content: '\e606';
+    }
 }
 
-.icon-filter:before {
-    content: '\e605';
+.icon-account {
+    &:before {
+        content: '\e600';
+    }
 }
 
-.icon-promotions:before {
-    content: '\e609';
+.icon-arrowdown {
+    &:before {
+        content: '\e601';
+    }
 }
 
-.icon-reports:before {
-    content: '\e60a';
+.icon-cms {
+    &:before {
+        content: '\e602';
+    }
 }
 
-.icon-sales:before {
-    content: '\e60b';
+.icon-customers {
+    &:before {
+        content: '\e603';
+    }
 }
 
-.icon-search:before {
-    content: '\e60c';
+.icon-dashboard {
+    &:before {
+        content: '\e604';
+    }
 }
 
-.icon-stores:before {
-    content: '\e60d';
+.icon-filter {
+    &:before {
+        content: '\e605';
+    }
 }
 
-.icon-systems:before {
-    content: '\e60e';
+.icon-promotions {
+    &:before {
+        content: '\e609';
+    }
 }
 
-.icon-views:before {
-    content: '\e60f';
+.icon-reports {
+    &:before {
+        content: '\e60a';
+    }
 }
 
-.icon-import:before {
-    content: '\e636';
+.icon-sales {
+    &:before {
+        content: '\e60b';
+    }
 }
 
-.icon-export:before {
-    content: '\e635';
+.icon-search {
+    &:before {
+        content: '\e60c';
+    }
 }
 
-.icon-enable:before {
-    content: '\e637';
+.icon-stores {
+    &:before {
+        content: '\e60d';
+    }
 }
 
-.icon-not-installed:before {
-    content: '\e638';
+.icon-systems {
+    &:before {
+        content: '\e60e';
+    }
 }
 
-.icon-disabled:before {
-    content: '\e639';
+.icon-views {
+    &:before {
+        content: '\e60f';
+    }
 }
+
+

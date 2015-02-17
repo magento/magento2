@@ -22,6 +22,7 @@
     "grunt-exec": "^0.4.6",
     "grunt-styledocco": "^0.1.4",
     "grunt-template-jasmine-requirejs": "^0.2.0",
+    "grunt-text-replace": "^0.4.0",
     "imagemin-svgo": "^4.0.1",
     "load-grunt-tasks": "^1.0.0",
     "morgan": "^1.5.0",

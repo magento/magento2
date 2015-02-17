@@ -73,7 +73,7 @@
     &[disabled],
     &.disabled {
         cursor: default;
-        opacity: @opacity-disabled;
+        opacity: @disabled__opacity;
         pointer-events: none;
     }
 }
@@ -94,14 +94,14 @@
 .action-link {
     background-color: transparent;
     border: none;
-    color: @color-link;
+    color: @link__color;
     font-family: @font-family__base;
     font-size: 1.4rem;
     &:hover,
     &:active {
         background-color: transparent;
         border-color: transparent;
-        color: @color-link-hover;
+        color: @link__hover__color;
         text-decoration: underline;
     }
 }
@@ -123,7 +123,7 @@
     &.disabled,
     &[disabled] {
         cursor: default;
-        opacity: @opacity-disabled;
+        opacity: @disabled__opacity;
         pointer-events: none;
     }
 }

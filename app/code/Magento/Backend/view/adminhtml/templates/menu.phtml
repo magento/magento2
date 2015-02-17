@@ -7,6 +7,9 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<nav data-mage-init='{"globalNavigation": {}}' class="navigation">
-    <?php echo $block->renderNavigation($block->getMenuModel(), 0, 12); ?>
-</nav>
+
+<div class="admin__scope">
+    <nav data-mage-init='{"globalNavigation": {}}' class="navigation admin__menu">
+        <?php echo $block->renderNavigation($block->getMenuModel(), 0, 12); ?>
+    </nav>
+</div>

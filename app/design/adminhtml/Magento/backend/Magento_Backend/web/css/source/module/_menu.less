@@ -1,0 +1,44 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Menu
+//  _____________________________________________
+
+//
+//  Variables
+//  _____________________________________________
+
+@menu-item__font-size: 1rem;
+@menu-item__color: @color-white;
+@menu__background-color: @color-very-dark-grayish-orange;
+
+//
+
+.admin__menu {
+    background-color: @menu__background-color;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: @menu__width;
+    z-index: @menu__z-index;
+    ul {
+        > li {
+            display: block;
+            float: none;
+        }
+    }
+    .level-0 {
+        > a {
+            display: block;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-size: @menu-item__font-size;
+            color: @menu-item__color;
+        }
+    }
+
+}

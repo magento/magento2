@@ -18,6 +18,8 @@
         <css src="mui/utils.css"/>
         <css src="Magento_Theme::prototype/magento.css"/>
         <css src="mui/print.css" media="print"/>
+
+        <css src="css/styles-migration.css"/> <!--New styles scope -->
     </head>
 
     <body/>

@@ -77,7 +77,8 @@ module.exports = function (grunt) {
                 'css/styles-old',
                 'css/styles',
                 'css/pages',
-                'css/admin'
+                'css/admin',
+                'css/styles-migration'
             ]
         }
     };
@@ -313,6 +314,11 @@ module.exports = function (grunt) {
             backend: {
                 files: combo.lessFiles('backend')
             },
+            override: {
+                files: {
+                    '<%= combo.autopath("backend","pub") %>css/styles-migration.css': '<%= combo.autopath("backend","pub") %>css/styles-migration.less'
+                }
+            },
             blank: {
                 files: combo.lessFiles('blank')
             },
@@ -358,6 +364,23 @@ module.exports = function (grunt) {
             },
             setup: {
                 src: '<%= path.css.setup %>/setup.css'
+            }
+        },
+
+        //  Replace task for backend migration
+        //  ---------------------------------------------
+
+        replace: {
+            example: {
+                src: ['<%= combo.autopath("backend","pub") %>/css/styles.css'], // source files array (supports minimatch)
+                dest: '<%= combo.autopath("backend","pub") %>/css/override.css', // destination directory or file
+                replacements: [{
+                    from: /:(.*calc.*);/g, // regex replacement ('Fooo' to 'Mooo')
+                    to: ': ~"$1";'
+                }, {
+                    from: /\/\*# sourc.*/g, // regex replacement ('Fooo' to 'Mooo')
+                    to: ''
+                }]
             }
         },
 
@@ -407,12 +430,6 @@ module.exports = function (grunt) {
         //  ---------------------------------------------
 
         watch: {
-            backend: {
-                files: [
-                    '<%= combo.autopath("backend","pub") %>/**/*.less'
-                ],
-                tasks: 'less:backend'
-            },
             blank: {
                 files: [
                     '<%= combo.autopath("blank","pub") %>/**/*.less'
@@ -428,6 +445,21 @@ module.exports = function (grunt) {
             setup: {
                 files: '<%= path.less.setup %>/**/*.less',
                 tasks: 'less:setup'
+            },
+            backendCompile: {
+                files: [
+                    '<%= combo.autopath("backend","pub") %>/**/*.less'
+                ],
+                tasks: 'less:backend'
+            },
+            backendReplace: {
+                files: [
+                    '<%= combo.autopath("backend","pub") %>/css/styles.css'
+                ],
+                tasks: [
+                    'replace:example',
+                    'less:override'
+                ]
             }
         },
 
@@ -640,4 +672,12 @@ module.exports = function (grunt) {
         'jasmine:backend-integration',
         'jasmine:frontend-integration'
     ]);
+
+    //  Backend styles migration tasks
+    //  ---------------------------------------------
+
+    grunt.event.on('watch', function(action, filepath, target) {
+        grunt.log.writeln(target + ': ' + filepath + ' has been ' + action);
+    });
+
 };

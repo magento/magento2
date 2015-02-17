@@ -734,16 +734,16 @@ td.col-type {
     }
     .validation-advice {
         background: @validation-background-color;
-        border: 1px solid @validation-color;
+        border: 1px solid @validation__color;
         border-radius: 3px;
-        color: @validation-color;
+        color: @validation__color;
         margin: 5px 0 0;
         padding: 3px 7px;
         position: absolute;
         white-space: nowrap;
         z-index: 5;
         &:before {
-            .arrow(up, 5px, @validation-color);
+            .arrow(up, 5px, @validation__color);
             content: '';
             left: 50%;
             margin-left: -5px;
@@ -752,8 +752,8 @@ td.col-type {
         }
     }
     input[type="text"].validation-failed {
-        border-color: @validation-color;
-        box-shadow: 0 0 8px @validation-color-rgba;
+        border-color: @validation__color;
+        box-shadow: 0 0 8px @validation__color-rgba;
     }
     .link-feed {
         white-space: nowrap;
