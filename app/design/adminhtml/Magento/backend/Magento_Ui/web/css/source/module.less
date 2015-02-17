@@ -541,56 +541,19 @@
 // Form Component
 //
 
-/* Price field */
-
-.addon {
-  input {
-    border-width: 1px 0 1px 1px;
-    ~ .addafter strong {
-      display: inline-block;
-      background: #fff;
-      line-height: 24px;
-      margin: 0 3px 0 -2px;
-      padding-left: 4px;
-      padding-right: 4px;
-      position: relative;
-      font-size: 12px;
-      top: 0;
-    }
-    &:focus ~ .addafter {
-      border-color: #75b9f0;
-      box-shadow: 0 0 8px rgba(82, 168, 236, .6);
-      strong {
-        margin-top: 0;
-      }
-    }
-  }
-  .addafter {
-    background: none;
-    color: #a6a6a6;
-    border-width: 1px 1px 1px 0;
-    border-radius: 2px 2px 0 0;
-    padding: 0;
-    border-color: #ada89e;
-  }
-  .pager input {
-    border-width: 1px;
-  }
-}
-
 .field .control input[type='text'][disabled],
 .field .control input[type='text'][disabled] ~ .addafter,
 .field .control select[disabled],
 .field .control select[disabled] ~ .addafter {
-  background-color: #fff;
-  border-color: #eee;
-  box-shadow: none;
-  color: #999;
+    background-color: #f4f4f4;
+    border-color: #dddddd;
+    box-shadow: none;
+    color: #999;
 }
 
 .field .control input[type='text'][disabled] ~ .addafter strong,
 .field .control select[disabled] ~ .addafter strong {
-  background-color: #fff;
+  background-color: #f4f4f4;
 }
 
 .field-price.addon {
@@ -612,14 +575,6 @@
 
 .field-price input {
   border-width: 1px 1px 1px 0;
-}
-
-.field-price input:focus {
-  box-shadow: 0 0 8px rgba(82, 168, 236, .6);
-}
-
-.field-price input:focus ~ label.addafter {
-  box-shadow: 0 0 8px rgba(82, 168, 236, .6);
 }
 
 .field-price input ~ label.addafter strong {
