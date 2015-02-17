@@ -8,8 +8,6 @@ namespace Magento\Setup\Module;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -68,38 +66,10 @@ class ModuleInstallerUpgraderFactory
     }
 
     /**
-     * Creates data installer for a module
-     *
-     * @param $moduleName
-     * @return InstallDataInterface | null
-     */
-    public function createDataInstaller($moduleName)
-    {
-        $modulePath = str_replace('_', '/', $moduleName);
-        $dataInstaller = $this->directoryList->getPath(DirectoryList::MODULES)
-            . '/' . $modulePath . '/Setup/InstallData';
-        return $this->getInstallerUpgrader($dataInstaller);
-    }
-
-    /**
-     * Creates data upgrader for a module
-     *
-     * @param $moduleName
-     * @return UpgradeDataInterface | null
-     */
-    public function createDataUpgrader($moduleName)
-    {
-        $modulePath = str_replace('_', '/', $moduleName);
-        $dataUgrader = $this->directoryList->getPath(DirectoryList::MODULES)
-            . '/' . $modulePath . '/Setup/UpgradeData';
-        return $this->getInstallerUpgrader($dataUgrader);
-    }
-
-    /**
      * Get the installer or upgrader for a module
      *
      * @param $path
-     * @return InstallSchemaInterface| UpgradeSchemaInterface| InstallDataInterface |UpgradeDataInterface | null
+     * @return InstallSchemaInterface| UpgradeSchemaInterface| null
      */
     private function getInstallerUpgrader($path)
     {

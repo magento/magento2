@@ -8,51 +8,68 @@
 namespace Magento\Framework\Module\Updater;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 class SetupFactory
 {
-    const INSTANCE_TYPE = 'Magento\Framework\Setup\ModuleDataResourceInterface';
-
     /**
      * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @var array
+     * @var DirectoryList
      */
-    protected $_resourceTypes;
+    private $directoryList;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param array $resourceTypes
+     * @param DirectoryList $directoryList
      */
-    public function __construct(ObjectManagerInterface $objectManager, array $resourceTypes)
+    public function __construct(ObjectManagerInterface $objectManager, DirectoryList $directoryList)
     {
         $this->_objectManager = $objectManager;
-        $this->_resourceTypes = $resourceTypes;
+        $this->directoryList = $directoryList;
     }
 
     /**
-     * @param string $resourceName
      * @param string $moduleName
-     * @return ModuleDataResourceInterface
-     * @throws \LogicException
+     * @param string $type
+     * @return InstallDataInterface |UpgradeDataInterface | null
      */
-    public function create($resourceName, $moduleName)
+    public function create($moduleName, $type)
     {
-        $className = isset(
-            $this->_resourceTypes[$resourceName]
-        ) ? $this->_resourceTypes[$resourceName] : self::INSTANCE_TYPE;
-
-        if (false == is_subclass_of($className, self::INSTANCE_TYPE) && $className !== self::INSTANCE_TYPE) {
-            throw new \LogicException($className . ' must implement \\' . self::INSTANCE_TYPE);
+        $modulePath = str_replace('_', '\\', $moduleName);
+        if ($type === 'install') {
+            $dataInstaller = $this->directoryList->getPath(DirectoryList::MODULES)
+                . '/' . $modulePath . '/Setup/InstallData';
+            return $this->getInstallerUpgrader($dataInstaller);
+        } else {
+            $dataUgrader = $this->directoryList->getPath(DirectoryList::MODULES)
+                . '/' . $modulePath . '/Setup/UpgradeData';
+            return $this->getInstallerUpgrader($dataUgrader);
         }
+    }
 
-        return $this->_objectManager->create(
-            $className,
-            ['resourceName' => $resourceName, 'moduleName' => $moduleName]
-        );
+    /**
+     * Get the installer or upgrader for a module
+     *
+     * @param $path
+     * @return InstallDataInterface |UpgradeDataInterface | null
+     */
+    private function getInstallerUpgrader($path)
+    {
+        if (file_exists($path . '.php')) {
+            $path = str_replace('/', '\\', str_replace(
+                $this->directoryList->getPath(DirectoryList::MODULES) . '/' ,
+                '',
+                $path
+            ));
+            return $this->_objectManager->create($path);
+        } else {
+            return null;
+        }
     }
 }

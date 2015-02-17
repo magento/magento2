@@ -13,6 +13,16 @@ use Magento\Setup\Module\DataSetup;
 class Updater
 {
     /**
+     * @var Updater\SetupFactory
+     */
+    protected $setupFactory;
+
+    /**
+     * @var DataSetup
+     */
+    private $dataSetup;
+
+    /**
      * @var ModuleListInterface
      */
     protected $_moduleList;
@@ -23,21 +33,19 @@ class Updater
     private $_dbVersionInfo;
 
     /**
-     * @var DataSetup
-     */
-    private $setup;
-
-    /**
-     * @param DataSetup $setup
+     * Updater\SetupFactory $setupFactory
+     * @param DataSetup $dataSetup
      * @param ModuleListInterface $moduleList
      * @param DbVersionInfo $dbVersionInfo
      */
     public function __construct(
-        DataSetup $setup,
+        Updater\SetupFactory $setupFactory,
+        DataSetup $dataSetup,
         ModuleListInterface $moduleList,
         DbVersionInfo $dbVersionInfo
     ) {
-        $this->setup = $setup;
+        $this->setupFactory = $setupFactory;
+        $this->dataSetup = $dataSetup;
         $this->_moduleList = $moduleList;
         $this->_dbVersionInfo = $dbVersionInfo;
     }
@@ -46,10 +54,9 @@ class Updater
      * Apply database data updates whenever needed
      *
      * @param \Magento\Framework\Module\Resource $resource
-     * @param ModuleInstallerUpgraderFactory $moduleInstallerUpgraderFactory
      * @return void
      */
-    public function updateData($resource, $moduleInstallerUpgraderFactory)
+    public function updateData($resource)
     {
         foreach ($this->_moduleList->getNames() as $moduleName) {
             if (!$this->_dbVersionInfo->isDataUpToDate($moduleName)) {
@@ -60,16 +67,16 @@ class Updater
                 if ($dataVer !== false) {
                     $status = version_compare($configVer, $dataVer);
                     if ($status == \Magento\Framework\Setup\ModuleDataResourceInterface::VERSION_COMPARE_GREATER) {
-                        $moduleUpgrader = $moduleInstallerUpgraderFactory->createDataUpgrader($moduleName);
+                        $moduleUpgrader = $this->setupFactory->create($moduleName, 'upgrade');
                         if ($moduleUpgrader) {
-                            $moduleUpgrader->upgrade($this->setup, $moduleContext);
+                            $moduleUpgrader->upgrade($this->dataSetup, $moduleContext);
                             $resource->setDataVersion($moduleName, $configVer);
                         }
                     }
                 } elseif ($configVer) {
-                    $moduleInstaller = $moduleInstallerUpgraderFactory->createDataInstaller($moduleName);
+                    $moduleInstaller = $this->setupFactory->create($moduleName, 'install');
                     if ($moduleInstaller) {
-                        $moduleInstaller->install($this->setup, $moduleContext);
+                        $moduleInstaller->install($this->dataSetup, $moduleContext);
                         $resource->setDataVersion($moduleName, $configVer);
                     }
                 }
