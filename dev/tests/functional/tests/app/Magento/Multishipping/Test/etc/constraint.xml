@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/constraints.xsd">
-    <constraint name="assertOrderSuccessPlacedMessage" module="Magento_Multishipping" severity="high"/>
+    <constraint name="assertMultishippingOrderSuccessPlacedMessage" module="Magento_Multishipping" severity="high"/>
 </config>

@@ -30,7 +30,7 @@ class SubmitOrderStep implements TestStepInterface
      *
      * @var SalesOrderView
      */
-    protected $orderView;
+    protected $salesOrderView;
 
     /**
      * Factory for fixtures.
@@ -42,7 +42,7 @@ class SubmitOrderStep implements TestStepInterface
     /**
      * @constructor
      * @param OrderCreateIndex $orderCreateIndex
-     * @param SalesOrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param FixtureFactory $fixtureFactory
      * @param Customer $customer
      * @param Address $billingAddress
@@ -50,14 +50,14 @@ class SubmitOrderStep implements TestStepInterface
      */
     public function __construct(
         OrderCreateIndex $orderCreateIndex,
-        SalesOrderView $orderView,
+        SalesOrderView $salesOrderView,
         FixtureFactory $fixtureFactory,
         Customer $customer,
         Address $billingAddress,
         array $products
     ) {
         $this->orderCreateIndex = $orderCreateIndex;
-        $this->orderView = $orderView;
+        $this->salesOrderView = $salesOrderView;
         $this->fixtureFactory = $fixtureFactory;
         $this->customer = $customer;
         $this->billingAddress = $billingAddress;
@@ -72,8 +72,8 @@ class SubmitOrderStep implements TestStepInterface
     public function run()
     {
         $this->orderCreateIndex->getCreateBlock()->submitOrder();
-        $this->orderView->getMessagesBlock()->waitSuccessMessage();
-        $orderId = trim($this->orderView->getTitleBlock()->getTitle(), '#');
+        $this->salesOrderView->getMessagesBlock()->waitSuccessMessage();
+        $orderId = trim($this->salesOrderView->getTitleBlock()->getTitle(), '#');
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
             [
