@@ -1,4 +1,0 @@
-"initialCustomer/dataSet";"customer/data/current_password";"customer/data/password";"customer/data/password_confirmation";"constraint";
-"default";"123123q";"123123a";"123123a";"assertCustomerInfoSuccessSavedMessage, assertCustomerPasswordChanged";
-"default";"123123";"123123a";"123123a";"assertChangePasswordFailMessage";
-"default";"123123q";"123123a";"123123";"assertWrongPassConfirmationMessage";

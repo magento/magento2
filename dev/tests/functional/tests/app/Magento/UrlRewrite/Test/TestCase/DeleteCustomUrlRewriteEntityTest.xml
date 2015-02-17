@@ -5,11 +5,13 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="DeleteCustomUrlRewriteEntityTest">
-        <variation name="DeleteCustomUrlRewriteEntityTestVariation1">
-            <data name="urlRewrite/dataSet">default</data>
-            <data name="constraint">assertUrlRewriteDeletedMessage, assertUrlRewriteNotInGrid, assertPageByUrlRewriteIsNotFound</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteCustomUrlRewriteEntityTest">
+    <variation name="DeleteCustomUrlRewriteEntityTestVariation1" firstConstraint="assertUrlRewriteDeletedMessage" method="test">
+      <data name="urlRewrite/dataSet" xsi:type="string">default</data>
+      <constraint name="assertUrlRewriteDeletedMessage" next="assertUrlRewriteNotInGrid"/>
+      <constraint name="assertUrlRewriteNotInGrid" next="assertPageByUrlRewriteIsNotFound" prev="assertUrlRewriteDeletedMessage"/>
+      <constraint name="assertPageByUrlRewriteIsNotFound" prev="assertUrlRewriteNotInGrid"/>
+    </variation>
+  </testCase>
 </config>

@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Constraint;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -25,14 +25,14 @@ class AssertInvoiceInInvoicesTab extends AbstractConstraint
     /**
      * Assert that invoice is present in the invoices tab of the order with corresponding amount(Grand Total)
      *
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @param OrderIndex $orderIndex
      * @param OrderInjectable $order
      * @param array $ids
      * @return void
      */
     public function processAssert(
-        OrderView $orderView,
+        SalesOrderView $orderView,
         OrderIndex $orderIndex,
         OrderInjectable $order,
         array $ids
