@@ -35,12 +35,17 @@
         <?php echo $block->getChildHtml('form_bottom'); ?>
     </form>
 </div>
-<script type="text/x-magento-init">
-    {
-        "[data-role=priceBox]": {
-            "priceBox": {
-                "priceConfig": <?php echo $block->getJsonConfig() ?>
-            }
-        }
-    }
+<script>
+    require([
+        'jquery',
+        'Magento_Catalog/js/price-box'
+    ], function($){
+        var priceBoxes = $('[data-role=priceBox]');
+
+        priceBoxes = priceBoxes.filter(function(index, elem){
+            return !$(elem).find('.price-from').length;
+        });
+
+        priceBoxes.priceBox({'priceConfig': <?php echo $block->getJsonConfig() ?>});
+    });
 </script>
