@@ -294,7 +294,7 @@ class Config
      * @throws \InvalidArgumentException When class is not valid API service.
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function getServiceNameParts($className, $preserveVersion = false)
+    protected function getServiceNameParts($className, $preserveVersion = false)
     {
         if (!preg_match(\Magento\Webapi\Model\Config::SERVICE_CLASS_PATTERN, $className, $matches)) {
             $apiClassPattern = "#^(.+?)\\\\(.+?)\\\\Api\\\\(.+?)(Interface)?$#";
