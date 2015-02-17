@@ -5,7 +5,7 @@
  */
 
 /**
- * Class DisableFormKeyUsageFixture
+ * Class ConfigsApplyFixture
  */
 class ConfigsApplyFixture extends \Magento\ToolkitFramework\Fixture
 {
