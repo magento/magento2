@@ -1,18 +1,14 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="customer/index/edit">
-    <blocks>
-        <configureProductBlock>
-            <renders>
-                <grouped>
-                    <class>Magento\GroupedProduct\Test\Block\Adminhtml\Product\Composite\Configure</class>
-                </grouped>
-            </renders>
-        </configureProductBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CustomerIndexEdit" area="Adminhtml" mca="customer/index/edit">
+    <block name="configureProductBlock">
+      <render name="grouped" class="Magento\GroupedProduct\Test\Block\Adminhtml\Product\Composite\Configure"/>
+    </block>
+  </page>
+</config>

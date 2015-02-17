@@ -1,160 +1,63 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<constraint>
-    <assertOrderStatusSuccessCreateMessage module="Magento_Sales">
-        <severity>low</severity>
-        <require>
-            <orderStatusIndex class="Magento\Sales\Test\Page\Adminhtml\OrderStatusIndex" />
-        </require>
-    </assertOrderStatusSuccessCreateMessage>
-    <assertOrderStatusInGrid module="Magento_Sales">
-        <severity>high</severity>
-        <require>
-            <orderStatusIndex class="Magento\Sales\Test\Page\Adminhtml\OrderStatusIndex" />
-            <orderStatus class="Magento\Sales\Test\Fixture\OrderStatus" />
-        </require>
-    </assertOrderStatusInGrid>
-    <assertOrderStatusIsCorrect module="Magento_Sales">
-        <severity>high</severity>
-    </assertOrderStatusIsCorrect>
-    <assertOrderStatusDuplicateStatus module="Magento_Sales">
-        <severity>high</severity>
-        <require>
-            <orderStatusNew class="Magento\Sales\Test\Page\Adminhtml\OrderStatusNew" />
-        </require>
-    </assertOrderStatusDuplicateStatus>
-    <assertOrderButtonsAvailable module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderButtonsAvailable>
-    <assertOrderGrandTotal module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderGrandTotal>
-    <assertOrderStatusIsCorrect module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderStatusIsCorrect>
-    <assertProductInItemsOrderedGrid module="Magento_Sales">
-        <severity>low</severity>
-    </assertProductInItemsOrderedGrid>
-    <assertOrderCancelSuccessMessage module="Magento_Sales">
-        <severity>high</severity>
-    </assertOrderCancelSuccessMessage>
-    <assertOrderInOrdersGrid module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderInOrdersGrid>
-    <assertOrdersInOrdersGrid module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrdersInOrdersGrid>
-    <assertOrderInOrdersGridOnFrontend module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderInOrdersGridOnFrontend>
-    <assertOrderOnHoldSuccessMessage module="Magento_Sales">
-        <severity>high</severity>
-    </assertOrderOnHoldSuccessMessage>
-    <assertOrderMassOnHoldSuccessMessage module="Magento_Sales">
-        <severity>high</severity>
-    </assertOrderMassOnHoldSuccessMessage>
-    <assertUnholdButton module="Magento_Sales">
-        <severity>low</severity>
-    </assertUnholdButton>
-    <assertOrderButtonsUnavailable module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderButtonsUnavailable>
-    <assertOrderSuccessCreateMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderSuccessCreateMessage>
-    <assertNoInvoiceButton module="Magento_Sales">
-        <severity>low</severity>
-    </assertNoInvoiceButton>
-    <assertInvoiceInInvoicesTab module="Magento_Sales">
-        <severity>low</severity>
-    </assertInvoiceInInvoicesTab>
-    <assertInvoiceInInvoicesGrid module="Magento_Sales">
-        <severity>low</severity>
-    </assertInvoiceInInvoicesGrid>
-    <assertInvoicedAmountOnFrontend module="Magento_Sales">
-        <severity>low</severity>
-    </assertInvoicedAmountOnFrontend>
-    <assertInvoiceSuccessCreateMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertInvoiceSuccessCreateMessage>
-    <assertInvoiceWithShipmentSuccessMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertInvoiceWithShipmentSuccessMessage>
-    <assertOrderNotInOrdersGrid module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderNotInOrdersGrid>
-    <assertOrderCancelMassActionSuccessMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderCancelMassActionSuccessMessage>
-    <assertOrderCancelMassActionFailMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderCancelMassActionFailMessage>
-    <assertOrderOnHoldSuccessMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderOnHoldSuccessMessage>
-    <assertOrderOnHoldFailMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderOnHoldFailMessage>
-    <assertOrderReleaseSuccessMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderReleaseSuccessMessage>
-    <assertOrderReleaseFailMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderReleaseFailMessage>
-    <assertReorderStatusIsCorrect module="Magento_Sales">
-        <severity>low</severity>
-    </assertReorderStatusIsCorrect>
-    <assertRefundSuccessCreateMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertRefundSuccessCreateMessage>
-    <assertCreditMemoButton module="Magento_Sales">
-        <severity>low</severity>
-    </assertCreditMemoButton>
-    <assertRefundInCreditMemoTab module="Magento_Sales">
-        <severity>low</severity>
-    </assertRefundInCreditMemoTab>
-    <assertRefundInRefundsGrid module="Magento_Sales">
-        <severity>low</severity>
-    </assertRefundInRefundsGrid>
-    <assertRefundedGrandTotalOnFrontend module="Magento_Sales">
-        <severity>low</severity>
-    </assertRefundedGrandTotalOnFrontend>
-    <assertNoCreditMemoButton module="Magento_Sales">
-        <severity>low</severity>
-    </assertNoCreditMemoButton>
-    <assertCreditMemoItems module="Magento_Sales">
-        <severity>low</severity>
-    </assertCreditMemoItems>
-    <assertInvoiceItems module="Magento_Sales">
-        <severity>low</severity>
-    </assertInvoiceItems>
-    <assertOrderStatusSuccessAssignMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderStatusSuccessAssignMessage>
-    <assertOrderNotVisibleOnMyAccount module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderNotVisibleOnMyAccount>
-    <assertOrderStatusSuccessUnassignMessage module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderStatusSuccessUnassignMessage>
-    <assertOrderStatusNotAssigned module="Magento_Sales">
-        <severity>low</severity>
-    </assertOrderStatusNotAssigned>
-    <assertSalesPrintOrderBillingAddress module="Magento_Sales">
-        <severity>low</severity>
-    </assertSalesPrintOrderBillingAddress>
-    <assertSalesPrintOrderGrandTotal module="Magento_Sales">
-        <severity>low</severity>
-    </assertSalesPrintOrderGrandTotal>
-    <assertSalesPrintOrderPaymentMethod module="Magento_Sales">
-        <severity>low</severity>
-    </assertSalesPrintOrderPaymentMethod>
-    <assertSalesPrintOrderProducts module="Magento_Sales">
-        <severity>low</severity>
-    </assertSalesPrintOrderProducts>
-</constraint>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/constraints.xsd">
+    <constraint name="assertOrderStatusSuccessCreateMessage" module="Magento_Sales" severity="low">
+        <argument name="orderStatusIndex">Magento\Sales\Test\Page\Adminhtml\OrderStatusIndex</argument>
+    </constraint>
+    <constraint name="assertOrderStatusInGrid" module="Magento_Sales" severity="high">
+        <argument name="orderStatusIndex">Magento\Sales\Test\Page\Adminhtml\OrderStatusIndex</argument>
+        <argument name="orderStatus">Magento\Sales\Test\Fixture\OrderStatus</argument>
+    </constraint>
+    <constraint name="assertOrderStatusIsCorrect" module="Magento_Sales" severity="high"/>
+    <constraint name="assertOrderStatusDuplicateStatus" module="Magento_Sales" severity="high">
+        <argument name="orderStatusNew">Magento\Sales\Test\Page\Adminhtml\OrderStatusNew</argument>
+    </constraint>
+    <constraint name="assertOrderButtonsAvailable" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderGrandTotal" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderStatusIsCorrect" module="Magento_Sales" severity="low"/>
+    <constraint name="assertProductInItemsOrderedGrid" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderCancelSuccessMessage" module="Magento_Sales" severity="high"/>
+    <constraint name="assertOrderInOrdersGrid" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrdersInOrdersGrid" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderInOrdersGridOnFrontend" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderOnHoldSuccessMessage" module="Magento_Sales" severity="high"/>
+    <constraint name="assertOrderMassOnHoldSuccessMessage" module="Magento_Sales" severity="high"/>
+    <constraint name="assertUnholdButton" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderButtonsUnavailable" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderSuccessCreateMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertNoInvoiceButton" module="Magento_Sales" severity="low"/>
+    <constraint name="assertInvoiceInInvoicesTab" module="Magento_Sales" severity="low"/>
+    <constraint name="assertInvoiceInInvoicesGrid" module="Magento_Sales" severity="low"/>
+    <constraint name="assertInvoicedAmountOnFrontend" module="Magento_Sales" severity="low"/>
+    <constraint name="assertInvoiceSuccessCreateMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertInvoiceWithShipmentSuccessMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderNotInOrdersGrid" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderCancelMassActionSuccessMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderCancelMassActionFailMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderOnHoldSuccessMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderOnHoldFailMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderReleaseSuccessMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderReleaseFailMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertReorderStatusIsCorrect" module="Magento_Sales" severity="low"/>
+    <constraint name="assertRefundSuccessCreateMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertCreditMemoButton" module="Magento_Sales" severity="low"/>
+    <constraint name="assertRefundInCreditMemoTab" module="Magento_Sales" severity="low"/>
+    <constraint name="assertRefundInRefundsGrid" module="Magento_Sales" severity="low"/>
+    <constraint name="assertRefundedGrandTotalOnFrontend" module="Magento_Sales" severity="low"/>
+    <constraint name="assertNoCreditMemoButton" module="Magento_Sales" severity="low"/>
+    <constraint name="assertCreditMemoItems" module="Magento_Sales" severity="low"/>
+    <constraint name="assertInvoiceItems" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderStatusSuccessAssignMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderNotVisibleOnMyAccount" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderStatusSuccessUnassignMessage" module="Magento_Sales" severity="low"/>
+    <constraint name="assertOrderStatusNotAssigned" module="Magento_Sales" severity="low"/>
+    <constraint name="assertSalesPrintOrderBillingAddress" module="Magento_Sales" severity="low"/>
+    <constraint name="assertSalesPrintOrderGrandTotal" module="Magento_Sales" severity="low"/>
+    <constraint name="assertSalesPrintOrderPaymentMethod" module="Magento_Sales" severity="low"/>
+    <constraint name="assertSalesPrintOrderProducts" module="Magento_Sales" severity="low"/>
+</config>
