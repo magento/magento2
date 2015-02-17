@@ -186,7 +186,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->updateFactory->expects($this->at(0))->method('create')->will($this->returnValue($this->_update));
+        $this->updateFactory->expects($this->at(0))->method('create')->will($this->returnValue($this->update));
         $this->updateCollection = $this->getMock(
             'Magento\Widget\Model\Resource\Layout\Update\Collection',
             ['addThemeFilter', 'delete', 'getIterator'],
