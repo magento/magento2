@@ -3,16 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-
-/* ==========================================================================
-   reset.css (begin)
-   ========================================================================== */
-
-/* ==========================================================================
-   reset.css (end)
-   ========================================================================== */
-
-
 /* ==========================================================================
    base.css (begin)
    ========================================================================== */
@@ -1586,7 +1576,7 @@ span.required {
 .addon select:first-child,
 .addon input:first-child,
 .addon .addbefore:first-child {
-    border-radius: 2px 0 0 2px;
+    border-radius: 0;
 }
 
 .addon textarea:last-child,
@@ -2087,16 +2077,10 @@ span.required {
 .quick-access .nav > .button {
     margin:-3px 0 0 0;
 }
-.welcome-msg {}
-.quick-access-links {}
-.quick-access-links ul {}
-.quick-access-links li {}
-.quick-access-links a {}
 
 /* =============================================================================
    Header
    ========================================================================== */
-.page-header {}
 .page-header .arrow {
     margin:0 0 0 3px;
     cursor:pointer;
@@ -2104,7 +2088,6 @@ span.required {
     font-size:9px;
     vertical-align:middle;
 }
-.page-header-inner {}
 .page-header-inner:after {
     content:'';
     display:table;
