@@ -98,7 +98,10 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getWriteAdapter();
 
-        $data = ['logdate' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT), 'lognum' => $user->getLognum() + 1];
+        $data = [
+            'logdate' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+            'lognum' => $user->getLognum() + 1,
+        ];
 
         $condition = ['user_id = ?' => (int)$user->getUserId()];
 

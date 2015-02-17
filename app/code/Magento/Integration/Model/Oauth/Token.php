@@ -260,7 +260,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     public function beforeSave()
     {
         if ($this->isObjectNew() && null === $this->getCreatedAt()) {
-            $this->setCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
+            $this->setCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
         }
         parent::beforeSave();
         return $this;

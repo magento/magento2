@@ -221,7 +221,7 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function utcDate($scope, $date, $includeTime = false, $format = null)
+    public function utcDate($scope, $date, $includeTime = false)
     {
         $dateObj = $this->scopeDate($scope, $date, $includeTime);
         $dateObj->setTimezone(new \DateTimeZone('UTC'));

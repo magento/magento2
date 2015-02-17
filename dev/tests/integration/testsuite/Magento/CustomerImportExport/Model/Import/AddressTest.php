@@ -242,8 +242,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $entityData = [
             'entity_id' => $addressId,
             'parent_id' => $customerId,
-            'created_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT),
-            'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT),
+            'created_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+            'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         ];
 
         // invoke _saveAddressEntities

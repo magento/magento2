@@ -138,7 +138,9 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         }
         if (!$this->getId()) {
             $this->setSessionId($this->session->getSessionId());
-            $this->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
+            $this->setLastVisitAt(
+                (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+            );
             $this->save();
             $this->_eventManager->dispatch('visitor_init', ['visitor' => $this]);
             $this->session->setVisitorData($this->getData());

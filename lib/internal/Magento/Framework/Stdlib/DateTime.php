@@ -37,7 +37,7 @@ class DateTime
     /**
      * Format date to internal format
      *
-     * @param string|\DateTime|bool|null $date
+     * @param string|\DateTime|\Magento\Framework\Stdlib\DateTime\DateInterface|bool|null $date
      * @param boolean $includeTime
      * @return string|null
      */
@@ -45,6 +45,9 @@ class DateTime
     {
         if ($date instanceof \Magento\Framework\Stdlib\DateTime\DateInterface) {
             $format = $includeTime ? self::DATETIME_INTERNAL_FORMAT : self::DATE_INTERNAL_FORMAT;
+            return $date->toString($format);
+        } elseif ($date instanceof \DateTime) {
+            $format = $includeTime ? self::DATETIME_PHP_FORMAT : self::DATE_PHP_FORMAT;
             return $date->format($format);
         } elseif (empty($date)) {
             return null;

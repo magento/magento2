@@ -1020,7 +1020,9 @@ class AccountManagement implements AccountManagementInterface
         if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
             $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
             $customerSecure->setRpToken($passwordLinkToken);
-            $customerSecure->setRpTokenCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
+            $customerSecure->setRpTokenCreatedAt(
+                (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+            );
             $this->customerRepository->save($customer);
         }
         return true;

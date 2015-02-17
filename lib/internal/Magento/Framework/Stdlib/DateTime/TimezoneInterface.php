@@ -100,10 +100,9 @@ interface TimezoneInterface
      * @param mixed $scope Information about scope
      * @param string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface|array|null $date date in scope's timezone
      * @param boolean $includeTime flag for including time to date
-     * @param null|string $format
      * @return \DateTime
      */
-    public function utcDate($scope, $date, $includeTime = false, $format = null);
+    public function utcDate($scope, $date, $includeTime = false);
 
     /**
      * Get scope timestamp

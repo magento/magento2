@@ -401,7 +401,9 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     {
         if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
             $customer->setRpToken($passwordLinkToken);
-            $customer->setRpTokenCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
+            $customer->setRpTokenCreatedAt(
+                (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+            );
             $this->saveAttribute($customer, 'rp_token');
             $this->saveAttribute($customer, 'rp_token_created_at');
         }

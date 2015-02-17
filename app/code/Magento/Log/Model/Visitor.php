@@ -184,7 +184,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         $visitor = $observer->getEvent()->getVisitor();
         $this->setData($visitor->getData());
         $this->initServerData();
-        $this->setFirstVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
+        $this->setFirstVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
         $this->setIsNewVisitor(true);
         $this->save();
         $visitor->setData($this->getData());
@@ -206,7 +206,9 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
             $this->setData($visitor->getData());
             if ($this->getId() && $this->getVisitorId()) {
                 $this->initServerData();
-                $this->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
+                $this->setLastVisitAt(
+                    (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+                );
                 $this->save();
                 $visitor->setData($this->getData());
             }

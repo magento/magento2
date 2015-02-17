@@ -59,8 +59,8 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory,
         \Magento\Sales\Model\Resource\Report $resource,
+        \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory,
         $connection = null
     ) {
         $this->_ruleFactory = $ruleFactory;

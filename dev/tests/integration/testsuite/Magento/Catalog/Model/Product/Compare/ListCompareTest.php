@@ -33,7 +33,7 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
         $this->_visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Customer\Model\Visitor');
         $this->_visitor->setSessionId(md5(time()) . md5(microtime()))
-            ->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT))
+            ->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT))
             ->save();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product\Compare\ListCompare', ['customerVisitor' => $this->_visitor]);

@@ -33,7 +33,10 @@ class Created extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
         if ($object->isObjectNew() && is_null($object->getData($attributeCode))) {
-            $object->setData($attributeCode, (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATE_PHP_FORMAT));
+            $object->setData(
+                $attributeCode,
+                (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+            );
         }
 
         return $this;

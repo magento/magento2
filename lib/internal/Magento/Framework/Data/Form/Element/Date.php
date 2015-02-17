@@ -60,8 +60,6 @@ class Date extends AbstractElement
 
     /**
      * Set date value
-     * If \Magento\Framework\Stdlib\DateTime\Date instance is provided instead of value, other params will be ignored.
-     * Format and locale must be compatible with \Magento\Framework\Stdlib\DateTime\Date
      *
      * @param mixed $value
      * @return $this
@@ -77,7 +75,7 @@ class Date extends AbstractElement
             return $this;
         }
         if (preg_match('/^[0-9]+$/', $value)) {
-            $this->_value = new \DateTime('@' . $this->_toTimestamp($value));
+            $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
             return $this;
         }
 

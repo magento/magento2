@@ -357,14 +357,7 @@ class Collection extends \Magento\Framework\Data\Collection
      */
     public function timeShift($datetime)
     {
-        return $this->_localeDate->utcDate(
-            null,
-            $datetime,
-            true,
-            \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-        )->toString(
-            \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-        );
+        return $this->_localeDate->utcDate(null, $datetime, true)->format('Y-m-d H:i:s');
     }
 
     /**
