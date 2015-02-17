@@ -23,7 +23,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
     protected $_moduleListMock;
 
     /**
-     * @var \Magento\Setup\Module\DataSetup|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\ModuleDataResourceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resourceSetupMock;
 
@@ -49,7 +49,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         $this->_moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
         $this->_resourceResolver = $this->getMock('Magento\Framework\Module\ResourceResolverInterface');
         $this->_resourceSetupMock = $this->getMock(
-            'Magento\Setup\Module\DataSetup',
+            'Magento\Framework\Setup\ModuleDataResourceInterface',
             [],
             [],
             '',

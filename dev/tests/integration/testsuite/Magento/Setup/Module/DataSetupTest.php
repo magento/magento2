@@ -92,4 +92,9 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->tableExists('store_website'));
         $this->assertFalse($this->_model->tableExists('core/website'));
     }
+
+    public function testGetSetupCache()
+    {
+        $this->assertInstanceOf('Magento\Framework\Setup\DataCacheInterface', $this->_model->getSetupCache());
+    }
 }

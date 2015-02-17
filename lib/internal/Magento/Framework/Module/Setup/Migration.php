@@ -7,7 +7,7 @@ namespace Magento\Framework\Module\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Setup\Module\DataSetup;
+use Magento\Framework\Setup\ModuleDataResourceInterface;
 
 /**
  * Resource setup model with methods needed for migration process between Magento versions
@@ -126,19 +126,19 @@ class Migration
     protected $_migrationData;
 
     /**
-     * @var DataSetup
+     * @var ModuleDataResourceInterface
      */
     private $setup;
 
     /**
-     * @param DataSetup $setup
+     * @param ModuleDataResourceInterface $setup
      * @param Filesystem $filesystem
      * @param MigrationData $migrationData
      * @param string $confPathToMapFile
      * @param array $compositeModules
      */
     public function __construct(
-        DataSetup $setup,
+        ModuleDataResourceInterface $setup,
         Filesystem $filesystem,
         MigrationData $migrationData,
         $confPathToMapFile,

@@ -99,7 +99,7 @@ interface ModuleDataResourceInterface extends ResourceInterface
     /**
      * Gets setup cache
      *
-     * @return array
+     * @return DataCacheInterface
      */
     public function getSetupCache();
 }

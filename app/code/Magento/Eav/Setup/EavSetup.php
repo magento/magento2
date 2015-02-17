@@ -975,7 +975,8 @@ class EavSetup
         }
 
         $mainTable = $this->setup->getTable('eav_attribute');
-        if (empty($this->setup->getSetupCache()[$mainTable][$entityTypeId][$id])) {
+        $setupCache = $this->setup->getSetupCache();
+        if (!$setupCache->has($mainTable, $entityTypeId, $id)) {
             $additionalTable = $this->setup->getTable($additionalTable);
             $bind = ['id' => $id, 'entity_type_id' => $entityTypeId];
             $select = $this->setup->getConnection()->select()->from(
@@ -991,14 +992,14 @@ class EavSetup
 
             $row = $this->setup->getConnection()->fetchRow($select, $bind);
             if (!$row) {
-                $this->setup->getSetupCache()[$mainTable][$entityTypeId][$id] = false;
+                $setupCache->setRow($mainTable, $entityTypeId, $id, false);
             } else {
-                $this->setup->getSetupCache()[$mainTable][$entityTypeId][$row['attribute_id']] = $row;
-                $this->setup->getSetupCache()[$mainTable][$entityTypeId][$row['attribute_code']] = $row;
+                $setupCache->setRow($mainTable, $entityTypeId, $row['attribute_id'], $row);
+                $setupCache->setRow($mainTable, $entityTypeId, $row['attribute_code'],$row);
             }
         }
 
-        $row = $this->setup->getSetupCache()[$mainTable][$entityTypeId][$id];
+        $row = $setupCache->get($mainTable, $entityTypeId, $id);
         if ($field !== null) {
             return isset($row[$field]) ? $row[$field] : false;
         }
