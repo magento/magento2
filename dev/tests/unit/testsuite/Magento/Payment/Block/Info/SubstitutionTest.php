@@ -54,7 +54,7 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
             $this->stringContains(
                 'advanced/modules_disable_output/'
             ),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue(
                 false

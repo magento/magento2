@@ -138,7 +138,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 Data::XML_PATH_DEV_ALLOW_IPS,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             )->will($this->returnValue($allowedIps));
 
@@ -269,7 +269,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 Data::XML_PATH_DEFAULT_COUNTRY,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             )->will($this->returnValue($country));
 

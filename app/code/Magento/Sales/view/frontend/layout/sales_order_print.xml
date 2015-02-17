@@ -34,6 +34,6 @@
             </block>
             <block class="Magento\Sales\Block\Order\PrintShipment" as="sales.order.print.info" name="sales.order.print.info" template="order/info.phtml"/>
         </referenceContainer>
-        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Theme::template.phtml"/>
     </body>
 </page>

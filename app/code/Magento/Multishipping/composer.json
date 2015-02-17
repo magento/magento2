@@ -3,6 +3,7 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
+        "magento/module-store": "0.42.0-beta7",
         "magento/module-core": "0.42.0-beta7",
         "magento/module-checkout": "0.42.0-beta7",
         "magento/module-sales": "0.42.0-beta7",

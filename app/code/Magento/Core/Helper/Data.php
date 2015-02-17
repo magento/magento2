@@ -55,7 +55,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -77,7 +77,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param PriceCurrencyInterface $priceCurrency
      * @param bool $dbCompatibleMode
@@ -85,7 +85,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         PriceCurrencyInterface $priceCurrency,
         $dbCompatibleMode = true
@@ -172,7 +172,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $allowedIps = $this->_scopeConfig->getValue(
             self::XML_PATH_DEV_ALLOW_IPS,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $remoteAddr = $this->_remoteAddress->getRemoteAddress();
@@ -242,7 +242,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_DEFAULT_COUNTRY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

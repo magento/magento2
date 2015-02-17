@@ -22,7 +22,7 @@
                 <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>
             </block>
         </referenceContainer>
-        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Theme::template.phtml"/>
         <referenceBlock name="head.components">
             <block class="Magento\Framework\View\Element\Template" name="multishipping_checkout_addresses_page_head_components" template="Magento_Multishipping::js/components.phtml"/>
         </referenceBlock>

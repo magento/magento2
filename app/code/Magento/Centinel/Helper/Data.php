@@ -17,7 +17,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return label for cmpi field
      *
      * @param string $fieldName
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getCmpiLabel($fieldName)
     {
@@ -64,7 +64,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return text value for cmpi eci flag field
      *
      * @param string $value
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     private function _getCmpiEciValue($value)
     {
@@ -85,7 +85,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return text value for cmpi enrolled field
      *
      * @param string $value
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     private function _getCmpiEnrolledValue($value)
     {
@@ -105,7 +105,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return text value for cmpi pares field
      *
      * @param string $value
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     private function _getCmpiParesValue($value)
     {

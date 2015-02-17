@@ -105,7 +105,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         // Check that store value set correctly
         $defaultStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore(
             true
         )->getId();

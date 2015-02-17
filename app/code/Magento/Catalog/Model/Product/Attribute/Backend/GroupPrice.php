@@ -21,7 +21,7 @@ class GroupPrice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupP
 
     /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -30,7 +30,7 @@ class GroupPrice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupP
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
@@ -61,7 +61,7 @@ class GroupPrice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupP
     /**
      * Error message when duplicates
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getDuplicateErrorMessage()
     {
