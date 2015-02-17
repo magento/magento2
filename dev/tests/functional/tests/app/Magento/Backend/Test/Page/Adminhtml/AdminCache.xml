@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="admin/cache/" module="Magento_Backend">
-    <blocks>
-        <messagesBlock>
-            <class>Magento\Core\Test\Block\Messages</class>
-            <locator>#messages .messages</locator>
-            <strategy>css selector</strategy>
-        </messagesBlock>
-        <actionsBlock>
-            <class>Magento\Backend\Test\Block\Cache</class>
-            <locator>div.page-actions</locator>
-            <strategy>css selector</strategy>
-        </actionsBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="AdminCache" area="Adminhtml" mca="admin/cache/" module="Magento_Backend">
+    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
+    <block name="actionsBlock" class="Magento\Backend\Test\Block\Cache" locator="div.page-actions" strategy="css selector"/>
+  </page>
+</config>

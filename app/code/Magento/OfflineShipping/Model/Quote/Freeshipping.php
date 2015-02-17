@@ -17,16 +17,16 @@ class Freeshipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTota
     protected $_calculator;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\OfflineShipping\Model\SalesRule\Calculator $calculator
      */
     public function __construct(
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\OfflineShipping\Model\SalesRule\Calculator $calculator
     ) {
         $this->setCode('discount');

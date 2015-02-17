@@ -17,7 +17,7 @@ class FilterableAttributeList implements FilterableAttributeListInterface
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -30,12 +30,12 @@ class FilterableAttributeList implements FilterableAttributeListInterface
      * FilterableAttributeList constructor
      *
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver
     ) {
         $this->collectionFactory = $collectionFactory;

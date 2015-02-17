@@ -12,7 +12,7 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Url;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)

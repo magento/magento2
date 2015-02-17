@@ -50,7 +50,7 @@ class ProductList
      */
     public function getAvailableViewMode()
     {
-        switch ($this->scopeConfig->getValue(self::XML_PATH_LIST_MODE, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)) {
+        switch ($this->scopeConfig->getValue(self::XML_PATH_LIST_MODE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             case 'grid':
                 $availableMode = ['grid' => __('Grid')];
                 break;
@@ -96,7 +96,7 @@ class ProductList
     {
         return $this->scopeConfig->getValue(
             \Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -114,13 +114,13 @@ class ProductList
         $perPageConfigKey = 'catalog/frontend/' . $mode . '_per_page_values';
         $perPageValues = (string)$this->scopeConfig->getValue(
             $perPageConfigKey,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $perPageValues = explode(',', $perPageValues);
         $perPageValues = array_combine($perPageValues, $perPageValues);
         if ($this->scopeConfig->isSetFlag(
             'catalog/frontend/list_allow_all',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )) {
             return ($perPageValues + ['all' => __('All')]);
         } else {
@@ -139,12 +139,12 @@ class ProductList
         if ($viewMode == self::VIEW_MODE_LIST) {
             return $this->scopeConfig->getValue(
                 'catalog/frontend/list_per_page',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         } elseif ($viewMode == self::VIEW_MODE_GRID) {
             return $this->scopeConfig->getValue(
                 'catalog/frontend/grid_per_page',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
         return 0;

@@ -45,7 +45,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_storage = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->_storage = $this->getMock('Magento\Store\Model\StoreManagerInterface');
 
         $this->_model = new \Magento\Store\Model\StoreManager(
             $this->_factoryMock,
@@ -146,7 +146,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue(true)
         );
@@ -165,7 +165,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue(false)
         );

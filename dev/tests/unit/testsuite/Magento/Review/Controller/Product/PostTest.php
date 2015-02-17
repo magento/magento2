@@ -148,7 +148,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->messageManager = $this->getMock('\Magento\Framework\Message\ManagerInterface');
 
         $this->store = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
-        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
         $this->model = (new \Magento\TestFramework\Helper\ObjectManager($this))
             ->getObject(
