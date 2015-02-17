@@ -23,13 +23,6 @@ interface ModuleDataResourceInterface extends ResourceInterface
     const TYPE_DATA_UPGRADE = 'data-upgrade';
 
     /**
-     * Apply data updates to the system after upgrading.
-     *
-     * @return $this
-     */
-    public function applyDataUpdates();
-
-    /**
      * Retrieve row or field from table by id or string and parent id
      *
      * @param string $table

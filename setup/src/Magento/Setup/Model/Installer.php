@@ -25,7 +25,10 @@ use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\SetupFactory;
+use Magento\Setup\Module\Setup;
 use Magento\Store\Model\Store;
+use Magento\Setup\Module\ModuleInstallerUpgraderFactory;
+
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -86,9 +89,9 @@ class Installer
     /**
      * Resource setup factory
      *
-     * @var SetupFactory;
+     * @var Setup;
      */
-    private $setupFactory;
+    private $setup;
 
     /**
      * Module list
@@ -195,6 +198,17 @@ class Installer
     private $objectManagerFactory;
 
     /**
+     * @var \Magento\Framework\Module\Resource
+     */
+    private $resource;
+
+    /**
+     *
+     * @var ModuleInstallerUpgraderFactory
+     */
+    private $moduleInstallerUpgraderFactory;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -212,6 +226,8 @@ class Installer
      * @param Filesystem $filesystem
      * @param SampleData $sampleData
      * @param ObjectManagerFactory $objectManagerFactory
+     * @param \Magento\Framework\App\Resource $resource
+     * @param ModuleInstallerUpgraderFactory $moduleInstallerUpgraderFactory
      */
     public function __construct(
         FilePermissions $filePermissions,
@@ -228,11 +244,13 @@ class Installer
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
         SampleData $sampleData,
-        ObjectManagerFactory $objectManagerFactory
+        ObjectManagerFactory $objectManagerFactory,
+        \Magento\Framework\App\Resource $resource,
+        ModuleInstallerUpgraderFactory $moduleInstallerUpgraderFactory
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
-        $this->setupFactory = $setupFactory;
+        $this->setup = $setupFactory->createSetup($resource);
         $this->moduleList = $moduleList;
         $this->moduleLoader = $moduleLoader;
         $this->directoryList = $directoryList;
@@ -247,6 +265,8 @@ class Installer
         $this->installInfo[self::INFO_MESSAGE] = array();
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerFactory = $objectManagerFactory;
+        $this->resource = new \Magento\Framework\Module\Resource($resource);
+        $this->moduleInstallerUpgraderFactory = $moduleInstallerUpgraderFactory;
     }
 
     /**
@@ -545,14 +565,13 @@ class Installer
      */
     private function setupModuleRegistry()
     {
-        $registrySetup = $this->setupFactory->createSetup();
-        $connection = $registrySetup->getConnection();
+        $connection = $this->setup->getConnection();
 
-        if (!$connection->isTableExists($registrySetup->getTable('setup_module'))) {
+        if (!$connection->isTableExists($this->setup->getTable('setup_module'))) {
             /**
              * Create table 'setup_module'
              */
-            $table = $connection->newTable($registrySetup->getTable('setup_module'))
+            $table = $connection->newTable($this->setup->getTable('setup_module'))
                 ->addColumn(
                     'module',
                     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -587,21 +606,30 @@ class Installer
         $this->assertDbAccessible();
         $this->setupModuleRegistry();
 
-        $moduleNames = $this->moduleList->getNames();
-
         $this->log->log('Schema creation/updates:');
-        foreach ($moduleNames as $moduleName) {
+        foreach ($this->moduleList->getNames() as $moduleName) {
             $this->log->log("Module '{$moduleName}':");
-            $setup = $this->setupFactory->createSetupModule($this->log, $moduleName);
-            $setup->applyUpdates();
+            $dbVer = $this->resource->getDbVersion($moduleName);
+            $moduleConfig = $this->moduleList->getOne($moduleName);
+            $configVer = $moduleConfig['setup_version'];
+            $moduleContext = new ModuleContext($moduleConfig);
+            // Module is installed
+            if ($dbVer !== false) {
+                if (version_compare($configVer, $dbVer, '>')) {
+                    $moduleUpgrader = $this->moduleInstallerUpgraderFactory->createSchemaUpgrader($moduleName);
+                    if ($moduleUpgrader) {
+                        $moduleUpgrader->upgrade($this->setup, $moduleContext);
+                        $this->resource->setDbVersion($moduleName, $configVer);
+                    }
+                }
+            } elseif ($configVer) {
+                $moduleInstaller = $this->moduleInstallerUpgraderFactory->createSchemaInstaller($moduleName);
+                if ($moduleInstaller) {
+                    $moduleInstaller->install($this->setup, $moduleContext);
+                    $this->resource->setDbVersion($moduleName, $configVer);
+                }
+            }
             $this->logProgress();
-        }
-
-        $this->log->log('Schema post-updates:');
-        foreach ($moduleNames as $moduleName) {
-            $this->log->log("Module '{$moduleName}':");
-            $setup = $this->setupFactory->createSetupModule($this->log, $moduleName);
-            $setup->applyRecurringUpdates();
         }
     }
 
@@ -619,7 +647,7 @@ class Installer
 
         /** @var \Magento\Framework\Module\Updater $updater */
         $updater = $this->getObjectManager()->create('Magento\Framework\Module\Updater');
-        $updater->updateData();
+        $updater->updateData($this->resource, $this->moduleInstallerUpgraderFactory);
     }
 
     /**
@@ -653,18 +681,17 @@ class Installer
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
-        $setup = $this->setupFactory->createSetup($this->log);
-        $dbConnection = $setup->getConnection();
+        $dbConnection = $this->setup->getConnection();
 
         // get entity_type_id for order
         $select = $dbConnection->select()
-            ->from($setup->getTable('eav_entity_type'), 'entity_type_id')
+            ->from($this->setup->getTable('eav_entity_type'), 'entity_type_id')
             ->where('entity_type_code = \'order\'');
         $entityTypeId = $dbConnection->fetchOne($select);
 
         // See if row already exists
         $incrementRow = $dbConnection->fetchRow(
-            'SELECT * FROM ' . $setup->getTable('eav_entity_store') . ' WHERE entity_type_id = ? AND store_id = ?',
+            'SELECT * FROM ' . $this->setup->getTable('eav_entity_store') . ' WHERE entity_type_id = ? AND store_id = ?',
             [$entityTypeId, Store::DISTRO_STORE_ID]
         );
 
@@ -672,7 +699,7 @@ class Installer
             // row exists, update it
             $entityStoreId = $incrementRow['entity_store_id'];
             $dbConnection->update(
-                $setup->getTable('eav_entity_store'),
+                $this->setup->getTable('eav_entity_store'),
                 ['increment_prefix' => $orderIncrementPrefix],
                 ['entity_store_id' => $entityStoreId]
             );
@@ -683,7 +710,7 @@ class Installer
                 'store_id' => Store::DISTRO_STORE_ID,
                 'increment_prefix' => $orderIncrementPrefix,
             ];
-            $dbConnection->insert($setup->getTable('eav_entity_store'), $rowData);
+            $dbConnection->insert($this->setup->getTable('eav_entity_store'), $rowData);
         }
     }
 
@@ -696,8 +723,7 @@ class Installer
     public function installAdminUser($data)
     {
         $this->assertDeploymentConfigExists();
-        $setup = $this->setupFactory->createSetup($this->log);
-        $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
+        $adminAccount = $this->adminAccountFactory->create($this->setup, (array)$data);
         $adminAccount->save();
     }
 

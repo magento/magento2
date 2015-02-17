@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Setup\Module\ResourceFactory;
 
 class InstallerFactory
 {
@@ -18,13 +19,22 @@ class InstallerFactory
     protected $serviceLocator;
 
     /**
+     * @var ResourceFactory
+     */
+    private $resourceFactory;
+
+    /**
      * Constructor
      *
      * @param ServiceLocatorInterface $serviceLocator
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator)
+    public function __construct(
+        ServiceLocatorInterface $serviceLocator,
+        ResourceFactory $resourceFactory
+    )
     {
         $this->serviceLocator = $serviceLocator;
+        $this->resourceFactory = $resourceFactory;
     }
 
     /**
@@ -50,7 +60,18 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode'),
             $this->serviceLocator->get('Magento\Framework\Filesystem'),
             $this->serviceLocator->get('Magento\Setup\Model\SampleData'),
-            $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerFactory')
+            $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerFactory'),
+            $this->getResource(),
+            $this->serviceLocator->get('Magento\Setup\Module\ModuleInstallerUpgraderFactory')
         );
+    }
+
+    private function getResource()
+    {
+        $deploymentConfig = new \Magento\Framework\App\DeploymentConfig(
+            $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Reader'),
+            []
+        );
+        return $this->resourceFactory->create($deploymentConfig);
     }
 }

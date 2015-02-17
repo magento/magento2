@@ -18,58 +18,24 @@ class SetupFactory
     private $serviceLocator;
 
     /**
-     * @var ResourceFactory
-     */
-    private $resourceFactory;
-
-    /**
      * Constructor
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @param ResourceFactory $resourceFactory
      */
     public function __construct(
-        ServiceLocatorInterface $serviceLocator,
-        \Magento\Setup\Module\ResourceFactory $resourceFactory
+        ServiceLocatorInterface $serviceLocator
     ) {
         $this->serviceLocator = $serviceLocator;
-        $this->resourceFactory = $resourceFactory;
     }
 
     /**
      * Creates Setup
      *
+     * @param \Magento\Framework\App\Resource $resource
      * @return Setup
      */
-    public function createSetup()
+    public function createSetup($resource)
     {
-        return new Setup($this->getResource());
-    }
-
-    /**
-     * Creates SetupModule
-     *
-     * @param LoggerInterface $log
-     * @param string $moduleName
-     * @return ModuleSchemaResourceInterface
-     */
-    public function createSetupModule(LoggerInterface $log, $moduleName)
-    {
-        return new SetupModule(
-            $log,
-            $this->serviceLocator->get('Magento\Framework\Module\ModuleList'),
-            $this->serviceLocator->get('Magento\Setup\Module\Setup\FileResolver'),
-            $moduleName,
-            $this->getResource()
-        );
-    }
-
-    private function getResource()
-    {
-        $deploymentConfig = new \Magento\Framework\App\DeploymentConfig(
-            $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Reader'),
-            []
-        );
-        return $this->resourceFactory->create($deploymentConfig);
+        return new Setup($resource);
     }
 }

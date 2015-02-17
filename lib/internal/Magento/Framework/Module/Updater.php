@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Module;
 
+use Magento\Setup\Module\ModuleInstallerUpgraderFactory;
+
 class Updater
 {
     /**
@@ -50,14 +52,36 @@ class Updater
     /**
      * Apply database data updates whenever needed
      *
+     * @param \Magento\Framework\Module\Resource $resource
+     * @param ModuleInstallerUpgraderFactory $moduleInstallerUpgraderFactory
      * @return void
      */
-    public function updateData()
+    public function updateData($resource, $moduleInstallerUpgraderFactory)
     {
         foreach ($this->_moduleList->getNames() as $moduleName) {
             foreach ($this->_resourceResolver->getResourceList($moduleName) as $resourceName) {
                 if (!$this->_dbVersionInfo->isDataUpToDate($moduleName, $resourceName)) {
-                    $this->_setupFactory->create($resourceName, $moduleName)->applyDataUpdates();
+                    $moduleDataResource = $this->_setupFactory->create($resourceName, $moduleName);
+                    $dataVer = $resource->getDataVersion($moduleName);
+                    $moduleConfig = $this->_moduleList->getOne($moduleName);
+                    $configVer = $moduleConfig['setup_version'];
+                    $moduleContext = new \Magento\Setup\Model\ModuleContext($dataVer);
+                    if ($dataVer !== false) {
+                        $status = version_compare($configVer, $dataVer);
+                        if ($status == \Magento\Framework\Setup\ModuleDataResourceInterface::VERSION_COMPARE_GREATER) {
+                            $moduleUpgrader = $moduleInstallerUpgraderFactory->createDataUpgrader($moduleName);
+                            if ($moduleUpgrader) {
+                                $moduleUpgrader->upgrade($moduleDataResource, $moduleContext);
+                                $resource->setDataVersion($moduleName, $configVer);
+                            }
+                        }
+                    } elseif ($configVer) {
+                        $moduleInstaller = $moduleInstallerUpgraderFactory->createDataInstaller($moduleName);
+                        if ($moduleInstaller) {
+                            $moduleInstaller->install($moduleDataResource, $moduleContext);
+                            $resource->setDataVersion($moduleName, $configVer);
+                        }
+                    }
                 }
             }
         }
