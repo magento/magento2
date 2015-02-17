@@ -54,8 +54,8 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $this->backup->expects($this->once())->method('getSize')->willReturn($size);
         $this->backup->expects($this->once())->method('output')->willReturn($output);
 
-        $this->request->expects($this->at(0))->method('getParam')->with('time')->willReturn($time);
-        $this->request->expects($this->at(1))->method('getParam')->with('type')->willReturn($type);
+        $this->request->expects($this->any())->method('getParam')
+            ->will($this->returnValueMap([['time', null, $time], ['type', null, $type]]));
 
         $this->backupModelFactory->expects($this->once())->method('create')->with($time, $type)
             ->willReturn($this->backup);
