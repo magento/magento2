@@ -2911,6 +2911,7 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
     ['Magento\Core\Model\Validator\Factory', 'Magento\Framework\Validator\Factory'],
     ['Magento\Sendfriend\Model\Observer'],
+    ['Magento\Tools\Di\Compiler\Directory'],
     [
         'Magento\Core\Model\TemplateEngine\Plugin\DebugHints',
         'Magento\Developer\Model\TemplateEngine\Plugin\DebugHints'
