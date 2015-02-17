@@ -167,7 +167,7 @@ class Timezone implements TimezoneInterface
     public function scopeDate($scope = null, $date = null, $includeTime = false)
     {
         $timezone = $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType, $scope);
-        $date = new \DateTime($date, new \DateTimeZone($timezone));
+        $date = new \DateTime(is_numeric($date) ? '@' . $date : $date, new \DateTimeZone($timezone));
         if (!$includeTime) {
             $date->setTime(0, 0, 0);
         }
@@ -185,7 +185,7 @@ class Timezone implements TimezoneInterface
             $format = $this->getDateFormat($format);
         }
 
-        if ($date instanceof DateInterface || $date instanceof \DateTime) {
+        if ($date instanceof \DateTime) {
             return $date->format($format);
         } else {
             return (new \DateTime($date))->format($format);
@@ -201,12 +201,9 @@ class Timezone implements TimezoneInterface
             return $time;
         }
 
-        if (is_null($time)) {
-            $date = $this->date(time());
-        } elseif ($time instanceof DateInterface) {
-            $date = $time;
-        } else {
-            $date = $this->date(strtotime($time));
+        $date = $time;
+        if (!($time instanceof \DateTimeInterface)) {
+            $date = new \DateTime($time);
         }
 
         if ($showDate) {
@@ -215,7 +212,7 @@ class Timezone implements TimezoneInterface
             $format = $this->getTimeFormat($format);
         }
 
-        return $date->toString($format);
+        return $date->format($format);
     }
 
     /**

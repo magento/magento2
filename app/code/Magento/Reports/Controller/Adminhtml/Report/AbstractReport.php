@@ -124,15 +124,11 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         $flag = $this->_objectManager->create('Magento\Reports\Model\Flag')->setReportFlagCode($flagCode)->loadSelf();
         $updatedAt = 'undefined';
         if ($flag->hasData()) {
-            $date = new \Magento\Framework\Stdlib\DateTime\Date(
-                $flag->getLastUpdate(),
-                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-            );
             $updatedAt = $this->_objectManager->get(
                 'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
             )->scopeDate(
                 0,
-                $date,
+                $flag->getLastUpdate(),
                 true
             );
         }
