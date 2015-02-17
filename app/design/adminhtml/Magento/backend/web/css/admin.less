@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-@import "source/lib/lib.less"; // Import all lib files
+@import 'source/lib/_lib'; // Global lib
 @baseDir: "../"; //default
 
 /* Backend */
@@ -14,6 +14,9 @@
 @import "../mui/styles/navigation.less"; // import navigation
 @import "../mui/styles/dashboard.less"; // import dashboard
 @import (reference) "../mui/styles/abstract"; // import some abstract
+
+@import 'source/theme'; // import theme styles
+@import 'source/variables';
 @import 'source/lib/_utilities';
 
 /*
