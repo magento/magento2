@@ -7,38 +7,38 @@ namespace Magento\Webapi\Model\Plugin;
 
 use Magento\Integration\Model\Integration;
 
-class SetupTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * API Integration config
      *
-     * @var \Magento\Webapi\Model\IntegrationConfig
+     * @var \Magento\Webapi\Model\IntegrationConfig|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $integrationConfigMock;
 
     /**
      * Integration service mock
      *
-     * @var \Magento\Integration\Service\V1\IntegrationInterface
+     * @var \Magento\Integration\Service\V1\IntegrationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $integrationServiceMock;
 
     /**
      * Authorization service mock
      *
-     * @var \Magento\Integration\Service\V1\AuthorizationService
+     * @var \Magento\Integration\Service\V1\AuthorizationService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $integrationAuthorizationServiceMock;
 
     /**
      * API setup plugin
      *
-     * @var \Magento\Webapi\Model\Plugin\Setup
+     * @var \Magento\Webapi\Model\Plugin\Manager
      */
     protected $apiSetupPlugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 
@@ -62,26 +62,26 @@ class SetupTest extends \PHPUnit_Framework_TestCase
             ['grantPermissions']
         )->getMock();
 
-        $this->subjectMock = $this->getMock('Magento\Integration\Model\Resource\Setup', [], [], '', false);
-        $this->apiSetupPlugin = new \Magento\Webapi\Model\Plugin\Setup(
+        $this->subjectMock = $this->getMock('Magento\Integration\Model\Manager', [], [], '', false);
+        $this->apiSetupPlugin = new \Magento\Webapi\Model\Plugin\Manager(
             $this->integrationConfigMock,
             $this->integrationAuthorizationServiceMock,
             $this->integrationServiceMock
         );
     }
 
-    public function testAfterInitIntegrationProcessingNoIntegrations()
+    public function testAfterProcessIntegrationConfigNoIntegrations()
     {
         $this->integrationConfigMock->expects($this->never())->method('getIntegrations');
         $this->integrationServiceMock->expects($this->never())->method('findByName');
-        $this->apiSetupPlugin->afterInitIntegrationProcessing($this->subjectMock, []);
+        $this->apiSetupPlugin->afterProcessIntegrationConfig($this->subjectMock, []);
     }
 
     /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testAfterInitIntegrationProcessingSuccess()
+    public function testAfterProcessIntegrationConfigSuccess()
     {
         $testIntegration1Resource = [
             'Magento_Customer::manage',
@@ -144,7 +144,7 @@ class SetupTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($integrationsData2)
         );
 
-        $this->apiSetupPlugin->afterInitIntegrationProcessing(
+        $this->apiSetupPlugin->afterProcessIntegrationConfig(
             $this->subjectMock,
             ['TestIntegration1', 'TestIntegration2']
         );

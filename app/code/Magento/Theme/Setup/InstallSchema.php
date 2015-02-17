@@ -10,14 +10,14 @@ namespace Magento\Theme\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleSchemaResourceInterface;
+use Magento\Framework\Setup\SchemaResourceInterface;
 
 class InstallSchema implements InstallSchemaInterface
 {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function install(ModuleSchemaResourceInterface $setup, ModuleContextInterface $context)
+	public function install(SchemaResourceInterface $setup, ModuleContextInterface $context)
 	{
 		$installer = $setup;
 		

@@ -3,6 +3,4 @@
 Implement `InstallSchemaInterface` and/or `UpgradeSchemaInterface` for DB schema install and/or upgrade.
 Implement `InstallDataInterface` and/or `UpgradeDataInterface` for DB data install and/or upgrade.
 
-Setup application provides concrete implementation of a module context and setup DB/schema resources.
-Additionally, you may implement `ModuleSchemaResourceInterface` or `ModuleDataResourceInterface`, if your module
-requires custom setup resources.
+Setup application provides concrete implementation of a module context and setup DB/schema resources, so they can be used to determine current state of the module and get access to DB resource.

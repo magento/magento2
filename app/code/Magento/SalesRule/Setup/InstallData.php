@@ -20,7 +20,7 @@ class InstallData implements InstallDataInterface
 	public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
 	{
 		$installer = $setup->createMigrationSetup();
-		$installer->startSetup();
+		$setup->startSetup();
 		
 		$installer->appendClassAliasReplace(
 		    'salesrule',
@@ -39,7 +39,7 @@ class InstallData implements InstallDataInterface
 		
 		$installer->doUpdateClassAliases();
 		
-		$installer->endSetup();
+		$setup->endSetup();
 		
 	}
 }

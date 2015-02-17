@@ -39,12 +39,12 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
     {
         $installer = $setup->createMigrationSetup();
-        $installer->startSetup();
+        $setup->startSetup();
 
         /*
          * Register themes
          */
-        $installer->getEventManager()->dispatch('theme_registration_from_filesystem');
+        $setup->getEventManager()->dispatch('theme_registration_from_filesystem');
 
         /**
          * Update theme's data
@@ -81,13 +81,13 @@ class InstallData implements InstallDataInterface
         /**
          * Update rows in theme
          */
-        $installer->getConnection()->update(
-            $installer->getTable('theme'),
+        $setup->getConnection()->update(
+            $setup->getTable('theme'),
             ['area' => 'frontend'],
             ['area = ?' => '']
         );
 
-        $installer->endSetup();
+        $setup->endSetup();
     }
 
     /**

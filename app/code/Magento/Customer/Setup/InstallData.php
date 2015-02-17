@@ -168,6 +168,6 @@ class InstallData implements InstallDataInterface
         );
         $migrationSetup->doUpdateClassAliases();
 
-        $migrationSetup->endSetup();
+        $setup->endSetup();
     }
 }

@@ -265,6 +265,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
      */
     public function createMigrationSetup(array $data = [])
     {
+        $data['setup'] = $this;
         return $this->_migrationFactory->create($data);
     }
 }

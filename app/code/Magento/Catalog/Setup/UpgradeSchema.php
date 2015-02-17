@@ -10,14 +10,14 @@ namespace Magento\Catalog\Setup;
 
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleSchemaResourceInterface;
+use Magento\Framework\Setup\SchemaResourceInterface;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function upgrade(ModuleSchemaResourceInterface $setup, ModuleContextInterface $context)
+	public function upgrade(SchemaResourceInterface $setup, ModuleContextInterface $context)
 	{
         if (version_compare($context->getVersion(), '2.0.0.1') <= 0) {
             $installer = $setup;
