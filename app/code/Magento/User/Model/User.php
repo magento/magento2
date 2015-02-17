@@ -540,8 +540,6 @@ class User extends AbstractModel implements StorageInterface
      * @param string $password
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     * @throws \Magento\Framework\Exception\Plugin\AuthenticationException
      */
     public function authenticate($username, $password)
     {

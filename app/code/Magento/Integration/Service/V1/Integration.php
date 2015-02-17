@@ -129,7 +129,7 @@ class Integration implements \Magento\Integration\Service\V1\IntegrationInterfac
     {
         $integration = $this->_integrationFactory->create()->load($name, 'name');
         if ($integration->getId()) {
-            throw new IntegrationException(__("Integration with name '%1' exists.", $name));
+            throw new IntegrationException(__('Integration with name \'%1\' exists.', $name));
         }
     }
 
@@ -144,7 +144,7 @@ class Integration implements \Magento\Integration\Service\V1\IntegrationInterfac
     {
         $integration = $this->_integrationFactory->create()->load($integrationId);
         if (!$integration->getId()) {
-            throw new IntegrationException(__("Integration with ID '%1' does not exist.", $integrationId));
+            throw new IntegrationException(__('Integration with ID \'%1\' does not exist.', $integrationId));
         }
         return $integration;
     }

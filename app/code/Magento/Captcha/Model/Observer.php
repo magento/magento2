@@ -5,6 +5,8 @@
  */
 namespace Magento\Captcha\Model;
 
+use Magento\Framework\Exception\Plugin\AuthenticationException as PluginAuthenticationException;
+
 /**
  * Captcha Observer
  *
@@ -275,7 +277,7 @@ class Observer
         if ($captchaModel->isRequired($login)) {
             if (!$captchaModel->isCorrect($this->_getCaptchaString($this->_request, $formId))) {
                 $captchaModel->logAttempt($login);
-                throw new \Magento\Framework\Exception\Plugin\AuthenticationException(__('Incorrect CAPTCHA.'));
+                throw new PluginAuthenticationException(__('Incorrect CAPTCHA.'));
             }
         }
         $captchaModel->logAttempt($login);

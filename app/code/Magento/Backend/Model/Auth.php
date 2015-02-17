@@ -6,6 +6,7 @@
 namespace Magento\Backend\Model;
 
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\Plugin\AuthenticationException as PluginAuthenticationException;
 
 /**
  * Backend Auth model
@@ -75,7 +76,7 @@ class Auth
      *
      * @param \Magento\Backend\Model\Auth\StorageInterface $storage
      * @return $this
-     * @throws \Magento\Framework\Exception\AuthenticationException if $storage is not correct
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function setAuthStorage($storage)
     {
@@ -136,7 +137,7 @@ class Auth
      * @param string $username
      * @param string $password
      * @return void
-     * @throws \Exception|\Magento\Framework\Exception\Plugin\AuthenticationException
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function login($username, $password)
     {
@@ -160,7 +161,7 @@ class Auth
             if (!$this->getAuthStorage()->getUser()) {
                 self::throwException(__('Please correct the user name or password.'));
             }
-        } catch (\Magento\Framework\Exception\Plugin\AuthenticationException $e) {
+        } catch (PluginAuthenticationException $e) {
             $this->_eventManager->dispatch(
                 'backend_auth_user_login_failed',
                 ['user_name' => $username, 'exception' => $e]

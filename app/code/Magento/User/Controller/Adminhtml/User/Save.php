@@ -56,9 +56,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             && !empty($data[$currentUserPasswordField]) && is_string($data[$currentUserPasswordField]);
         try {
             if (!($isCurrentUserPasswordValid && $currentUser->verifyIdentity($data[$currentUserPasswordField]))) {
-                throw new AuthenticationException(
-                    __('You have entered an invalid password for current user.')
-                );
+                throw new AuthenticationException(__('You have entered an invalid password for current user.'));
             }
             $model->save();
             $this->messageManager->addSuccess(__('You saved the user.'));

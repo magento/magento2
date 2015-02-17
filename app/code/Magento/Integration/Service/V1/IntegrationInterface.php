@@ -68,7 +68,7 @@ interface IntegrationInterface
      *
      * @param int $integrationId
      * @return array Integration data
-     * @throws \Magento\Framework\Exception\IntegrationException If the integration does not exist or cannot be deleted
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function delete($integrationId);
 }

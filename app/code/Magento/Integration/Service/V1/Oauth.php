@@ -265,7 +265,7 @@ class Oauth implements OauthInterface
     {
         $consumer = $this->_consumerFactory->create()->load($consumerId);
         if (!$consumer->getId()) {
-            throw new IntegrationException(__("Consumer with ID '%1' does not exist.", $consumerId));
+            throw new IntegrationException(__('Consumer with ID \'%1\' does not exist.', $consumerId));
         }
         return $consumer;
     }
