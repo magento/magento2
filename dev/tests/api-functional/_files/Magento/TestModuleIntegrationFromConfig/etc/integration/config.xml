@@ -1,0 +1,6 @@
+<integrations>
+    <integration name="Test Integration1">
+        <email>test-integration@magento.com</email>
+        <endpoint_url>http://example.com/endpoint1</endpoint_url>
+    </integration>
+</integrations>

@@ -53,7 +53,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function call($serviceInfo, $arguments = [], $storeCode = null)
+    public function call($serviceInfo, $arguments = [], $storeCode = null, $integration = null)
     {
         $soapOperation = $this->_getSoapOperation($serviceInfo);
         $arguments = $this->_converter->convertKeysToCamelCase($arguments);

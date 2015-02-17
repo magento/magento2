@@ -1,0 +1,18 @@
+{
+  "name": "magento/module-test-module-integration-from-config",
+  "description": "test integration create from config",
+  "require": {
+    "php": "~5.5.0",
+    "magento/magento-composer-installer": "*"
+  },
+  "type": "magento2-module",
+  "version": "1.0",
+  "extra": {
+    "map": [
+      [
+        "*",
+        "Magento/TestModuleIntegrationFromConfig"
+      ]
+    ]
+  }
+}

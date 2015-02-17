@@ -10,6 +10,7 @@ namespace Magento\TestFramework\TestCase\Webapi\Adapter;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Webapi\Model\Rest\Config;
+use Magento\TestFramework\Authentication\OauthHelper;
 
 class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
 {
@@ -64,13 +65,13 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function call($serviceInfo, $arguments = [], $storeCode = null)
+    public function call($serviceInfo, $arguments = [], $storeCode = null, $integration = null)
     {
         $storeCode = !is_null($storeCode) ? (string)$storeCode : $this->defaultStoreCode;
         $resourcePath = '/' . $storeCode . $this->_getRestResourcePath($serviceInfo);
         $httpMethod = $this->_getRestHttpMethod($serviceInfo);
         //Get a valid token
-        $accessCredentials = \Magento\TestFramework\Authentication\OauthHelper::getApiAccessCredentials();
+        $accessCredentials = OauthHelper::getApiAccessCredentials(null, $integration);
         /** @var $oAuthClient \Magento\TestFramework\Authentication\Rest\OauthClient */
         $oAuthClient = $accessCredentials['oauth_client'];
         $urlFormEncoded = false;
