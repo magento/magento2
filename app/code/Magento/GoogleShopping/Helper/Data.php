@@ -22,19 +22,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Stdlib\String $string
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Stdlib\String $string,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->string = $string;
         $this->_storeManager = $storeManager;

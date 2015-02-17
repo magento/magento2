@@ -66,7 +66,7 @@ class RecentTest extends \PHPUnit_Framework_TestCase
         $data = [];
         $attribute = ['customer_id', 'status'];
         $customerId = 25;
-        $layout = $this->getMock('Magento\Core\Model\Layout', ['getBlock'], [], '', false, false);
+        $layout = $this->getMock('Magento\Framework\View\Layout', ['getBlock'], [], '', false, false);
         $this->context->expects($this->once())
             ->method('getLayout')
             ->will($this->returnValue($layout));

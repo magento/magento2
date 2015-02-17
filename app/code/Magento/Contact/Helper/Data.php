@@ -62,7 +62,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

@@ -18,7 +18,7 @@ class StockAll extends \Magento\ProductAlert\Controller\Unsubscribe
                 'Magento\ProductAlert\Model\Stock'
             )->deleteCustomer(
                 $this->_customerSession->getCustomerId(),
-                $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getWebsiteId()
+                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
             );
             $this->messageManager->addSuccess(__('You will no longer receive stock alerts.'));
         } catch (\Exception $e) {
