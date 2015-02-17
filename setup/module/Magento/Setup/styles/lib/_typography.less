@@ -6,28 +6,28 @@
 .font-face(
     @family-name: 'Open Sans',
     @font-path: '@{path-to-pub}fonts/opensans/light/opensans-300',
-    @font-weight: @font-weight-light,
+    @font-weight: @font-weight__light,
     @font-style: normal
 );
 
 .font-face(
     @family-name: 'Open Sans',
     @font-path: '@{path-to-pub}fonts/opensans/regular/opensans-400',
-    @font-weight: @font-weight-regular,
+    @font-weight: @font-weight__regular,
     @font-style: normal
 );
 
 .font-face(
     @family-name: 'Open Sans',
     @font-path: '@{path-to-pub}fonts/opensans/semibold/opensans-600',
-    @font-weight: @font-weight-semibold,
+    @font-weight: @font-weight__semibold,
     @font-style: normal
 );
 
 .font-face(
     @family-name: 'Open Sans',
     @font-path: '@{path-to-pub}fonts/opensans/bold/opensans-700',
-    @font-weight: @font-weight-bold,
+    @font-weight: @font-weight__bold,
     @font-style: normal
 );
 
@@ -37,9 +37,9 @@ html {
 
 body {
     color: @base__color;
-    font-family: @base__font-family;
+    font-family: @font-family__base;
     font-size: @base__font-size;
-    font-weight: @font-weight-regular;
+    font-weight: @font-weight__regular;
     line-height: @base__line-height;
 }
 
@@ -51,7 +51,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-weight: @font-weight-regular;
+    font-weight: @font-weight__regular;
     margin-top: 0;
 }
 

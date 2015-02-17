@@ -29,7 +29,7 @@
 
 @field-control__border-color: @color-gray68;
 @field-control__color: @color-very-dark-gray-black;
-@field-control__bg-color: @color-white;
+@field-control__background-color: @color-white;
 @field-control-addon__color: @color-gray52;
 
 @field-scope__color: @color-dark-gray;
@@ -38,17 +38,17 @@
 @field-date-icon__color: @color-brownie;
 @field-note__color: @color-very-dark-gray-black;
 
-@field-tooltip-icon__bg-color: @color-brownie;
-@field-tooltip-content__bg-color: @color-lazy-sun;
+@field-tooltip-icon__background-color: @color-brownie;
+@field-tooltip-content__background-color: @color-lazy-sun;
 @field-tooltip-content__border-color: @color-gray68;
 
 @field-error__color: @color-very-dark-gray2;
-@field-error__bg-color: @color-lazy-sun;
+@field-error__background-color: @color-lazy-sun;
 @field-error__border-color: @color-tomato-brick;
 
 //  States
 @field-control__focus__border-color: @color-pure-blue;
-@field-control__disabled__bg-color: @color-lighter-gray;
+@field-control__disabled__background-color: @color-lighter-gray;
 @field-label__required__color: @color-phoenix;
 @field-label__disabled__color: @color-gray60;
 
@@ -201,16 +201,16 @@ fieldset.field [class^='fields-group-'] .field .control {
         z-index: 99;
     }
     &-action {
-        color: @field-tooltip-icon__bg-color;
+        color: @field-tooltip-icon__background-color;
         cursor: pointer;
         display: inline-block;
-        font-family: @icon-font-admin-name;
+        font-family: @icon-font__admin-name;
         margin-left: 18px;
         margin-top: -6px;
         position: relative;
         z-index: 2;
         &:hover {
-            color: @field-tooltip-icon__bg-color;
+            color: @field-tooltip-icon__background-color;
             text-decoration: none;
         }
         &:before {
@@ -228,7 +228,7 @@ fieldset.field [class^='fields-group-'] .field .control {
     &-content {
         @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
 
-        background: @field-tooltip-content__bg-color;
+        background: @field-tooltip-content__background-color;
         border: 1px solid @field-tooltip-content__border-color;
         border-radius: 1px;
         bottom: 42px;
@@ -250,7 +250,7 @@ fieldset.field [class^='fields-group-'] .field .control {
             z-index: 3;
         }
         &:after {
-            border-top-color: @field-tooltip-content__bg-color;
+            border-top-color: @field-tooltip-content__background-color;
             margin-top: -1px;
             z-index: 4;
         }
@@ -277,7 +277,7 @@ fieldset.field [class^='fields-group-'] .field .control {
         }
     }
     .mage-error {
-        background: @field-error__bg-color;
+        background: @field-error__background-color;
         border: 1px solid @field-error__border-color;
         box-sizing: border-box;
         color: @field-error__color;
@@ -315,7 +315,7 @@ fieldset.field [class^='fields-group-'] .field .control {
         color: @field-label__disabled__color;
     }
     &.field .control [class*='control-'][disabled] {
-        background-color: @field-control__disabled__bg-color;
+        background-color: @field-control__disabled__background-color;
         border-color: @field-control__border-color;
         color: @field-control__color;
         opacity: .5;
@@ -420,7 +420,7 @@ fieldset.field [class^='fields-group-'] .field .control {
         &-textarea,
         &-select,
         &-text {
-            background-color: @field-control__bg-color;
+            background-color: @field-control__background-color;
             border: 1px solid @field-control__border-color;
             border-radius: 1px;
             color: @field-control__color;
@@ -640,7 +640,7 @@ fieldset.field [class^='fields-group-'] .field .control {
                     z-index: 0;
                 }
                 &[disabled] + label:before {
-                    background: @field-control__disabled__bg-color;
+                    background: @field-control__disabled__background-color;
                     opacity: .5;
                 }
             }

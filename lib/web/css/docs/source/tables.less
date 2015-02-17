@@ -94,7 +94,7 @@
 //        </tr>
 //        <tr>
 //            <th>@_cell-padding-horizontal</th>
-//            <td class="vars_value">@indent-s-base</td>
+//            <td class="vars_value">@indent__s</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell horizontal padding</td>
 //        </tr>
@@ -240,7 +240,7 @@
 //        </tr>
 //        <tr>
 //            <th>@_table-th-color</th>
-//            <td class="vars_value">@text-color-intense</td>
+//            <td class="vars_value">@text__color__intense</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell font color</td>
 //        </tr>
@@ -252,7 +252,7 @@
 //        </tr>
 //        <tr>
 //            <th>@_table-th-font-weight</th>
-//            <td class="vars_value">@font-weight-bold</td>
+//            <td class="vars_value">@font-weight__bold</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell font weight</td>
 //        </tr>
@@ -537,13 +537,13 @@
 //        </tr>
 //        <tr>
 //            <th>@_td-padding-top</th>
-//            <td class="vars_value">@table-cell-padding-vertical / 2</td>
+//            <td class="vars_value">@table-cell__padding-vertical / 2</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell top padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_td-padding-right</th>
-//            <td class="vars_value">@table-cell-padding-horizontal / 2</td>
+//            <td class="vars_value">@table-cell__padding-horizontal / 2</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell right padding</td>
 //        </tr>
@@ -564,7 +564,7 @@
 
 //  # Table background customization
 //
-//  The <code>.table-bg()</code> mixin provides table cells background customization options.
+//  The <code>.table-background-color()</code> mixin provides table cells background customization options.
 //
 //  ```html
 //    <table class="example-table-5">
@@ -634,12 +634,12 @@
 
 .example-table-5 {
     .table();
-    .table-bg(
-        @_table-bg: #fff,
-        @_table-head-bg: #ccf,
-        @_table-foot-bg: #cff,
-        @_table-td-bg: #fcc,
-        @_table-body-th-bg: #ffc
+    .table-background-color(
+        @_table-background-color: #fff,
+        @_table-head-background-color: #ccf,
+        @_table-foot-background-color: #cff,
+        @_table-td-background-color: #fcc,
+        @_table-body-th-background-color: #ffc
     );
 }
 
@@ -653,32 +653,32 @@
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
-//            <th>@_table-bg</th>
+//            <th>@_table-background-color</th>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table background</td>
 //        </tr>
 //        <tr>
-//            <th>@_table-head-bg</th>
-//            <td class="vars_value">@table-bg</td>
+//            <th>@_table-head-background-color</th>
+//            <td class="vars_value">@table__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table thead background</td>
 //        </tr>
 //        <tr>
-//            <th>@_table-foot-bg</th>
-//            <td class="vars_value">@table-bg</td>
+//            <th>@_table-foot-background-color</th>
+//            <td class="vars_value">@table__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table tfoot background</td>
 //        </tr>
 //        <tr>
-//            <th>@_table-body-th-bg</th>
-//            <td class="vars_value">@table-bg</td>
+//            <th>@_table-body-th-background-color</th>
+//            <td class="vars_value">@table__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cells background</td>
 //        </tr>
 //        <tr>
-//            <th nowrap="nowrap">@_table-td-bg</th>
-//            <td class="vars_value">@table-bg</td>
+//            <th nowrap="nowrap">@_table-td-background-color</th>
+//            <td class="vars_value">@table__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cells background</td>
 //        </tr>
@@ -785,7 +785,7 @@
 //        </tr>
 //        <tr>
 //            <th>@_table_border-width</th>
-//            <td class="vars_value" nowrap="nowrap">@border-width-base</td>
+//            <td class="vars_value" nowrap="nowrap">@border-width__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table border width</td>
 //        </tr>
@@ -797,7 +797,7 @@
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_table_border-color</th>
-//            <td class="vars_value">@border-color-base</td>
+//            <td class="vars_value">@border-color__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table border color</td>
 //        </tr>
@@ -1197,7 +1197,7 @@
 .example-table-11 {
     .table();
     .table-striped(
-        @_stripped-bg: #ffc,
+        @_stripped-background-color: #ffc,
         @_stripped-color: #000,
         @_stripped-direction: horizontal,
         @_stripped-highlight: even
@@ -1215,16 +1215,16 @@
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
-//            <th>@_stripped-bg</th>
-//            <td class="vars_value">@table-cell-bg-stripped</td>
-//            <td class="vars_value">lighten(@table-cell-bg-hover, 15%)</td>
+//            <th>@_stripped-background-color</th>
+//            <td class="vars_value">@table-cell-stripped__background-color</td>
+//            <td class="vars_value">lighten(@table-cell__hover__background-color, 15%)</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Striped cells background color</td>
 //        </tr>
 //        <tr>
 //            <th>@_stripped-color</th>
-//            <td class="vars_value">@table-td-color</td>
-//            <td class="vars_value">@text-color</td>
+//            <td class="vars_value">@table-td__color</td>
+//            <td class="vars_value">@text__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Striped cells text color</td>
 //        </tr>
@@ -1330,14 +1330,14 @@
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
-//            <th>@_table_cell-bg-hover</th>
-//            <td class="vars_value">@panel-bg</td>
+//            <th>@_table_cell-background-color-hover</th>
+//            <td class="vars_value">@panel__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Hovered table row background</td>
 //        </tr>
 //        <tr>
-//            <th>@_table_cell-odd-bg-hover</th>
-//            <td class="vars_value">@_table_cell-bg-hover</td>
+//            <th>@_table_cell-odd-background-color-hover</th>
+//            <td class="vars_value">@_table_cell-background-color-hover</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Hovered table odd row background</td>
 //        </tr>
@@ -1425,7 +1425,7 @@
     .table-hover();
 }
 
-@media only screen and (max-width: @screen-m) {
+@media only screen and (max-width: @screen__m) {
     .example-table-14 {
         .table-overflow();
     }
@@ -1503,11 +1503,11 @@
     .table-hover();
 }
 
-@media only screen and (max-width: @screen-m) {
+@media only screen and (max-width: @screen__m) {
     .example-table-15 {
         .table-responsive(
-            @_table-bg-responsive: #cff,
-            @_table-th-bg-responsive: #ffc,
+            @_table-background-color-responsive: #cff,
+            @_table-th-background-color-responsive: #ffc,
             @_reset-table-striped: true,
             @_reset-table-hover: true
         );
@@ -1525,15 +1525,15 @@
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
-//            <th>@_table-bg-responsive</th>
-//            <td class="vars_value">@table-bg-responsive</td>
-//            <td class="vars_value">@table-bg</td>
+//            <th>@_table-background-color-responsive</th>
+//            <td class="vars_value">@table-responsive__background-color</td>
+//            <td class="vars_value">@table__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Responsive table background</td>
 //        </tr>
 //        <tr>
-//            <th>@_table-th-bg-responsive</th>
-//            <td class="vars_value">@table-th-bg-responsive</td>
+//            <th>@_table-th-background-color-responsive</th>
+//            <td class="vars_value">@table-responsive-th__background-color</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Responsive table header cells background</td>
@@ -1554,7 +1554,7 @@
 //        </tr>
 //        <tr>
 //            <th>@_table-responsive-cell-padding</th>
-//            <td class="vars_value">@indent-xs-base 0</td>
+//            <td class="vars_value">@indent__xs 0</td>
 //            <td class="vars_value">-</td>
 //            <td class="vars_value">true | false</td>
 //            <td>Responsive table cells padding</td>

@@ -27,9 +27,9 @@
 //  Base class
 .tooltip {
     display: block;
-    font-family: @base__font-family;
+    font-family: @font-family__base;
     font-size: @small__font-size;
-    font-weight: @font-weight-regular;
+    font-weight: @font-weight__regular;
     line-height: 1.4;
     opacity: 0;
     position: absolute;
@@ -177,7 +177,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .tooltip {
         display: none !important;
     }

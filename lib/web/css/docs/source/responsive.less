@@ -4,7 +4,7 @@
 //  */
 
 //  # Responsive
-//  Magento UI library provides a strong approach for working with media queries. It`s based on recursive call of <nobr><code>.media-width()</code></nobr> mixin defined anywhere in project but invoked in one place in <nobr><code>lib/web/css/source/lib/responsive.less</code></nobr>. That's why in the resulting <code>styles.css</code> we have every media query only once with all the rules there, not a multiple calls for the same query.
+//  Magento UI library provides a strong approach for working with media queries. It`s based on recursive call of <nobr><code>.media-width()</code></nobr> mixin defined anywhere in project but invoked in one place in <nobr><code>lib/web/css/source/lib/_responsive.less</code></nobr>. That's why in the resulting <code>styles.css</code> we have every media query only once with all the rules there, not a multiple calls for the same query.
 //
 //  To see the media queries work resize window to understand which breakpoint is applied.
 //  ```
@@ -17,7 +17,7 @@
     padding: 10px;
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .example-responsive-block {
         background: #ffc;
     }
@@ -27,7 +27,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .example-responsive-block {
         background: #ccf;
     }
@@ -47,7 +47,7 @@
 //  <nobr><code>@break: value</code></nobr> - sets the value of breakpoint to compare with in media query condition.<br />
 //  For example
 //  ```css
-//  .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
+//  .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
 //      your styles
 //  }
 //  ```
@@ -73,8 +73,8 @@
 //  ```css
 //  & when (@media-target = 'mobile'),
 //  (@media-target = 'all') {
-//     @media only screen and (max-width: (@screen-xs - 1)) {
-//         .media-width('max', @screen-xs);
+//     @media only screen and (max-width: (@screen__xs - 1)) {
+//         .media-width('max', @screen__xs);
 //     }
 // }
 //  ```
@@ -92,17 +92,17 @@
 //  ```css
 //  .media-width(@extremum, @break));
 //  ```
-//  By default you can find it <code>responsive.less</code> file in li
+//  By default you can find it <code>_responsive.less</code> file in li
 //  &nbsp;
 //
 //  # Responsive breakpoints
 //  In Magento UI library there are predefined variables for breakpoints.
 //  ```css
-//  @screen-xxs: 320px;
-//  @screen-xs: 480px;
-//  @screen-s: 640px;
-//  @screen-m: 768px;
-//  @screen-l: 1024px;
-//  @screen-xl: 1440px;
+//  @screen__xxs: 320px;
+//  @screen__xs: 480px;
+//  @screen__s: 640px;
+//  @screen__m: 768px;
+//  @screen__l: 1024px;
+//  @screen__xl: 1440px;
 //  ```
 //  &nbsp;
