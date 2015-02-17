@@ -406,20 +406,25 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
             }
 
             $to = new \DateTime($to);
-            $nextPeriod = $to->format('Y-m-d H:i:s');
+            $nextPeriod = $this->_getWriteAdapter()->formatDate(
+                $to->format('Y-m-d H:i:s')
+            );
             $to = $to->getTimestamp();
 
             $dtz = new \DateTimeZone($timezone);
             $transitions = $dtz->getTransitions();
 
-            foreach ($transitions as $tr) {
+            for ($i = count($transitions) - 1; $i >= 0; $i--) {
+                $tr = $transitions[$i];
                 try {
                     $this->timezoneValidator->validate($tr['ts'], $to);
                 } catch (\Magento\Framework\Stdlib\DateTime\Timezone\ValidationException $e) {
                     continue;
                 }
 
-                $tr['time'] = (new \DateTime($tr['time']))->format('Y-m-d H:i:s');
+                $tr['time'] = $this->_getWriteAdapter()->formatDate(
+                    (new \DateTime($tr['time']))->format('Y-m-d H:i:s')
+                );
                 $tzTransitions[$tr['offset']][] = ['from' => $tr['time'], 'to' => $nextPeriod];
 
                 if (!empty($from) && $tr['ts'] < $from) {
