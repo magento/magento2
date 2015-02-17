@@ -1,46 +1,18 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="sales/order_create/index" module="Magento_Sales">
-    <blocks>
-        <customerBlock>
-            <class>Magento\Sales\Test\Block\Adminhtml\Order\Create\Customer</class>
-            <locator>#order-customer-selector</locator>
-            <strategy>css selector</strategy>
-        </customerBlock>
-        <storeBlock>
-            <class>Magento\Sales\Test\Block\Adminhtml\Order\Create\Store</class>
-            <locator>#order-store-selector</locator>
-            <strategy>css selector</strategy>
-        </storeBlock>
-        <createBlock>
-            <class>Magento\Sales\Test\Block\Adminhtml\Order\Create</class>
-            <locator>[id="page:main-container"]</locator>
-            <strategy>css selector</strategy>
-        </createBlock>
-        <actionsBlock>
-            <class>Magento\Backend\Test\Block\GridPageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </actionsBlock>
-        <couponsBlock>
-            <class>Magento\Sales\Test\Block\Adminhtml\Order\Create\Coupons</class>
-            <locator>#order-coupons</locator>
-            <strategy>css selector</strategy>
-        </couponsBlock>
-        <customerActivitiesBlock>
-            <class>Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities</class>
-            <locator>.customer-current-activity</locator>
-            <strategy>css selector</strategy>
-        </customerActivitiesBlock>
-        <configureProductBlock>
-            <class>Magento\Catalog\Test\Block\Adminhtml\Product\Composite\Configure</class>
-            <locator>//*[@role="dialog" and ./*[@id="product_composite_configure"] and contains(@style,"display: block")]</locator>
-            <strategy>xpath</strategy>
-        </configureProductBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="OrderCreateIndex" area="Adminhtml" mca="sales/order_create/index" module="Magento_Sales">
+    <block name="customerBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\Customer" locator="#order-customer-selector" strategy="css selector"/>
+    <block name="storeBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\Store" locator="#order-store-selector" strategy="css selector"/>
+    <block name="createBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create" locator="[id='page:main-container']" strategy="css selector"/>
+    <block name="actionsBlock" class="Magento\Backend\Test\Block\GridPageActions" locator=".page-main-actions" strategy="css selector"/>
+    <block name="couponsBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\Coupons" locator="#order-coupons" strategy="css selector"/>
+    <block name="customerActivitiesBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities" locator=".customer-current-activity" strategy="css selector"/>
+    <block name="configureProductBlock" class="Magento\Catalog\Test\Block\Adminhtml\Product\Composite\Configure" locator="//*[@role='dialog' and ./*[@id='product_composite_configure'] and contains(@style,'display: block')]" strategy="xpath"/>
+  </page>
+</config>

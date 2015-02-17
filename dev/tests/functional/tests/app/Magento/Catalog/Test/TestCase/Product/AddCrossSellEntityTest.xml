@@ -5,12 +5,15 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
-    <testCase name="AddCrossSellEntityTest">
-        <variation name="AddCrossSellEntityTestVariation1">
-            <data name="productData">catalogProductSimple::default</data>
-            <data name="crossSellProductsData">catalogProductSimple::default, configurableProductInjectable::default</data>
-            <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertCrossSellsProductsSection</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="AddCrossSellEntityTest">
+    <variation name="AddCrossSellEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="productData" xsi:type="string">catalogProductSimple::default</data>
+      <data name="crossSellProductsData" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductForm" next="assertCrossSellsProductsSection" prev="assertProductInGrid"/>
+      <constraint name="assertCrossSellsProductsSection" prev="assertProductForm"/>
+    </variation>
+  </testCase>
 </config>

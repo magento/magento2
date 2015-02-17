@@ -1,3 +1,0 @@
-"description";"customer/dataSet";"products";"constraint"
-"add product to cart as registered user and check product in Report";"default";"catalogProductSimple::product_100_dollar";"assertAbandonedCartCustomerInfoResult"
-"add two products to cart as registered user and check product in Report";"default";"catalogProductSimple::product_100_dollar,catalogProductSimple::product_100_dollar";"assertAbandonedCartCustomerInfoResult"
