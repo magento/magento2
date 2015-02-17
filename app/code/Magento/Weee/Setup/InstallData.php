@@ -7,7 +7,7 @@ namespace Magento\Weee\Setup;
 
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Quote\Setup\QuoteSetup;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Sales\Setup\SalesSetup;
@@ -40,7 +40,7 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      */
-    public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         /** @var QuoteSetup $quoteSetup */
         $quoteSetup = $this->quoteSetupFactory->create(['setup' => $setup]);

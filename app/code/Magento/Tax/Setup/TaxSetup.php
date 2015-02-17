@@ -12,7 +12,7 @@ use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Sales\Setup\SalesSetup;
 
 /**
@@ -31,7 +31,7 @@ class TaxSetup extends SalesSetup
     protected $productTypeConfig;
 
     /**
-     * @param ModuleDataResourceInterface $setup
+     * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
@@ -40,7 +40,7 @@ class TaxSetup extends SalesSetup
      * @param ConfigInterface $productTypeConfig
      */
     public function __construct(
-        ModuleDataResourceInterface $setup,
+        ModuleDataSetupInterface $setup,
         Context $context,
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory,

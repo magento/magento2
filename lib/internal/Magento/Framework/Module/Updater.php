@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Setup\Module\ModuleInstallerUpgraderFactory;
 use Magento\Setup\Module\DataSetup;
 
 class Updater
@@ -66,7 +65,7 @@ class Updater
                 $moduleContext = new \Magento\Setup\Model\ModuleContext($dataVer);
                 if ($dataVer !== false) {
                     $status = version_compare($configVer, $dataVer);
-                    if ($status == \Magento\Framework\Setup\ModuleDataResourceInterface::VERSION_COMPARE_GREATER) {
+                    if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
                         $moduleUpgrader = $this->setupFactory->create($moduleName, 'upgrade');
                         if ($moduleUpgrader) {
                             $moduleUpgrader->upgrade($this->dataSetup, $moduleContext);

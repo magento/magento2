@@ -8,9 +8,10 @@
 namespace Magento\Setup\Module;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Setup\Module\Setup\SetupCache;
 
-class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataResourceInterface
+class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSetupInterface
 {
     /**
      * Call afterApplyAllUpdates method flag
@@ -20,11 +21,11 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
     private $_callAfterApplyAllUpdates = false;
 
     /**
-     * Tables data cache array
+     * Tables data cache
      *
-     * @var array
+     * @var SetupCache
      */
-    protected $_setupCache = [];
+    private $setupCache;
 
     /**
      * Modules configuration reader
@@ -71,7 +72,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
      */
     public function __construct(
         \Magento\Framework\Module\Setup\Context $context,
-        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataSetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         parent::__construct($context->getResourceModel(), $connectionName);
         $this->_eventManager = $context->getEventManager();
@@ -81,6 +82,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
         $this->_migrationFactory = $context->getMigrationFactory();
         $this->filesystem = $context->getFilesystem();
         $this->modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->setupCache = new SetupCache();
     }
 
     /**
@@ -88,7 +90,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
      */
     public function getSetupCache()
     {
-        return $this->_setupCache;
+        return $this->setupCache;
     }
 
     /**
@@ -105,7 +107,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
     public function getTableRow($table, $idField, $rowId, $field = null, $parentField = null, $parentId = 0)
     {
         $table = $this->getTable($table);
-        if (empty($this->_setupCache[$table][$parentId][$rowId])) {
+        if (!$this->setupCache->has($table, $parentId, $rowId)) {
             $adapter = $this->getConnection();
             $bind = ['id_field' => $rowId];
             $select = $adapter->select()->from($table)->where($adapter->quoteIdentifier($idField) . '= :id_field');
@@ -113,15 +115,10 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
                 $select->where($adapter->quoteIdentifier($parentField) . '= :parent_id');
                 $bind['parent_id'] = $parentId;
             }
-            $this->_setupCache[$table][$parentId][$rowId] = $adapter->fetchRow($select, $bind);
+            $this->setupCache->setRow($table, $parentId, $rowId, $adapter->fetchRow($select, $bind));
         }
 
-        if (null === $field) {
-            return $this->_setupCache[$table][$parentId][$rowId];
-        }
-        return isset(
-            $this->_setupCache[$table][$parentId][$rowId][$field]
-        ) ? $this->_setupCache[$table][$parentId][$rowId][$field] : false;
+        return $this->setupCache->get($table, $parentId, $rowId, $field);
     }
 
     /**
@@ -145,9 +142,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
 
         $adapter->delete($table, $where);
 
-        if (isset($this->_setupCache[$table][$parentId][$rowId])) {
-            unset($this->_setupCache[$table][$parentId][$rowId]);
-        }
+        $this->setupCache->remove($table, $parentId, $rowId);
 
         return $this;
     }
@@ -178,15 +173,16 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
         $where = [$adapter->quoteIdentifier($idField) . '=?' => $rowId];
         $adapter->update($table, $data, $where);
 
-        if (isset($this->_setupCache[$table][$parentId][$rowId])) {
+        if ($this->setupCache->has($table, $parentId, $rowId)) {
             if (is_array($field)) {
-                $this->_setupCache[$table][$parentId][$rowId] = array_merge(
-                    $this->_setupCache[$table][$parentId][$rowId],
+                $newRowData = array_merge(
+                    $this->setupCache->get($table, $parentId, $rowId),
                     $field
                 );
             } else {
-                $this->_setupCache[$table][$parentId][$rowId][$field] = $value;
+                $newRowData = $value;
             }
+            $this->setupCache->setRow($table, $parentId, $rowId, $newRowData);
         }
 
         return $this;
@@ -205,7 +201,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
 
     /**
      * Run each time after applying of all updates,
-     * if setup model setted $_callAfterApplyAllUpdates flag to true
+     * if setup model set $_callAfterApplyAllUpdates flag to true
      *
      * @return $this
      */

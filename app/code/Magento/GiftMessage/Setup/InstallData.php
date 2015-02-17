@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Setup;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Sales\Setup\SalesSetupFactory;
 
@@ -48,7 +48,7 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      */
-    public function install(ModuleDataResourceInterface $setup, ModuleContextInterface $context)
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         /**
          * Add 'gift_message_id' attributes for entities

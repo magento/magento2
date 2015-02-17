@@ -5,12 +5,12 @@
  */
 namespace Magento\Setup\Module;
 
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 class DataSetupTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ModuleDataResourceInterface
+     * @var ModuleDataSetupInterface
      */
     protected $_model;
 
@@ -91,5 +91,10 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->_model->tableExists('store_website'));
         $this->assertFalse($this->_model->tableExists('core/website'));
+    }
+
+    public function testGetSetupCache()
+    {
+        $this->assertInstanceOf('Magento\Framework\Setup\DataCacheInterface', $this->_model->getSetupCache());
     }
 }

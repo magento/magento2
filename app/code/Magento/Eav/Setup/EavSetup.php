@@ -9,7 +9,7 @@ use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\CacheInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -30,28 +30,11 @@ class EavSetup
      * @var PropertyMapperInterface
      */
     private $attributeMapper;
-    /**
-     * @var ModuleDataResourceInterface
-     */
-    private $setup;
 
     /**
-     * @param ModuleDataResourceInterface $setup
-     * @param Context $context
-     * @param CacheInterface $cache
-     * @param CollectionFactory $attrGroupCollectionFactory
+     * @var ModuleDataSetupInterface
      */
-    public function __construct(
-        ModuleDataResourceInterface $setup,
-        Context $context,
-        CacheInterface $cache,
-        CollectionFactory $attrGroupCollectionFactory
-    ) {
-        $this->cache = $cache;
-        $this->attrGroupCollectionFactory = $attrGroupCollectionFactory;
-        $this->attributeMapper = $context->getAttributeMapper();
-        $this->setup = $setup;
-    }
+    private $setup;
 
     /**
      * General Attribute Group Name
@@ -82,7 +65,25 @@ class EavSetup
     private $_defaultAttributeSetName = 'Default';
 
     /**
-     * @return ModuleDataResourceInterface
+     * @param ModuleDataSetupInterface $setup
+     * @param Context $context
+     * @param CacheInterface $cache
+     * @param CollectionFactory $attrGroupCollectionFactory
+     */
+    public function __construct(
+        ModuleDataSetupInterface $setup,
+        Context $context,
+        CacheInterface $cache,
+        CollectionFactory $attrGroupCollectionFactory
+    ) {
+        $this->cache = $cache;
+        $this->attrGroupCollectionFactory = $attrGroupCollectionFactory;
+        $this->attributeMapper = $context->getAttributeMapper();
+        $this->setup = $setup;
+    }
+
+    /**
+     * @return ModuleDataSetupInterface
      */
     public function getSetup()
     {
@@ -975,7 +976,8 @@ class EavSetup
         }
 
         $mainTable = $this->setup->getTable('eav_attribute');
-        if (empty($this->setup->getSetupCache()[$mainTable][$entityTypeId][$id])) {
+        $setupCache = $this->setup->getSetupCache();
+        if (!$setupCache->has($mainTable, $entityTypeId, $id)) {
             $additionalTable = $this->setup->getTable($additionalTable);
             $bind = ['id' => $id, 'entity_type_id' => $entityTypeId];
             $select = $this->setup->getConnection()->select()->from(
@@ -991,14 +993,14 @@ class EavSetup
 
             $row = $this->setup->getConnection()->fetchRow($select, $bind);
             if (!$row) {
-                $this->setup->getSetupCache()[$mainTable][$entityTypeId][$id] = false;
+                $setupCache->setRow($mainTable, $entityTypeId, $id, false);
             } else {
-                $this->setup->getSetupCache()[$mainTable][$entityTypeId][$row['attribute_id']] = $row;
-                $this->setup->getSetupCache()[$mainTable][$entityTypeId][$row['attribute_code']] = $row;
+                $setupCache->setRow($mainTable, $entityTypeId, $row['attribute_id'], $row);
+                $setupCache->setRow($mainTable, $entityTypeId, $row['attribute_code'],$row);
             }
         }
 
-        $row = $this->setup->getSetupCache()[$mainTable][$entityTypeId][$id];
+        $row = $setupCache->get($mainTable, $entityTypeId, $id);
         if ($field !== null) {
             return isset($row[$field]) ? $row[$field] : false;
         }

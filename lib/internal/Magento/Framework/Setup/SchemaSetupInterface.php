@@ -8,7 +8,7 @@ namespace Magento\Framework\Setup;
 /**
  * DB schema resource interface
  */
-interface SchemaResourceInterface extends ResourceInterface
+interface SchemaSetupInterface extends SetupInterface
 {
     /**
      * Retrieves 32bit UNIQUE HASH for a Table index

@@ -7,38 +7,38 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\Setup\ModuleDataResourceInterface;
-use Magento\Framework\Setup\ResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SetupInterface;
 
-class Setup implements ResourceInterface
+class Setup implements SetupInterface
 {
     /**
      * Setup Connection
      *
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    private $_connection = null;
+    private $connection = null;
 
     /**
      * Tables cache array
      *
      * @var array
      */
-    private $_tables = [];
+    private $tables = [];
 
     /**
      * Modules configuration
      *
      * @var \Magento\Framework\App\Resource
      */
-    private $_resourceModel;
+    private $resourceModel;
 
     /**
      * Connection instance name
      *
      * @var string
      */
-    private $_connectionName;
+    private $connectionName;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
@@ -46,10 +46,10 @@ class Setup implements ResourceInterface
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataSetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
-        $this->_resourceModel = $resource;
-        $this->_connectionName = $connectionName;
+        $this->resourceModel = $resource;
+        $this->connectionName = $connectionName;
     }
 
     /**
@@ -59,10 +59,10 @@ class Setup implements ResourceInterface
      */
     public function getConnection()
     {
-        if (null === $this->_connection) {
-            $this->_connection = $this->_resourceModel->getConnection($this->_connectionName);
+        if (null === $this->connection) {
+            $this->connection = $this->resourceModel->getConnection($this->connectionName);
         }
-        return $this->_connection;
+        return $this->connection;
     }
 
     /**
@@ -74,7 +74,7 @@ class Setup implements ResourceInterface
      */
     public function setTable($tableName, $realTableName)
     {
-        $this->_tables[$tableName] = $realTableName;
+        $this->tables[$tableName] = $realTableName;
         return $this;
     }
 
@@ -87,10 +87,10 @@ class Setup implements ResourceInterface
     public function getTable($tableName)
     {
         $cacheKey = $this->_getTableCacheName($tableName);
-        if (!isset($this->_tables[$cacheKey])) {
-            $this->_tables[$cacheKey] = $this->_resourceModel->getTableName($tableName);
+        if (!isset($this->tables[$cacheKey])) {
+            $this->tables[$cacheKey] = $this->resourceModel->getTableName($tableName);
         }
-        return $this->_tables[$cacheKey];
+        return $this->tables[$cacheKey];
     }
 
     /**

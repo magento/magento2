@@ -10,7 +10,7 @@ use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Framework\Setup\ModuleDataResourceInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Setup Model of Sales Module
@@ -28,14 +28,14 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     protected $encryptor;
 
     /**
-     * @param ModuleDataResourceInterface $setup
+     * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
      * @param ScopeConfigInterface $config
      */
     public function __construct(
-        ModuleDataResourceInterface $setup,
+        ModuleDataSetupInterface $setup,
         Context $context,
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory,

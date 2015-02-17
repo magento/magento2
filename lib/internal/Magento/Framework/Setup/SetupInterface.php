@@ -8,7 +8,7 @@ namespace Magento\Framework\Setup;
 /**
  * DB resource interface
  */
-interface ResourceInterface
+interface SetupInterface
 {
     /**
      * Gets connection object
