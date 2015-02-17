@@ -67,8 +67,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Helper\Data::getFrontendClasses
-     * @covers \Magento\Eav\Helper\Data::_getDefaultFrontendClasses
+     * covers \Magento\Eav\Helper\Data::getFrontendClasses
+     * covers \Magento\Eav\Helper\Data::_getDefaultFrontendClasses
      */
     public function testGetFrontendClasses()
     {
@@ -79,7 +79,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Helper\Data::getAttributeLockedFields
+     * covers \Magento\Eav\Helper\Data::getAttributeLockedFields
      */
     public function testGetAttributeLockedFieldsNoEntityCode()
     {
@@ -88,7 +88,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Helper\Data::getAttributeLockedFields
+     * covers \Magento\Eav\Helper\Data::getAttributeLockedFields
      */
     public function testGetAttributeLockedFieldsNonCachedLockedFiled()
     {
@@ -100,7 +100,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Helper\Data::getAttributeLockedFields
+     * covers \Magento\Eav\Helper\Data::getAttributeLockedFields
      */
     public function testGetAttributeLockedFieldsCachedLockedFiled()
     {
@@ -114,7 +114,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Helper\Data::getAttributeLockedFields
+     * covers \Magento\Eav\Helper\Data::getAttributeLockedFields
      */
     public function testGetAttributeLockedFieldsNoLockedFields()
     {

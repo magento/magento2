@@ -63,7 +63,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getProduct
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getProduct
      */
     public function testGetProductPositive()
     {
@@ -86,7 +86,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getProduct
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getProduct
      */
     public function testGetProductNegative()
     {
@@ -130,7 +130,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getAssociatedProducts
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getAssociatedProducts
      */
     public function testGetAssociatedProducts()
     {
@@ -166,7 +166,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::setPreconfiguredValue
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::setPreconfiguredValue
      */
     public function testSetPreconfiguredValue()
     {
@@ -213,7 +213,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getCanShowProductPrice
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getCanShowProductPrice
      */
     public function testGetCanShowProductPrice()
     {
@@ -221,7 +221,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getIsLastFieldset
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getIsLastFieldset
      */
     public function testGetIsLastFieldsetPositive()
     {
@@ -236,7 +236,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      * @param array|bool $options
      * @param bool $expectedResult
      *
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getIsLastFieldset
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getIsLastFieldset
      * @dataProvider getIsLastFieldsetDataProvider
      */
     public function testGetIsLastFieldsetNegative($options, $expectedResult)
@@ -274,7 +274,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getCurrencyPrice
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getCurrencyPrice
      */
     public function testGetCurrencyPrice()
     {

@@ -187,7 +187,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Account::getAllowedActions
+     * covers \Magento\Customer\Controller\Account::getAllowedActions
      */
     public function testGetAllowedActions()
     {

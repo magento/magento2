@@ -80,9 +80,9 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingTags
-     * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsNotMatchingTags
-     * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingAnyTags
+     * covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingTags
+     * covers \Magento\Framework\Cache\Backend\MongoDb::getIdsNotMatchingTags
+     * covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingAnyTags
      * @dataProvider getIdsMatchingTagsDataProvider
      */
     public function testGetIdsMatchingTags($method, $tags, $expectedInput)
@@ -139,9 +139,9 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingTags
-     * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsNotMatchingTags
-     * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingAnyTags
+     * covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingTags
+     * covers \Magento\Framework\Cache\Backend\MongoDb::getIdsNotMatchingTags
+     * covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingAnyTags
      */
     public function testGetIdsMatchingTagsNoInputTags()
     {

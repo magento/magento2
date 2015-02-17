@@ -41,7 +41,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      * @dataProvider testIsValidDataProvider
      * @param string $locale
      * @param boolean $valid
-     * @covers \Magento\Framework\Locale\Validator::isValid
+     * covers \Magento\Framework\Locale\Validator::isValid
      */
     public function testIsValid($locale, $valid)
     {
