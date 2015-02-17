@@ -273,7 +273,7 @@ class Observer
         $productIds = [];
         /* @var $product Product */
         foreach ($collection as $product) {
-            $key = implode('|', [$date, $websiteId, $groupId, $product->getId()]);
+            $key = implode('|', [$date->format('Y-m-d H:i:s'), $websiteId, $groupId, $product->getId()]);
             if (!isset($this->_rulePrices[$key])) {
                 $productIds[] = $product->getId();
             }
