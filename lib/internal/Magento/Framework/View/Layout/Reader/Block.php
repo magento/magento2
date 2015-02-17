@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Layout\Reader;
 
 use Magento\Framework\App;
+use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Layout;
 
 /**
@@ -43,16 +44,6 @@ class Block implements Layout\ReaderInterface
     protected $argumentParser;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\Framework\App\ScopeResolverInterface
-     */
-    protected $scopeResolver;
-
-    /**
      * @var \Magento\Framework\View\Layout\ReaderPool
      */
     protected $readerPool;
@@ -63,29 +54,31 @@ class Block implements Layout\ReaderInterface
     protected $scopeType;
 
     /**
+     * @var InterpreterInterface
+     */
+    protected $argumentInterpreter;
+
+    /**
      * Constructor
      *
      * @param Layout\ScheduledStructure\Helper $helper
      * @param Layout\Argument\Parser $argumentParser
      * @param Layout\ReaderPool $readerPool
-     * @param App\Config\ScopeConfigInterface $scopeConfig
-     * @param App\ScopeResolverInterface $scopeResolver
+     * @param InterpreterInterface $argumentInterpreter
      * @param string|null $scopeType
      */
     public function __construct(
         Layout\ScheduledStructure\Helper $helper,
         Layout\Argument\Parser $argumentParser,
         Layout\ReaderPool $readerPool,
-        App\Config\ScopeConfigInterface $scopeConfig,
-        App\ScopeResolverInterface $scopeResolver,
+        InterpreterInterface $argumentInterpreter,
         $scopeType = null
     ) {
         $this->helper = $helper;
         $this->argumentParser = $argumentParser;
-        $this->scopeConfig = $scopeConfig;
-        $this->scopeResolver = $scopeResolver;
         $this->readerPool = $readerPool;
         $this->scopeType = $scopeType;
+        $this->argumentInterpreter = $argumentInterpreter;
     }
 
     /**
@@ -144,13 +137,12 @@ class Block implements Layout\ReaderInterface
         $data = $scheduledStructure->getStructureElementData($elementName, []);
         $data['attributes'] = $this->getAttributes($currentElement);
         $this->updateScheduledData($currentElement, $data);
+        $this->evaluateArguments($currentElement, $data);
         $scheduledStructure->setStructureElementData($elementName, $data);
 
         $configPath = (string)$currentElement->getAttribute('ifconfig');
-        if (!empty($configPath)
-            && !$this->scopeConfig->isSetFlag($configPath, $this->scopeType, $this->scopeResolver->getScope())
-        ) {
-            $scheduledStructure->setElementToRemoveList($elementName);
+        if (!empty($configPath)) {
+            $scheduledStructure->setElementToIfconfigList($elementName, $configPath, $this->scopeType);
         }
     }
 
@@ -168,6 +160,7 @@ class Block implements Layout\ReaderInterface
         $elementName = $currentElement->getAttribute('name');
         $data = $scheduledStructure->getStructureElementData($elementName, []);
         $this->updateScheduledData($currentElement, $data);
+        $this->evaluateArguments($currentElement, $data);
         $scheduledStructure->setStructureElementData($elementName, $data);
     }
 
@@ -218,14 +211,9 @@ class Block implements Layout\ReaderInterface
         /** @var $actionElement Layout\Element */
         foreach ($this->getElementsByType($blockElement, self::TYPE_ACTION) as $actionElement) {
             $configPath = $actionElement->getAttribute('ifconfig');
-            if ($configPath
-                && !$this->scopeConfig->isSetFlag($configPath, $this->scopeType, $this->scopeResolver->getScope())
-            ) {
-                continue;
-            }
             $methodName = $actionElement->getAttribute('method');
             $actionArguments = $this->parseArguments($actionElement);
-            $actions[] = [$methodName, $actionArguments];
+            $actions[] = [$methodName, $actionArguments, $configPath, $this->scopeType];
         }
         return $actions;
     }
@@ -280,5 +268,29 @@ class Block implements Layout\ReaderInterface
             }
         }
         return $result;
+    }
+
+    /**
+     * Compute argument values
+     *
+     * @param Layout\Element $blockElement
+     * @param array $data
+     */
+    protected function evaluateArguments(Layout\Element $blockElement, array &$data)
+    {
+        $arguments = $this->getArguments($blockElement);
+        foreach ($arguments as $argumentName => $argumentData) {
+            if (isset($argumentData['updater'])) {
+                continue;
+            }
+            $result = $this->argumentInterpreter->evaluate($argumentData);
+            if (is_array($result)) {
+                $data['arguments'][$argumentName] = isset($data['arguments'][$argumentName])
+                    ? array_replace_recursive($data['arguments'][$argumentName], $result)
+                    : $result;
+            } else {
+                $data['arguments'][$argumentName] = $result;
+            }
+        }
     }
 }

@@ -58,7 +58,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Bundle\Model\Option::addSelection
+     * covers \Magento\Bundle\Model\Option::addSelection
      */
     public function testAddSelection()
     {
