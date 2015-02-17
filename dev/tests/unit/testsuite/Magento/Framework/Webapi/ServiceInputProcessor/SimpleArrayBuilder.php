@@ -3,19 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Service\Entity;
+namespace Magento\Framework\Webapi\ServiceInputProcessor;
 
 use Magento\Framework\Api\ExtensibleObjectBuilder;
 
-class DataArrayBuilder extends ExtensibleObjectBuilder
+class SimpleArrayBuilder extends ExtensibleObjectBuilder
 {
     /**
-     * @param \Magento\Webapi\Service\Entity\Simple[] $items
+     * @param array $ids
      * @return $this
      */
-    public function setItems($items)
+    public function setIds($ids)
     {
-        $this->data['items'] = $items;
+        $this->data['ids'] = $ids;
         return $this;
     }
 }

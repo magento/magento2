@@ -39,7 +39,7 @@ class OptionManagement implements \Magento\Bundle\Api\ProductOptionManagementInt
     {
         $product = $this->productRepository->get($option->getSku());
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException('Only implemented for bundle product', Exception::HTTP_FORBIDDEN);
+            throw new InputException('Only implemented for bundle product');
         }
         return $this->optionRepository->save($product, $option);
     }
