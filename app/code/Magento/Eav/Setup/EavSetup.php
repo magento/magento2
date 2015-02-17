@@ -182,12 +182,6 @@ class EavSetup
             $this->setup->getConnection()->insert($this->setup->getTable('eav_entity_type'), $data);
         }
 
-        if (!empty($params['default_group'])) {
-            $defaultGroup = $params['default_group'];
-        } else {
-            $defaultGroup = $this->_defaultGroupName;
-        }
-
         $this->addAttributeSet($code, $this->_defaultAttributeSetName);
         $this->addAttributeGroup($code, $this->_defaultGroupName, $this->_generalGroupName);
 
