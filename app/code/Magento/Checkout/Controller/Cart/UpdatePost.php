@@ -20,7 +20,6 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
     {
         try {
             $this->cart->truncate()->save();
-            $this->_checkoutSession->setCartWasUpdated(true);
         } catch (\Magento\Framework\Model\Exception $exception) {
             $this->messageManager->addError($exception->getMessage());
         } catch (\Exception $exception) {
@@ -53,7 +52,6 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
                 $cartData = $this->cart->suggestItemsQty($cartData);
                 $this->cart->updateItems($cartData)->save();
             }
-            $this->_checkoutSession->setCartWasUpdated(true);
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError(
                 $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($e->getMessage())

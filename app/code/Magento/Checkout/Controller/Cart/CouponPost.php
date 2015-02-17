@@ -98,6 +98,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
                             $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
                         )
                     );
+                    $this->cart->save();
                 }
             } else {
                 $this->messageManager->addSuccess(__('The coupon code was canceled.'));

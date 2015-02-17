@@ -220,23 +220,19 @@ class Cart extends Object implements CartInterface
     }
 
     /**
-     * Initialize cart quote state to be able use it on cart page
+     * Reinitialize cart quote state
      *
      * @return $this
      */
-    public function init()
+    protected function reinitState()
     {
         $quote = $this->getQuote()->setCheckoutMethod('');
-
+        $this->_checkoutSession->setCartWasUpdated(true);
+        // reset for multiple address checkout
         if ($this->_checkoutSession->getCheckoutState() !== Session::CHECKOUT_STATE_BEGIN) {
             $quote->removeAllAddresses()->removePayment();
             $this->_checkoutSession->resetCheckout();
         }
-
-        if (!$quote->hasItems()) {
-            $quote->getShippingAddress()->setCollectShippingRates(false)->removeAllShippingRates();
-        }
-
         return $this;
     }
 
@@ -562,6 +558,7 @@ class Cart extends Object implements CartInterface
          * Cart save usually called after changes with cart items.
          */
         $this->_eventManager->dispatch('checkout_cart_save_after', ['cart' => $this]);
+        $this->reinitState();
         return $this;
     }
 
