@@ -9,7 +9,7 @@
  *
  * Note that some methods are not covered here, see the \Magento\Framework\View\LayoutDirectivesTest
  *
- * @see \Magento\Core\Model\LayoutDirectivesTest
+ * @see \Magento\Framework\View\LayoutDirectivesTest
  */
 namespace Magento\Framework\View;
 
@@ -92,7 +92,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      * A smoke test for generating elements
      *
      * See sophisticated tests at \Magento\Framework\View\LayoutDirectivesTest
-     * @see \Magento\Core\Model\LayoutDirectivesTest
+     * @see \Magento\Framework\View\LayoutDirectivesTest
      * @magentoAppIsolation enabled
      */
     public function testGenerateGetAllBlocks()

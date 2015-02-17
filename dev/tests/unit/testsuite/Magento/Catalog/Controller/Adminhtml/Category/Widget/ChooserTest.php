@@ -37,7 +37,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
     protected $chooserBlockMock;
 
     /**
-     * @var \Magento\Core\Model\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $layoutMock;
 
@@ -90,7 +90,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultRaw);
 
-        $this->layoutMock = $this->getMock('Magento\Core\Model\Layout', ['createBlock'], [], '', false);
+        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', ['createBlock'], [], '', false);
         $layoutFactory = $this->getMockBuilder('Magento\Framework\View\LayoutFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])

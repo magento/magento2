@@ -36,7 +36,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     protected $themeResolverMock;
 
     /**
-     * @var \Magento\Core\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $processorMock;
 
@@ -105,7 +105,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->themeResolverMock = $this->getMockForAbstractClass(
             'Magento\Framework\View\Design\Theme\ResolverInterface'
         );
-        $this->processorMock = $this->getMock('Magento\Core\Model\Layout\Merge', [], [], '', false);
+        $this->processorMock = $this->getMock('Magento\Framework\View\Model\Layout\Merge', [], [], '', false);
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->generatorBlockMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Block')
             ->disableOriginalConstructor()->getMock();

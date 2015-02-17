@@ -60,13 +60,13 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->config->expects($this->any())->method('getValue')->will($this->returnValueMap([
             [
                 $path . 'free_method',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null,
                 self::FREE_METHOD_NAME,
             ],
             [
                 $path . 'free_shipping_subtotal',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null,
                 $freeShippingSubtotal
             ],

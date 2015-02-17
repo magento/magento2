@@ -80,7 +80,7 @@ class Template extends AbstractBlock
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -323,7 +323,7 @@ class Template extends AbstractBlock
         if (null === $this->_allowSymlinks) {
             $this->_allowSymlinks = $this->_scopeConfig->isSetFlag(
                 self::XML_PATH_TEMPLATE_ALLOW_SYMLINK,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
         return $this->_allowSymlinks;

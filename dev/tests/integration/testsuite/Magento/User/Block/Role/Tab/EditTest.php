@@ -35,7 +35,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $this->assertNotEmpty($this->_block->getSelectedResources());
-        $this->assertContains('Magento_Adminhtml::all', $this->_block->getSelectedResources());
+        $this->assertContains('Magento_Backend::all', $this->_block->getSelectedResources());
     }
 
     public function testGetTree()

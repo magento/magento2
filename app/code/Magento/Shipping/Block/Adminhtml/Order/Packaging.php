@@ -144,7 +144,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         $countryShipper = $this->_scopeConfig->getValue(
             \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if ($carrier) {
@@ -272,7 +272,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $address = $order->getShippingAddress();
         $shipperAddressCountryCode = $this->_scopeConfig->getValue(
             \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $recipientAddressCountryCode = $address->getCountryId();
@@ -350,7 +350,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         $countryShipper = $this->_scopeConfig->getValue(
             \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if ($carrier) {

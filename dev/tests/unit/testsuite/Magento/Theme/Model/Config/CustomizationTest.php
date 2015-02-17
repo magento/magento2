@@ -14,7 +14,7 @@ use Magento\Framework\App\Area;
 class CustomizationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -40,7 +40,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')->getMock();
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
         $this->designPackage = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
         $this->themeCollection = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Collection')
             ->disableOriginalConstructor()

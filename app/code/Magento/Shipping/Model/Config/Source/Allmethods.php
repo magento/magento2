@@ -52,7 +52,7 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
             }
             $carrierTitle = $this->_scopeConfig->getValue(
                 'carriers/' . $carrierCode . '/title',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             $methods[$carrierCode] = ['label' => $carrierTitle, 'value' => []];
             foreach ($carrierMethods as $methodCode => $methodTitle) {

@@ -5,234 +5,249 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
-    <testCase name="CreateCategoryEntityTest">
-        <variation name="CreateCategoryEntityTestVariation1">
-            <data name="description">Create root category with required fields</data>
-            <data name="addCategory">addRootCategory</data>
-            <data name="category/data/parent_id/dataSet">-</data>
-            <data name="category/data/name">RootCategory%isolation%</data>
-            <data name="category/data/url_key">RootCategory%isolation%</data>
-            <data name="category/data/is_active">Yes</data>
-            <data name="category/data/description">RootCategory Required </data>
-            <data name="category/data/meta_title">-</data>
-            <data name="category/data/include_in_menu">-</data>
-            <data name="category/data/display_mode">-</data>
-            <data name="category/data/landing_page">-</data>
-            <data name="category/data/is_anchor">-</data>
-            <data name="category/data/available_product_listing_config">No</data>
-            <data name="category/data/available_sort_by/sort_0">Position</data>
-            <data name="category/data/available_sort_by/sort_1">Name</data>
-            <data name="category/data/available_sort_by/sort_2">Price</data>
-            <data name="category/data/default_product_listing_config">-</data>
-            <data name="category/data/default_sort_by">-</data>
-            <data name="category/data/use_config_price_range">-</data>
-            <data name="category/data/layered_navigation_price_step">-</data>
-            <data name="category/data/category_products_data/preset">-</data>
-            <data name="category/data/category_products/dataSet">-</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForm</data>
-        </variation>
-        <variation name="CreateCategoryEntityTestVariation2">
-            <data name="description">Create root category with all fields</data>
-            <data name="addCategory">addRootCategory</data>
-            <data name="category/data/parent_id/dataSet">-</data>
-            <data name="category/data/name">RootCategory%isolation%</data>
-            <data name="category/data/url_key">RootCategory%isolation%</data>
-            <data name="category/data/is_active">Yes</data>
-            <data name="category/data/description">RootCategory All Fields </data>
-            <data name="category/data/meta_title">RootCategory Page Title</data>
-            <data name="category/data/include_in_menu">Yes</data>
-            <data name="category/data/display_mode">Static block and products</data>
-            <data name="category/data/landing_page">-</data>
-            <data name="category/data/is_anchor">Yes</data>
-            <data name="category/data/available_product_listing_config">No</data>
-            <data name="category/data/available_sort_by/sort_0">Position</data>
-            <data name="category/data/available_sort_by/sort_1">Name</data>
-            <data name="category/data/available_sort_by/sort_2">Price</data>
-            <data name="category/data/default_product_listing_config">No</data>
-            <data name="category/data/default_sort_by">Name</data>
-            <data name="category/data/use_config_price_range">No</data>
-            <data name="category/data/layered_navigation_price_step">50</data>
-            <data name="category/data/category_products_data/preset">-</data>
-            <data name="category/data/category_products/dataSet">-</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForm</data>
-        </variation>
-        <variation name="CreateCategoryEntityTestVariation3">
-            <data name="description">Create subcategory with required fields</data>
-            <data name="addCategory">addSubcategory</data>
-            <data name="category/data/parent_id/dataSet">default_category</data>
-            <data name="category/data/name">Subcategory%isolation%</data>
-            <data name="category/data/url_key">Subcategory%isolation%</data>
-            <data name="category/data/is_active">Yes</data>
-            <data name="category/data/description">Subcategory Required</data>
-            <data name="category/data/meta_title">-</data>
-            <data name="category/data/include_in_menu">-</data>
-            <data name="category/data/display_mode">-</data>
-            <data name="category/data/landing_page">-</data>
-            <data name="category/data/is_anchor">-</data>
-            <data name="category/data/available_product_listing_config">Yes</data>
-            <data name="category/data/available_sort_by/sort_0">-</data>
-            <data name="category/data/available_sort_by/sort_1">-</data>
-            <data name="category/data/available_sort_by/sort_2">-</data>
-            <data name="category/data/default_product_listing_config">-</data>
-            <data name="category/data/default_sort_by">-</data>
-            <data name="category/data/use_config_price_range">-</data>
-            <data name="category/data/layered_navigation_price_step">-</data>
-            <data name="category/data/category_products_data/preset">-</data>
-            <data name="category/data/category_products/dataSet">-</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForm, assertCategoryPage</data>
-        </variation>
-        <variation name="CreateCategoryEntityTestVariation4">
-            <data name="description">Create not anchor subcategory with required fields</data>
-            <data name="addCategory">addSubcategory</data>
-            <data name="category/data/parent_id/dataSet">default_category</data>
-            <data name="category/data/name">Subcategory%isolation%</data>
-            <data name="category/data/url_key">Subcategory%isolation%</data>
-            <data name="category/data/is_active">Yes</data>
-            <data name="category/data/description">Subcategory For Anchor Subcategory</data>
-            <data name="category/data/meta_title">-</data>
-            <data name="category/data/include_in_menu">Yes</data>
-            <data name="category/data/display_mode">-</data>
-            <data name="category/data/landing_page">-</data>
-            <data name="category/data/is_anchor">No</data>
-            <data name="category/data/available_product_listing_config">Yes</data>
-            <data name="category/data/available_sort_by/sort_0">-</data>
-            <data name="category/data/available_sort_by/sort_1">-</data>
-            <data name="category/data/available_sort_by/sort_2">-</data>
-            <data name="category/data/default_product_listing_config">Yes</data>
-            <data name="category/data/default_sort_by">-</data>
-            <data name="category/data/use_config_price_range">Yes</data>
-            <data name="category/data/layered_navigation_price_step">-</data>
-            <data name="category/data/category_products_data/preset">default</data>
-            <data name="category/data/category_products/dataSet">catalogProductSimple::default,catalogProductSimple::default</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForm, assertCategoryPage, assertCategoryForAssignedProducts</data>
-        </variation>
-        <variation name="CreateCategoryEntityTestVariation5">
-            <data name="description">Create anchor subcategory with all fields</data>
-            <data name="addCategory">addSubcategory</data>
-            <data name="category/data/parent_id/dataSet">default_category</data>
-            <data name="category/data/name">Subcategory%isolation%</data>
-            <data name="category/data/url_key">Subcategory%isolation%</data>
-            <data name="category/data/is_active">Yes</data>
-            <data name="category/data/description">Anchor Subcategory All Fields</data>
-            <data name="category/data/meta_title">Subcategory Page Title</data>
-            <data name="category/data/include_in_menu">Yes</data>
-            <data name="category/data/display_mode">Static block and products</data>
-            <data name="category/data/landing_page">default</data>
-            <data name="category/data/is_anchor">Yes</data>
-            <data name="category/data/available_product_listing_config">No</data>
-            <data name="category/data/available_sort_by/sort_0">Position</data>
-            <data name="category/data/available_sort_by/sort_1">Name</data>
-            <data name="category/data/available_sort_by/sort_2">Price</data>
-            <data name="category/data/default_product_listing_config">No</data>
-            <data name="category/data/default_sort_by">Price</data>
-            <data name="category/data/use_config_price_range">No</data>
-            <data name="category/data/layered_navigation_price_step">50</data>
-            <data name="category/data/category_products_data/preset">default</data>
-            <data name="category/data/category_products/dataSet">catalogProductSimple::default,catalogProductSimple::default</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForm, assertCategoryPage, assertCategoryForAssignedProducts</data>
-        </variation>
-        <variation name="CreateCategoryEntityTestVariation6">
-            <data name="description">Create not active subcategory</data>
-            <data name="addCategory">addSubcategory</data>
-            <data name="category/data/parent_id/dataSet">default_category</data>
-            <data name="category/data/name">Subcategory%isolation%</data>
-            <data name="category/data/url_key">Subcategory%isolation%</data>
-            <data name="category/data/is_active">Yes</data>
-            <data name="category/data/description">Not active category</data>
-            <data name="category/data/meta_title">-</data>
-            <data name="category/data/include_in_menu">Yes</data>
-            <data name="category/data/display_mode">-</data>
-            <data name="category/data/landing_page">-</data>
-            <data name="category/data/is_anchor">-</data>
-            <data name="category/data/available_product_listing_config">Yes</data>
-            <data name="category/data/available_sort_by/sort_0">-</data>
-            <data name="category/data/available_sort_by/sort_1">-</data>
-            <data name="category/data/available_sort_by/sort_2">-</data>
-            <data name="category/data/default_product_listing_config">Yes</data>
-            <data name="category/data/default_sort_by">-</data>
-            <data name="category/data/use_config_price_range">Yes</data>
-            <data name="category/data/layered_navigation_price_step">-</data>
-            <data name="category/data/category_products_data/preset">-</data>
-            <data name="category/data/category_products/dataSet">-</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForm</data>
-        </variation>
-        <variation name="CreateCategoryEntityTestVariation7">
-            <data name="description">Create not included in menu subcategory</data>
-            <data name="addCategory">addSubcategory</data>
-            <data name="category/data/parent_id/dataSet">default_category</data>
-            <data name="category/data/name">Subcategory%isolation%</data>
-            <data name="category/data/url_key">Subcategory%isolation%</data>
-            <data name="category/data/is_active">Yes</data>
-            <data name="category/data/description">Not included in menu</data>
-            <data name="category/data/meta_title">-</data>
-            <data name="category/data/include_in_menu">No</data>
-            <data name="category/data/display_mode">-</data>
-            <data name="category/data/landing_page">-</data>
-            <data name="category/data/is_anchor">-</data>
-            <data name="category/data/available_product_listing_config">-</data>
-            <data name="category/data/available_sort_by/sort_0">-</data>
-            <data name="category/data/available_sort_by/sort_1">-</data>
-            <data name="category/data/available_sort_by/sort_2">-</data>
-            <data name="category/data/default_product_listing_config">-</data>
-            <data name="category/data/default_sort_by">-</data>
-            <data name="category/data/use_config_price_range">-</data>
-            <data name="category/data/layered_navigation_price_step">-</data>
-            <data name="category/data/category_products_data/preset">-</data>
-            <data name="category/data/category_products/dataSet">-</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForm</data>
-        </variation>
-        <variation name="CreateCategoryEntityTestVariation8">
-            <data name="description">MAGETWO-12513: Create Category from Category page with Required Fields Only</data>
-            <data name="addCategory">addSubcategory</data>
-            <data name="category/data/parent_id/dataSet">default_category</data>
-            <data name="category/data/name">Subcategory%isolation%</data>
-            <data name="category/data/url_key">-</data>
-            <data name="category/data/is_active">Yes</data>
-            <data name="category/data/description">-</data>
-            <data name="category/data/meta_title">-</data>
-            <data name="category/data/include_in_menu">Yes</data>
-            <data name="category/data/display_mode">-</data>
-            <data name="category/data/landing_page">-</data>
-            <data name="category/data/is_anchor">-</data>
-            <data name="category/data/available_product_listing_config">-</data>
-            <data name="category/data/available_sort_by/sort_0">-</data>
-            <data name="category/data/available_sort_by/sort_1">-</data>
-            <data name="category/data/available_sort_by/sort_2">-</data>
-            <data name="category/data/default_product_listing_config">-</data>
-            <data name="category/data/default_sort_by">-</data>
-            <data name="category/data/use_config_price_range">-</data>
-            <data name="category/data/layered_navigation_price_step">-</data>
-            <data name="category/data/category_products_data/preset">-</data>
-            <data name="category/data/category_products/dataSet">-</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForm, assertCategoryPage</data>
-            <data name="tag">bamboo_plan:BAT,test_type:acceptance_test</data>
-        </variation>
-        <variation name="CreateCategoryEntityTestVariation9">
-            <data name="description">MAGETWO-16351: Assign Products at the Category Level</data>
-            <data name="addCategory">addSubcategory</data>
-            <data name="category/data/parent_id/dataSet">default_category</data>
-            <data name="category/data/name">Subcategory%isolation%</data>
-            <data name="category/data/url_key">-</data>
-            <data name="category/data/is_active">Yes</data>
-            <data name="category/data/description">-</data>
-            <data name="category/data/meta_title">-</data>
-            <data name="category/data/include_in_menu">Yes</data>
-            <data name="category/data/display_mode">-</data>
-            <data name="category/data/landing_page">-</data>
-            <data name="category/data/is_anchor">-</data>
-            <data name="category/data/available_product_listing_config">-</data>
-            <data name="category/data/available_sort_by/sort_0">-</data>
-            <data name="category/data/available_sort_by/sort_1">-</data>
-            <data name="category/data/available_sort_by/sort_2">-</data>
-            <data name="category/data/default_product_listing_config">-</data>
-            <data name="category/data/default_sort_by">-</data>
-            <data name="category/data/use_config_price_range">-</data>
-            <data name="category/data/layered_navigation_price_step">-</data>
-            <data name="category/data/category_products_data/preset">-</data>
-            <data name="category/data/category_products/dataSet">catalogProductSimple::default, configurableProductInjectable::default, bundleProduct::bundle_fixed_product</data>
-            <data name="constraint">assertCategorySaveMessage, assertCategoryForAssignedProducts</data>
-            <data name="tag">bamboo_plan:end_to_end,test_type:acceptance_test</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="CreateCategoryEntityTest">
+    <variation name="CreateCategoryEntityTestVariation1" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="description" xsi:type="string">Create root category with required fields</data>
+      <data name="addCategory" xsi:type="string">addRootCategory</data>
+      <data name="category/data/parent_id/dataSet" xsi:type="string">-</data>
+      <data name="category/data/name" xsi:type="string">RootCategory%isolation%</data>
+      <data name="category/data/url_key" xsi:type="string">RootCategory%isolation%</data>
+      <data name="category/data/is_active" xsi:type="string">Yes</data>
+      <data name="category/data/description" xsi:type="string">RootCategory Required </data>
+      <data name="category/data/meta_title" xsi:type="string">-</data>
+      <data name="category/data/include_in_menu" xsi:type="string">-</data>
+      <data name="category/data/display_mode" xsi:type="string">-</data>
+      <data name="category/data/landing_page" xsi:type="string">-</data>
+      <data name="category/data/is_anchor" xsi:type="string">-</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
+      <data name="category/data/available_sort_by/sort_0" xsi:type="string">Position</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">Name</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">Price</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">-</data>
+      <data name="category/data/default_sort_by" xsi:type="string">-</data>
+      <data name="category/data/use_config_price_range" xsi:type="string">-</data>
+      <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
+      <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
+      <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
+      <constraint name="assertCategoryForm" prev="assertCategorySaveMessage"/>
+    </variation>
+    <variation name="CreateCategoryEntityTestVariation2" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="description" xsi:type="string">Create root category with all fields</data>
+      <data name="addCategory" xsi:type="string">addRootCategory</data>
+      <data name="category/data/parent_id/dataSet" xsi:type="string">-</data>
+      <data name="category/data/name" xsi:type="string">RootCategory%isolation%</data>
+      <data name="category/data/url_key" xsi:type="string">RootCategory%isolation%</data>
+      <data name="category/data/is_active" xsi:type="string">Yes</data>
+      <data name="category/data/description" xsi:type="string">RootCategory All Fields </data>
+      <data name="category/data/meta_title" xsi:type="string">RootCategory Page Title</data>
+      <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+      <data name="category/data/display_mode" xsi:type="string">Static block and products</data>
+      <data name="category/data/landing_page" xsi:type="string">-</data>
+      <data name="category/data/is_anchor" xsi:type="string">Yes</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
+      <data name="category/data/available_sort_by/sort_0" xsi:type="string">Position</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">Name</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">Price</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">No</data>
+      <data name="category/data/default_sort_by" xsi:type="string">Name</data>
+      <data name="category/data/use_config_price_range" xsi:type="string">No</data>
+      <data name="category/data/layered_navigation_price_step" xsi:type="string">50</data>
+      <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
+      <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
+      <constraint name="assertCategoryForm" prev="assertCategorySaveMessage"/>
+    </variation>
+    <variation name="CreateCategoryEntityTestVariation3" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="description" xsi:type="string">Create subcategory with required fields</data>
+      <data name="addCategory" xsi:type="string">addSubcategory</data>
+      <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
+      <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/url_key" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/is_active" xsi:type="string">Yes</data>
+      <data name="category/data/description" xsi:type="string">Subcategory Required</data>
+      <data name="category/data/meta_title" xsi:type="string">-</data>
+      <data name="category/data/include_in_menu" xsi:type="string">-</data>
+      <data name="category/data/display_mode" xsi:type="string">-</data>
+      <data name="category/data/landing_page" xsi:type="string">-</data>
+      <data name="category/data/is_anchor" xsi:type="string">-</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
+      <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">-</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">-</data>
+      <data name="category/data/default_sort_by" xsi:type="string">-</data>
+      <data name="category/data/use_config_price_range" xsi:type="string">-</data>
+      <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
+      <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
+      <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
+      <constraint name="assertCategoryForm" next="assertCategoryPage" prev="assertCategorySaveMessage"/>
+      <constraint name="assertCategoryPage" prev="assertCategoryForm"/>
+    </variation>
+    <variation name="CreateCategoryEntityTestVariation4" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="description" xsi:type="string">Create not anchor subcategory with required fields</data>
+      <data name="addCategory" xsi:type="string">addSubcategory</data>
+      <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
+      <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/url_key" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/is_active" xsi:type="string">Yes</data>
+      <data name="category/data/description" xsi:type="string">Subcategory For Anchor Subcategory</data>
+      <data name="category/data/meta_title" xsi:type="string">-</data>
+      <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+      <data name="category/data/display_mode" xsi:type="string">-</data>
+      <data name="category/data/landing_page" xsi:type="string">-</data>
+      <data name="category/data/is_anchor" xsi:type="string">No</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
+      <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">-</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">Yes</data>
+      <data name="category/data/default_sort_by" xsi:type="string">-</data>
+      <data name="category/data/use_config_price_range" xsi:type="string">Yes</data>
+      <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
+      <data name="category/data/category_products_data/preset" xsi:type="string">default</data>
+      <data name="category/data/category_products/dataSet" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
+      <constraint name="assertCategoryForm" next="assertCategoryPage" prev="assertCategorySaveMessage"/>
+      <constraint name="assertCategoryPage" next="assertCategoryForAssignedProducts" prev="assertCategoryForm"/>
+      <constraint name="assertCategoryForAssignedProducts" prev="assertCategoryPage"/>
+    </variation>
+    <variation name="CreateCategoryEntityTestVariation5" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="description" xsi:type="string">Create anchor subcategory with all fields</data>
+      <data name="addCategory" xsi:type="string">addSubcategory</data>
+      <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
+      <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/url_key" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/is_active" xsi:type="string">Yes</data>
+      <data name="category/data/description" xsi:type="string">Anchor Subcategory All Fields</data>
+      <data name="category/data/meta_title" xsi:type="string">Subcategory Page Title</data>
+      <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+      <data name="category/data/display_mode" xsi:type="string">Static block and products</data>
+      <data name="category/data/landing_page" xsi:type="string">default</data>
+      <data name="category/data/is_anchor" xsi:type="string">Yes</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
+      <data name="category/data/available_sort_by/sort_0" xsi:type="string">Position</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">Name</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">Price</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">No</data>
+      <data name="category/data/default_sort_by" xsi:type="string">Price</data>
+      <data name="category/data/use_config_price_range" xsi:type="string">No</data>
+      <data name="category/data/layered_navigation_price_step" xsi:type="string">50</data>
+      <data name="category/data/category_products_data/preset" xsi:type="string">default</data>
+      <data name="category/data/category_products/dataSet" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
+      <constraint name="assertCategoryForm" next="assertCategoryPage" prev="assertCategorySaveMessage"/>
+      <constraint name="assertCategoryPage" next="assertCategoryForAssignedProducts" prev="assertCategoryForm"/>
+      <constraint name="assertCategoryForAssignedProducts" prev="assertCategoryPage"/>
+    </variation>
+    <variation name="CreateCategoryEntityTestVariation6" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="description" xsi:type="string">Create not active subcategory</data>
+      <data name="addCategory" xsi:type="string">addSubcategory</data>
+      <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
+      <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/url_key" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/is_active" xsi:type="string">Yes</data>
+      <data name="category/data/description" xsi:type="string">Not active category</data>
+      <data name="category/data/meta_title" xsi:type="string">-</data>
+      <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+      <data name="category/data/display_mode" xsi:type="string">-</data>
+      <data name="category/data/landing_page" xsi:type="string">-</data>
+      <data name="category/data/is_anchor" xsi:type="string">-</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
+      <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">-</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">Yes</data>
+      <data name="category/data/default_sort_by" xsi:type="string">-</data>
+      <data name="category/data/use_config_price_range" xsi:type="string">Yes</data>
+      <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
+      <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
+      <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
+      <constraint name="assertCategoryForm" prev="assertCategorySaveMessage"/>
+    </variation>
+    <variation name="CreateCategoryEntityTestVariation7" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="description" xsi:type="string">Create not included in menu subcategory</data>
+      <data name="addCategory" xsi:type="string">addSubcategory</data>
+      <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
+      <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/url_key" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/is_active" xsi:type="string">Yes</data>
+      <data name="category/data/description" xsi:type="string">Not included in menu</data>
+      <data name="category/data/meta_title" xsi:type="string">-</data>
+      <data name="category/data/include_in_menu" xsi:type="string">No</data>
+      <data name="category/data/display_mode" xsi:type="string">-</data>
+      <data name="category/data/landing_page" xsi:type="string">-</data>
+      <data name="category/data/is_anchor" xsi:type="string">-</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">-</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">-</data>
+      <data name="category/data/default_sort_by" xsi:type="string">-</data>
+      <data name="category/data/use_config_price_range" xsi:type="string">-</data>
+      <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
+      <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
+      <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
+      <constraint name="assertCategoryForm" prev="assertCategorySaveMessage"/>
+    </variation>
+    <variation name="CreateCategoryEntityTestVariation8" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12513: Create Category from Category page with Required Fields Only</data>
+      <data name="addCategory" xsi:type="string">addSubcategory</data>
+      <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
+      <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/url_key" xsi:type="string">-</data>
+      <data name="category/data/is_active" xsi:type="string">Yes</data>
+      <data name="category/data/description" xsi:type="string">-</data>
+      <data name="category/data/meta_title" xsi:type="string">-</data>
+      <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+      <data name="category/data/display_mode" xsi:type="string">-</data>
+      <data name="category/data/landing_page" xsi:type="string">-</data>
+      <data name="category/data/is_anchor" xsi:type="string">-</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">-</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">-</data>
+      <data name="category/data/default_sort_by" xsi:type="string">-</data>
+      <data name="category/data/use_config_price_range" xsi:type="string">-</data>
+      <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
+      <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
+      <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
+      <data name="tag" xsi:type="string">bamboo_plan:BAT,test_type:acceptance_test</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForm"/>
+      <constraint name="assertCategoryForm" next="assertCategoryPage" prev="assertCategorySaveMessage"/>
+      <constraint name="assertCategoryPage" prev="assertCategoryForm"/>
+    </variation>
+    <variation name="CreateCategoryEntityTestVariation9" firstConstraint="assertCategorySaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-16351: Assign Products at the Category Level</data>
+      <data name="addCategory" xsi:type="string">addSubcategory</data>
+      <data name="category/data/parent_id/dataSet" xsi:type="string">default_category</data>
+      <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
+      <data name="category/data/url_key" xsi:type="string">-</data>
+      <data name="category/data/is_active" xsi:type="string">Yes</data>
+      <data name="category/data/description" xsi:type="string">-</data>
+      <data name="category/data/meta_title" xsi:type="string">-</data>
+      <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+      <data name="category/data/display_mode" xsi:type="string">-</data>
+      <data name="category/data/landing_page" xsi:type="string">-</data>
+      <data name="category/data/is_anchor" xsi:type="string">-</data>
+      <data name="category/data/available_product_listing_config" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_1" xsi:type="string">-</data>
+      <data name="category/data/available_sort_by/sort_2" xsi:type="string">-</data>
+      <data name="category/data/default_product_listing_config" xsi:type="string">-</data>
+      <data name="category/data/default_sort_by" xsi:type="string">-</data>
+      <data name="category/data/use_config_price_range" xsi:type="string">-</data>
+      <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
+      <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
+      <data name="category/data/category_products/dataSet" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default, bundleProduct::bundle_fixed_product</data>
+      <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
+      <constraint name="assertCategorySaveMessage" next="assertCategoryForAssignedProducts"/>
+      <constraint name="assertCategoryForAssignedProducts" prev="assertCategorySaveMessage"/>
+    </variation>
+  </testCase>
 </config>

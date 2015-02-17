@@ -5,85 +5,94 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="CreateAdminUserEntityTest">
-        <variation name="CreateAdminUserEntityTestVariation1">
-            <data name="user/data/username">AdminUser%isolation%</data>
-            <data name="user/data/firstname">FirstName%isolation%</data>
-            <data name="user/data/lastname">LastName%isolation%</data>
-            <data name="user/data/email">email%isolation%@example.com</data>
-            <data name="user/data/password">123123q</data>
-            <data name="user/data/password_confirmation">123123q</data>
-            <data name="user/data/is_active">Active</data>
-            <data name="user/data/role_id/dataSet">Administrators</data>
-            <data name="isDuplicated">-</data>
-            <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserSuccessLogin</data>
-            <data name="user/data/current_password">%current_password%</data>
-        </variation>
-        <variation name="CreateAdminUserEntityTestVariation2">
-            <data name="user/data/username">AdminUser%isolation%</data>
-            <data name="user/data/firstname">FirstName%isolation%</data>
-            <data name="user/data/lastname">LastName%isolation%</data>
-            <data name="user/data/email">email%isolation%@example.com</data>
-            <data name="user/data/password">123123q</data>
-            <data name="user/data/password_confirmation">123123q</data>
-            <data name="user/data/is_active">Inactive</data>
-            <data name="user/data/role_id/dataSet">Administrators</data>
-            <data name="isDuplicated">-</data>
-            <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserWrongCredentialsMessage</data>
-            <data name="user/data/current_password">%current_password%</data>
-        </variation>
-        <variation name="CreateAdminUserEntityTestVariation3">
-            <data name="user/data/username">-</data>
-            <data name="user/data/firstname">FirstName%isolation%</data>
-            <data name="user/data/lastname">LastName%isolation%</data>
-            <data name="user/data/email">email%isolation%@example.com</data>
-            <data name="user/data/password">123123q</data>
-            <data name="user/data/password_confirmation">123123q</data>
-            <data name="user/data/is_active">Active</data>
-            <data name="user/data/role_id/dataSet">Administrators</data>
-            <data name="isDuplicated">username</data>
-            <data name="constraint">assertUserDuplicateMessage</data>
-            <data name="user/data/current_password">%current_password%</data>
-        </variation>
-        <variation name="CreateAdminUserEntityTestVariation4">
-            <data name="user/data/username">AdminUser%isolation%</data>
-            <data name="user/data/firstname">FirstName%isolation%</data>
-            <data name="user/data/lastname">LastName%isolation%</data>
-            <data name="user/data/email">-</data>
-            <data name="user/data/password">123123q</data>
-            <data name="user/data/password_confirmation">123123q</data>
-            <data name="user/data/is_active">Active</data>
-            <data name="user/data/role_id/dataSet">Administrators</data>
-            <data name="isDuplicated">email</data>
-            <data name="constraint">assertUserDuplicateMessage</data>
-            <data name="user/data/current_password">%current_password%</data>
-        </variation>
-        <variation name="CreateAdminUserEntityTestVariation5">
-            <data name="user/data/username">AdminUser%isolation%</data>
-            <data name="user/data/firstname">FirstName%isolation%</data>
-            <data name="user/data/lastname">LastName%isolation%</data>
-            <data name="user/data/email">email%isolation%@example.com</data>
-            <data name="user/data/password">123123q</data>
-            <data name="user/data/password_confirmation">123123q</data>
-            <data name="user/data/is_active">Active</data>
-            <data name="user/data/role_id/dataSet">-</data>
-            <data name="isDuplicated">-</data>
-            <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserWrongCredentialsMessage</data>
-            <data name="user/data/current_password">%current_password%</data>
-        </variation>
-        <variation name="CreateAdminUserEntityTestVariation6">
-            <data name="user/data/username">AdminUser%isolation%</data>
-            <data name="user/data/firstname">FirstName%isolation%</data>
-            <data name="user/data/lastname">LastName%isolation%</data>
-            <data name="user/data/email">email%isolation%@example.cim</data>
-            <data name="user/data/password">123123q</data>
-            <data name="user/data/password_confirmation">123123q</data>
-            <data name="user/data/is_active">Active</data>
-            <data name="user/data/role_id/dataSet">-</data>
-            <data name="isDuplicated">-</data>
-            <data name="constraint">assertUserInvalidEmailMessage</data>
-            <data name="user/data/current_password">%current_password%</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="CreateAdminUserEntityTest">
+    <variation name="CreateAdminUserEntityTestVariation1" firstConstraint="assertUserSuccessSaveMessage" method="test">
+      <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
+      <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
+      <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
+      <data name="user/data/email" xsi:type="string">email%isolation%@example.com</data>
+      <data name="user/data/password" xsi:type="string">123123q</data>
+      <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
+      <data name="user/data/is_active" xsi:type="string">Active</data>
+      <data name="user/data/role_id/dataSet" xsi:type="string">Administrators</data>
+      <data name="isDuplicated" xsi:type="string">-</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
+      <constraint name="assertUserSuccessSaveMessage" next="assertUserInGrid"/>
+      <constraint name="assertUserInGrid" next="assertUserSuccessLogOut" prev="assertUserSuccessSaveMessage"/>
+      <constraint name="assertUserSuccessLogOut" next="assertUserSuccessLogin" prev="assertUserInGrid"/>
+      <constraint name="assertUserSuccessLogin" prev="assertUserSuccessLogOut"/>
+    </variation>
+    <variation name="CreateAdminUserEntityTestVariation2" firstConstraint="assertUserSuccessSaveMessage" method="test">
+      <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
+      <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
+      <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
+      <data name="user/data/email" xsi:type="string">email%isolation%@example.com</data>
+      <data name="user/data/password" xsi:type="string">123123q</data>
+      <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
+      <data name="user/data/is_active" xsi:type="string">Inactive</data>
+      <data name="user/data/role_id/dataSet" xsi:type="string">Administrators</data>
+      <data name="isDuplicated" xsi:type="string">-</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
+      <constraint name="assertUserSuccessSaveMessage" next="assertUserInGrid"/>
+      <constraint name="assertUserInGrid" next="assertUserSuccessLogOut" prev="assertUserSuccessSaveMessage"/>
+      <constraint name="assertUserSuccessLogOut" next="assertUserWrongCredentialsMessage" prev="assertUserInGrid"/>
+      <constraint name="assertUserWrongCredentialsMessage" prev="assertUserSuccessLogOut"/>
+    </variation>
+    <variation name="CreateAdminUserEntityTestVariation3" firstConstraint="assertUserDuplicateMessage" method="test">
+      <data name="user/data/username" xsi:type="string">-</data>
+      <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
+      <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
+      <data name="user/data/email" xsi:type="string">email%isolation%@example.com</data>
+      <data name="user/data/password" xsi:type="string">123123q</data>
+      <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
+      <data name="user/data/is_active" xsi:type="string">Active</data>
+      <data name="user/data/role_id/dataSet" xsi:type="string">Administrators</data>
+      <data name="isDuplicated" xsi:type="string">username</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
+      <constraint name="assertUserDuplicateMessage"/>
+    </variation>
+    <variation name="CreateAdminUserEntityTestVariation4" firstConstraint="assertUserDuplicateMessage" method="test">
+      <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
+      <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
+      <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
+      <data name="user/data/email" xsi:type="string">-</data>
+      <data name="user/data/password" xsi:type="string">123123q</data>
+      <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
+      <data name="user/data/is_active" xsi:type="string">Active</data>
+      <data name="user/data/role_id/dataSet" xsi:type="string">Administrators</data>
+      <data name="isDuplicated" xsi:type="string">email</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
+      <constraint name="assertUserDuplicateMessage"/>
+    </variation>
+    <variation name="CreateAdminUserEntityTestVariation5" firstConstraint="assertUserSuccessSaveMessage" method="test">
+      <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
+      <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
+      <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
+      <data name="user/data/email" xsi:type="string">email%isolation%@example.com</data>
+      <data name="user/data/password" xsi:type="string">123123q</data>
+      <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
+      <data name="user/data/is_active" xsi:type="string">Active</data>
+      <data name="user/data/role_id/dataSet" xsi:type="string">-</data>
+      <data name="isDuplicated" xsi:type="string">-</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
+      <constraint name="assertUserSuccessSaveMessage" next="assertUserInGrid"/>
+      <constraint name="assertUserInGrid" next="assertUserSuccessLogOut" prev="assertUserSuccessSaveMessage"/>
+      <constraint name="assertUserSuccessLogOut" next="assertUserWrongCredentialsMessage" prev="assertUserInGrid"/>
+      <constraint name="assertUserWrongCredentialsMessage" prev="assertUserSuccessLogOut"/>
+    </variation>
+    <variation name="CreateAdminUserEntityTestVariation6" firstConstraint="assertUserInvalidEmailMessage" method="test">
+      <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
+      <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
+      <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
+      <data name="user/data/email" xsi:type="string">email%isolation%@example.cim</data>
+      <data name="user/data/password" xsi:type="string">123123q</data>
+      <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
+      <data name="user/data/is_active" xsi:type="string">Active</data>
+      <data name="user/data/role_id/dataSet" xsi:type="string">-</data>
+      <data name="isDuplicated" xsi:type="string">-</data>
+      <data name="user/data/current_password" xsi:type="string">%current_password%</data>
+      <constraint name="assertUserInvalidEmailMessage"/>
+    </variation>
+  </testCase>
 </config>
