@@ -49,24 +49,24 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $size = 10;
         $output = 'test';
 
-        $this->backup->expects($this->once())->method('getTime')->will($this->returnValue($time));
-        $this->backup->expects($this->once())->method('exists')->will($this->returnValue(true));
-        $this->backup->expects($this->once())->method('getSize')->will($this->returnValue($size));
-        $this->backup->expects($this->once())->method('output')->will($this->returnValue($output));
+        $this->backup->expects($this->once())->method('getTime')->willReturn($time);
+        $this->backup->expects($this->once())->method('exists')->willReturn(true);
+        $this->backup->expects($this->once())->method('getSize')->willReturn($size);
+        $this->backup->expects($this->once())->method('output')->willReturn($output);
 
-        $this->request->expects($this->at(0))->method('getParam')->with('time')->will($this->returnValue($time));
-        $this->request->expects($this->at(1))->method('getParam')->with('type')->will($this->returnValue($type));
+        $this->request->expects($this->at(0))->method('getParam')->with('time')->willReturn($time);
+        $this->request->expects($this->at(1))->method('getParam')->with('type')->willReturn($type);
 
         $this->backupModelFactory->expects($this->once())->method('create')->with($time, $type)
-            ->will($this->returnValue($this->backup));
+            ->willReturn($this->backup);
 
         $helper = $this->getMock('Magento\Backup\Helper\Data', [], [], '', false);
         $helper->expects($this->once())->method('generateBackupDownloadName')->with($this->backup)
-            ->will($this->returnValue($filename));
+            ->willReturn($filename);
 
         $objectManager = $this->getMock('\Magento\Framework\ObjectManagerInterface', [], [], '', false);
         $objectManager->expects($this->once())->method('get')->with('Magento\Backup\Helper\Data')
-            ->will($this->returnValue($helper));
+            ->willReturn($helper);
 
         $fileFactory = $this->getMock('\Magento\Framework\App\Response\Http\FileFactory', [], [], '', false);
         $fileFactory->expects($this->once())->method('create')->with(
@@ -75,7 +75,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR,
             'application/octet-stream',
             $size
-        )->will($this->returnValue($this->response));
+        )->willReturn($this->response);
 
         $resultRaw = $this->getMock('\Magento\Framework\Controller\Result\Raw', [], [], '', false);
         $resultRaw->expects($this->once())->method('setContents')->with($output);
@@ -87,12 +87,12 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $resultRawFactory->expects($this->once())->method('create')->will($this->returnValue($resultRaw));
+        $resultRawFactory->expects($this->once())->method('create')->willReturn($resultRaw);
 
         $context = $this->getMock('\Magento\Backend\App\Action\Context', [], [], '', false);
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->request));
-        $context->expects($this->once())->method('getObjectManager')->will($this->returnValue($objectManager));
-        $context->expects($this->once())->method('getResponse')->will($this->returnValue($this->response));
+        $context->expects($this->once())->method('getRequest')->willReturn($this->request);
+        $context->expects($this->once())->method('getObjectManager')->willReturn($objectManager);
+        $context->expects($this->once())->method('getResponse')->willReturn($this->response);
 
         /** @var Download|\PHPUnit_Framework_MockObject_MockObject $controller */
         $controller = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(
@@ -111,25 +111,24 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
      * @dataProvider executeBackupNotFoundDataProvider
      * @param string $time
      * @param bool $exists
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $existsCount
+     * @param int $existsCount
      */
     public function testExecuteBackupNotFound($time, $exists, $existsCount)
     {
         $type = 'db';
 
-        $this->backup->expects($this->once())->method('getTime')->will($this->returnValue($time));
-        $this->backup->expects($existsCount)->method('exists')->will($this->returnValue($exists));
+        $this->backup->expects($this->once())->method('getTime')->willReturn($time);
+        $this->backup->expects($this->exactly($existsCount))->method('exists')->willReturn($exists);
 
-        $this->request = $this->getMock('\Magento\Framework\App\RequestInterface', [], [], '', false);
         $this->request->expects($this->at(0))->method('getParam')->with('time')->will($this->returnValue($time));
         $this->request->expects($this->at(1))->method('getParam')->with('type')->will($this->returnValue($type));
 
         $context = $this->getMock('\Magento\Backend\App\Action\Context', [], [], '', false);
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->request));
-        $context->expects($this->once())->method('getResponse')->will($this->returnValue($this->response));
+        $context->expects($this->once())->method('getRequest')->willReturn($this->request);
+        $context->expects($this->once())->method('getResponse')->willReturn($this->response);
 
         $this->backupModelFactory->expects($this->once())->method('create')->with($time, $type)
-            ->will($this->returnValue($this->backup));
+            ->willReturn($this->backup);
 
         $resultRedirect = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
         $resultRedirect->expects($this->once())->method('setPath')->with('backup/*');
@@ -141,7 +140,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $resultRedirectFactory->expects($this->once())->method('create')->will($this->returnValue($resultRedirect));
+        $resultRedirectFactory->expects($this->once())->method('create')->willReturn($resultRedirect);
 
         /** @var Download|\PHPUnit_Framework_MockObject_MockObject $controller */
         $controller = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(
@@ -161,9 +160,9 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     public function executeBackupNotFoundDataProvider()
     {
         return [
-            [1, false, $this->once()],
-            [0, true, $this->never()],
-            [0, false, $this->never()]
+            [1, false, 1],
+            [0, true, 0],
+            [0, false, 0]
         ];
     }
 } 

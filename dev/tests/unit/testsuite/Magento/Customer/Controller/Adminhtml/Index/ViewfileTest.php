@@ -119,10 +119,14 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
 
         $this->storage->expects($this->once())->method('processStorageFile')->with($path)->willReturn(true);
 
-        $this->objectManager->expects($this->at(0))->method('get')->with('Magento\Framework\Filesystem')
-            ->willReturn($this->fileSystemMock);
-        $this->objectManager->expects($this->at(1))->method('get')->with('Magento\Core\Helper\File\Storage')
-            ->willReturn($this->storage);
+        $this->objectManager->expects($this->any())->method('get')
+            ->will($this->returnValueMap(
+                [
+                    ['Magento\Framework\Filesystem', $this->fileSystemMock],
+                    ['Magento\Core\Helper\File\Storage', $this->storage]
+                ]
+            )
+        );
 
         $this->urlDecoderMock->expects($this->once())->method('decode')->with($decodedFile)->willReturn($file);
 
