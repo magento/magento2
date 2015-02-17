@@ -758,7 +758,7 @@ class Installer
     }
 
     /**
-     * Check if database table is valid
+     * Check if database table prefix is valid
      *
      * @param string $prefix
      * @return boolean
@@ -767,7 +767,7 @@ class Installer
     public function checkDatabaseTablePrefix($prefix)
     {
         if ($prefix !== '' && !preg_match('/^([[:alnum:]]+)([[:alnum:]_]+)$/', $prefix)) {
-            throw new \InvalidArgumentException('Table prefix is in wrong format.');
+            throw new \InvalidArgumentException('Please correct the table prefix format.');
         }
 
         return true;
