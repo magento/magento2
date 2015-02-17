@@ -13,25 +13,6 @@ use Magento\Framework\Setup\ModuleDataResourceInterface;
 class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataResourceInterface
 {
     /**
-     * Setup resource name
-     * @var string
-     */
-    private $_resourceName;
-
-    /**
-     * Setup module name
-     * @var string
-     */
-    private $moduleName;
-
-    /**
-     * Setup module configuration object
-     *
-     * @var array
-     */
-    private $_moduleConfig;
-
-    /**
      * Call afterApplyAllUpdates method flag
      *
      * @var boolean
@@ -86,26 +67,18 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataRes
 
     /**
      * @param \Magento\Framework\Module\Setup\Context $context
-     * @param string $resourceName
-     * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Module\Setup\Context $context,
-        $resourceName,
-        $moduleName,
         $connectionName = ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION
     ) {
         parent::__construct($context->getResourceModel(), $connectionName);
         $this->_eventManager = $context->getEventManager();
         $this->_logger = $context->getLogger();
         $this->_modulesReader = $context->getModulesReader();
-        $this->_resourceName = $resourceName;
-        $this->moduleName = $moduleName;
-
         $this->_resource = $context->getResource();
         $this->_migrationFactory = $context->getMigrationFactory();
-        $this->_moduleConfig = $context->getModuleList()->getOne($moduleName);
         $this->filesystem = $context->getFilesystem();
         $this->modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
     }

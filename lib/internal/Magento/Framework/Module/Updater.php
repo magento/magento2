@@ -8,6 +8,7 @@
 namespace Magento\Framework\Module;
 
 use Magento\Setup\Module\ModuleInstallerUpgraderFactory;
+use Magento\Setup\Module\DataSetup;
 
 class Updater
 {
@@ -17,35 +18,27 @@ class Updater
     protected $_moduleList;
 
     /**
-     * @var ResourceResolverInterface
-     */
-    protected $_resourceResolver;
-
-    /**
-     * @var Updater\SetupFactory
-     */
-    protected $_setupFactory;
-
-    /**
      * @var DbVersionInfo
      */
     private $_dbVersionInfo;
 
     /**
-     * @param Updater\SetupFactory $setupFactory
+     * @var DataSetup
+     */
+    private $setup;
+
+    /**
+     * @param DataSetup $setup
      * @param ModuleListInterface $moduleList
-     * @param ResourceResolverInterface $resourceResolver
      * @param DbVersionInfo $dbVersionInfo
      */
     public function __construct(
-        Updater\SetupFactory $setupFactory,
+        DataSetup $setup,
         ModuleListInterface $moduleList,
-        ResourceResolverInterface $resourceResolver,
         DbVersionInfo $dbVersionInfo
     ) {
+        $this->setup = $setup;
         $this->_moduleList = $moduleList;
-        $this->_resourceResolver = $resourceResolver;
-        $this->_setupFactory = $setupFactory;
         $this->_dbVersionInfo = $dbVersionInfo;
     }
 
@@ -59,28 +52,25 @@ class Updater
     public function updateData($resource, $moduleInstallerUpgraderFactory)
     {
         foreach ($this->_moduleList->getNames() as $moduleName) {
-            foreach ($this->_resourceResolver->getResourceList($moduleName) as $resourceName) {
-                if (!$this->_dbVersionInfo->isDataUpToDate($moduleName, $resourceName)) {
-                    $moduleDataResource = $this->_setupFactory->create($resourceName, $moduleName);
-                    $dataVer = $resource->getDataVersion($moduleName);
-                    $moduleConfig = $this->_moduleList->getOne($moduleName);
-                    $configVer = $moduleConfig['setup_version'];
-                    $moduleContext = new \Magento\Setup\Model\ModuleContext($dataVer);
-                    if ($dataVer !== false) {
-                        $status = version_compare($configVer, $dataVer);
-                        if ($status == \Magento\Framework\Setup\ModuleDataResourceInterface::VERSION_COMPARE_GREATER) {
-                            $moduleUpgrader = $moduleInstallerUpgraderFactory->createDataUpgrader($moduleName);
-                            if ($moduleUpgrader) {
-                                $moduleUpgrader->upgrade($moduleDataResource, $moduleContext);
-                                $resource->setDataVersion($moduleName, $configVer);
-                            }
-                        }
-                    } elseif ($configVer) {
-                        $moduleInstaller = $moduleInstallerUpgraderFactory->createDataInstaller($moduleName);
-                        if ($moduleInstaller) {
-                            $moduleInstaller->install($moduleDataResource, $moduleContext);
+            if (!$this->_dbVersionInfo->isDataUpToDate($moduleName)) {
+                $dataVer = $resource->getDataVersion($moduleName);
+                $moduleConfig = $this->_moduleList->getOne($moduleName);
+                $configVer = $moduleConfig['setup_version'];
+                $moduleContext = new \Magento\Setup\Model\ModuleContext($dataVer);
+                if ($dataVer !== false) {
+                    $status = version_compare($configVer, $dataVer);
+                    if ($status == \Magento\Framework\Setup\ModuleDataResourceInterface::VERSION_COMPARE_GREATER) {
+                        $moduleUpgrader = $moduleInstallerUpgraderFactory->createDataUpgrader($moduleName);
+                        if ($moduleUpgrader) {
+                            $moduleUpgrader->upgrade($this->setup, $moduleContext);
                             $resource->setDataVersion($moduleName, $configVer);
                         }
+                    }
+                } elseif ($configVer) {
+                    $moduleInstaller = $moduleInstallerUpgraderFactory->createDataInstaller($moduleName);
+                    if ($moduleInstaller) {
+                        $moduleInstaller->install($this->setup, $moduleContext);
+                        $resource->setDataVersion($moduleName, $configVer);
                     }
                 }
             }
