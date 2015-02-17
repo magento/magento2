@@ -1,2 +1,0 @@
-"product";"agreement/dataSet";"shipping/shipping_service";"shipping/shipping_method";"payment/method";"constraint"
-"catalogProductSimple::default";"term_enabled_text";"Flat Rate";"Fixed";"checkmo";"assertTermSuccessDeleteMessage, assertTermAbsentInGrid, assertTermAbsentOnCheckout"

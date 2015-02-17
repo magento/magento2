@@ -1,6 +1,0 @@
-"product";"constraint"
-"catalogProductSimple::with_two_custom_option";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"
-"configurableProductInjectable::default";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"
-"bundleProduct::bundle_dynamic_product";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"
-"downloadableProductInjectable::with_two_separately_links";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"
-"groupedProductInjectable::three_simple_products";"assertProductIsPresentInWishlist, assertProductDetailsInWishlist"
