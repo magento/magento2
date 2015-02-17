@@ -5,11 +5,7 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\Store;
-
-class SecureUrl implements \Magento\Framework\App\Router\SecureUrlInterface
+class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
 {
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     private $scopeConfig;
@@ -71,5 +67,15 @@ class SecureUrl implements \Magento\Framework\App\Router\SecureUrlInterface
             ),
             PHP_URL_SCHEME
         ) == 'https' && $this->urlSecurityInfo->isSecure($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getDefaultPath()
+    {
+        return $this->scopeConfig->getValue('web/default/front', ScopeInterface::SCOPE_STORE);
     }
 }

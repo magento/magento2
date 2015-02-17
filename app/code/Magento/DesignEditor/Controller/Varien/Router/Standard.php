@@ -47,10 +47,9 @@ class Standard extends \Magento\Framework\App\Router\Base
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
      * @param \Magento\Framework\App\Route\Config $routeConfig
      * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $routerId
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
-     * @param \Magento\Framework\App\Router\SecureUrlInterface $secureUrl
+     * @param \Magento\Framework\App\Router\PathConfigInterface $pathConfig
      * @param \Magento\Framework\App\RouterListInterface $routerList
      * @param \Magento\DesignEditor\Helper\Data $designEditorHelper
      * @param \Magento\DesignEditor\Model\State $designEditorState
@@ -65,10 +64,9 @@ class Standard extends \Magento\Framework\App\Router\Base
         \Magento\Framework\App\ResponseFactory $responseFactory,
         \Magento\Framework\App\Route\Config $routeConfig,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $routerId,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
-        \Magento\Framework\App\Router\SecureUrlInterface $secureUrl,
+        \Magento\Framework\App\Router\PathConfigInterface $pathConfig,
         \Magento\Framework\App\RouterListInterface $routerList,
         \Magento\DesignEditor\Helper\Data $designEditorHelper,
         \Magento\DesignEditor\Model\State $designEditorState,
@@ -81,10 +79,9 @@ class Standard extends \Magento\Framework\App\Router\Base
             $responseFactory,
             $routeConfig,
             $url,
-            $scopeConfig,
             $routerId,
             $nameBuilder,
-            $secureUrl
+            $pathConfig
         );
         $this->_routerList = $routerList;
         $this->_designEditorHelper = $designEditorHelper;

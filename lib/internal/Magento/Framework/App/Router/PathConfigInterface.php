@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Router;
 
-interface SecureUrlInterface
+interface PathConfigInterface
 {
     /**
      * Retrieve secure url for current request
@@ -23,4 +23,11 @@ interface SecureUrlInterface
      * @return bool
      */
     public function shouldBeSecure($path);
+
+    /**
+     * Get router default request path
+     *
+     * @return string
+     */
+    public function getDefaultPath();
 }

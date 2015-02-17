@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\ObjectManager;
 
-class SecureUrlTest extends \PHPUnit_Framework_TestCase
+class PathConfigTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject*/
     private $scopeConfigMock;
@@ -23,7 +23,7 @@ class SecureUrlTest extends \PHPUnit_Framework_TestCase
     private $storeManagerMock;
     /** @var Store | \PHPUnit_Framework_MockObject_MockObject*/
     private $storeMock;
-    /** @var \Magento\Store\Model\SecureUrl */
+    /** @var \Magento\Store\Model\RouteConfig */
     protected $model;
 
     public function setUp()
@@ -45,7 +45,7 @@ class SecureUrlTest extends \PHPUnit_Framework_TestCase
             'urlSecurityInfo' => $this->urlSecurityInfoMock,
             'storeManager' => $this->storeManagerMock,
         ];
-        $this->model = (new ObjectManager($this))->getObject('\Magento\Store\Model\SecureUrl', $mockArgs);
+        $this->model = (new ObjectManager($this))->getObject('\Magento\Store\Model\PathConfig', $mockArgs);
     }
 
     public function testGetCurrentSecureUrlNoAlias()
