@@ -25,14 +25,14 @@ angular.module('create-admin-account', ['ngStorage'])
                 $scope.admin.passwordStatus.class = 'good';
                 $scope.admin.passwordStatus.label = 'Good';
             } else if (p.length > 6 && p.match(/[\d]+/) && p.match(/[a-zA-Z]+/)) {
+                $scope.admin.passwordStatus.class = 'fair';
+                $scope.admin.passwordStatus.label = 'Fair';
+            } else if (p.length > 6) {
                 $scope.admin.passwordStatus.class = 'weak';
                 $scope.admin.passwordStatus.label = 'Weak';
-            } else if (p.length > 6) {
-                $scope.admin.passwordStatus.class = 'to-short';
-                $scope.admin.passwordStatus.label = 'Too Short';
             } else {
-                $scope.admin.passwordStatus.class = 'none';
-                $scope.admin.passwordStatus.label = 'None';
+                $scope.admin.passwordStatus.class = 'too-short';
+                $scope.admin.passwordStatus.label = 'Too Short';
             }
         };
 
