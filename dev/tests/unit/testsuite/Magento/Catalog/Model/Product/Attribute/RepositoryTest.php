@@ -99,8 +99,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             [],
             '',
             false);
-        $this->metadataConfigMock =
-            $this->getMock('Magento\Framework\Api\Config\MetadataConfig', [], [], '', false);
         $this->searchCriteriaBuilderMock =
             $this->getMock('Magento\Framework\Api\SearchCriteriaDataBuilder', [], [], '', false);
         $this->filterBuilderMock =
@@ -126,7 +124,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->eavAttributeRepositoryMock,
             $this->eavConfigMock,
             $this->validatorFactoryMock,
-            $this->metadataConfigMock,
             $this->searchCriteriaBuilderMock,
             $this->filterBuilderMock
         );
@@ -208,11 +205,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 $searchCriteriaMock
             )->willReturn($this->searchResultMock);
         $this->searchResultMock->expects($this->once())->method('getItems')->willReturn([$itemMock]);
-        $this->metadataConfigMock->expects($this->once())
-            ->method('getCustomAttributesMetadata')
-            ->with(null)
-            ->willReturn(['Attribute metadata']);
-        $expected = array_merge([$itemMock], ['Attribute metadata']);
+        $expected = [$itemMock];
 
         $this->assertEquals($expected, $this->model->getCustomAttributesMetadata());
     }

@@ -31,7 +31,7 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetResolvedConstructorArgumentsNoType($constructor, $isRequired, $getType, $isShared, $expected)
     {
-        $instanceType = ['instance' => 'Magento\Framework\Api\Config\MetadataConfig', 'argument' => 'object'];
+        $instanceType = ['instance' => 'Magento\Framework\Api\DefaultMetadataService', 'argument' => 'object'];
         $this->diContainerConfig->expects($this->any())
             ->method('getArguments')
             ->willReturn(['virtualType' => $instanceType]);
@@ -77,7 +77,7 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetResolvedConstructorArgumentsWithType(
         $constructor, $isRequired, $getType, $isShared, $expected
     ) {
-        $instanceType = ['instance' => 'Magento\Framework\Api\Config\MetadataConfig'];
+        $instanceType = ['instance' => 'Magento\Framework\Api\DefaultMetadataService'];
         if (!$constructor) {
             $this->assertNull($this->model->getResolvedConstructorArguments('virtualType', $constructor));
             return;
@@ -115,7 +115,7 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     {
         $constructor = $this->getMock('Magento\Tools\Di\Compiler\ConstructorArgument', [], [], '', false);
         return [
-            [$constructor, true, 'virtualType', true, ['virtualType' => 'Magento\Framework\Api\Config\MetadataConfig']],
+            [$constructor, true, 'virtualType', true, ['virtualType' => 'Magento\Framework\Api\DefaultMetadataService']],
         ];
     }
 
@@ -130,7 +130,7 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetResolvedConstructorArgumentsWithArgument(
         $constructor, $isRequired, $getType, $isShared, $expected
     ) {
-        $instanceType = ['instance' => 'Magento\Framework\Api\Config\MetadataConfig', 'argument' => 'object'];
+        $instanceType = ['instance' => 'Magento\Framework\Api\DefaultMetadataService', 'argument' => 'object'];
         $this->diContainerConfig->expects($this->any())
             ->method('getArguments')
             ->willReturn(['virtualType' => $instanceType]);
@@ -179,7 +179,7 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetResolvedConstructorArgumentsNoShared(
         $constructor, $isRequired, $getType, $isShared, $expected
     ) {
-        $instanceType = ['instance' => 'Magento\Framework\Api\Config\MetadataConfig', 'argument' => 'object'];
+        $instanceType = ['instance' => 'Magento\Framework\Api\DefaultMetadataService', 'argument' => 'object'];
         $this->diContainerConfig->expects($this->any())
             ->method('getArguments')
             ->willReturn(['virtualType' => $instanceType]);
@@ -214,7 +214,7 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'virtualType' => [
                 '__non_shared__' => true,
-                '__instance__' => 'Magento\Framework\Api\Config\MetadataConfig'
+                '__instance__' => 'Magento\Framework\Api\DefaultMetadataService'
             ]
         ];
         return [

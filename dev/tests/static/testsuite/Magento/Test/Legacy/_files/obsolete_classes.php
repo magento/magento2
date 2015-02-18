@@ -2105,6 +2105,7 @@ return [
     ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Machinable', 'Magento\Usps\Model\Source\Machinable'],
     ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Method', 'Magento\Usps\Model\Source\Method'],
     ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Size', 'Magento\Usps\Model\Source\Size'],
+    ['Magento\Framework\Api\Config\MetadataConfig'],
     ['Magento\Usa\Model\Shipping\Carrier\Usps', 'Magento\Usps\Model\Carrier'],
     ['Magento\Usa\Model\Shipping\Carrier\Ups', 'Magento\Ups\Model\Carrier'],
     ['Magento\Usa\Model\Simplexml\Element', 'Magento\Shipping\Model\Simplexml\Element'],

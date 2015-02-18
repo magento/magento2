@@ -10,7 +10,6 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\AttributeMetadataConverter;
 use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\Api\Config\MetadataConfig;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -25,11 +24,6 @@ class CustomerMetadata implements CustomerMetadataInterface
     private $customerDataObjectMethods;
 
     /**
-     * @var MetadataConfig
-     */
-    private $metadataConfig;
-
-    /**
      * @var AttributeMetadataConverter
      */
     private $attributeMetadataConverter;
@@ -40,16 +34,13 @@ class CustomerMetadata implements CustomerMetadataInterface
     private $attributeMetadataDataProvider;
 
     /**
-     * @param MetadataConfig $metadataConfig
      * @param AttributeMetadataConverter $attributeMetadataConverter
      * @param AttributeMetadataDataProvider $attributeMetadataDataProvider
      */
     public function __construct(
-        MetadataConfig $metadataConfig,
         AttributeMetadataConverter $attributeMetadataConverter,
         AttributeMetadataDataProvider $attributeMetadataDataProvider
     ) {
-        $this->metadataConfig = $metadataConfig;
         $this->attributeMetadataConverter = $attributeMetadataConverter;
         $this->attributeMetadataDataProvider = $attributeMetadataDataProvider;
     }
@@ -148,6 +139,6 @@ class CustomerMetadata implements CustomerMetadataInterface
                 $customAttributes[] = $attributeMetadata;
             }
         }
-        return array_merge($customAttributes, $this->metadataConfig->getCustomAttributesMetadata($dataObjectClassName));
+        return $customAttributes;
     }
 }
