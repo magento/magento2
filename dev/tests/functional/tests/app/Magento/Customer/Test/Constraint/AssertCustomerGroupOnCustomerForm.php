@@ -18,10 +18,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
  */
 class AssertCustomerGroupOnCustomerForm extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that customer group find on account information page
      *

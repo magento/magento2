@@ -22,10 +22,6 @@ use Magento\Mtf\ObjectManager;
  */
 class AssertTermOnCheckout extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Notification message
      */

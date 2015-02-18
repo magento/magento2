@@ -18,10 +18,6 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
  */
 class AssertCustomVariableForm extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Skipped fields for verify data
      *

@@ -18,10 +18,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
  */
 class AssertProductAttributeAbsenceForAttributeMapping extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that deleted attribute can't be mapped to Google Attribute (attribute doesn't appear in Attributes
      * Mapping -> Google Content - Attributes after selecting attribute set)

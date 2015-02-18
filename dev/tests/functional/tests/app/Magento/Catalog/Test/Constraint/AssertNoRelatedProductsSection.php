@@ -18,10 +18,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class AssertNoRelatedProductsSection extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     /**
      * Assert that product is not displayed in related products section
      *

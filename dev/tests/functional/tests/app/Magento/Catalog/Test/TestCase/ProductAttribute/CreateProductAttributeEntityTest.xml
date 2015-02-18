@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="CreateProductAttributeEntityTest">
-    <variation name="CreateProductAttributeEntityTestVariation1" firstConstraint="assertProductAttributeInGrid" method="test">
+  <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\CreateProductAttributeEntityTest">
+    <variation name="CreateProductAttributeEntityTestVariation1">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
       <data name="productAttribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
       <data name="productAttribute/data/frontend_input" xsi:type="string">Text Field</data>
@@ -31,11 +31,11 @@
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
       <data name="issue" xsi:type="string">-</data>
-      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
-      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" prev="assertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
     </variation>
-    <variation name="CreateProductAttributeEntityTestVariation2" firstConstraint="assertProductAttributeInGrid" method="test">
+    <variation name="CreateProductAttributeEntityTestVariation2">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
       <data name="productAttribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
       <data name="productAttribute/data/frontend_input" xsi:type="string">Text Area</data>
@@ -59,15 +59,15 @@
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
       <data name="issue" xsi:type="string">-</data>
-      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
-      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" next="assertProductAttributeIsRequired" prev="assertAttributeForm"/>
-      <constraint name="assertProductAttributeIsRequired" next="assertAttributeSearchableByLabel" prev="assertAddedProductAttributeOnProductForm"/>
-      <constraint name="assertAttributeSearchableByLabel" next="assertProductAttributeDisplayingOnSearchForm" prev="assertProductAttributeIsRequired"/>
-      <constraint name="assertProductAttributeDisplayingOnSearchForm" next="assertProductAttributeIsComparable" prev="assertAttributeSearchableByLabel"/>
-      <constraint name="assertProductAttributeIsComparable" prev="assertProductAttributeDisplayingOnSearchForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSearchableByLabel"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsComparable"/>
     </variation>
-    <variation name="CreateProductAttributeEntityTestVariation3" firstConstraint="assertProductAttributeInGrid" method="test">
+    <variation name="CreateProductAttributeEntityTestVariation3">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
       <data name="productAttribute/data/frontend_label" xsi:type="string">Date_Admin_%isolation%</data>
       <data name="productAttribute/data/frontend_input" xsi:type="string">Date</data>
@@ -91,13 +91,13 @@
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">Yes</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">Yes</data>
       <data name="issue" xsi:type="string">Yes</data>
-      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
-      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" next="assertProductAttributeIsUsedInSortOnFrontend" prev="assertAttributeForm"/>
-      <constraint name="assertProductAttributeIsUsedInSortOnFrontend" next="assertProductAttributeIsUsedPromoRules" prev="assertAddedProductAttributeOnProductForm"/>
-      <constraint name="assertProductAttributeIsUsedPromoRules" prev="assertProductAttributeIsUsedInSortOnFrontend"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedPromoRules"/>
     </variation>
-    <variation name="CreateProductAttributeEntityTestVariation4" firstConstraint="assertProductAttributeInGrid" method="test">
+    <variation name="CreateProductAttributeEntityTestVariation4">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
       <data name="productAttribute/data/frontend_label" xsi:type="string">Yes/No_Admin_%isolation%</data>
       <data name="productAttribute/data/frontend_input" xsi:type="string">Yes/No</data>
@@ -121,11 +121,11 @@
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
       <data name="issue" xsi:type="string">-</data>
-      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
-      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" prev="assertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
     </variation>
-    <variation name="CreateProductAttributeEntityTestVariation5" firstConstraint="assertProductAttributeInGrid" method="test">
+    <variation name="CreateProductAttributeEntityTestVariation5">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
       <data name="productAttribute/data/frontend_label" xsi:type="string">Multiple_Select_Admin_%isolation%</data>
       <data name="productAttribute/data/frontend_input" xsi:type="string">Multiple Select</data>
@@ -149,18 +149,18 @@
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">Yes</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">Yes</data>
       <data name="issue" xsi:type="string">-</data>
-      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
-      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" next="assertProductAttributeDisplayingOnFrontend" prev="assertAttributeForm"/>
-      <constraint name="assertProductAttributeDisplayingOnFrontend" next="assertProductAttributeDisplayingOnSearchForm" prev="assertAddedProductAttributeOnProductForm"/>
-      <constraint name="assertProductAttributeDisplayingOnSearchForm" next="assertProductAttributeIsComparable" prev="assertProductAttributeDisplayingOnFrontend"/>
-      <constraint name="assertProductAttributeIsComparable" next="assertProductAttributeIsFilterable" prev="assertProductAttributeDisplayingOnSearchForm"/>
-      <constraint name="assertProductAttributeIsFilterable" next="assertProductAttributeIsFilterableInSearch" prev="assertProductAttributeIsComparable"/>
-      <constraint name="assertProductAttributeIsFilterableInSearch" next="assertAttributeSearchableByLabel" prev="assertProductAttributeIsFilterable"/>
-      <constraint name="assertAttributeSearchableByLabel" next="assertAttributeOptionsOnProductForm" prev="assertProductAttributeIsFilterableInSearch"/>
-      <constraint name="assertAttributeOptionsOnProductForm" prev="assertAttributeSearchableByLabel"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnFrontend"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsComparable"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSearchableByLabel"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm"/>
     </variation>
-    <variation name="CreateProductAttributeEntityTestVariation6" firstConstraint="assertProductAttributeInGrid" method="test">
+    <variation name="CreateProductAttributeEntityTestVariation6">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
       <data name="productAttribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
       <data name="productAttribute/data/frontend_input" xsi:type="string">Dropdown</data>
@@ -184,22 +184,22 @@
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">Yes</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">Yes</data>
       <data name="issue" xsi:type="string">Yes</data>
-      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
-      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" next="assertProductAttributeIsRequired" prev="assertAttributeForm"/>
-      <constraint name="assertProductAttributeIsRequired" next="assertProductAttributeIsGlobal" prev="assertAddedProductAttributeOnProductForm"/>
-      <constraint name="assertProductAttributeIsGlobal" next="assertProductAttributeDisplayingOnFrontend" prev="assertProductAttributeIsRequired"/>
-      <constraint name="assertProductAttributeDisplayingOnFrontend" next="assertProductAttributeDisplayingOnSearchForm" prev="assertProductAttributeIsGlobal"/>
-      <constraint name="assertProductAttributeDisplayingOnSearchForm" next="assertAttributeSearchableByLabel" prev="assertProductAttributeDisplayingOnFrontend"/>
-      <constraint name="assertAttributeSearchableByLabel" next="assertProductAttributeIsComparable" prev="assertProductAttributeDisplayingOnSearchForm"/>
-      <constraint name="assertProductAttributeIsComparable" next="assertProductAttributeIsUsedInSortOnFrontend" prev="assertAttributeSearchableByLabel"/>
-      <constraint name="assertProductAttributeIsUsedInSortOnFrontend" next="assertProductAttributeIsFilterable" prev="assertProductAttributeIsComparable"/>
-      <constraint name="assertProductAttributeIsFilterable" next="assertProductAttributeIsConfigurable" prev="assertProductAttributeIsUsedInSortOnFrontend"/>
-      <constraint name="assertProductAttributeIsConfigurable" next="assertProductAttributeIsFilterableInSearch" prev="assertProductAttributeIsFilterable"/>
-      <constraint name="assertProductAttributeIsFilterableInSearch" next="assertAttributeOptionsOnProductForm" prev="assertProductAttributeIsConfigurable"/>
-      <constraint name="assertAttributeOptionsOnProductForm" prev="assertProductAttributeIsFilterableInSearch"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsGlobal"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnFrontend"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSearchableByLabel"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsComparable"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductAttributeIsConfigurable"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm"/>
     </variation>
-    <variation name="CreateProductAttributeEntityTestVariation7" firstConstraint="assertProductAttributeInGrid" method="test">
+    <variation name="CreateProductAttributeEntityTestVariation7">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
       <data name="productAttribute/data/frontend_label" xsi:type="string">Price_Admin_%isolation%</data>
       <data name="productAttribute/data/frontend_input" xsi:type="string">Price</data>
@@ -223,15 +223,15 @@
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
       <data name="issue" xsi:type="string">-</data>
-      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
-      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" next="assertAttributeSearchableByLabel" prev="assertAttributeForm"/>
-      <constraint name="assertAttributeSearchableByLabel" next="assertProductAttributeDisplayingOnSearchForm" prev="assertAddedProductAttributeOnProductForm"/>
-      <constraint name="assertProductAttributeDisplayingOnSearchForm" next="assertProductAttributeIsFilterable" prev="assertAttributeSearchableByLabel"/>
-      <constraint name="assertProductAttributeIsFilterable" next="assertProductAttributeIsFilterableInSearch" prev="assertProductAttributeDisplayingOnSearchForm"/>
-      <constraint name="assertProductAttributeIsFilterableInSearch" prev="assertProductAttributeIsFilterable"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSearchableByLabel"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch"/>
     </variation>
-    <variation name="CreateProductAttributeEntityTestVariation8" firstConstraint="assertProductAttributeInGrid" method="test">
+    <variation name="CreateProductAttributeEntityTestVariation8">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
       <data name="productAttribute/data/frontend_label" xsi:type="string">Fixed_Product_Tax_Admin_%isolation%</data>
       <data name="productAttribute/data/frontend_input" xsi:type="string">Fixed Product Tax</data>
@@ -255,11 +255,11 @@
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
       <data name="issue" xsi:type="string">-</data>
-      <constraint name="assertProductAttributeInGrid" next="assertAttributeForm"/>
-      <constraint name="assertAttributeForm" next="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeInGrid"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" prev="assertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
     </variation>
-    <variation name="CreateProductAttributeEntityTestVariation9" firstConstraint="assertProductAttributeIsUnique" method="test">
+    <variation name="CreateProductAttributeEntityTestVariation9">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
       <data name="productAttribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
       <data name="productAttribute/data/frontend_input" xsi:type="string">Text Field</data>
@@ -283,7 +283,7 @@
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
       <data name="issue" xsi:type="string">-</data>
-      <constraint name="assertProductAttributeIsUnique"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUnique"/>
     </variation>
   </testCase>
 </config>

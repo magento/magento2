@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSuggestSearchingResult">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermForm">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermInGrid">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermOnFrontend">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessSaveMessage">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSynonymOnFrontend">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessDeleteMessage">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotInGrid">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotOnFrontend">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymNotOnFrontend">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessMassDeleteMessage">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionsNotInGrid">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionNotOnFrontend">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymMassActionNotOnFrontend">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
+</config>

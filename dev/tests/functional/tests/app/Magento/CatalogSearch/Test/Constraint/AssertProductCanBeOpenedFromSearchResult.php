@@ -16,10 +16,6 @@ use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
  */
 class AssertProductCanBeOpenedFromSearchResult extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Assert product can be opened from search results page.
      *

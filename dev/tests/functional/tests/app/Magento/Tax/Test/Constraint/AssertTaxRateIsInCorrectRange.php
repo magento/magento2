@@ -13,10 +13,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertTaxRateIsInCorrectRange extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * @return void
      */

@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="CreateBundleProductEntityTest">
-    <variation name="CreateBundleProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+  <testCase name="Magento\Bundle\Test\TestCase\CreateBundleProductEntityTest">
+    <variation name="CreateBundleProductEntityTestVariation1">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">-</data>
@@ -39,11 +39,11 @@
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertBundleItemsOnProductPage" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundleItemsOnProductPage" prev="assertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation2">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -75,10 +75,10 @@
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">No</data>
       <data name="product/data/gift_message_available" xsi:type="string">Yes</data>
-      <constraint name="assertProductSaveMessage" next="assertProductNotSearchableBySku"/>
-      <constraint name="assertProductNotSearchableBySku" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotSearchableBySku"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation3">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -110,18 +110,18 @@
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">No</data>
       <data name="product/data/gift_message_available" xsi:type="string">Yes</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertBundleProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundleProductForm" next="assertProductSearchableBySku" prev="assertProductInGrid"/>
-      <constraint name="assertProductSearchableBySku" next="assertBundleProductPage" prev="assertBundleProductForm"/>
-      <constraint name="assertBundleProductPage" next="assertProductInStock" prev="assertProductSearchableBySku"/>
-      <constraint name="assertProductInStock" next="assertBundleItemsOnProductPage" prev="assertBundleProductPage"/>
-      <constraint name="assertBundleItemsOnProductPage" next="assertProductVisibleInCategory" prev="assertProductInStock"/>
-      <constraint name="assertProductVisibleInCategory" next="assertBundlePriceView" prev="assertBundleItemsOnProductPage"/>
-      <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation4">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -153,14 +153,14 @@
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertBundleProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundleProductForm" next="assertProductSearchableBySku" prev="assertProductInGrid"/>
-      <constraint name="assertProductSearchableBySku" next="assertBundleProductPage" prev="assertBundleProductForm"/>
-      <constraint name="assertBundleProductPage" next="assertBundleItemsOnProductPage" prev="assertProductSearchableBySku"/>
-      <constraint name="assertBundleItemsOnProductPage" prev="assertBundleProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation5">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -192,18 +192,18 @@
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">No</data>
       <data name="product/data/gift_message_available" xsi:type="string">No</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertBundleProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundleProductForm" next="assertProductVisibleInCategory" prev="assertProductInGrid"/>
-      <constraint name="assertProductVisibleInCategory" next="assertBundleProductPage" prev="assertBundleProductForm"/>
-      <constraint name="assertBundleProductPage" next="assertProductInStock" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertProductInStock" next="assertGroupedPriceOnBundleProductPage" prev="assertBundleProductPage"/>
-      <constraint name="assertGroupedPriceOnBundleProductPage" next="assertBundleItemsOnProductPage" prev="assertProductInStock"/>
-      <constraint name="assertBundleItemsOnProductPage" next="assertBundlePriceView" prev="assertGroupedPriceOnBundleProductPage"/>
-      <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertBundleItemsOnProductPage"/>
-      <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertGroupedPriceOnBundleProductPage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation6">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -235,14 +235,14 @@
       <data name="product/data/visibility" xsi:type="string">Catalog</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">No</data>
       <data name="product/data/gift_message_available" xsi:type="string">No</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertBundleProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundleProductForm" next="assertBundleProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertBundleProductPage" next="assertProductOutOfStock" prev="assertBundleProductForm"/>
-      <constraint name="assertProductOutOfStock" next="assertBundlePriceView" prev="assertBundleProductPage"/>
-      <constraint name="assertBundlePriceView" prev="assertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductForm"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation7">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -274,15 +274,15 @@
       <data name="product/data/visibility" xsi:type="string">Search</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertBundleProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundleProductForm" next="assertProductSearchableBySku" prev="assertProductInGrid"/>
-      <constraint name="assertProductSearchableBySku" next="assertBundleProductPage" prev="assertBundleProductForm"/>
-      <constraint name="assertBundleProductPage" next="assertBundleItemsOnProductPage" prev="assertProductSearchableBySku"/>
-      <constraint name="assertBundleItemsOnProductPage" next="assertTierPriceOnBundleProductPage" prev="assertBundleProductPage"/>
-      <constraint name="assertTierPriceOnBundleProductPage" prev="assertBundleItemsOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertTierPriceOnBundleProductPage"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation8">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -314,10 +314,10 @@
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertBundleInCategory"/>
-      <constraint name="assertBundleInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation9">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -349,12 +349,12 @@
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertBundleInCategory"/>
-      <constraint name="assertBundleInCategory" next="assertBundlePriceView" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertBundleInCategory"/>
-      <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation10" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation10">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -386,12 +386,12 @@
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertBundleInCategory"/>
-      <constraint name="assertBundleInCategory" next="assertBundlePriceView" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertBundleInCategory"/>
-      <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation11" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation11">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -423,13 +423,13 @@
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertBundleInCategory"/>
-      <constraint name="assertBundleInCategory" next="assertBundlePriceView" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertBundleInCategory"/>
-      <constraint name="assertBundlePriceType" next="assertProductCustomOptionsOnBundleProductPage" prev="assertBundlePriceView"/>
-      <constraint name="assertProductCustomOptionsOnBundleProductPage" prev="assertBundlePriceType"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertProductCustomOptionsOnBundleProductPage"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation12" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation12">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -461,12 +461,12 @@
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertBundleInCategory"/>
-      <constraint name="assertBundleInCategory" next="assertBundlePriceView" prev="assertProductSaveMessage"/>
-      <constraint name="assertBundlePriceView" next="assertBundlePriceType" prev="assertBundleInCategory"/>
-      <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation13" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation13">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -498,9 +498,9 @@
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation14" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="CreateBundleProductEntityTestVariation14">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -532,7 +532,7 @@
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
     </variation>
   </testCase>
 </config>

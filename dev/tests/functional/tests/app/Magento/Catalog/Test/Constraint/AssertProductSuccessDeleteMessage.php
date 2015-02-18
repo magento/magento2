@@ -15,10 +15,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductSuccessDeleteMessage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Text value to be checked
      */

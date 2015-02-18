@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserWrongCredentialsMessage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     const INVALID_CREDENTIALS_MESSAGE = 'Please correct the user name or password.';
 
     /**

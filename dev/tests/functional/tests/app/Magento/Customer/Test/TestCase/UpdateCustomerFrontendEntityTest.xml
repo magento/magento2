@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateCustomerFrontendEntityTest">
-    <variation name="UpdateCustomerFrontendEntityTestVariation1" firstConstraint="assertCustomerAddressSuccessSaveMessage" method="test">
+  <testCase name="Magento\Customer\Test\TestCase\UpdateCustomerFrontendEntityTest">
+    <variation name="UpdateCustomerFrontendEntityTestVariation1">
       <data name="description" xsi:type="string">Update customer information and add US address</data>
       <data name="customer/data/firstname" xsi:type="string">Jany %isolation%</data>
       <data name="customer/data/lastname" xsi:type="string">Doe %isolation%</data>
@@ -23,10 +23,10 @@
       <data name="address/data/telephone" xsi:type="string">555-888-111-999</data>
       <data name="address/data/fax" xsi:type="string">161-999-8888</data>
       <data name="address/data/postcode" xsi:type="string">12345</data>
-      <constraint name="assertCustomerAddressSuccessSaveMessage" next="assertCustomerDefaultAddresses"/>
-      <constraint name="assertCustomerDefaultAddresses" prev="assertCustomerAddressSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses"/>
     </variation>
-    <variation name="UpdateCustomerFrontendEntityTestVariation2" firstConstraint="assertCustomerAddressSuccessSaveMessage" method="test">
+    <variation name="UpdateCustomerFrontendEntityTestVariation2">
       <data name="description" xsi:type="string">Update customer information and add UK address</data>
       <data name="customer/data/firstname" xsi:type="string">Jonny %isolation%</data>
       <data name="customer/data/lastname" xsi:type="string">Doe %isolation%</data>
@@ -42,10 +42,10 @@
       <data name="address/data/telephone" xsi:type="string">0123456789-02134567</data>
       <data name="address/data/fax" xsi:type="string">5555-874-99634</data>
       <data name="address/data/postcode" xsi:type="string">12345</data>
-      <constraint name="assertCustomerAddressSuccessSaveMessage" next="assertCustomerDefaultAddresses"/>
-      <constraint name="assertCustomerDefaultAddresses" prev="assertCustomerAddressSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses"/>
     </variation>
-    <variation name="UpdateCustomerFrontendEntityTestVariation3" firstConstraint="assertCustomerAddressSuccessSaveMessage" method="test">
+    <variation name="UpdateCustomerFrontendEntityTestVariation3">
       <data name="description" xsi:type="string">Update customer information and add France address</data>
       <data name="customer/data/firstname" xsi:type="string">Jean %isolation%</data>
       <data name="customer/data/lastname" xsi:type="string">Reno %isolation%</data>
@@ -61,10 +61,10 @@
       <data name="address/data/telephone" xsi:type="string">555-888-111-999</data>
       <data name="address/data/fax" xsi:type="string">161-999-8888</data>
       <data name="address/data/postcode" xsi:type="string">12345</data>
-      <constraint name="assertCustomerAddressSuccessSaveMessage" next="assertCustomerDefaultAddresses"/>
-      <constraint name="assertCustomerDefaultAddresses" prev="assertCustomerAddressSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses"/>
     </variation>
-    <variation name="UpdateCustomerFrontendEntityTestVariation4" firstConstraint="assertCustomerAddressSuccessSaveMessage" method="test">
+    <variation name="UpdateCustomerFrontendEntityTestVariation4">
       <data name="description" xsi:type="string">MAGETWO-12394: Register Customer. Update address</data>
       <data name="customer/data/firstname" xsi:type="string">-</data>
       <data name="customer/data/lastname" xsi:type="string">-</data>
@@ -81,8 +81,8 @@
       <data name="address/data/fax" xsi:type="string">-</data>
       <data name="address/data/postcode" xsi:type="string">90230</data>
       <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
-      <constraint name="assertCustomerAddressSuccessSaveMessage" next="assertCustomerDefaultAddresses"/>
-      <constraint name="assertCustomerDefaultAddresses" prev="assertCustomerAddressSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses"/>
     </variation>
   </testCase>
 </config>

@@ -15,10 +15,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class AssertSalesPrintOrderProducts extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Template for error message.
      */

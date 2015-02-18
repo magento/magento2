@@ -20,10 +20,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Message on the product page 404
      */

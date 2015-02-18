@@ -21,10 +21,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class AssertProductsIsAbsentInWishlist extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that product is not present in Wishlist on Frontend
      *

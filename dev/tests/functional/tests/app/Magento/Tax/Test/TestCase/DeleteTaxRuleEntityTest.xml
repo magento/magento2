@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="DeleteTaxRuleEntityTest">
-    <variation name="DeleteTaxRuleEntityTestVariation1" firstConstraint="assertTaxRuleSuccessDeleteMessage" method="test">
+  <testCase name="Magento\Tax\Test\TestCase\DeleteTaxRuleEntityTest">
+    <variation name="DeleteTaxRuleEntityTestVariation1">
       <data name="taxRule/dataSet" xsi:type="string">tax_rule_with_custom_tax_classes</data>
       <data name="address/data/country_id" xsi:type="string">United States</data>
       <data name="address/data/region_id" xsi:type="string">California</data>
@@ -15,9 +15,9 @@
       <data name="shipping/carrier" xsi:type="string">Flat Rate</data>
       <data name="shipping/method" xsi:type="string">Fixed</data>
       <data name="shipping/price" xsi:type="string">5</data>
-      <constraint name="assertTaxRuleSuccessDeleteMessage" next="assertTaxRuleNotInGrid"/>
-      <constraint name="assertTaxRuleNotInGrid" next="assertTaxRuleIsNotApplied" prev="assertTaxRuleSuccessDeleteMessage"/>
-      <constraint name="assertTaxRuleIsNotApplied" prev="assertTaxRuleNotInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessDeleteMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleNotInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsNotApplied"/>
     </variation>
   </testCase>
 </config>

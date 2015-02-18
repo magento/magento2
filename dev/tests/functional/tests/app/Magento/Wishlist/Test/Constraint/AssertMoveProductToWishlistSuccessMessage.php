@@ -16,10 +16,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class AssertMoveProductToWishlistSuccessMessage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Success add message
      */

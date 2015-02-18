@@ -6,12 +6,12 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="ReAuthorizeTokensIntegrationEntityTest">
-    <variation name="ReAuthorizeTokensIntegrationEntityTestVariation1" firstConstraint="assertIntegrationSuccessReauthorizeMessage" method="test">
+  <testCase name="Magento\Integration\Test\TestCase\ReAuthorizeTokensIntegrationEntityTest">
+    <variation name="ReAuthorizeTokensIntegrationEntityTestVariation1">
       <data name="description" xsi:type="string">Re-authorize integration</data>
-      <constraint name="assertIntegrationSuccessReauthorizeMessage" next="assertIntegrationForm"/>
-      <constraint name="assertIntegrationForm" next="assertIntegrationTokensAfterReauthorize" prev="assertIntegrationSuccessReauthorizeMessage"/>
-      <constraint name="assertIntegrationTokensAfterReauthorize" prev="assertIntegrationForm"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessReauthorizeMessage"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensAfterReauthorize"/>
     </variation>
   </testCase>
 </config>

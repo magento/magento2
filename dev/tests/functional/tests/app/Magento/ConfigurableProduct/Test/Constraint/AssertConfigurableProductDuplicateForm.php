@@ -15,10 +15,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertConfigurableProductDuplicateForm extends AssertConfigurableProductForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert form data equals duplicate product configurable data.
      *

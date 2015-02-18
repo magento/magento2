@@ -18,10 +18,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductReviewOnProductPage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     /**
      * Assert that product review available on product page.
      *

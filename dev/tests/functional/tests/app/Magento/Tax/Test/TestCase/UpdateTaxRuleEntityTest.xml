@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateTaxRuleEntityTest">
-    <variation name="UpdateTaxRuleEntityTestVariation1" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
+  <testCase name="Magento\Tax\Test\TestCase\UpdateTaxRuleEntityTest">
+    <variation name="UpdateTaxRuleEntityTestVariation1">
       <data name="initialTaxRule/dataSet" xsi:type="string">tax_rule_default</data>
       <data name="address/data/country_id" xsi:type="string">-</data>
       <data name="address/data/region_id" xsi:type="string">-</data>
@@ -22,11 +22,11 @@
       <data name="taxRule/data/tax_product_class/dataSet/class_1" xsi:type="string">product_tax_class</data>
       <data name="taxRule/data/priority" xsi:type="string">2</data>
       <data name="taxRule/data/position" xsi:type="string">2</data>
-      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
-      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
-      <constraint name="assertTaxRuleForm" prev="assertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
     </variation>
-    <variation name="UpdateTaxRuleEntityTestVariation2" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
+    <variation name="UpdateTaxRuleEntityTestVariation2">
       <data name="initialTaxRule/dataSet" xsi:type="string">tax_rule_with_custom_tax_classes</data>
       <data name="address/data/country_id" xsi:type="string">-</data>
       <data name="address/data/region_id" xsi:type="string">-</data>
@@ -41,11 +41,11 @@
       <data name="taxRule/data/tax_product_class/dataSet/class_1" xsi:type="string">taxable_goods</data>
       <data name="taxRule/data/priority" xsi:type="string">-</data>
       <data name="taxRule/data/position" xsi:type="string">-</data>
-      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
-      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
-      <constraint name="assertTaxRuleForm" prev="assertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
     </variation>
-    <variation name="UpdateTaxRuleEntityTestVariation3" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
+    <variation name="UpdateTaxRuleEntityTestVariation3">
       <data name="initialTaxRule/dataSet" xsi:type="string">tax_rule_with_custom_tax_classes</data>
       <data name="address/data/country_id" xsi:type="string">United States</data>
       <data name="address/data/region_id" xsi:type="string">Utah</data>
@@ -60,12 +60,12 @@
       <data name="taxRule/data/tax_product_class/dataSet/class_1" xsi:type="string">-</data>
       <data name="taxRule/data/priority" xsi:type="string">-</data>
       <data name="taxRule/data/position" xsi:type="string">-</data>
-      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
-      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
-      <constraint name="assertTaxRuleForm" next="assertTaxRuleIsApplied" prev="assertTaxRuleInGrid"/>
-      <constraint name="assertTaxRuleIsApplied" prev="assertTaxRuleForm"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsApplied"/>
     </variation>
-    <variation name="UpdateTaxRuleEntityTestVariation4" firstConstraint="assertTaxRuleSuccessSaveMessage" method="test">
+    <variation name="UpdateTaxRuleEntityTestVariation4">
       <data name="initialTaxRule/dataSet" xsi:type="string">tax_rule_with_custom_tax_classes</data>
       <data name="address/data/country_id" xsi:type="string">United States</data>
       <data name="address/data/region_id" xsi:type="string">Idaho</data>
@@ -80,10 +80,10 @@
       <data name="taxRule/data/tax_product_class/dataSet/class_1" xsi:type="string">-</data>
       <data name="taxRule/data/priority" xsi:type="string">-</data>
       <data name="taxRule/data/position" xsi:type="string">-</data>
-      <constraint name="assertTaxRuleSuccessSaveMessage" next="assertTaxRuleInGrid"/>
-      <constraint name="assertTaxRuleInGrid" next="assertTaxRuleForm" prev="assertTaxRuleSuccessSaveMessage"/>
-      <constraint name="assertTaxRuleForm" next="assertTaxRuleIsNotApplied" prev="assertTaxRuleInGrid"/>
-      <constraint name="assertTaxRuleIsNotApplied" prev="assertTaxRuleForm"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsNotApplied"/>
     </variation>
   </testCase>
 </config>
