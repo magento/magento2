@@ -14,7 +14,7 @@ $_option = $block->getOption();
 $class = ($_option->getIsRequire()) ? ' required' : '';
 ?>
 <div class="field<?php echo $class; ?>">
-    <label class="label">
+    <label class="label" for="select_<?php echo $_option->getId() ?>">
         <span><?php echo  $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">

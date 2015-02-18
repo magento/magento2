@@ -5,29 +5,33 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="ApplySeveralCatalogPriceRuleEntityTest">
-        <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation1">
-            <data name="catalogRulesOriginal/priority_0">catalog_price_rule_priority_0</data>
-            <data name="catalogRulesOriginal/priority_1">-</data>
-            <data name="catalogRulesOriginal/priority_2">catalog_price_rule_priority_2</data>
-            <data name="price/sub_total">100</data>
-            <data name="price/grand_total">40</data>
-            <data name="price/discount_amount">60</data>
-            <data name="price/special">40</data>
-            <data name="price/regular">100</data>
-            <data name="constraint">assertCatalogPriceRuleAppliedCatalogPage, assertCatalogPriceRuleAppliedProductPage, assertCatalogPriceRuleAppliedShoppingCart</data>
-        </variation>
-        <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation2">
-            <data name="catalogRulesOriginal/priority_0">catalog_price_rule_priority_0</data>
-            <data name="catalogRulesOriginal/priority_1">catalog_price_rule_priority_1_stop_further_rules</data>
-            <data name="catalogRulesOriginal/priority_2">catalog_price_rule_priority_2</data>
-            <data name="price/sub_total">100</data>
-            <data name="price/grand_total">45</data>
-            <data name="price/discount_amount">55</data>
-            <data name="price/special">45</data>
-            <data name="price/regular">100</data>
-            <data name="constraint">assertCatalogPriceRuleAppliedCatalogPage, assertCatalogPriceRuleAppliedProductPage, assertCatalogPriceRuleAppliedShoppingCart</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="ApplySeveralCatalogPriceRuleEntityTest">
+    <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation1" firstConstraint="assertCatalogPriceRuleAppliedCatalogPage" method="test">
+      <data name="catalogRulesOriginal/priority_0" xsi:type="string">catalog_price_rule_priority_0</data>
+      <data name="catalogRulesOriginal/priority_1" xsi:type="string">-</data>
+      <data name="catalogRulesOriginal/priority_2" xsi:type="string">catalog_price_rule_priority_2</data>
+      <data name="price/sub_total" xsi:type="string">100</data>
+      <data name="price/grand_total" xsi:type="string">40</data>
+      <data name="price/discount_amount" xsi:type="string">60</data>
+      <data name="price/special" xsi:type="string">40</data>
+      <data name="price/regular" xsi:type="string">100</data>
+      <constraint name="assertCatalogPriceRuleAppliedCatalogPage" next="assertCatalogPriceRuleAppliedProductPage"/>
+      <constraint name="assertCatalogPriceRuleAppliedProductPage" next="assertCatalogPriceRuleAppliedShoppingCart" prev="assertCatalogPriceRuleAppliedCatalogPage"/>
+      <constraint name="assertCatalogPriceRuleAppliedShoppingCart" prev="assertCatalogPriceRuleAppliedProductPage"/>
+    </variation>
+    <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation2" firstConstraint="assertCatalogPriceRuleAppliedCatalogPage" method="test">
+      <data name="catalogRulesOriginal/priority_0" xsi:type="string">catalog_price_rule_priority_0</data>
+      <data name="catalogRulesOriginal/priority_1" xsi:type="string">catalog_price_rule_priority_1_stop_further_rules</data>
+      <data name="catalogRulesOriginal/priority_2" xsi:type="string">catalog_price_rule_priority_2</data>
+      <data name="price/sub_total" xsi:type="string">100</data>
+      <data name="price/grand_total" xsi:type="string">45</data>
+      <data name="price/discount_amount" xsi:type="string">55</data>
+      <data name="price/special" xsi:type="string">45</data>
+      <data name="price/regular" xsi:type="string">100</data>
+      <constraint name="assertCatalogPriceRuleAppliedCatalogPage" next="assertCatalogPriceRuleAppliedProductPage"/>
+      <constraint name="assertCatalogPriceRuleAppliedProductPage" next="assertCatalogPriceRuleAppliedShoppingCart" prev="assertCatalogPriceRuleAppliedCatalogPage"/>
+      <constraint name="assertCatalogPriceRuleAppliedShoppingCart" prev="assertCatalogPriceRuleAppliedProductPage"/>
+    </variation>
+  </testCase>
 </config>

@@ -94,7 +94,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
      * @param bool $withAdmin
      * @param array $condition
      * @dataProvider dataProviderForTestAddStoreIfStoreIsArray
-     * @covers \Magento\UrlRewrite\Model\Resource\UrlRewriteCollection
+     * covers \Magento\UrlRewrite\Model\Resource\UrlRewriteCollection
      */
     public function testAddStoreFilterIfStoreIsArray($storeId, $withAdmin, $condition)
     {
@@ -121,7 +121,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
      * @param bool $withAdmin
      * @param array $condition
      * @dataProvider dataProviderForTestAddStoreFilterIfStoreIsInt
-     * @covers \Magento\UrlRewrite\Model\Resource\UrlRewriteCollection
+     * covers \Magento\UrlRewrite\Model\Resource\UrlRewriteCollection
      */
     public function testAddStoreFilterIfStoreIsInt($storeId, $withAdmin, $condition)
     {

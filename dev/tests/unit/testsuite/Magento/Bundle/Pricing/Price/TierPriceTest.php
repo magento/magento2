@@ -72,7 +72,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Bundle\Pricing\Price\TierPrice::isFirstPriceBetter
+     * covers \Magento\Bundle\Pricing\Price\TierPrice::isFirstPriceBetter
      * @dataProvider providerForGetterTierPriceList
      */
     public function testGetterTierPriceList($tierPrices, $basePrice, $expectedResult)

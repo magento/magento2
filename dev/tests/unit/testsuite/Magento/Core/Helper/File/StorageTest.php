@@ -30,27 +30,15 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->filesystemStorageMock = $this->getMockBuilder('Magento\Core\Model\File\Storage\File')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->coreFileStorageDbMock = $this->getMockBuilder('Magento\Core\Helper\File\Storage\Database')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storageMock = $this->getMockBuilder('Magento\Core\Model\File\Storage')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->helper = $this->objectManager->getObject(
-            'Magento\Core\Helper\File\Storage',
-            [
-                'coreFileStorageDb' => $this->coreFileStorageDbMock,
-                'storage' => $this->storageMock,
-                'filesystemStorage' => $this->filesystemStorageMock,
-                'config' => $this->configMock,
-            ]
-        );
+        $className = 'Magento\Core\Helper\File\Storage';
+        $arguments = $this->objectManager->getConstructArguments($className);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
+        $this->filesystemStorageMock = $arguments['filesystemStorage'];
+        $this->coreFileStorageDbMock = $arguments['coreFileStorageDb'];
+        $this->storageMock = $arguments['storage'];
+        $this->configMock = $context->getScopeConfig();
+        $this->helper = $this->objectManager->getObject($className, $arguments);
     }
 
     public function testGetCurrentStorageCode()
