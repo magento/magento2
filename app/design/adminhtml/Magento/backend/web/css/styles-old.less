@@ -573,7 +573,7 @@ select {
         .css(appearance, none, 1);
 
         display: inline-block;
-        vertical-align: middle;
+        line-height: normal;
         background-repeat: no-repeat;
         background-image+: url('../images/arrows-bg.svg');
         background-position+: ~'calc(100% - 12px)' -34px;
@@ -587,7 +587,7 @@ select {
         background-position+: ~'calc(100% - 33px)' 0;
         background-size+: 1px 100%;
 
-        padding-right: 34px+10px;
+        padding-right: 44px;
         &:focus {
             background-image+: url('../images/arrows-bg.svg');
             background-position+: ~'calc(100% - 12px)' 13px;
@@ -607,8 +607,8 @@ select {
     }
 }
 
-textarea,
-.input-text {
+select[multiple],
+select[size] {
     height: auto;
 }
 
@@ -618,18 +618,62 @@ textarea {
     padding-bottom: 6px;
     line-height: 1.18em;
     max-width: none;
+    min-height: 100px;
 }
 
-select[multiple],
-select[size] {
+textarea,
+.input-text {
     height: auto;
 }
 
 input[type="radio"],
 input[type="checkbox"] {
-    margin: 3px 0;
-    line-height: normal;
+    margin: 3px 0 0 0;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    vertical-align: top;
+    + label {
+        cursor: pointer;
+        display: inline-block;
+        &:before {
+            background: url('../images/choice_bkg.png') no-repeat -100% -100% #fff;
+            border-radius: 2px;
+            border: 1px solid #adadad;
+            content: '';
+            float: left;
+            height: 14px;
+            line-height: 14px;
+            margin: 1px 10px 0 0;
+            text-align: center;
+            vertical-align: top;
+            width: 14px;
+        }
+    }
+    &:focus + label {
+        &:before {
+            border-color: #007bdb;
+        }
+    }
+    &[disabled] + label {
+        &:before {
+            background-color: #e9e9e9;
+            border-color: #adadad;
+        }
+        color: #303030;
+        opacity: .5;
+    }
 }
+input[type="radio"] + label:before {
+    border-radius: 8px;
+}
+input[type="radio"]:checked + label:before {
+    background-position: -26px -1px;
+}
+input[type="checkbox"]:checked + label:before {
+    background-position: -1px -1px;
+}
+
 
 input[disabled],
 select[disabled],
@@ -1047,7 +1091,6 @@ input.mage-error ~ .addafter {
     font-weight: 500;
     position: absolute;
     margin-left: 10px;
-    top: 9px;
 }
 
 .with-addon .textarea {
@@ -2717,10 +2760,6 @@ address {
     text-transform: uppercase;
 }
 
-.switcher-label:before {
-    content: attr(data-text-off);
-}
-
 .switcher-label:after {
     display: inline-block;
     margin-left: 10px;
@@ -2729,6 +2768,19 @@ address {
     height: 17px;
     background: url(../images/switcher.png) no-repeat;
     content: '';
+}
+
+.switcher input[type="checkbox"] + .switcher-label:before {
+    content: attr(data-text-off);
+    background: none;
+    border-radius: 0;
+    border: none;
+    float: none;
+    height: auto;
+    line-height: normal;
+    margin: 0;
+    text-align: left;
+    width: auto;
 }
 
 .switcher input[type="checkbox"]:focus + .switcher-label:after {
