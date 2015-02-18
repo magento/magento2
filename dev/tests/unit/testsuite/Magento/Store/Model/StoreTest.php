@@ -9,6 +9,7 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -182,10 +183,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getBaseUrlDataProvider
      *
-     * @covers \Magento\Store\Model\Store::getBaseUrl
-     * @covers \Magento\Store\Model\Store::getCode
-     * @covers \Magento\Store\Model\Store::_updatePathUseRewrites
-     * @covers \Magento\Store\Model\Store::_getConfig
+     * covers \Magento\Store\Model\Store::getBaseUrl
+     * covers \Magento\Store\Model\Store::getCode
+     * covers \Magento\Store\Model\Store::_updatePathUseRewrites
+     * covers \Magento\Store\Model\Store::_getConfig
      *
      * @param string $type
      * @param boolean $secure
@@ -598,7 +599,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Store\Model\Store::getBaseMediaDir
+     * covers \Magento\Store\Model\Store::getBaseMediaDir
      */
     public function testGetBaseMediaDir()
     {
@@ -611,7 +612,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Store\Model\Store::getBaseStaticDir
+     * covers \Magento\Store\Model\Store::getBaseStaticDir
      */
     public function testGetBaseStaticDir()
     {

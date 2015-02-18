@@ -31,37 +31,30 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->dbStorageFactoryMock = $this->getMockBuilder('Magento\Core\Model\File\Storage\DatabaseFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $className = 'Magento\Core\Helper\File\Storage\Database';
+        $arguments = $this->objectManager->getConstructArguments(
+            $className,
+            ['dbStorageFactory' => $this->dbStorageFactoryMock]
+        );
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
         $mediaDirMock = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
         $mediaDirMock->expects($this->any())
             ->method('getAbsolutePath')
             ->will($this->returnValue('media-dir'));
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filesystemMock = $arguments['filesystem'];
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($mediaDirMock));
-        $this->fileStorageMock = $this->getMockBuilder('Magento\Core\Model\File\Storage\File')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->helper = $this->objectManager->getObject(
-            'Magento\Core\Helper\File\Storage\Database',
-            [
-                'filesystem' => $this->filesystemMock,
-                'fileStorage' => $this->fileStorageMock,
-                'dbStorageFactory' => $this->dbStorageFactoryMock,
-                'config' => $this->configMock,
-            ]
-        );
+        $this->fileStorageMock = $arguments['fileStorage'];
+        $this->configMock = $context->getScopeConfig();
+        $this->helper = $this->objectManager->getObject($className, $arguments);
     }
 
     /**

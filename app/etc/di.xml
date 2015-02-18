@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
+    <preference for="Magento\Framework\View\Template\Html\MinifierInterface" type="Magento\Framework\View\Template\Html\Minifier" />
     <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\Framework\Search\Adapter\Mysql\Filter\Preprocessor" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Resolver" />
@@ -87,6 +88,7 @@
     <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Null"/>
     <preference for="Magento\Framework\App\Resource\ConnectionAdapterInterface" type="Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
+    <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
     <preference for="Magento\Framework\Acl\CacheInterface" type="Magento\Framework\Acl\Cache" />
     <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area" />
     <preference for="Magento\Framework\Module\Updater\SetupInterface" type="Magento\Framework\Module\DataSetup" />
@@ -308,39 +310,65 @@
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
-    <virtualType name="layoutArgumentInterpreterInternal" type="Magento\Framework\Data\Argument\Interpreter\Composite">
+    <virtualType name="layoutArgumentReaderInterpreter" type="Magento\Framework\Data\Argument\Interpreter\Composite">
         <arguments>
             <argument name="interpreters" xsi:type="array">
-                <item name="object" xsi:type="object">layoutObjectArgumentInterpreter</item>
                 <item name="options" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Options</item>
-                <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
-                <item name="array" xsi:type="object">layoutArrayArgumentInterpreterProxy</item>
+                <item name="array" xsi:type="object">layoutArrayArgumentReaderInterpreterProxy</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
-                <item name="helper" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod</item>
                 <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
                 <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</item>
                 <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
+                <item name="object" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
+                <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
+                <item name="helper" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
             </argument>
             <argument name="discriminator" xsi:type="const">Magento\Framework\View\Model\Layout\Merge::TYPE_ATTRIBUTE</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutArgumentInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater">
+    <virtualType name="layoutArgumentGeneratorInterpreterInternal" type="Magento\Framework\Data\Argument\Interpreter\Composite">
         <arguments>
-            <argument name="subject" xsi:type="object">layoutArgumentInterpreterInternal</argument>
+            <argument name="interpreters" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Options</item>
+                <item name="array" xsi:type="object">layoutArrayArgumentGeneratorInterpreterProxy</item>
+                <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
+                <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</item>
+                <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
+                <item name="object" xsi:type="object">layoutObjectArgumentInterpreter</item>
+                <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
+                <item name="helper" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod</item>
+            </argument>
+            <argument name="discriminator" xsi:type="const">Magento\Framework\View\Model\Layout\Merge::TYPE_ATTRIBUTE</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutArrayArgumentInterpreter" type="Magento\Framework\Data\Argument\Interpreter\ArrayType">
+    <virtualType name="layoutArgumentGeneratorInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater">
         <arguments>
-            <argument name="itemInterpreter" xsi:type="object">layoutArgumentInterpreter</argument>
+            <argument name="subject" xsi:type="object">layoutArgumentGeneratorInterpreterInternal</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutArrayArgumentReaderInterpreter" type="Magento\Framework\Data\Argument\Interpreter\ArrayType">
+        <arguments>
+            <argument name="itemInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutArrayArgumentGeneratorInterpreter" type="Magento\Framework\Data\Argument\Interpreter\ArrayType">
+        <arguments>
+            <argument name="itemInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreterInternal</argument>
         </arguments>
     </virtualType>
     <!--
     Array item can be of any type just like an argument, including array type itself, which creates circular dependency.
     Proxy is used to resolve the circular dependency, so that array items undergo the same interpretation as arguments.
     -->
-    <virtualType name="layoutArrayArgumentInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
+    <virtualType name="layoutArrayArgumentReaderInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
         <arguments>
-            <argument name="instanceName" xsi:type="string">layoutArrayArgumentInterpreter</argument>
+            <argument name="instanceName" xsi:type="string">layoutArrayArgumentReaderInterpreter</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutArrayArgumentGeneratorInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">layoutArrayArgumentGeneratorInterpreter</argument>
         </arguments>
     </virtualType>
     <virtualType name="layoutObjectArgumentInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Object">
@@ -382,11 +410,13 @@
         <arguments>
             <argument name="readerPool" xsi:type="object">blockRenderPool</argument>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout\Reader\UiComponent">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
         </arguments>
     </type>
     <virtualType name="bodyRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
@@ -422,6 +452,7 @@
     <type name="Magento\Framework\View\Layout">
         <arguments>
             <argument name="readerPool" xsi:type="object" shared="false">commonRenderPool</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
     <virtualType name="genericLayoutRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
@@ -480,12 +511,12 @@
     </type>
     <type name="Magento\Framework\View\Layout\Generator\Block">
         <arguments>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentInterpreter</argument>
+            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout\Generator\UiComponent">
         <arguments>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentInterpreter</argument>
+            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Mview\View">
@@ -594,6 +625,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout\ScheduledStructure" shared="false" />
+    <type name="Magento\Framework\View\Page\Config\Structure" shared="false" />
     <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container">
         <arguments>
             <argument name="buckets" xsi:type="array">

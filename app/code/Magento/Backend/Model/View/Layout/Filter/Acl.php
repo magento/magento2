@@ -7,6 +7,9 @@
  */
 namespace Magento\Backend\Model\View\Layout\Filter;
 
+use Magento\Framework\View\Layout\ScheduledStructure;
+use Magento\Framework\View\Layout\Data\Structure;
+
 class Acl
 {
     /**
@@ -14,32 +17,58 @@ class Acl
      *
      * @var \Magento\Framework\AuthorizationInterface
      */
-    protected $_authorization;
+    protected $authorization;
 
     /**
      * @param \Magento\Framework\AuthorizationInterface $authorization
      */
     public function __construct(\Magento\Framework\AuthorizationInterface $authorization)
     {
-        $this->_authorization = $authorization;
+        $this->authorization = $authorization;
     }
 
     /**
-     * Delete nodes that have "acl" attribute but value is "not allowed"
+     * Delete elements that have "acl" attribute but value is "not allowed"
      * In any case, the "acl" attribute will be unset
      *
-     * @param \Magento\Framework\Simplexml\Element $xml
-     * @return void
+     * @param ScheduledStructure $scheduledStructure
+     * @param Structure $structure
      */
-    public function filterAclNodes(\Magento\Framework\Simplexml\Element $xml)
+    public function filterAclElements(ScheduledStructure $scheduledStructure, Structure $structure)
     {
-        $limitations = $xml->xpath('//*[@acl]') ?: [];
-        foreach ($limitations as $node) {
-            if (!$this->_authorization->isAllowed($node['acl'])) {
-                $node->unsetSelf();
-            } else {
-                unset($node['acl']);
+        foreach ($scheduledStructure->getElements() as $name => $data) {
+            list(, $data) = $data;
+            if (isset($data['attributes']['acl']) && $data['attributes']['acl']) {
+                if (!$this->authorization->isAllowed($data['attributes']['acl'])) {
+                    $this->removeElement($scheduledStructure, $structure, $name);
+                }
             }
         }
+    }
+
+    /**
+     * Remove scheduled element
+     *
+     * @param ScheduledStructure $scheduledStructure
+     * @param Structure $structure
+     * @param string $elementName
+     * @param bool $isChild
+     * @return $this
+     */
+    protected function removeElement(
+        ScheduledStructure $scheduledStructure,
+        Structure $structure,
+        $elementName,
+        $isChild = false
+    ) {
+        $elementsToRemove = array_keys($structure->getChildren($elementName));
+        $scheduledStructure->unsetElement($elementName);
+        foreach ($elementsToRemove as $element) {
+            $this->removeElement($scheduledStructure, $structure, $element, true);
+        }
+        if (!$isChild) {
+            $structure->unsetElement($elementName);
+        }
+        return $this;
     }
 }
