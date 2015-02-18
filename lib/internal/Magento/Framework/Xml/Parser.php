@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Xml;
 
+use \Magento\Framework\Exception;
+
 class Parser
 {
     /**
@@ -23,6 +25,11 @@ class Parser
     protected $_content = [];
 
     /**
+     * @var boolean
+     */
+    protected $errorHandlerIsActive = false;
+
+    /**
      *
      */
     public function __construct()
@@ -30,6 +37,16 @@ class Parser
         $this->_dom = new \DOMDocument();
         $this->_currentDom = $this->_dom;
         return $this;
+    }
+
+    /**
+     * Initializes error handler
+     *
+     * @return void
+     */
+    public function initErrorHandler()
+    {
+        $this->errorHandlerIsActive = true;
     }
 
     /**
@@ -135,7 +152,31 @@ class Parser
      */
     public function loadXML($string)
     {
+        if ($this->errorHandlerIsActive) {
+            set_error_handler([$this, 'errorHandler']);
+        }
+
         $this->getDom()->loadXML($string);
+
+        if ($this->errorHandlerIsActive) {
+            restore_error_handler();
+        }
+
         return $this;
+    }
+
+    /**
+     * Custom XML lib error handler
+     *
+     * @param $errorNo
+     * @param $errorStr
+     * @param $errorFile
+     * @param $errorLine
+     * @throws \Magento\Framework\Exception
+     * @return void
+     */
+    public function errorHandler($errorNo, $errorStr, $errorFile, $errorLine)
+    {
+        throw new \Magento\Framework\Exception($errorStr);
     }
 }

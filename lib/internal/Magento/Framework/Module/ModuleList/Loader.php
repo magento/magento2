@@ -9,6 +9,7 @@ namespace Magento\Framework\Module\ModuleList;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Declaration\Converter\Dom;
+use Magento\Framework\Xml\Parser;
 
 /**
  * Loader of module list information from the filesystem
@@ -30,15 +31,24 @@ class Loader
     private $converter;
 
     /**
+     * Parser
+     * @var \Magento\Framework\Xml\Parser
+     */
+    private $parser;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
      * @param Dom $converter
+     * @param Parser $parser
      */
-    public function __construct(Filesystem $filesystem, Dom $converter)
+    public function __construct(Filesystem $filesystem, Dom $converter, Parser $parser)
     {
         $this->filesystem = $filesystem;
         $this->converter = $converter;
+        $this->parser = $parser;
+        $this->parser->initErrorHandler();
     }
 
     /**
@@ -52,9 +62,17 @@ class Loader
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
         foreach ($dir->search('*/*/etc/module.xml') as $file) {
             $contents = $dir->readFile($file);
-            $dom = new \DOMDocument();
-            $dom->loadXML($contents);
-            $data = $this->converter->convert($dom);
+
+            try {
+                $this->parser->loadXML($contents);
+            } catch (\Magento\Framework\Exception $e) {
+                throw new \Magento\Framework\Exception(
+                    'Invalid Document: ' . $file . PHP_EOL
+                    . ' Error: ' . $e->getMessage()
+                );
+            }
+
+            $data = $this->converter->convert($this->parser->getDom());
             $name = key($data);
             $result[$name] = $data[$name];
         }
