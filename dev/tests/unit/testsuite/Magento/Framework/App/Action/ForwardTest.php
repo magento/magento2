@@ -69,7 +69,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
      * Test for getRequest method
      *
      * @test
-     * @covers \Magento\Framework\App\Action\AbstractAction::getRequest
+     * covers \Magento\Framework\App\Action\AbstractAction::getRequest
      */
     public function testGetRequest()
     {
@@ -80,7 +80,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
      * Test for getResponse method
      *
      * @test
-     * @covers \Magento\Framework\App\Action\AbstractAction::getResponse
+     * covers \Magento\Framework\App\Action\AbstractAction::getResponse
      */
     public function testGetResponse()
     {
@@ -91,7 +91,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
      * Test for getResponse med. Checks that response headers are set correctly
      *
      * @test
-     * @covers \Magento\Framework\App\Action\AbstractAction::getResponse
+     * covers \Magento\Framework\App\Action\AbstractAction::getResponse
      */
     public function testResponseHeaders()
     {

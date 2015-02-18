@@ -40,7 +40,7 @@ class LabelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Label::__construct
+     * covers \Magento\Framework\Data\Form\Element\Label::__construct
      */
     public function testConstruct()
     {
@@ -48,7 +48,7 @@ class LabelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Label::getElementHtml
+     * covers \Magento\Framework\Data\Form\Element\Label::getElementHtml
      */
     public function testGetElementHtml()
     {

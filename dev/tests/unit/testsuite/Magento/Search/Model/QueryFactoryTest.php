@@ -45,7 +45,7 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
         $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
-            ->setMethods(['getRequest'])
+            ->setMethods(['getRequest', 'getScopeConfig'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->once())
@@ -63,6 +63,9 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->setMethods([])
             ->getMock();
+        $this->contextMock->expects($this->once())
+            ->method('getScopeConfig')
+            ->will($this->returnValue($this->scopeConfigMock));
         $this->queryMock = $this->getMockBuilder('\Magento\Search\Model\Query')
             ->disableOriginalConstructor()
             ->setMethods(['setIsQueryTextExceeded', 'getId', 'setQueryText', 'loadByQuery'])
@@ -74,7 +77,6 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->contextMock,
                 'objectManager' => $this->objectManagerMock,
                 'string' => $this->stringMock,
-                'scopeConfig' => $this->scopeConfigMock
             ]
         );
     }

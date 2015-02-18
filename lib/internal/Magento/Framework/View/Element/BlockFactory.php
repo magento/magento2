@@ -39,6 +39,7 @@ class BlockFactory
      */
     public function createBlock($blockName, array $arguments = [])
     {
+        $blockName = ltrim($blockName, '\\');
         $block = $this->objectManager->create($blockName, $arguments);
         if (!$block instanceof BlockInterface) {
             throw new \LogicException($blockName . ' does not implemented BlockInterface');

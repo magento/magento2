@@ -2,7 +2,7 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.42.0-beta7",
+    "version": "0.42.0-beta8",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -131,6 +131,7 @@
         "magento/module-url-rewrite": "self.version",
         "magento/module-user": "self.version",
         "magento/module-usps": "self.version",
+        "magento/module-version": "self.version",
         "magento/module-webapi": "self.version",
         "magento/module-weee": "self.version",
         "magento/module-widget": "self.version",

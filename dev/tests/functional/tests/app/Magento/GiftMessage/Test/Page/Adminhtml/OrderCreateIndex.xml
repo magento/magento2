@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="sales/order_create/index">
-    <blocks>
-        <giftMessageForOrderBlock>
-            <class>Magento\GiftMessage\Test\Block\Adminhtml\Order\Create\GiftOptions</class>
-            <locator>#order-giftmessage</locator>
-            <strategy>css selector</strategy>
-        </giftMessageForOrderBlock>
-        <createGiftMessageBlock>
-            <class>Magento\GiftMessage\Test\Block\Adminhtml\Order\Create</class>
-            <locator>#order-items</locator>
-            <strategy>css selector</strategy>
-        </createGiftMessageBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="OrderCreateIndex" area="Adminhtml" mca="sales/order_create/index">
+    <block name="giftMessageForOrderBlock" class="Magento\GiftMessage\Test\Block\Adminhtml\Order\Create\GiftOptions" locator="#order-giftmessage" strategy="css selector"/>
+    <block name="createGiftMessageBlock" class="Magento\GiftMessage\Test\Block\Adminhtml\Order\Create" locator="#order-items" strategy="css selector"/>
+  </page>
+</config>
