@@ -73,6 +73,6 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $collection->getStoreId(), 'Store id setter and getter');
 
         $collection->addValuesToResult();
-        $this->assertContains('core_variable_value', (string)$collection->getSelect());
+        $this->assertContains('variable_value', (string)$collection->getSelect());
     }
 }
