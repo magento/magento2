@@ -766,6 +766,8 @@ class Installer
      */
     public function checkDatabaseTablePrefix($prefix)
     {
+        //The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_);
+        // the first character should be a letter.
         if ($prefix !== '' && !preg_match('/^([a-zA-Z])([[:alnum:]]+)([[:alnum:]_]+)$/', $prefix)) {
             throw new \InvalidArgumentException('Please correct the table prefix format.');
         }
