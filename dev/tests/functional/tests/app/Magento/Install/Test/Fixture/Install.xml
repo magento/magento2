@@ -25,6 +25,6 @@
     <field name="httpsFront"/>
     <field name="keyValue"/>
     <field name="language"/>
-    <field name="language"/>
+    <field name="currency"/>
   </fixture>
 </config>
