@@ -766,7 +766,7 @@ class Installer
      */
     public function checkDatabaseTablePrefix($prefix)
     {
-        if ($prefix !== '' && !preg_match('/^([[:alnum:]]+)([[:alnum:]_]+)$/', $prefix)) {
+        if ($prefix !== '' && !preg_match('/^([a-zA-Z])([[:alnum:]]+)([[:alnum:]_]+)$/', $prefix)) {
             throw new \InvalidArgumentException('Please correct the table prefix format.');
         }
 
