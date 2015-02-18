@@ -6,6 +6,9 @@
  
 namespace Magento\Eav\Model\Entity;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
