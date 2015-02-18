@@ -50,23 +50,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     public function render(\Magento\Framework\Object $row)
     {
         if ($data = $this->_getValue($row)) {
-            $format = $this->_getFormat();
-            try {
-                $data = $this->_localeDate->date(
-                    $data,
-                    \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-                )->toString(
-                    $format
-                );
-            } catch (\Exception $e) {
-                $data = $this->_localeDate->date(
-                    $data,
-                    \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-                )->toString(
-                    $format
-                );
-            }
-            return $data;
+            return $this->_localeDate->formatDateTime(new \DateTime($data));
         }
         return $this->getColumn()->getDefault();
     }

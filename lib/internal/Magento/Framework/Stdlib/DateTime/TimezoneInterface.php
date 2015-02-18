@@ -141,4 +141,20 @@ interface TimezoneInterface
      * @return bool
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
+
+    /**
+     * @param \DateTime $date
+     * @param int $dateType
+     * @param int $timeType
+     * @param null $locale
+     * @param null $timezone
+     * @return mixed
+     */
+    public function formatDateTime(
+        \DateTime $date,
+        $dateType = \IntlDateFormatter::SHORT,
+        $timeType = \IntlDateFormatter::SHORT,
+        $locale = null,
+        $timezone = null
+    );
 }

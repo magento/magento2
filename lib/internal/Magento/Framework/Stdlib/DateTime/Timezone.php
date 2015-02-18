@@ -265,4 +265,28 @@ class Timezone implements TimezoneInterface
     {
         return $this->_localeResolver->getLocale()->getTranslation($value, $path, $this->_localeResolver->getLocale());
     }
+
+    /**
+     * @param \DateTime $date
+     * @param int $dateType
+     * @param int $timeType
+     * @param null $locale
+     * @param null $timezone
+     * @return mixed
+     */
+    public function formatDateTime(
+        \DateTime $date,
+        $dateType = \IntlDateFormatter::SHORT,
+        $timeType = \IntlDateFormatter::SHORT,
+        $locale = null,
+        $timezone = null
+    ) {
+        $formatter = new \IntlDateFormatter(
+            $locale ?: $this->_localeResolver->getLocaleCode(),
+            $dateType,
+            $timeType,
+            $timezone ?: 'UTC'
+        );
+        return $formatter->format($date);
+    }
 }
