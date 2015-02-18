@@ -151,7 +151,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         try {
             $this->assertEquals($contentType, $this->_request->getContentType());
-        } catch (\Magento\Framework\Webapi\Exception $e) {
+        } catch (\Magento\Framework\Exception\InputException $e) {
             if ($exceptionMessage) {
                 $this->assertEquals(
                     $exceptionMessage,

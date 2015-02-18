@@ -16,8 +16,8 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var ErrorProcessor */
     protected $_errorProcessor;
 
-    /** @var \Magento\Core\Helper\Data */
-    protected $_helperMock;
+    /** @var \Magento\Framework\Json\Encoder */
+    protected $encoderMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_appStateMock;
@@ -28,9 +28,10 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Set up mocks for SUT. */
-        $this->_helperMock = $this->getMockBuilder(
-            'Magento\Core\Helper\Data'
-        )->disableOriginalConstructor()->getMock();
+        $this->encoderMock = $this->getMockBuilder('Magento\Framework\Json\Encoder')
+            ->disableOriginalConstructor()
+            ->setMethods(['jsonEncode'])
+            ->getMock();
 
         $this->_appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
             ->disableOriginalConstructor()
@@ -44,7 +45,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
         /** Initialize SUT. */
         $this->_errorProcessor = new ErrorProcessor(
-            $this->_helperMock,
+            $this->encoderMock,
             $this->_appStateMock,
             $this->_loggerMock,
             $filesystemMock
@@ -56,7 +57,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_errorProcessor);
-        unset($this->_helperMock);
+        unset($this->encoderMock);
         unset($this->_appStateMock);
         parent::tearDown();
     }
@@ -68,7 +69,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_ACCEPT'] = 'json';
         /** Assert that jsonEncode method will be executed once. */
-        $this->_helperMock->expects(
+        $this->encoderMock->expects(
             $this->once()
         )->method(
             'jsonEncode'
@@ -107,7 +108,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         /** Mock app to return enabled developer mode flag. */
         $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
         /** Assert that jsonEncode method will be executed once. */
-        $this->_helperMock->expects(
+        $this->encoderMock->expects(
             $this->once()
         )->method(
             'jsonEncode'
@@ -167,7 +168,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         /** Set undefined rendering format. */
         $_SERVER['HTTP_ACCEPT'] = 'undefined';
         /** Assert that jsonEncode method will be executed at least once. */
-        $this->_helperMock->expects($this->atLeastOnce())->method('jsonEncode');
+        $this->encoderMock->expects($this->atLeastOnce())->method('jsonEncode');
         $this->_errorProcessor->renderErrorMessage('Message');
     }
 

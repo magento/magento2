@@ -11,7 +11,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Config\Reader as ServiceConfigReader;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Framework\Cache\FrontendInterface as WebapiCache;
+use Magento\Framework\Cache\Frontend\Decorator\TagScope as WebapiCache;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Reflection\TypeProcessor;
