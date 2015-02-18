@@ -17,35 +17,7 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Setup\Module\DataSetup',
-            ['resourceName' => 'default_setup', 'moduleName' => 'Magento_Core']
-        );
-    }
-
-    public function testApplyAllDataUpdates()
-    {
-        /* reset data version */
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Module\ResourceInterface'
-        )->setDataVersion(
-            'adminnotification_setup',
-            false
-        );
-        /* clear table */
-        $this->_model->getConnection()->delete($this->_model->getTable('adminnotification_inbox'), 'true');
-        $this->_model->getConnection()->delete($this->_model->getTable('admin_system_messages'), 'true');
-        /** @var $updater \Magento\Framework\Module\Updater */
-        $updater = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Module\Updater');
-        try {
-            $updater->updateData();
-        } catch (\Exception $e) {
-            $this->fail("Impossible to continue other tests, because database is broken: {$e}");
-        }
-        $this->assertNotEmpty(
-            $this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification', 'schema_version')
-        );
-        $this->assertNotEmpty(
-            $this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification', 'data_version')
+            'Magento\Setup\Module\DataSetup'
         );
     }
 
