@@ -42,8 +42,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadCustomerQuoteThrowingCoreException()
     {
-        $this->checkoutSession->expects($this->once())->method('loadCustomerQuote')->will(
-            $this->throwException(new \Magento\Framework\Exception\LocalizedException('Message'))
+        $this->checkoutSession->expects($this->once())->method('loadCustomerQuote')->willThrowException(
+            new \Magento\Framework\Exception\LocalizedException(__('message'))
         );
         $this->messageManager->expects($this->once())->method('addError')->with('Message');
 

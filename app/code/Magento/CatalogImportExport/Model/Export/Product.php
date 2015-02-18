@@ -319,7 +319,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         foreach ($productTypes as $productTypeName => $productTypeConfig) {
             if (!($model = $this->_typeFactory->create($productTypeConfig['model']))) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    "Entity type model '{$productTypeConfig['model']}' is not found"
+                    __('Entity type model \'%1\' is not found', $productTypeConfig['model'])
                 );
             }
             if (!$model instanceof \Magento\CatalogImportExport\Model\Export\Product\Type\AbstractType) {

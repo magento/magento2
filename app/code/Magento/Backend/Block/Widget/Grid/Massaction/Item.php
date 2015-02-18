@@ -53,7 +53,7 @@ class Item extends \Magento\Backend\Block\Widget
         } elseif (is_array($block)) {
             $block = $this->_createFromConfig($block);
         } elseif (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
-            throw new \Magento\Framework\Exception\LocalizedException('Unknown block type');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Unknown block type'));
         }
 
         $this->setChild('additional_action', $block);

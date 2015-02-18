@@ -788,7 +788,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->once())
             ->method('addToCart')
             ->with($this->checkoutCartMock, true)
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException('message'));
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
 
         $this->messageManagerMock->expects($this->once())
             ->method('addNotice')

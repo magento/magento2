@@ -89,7 +89,7 @@ class CsvImportHandler
     public function importFromCsvFile($file)
     {
         if (!isset($file['tmp_name'])) {
-            throw new \Magento\Framework\Exception\LocalizedException('Invalid file upload attempt.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid file upload attempt.'));
         }
         $csvProcessor = new \Magento\Framework\File\Csv();
         $ratesRawData = $csvProcessor->getData($file['tmp_name']);
@@ -161,7 +161,7 @@ class CsvImportHandler
             }
             // check if number of fields in row match with number of valid fields
             if (count($rateRawData[$rowIndex]) != $validFieldsNum) {
-                throw new \Magento\Framework\Exception\LocalizedException('Invalid file format.');
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid file format.'));
             }
         }
         return $rateRawData;
@@ -225,7 +225,7 @@ class CsvImportHandler
         $countryCode = $rateData[1];
         $country = $this->_countryFactory->create()->loadByCode($countryCode, 'iso2_code');
         if (!$country->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException('One of the countries has invalid code.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('One of the countries has invalid code.'));
         }
         $regionsCache = $this->_addCountryRegionsToCache($countryCode, $regionsCache);
 

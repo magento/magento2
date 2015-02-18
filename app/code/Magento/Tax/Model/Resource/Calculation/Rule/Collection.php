@@ -155,7 +155,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                 $field = 'cd.customer_tax_class_id';
                 break;
             default:
-                throw new \Magento\Framework\Exception\LocalizedException('Invalid type supplied');
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid type supplied'));
         }
 
         $this->joinCalculationData('cd');

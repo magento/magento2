@@ -78,14 +78,14 @@ class CustomerTokenService implements CustomerTokenServiceInterface
     {
         $tokenCollection = $this->tokenModelCollectionFactory->create()->addFilterByCustomerId($customerId);
         if ($tokenCollection->getSize() == 0) {
-            throw new LocalizedException("This customer has no tokens.");
+            throw new LocalizedException(__('This customer has no tokens.'));
         }
         try {
             foreach ($tokenCollection as $token) {
                 $token->setRevoked(1)->save();
             }
         } catch (\Exception $e) {
-            throw new LocalizedException("The tokens could not be revoked.");
+            throw new LocalizedException(__('The tokens could not be revoked.'));
         }
         return true;
     }

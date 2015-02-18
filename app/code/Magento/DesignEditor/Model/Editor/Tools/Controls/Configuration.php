@@ -194,7 +194,9 @@ class Configuration
     public function getControlData($controlName)
     {
         if (!isset($this->_controlList[$controlName])) {
-            throw new \Magento\Framework\Exception\LocalizedException("Unknown control: \"{$controlName}\"");
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Unknown control: "%1"', $controlName)
+            );
         }
         return $this->_controlList[$controlName];
     }

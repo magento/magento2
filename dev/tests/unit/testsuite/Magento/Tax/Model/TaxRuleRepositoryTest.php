@@ -140,7 +140,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                new \Magento\Framework\Exception\LocalizedException('Could not save'),
+                new \Magento\Framework\Exception\LocalizedException(__('Could not save')),
                 '\Magento\Framework\Exception\CouldNotSaveException',
                 'Could not save'
             ], [

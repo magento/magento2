@@ -77,7 +77,9 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         if ($this->hasData('exportTypes')) {
             foreach ($this->getData('exportTypes') as $type) {
                 if (!isset($type['urlPath']) || !isset($type['label'])) {
-                    throw new \Magento\Framework\Exception\LocalizedException('Invalid export type supplied for grid export block');
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Invalid export type supplied for grid export block')
+                    );
                 }
                 $this->addExportType($type['urlPath'], $type['label']);
             }

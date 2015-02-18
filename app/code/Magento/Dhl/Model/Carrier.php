@@ -1932,7 +1932,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $result = new \Magento\Framework\Object();
         try {
             if (!isset($xml->AirwayBillNumber) || !isset($xml->LabelImage->OutputImage)) {
-                throw new \Magento\Framework\Exception\LocalizedException('Unable to retrieve shipping label');
+                throw new \Magento\Framework\Exception\LocalizedException(__('Unable to retrieve shipping label'));
             }
             $result->setTrackingNumber((string)$xml->AirwayBillNumber);
             $labelContent = (string)$xml->LabelImage->OutputImage;

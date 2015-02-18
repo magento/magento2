@@ -26,12 +26,16 @@ class Adapter
     public static function factory($type, $directory, $options = null)
     {
         if (!is_string($type) || !$type) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The adapter type must be a non empty string.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The adapter type must be a non empty string.')
+            );
         }
         $adapterClass = 'Magento\ImportExport\Model\Import\Source\\' . ucfirst(strtolower($type));
 
         if (!class_exists($adapterClass)) {
-            throw new \Magento\Framework\Exception\LocalizedException("'{$type}' file extension is not supported");
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('\'%1\' file extension is not supported', $type)
+            );
         }
         $adapter = new $adapterClass($options, $directory);
 
