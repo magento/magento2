@@ -51,7 +51,7 @@ class CreateUser extends Curl
         $response = $curl->read();
         $curl->close();
         preg_match(
-            '/class=\"\scol\-id col\-user_id\W*>\W+(\d+)\W+<\/td>\W+<td[\w\s\"=\-]*?>\W+?' . $data['username'] . '/siu',
+            '/class=\"\scol\-id col\-user_id\W*>\W*(\d+)\W*<\/td>\W*<td[\w\s\"=\-]*?>\W*?' . $data['username'] . '/siu',
             $response,
             $matches
         );

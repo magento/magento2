@@ -143,4 +143,16 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->model->reindexAll();
     }
+
+    public function testUpdateMview()
+    {
+        $this->viewProcessorMock->expects($this->once())->method('update')->with('indexer')->willReturnSelf();
+        $this->model->updateMview();
+    }
+
+    public function testClearChangelog()
+    {
+        $this->viewProcessorMock->expects($this->once())->method('clearChangelog')->with('indexer')->willReturnSelf();
+        $this->model->clearChangelog();
+    }
 }

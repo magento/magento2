@@ -11,7 +11,7 @@ namespace Magento\Eav\Model\Resource\Entity;
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Eav\Model\Resource\Entity\Attribute::_saveOption
+     * covers \Magento\Eav\Model\Resource\Entity\Attribute::_saveOption
      */
     public function testSaveOptionSystemAttribute()
     {
@@ -80,7 +80,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Resource\Entity\Attribute::_saveOption
+     * covers \Magento\Eav\Model\Resource\Entity\Attribute::_saveOption
      */
     public function testSaveOptionNewUserDefinedAttribute()
     {
@@ -174,7 +174,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Resource\Entity\Attribute::_saveOption
+     * covers \Magento\Eav\Model\Resource\Entity\Attribute::_saveOption
      */
     public function testSaveOptionNoValue()
     {

@@ -112,7 +112,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         );
 
         // method "match" will be invoked for this router because it's first in the list
-        $matchedRouter = $this->getMock('Magento\Core\App\Router\Base', [], [], '', false);
+        $matchedRouter = $this->getMock('Magento\Framework\App\Router\Base', [], [], '', false);
         $matchedRouter->expects(
             $this->once()
         )->method(
@@ -128,7 +128,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($matchedController));
 
         // method "match" will not be invoked for this router because controller will be found by first router
-        $notMatchedRouter = $this->getMock('Magento\Core\App\Router\Base', [], [], '', false);
+        $notMatchedRouter = $this->getMock('Magento\Framework\App\Router\Base', [], [], '', false);
         $notMatchedRouter->expects($this->never())->method('match');
 
         $matchedRouters = array_merge(

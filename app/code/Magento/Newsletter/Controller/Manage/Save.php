@@ -11,7 +11,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 class Save extends \Magento\Newsletter\Controller\Manage
 {
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $formKeyValidator;
 
@@ -35,7 +35,7 @@ class Save extends \Magento\Newsletter\Controller\Manage
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param CustomerRepository $customerRepository
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
@@ -43,7 +43,7 @@ class Save extends \Magento\Newsletter\Controller\Manage
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         CustomerRepository $customerRepository,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
