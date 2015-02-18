@@ -15,11 +15,13 @@ $installer->startSetup();
 /**
  * Rename/Create table 'variable'
  */
+$variableTableName = $installer->getTable('variable');
+$coreVariableTableName = $installer->getTable('core_variable');
 if ($installer->tableExists('core_variable')) {
-    $connection->renameTable('core_variable', 'variable');
+    $connection->renameTable($coreVariableTableName, $variableTableName);
 } else {
     $table = $connection->newTable(
-        $installer->getTable('variable')
+        $variableTableName
     )->addColumn(
         'variable_id',
         \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -56,15 +58,17 @@ if ($installer->tableExists('core_variable')) {
 /**
  * Rename/Create table 'variable_value'
  */
+$variableValueTableName = $installer->getTable('variable_value');
+$coreVariableValueTableName = $installer->getTable('core_variable_value');
 if ($installer->tableExists('core_variable_value')) {
-    $connection->renameTable('core_variable_value', 'variable_value');
-    $oldForeignKeys = $connection->getForeignKeys('variable_value');
+    $connection->renameTable($coreVariableValueTableName, $variableValueTableName);
+    $oldForeignKeys = $connection->getForeignKeys($variableValueTableName);
     foreach ($oldForeignKeys as $foreignKey) {
-        $connection->dropForeignKey('variable_value', $foreignKey['FK_NAME']);
+        $connection->dropForeignKey($variableValueTableName, $foreignKey['FK_NAME']);
     }
 } else {
     $table = $connection->newTable(
-        $installer->getTable('variable_value')
+        $variableValueTableName
     )->addColumn(
         'value_id',
         \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -113,7 +117,7 @@ if ($installer->tableExists('core_variable_value')) {
 }
 $connection->addForeignKey(
     $installer->getFkName('variable_value', 'store_id', 'store', 'store_id'),
-    'variable_value',
+    $variableValueTableName,
     'store_id',
     $installer->getTable('store'),
     'store_id',
@@ -122,7 +126,7 @@ $connection->addForeignKey(
 );
 $connection->addForeignKey(
     $installer->getFkName('variable_value', 'variable_id', 'variable', 'variable_id'),
-    'variable_value',
+    $variableValueTableName,
     'variable_id',
     $installer->getTable('variable'),
     'variable_id',
