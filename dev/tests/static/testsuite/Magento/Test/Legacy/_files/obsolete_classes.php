@@ -1751,13 +1751,34 @@ return [
     ['Magento\Adminhtml\Block\Report\Wishlist', 'Magento\Reports\Block\Adminhtml\Wishlist'],
     ['Magento\Backend\Helper\Addresses'],
     ['Magento\Backend\Controller\Adminhtml\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
-    ['Magento\Backend\Controller\Adminhtml\System\Variable\Delete', 'Magento\Variable\Controller\Adminhtml\System\Variable\Delete'],
-    ['Magento\Backend\Controller\Adminhtml\System\Variable\Edit', 'Magento\Variable\Controller\Adminhtml\System\Variable\Edit'],
-    ['Magento\Backend\Controller\Adminhtml\System\Variable\Index', 'Magento\Variable\Controller\Adminhtml\System\Variable\Index'],
-    ['Magento\Backend\Controller\Adminhtml\System\Variable\NewAction', 'Magento\Variable\Controller\Adminhtml\System\Variable\NewAction'],
-    ['Magento\Backend\Controller\Adminhtml\System\Variable\Save', 'Magento\Variable\Controller\Adminhtml\System\Variable\Save'],
-    ['Magento\Backend\Controller\Adminhtml\System\Variable\Validate', 'Magento\Variable\Controller\Adminhtml\System\Variable\Validate'],
-    ['Magento\Backend\Controller\Adminhtml\System\Variable\WysiwygPlugin', 'Magento\Variable\Controller\Adminhtml\System\Variable\WysiwygPlugin'],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Delete',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Delete'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Edit',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Edit'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Index',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Index'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\NewAction',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\NewAction'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Save',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Save'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Validate',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Validate'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\WysiwygPlugin',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\WysiwygPlugin'
+    ],
     ['Magento\Core\Model\Cookie', 'Magento\Framework\Stdlib\Cookie'],
     ['Magento\Core\Model\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Core\Block\Template\Context', 'Magento\Framework\View\Element\Template\Context'],

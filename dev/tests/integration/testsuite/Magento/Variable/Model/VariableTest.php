@@ -30,7 +30,9 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $this->_model->setData(['code' => 'test_code', 'name' => 'test_name']);
         $this->_model->save();
 
-        $variable = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Variable\Model\Variable');
+        $variable = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Variable\Model\Variable'
+        );
         $variable->loadByCode('test_code');
         $this->assertEquals($this->_model->getName(), $variable->getName());
         $this->_model->delete();
