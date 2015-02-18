@@ -13,25 +13,25 @@ namespace Magento\Backend\Block\System\Cache;
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
-    protected $_coreData;
+    protected $cacheTypeList;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         array $data = []
     ) {
-        $this->_coreData = $coreData;
+        $this->cacheTypeList = $cacheTypeList;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -63,7 +63,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        foreach ($this->_coreData->getCacheTypes() as $type => $label) {
+        foreach ($this->cacheTypeList->getTypeLabels() as $type => $label) {
             $fieldset->addField(
                 'enable_' . $type,
                 'checkbox',

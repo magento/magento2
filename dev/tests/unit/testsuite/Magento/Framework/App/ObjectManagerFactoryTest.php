@@ -6,7 +6,7 @@
 namespace Magento\Framework\App;
 
 /**
- * @covers \Magento\Framework\App\ObjectManagerFactory
+ * covers \Magento\Framework\App\ObjectManagerFactory
  */
 class ObjectManagerFactoryTest extends \PHPUnit_Framework_TestCase
 {

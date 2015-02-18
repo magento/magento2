@@ -22,7 +22,7 @@ class Items extends Block
      *
      * @var string
      */
-    protected $priceSelector = '//div[@class="price-excl-tax"]//span[@class="price"]';
+    protected $priceSelector = '//td[@class="col-price"]//div[@class="price-excl-tax"]//span[@class="price"]';
 
     // @codingStandardsIgnoreStart
     /**
@@ -74,10 +74,10 @@ class Items extends Block
             $attributeValue = $configurableAttributes[$attributeKey]['label']['value'];
             $optionValue = $configurableAttributes[$attributeKey][$optionKey]['option_label']['value'];
 
-            $productDisplay = $productName . ' SKU: ' . $product->getVariationSku($checkoutOption);
-            $productDisplay .= ' ' . $attributeValue . ' ' . $optionValue;
+            $productDisplay = $productName . 'SKU: ' . $product->getVariationSku($checkoutOption);
+            $productDisplay .= $attributeValue . $optionValue;
         } else {
-            $productDisplay = $productName . ' SKU: ' . $product->getSku();
+            $productDisplay = $productName . 'SKU: ' . $product->getSku();
         }
         $selector = '//tr[normalize-space(td)="' . $productDisplay . '"]' . $this->priceSelector;
 

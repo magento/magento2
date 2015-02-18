@@ -6,7 +6,7 @@
 namespace Magento\Cms\Block\Adminhtml\Block\Widget;
 
 /**
- * @covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser
+ * covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser
  */
 class ChooserTest extends \PHPUnit_Framework_TestCase
 {
@@ -127,7 +127,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser::prepareElementHtml
+     * covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser::prepareElementHtml
      * @param string $elementValue
      * @param integer|null $modelBlockId
      *
@@ -231,7 +231,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser::getGridUrl
+     * covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser::getGridUrl
      */
     public function testGetGridUrl()
     {
