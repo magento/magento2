@@ -12,36 +12,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * Date format string
-     *
-     * @var string
-     */
-    protected static $_format = null;
-
-    /**
-     * Retrieve datetime format
-     *
-     * @return string|null
-     */
-    protected function _getFormat()
-    {
-        $format = $this->getColumn()->getFormat();
-        if (!$format) {
-            if (is_null(self::$_format)) {
-                try {
-                    self::$_format = $this->_localeDate->getDateTimeFormat(
-                        \IntlDateFormatter::MEDIUM
-                    );
-                } catch (\Exception $e) {
-                    $this->_logger->critical($e);
-                }
-            }
-            $format = self::$_format;
-        }
-        return $format;
-    }
-
-    /**
      * Renders grid column
      *
      * @param   \Magento\Framework\Object $row
@@ -49,8 +19,13 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
      */
     public function render(\Magento\Framework\Object $row)
     {
+        $format = $this->getColumn()->getFormat();
         if ($data = $this->_getValue($row)) {
-            return $this->_localeDate->formatDateTime(new \DateTime($data));
+            return $this->_localeDate->formatDateTime(
+                new \DateTime($data),
+                $format ?: \IntlDateFormatter::MEDIUM,
+                $format ?: \IntlDateFormatter::MEDIUM
+            );
         }
         return $this->getColumn()->getDefault();
     }
