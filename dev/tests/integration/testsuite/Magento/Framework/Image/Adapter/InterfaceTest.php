@@ -7,6 +7,9 @@ namespace Magento\Framework\Image\Adapter;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class InterfaceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -107,6 +110,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
      * Mark test as skipped if not
      *
      * @param string $adapterType
+     * @return \Magento\Framework\Image\Adapter\AdapterInterface
      */
     protected function _getAdapter($adapterType)
     {
@@ -319,7 +323,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
         $pixel['y'] -= $center['y'];
         return [
             'x' => round($size[0] / 2 + $pixel['x'] * cos($angle) + $pixel['y'] * sin($angle), 0),
-            'y' => round($size[1] / 2 + $pixel['y'] * cos($angle) - $pixel['x'] * sin($angle), 0)
+            'y' => round($size[1] / 2 + $pixel['y'] * cos($angle) - $pixel['x'] * sin($angle), 0),
         ];
     }
 
