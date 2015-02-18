@@ -8,6 +8,7 @@
 namespace Magento\Framework\Webapi\Rest\Request\Deserializer;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Phrase;
 
 class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
 {
@@ -63,7 +64,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
         /** Process errors during XML parsing. */
         if ($this->_errorMessage !== null) {
             if ($this->_appState->getMode() !== State::MODE_DEVELOPER) {
-                $exceptionMessage = __('Decoding error.');
+                $exceptionMessage = new Phrase('Decoding error.');
             } else {
                 $exceptionMessage = 'Decoding Error: ' . $this->_errorMessage;
             }

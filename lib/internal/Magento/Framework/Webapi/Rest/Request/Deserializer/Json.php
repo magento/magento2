@@ -8,13 +8,12 @@
 namespace Magento\Framework\Webapi\Rest\Request\Deserializer;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Phrase;
 
 class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
 {
-    /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_helper;
+    /** @var \Magento\Framework\Json\Decoder */
+    protected $decoder;
 
     /**
      * @var State
@@ -22,12 +21,12 @@ class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfa
     protected $_appState;
 
     /**
-     * @param \Magento\Core\Helper\Data $helper
+     * @param \Magento\Framework\Json\Decoder $decoder
      * @param \Magento\Framework\App\State $appState
      */
-    public function __construct(\Magento\Core\Helper\Data $helper, State $appState)
+    public function __construct(\Magento\Framework\Json\Decoder $decoder, State $appState)
     {
-        $this->_helper = $helper;
+        $this->decoder = $decoder;
         $this->_appState = $appState;
     }
 
@@ -47,13 +46,13 @@ class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfa
             );
         }
         try {
-            $decodedBody = $this->_helper->jsonDecode($encodedBody);
+            $decodedBody = $this->decoder->jsonDecode($encodedBody);
         } catch (\Zend_Json_Exception $e) {
             if ($this->_appState->getMode() !== State::MODE_DEVELOPER) {
-                throw new \Magento\Framework\Webapi\Exception(__('Decoding error.'));
+                throw new \Magento\Framework\Webapi\Exception(new Phrase('Decoding error.'));
             } else {
                 throw new \Magento\Framework\Webapi\Exception(
-                    __('Decoding error: %1%2%3%4', PHP_EOL, $e->getMessage(), PHP_EOL, $e->getTraceAsString())
+                    new Phrase('Decoding error: %1%2%3%4', PHP_EOL, $e->getMessage(), PHP_EOL, $e->getTraceAsString())
                 );
             }
         }

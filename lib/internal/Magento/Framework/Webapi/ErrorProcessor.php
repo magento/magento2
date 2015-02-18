@@ -12,6 +12,7 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 
 /**
@@ -39,9 +40,9 @@ class ErrorProcessor
     /**#@-*/
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Encoder
      */
-    protected $_coreHelper;
+    protected $encoder;
 
     /**
      * @var \Magento\Framework\App\State
@@ -72,12 +73,12 @@ class ErrorProcessor
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Core\Helper\Data $helper,
+        Magento\Framework\Json\Encoder $encoder,
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem
     ) {
-        $this->_coreHelper = $helper;
+        $this->encoder = $encoder;
         $this->_appState = $appState;
         $this->_logger = $logger;
         $this->_filesystem = $filesystem;
@@ -172,7 +173,7 @@ class ErrorProcessor
         } else {
             $reportId = $this->_critical($exception);
             $this->renderErrorMessage(
-                __('Internal Error. Details are available in Magento log file. Report ID: %1', $reportId),
+                new Phrase('Internal Error. Details are available in Magento log file. Report ID: %1', $reportId),
                 'Trace is not available.',
                 $httpCode
             );
@@ -247,7 +248,7 @@ class ErrorProcessor
         $errorData['messages']['error'][] = $message;
         switch ($format) {
             case self::DATA_FORMAT_JSON:
-                $errorData = $this->_coreHelper->jsonEncode($errorData);
+                $errorData = $this->encoder->jsonEncode($errorData);
                 break;
             case self::DATA_FORMAT_XML:
                 $errorData = '<?xml version="1.0"?>'
@@ -293,7 +294,7 @@ class ErrorProcessor
             if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
                 $this->renderErrorMessage($errorMessage);
             } else {
-                $this->renderErrorMessage(__('Server internal error. See details in report api/%1', $reportId));
+                $this->renderErrorMessage(new Phrase('Server internal error. See details in report api/%1', $reportId));
             }
         }
     }

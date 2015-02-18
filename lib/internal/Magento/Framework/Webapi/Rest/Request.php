@@ -138,14 +138,14 @@ class Request extends \Magento\Framework\Webapi\Request
         $headerValue = $this->getHeader('Content-Type');
 
         if (!$headerValue) {
-            throw new \Magento\Framework\Webapi\Exception(__('Content-Type header is empty.'));
+            throw new \Magento\Framework\Exception\InputException('Content-Type header is empty.');
         }
         if (!preg_match('~^([a-z\d/\-+.]+)(?:; *charset=(.+))?$~Ui', $headerValue, $matches)) {
-            throw new \Magento\Framework\Webapi\Exception(__('Content-Type header is invalid.'));
+            throw new \Magento\Framework\Exception\InputException('Content-Type header is invalid.');
         }
         // request encoding check if it is specified in header
         if (isset($matches[2]) && self::REQUEST_CHARSET != strtolower($matches[2])) {
-            throw new \Magento\Framework\Webapi\Exception(__('UTF-8 is the only supported charset.'));
+            throw new \Magento\Framework\Exception\InputException('UTF-8 is the only supported charset.');
         }
 
         return $matches[1];
@@ -160,7 +160,7 @@ class Request extends \Magento\Framework\Webapi\Request
     public function getHttpMethod()
     {
         if (!$this->isGet() && !$this->isPost() && !$this->isPut() && !$this->isDelete()) {
-            throw new \Magento\Framework\Webapi\Exception(__('Request method is invalid.'));
+            throw new \Magento\Framework\Exception\InputException('Request method is invalid.');
         }
         return $this->getMethod();
     }

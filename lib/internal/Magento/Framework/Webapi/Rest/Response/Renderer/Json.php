@@ -14,17 +14,17 @@ class Json implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      */
     const MIME_TYPE = 'application/json';
 
-    /** @var \Magento\Core\Helper\Data */
-    protected $_helper;
+    /** @var \Magento\Framework\Json\Encoder */
+    protected $encoder;
 
     /**
      * Initialize dependencies.
      *
      * @param \Magento\Core\Helper\Data $helper
      */
-    public function __construct(\Magento\Core\Helper\Data $helper)
+    public function __construct(\Framework\Json\Encoder $encoder)
     {
-        $this->_helper = $helper;
+        $this->encoder= $encoder;
     }
 
     /**
@@ -35,7 +35,7 @@ class Json implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      */
     public function render($data)
     {
-        return $this->_helper->jsonEncode($data);
+        return $this->encoder->jsonEncode($data);
     }
 
     /**
