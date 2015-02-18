@@ -28,7 +28,7 @@ class MultilineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Multiline::extractValue
+     * covers \Magento\Eav\Model\Attribute\Data\Multiline::extractValue
      *
      * @param mixed $param
      * @param mixed $expectedResult
@@ -64,7 +64,7 @@ class MultilineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Multiline::outputValue
+     * covers \Magento\Eav\Model\Attribute\Data\Multiline::outputValue
      *
      * @param string $format
      * @param mixed $expectedResult
@@ -108,8 +108,8 @@ class MultilineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Multiline::validateValue
-     * @covers \Magento\Eav\Model\Attribute\Data\Text::validateValue
+     * covers \Magento\Eav\Model\Attribute\Data\Multiline::validateValue
+     * covers \Magento\Eav\Model\Attribute\Data\Text::validateValue
      *
      * @param mixed $value
      * @param bool $isAttributeRequired

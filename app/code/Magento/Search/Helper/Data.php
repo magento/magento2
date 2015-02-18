@@ -55,13 +55,6 @@ class Data extends AbstractHelper
     protected $string;
 
     /**
-     * Core store config
-     *
-     * @var ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * Query factory
      *
      * @var QueryFactory
@@ -88,7 +81,6 @@ class Data extends AbstractHelper
      *
      * @param Context $context
      * @param String $string
-     * @param ScopeConfigInterface $scopeConfig
      * @param QueryFactory $queryFactory
      * @param Escaper $escaper
      * @param FilterManager $filter
@@ -97,14 +89,12 @@ class Data extends AbstractHelper
     public function __construct(
         Context $context,
         String $string,
-        ScopeConfigInterface $scopeConfig,
         QueryFactory $queryFactory,
         Escaper $escaper,
         FilterManager $filter,
         StoreManagerInterface $storeManager
     ) {
         $this->string = $string;
-        $this->_scopeConfig = $scopeConfig;
         $this->_queryFactory = $queryFactory;
         $this->_escaper = $escaper;
         $this->filter = $filter;
@@ -190,7 +180,7 @@ class Data extends AbstractHelper
      */
     public function getMinQueryLength($store = null)
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             SearchQuery::XML_PATH_MIN_QUERY_LENGTH,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -205,7 +195,7 @@ class Data extends AbstractHelper
      */
     public function getMaxQueryLength($store = null)
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             SearchQuery::XML_PATH_MAX_QUERY_LENGTH,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store

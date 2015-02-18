@@ -50,6 +50,9 @@ class Deployer
     /** @var int */
     private $errorCount;
 
+    /** @var \Magento\Framework\View\Template\Html\MinifierInterface */
+    private $htmlMinifier;
+
     /** @var \Magento\Framework\View\Asset\MinifyService */
     protected $minifyService;
 
@@ -113,6 +116,14 @@ class Deployer
             }
             $this->bundleService->save();
         }
+        $this->logger->logMessage("=== Minify templates ===");
+        $this->count = 0;
+        foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
+            $this->htmlMinifier->minify($template);
+            $this->logger->logDebug($template . " minified\n", '.');
+            $this->count++;
+        }
+        $this->logger->logMessage("\nSuccessful: {$this->count} files modified\n---\n");
         $version = $this->dateTime->toTimestamp(true);
         $this->logger->logMessage("New version of deployed files: {$version}");
         if (!$this->isDryRun) {
@@ -176,6 +187,7 @@ class Deployer
         $this->assetRepo = $objectManager->get('Magento\Framework\View\Asset\Repository');
         $this->assetPublisher = $objectManager->get('Magento\Framework\App\View\Asset\Publisher');
         $this->bundleService = $objectManager->get('Magento\Framework\View\Asset\BundleService');
+        $this->htmlMinifier = $objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
     }
 
     /**

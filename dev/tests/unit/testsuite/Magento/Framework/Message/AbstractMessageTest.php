@@ -25,8 +25,8 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Message\AbstractMessage::getText
-     * @covers \Magento\Framework\Message\AbstractMessage::setText
+     * covers \Magento\Framework\Message\AbstractMessage::getText
+     * covers \Magento\Framework\Message\AbstractMessage::setText
      * @dataProvider setTextGetTextProvider
      */
     public function testSetTextGetText($text)
@@ -44,8 +44,8 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Message\AbstractMessage::getIdentifier
-     * @covers \Magento\Framework\Message\AbstractMessage::setIdentifier
+     * covers \Magento\Framework\Message\AbstractMessage::getIdentifier
+     * covers \Magento\Framework\Message\AbstractMessage::setIdentifier
      * @dataProvider setIdentifierGetIdentifierProvider
      */
     public function testSetIdentifierGetIdentifier($identifier)
@@ -63,8 +63,8 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Message\AbstractMessage::getIsSticky
-     * @covers \Magento\Framework\Message\AbstractMessage::setIsSticky
+     * covers \Magento\Framework\Message\AbstractMessage::getIsSticky
+     * covers \Magento\Framework\Message\AbstractMessage::setIsSticky
      */
     public function testSetIsStickyGetIsSticky()
     {
@@ -74,7 +74,7 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Message\AbstractMessage::toString
+     * covers \Magento\Framework\Message\AbstractMessage::toString
      */
     public function testToString()
     {
