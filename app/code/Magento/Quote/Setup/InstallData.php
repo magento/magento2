@@ -13,11 +13,15 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
     /**
+     * Quote setup factory
+     *
      * @var QuoteSetupFactory
      */
     private $quoteSetupFactory;
 
     /**
+     * Init
+     *
      * @param QuoteSetupFactory $setupFactory
      */
     public function __construct(QuoteSetupFactory $setupFactory)

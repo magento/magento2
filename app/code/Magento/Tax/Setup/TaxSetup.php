@@ -21,16 +21,22 @@ use Magento\Sales\Setup\SalesSetup;
 class TaxSetup extends SalesSetup
 {
     /**
+     * Category setup factory
+     *
      * @var CategorySetupFactory
      */
     protected $_setupFactory;
 
     /**
+     * Product type config
+     *
      * @var ConfigInterface
      */
     protected $productTypeConfig;
 
     /**
+     * Init
+     *
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
@@ -53,6 +59,8 @@ class TaxSetup extends SalesSetup
     }
 
     /**
+     * Gets catalog setup
+     *
      * @param array $data
      * @return CategorySetup
      */

@@ -7,9 +7,6 @@ namespace Magento\Authorization\Setup;
 
 /**
  * Resource Setup Model
- *
- * @SuppressWarnings(PHPMD.LongVariable)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AuthorizationFactory
 {
@@ -42,6 +39,8 @@ class AuthorizationFactory
     protected $_rulesFactory;
 
     /**
+     * Init
+     *
      * @param \Magento\Authorization\Model\Resource\Role\CollectionFactory $roleCollectionFactory
      * @param \Magento\Authorization\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory

@@ -58,7 +58,6 @@ interface ModuleDataSetupInterface extends SetupInterface
      * @param string $parentField
      * @param string|integer $parentId
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function updateTableRow($table, $idField, $rowId, $field, $value = null, $parentField = null, $parentId = 0);
 
@@ -66,13 +65,12 @@ interface ModuleDataSetupInterface extends SetupInterface
      * Check call afterApplyAllUpdates method for setup class
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCallAfterApplyAllUpdates();
 
     /**
      * Run each time after applying of all updates,
-     * if setup model setted $_callAfterApplyAllUpdates flag to true
+     * if setup model set $_callAfterApplyAllUpdates flag to true
      *
      * @return $this
      */
@@ -86,6 +84,8 @@ interface ModuleDataSetupInterface extends SetupInterface
     public function getEventManager();
 
     /**
+     * Gets filesystem
+     *
      * @return \Magento\Framework\Filesystem
      */
     public function getFilesystem();

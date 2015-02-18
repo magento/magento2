@@ -15,22 +15,30 @@ use Magento\Sales\Setup\SalesSetupFactory;
 class InstallData implements InstallDataInterface
 {
     /**
+     * Category setup factory
+     *
      * @var CategorySetupFactory
      */
     protected $categorySetupFactory;
 
     /**
+     * Quote setup factory
+     *
      * @var QuoteSetupFactory
      */
     protected $quoteSetupFactory;
 
     /**
+     * Sales setup factory
+     *
      * @var SalesSetupFactory
      */
     protected $salesSetupFactory;
 
 
     /**
+     * Init
+     *
      * @param CategorySetupFactory $categorySetupFactory
      * @param QuoteSetupFactory $quoteSetupFactory
      * @param SalesSetupFactory $salesSetupFactory

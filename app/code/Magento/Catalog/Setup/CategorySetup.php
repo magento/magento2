@@ -25,6 +25,8 @@ class CategorySetup extends EavSetup
     private $categoryFactory;
 
     /**
+     * Init
+     *
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
@@ -69,7 +71,6 @@ class CategorySetup extends EavSetup
                 'table' => 'catalog_category_entity',
                 'additional_attribute_table' => 'catalog_eav_attribute',
                 'entity_attribute_collection' => 'Magento\Catalog\Model\Resource\Category\Attribute\Collection',
-                'default_group' => 'General Information',
                 'attributes' => [
                     'name' => [
                         'type' => 'varchar',

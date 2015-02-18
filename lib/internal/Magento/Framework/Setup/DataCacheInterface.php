@@ -8,7 +8,8 @@ namespace Magento\Framework\Setup;
 /**
  * Data setup cache
  */
-interface DataCacheInterface {
+interface DataCacheInterface
+{
     /**
      * Set data of a row
      *
@@ -28,6 +29,7 @@ interface DataCacheInterface {
      * @param string $rowId
      * @param string $field
      * @param mixed $value
+     * @return void
      */
     public function setField($table, $parentId, $rowId, $field, $value);
 

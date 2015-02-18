@@ -12,16 +12,22 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
     /**
+     * Theme resource factory
+     *
      * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory
      */
     private $themeResourceFactory;
 
     /**
+     * Theme collection factory
+     *
      * @var \Magento\Theme\Model\Theme\CollectionFactory
      */
     private $themeFactory;
 
     /**
+     * Init
+     *
      * @param \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeResourceFactory
      * @param \Magento\Theme\Model\Theme\CollectionFactory $themeFactory
      */
@@ -38,7 +44,6 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $installer = $setup->createMigrationSetup();
         $setup->startSetup();
 
         /*

@@ -1,10 +1,8 @@
 <?php
 /**
-* Copyright © 2015 Magento. All rights reserved.
-* See COPYING.txt for license details.
-*/
-
-// @codingStandardsIgnoreFile
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Fedex\Setup;
 
@@ -14,11 +12,11 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 class InstallData implements InstallDataInterface
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
-	{
+    /**
+     * {@inheritdoc}
+     */
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
         $codes = [
             'method' => [
                 'EUROPEFIRSTINTERNATIONALPRIORITY' => 'EUROPE_FIRST_INTERNATIONAL_PRIORITY',
@@ -103,5 +101,5 @@ class InstallData implements InstallDataInterface
             }
         }
 
-	}
+    }
 }

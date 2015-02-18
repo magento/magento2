@@ -15,7 +15,7 @@ interface UpgradeSchemaInterface
      *
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
-     * @return
+     * @return void
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context);
 }

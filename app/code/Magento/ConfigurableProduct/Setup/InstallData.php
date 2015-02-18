@@ -5,20 +5,25 @@
  */
 namespace Magento\ConfigurableProduct\Setup;
 
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
-class InstallData implements InstallDataInterface 
+class InstallData implements InstallDataInterface
 {
     /**
+     * EAV setup factory
+     *
      * @var EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
+     * Init
+     *
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(EavSetupFactory $eavSetupFactory)
@@ -51,8 +56,8 @@ class InstallData implements InstallDataInterface
                 ',',
                 $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, 'apply_to')
             );
-            if (!in_array(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE, $relatedProductTypes)) {
-                $relatedProductTypes[] = \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE;
+            if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
+                $relatedProductTypes[] = Configurable::TYPE_CODE;
                 $eavSetup->updateAttribute(
                     \Magento\Catalog\Model\Product::ENTITY,
                     $attributeCode,

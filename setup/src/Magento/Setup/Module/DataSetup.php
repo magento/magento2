@@ -35,21 +35,22 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
     private $_modulesReader;
 
     /**
+     * Event manager
+     *
      * @var \Magento\Framework\Event\ManagerInterface
      */
     private $_eventManager;
 
     /**
+     * Logger
+     *
      * @var \Psr\Log\LoggerInterface
      */
     private $_logger;
 
     /**
-     * @var \Magento\Framework\Module\ResourceInterface
-     */
-    private $_resource;
-
-    /**
+     * Migration factory
+     *
      * @var \Magento\Framework\Module\Setup\MigrationFactory
      */
     private $_migrationFactory;
@@ -62,11 +63,15 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
     private $filesystem;
 
     /**
+     * Modules list object
+     *
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     private $modulesDir;
 
     /**
+     * Init
+     *
      * @param \Magento\Framework\Module\Setup\Context $context
      * @param string $connectionName
      */
@@ -78,7 +83,6 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
         $this->_eventManager = $context->getEventManager();
         $this->_logger = $context->getLogger();
         $this->_modulesReader = $context->getModulesReader();
-        $this->_resource = $context->getResource();
         $this->_migrationFactory = $context->getMigrationFactory();
         $this->filesystem = $context->getFilesystem();
         $this->modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
@@ -175,10 +179,15 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
 
         if ($this->setupCache->has($table, $parentId, $rowId)) {
             if (is_array($field)) {
-                $newRowData = array_merge(
-                    $this->setupCache->get($table, $parentId, $rowId),
-                    $field
-                );
+                $oldRowData = $this->setupCache->get($table, $parentId, $rowId);
+                if (is_array($oldRowData)) {
+                    $newRowData = array_merge(
+                        $oldRowData,
+                        $field
+                    );
+                } else {
+                    $newRowData = $field;
+                }
             } else {
                 $newRowData = $value;
             }
@@ -211,6 +220,8 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
     }
 
     /**
+     * Gets event manager
+     *
      * @return \Magento\Framework\Event\ManagerInterface
      */
     public function getEventManager()
@@ -219,6 +230,8 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
     }
 
     /**
+     * Gets filesystem
+     *
      * @return \Magento\Framework\Filesystem
      */
     public function getFilesystem()

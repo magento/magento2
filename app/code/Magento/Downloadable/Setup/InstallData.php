@@ -14,11 +14,15 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
     /**
+     * EAV setup factory
+     *
      * @var EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
+     * Init
+     *
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(EavSetupFactory $eavSetupFactory)
@@ -152,7 +156,10 @@ class InstallData implements InstallDataInterface
 
         // make these attributes applicable to downloadable products
         foreach ($fieldList as $field) {
-            $applyTo = explode(',', $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field, 'apply_to'));
+            $applyTo = explode(
+                ',',
+                $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field, 'apply_to')
+            );
             if (!in_array('downloadable', $applyTo)) {
                 $applyTo[] = 'downloadable';
                 $eavSetup->updateAttribute(

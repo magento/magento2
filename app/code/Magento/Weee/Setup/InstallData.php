@@ -16,16 +16,22 @@ use Magento\Sales\Setup\SalesSetupFactory;
 class InstallData implements InstallDataInterface
 {
     /**
+     * Sales setup factory
+     *
      * @var SalesSetupFactory
      */
     private $salesSetupFactory;
 
     /**
+     * Quote setup factory
+     *
      * @var QuoteSetupFactory
      */
     private $quoteSetupFactory;
 
     /**
+     * Init
+     *
      * @param SalesSetupFactory $salesSetupFactory
      * @param QuoteSetupFactory $quoteSetupFactory
      */

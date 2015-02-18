@@ -4,8 +4,6 @@
 * See COPYING.txt for license details.
 */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Setup;
 
 use Magento\Framework\Setup\UpgradeSchemaInterface;
@@ -14,11 +12,11 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
-	{
+    /**
+     * {@inheritdoc}
+     */
+    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    {
         if (version_compare($context->getVersion(), '2.0.0.1') <= 0) {
             $installer = $setup;
             $installer->startSetup();
@@ -58,5 +56,5 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $connection->dropColumn($installer->getTable('customer_entity'), 'attribute_set_id');
             $installer->endSetup();
         }
-	}
+    }
 }

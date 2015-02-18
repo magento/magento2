@@ -6,6 +6,7 @@
 namespace Magento\Checkout\Setup;
 
 use Magento\Customer\Helper\Address;
+use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -14,15 +15,22 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
     /**
+     * EAV setup factory
+     *
      * @var EavSetupFactory
      */
     private $eavSetupFactory;
+
     /**
+     * Customer address
+     *
      * @var Address
      */
     private $customerAddress;
 
     /**
+     * Init
+     *
      * @param EavSetupFactory $eavSetupFactory
      * @param Address $customerAddress
      */
@@ -37,7 +45,7 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        /** @var CustomerAddress $eavSetup */
+        /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
         
         $setup->startSetup();
