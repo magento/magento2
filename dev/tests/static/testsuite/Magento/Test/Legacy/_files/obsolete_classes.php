@@ -2944,4 +2944,5 @@ return [
     ['Magento\Core\Model\Resource\Layout\Link\Collection', 'Magento\Widget\Model\Resource\Layout\Link\Collection'],
     ['Magento\Core\Model\Resource\Layout\Update', 'Magento\Widget\Model\Resource\Layout\Update'],
     ['Magento\Core\Model\Resource\Layout\Update\Collection', 'Magento\Widget\Model\Resource\Layout\Update\Collection'],
+    ['Magento\Backend\Model\View', 'Magento\Framework\App\View'],
 ];

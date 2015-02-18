@@ -70,7 +70,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Bundle\Helper\Catalog\Product\Configuration::getSelectionFinalPrice
+     * covers \Magento\Bundle\Helper\Catalog\Product\Configuration::getSelectionFinalPrice
      */
     public function testGetSelectionFinalPrice()
     {

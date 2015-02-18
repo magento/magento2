@@ -2050,4 +2050,7 @@ return [
     ['renderPage', 'Magento\Cms\Helper\Page'],
     ['renderPageExtended', 'Magento\Cms\Helper\Page'],
     ['_renderPage', 'Magento\Cms\Helper\Page'],
+    ['beforeGenerateBlock', 'Magento\Backend\Model\View\Layout\Builder'],
+    ['beforeGenerateBlock', 'Magento\Backend\Model\View\Page\Builder'],
+    ['filterAclNodes', 'Magento\Backend\Model\View\Layout\Filter\Acl', 'Magento\Backend\Model\View\Layout\Filter\Acl::filterAclElements'],
 ];

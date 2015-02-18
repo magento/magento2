@@ -44,7 +44,7 @@ class NoteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Note::__construct
+     * covers \Magento\Framework\Data\Form\Element\Note::__construct
      */
     public function testConstruct()
     {
@@ -52,7 +52,7 @@ class NoteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Note::getElementHtml
+     * covers \Magento\Framework\Data\Form\Element\Note::getElementHtml
      */
     public function testGetElementHtml()
     {
