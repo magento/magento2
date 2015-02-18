@@ -48,7 +48,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Search\Model\Query::XML_PATH_MIN_QUERY_LENGTH,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null
             )
             ->will($this->returnValue($return));
@@ -62,7 +62,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Search\Model\Query::XML_PATH_MAX_QUERY_LENGTH,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null
             )
             ->will($this->returnValue($return));

@@ -46,7 +46,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Helper\Data::getCaptcha
+     * covers \Magento\Captcha\Helper\Data::getCaptcha
      */
     public function testGetCaptcha()
     {
@@ -81,7 +81,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Helper\Data::getConfig
+     * covers \Magento\Captcha\Helper\Data::getConfig
      */
     public function testGetConfigNode()
     {
@@ -91,7 +91,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             'customer/captcha/enable',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue('1')
         );
@@ -137,8 +137,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Model\DefaultModel::getImgDir
-     * @covers \Magento\Captcha\Helper\Data::getImgDir
+     * covers \Magento\Captcha\Model\DefaultModel::getImgDir
+     * covers \Magento\Captcha\Helper\Data::getImgDir
      */
     public function testGetImgDir()
     {
@@ -177,8 +177,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Captcha\Model\DefaultModel::getImgUrl
-     * @covers \Magento\Captcha\Helper\Data::getImgUrl
+     * covers \Magento\Captcha\Model\DefaultModel::getImgUrl
+     * covers \Magento\Captcha\Helper\Data::getImgUrl
      */
     public function testGetImgUrl()
     {

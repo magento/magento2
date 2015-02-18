@@ -29,7 +29,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     protected $rssUrlBuilder;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -68,7 +68,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
      */
     public function isAllowed()
     {
-        return $this->_scopeConfig->isSetFlag('rss/catalog/new', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->isSetFlag('rss/catalog/new', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -81,7 +81,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
         $title = __('New Products from %1', $storeModel->getFrontendName());
         $lang = $this->_scopeConfig->getValue(
             'general/locale/code',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeModel
         );
         $data = [

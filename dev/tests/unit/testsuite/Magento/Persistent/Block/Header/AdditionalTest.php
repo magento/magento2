@@ -268,7 +268,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 'advanced/modules_disable_output/Magento_Persistent',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )->willReturn(false);
 
         // get cache

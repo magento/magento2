@@ -47,7 +47,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isGoogleExperimentEnabled($store = null)
     {
-        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store);
+        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**

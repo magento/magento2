@@ -6,7 +6,7 @@
 namespace Magento\Cms\Helper;
 
 /**
- * @covers \Magento\Cms\Helper\Page
+ * covers \Magento\Cms\Helper\Page
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -34,7 +34,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     protected $pageMock;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -141,7 +141,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->getMockForAbstractClass();
         $this->localeDateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
             ->getMockForAbstractClass();
@@ -208,7 +208,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Helper\Page::renderPageExtended
+     * covers \Magento\Cms\Helper\Page::renderPageExtended
      * @param integer|null $pageId
      * @param integer|null $internalPageId
      * @param integer $pageLoadResultIndex
@@ -422,7 +422,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Helper\Page::getPageUrl
+     * covers \Magento\Cms\Helper\Page::getPageUrl
      * @param integer|null $pageId
      * @param integer|null $internalPageId
      * @param integer $pageLoadResultIndex

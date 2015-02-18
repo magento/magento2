@@ -32,7 +32,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             case \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG:
                 $shareable = (bool)$this->scopeConfig->isSetFlag(
                     \Magento\Downloadable\Model\Link::XML_PATH_CONFIG_IS_SHAREABLE,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
         }
         return $shareable;

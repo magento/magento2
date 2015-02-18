@@ -8,8 +8,7 @@
 namespace Magento\Framework\App\Router;
 
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Store\ScopeInterface;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -69,7 +68,7 @@ class Base implements \Magento\Framework\App\RouterInterface
     protected $_url;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -110,8 +109,8 @@ class Base implements \Magento\Framework\App\RouterInterface
      */
     protected $actionList;
 
-    /** @var SecureUrlInterface */
-    private $secureUrl;
+    /** @var PathConfigInterface */
+    protected $pathConfig;
 
     /**
      * @param \Magento\Framework\App\Router\ActionList $actionList
@@ -120,10 +119,9 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $routerId
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
-     * @param \Magento\Framework\App\Router\SecureUrlInterface $secureUrl
+     * @param \Magento\Framework\App\Router\PathConfigInterface $pathConfig
      *
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -136,20 +134,18 @@ class Base implements \Magento\Framework\App\RouterInterface
         \Magento\Framework\App\ResponseFactory $responseFactory,
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $routerId,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
-        \Magento\Framework\App\Router\SecureUrlInterface $secureUrl
+        \Magento\Framework\App\Router\PathConfigInterface $pathConfig
     ) {
         $this->actionList = $actionList;
         $this->actionFactory = $actionFactory;
         $this->_responseFactory = $responseFactory;
         $this->_defaultPath = $defaultPath;
         $this->_routeConfig = $routeConfig;
-        $this->_scopeConfig = $scopeConfig;
         $this->_url = $url;
         $this->nameBuilder = $nameBuilder;
-        $this->secureUrl = $secureUrl;
+        $this->pathConfig = $pathConfig;
     }
 
     /**
@@ -177,7 +173,7 @@ class Base implements \Magento\Framework\App\RouterInterface
 
         $path = trim($request->getPathInfo(), '/');
 
-        $params = explode('/', $path ? $path : $this->_getDefaultPath());
+        $params = explode('/', $path ? $path : $this->pathConfig->getDefaultPath());
         foreach ($this->_requiredParams as $paramName) {
             $output[$paramName] = array_shift($params);
         }
@@ -327,16 +323,6 @@ class Base implements \Magento\Framework\App\RouterInterface
     }
 
     /**
-     * Get router default request path
-     *
-     * @return string
-     */
-    protected function _getDefaultPath()
-    {
-        return $this->_scopeConfig->getValue('web/default/front', ScopeInterface::SCOPE_STORE);
-    }
-
-    /**
      * Build controller class name
      *
      * @param string $module
@@ -364,8 +350,8 @@ class Base implements \Magento\Framework\App\RouterInterface
             return;
         }
 
-        if ($this->secureUrl->shouldBeSecure($path) && !$request->isSecure()) {
-            $url = $this->secureUrl->getCurrentSecureUrl($request);
+        if ($this->pathConfig->shouldBeSecure($path) && !$request->isSecure()) {
+            $url = $this->pathConfig->getCurrentSecureUrl($request);
             if ($this->_shouldRedirectToSecure()) {
                 $url = $this->_url->getRedirectUrl($url);
             }

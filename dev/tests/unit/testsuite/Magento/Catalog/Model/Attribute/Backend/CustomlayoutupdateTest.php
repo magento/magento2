@@ -67,11 +67,11 @@ class CustomlayoutupdateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Core\Model\Layout\Update\ValidatorFactory
+     * @return \Magento\Framework\View\Model\Layout\Update\ValidatorFactory
      */
     private function getMockedLayoutUpdateValidatorFactory()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Core\Model\Layout\Update\ValidatorFactory');
+        $mockBuilder = $this->getMockBuilder('\Magento\Framework\View\Model\Layout\Update\ValidatorFactory');
         $mockBuilder->disableOriginalConstructor();
         $mockBuilder->setMethods(['create']);
         $mock = $mockBuilder->getMock();
@@ -84,11 +84,11 @@ class CustomlayoutupdateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Core\Model\Layout\Update\Validator
+     * @return \Magento\Framework\View\Model\Layout\Update\Validator
      */
     private function getMockedValidator()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Core\Model\Layout\Update\Validator');
+        $mockBuilder = $this->getMockBuilder('\Magento\Framework\View\Model\Layout\Update\Validator');
         $mockBuilder->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 

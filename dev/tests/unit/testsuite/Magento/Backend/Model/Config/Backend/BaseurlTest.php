@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
 
 class BaseurlTest extends \PHPUnit_Framework_TestCase

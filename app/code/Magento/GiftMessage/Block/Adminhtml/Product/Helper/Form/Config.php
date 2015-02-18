@@ -46,7 +46,7 @@ class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
     {
         return $this->_scopeConfig->getValue(
             \Magento\GiftMessage\Helper\Message::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 }

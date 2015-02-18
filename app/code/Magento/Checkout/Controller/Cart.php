@@ -7,7 +7,7 @@ namespace Magento\Checkout\Controller;
 
 use Magento\Catalog\Controller\Product\View\ViewInterface;
 use Magento\Checkout\Model\Cart as CustomerCart;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Shopping cart controller
@@ -25,7 +25,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -48,7 +48,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
@@ -57,7 +57,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
@@ -74,26 +74,18 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
     /**
      * Set back redirect url to response
      *
+     * @param null|string $backUrl
+     *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    protected function _goBack()
+    protected function _goBack($backUrl = null)
     {
-        $returnUrl = $this->getRequest()->getParam('return_url');
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ($returnUrl && $this->_isInternalUrl($returnUrl)) {
-            $this->messageManager->getMessages()->clear();
-            $resultRedirect->setUrl($returnUrl);
-        } elseif (!$this->_scopeConfig->getValue('checkout/cart/redirect_to_cart', ScopeInterface::SCOPE_STORE)
-            && !$this->getRequest()->getParam('in_cart')
-            && ($backUrl = $this->_redirect->getRefererUrl())
-        ) {
+
+        if ($backUrl || $backUrl = $this->getBackUrl($this->_redirect->getRefererUrl())) {
             $resultRedirect->setUrl($backUrl);
-        } else {
-            if ($this->getRequest()->getActionName() == 'add' && !$this->getRequest()->getParam('in_cart')) {
-                $this->_checkoutSession->setContinueShoppingUrl($this->_redirect->getRefererUrl());
-            }
-            $resultRedirect->setPath('checkout/cart');
         }
+        
         return $resultRedirect;
     }
 
@@ -117,5 +109,35 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
         $unsecure = strpos($url, $store->getBaseUrl()) === 0;
         $secure = strpos($url, $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true)) === 0;
         return $unsecure || $secure;
+    }
+
+    /**
+     * Get resolved back url
+     *
+     * @param null $defaultUrl
+     *
+     * @return mixed|null|string
+     */
+    protected function getBackUrl($defaultUrl = null)
+    {
+        $returnUrl = $this->getRequest()->getParam('return_url');
+        if ($returnUrl && $this->_isInternalUrl($returnUrl)) {
+            $this->messageManager->getMessages()->clear();
+            return $returnUrl;
+        }
+
+        $shouldRedirectToCart = $this->_scopeConfig->getValue(
+            'checkout/cart/redirect_to_cart',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        if ($shouldRedirectToCart || $this->getRequest()->getParam('in_cart')) {
+            if ($this->getRequest()->getActionName() == 'add' && !$this->getRequest()->getParam('in_cart')) {
+                $this->_checkoutSession->setContinueShoppingUrl($this->_redirect->getRefererUrl());
+            }
+            return $this->_url->getUrl('checkout/cart');
+        }
+
+        return $defaultUrl;
     }
 }

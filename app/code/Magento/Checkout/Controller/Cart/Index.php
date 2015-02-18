@@ -20,7 +20,7 @@ class Index extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Checkout\Model\Cart $cart
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
@@ -30,7 +30,7 @@ class Index extends \Magento\Checkout\Controller\Cart
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Checkout\Model\Cart $cart,
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
@@ -61,7 +61,7 @@ class Index extends \Magento\Checkout\Controller\Cart
             $this->cart->save();
 
             if (!$this->cart->getQuote()->validateMinimumAmount()) {
-                $currencyCode = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')
+                $currencyCode = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
                     ->getStore()
                     ->getCurrentCurrencyCode();
                 $minimumAmount = $this->_objectManager->get('Magento\Framework\Locale\CurrencyInterface')
@@ -69,16 +69,16 @@ class Index extends \Magento\Checkout\Controller\Cart
                     ->toCurrency(
                         $this->_scopeConfig->getValue(
                             'sales/minimum_order/amount',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                         )
                 );
 
                 $warning = $this->_scopeConfig->getValue(
                     'sales/minimum_order/description',
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 ) ? $this->_scopeConfig->getValue(
                     'sales/minimum_order/description',
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 ) : __(
                     'Minimum order amount is %1',
                     $minimumAmount

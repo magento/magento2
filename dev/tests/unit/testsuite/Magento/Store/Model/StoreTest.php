@@ -9,7 +9,6 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\Store\ScopeInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -131,7 +130,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWebsite($websiteId, $website)
     {
-        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())
             ->method('getWebsite')
             ->with($websiteId)
@@ -167,7 +166,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('test/route'), $this->equalTo($params))
             ->will($this->returnValue('http://test/url'));
 
-        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($defaultStore));
@@ -184,10 +183,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getBaseUrlDataProvider
      *
-     * @covers \Magento\Store\Model\Store::getBaseUrl
-     * @covers \Magento\Store\Model\Store::getCode
-     * @covers \Magento\Store\Model\Store::_updatePathUseRewrites
-     * @covers \Magento\Store\Model\Store::_getConfig
+     * covers \Magento\Store\Model\Store::getBaseUrl
+     * covers \Magento\Store\Model\Store::getCode
+     * covers \Magento\Store\Model\Store::_updatePathUseRewrites
+     * covers \Magento\Store\Model\Store::_getConfig
      *
      * @param string $type
      * @param boolean $secure
@@ -354,7 +353,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $urlMock->expects($this->any())->method('getUrl')
             ->will($this->returnValue($url));
 
-        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($defaultStore));
@@ -404,7 +403,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     'scope_code',
                     'UAH'
                 ],
@@ -600,7 +599,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Store\Model\Store::getBaseMediaDir
+     * covers \Magento\Store\Model\Store::getBaseMediaDir
      */
     public function testGetBaseMediaDir()
     {
@@ -613,7 +612,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Store\Model\Store::getBaseStaticDir
+     * covers \Magento\Store\Model\Store::getBaseStaticDir
      */
     public function testGetBaseStaticDir()
     {

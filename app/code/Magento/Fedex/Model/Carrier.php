@@ -108,7 +108,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_customizableContainerTypes = ['YOUR_PACKAGING'];
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -132,7 +132,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Dir\Reader $configReader
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param array $data
@@ -154,7 +154,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Module\Dir\Reader $configReader,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         array $data = []
@@ -297,7 +297,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         } else {
             $origCountry = $this->_scopeConfig->getValue(
                 \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $request->getStoreId()
             );
         }
@@ -309,7 +309,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $r->setOrigPostal(
                 $this->_scopeConfig->getValue(
                     \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $request->getStoreId()
                 )
             );
@@ -1329,7 +1329,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'AccountNumber' => $this->getConfigData('account'),
                         'CountryCode' => $this->_scopeConfig->getValue(
                             \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             $request->getStoreId()
                         ),
                     ],
@@ -1366,7 +1366,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'AccountNumber' => $this->getConfigData('account'),
                         'CountryCode' => $this->_scopeConfig->getValue(
                             \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             $request->getStoreId()
                         ),
                     ],

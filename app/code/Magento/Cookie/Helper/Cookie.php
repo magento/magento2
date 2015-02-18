@@ -37,14 +37,14 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      *
      * @throws \InvalidArgumentException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = []
     ) {
         parent::__construct($context);
@@ -71,7 +71,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
         $acceptedSaveCookiesWebsites = $this->_getAcceptedSaveCookiesWebsites();
         return $this->scopeConfig->getValue(
             self::XML_PATH_COOKIE_RESTRICTION,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_currentStore
         ) && empty($acceptedSaveCookiesWebsites[$this->_website->getId()]);
     }
@@ -109,7 +109,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int)$this->scopeConfig->getValue(
             self::XML_PATH_COOKIE_RESTRICTION_LIFETIME,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_currentStore
         );
     }
