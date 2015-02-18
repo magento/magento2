@@ -446,7 +446,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Framework\Object $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
-     * @return array|string
+     * @return \Magento\Framework\Phrase|array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -485,7 +485,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
             return $result;
         }
         if ($this->getLinkSelectionRequired($product) && $this->_isStrictProcessMode($processMode)) {
-            return __('Please specify product link(s).');
+            return __('Please specify product link(s).')->render();
         }
         return $result;
     }

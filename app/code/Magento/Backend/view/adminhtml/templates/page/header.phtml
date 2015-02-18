@@ -19,7 +19,7 @@
                 <?php echo $block->escapeHtml($block->getUser()->getUsername()); ?>
             </a>
             <ul class="dropdown-menu admin-user-menu">
-                <?php if ($block->getAuthorization()->isAllowed('Magento_Adminhtml::myaccount')): ?>
+                <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::myaccount')): ?>
                 <li>
                     <a href="<?php echo $block->getUrl('adminhtml/system_account/index') ?>" <?php echo $block->getUiId('user', 'account', 'settings')?> title="<?php echo __('Account Setting') ?>"><?php echo __('Account Setting') ?> <span><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span></a>
                 </li>

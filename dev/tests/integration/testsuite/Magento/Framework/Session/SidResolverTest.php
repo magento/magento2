@@ -93,7 +93,7 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue($useFrontedSid)
         );

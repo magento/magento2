@@ -3,52 +3,47 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Url;
 
-class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\Framework\Url\RouteParamsResolverInterface
+use Magento\Framework\Url\RouteParamsResolverInterface;
+
+/**
+ * Route params resolver.
+ *
+ * @method $this setType(string $type)
+ * @method string getType()
+ * @method $this setScope(string $scope)
+ * @method string getScope()
+ * @method $this setSecureIsForced(bool $isForced)
+ * @method bool getSecureIsForced()
+ * @method $this setSecure(bool $isForced)
+ * @method bool getSecure()
+ */
+class RouteParamsResolver extends \Magento\Framework\Object implements RouteParamsResolverInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
-    protected $_request;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
-     */
-    protected $_storeManager;
+    protected $request;
 
     /**
      * @var \Magento\Framework\Url\QueryParamsResolverInterface
      */
-    protected $_queryParamsResolver;
+    protected $queryParamsResolver;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
         array $data = []
     ) {
         parent::__construct($data);
-        $this->_request = $request;
-        $this->_scopeConfig = $scopeConfig;
-        $this->_storeManager = $storeManager;
-        $this->_queryParamsResolver = $queryParamsResolver;
+        $this->request = $request;
+        $this->queryParamsResolver = $queryParamsResolver;
     }
 
     /**
@@ -61,11 +56,6 @@ class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\
         if (isset($data['_type'])) {
             $this->setType($data['_type']);
             unset($data['_type']);
-        }
-
-        if (isset($data['_scope'])) {
-            $this->setScope($data['_scope']);
-            unset($data['_scope']);
         }
 
         if (isset($data['_forced_secure'])) {
@@ -88,20 +78,20 @@ class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\
         if (isset($data['_current'])) {
             if (is_array($data['_current'])) {
                 foreach ($data['_current'] as $key) {
-                    if (array_key_exists($key, $data) || !$this->_request->getUserParam($key)) {
+                    if (array_key_exists($key, $data) || !$this->request->getUserParam($key)) {
                         continue;
                     }
-                    $data[$key] = $this->_request->getUserParam($key);
+                    $data[$key] = $this->request->getUserParam($key);
                 }
             } elseif ($data['_current']) {
-                foreach ($this->_request->getUserParams() as $key => $value) {
+                foreach ($this->request->getUserParams() as $key => $value) {
                     if (array_key_exists($key, $data) || $this->getRouteParam($key)) {
                         continue;
                     }
                     $data[$key] = $value;
                 }
-                foreach ($this->_request->getQuery() as $key => $value) {
-                    $this->_queryParamsResolver->setQueryParam($key, $value);
+                foreach ($this->request->getQuery() as $key => $value) {
+                    $this->queryParamsResolver->setQueryParam($key, $value);
                 }
             }
             unset($data['_current']);
@@ -110,19 +100,6 @@ class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\
         if (isset($data['_use_rewrite'])) {
             unset($data['_use_rewrite']);
         }
-
-        if (isset($data['_scope_to_url']) && (bool)$data['_scope_to_url'] === true) {
-            $store = $this->getScope() ?: $this->_storeManager->getStore();
-            if (!$this->_scopeConfig->getValue(
-                \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
-                $this->getScope()
-            ) && !$this->_storeManager->hasSingleStore()
-            ) {
-                $this->_queryParamsResolver->setQueryParam('___store', $store->getCode());
-            }
-        }
-        unset($data['_scope_to_url']);
 
         foreach ($data as $key => $value) {
             $this->setRouteParam($key, $value);

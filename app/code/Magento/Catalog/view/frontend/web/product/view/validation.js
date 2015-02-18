@@ -19,8 +19,8 @@
         options: {
             radioCheckboxClosest: 'ul, ol',
             errorPlacement: function (error, element) {
-                if (element.attr('data-validate-message-box')) {
-                    var messageBox = $(element.attr('data-validate-message-box'));
+                if (element.attr('data-errors-message-box')) {
+                    var messageBox = $(element.attr('data-errors-message-box'));
                     messageBox.html(error);
                     return;
                 }

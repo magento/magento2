@@ -1,0 +1,62 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  LESS Extend
+//  ---------------------------------------------
+
+//  Buttons
+button {
+    &:extend(.action all);
+
+    &.primary {
+        &:extend(.action-primary all);
+    }
+
+    &.secondary {
+        &:extend(.action-secondary all);
+    }
+
+    &.tertiary  {
+        &:extend(.action-tertiary all);
+    }
+}
+
+//  Validation
+.validation-symbol {
+    &:after {
+        content: '*';
+        color: @validation-color;
+        font-weight: @font-weight-regular;
+        margin-left: 3px;
+    }
+}
+
+//  Visually hidden
+.abs-visually-hidden {
+    .visually-hidden();
+}
+
+.extend__visually-hidden() {
+    &:extend(.abs-visually-hidden all);
+}
+
+//  Clearfix
+.abs-clearfix {
+    .clearfix();
+}
+
+.extend__clearfix() {
+    &:extend(.abs-clearfix all);
+}
+
+//  Reset list styles
+.abs-list-reset-styles {
+    .list-reset-styles();
+}
+
+.extend__list-reset-styles() {
+    &:extend(.abs-list-reset-styles all);
+}

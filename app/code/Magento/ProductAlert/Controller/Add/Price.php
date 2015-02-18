@@ -12,7 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class Price extends \Magento\ProductAlert\Controller\Add
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -22,13 +22,13 @@ class Price extends \Magento\ProductAlert\Controller\Add
     /**
      * @param Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
         Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         parent::__construct($context, $customerSession);
@@ -81,7 +81,7 @@ class Price extends \Magento\ProductAlert\Controller\Add
             )->setPrice(
                 $product->getFinalPrice()
             )->setWebsiteId(
-                $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getWebsiteId()
+                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
             );
             $model->save();
             $this->messageManager->addSuccess(__('You saved the alert subscription.'));

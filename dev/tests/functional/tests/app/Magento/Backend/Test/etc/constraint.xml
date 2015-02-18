@@ -10,4 +10,5 @@
     <constraint name="assertGlobalSearchOrderId" module="Magento_Backend" severity="low"/>
     <constraint name="assertGlobalSearchNoRecordsFound" module="Magento_Backend" severity="low"/>
     <constraint name="assertGlobalSearchCustomerName" module="Magento_Backend" severity="low"/>
+    <constraint name="assertBestsellersOnDashboard" module="Magento_Backend" severity="low"/>
 </config>

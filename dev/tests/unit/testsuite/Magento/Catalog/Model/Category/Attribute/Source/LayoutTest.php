@@ -34,7 +34,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Core\Model\PageLayout\Config\Builder
+     * @return \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
      */
     private function getMockedPageLayoutBuilder()
     {
@@ -45,9 +45,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->method('toOptionArray')
             ->will($this->returnValue($this->testArray));
 
-        $mockPageLayoutBuilder = $this->getMockBuilder('Magento\Core\Model\PageLayout\Config\Builder')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockPageLayoutBuilder = $this->getMockBuilder(
+            'Magento\Framework\View\Model\PageLayout\Config\BuilderInterface'
+        )->disableOriginalConstructor()->getMock();
         $mockPageLayoutBuilder->expects($this->once())
             ->method('getPageLayoutsConfig')
             ->will($this->returnValue($mockPageLayoutConfig));

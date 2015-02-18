@@ -35,7 +35,7 @@ $order->setIncrementId(
     $shippingAddress
 )->setStoreId(
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Framework\Store\StoreManagerInterface'
+        'Magento\Store\Model\StoreManagerInterface'
     )->getStore()->getId()
 )->setPayment(
     $payment
