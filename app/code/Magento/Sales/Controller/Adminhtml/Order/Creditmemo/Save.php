@@ -141,10 +141,7 @@ class Save extends \Magento\Backend\App\Action
                 return $resultForward;
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $message = $e->getPrevious()
-                ? $e->getPrevious()->getMessage() . ' ' . $e->getMessage()
-                : $e->getMessage();
-            $this->messageManager->addError($message);
+            $this->messageManager->addError($e->getMessage());
             $this->_getSession()->setFormData($data);
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
