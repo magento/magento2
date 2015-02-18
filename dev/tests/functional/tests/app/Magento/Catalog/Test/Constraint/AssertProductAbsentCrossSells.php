@@ -50,6 +50,8 @@ class AssertProductAbsentCrossSells extends AbstractConstraint
 
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->addToCart($product);
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
+        $checkoutCart->open();
         foreach ($promotedProducts as $promotedProduct) {
             \PHPUnit_Framework_Assert::assertFalse(
                 $checkoutCart->getCrosssellBlock()->getProductItem($promotedProduct)->isVisible(),

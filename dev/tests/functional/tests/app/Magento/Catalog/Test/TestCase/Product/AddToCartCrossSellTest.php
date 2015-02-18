@@ -11,8 +11,6 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create products.
  * 2. Assign promoted products.
@@ -84,6 +82,7 @@ class AddToCartCrossSellTest extends AbstractProductPromotedProductsTest
 
         $this->browser->open($_ENV['app_frontend_url'] . $initialProduct->getUrlKey() . '.html');
         $this->catalogProductView->getViewBlock()->addToCart($initialProduct);
+        $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
         $this->assertCrossSellSection($initialProductToVerify);
         foreach ($navigateProductsOrder as $productName) {
             $this->addToCart($this->products[$productName]);
@@ -109,7 +108,7 @@ class AddToCartCrossSellTest extends AbstractProductPromotedProductsTest
             $this->catalogProductView->getViewBlock()->addToCart($product);
         }
 
-        $this->checkoutCart->getMessagesBlock()->waitSuccessMessage();
+        $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
     }
 
     /**
@@ -119,6 +118,7 @@ class AddToCartCrossSellTest extends AbstractProductPromotedProductsTest
      */
     protected function assertAbsentCrossSellSection()
     {
+        $this->checkoutCart->open();
         \PHPUnit_Framework_Assert::assertFalse(
             $this->checkoutCart->getCrosssellBlock()->isVisible(),
             "Cross-sell block is present."
@@ -139,6 +139,7 @@ class AddToCartCrossSellTest extends AbstractProductPromotedProductsTest
         foreach ($promotedProductNames as $promotedProductName) {
             $productNames[] = $this->products[$promotedProductName]->getName();
         }
+        $this->checkoutCart->open();
         foreach ($this->checkoutCart->getCrosssellBlock()->getProducts() as $productItem) {
             $pageProductNames[] = $productItem->getProductName();
         }

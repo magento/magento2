@@ -36,6 +36,8 @@ class AssertConfigurableProductInCart extends AbstractConstraint
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         $catalogProductView->getViewBlock()->addToCart($product);
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
+        $checkoutCart->open();
 
         $checkoutData = $product->getCheckoutData();
         $price = $checkoutCart->getCartBlock()->getCartItem($product)->getPrice();

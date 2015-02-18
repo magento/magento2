@@ -10,8 +10,6 @@ use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create products.
  * 2. Assign promoted products.
@@ -102,6 +100,7 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
         $checkoutProducts = $this->selectRelatedProducts($lastProductName);
         $checkoutProducts[] = $lastProduct;
         $this->catalogProductView->getViewBlock()->addToCart($lastProduct);
+        $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
         $this->assertCheckoutCart($checkoutProducts);
     }
 

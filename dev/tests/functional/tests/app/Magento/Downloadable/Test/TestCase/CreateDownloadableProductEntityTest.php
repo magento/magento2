@@ -13,9 +13,7 @@ use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Create DownloadableProductEntity
- *
- * Test Flow:
+ * Steps:
  * 1. Log in to Backend.
  * 2. Navigate to Products > Catalog.
  * 3. Start to create new Downloadable product.

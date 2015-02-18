@@ -16,10 +16,6 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for ProductsInCartReportEntity
- *
- * Test Flow:
- *
  * Preconditions:
  * 1. Create customer
  * 2. Create product

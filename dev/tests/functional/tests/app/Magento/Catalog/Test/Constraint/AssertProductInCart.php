@@ -42,6 +42,7 @@ class AssertProductInCart extends AbstractConstraint
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->fillOptions($product);
         $catalogProductView->getViewBlock()->clickAddToCart();
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
 
         // Check price
         $this->assertOnShoppingCart($product, $checkoutCart);
@@ -56,6 +57,7 @@ class AssertProductInCart extends AbstractConstraint
      */
     protected function assertOnShoppingCart(FixtureInterface $product, CheckoutCart $checkoutCart)
     {
+        $checkoutCart->open();
         /** @var CatalogProductSimple $product */
         $customOptions = $product->getCustomOptions();
         $checkoutData = $product->getCheckoutData();
