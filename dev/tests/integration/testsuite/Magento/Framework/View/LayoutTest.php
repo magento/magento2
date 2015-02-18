@@ -30,6 +30,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->layoutFactory = $objectManager->get('Magento\Framework\View\LayoutFactory');
         $this->_layout = $this->layoutFactory->create();
+        $objectManager->get('Magento\Framework\App\Cache\Type\Layout')->clean();
     }
 
     public function testConstructorStructure()

@@ -5,12 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<page mca="catalog/category/view">
-    <blocks>
-        <weeeListProductBlock>
-            <class>Magento\Weee\Test\Block\Product\ListProduct</class>
-            <locator>.products.wrapper.grid</locator>
-            <strategy>css selector</strategy>
-        </weeeListProductBlock>
-    </blocks>
-</page>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="CatalogCategoryView" area="Category" mca="catalog/category/view">
+        <block name="weeeListProductBlock" class="Magento\Weee\Test\Block\Product\ListProduct" locator=".products.wrapper.grid" strategy="css selector"/>
+    </page>
+</config>

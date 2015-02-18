@@ -1,23 +1,15 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="catalog/product/view">
-    <blocks>
-        <viewBlock>
-            <renders>
-                <configurable>
-                    <class>Magento\ConfigurableProduct\Test\Block\Product\View</class>
-                </configurable>
-            </renders>
-        </viewBlock>
-        <configurableAttributesBlock>
-            <class>Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions</class>
-            <locator>#product-options-wrapper</locator>
-            <strategy>css selector</strategy>
-        </configurableAttributesBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CatalogProductView" area="Product" mca="catalog/product/view">
+    <block name="viewBlock">
+      <render name="configurable" class="Magento\ConfigurableProduct\Test\Block\Product\View"/>
+    </block>
+    <block name="configurableAttributesBlock" class="Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions" locator="#product-options-wrapper" strategy="css selector"/>
+  </page>
+</config>

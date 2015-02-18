@@ -22,13 +22,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_CUSTOMER_MUST_BE_LOGGED = 'checkout/options/customer_must_be_logged';
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -60,7 +53,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -70,7 +62,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -78,7 +69,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         PriceCurrencyInterface $priceCurrency
     ) {
-        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;
         $this->_localeDate = $localeDate;
@@ -141,7 +131,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function canOnepageCheckout()
     {
-        return (bool)$this->_scopeConfig->getValue(
+        return (bool)$this->scopeConfig->getValue(
             'checkout/options/onepage_checkout_enabled',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -215,14 +205,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $this->inlineTranslation->suspend();
 
-        $template = $this->_scopeConfig->getValue(
+        $template = $this->scopeConfig->getValue(
             'checkout/payment_failed/template',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $checkout->getStoreId()
         );
 
         $copyTo = $this->_getEmails('checkout/payment_failed/copy_to', $checkout->getStoreId());
-        $copyMethod = $this->_scopeConfig->getValue(
+        $copyMethod = $this->scopeConfig->getValue(
             'checkout/payment_failed/copy_method',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $checkout->getStoreId()
@@ -232,19 +222,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $bcc = $copyTo;
         }
 
-        $_receiver = $this->_scopeConfig->getValue(
+        $_receiver = $this->scopeConfig->getValue(
             'checkout/payment_failed/receiver',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $checkout->getStoreId()
         );
         $sendTo = [
             [
-                'email' => $this->_scopeConfig->getValue(
+                'email' => $this->scopeConfig->getValue(
                     'trans_email/ident_' . $_receiver . '/email',
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $checkout->getStoreId()
                 ),
-                'name' => $this->_scopeConfig->getValue(
+                'name' => $this->scopeConfig->getValue(
                     'trans_email/ident_' . $_receiver . '/name',
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $checkout->getStoreId()
@@ -293,11 +283,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     'customerEmail' => $checkout->getCustomerEmail(),
                     'billingAddress' => $checkout->getBillingAddress(),
                     'shippingAddress' => $checkout->getShippingAddress(),
-                    'shippingMethod' => $this->_scopeConfig->getValue(
+                    'shippingMethod' => $this->scopeConfig->getValue(
                         'carriers/' . $shippingMethod . '/title',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ),
-                    'paymentMethod' => $this->_scopeConfig->getValue(
+                    'paymentMethod' => $this->scopeConfig->getValue(
                         'payment/' . $paymentMethod . '/title',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ),
@@ -305,7 +295,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     'total' => $total,
                 ]
             )->setFrom(
-                $this->_scopeConfig->getValue(
+                $this->scopeConfig->getValue(
                     'checkout/payment_failed/identity',
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $checkout->getStoreId()
@@ -332,7 +322,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _getEmails($configPath, $storeId)
     {
-        $data = $this->_scopeConfig->getValue(
+        $data = $this->scopeConfig->getValue(
             $configPath,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
@@ -356,7 +346,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if ($store === null) {
             $store = $quote->getStoreId();
         }
-        $guestCheckout = $this->_scopeConfig->isSetFlag(
+        $guestCheckout = $this->scopeConfig->isSetFlag(
             self::XML_PATH_GUEST_CHECKOUT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -393,7 +383,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isCustomerMustBeLogged()
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CUSTOMER_MUST_BE_LOGGED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

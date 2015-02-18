@@ -17,9 +17,9 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     /**
      * Core data
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Pricing\Helper\Data
      */
-    protected $coreData;
+    protected $pricingHelper;
 
     /**
      * Catalog product configuration
@@ -38,17 +38,17 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfiguration
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfiguration,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Pricing\Helper\Data $pricingHelper,
         \Magento\Framework\Escaper $escaper
     ) {
         $this->productConfiguration = $productConfiguration;
-        $this->coreData = $coreData;
+        $this->pricingHelper = $pricingHelper;
         $this->escaper = $escaper;
         parent::__construct($context);
     }
@@ -139,7 +139,9 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
                                 $option['value'][] = $qty . ' x '
                                     . $this->escaper->escapeHtml($bundleSelection->getName())
                                     . ' '
-                                    . $this->coreData->currency($this->getSelectionFinalPrice($item, $bundleSelection));
+                                    . $this->pricingHelper->currency(
+                                        $this->getSelectionFinalPrice($item, $bundleSelection)
+                                    );
                             }
                         }
 

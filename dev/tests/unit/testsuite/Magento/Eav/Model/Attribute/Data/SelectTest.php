@@ -22,7 +22,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Select::outputValue
+     * covers \Magento\Eav\Model\Attribute\Data\Select::outputValue
      *
      * @param string $format
      * @param mixed $value
@@ -70,7 +70,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Select::validateValue
+     * covers \Magento\Eav\Model\Attribute\Data\Select::validateValue
      *
      * @param mixed $value
      * @param mixed $originalValue
@@ -132,7 +132,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Select::compactValue
+     * covers \Magento\Eav\Model\Attribute\Data\Select::compactValue
      */
     public function testCompactValue()
     {
@@ -148,7 +148,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Select::compactValue
+     * covers \Magento\Eav\Model\Attribute\Data\Select::compactValue
      */
     public function testCompactValueWithFalseValue()
     {
