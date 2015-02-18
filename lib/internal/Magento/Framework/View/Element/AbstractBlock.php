@@ -766,7 +766,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      * Retrieve formatting date
      *
      * @param   \DateTime|string|null $date
-     * @param   string $format
+     * @param   int $format
      * @param   bool $showTime
      * @return  string
      */
@@ -775,14 +775,19 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
         $format = \IntlDateFormatter::SHORT,
         $showTime = false
     ) {
-        return $this->_localeDate->formatDate($date, $format, $showTime);
+        $date = $date instanceof \DateTimeInterface ?: new \DateTime($date);
+        return $this->_localeDate->formatDateTime(
+            $date,
+            $format,
+            $showTime ? $format : \IntlDateFormatter::NONE
+        );
     }
 
     /**
      * Retrieve formatting time
      *
-     * @param   \Zend_Date|string|null $time
-     * @param   string $format
+     * @param   \DateTime|string|null $time
+     * @param   int $format
      * @param   bool $showDate
      * @return  string
      */
@@ -791,7 +796,12 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
         $format = \IntlDateFormatter::SHORT,
         $showDate = false
     ) {
-        return $this->_localeDate->formatTime($time, $format, $showDate);
+        $time = $time instanceof \DateTimeInterface ?: new \DateTime($time);
+        return $this->_localeDate->formatDateTime(
+            $time,
+            $showDate ? $format : \IntlDateFormatter::NONE,
+            $format
+        );
     }
 
     /**
