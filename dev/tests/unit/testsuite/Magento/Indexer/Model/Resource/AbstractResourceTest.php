@@ -17,55 +17,20 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
      */
     protected $_resourceMock;
 
-    /**
-     * @var \Magento\Catalog\Model\CategoryFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_categoryFactoryMock;
-
-    /**
-     * @var \Magento\Catalog\Model\Resource\Category\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_categoryCollectionFactoryMock;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_storeManagerMock;
-
-    /**
-     * @var \Magento\Catalog\Model\Config|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_catalogConfigMock;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_eventManagerMock;
 
     protected function setUp()
     {
         $this->_resourceMock = $this->getMockBuilder('Magento\Framework\App\Resource')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_categoryFactoryMock = $this->getMockBuilder('Magento\Catalog\Model\CategoryFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_categoryCollectionFactoryMock = $this->getMockBuilder(
-            'Magento\Catalog\Model\Resource\Category\CollectionFactory'
-        )->disableOriginalConstructor()->getMock();
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->_catalogConfigMock = $this->getMockBuilder('Magento\Catalog\Model\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
 
-        $this->model = new \Magento\Indexer\Model\Resource\AbstractResourceStub(
-            $this->_resourceMock,
-            $this->_categoryFactoryMock,
-            $this->_categoryCollectionFactoryMock,
-            $this->_storeManagerMock,
-            $this->_catalogConfigMock,
-            $this->_eventManagerMock
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $arguments = $objectManager->getConstructArguments('\Magento\Indexer\Model\Resource\AbstractResourceStub',
+            ['resource' => $this->_resourceMock]
+        );
+        $this->model = $objectManager->getObject(
+            '\Magento\Indexer\Model\Resource\AbstractResourceStub',
+            $arguments
         );
     }
 
@@ -86,9 +51,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     public function testClearTemporaryIndexTable()
     {
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $this->_storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
         $connectionMock->expects($this->once())->method('delete')->will($this->returnSelf());
         $this->model->clearTemporaryIndexTable();
     }
@@ -101,7 +64,6 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 
         $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
 
         $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($describeTable));
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
@@ -112,7 +74,6 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             $resultColumns
         )->will($this->returnSelf());
 
-        $this->_storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
         $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
 
@@ -147,13 +108,11 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 
         $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
 
         $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($tableColumns));
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
         $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
 
-        $this->_storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
         if ($readToIndex) {
             $connectionCustomMock = $this->getMock(
                 'Magento\Framework\DB\Adapter\CustomAdapterInterface',

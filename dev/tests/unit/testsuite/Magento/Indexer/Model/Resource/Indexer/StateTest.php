@@ -21,7 +21,14 @@ class StateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = new \Magento\Indexer\Model\Resource\Indexer\State($resourceMock);
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $arguments = $objectManager->getConstructArguments('\Magento\Indexer\Model\Resource\Indexer\State',
+            ['resource' => $resourceMock]
+        );
+        $this->model = $objectManager->getObject(
+            '\Magento\Indexer\Model\Resource\Indexer\State',
+            $arguments
+        );
         $this->assertEquals(
             [['field' => ['indexer_id'], 'title' => __('State for the same indexer')]],
             $this->model->getUniqueFields()
