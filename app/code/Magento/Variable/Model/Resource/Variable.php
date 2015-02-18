@@ -22,7 +22,7 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('core_variable', 'variable_id');
+        $this->_init('variable', 'variable_id');
     }
 
     /**
@@ -76,7 +76,7 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
              * remove store value
              */
             $this->_getWriteAdapter()->delete(
-                $this->getTable('core_variable_value'),
+                $this->getTable('variable_value'),
                 ['variable_id = ?' => $object->getId(), 'store_id = ?' => $object->getStoreId()]
             );
         } else {
@@ -86,9 +86,9 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'plain_value' => $object->getPlainValue(),
                 'html_value' => $object->getHtmlValue(),
             ];
-            $data = $this->_prepareDataForTable(new \Magento\Framework\Object($data), $this->getTable('core_variable_value'));
+            $data = $this->_prepareDataForTable(new \Magento\Framework\Object($data), $this->getTable('variable_value'));
             $this->_getWriteAdapter()->insertOnDuplicate(
-                $this->getTable('core_variable_value'),
+                $this->getTable('variable_value'),
                 $data,
                 ['plain_value', 'html_value']
             );
@@ -127,11 +127,11 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $ifNullHtmlValue = $adapter->getCheckSql('store.html_value IS NULL', 'def.html_value', 'store.html_value');
 
         $select->joinLeft(
-            ['def' => $this->getTable('core_variable_value')],
+            ['def' => $this->getTable('variable_value')],
             'def.variable_id = ' . $this->getMainTable() . '.variable_id AND def.store_id = 0',
             []
         )->joinLeft(
-            ['store' => $this->getTable('core_variable_value')],
+            ['store' => $this->getTable('variable_value')],
             'store.variable_id = def.variable_id AND store.store_id = ' . $adapter->quote($storeId),
             []
         )->columns(

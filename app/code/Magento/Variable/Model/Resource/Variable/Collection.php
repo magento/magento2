@@ -60,7 +60,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     public function addValuesToResult()
     {
         $this->getSelect()->join(
-            ['value_table' => $this->getTable('core_variable_value')],
+            ['value_table' => $this->getTable('variable_value')],
             'value_table.variable_id = main_table.variable_id',
             ['value_table.value']
         );
