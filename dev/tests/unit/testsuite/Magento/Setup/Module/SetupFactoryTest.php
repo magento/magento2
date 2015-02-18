@@ -15,46 +15,14 @@ class SetupFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $returnValueMap = [
-            [
-                'Magento\Framework\Module\ModuleList',
-                $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false),
-            ],
-            [
-                'Magento\Setup\Module\Setup\FileResolver',
-                $this->getMock('Magento\Setup\Module\Setup\FileResolver', [], [], '', false),
-            ],
-            [
-                'Magento\Framework\App\DeploymentConfig\Reader',
-                $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false),
-            ],
-        ];
-
         $serviceLocatorMock = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
-        $serviceLocatorMock
-            ->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($returnValueMap));
-        $resourceFactory = $this->getMock('Magento\Setup\Module\ResourceFactory', [], [], '', false);
-        $resourceFactory
-            ->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->getMock('Magento\Framework\App\Resource', [], [], '', false)));
-        $this->setupFactory = new SetupFactory($serviceLocatorMock, $resourceFactory);
+        $this->setupFactory = new SetupFactory($serviceLocatorMock);
     }
 
     public function testCreateSetup()
     {
-        $setup = $this->setupFactory->createSetup();
+        $resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $setup = $this->setupFactory->createSetup($resourceMock);
         $this->assertInstanceOf('Magento\Setup\Module\Setup', $setup);
-    }
-
-    public function testCreateSetupModule()
-    {
-        $setupModule = $this->setupFactory->createSetupModule(
-            $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface'),
-            'sampleModuleName'
-        );
-        $this->assertInstanceOf('Magento\Framework\Setup\ModuleSchemaSetupInterface', $setupModule);
     }
 }

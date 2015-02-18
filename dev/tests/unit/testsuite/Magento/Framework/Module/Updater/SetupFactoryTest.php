@@ -10,44 +10,46 @@ class SetupFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $objectManagerMock;
+    protected $directoryList;
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $this->directoryList
+            ->expects($this->exactly(2))
+            ->method('getPath')
+            ->will($this->returnValue(__DIR__ . '/_files'));
     }
 
-    public function testCreateUsesDefaultSetupModelClassIfSetupModelIsNotDeclaredForGivenResource()
+    public function testCreateInstaller()
     {
+        $objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock
+            ->expects($this->any())
+            ->method('create')
+            ->with('Foo\One\Setup\InstallData')
+            ->will($this->returnValue($this->getMockForAbstractClass('Magento\Framework\Setup\InstallDataInterface')));
         $model = new SetupFactory(
-            $this->objectManagerMock,
-            []
+            $objectManagerMock,
+            $this->directoryList
         );
-        $resourceName = 'module_setup';
-        $moduleName = 'module';
-        $this->objectManagerMock->expects($this->once())->method('create')
-            ->with(
-                '\Magento\Framework\Setup\ModuleDataSetupInterface',
-                [
-                    'resourceName' => $resourceName,
-                    'moduleName' => $moduleName,
-                ]
-            );
-        $model->create($resourceName, $moduleName);
+        $installer = $model->create('Foo_One', 'install');
+        $this->assertInstanceOf('Magento\Framework\Setup\InstallDataInterface', $installer);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage \Not\Valid\Setup\Model must implement \\Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    public function testCreateThrowsExceptionIfSetupModelIsNotValid()
+    public function testCreateUpgrader()
     {
+        $objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock
+            ->expects($this->any())
+            ->method('create')
+            ->with('Bar\Two\Setup\UpgradeData')
+            ->will($this->returnValue($this->getMockForAbstractClass('Magento\Framework\Setup\UpgradeDataInterface')));
         $model = new SetupFactory(
-            $this->objectManagerMock,
-            [
-                'module_setup' => '\Not\Valid\Setup\Model',
-            ]
+            $objectManagerMock,
+            $this->directoryList
         );
-        $model->create('module_setup', 'module');
+        $upgrader = $model->create('Bar_Two', 'upgrade');
+        $this->assertInstanceOf('Magento\Framework\Setup\UpgradeDataInterface', $upgrader);
     }
 }

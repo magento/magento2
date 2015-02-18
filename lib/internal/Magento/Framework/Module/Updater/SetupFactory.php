@@ -41,7 +41,7 @@ class SetupFactory
      */
     public function create($moduleName, $type)
     {
-        $modulePath = str_replace('_', '\\', $moduleName);
+        $modulePath = str_replace('_', '/', $moduleName);
         if ($type === 'install') {
             $dataInstaller = $this->directoryList->getPath(DirectoryList::MODULES)
                 . '/' . $modulePath . '/Setup/InstallData';
@@ -67,6 +67,7 @@ class SetupFactory
                 '',
                 $path
             ));
+            $temp = $this->_objectManager->create($path);
             return $this->_objectManager->create($path);
         } else {
             return null;
