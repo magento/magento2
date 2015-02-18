@@ -9,6 +9,9 @@ namespace Magento\Webapi\Controller\Rest;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Webapi\Model\Config\Converter;
 
+/**
+ * Override parameter values
+ */
 class ParamsOverrider
 {
     /**
@@ -21,9 +24,8 @@ class ParamsOverrider
      *
      * @param UserContextInterface $userContext
      */
-    public function __construct(
-        UserContextInterface $userContext
-    ) {
+    public function __construct(UserContextInterface $userContext)
+    {
         $this->userContext = $userContext;
     }
 
@@ -34,7 +36,7 @@ class ParamsOverrider
      * @param array $parameters Contains parameters to replace or default
      * @return array Data in same format as $inputData with appropriate parameters added or changed
      */
-    public function overrideParams(array $inputData, array $parameters)
+    public function override(array $inputData, array $parameters)
     {
         foreach ($parameters as $name => $paramData) {
             $arrayKeys = explode('.', $name);

@@ -173,7 +173,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $inputData = $this->_request->getRequestData();
             $serviceMethodName = $route->getServiceMethod();
             $serviceClassName = $route->getServiceClass();
-            $inputData = $this->paramsOverrider->overrideParams($inputData, $route->getParameters());
+            $inputData = $this->paramsOverrider->override($inputData, $route->getParameters());
             $inputParams = $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
             $service = $this->_objectManager->get($serviceClassName);
             /** @var \Magento\Framework\Api\AbstractExtensibleObject $outputData */

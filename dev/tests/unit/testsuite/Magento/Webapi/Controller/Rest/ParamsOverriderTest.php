@@ -37,7 +37,7 @@ class ParamsOverriderTest extends \PHPUnit_Framework_TestCase
             ['userContext' => $userContextMock]
         );
 
-        $this->assertEquals($expectedOverriddenParams, $paramsOverrider->overrideParams($requestData, $parameters));
+        $this->assertEquals($expectedOverriddenParams, $paramsOverrider->override($requestData, $parameters));
     }
 
     /**
