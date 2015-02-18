@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * Catalog product option file type
@@ -224,7 +225,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } catch (\Magento\Framework\Exception\File\LargeSizeException $largeSizeException) {
             $this->setIsValid(false);
             throw new LocalizedException($largeSizeException->getMessage());
-        } catch (\Magento\Framework\Exception\Product\HasRequiredOptionsException $e) {
+        } catch (ProductException $e) {
             switch ($this->getProcessMode()) {
                 case \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL:
                     throw new LocalizedException(__('Please specify the product\'s required option(s).'));

@@ -14,6 +14,9 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\EmailNotConfirmedException;
+use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Customer model
@@ -363,12 +366,12 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         $this->loadByEmail($login);
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new EmailNotConfirmedException(
                 __('This account is not confirmed.')
             );
         }
         if (!$this->validatePassword($password)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new InvalidEmailOrPasswordException(
                 __('Invalid login or password.')
             );
         }
@@ -1245,12 +1248,12 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      *
      * @param string $passwordLinkToken
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function changeResetPasswordLinkToken($passwordLinkToken)
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new AuthenticationException(
                 __('Invalid password reset token.')
             );
         }

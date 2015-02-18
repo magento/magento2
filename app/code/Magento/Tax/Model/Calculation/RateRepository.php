@@ -105,8 +105,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         try {
             $this->resourceModel->save($taxRate);
             $taxRate->saveTitles($taxRateTitles);
-        } catch (AlreadyExistsException $e) {
-            throw new InputException($e->getMessage());
         } catch (LocalizedException $e) {
             throw $e;
         }

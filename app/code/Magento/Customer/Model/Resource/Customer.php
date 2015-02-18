@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model\Resource;
 
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\Validator\ValidatorException;
 use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
@@ -93,9 +93,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param \Magento\Framework\Object $customer
      * @return $this
-     * @throws AlreadyExistsException
-     * @throws InputException
-     * @throws \Magento\Framework\Validator\ValidatorException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Object $customer)
     {
@@ -103,7 +101,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         parent::_beforeSave($customer);
 
         if (!$customer->getEmail()) {
-            throw new InputException(__('Customer email is required'));
+            throw new ValidatorException(__('Customer email is required'));
         }
 
         $adapter = $this->_getWriteAdapter();
@@ -152,15 +150,15 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param \Magento\Customer\Model\Customer $customer
      * @return void
-     * @throws \Magento\Framework\Validator\ValidatorException When validation failed
+     * @throws \Magento\Framework\Validator\ValidatorException
      */
     protected function _validate($customer)
     {
         $validator = $this->_validatorFactory->createValidator('customer', 'save');
 
         if (!$validator->isValid($customer)) {
-            throw new \Magento\Framework\Validator\ValidatorException(
-                InputException::DEFAULT_MESSAGE,
+            throw new ValidatorException(
+                ValidatorException::DEFAULT_MESSAGE,
                 [],
                 null,
                 $validator->getMessages()

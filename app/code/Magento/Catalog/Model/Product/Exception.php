@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Exception\Product;
+namespace Magento\Catalog\Model\Product;
 
 use Magento\Framework\Exception\LocalizedException;
 
-class HasRequiredOptionsException extends LocalizedException
+class Exception extends LocalizedException
 {
 }

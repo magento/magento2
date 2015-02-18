@@ -75,7 +75,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\Product\HasRequiredOptionsException
+     * @expectedException \Magento\Catalog\Model\Product\Exception
      * @return void
      */
     public function testOptionRequiredException()

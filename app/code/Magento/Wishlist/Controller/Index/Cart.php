@@ -9,6 +9,7 @@ namespace Magento\Wishlist\Controller\Index;
 use Magento\Framework\App\Action;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Wishlist\Controller\IndexInterface;
+use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -166,7 +167,7 @@ class Cart extends Action\Action implements IndexInterface
                     $redirectUrl = $refererUrl;
                 }
             }
-        } catch (\Magento\Framework\Exception\Product\NotSalableException $e) {
+        } catch (ProductException $e) {
             $this->messageManager->addError(__('This product(s) is out of stock.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addNotice($e->getMessage());

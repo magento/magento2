@@ -9,7 +9,6 @@ namespace Magento\Tax\Model;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -94,7 +93,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
             }
             $this->resource->save($rule);
         } catch (AlreadyExistsException $e) {
-            throw new InputException($e->getMessage());
+            throw $e;
         } catch (NoSuchEntityException $e) {
             throw $e;
         } catch (LocalizedException $e) {

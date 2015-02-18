@@ -6,6 +6,8 @@
 
 namespace Magento\Wishlist\Controller\Index;
 
+use Magento\Catalog\Model\Product\Exception as ProductException;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -625,7 +627,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->once())
             ->method('addToCart')
             ->with($this->checkoutCartMock, true)
-            ->willThrowException(new \Magento\Framework\Exception\Product\NotSalableException(null));
+            ->willThrowException(new ProductException(__('')));
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError')

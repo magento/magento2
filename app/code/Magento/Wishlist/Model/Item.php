@@ -15,6 +15,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory;
+use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * Wishlist item model
@@ -400,7 +401,7 @@ class Item extends AbstractModel implements ItemInterface
      * @param \Magento\Checkout\Model\Cart $cart
      * @param bool $delete  delete the item after successful add to cart
      * @return bool
-     * @throws \Magento\Framework\Exception\Product\NotSalableException
+     * @throws \Magento\Catalog\Model\Product\Exception
      */
     public function addToCart(\Magento\Checkout\Model\Cart $cart, $delete = false)
     {
@@ -428,7 +429,7 @@ class Item extends AbstractModel implements ItemInterface
         }
 
         if (!$product->isSalable()) {
-            throw new \Magento\Framework\Exception\Product\NotSalableException(null);
+            throw new ProductException(__(''));
         }
 
         $buyRequest = $this->getBuyRequest();

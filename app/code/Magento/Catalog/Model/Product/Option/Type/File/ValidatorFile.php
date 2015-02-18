@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -91,7 +92,7 @@ class ValidatorFile extends Validator
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_File_Transfer_Exception
      * @throws \Magento\Framework\Validator\ValidatorException
-     * @throws \Magento\Framework\Exception\Product\HasRequiredOptionsException
+     * @throws \Magento\Catalog\Model\Product\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate($processingParams, $option)
@@ -118,7 +119,7 @@ class ValidatorFile extends Validator
                     __("The file you uploaded is larger than %1 Megabytes allowed by server", $value)
                 );
             } else {
-                throw new \Magento\Framework\Exception\Product\HasRequiredOptionsException(__('Option required.'));
+                throw new ProductException(__('Option required.'));
             }
         }
 
