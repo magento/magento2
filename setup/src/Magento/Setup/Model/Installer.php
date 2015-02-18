@@ -626,8 +626,8 @@ class Installer
                 $moduleInstaller = $this->moduleInstallerUpgraderFactory->createSchemaInstaller($moduleName);
                 if ($moduleInstaller) {
                     $moduleInstaller->install($this->setup, $moduleContext);
-                    $this->resource->setDbVersion($moduleName, $configVer);
                 }
+                $this->resource->setDbVersion($moduleName, $configVer);
             }
             $this->logProgress();
         }

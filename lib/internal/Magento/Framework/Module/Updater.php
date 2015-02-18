@@ -76,8 +76,8 @@ class Updater
                     $moduleInstaller = $this->setupFactory->create($moduleName, 'install');
                     if ($moduleInstaller) {
                         $moduleInstaller->install($this->dataSetup, $moduleContext);
-                        $resource->setDataVersion($moduleName, $configVer);
                     }
+                    $resource->setDataVersion($moduleName, $configVer);
                 }
             }
         }
