@@ -29,7 +29,6 @@ class Rss extends \Magento\Wishlist\Helper\Data
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -43,7 +42,6 @@ class Rss extends \Magento\Wishlist\Helper\Data
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -59,7 +57,6 @@ class Rss extends \Magento\Wishlist\Helper\Data
         parent::__construct(
             $context,
             $coreRegistry,
-            $scopeConfig,
             $customerSession,
             $wishlistFactory,
             $storeManager,
@@ -120,7 +117,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
     public function isRssAllow()
     {
         return $this->_moduleManager->isEnabled('Magento_Rss')
-            && $this->_scopeConfig->isSetFlag(
+            && $this->scopeConfig->isSetFlag(
                 'rss/wishlist/active',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );

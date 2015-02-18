@@ -26,8 +26,8 @@ class LoggerAbstractTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Tools\Migration\System\Configuration\AbstractLogger::add()
-     * @covers \Magento\Tools\Migration\System\Configuration\AbstractLogger::__toString()
+     * covers \Magento\Tools\Migration\System\Configuration\AbstractLogger::add()
+     * covers \Magento\Tools\Migration\System\Configuration\AbstractLogger::__toString()
      */
     public function testToString()
     {
