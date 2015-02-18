@@ -14,24 +14,18 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sitemap\Helper\Data */
     protected $data;
 
-    /** @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject */
-    protected $context;
-
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $scopeConfig;
 
     protected function setUp()
     {
-        $this->context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-
-        $this->data = (new ObjectManager($this))->getObject(
-            'Magento\Sitemap\Helper\Data',
-            [
-                'context' => $this->context,
-                'scopeConfig' => $this->scopeConfig
-            ]
-        );
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $className = 'Magento\Sitemap\Helper\Data';
+        $arguments = $objectManagerHelper->getConstructArguments($className);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
+        $this->scopeConfig = $context->getScopeConfig();
+        $this->data = $objectManagerHelper->getObject($className, $arguments);
     }
 
     public function testGetValidPaths()

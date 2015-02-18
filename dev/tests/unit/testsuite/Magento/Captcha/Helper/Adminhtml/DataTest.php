@@ -8,7 +8,7 @@ namespace Magento\Captcha\Helper\Adminhtml;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Captcha\Helper\Adminhtml\Data|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Helper\Adminhtml\Data | |PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
@@ -17,11 +17,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $backendConfig = $this->getMockBuilder(
-            'Magento\Backend\App\ConfigInterface'
-        )->disableOriginalConstructor()->setMethods(
-            ['getValue', 'setValue', 'isSetFlag']
-        )->getMock();
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $className = 'Magento\Captcha\Helper\Adminhtml\Data';
+        $arguments = $objectManagerHelper->getConstructArguments($className);
+
+        $backendConfig = $arguments['backendConfig'];
         $backendConfig->expects(
             $this->any()
         )->method(
@@ -32,20 +32,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('1')
         );
 
-        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $filesystemMock = $arguments['filesystem'];
         $directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
 
         $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
         $directoryMock->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
 
-        $this->_model = new \Magento\Captcha\Helper\Adminhtml\Data(
-            $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false),
-            $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false),
-            $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
-            $filesystemMock,
-            $this->getMock('Magento\Captcha\Model\CaptchaFactory', [], [], '', false),
-            $backendConfig
-        );
+        $this->_model = $objectManagerHelper->getObject($className, $arguments);
     }
 
     public function testGetConfig()

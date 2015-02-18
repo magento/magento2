@@ -11,6 +11,15 @@ namespace Magento\Framework\App\Http;
 class Context
 {
     /**
+     * Currency cache context
+     */
+    const CONTEXT_CURRENCY = 'current_currency';
+    /**
+     * Store cache context
+     */
+    const CONTEXT_STORE = 'store';
+
+    /**
      * Data storage
      *
      * @var array

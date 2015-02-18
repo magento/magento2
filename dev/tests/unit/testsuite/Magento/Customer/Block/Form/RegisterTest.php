@@ -25,8 +25,8 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
 
     const REGION_ID_ATTRIBUTE_VALUE = '12';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Core\Helper\Data */
-    private $_coreData;
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Directory\Helper\Data */
+    private $directoryHelperMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config\ScopeConfigInterface */
     private $_scopeConfig;
@@ -47,7 +47,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
     {
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_moduleManager = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
-        $this->_coreData = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
+        $this->directoryHelperMock = $this->getMock('Magento\Directory\Helper\Data', [], [], '', false);
         $this->_customerUrl = $this->getMock('Magento\Customer\Model\Url', [], [], '', false);
         $this->_customerSession = $this->getMock(
             'Magento\Customer\Model\Session',
@@ -62,7 +62,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
 
         $this->_block = new Register(
             $context,
-            $this->_coreData,
+            $this->directoryHelperMock,
             $this->getMockForAbstractClass('Magento\Framework\Json\EncoderInterface', [], '', false),
             $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false),
             $this->getMock('Magento\Directory\Model\Resource\Region\CollectionFactory', [], [], '', false),
@@ -217,7 +217,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCountryIdParentNullData()
     {
-        $this->_coreData->expects(
+        $this->directoryHelperMock->expects(
             $this->once()
         )->method(
             'getDefaultCountry'
