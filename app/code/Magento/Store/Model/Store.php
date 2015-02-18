@@ -6,7 +6,9 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Http\Context;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Store model
@@ -53,7 +55,7 @@ class Store extends AbstractModel implements
     const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
 
     const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
-
+    
     const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
 
     const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
@@ -541,7 +543,9 @@ class Store extends AbstractModel implements
             $secure = is_null($secure) ? $this->isCurrentlySecure() : (bool)$secure;
             switch ($type) {
                 case \Magento\Framework\UrlInterface::URL_TYPE_WEB:
-                    $path = $secure ? self::XML_PATH_SECURE_BASE_URL : self::XML_PATH_UNSECURE_BASE_URL;
+                    $path = $secure
+                        ? self::XML_PATH_SECURE_BASE_URL
+                        : self::XML_PATH_UNSECURE_BASE_URL;
                     $url = $this->_getConfig($path);
                     break;
 
@@ -840,7 +844,7 @@ class Store extends AbstractModel implements
             $this->_getSession()->setCurrencyCode($code);
 
             $this->_httpContext->setValue(
-                \Magento\Core\Helper\Data::CONTEXT_CURRENCY,
+                Context::CONTEXT_CURRENCY,
                 $code,
                 $this->_storeManager->getWebsite()->getDefaultStore()->getDefaultCurrency()->getCode()
             );
@@ -856,7 +860,7 @@ class Store extends AbstractModel implements
     public function getCurrentCurrencyCode()
     {
         // try to get currently set code among allowed
-        $code = $this->_httpContext->getValue(\Magento\Core\Helper\Data::CONTEXT_CURRENCY);
+        $code = $this->_httpContext->getValue(Context::CONTEXT_CURRENCY);
         $code = is_null($code) ? $this->_getSession()->getCurrencyCode() : $code;
         if (empty($code)) {
             $code = $this->getDefaultCurrencyCode();

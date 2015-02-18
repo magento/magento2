@@ -65,6 +65,11 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $urlDecoder;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      * @param \Psr\Log\LoggerInterface $logger
@@ -76,6 +81,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\HTTP\Header $httpHeader
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -90,7 +96,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\HTTP\Header $httpHeader,
-        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->translateInline = $translateInline;
         $this->_moduleManager = $moduleManager;
@@ -103,6 +110,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->_remoteAddress = $remoteAddress;
         $this->urlEncoder = $urlEncoder;
         $this->urlDecoder = $urlDecoder;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -191,5 +199,13 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     public function getUrlDecoder()
     {
         return $this->urlDecoder;
+    }
+
+    /**
+     * @return \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    public function getScopeConfig()
+    {
+        return $this->scopeConfig;
     }
 }

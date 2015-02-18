@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests Magento\Core\App\Router\NoRouteHandler
+ * Tests Magento\Framework\App\Router\NoRouteHandler
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,12 +8,12 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Core\App\Router;
+namespace Magento\Framework\App\Router;
 
 class NoRouteHandlerTest extends \Magento\Test\BaseTestCase
 {
     /**
-     * @var \Magento\Core\App\Router\NoRouteHandler
+     * @var \Magento\Framework\App\Router\NoRouteHandler
      */
     private $model;
 
@@ -45,7 +45,7 @@ class NoRouteHandlerTest extends \Magento\Test\BaseTestCase
             'Magento\Framework\App\RequestInterface',
             $requestMethods
         );
-        $this->model = $this->objectManager->getObject('Magento\Core\App\Router\NoRouteHandler',
+        $this->model = $this->objectManager->getObject('Magento\Framework\App\Router\NoRouteHandler',
             [
                 'config' => $this->configMock,
             ]

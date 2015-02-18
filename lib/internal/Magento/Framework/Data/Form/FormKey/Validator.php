@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\App\Action;
+namespace Magento\Framework\Data\Form\FormKey;
 
-class FormKeyValidator
+class Validator
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey
