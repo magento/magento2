@@ -13,15 +13,14 @@ $children = $block->getChildren();
 $content = $block->getContent();
 $ajaxUrl = $block->getAjaxUrl();
 ?>
-
-<div class="fieldset-wrapper-title" tabindex="3" data-bind="click: onClick, keyboard: { 13: toggle }">
+<div class="admin__fieldset-wrapper-title" tabindex="3" data-bind="click: onClick, keyboard: { 13: toggle }">
     <strong class="title">
         <span data-bind="text: label"><?php echo $block->getData('config/label'); ?></span>
     </strong>
 </div>
 
-<div class="fieldset-wrapper-content">
-    <fieldset id="<?php echo $block->getData('index'); ?>" class="fieldset">
+<div class="admin__fieldset-wrapper-content">
+    <fieldset id="<?php echo $block->getData('index'); ?>" class="admin__fieldset">
         <?php if (!empty($content)): ?>
             <?php echo $content; ?>
         <?php endif; ?>

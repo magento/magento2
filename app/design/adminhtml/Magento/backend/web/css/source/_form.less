@@ -1,0 +1,283 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@import '_form/_abstract';
+
+@field-control__border-color: @color-gray68;
+@field-control__color: @color-very-dark-gray-black;
+@field-control__bg-color: @color-white;
+@field-control-addon__color: @color-gray52;
+
+
+@field-error__color: @color-very-dark-gray2;
+@field-error__bg-color: @color-lazy-sun;
+@field-error__border-color: @color-tomato-brick;
+
+//  States
+@field-control__focus__border-color: @color-pure-blue;
+@field-control__disabled__bg-color: @color-lighter-gray;
+@field-label__required__color: @color-phoenix;
+@field-label__disabled__color: @color-gray60;
+
+//
+//  Basic controls
+//  _____________________________________________
+
+//
+//  Common
+//  ---------------------------------------------
+.__form-control-styles() {
+        background-color: @field-control__bg-color;
+        border-radius: 1px;
+        border: 1px solid @field-control__border-color;
+        color: @field-control__color;
+        font-size: 15px;
+        font-weight: 500;
+        height: 33px;
+        max-width: 100%;
+        padding: 0 10px;
+    }
+.__form-control-styles__focus() {
+        border-color: @field-control__focus__border-color;
+        box-shadow: none;
+        outline: 0;
+    }
+.__form-control-styles__disabled() {
+        background-color: @field-control__disabled__bg-color;
+        border-color: @field-control__border-color;
+        color: @field-control__color;
+        opacity: .5;
+    }
+
+.admin__control-text {
+    .extend__form-control-styles();
+
+    line-height: normal;
+    width: 100%;
+}
+
+.admin__control-select {
+    .extend__form-control-styles();
+    .css(appearance, none, 1);
+
+    background-repeat: no-repeat;
+
+    background-image+: url('../images/arrows-bg.svg');
+    background-position+: ~'calc(100% - 12px)' -34px;
+    background-size+: auto;
+
+    background-image+: linear-gradient(#e3e3e3, #e3e3e3);
+    background-position+: 100%;
+    background-size+: 33px 100%;
+
+    background-image+: linear-gradient(@field-control__border-color,@field-control__border-color);
+    background-position+: ~'calc(100% - 33px)' 0;
+    background-size+: 1px 100%;
+
+    padding-right: 34px+10px;
+
+    &:focus {
+        background-image+: url('../images/arrows-bg.svg');
+        background-position+: ~'calc(100% - 12px)' 13px;
+
+        background-image+: linear-gradient(#e3e3e3, #e3e3e3);
+        background-position+: 100%;
+
+        background-image+: linear-gradient(@field-control__focus__border-color, @field-control__focus__border-color);
+        background-position+: ~'calc(100% - 33px)' 0;
+    }
+    &::-ms-expand {
+        display: none;
+    }
+    .ie9 & {
+        padding-right: 0;
+    }
+}
+
+option:empty {
+    display: none;
+}
+
+.admin__control-file {
+    background: transparent;
+    border: 0;
+}
+
+.admin__control-textarea,
+.admin__control-multiselect {
+    .extend__form-control-styles();
+    height: ~"calc(6 * 1.2em + 14px)";
+    line-height: 1.2;
+    padding: 6px 10px;
+    width: 100%;
+}
+
+.admin__control-textarea {
+    line-height: 1.18em;
+    padding-top: 8px;
+}
+
+.admin__control-radio,
+.admin__control-checkbox {
+    margin: 3px 0 0 0;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    vertical-align: top;
+    + label {
+        cursor: pointer;
+        display: inline-block;
+        padding-left: 26px;
+
+        &:before {
+            .url('images/choice_bkg.png', 'Magento_Ui');
+
+            background: url('@{url}') no-repeat -100% -100% #fff;
+            border-radius: 2px;
+            border: 1px solid @field-control__border-color;
+            content: '';
+            float: left;
+            height: 14px;
+            line-height: 14px;
+            margin: 1px 10px 0 -26px;
+            text-align: center;
+            vertical-align: top;
+            width: 14px;
+        }
+    }
+    &:focus + label {
+        .keyfocus & {
+            &:extend(.keyfocus *:focus);
+        }
+        &:before {
+            border-color: @field-control__focus__border-color;
+        }
+    }
+    &[disabled] + label {
+        &:before {
+            background-color: @field-control__disabled__bg-color;
+            border-color: @field-control__border-color;
+        }
+        color: @field-control__color;
+        opacity: .5;
+    }
+}
+.admin__control-radio + label:before {
+    border-radius: 8px;
+}
+.admin__control-radio:checked + label:before {
+    background-position: -26px -1px;
+}
+.admin__control-checkbox:checked + label:before {
+    background-position: -1px -1px;
+}
+
+
+.admin__control-addon {
+    .vendor-prefix-display(inline-flex);
+    .vendor-prefix-flex-direction(row);
+    & > * {
+        .vendor-prefix-flex-basis(auto);
+        .vendor-prefix-flex-grow(0);
+        .vendor-prefix-flex-shrink(0);
+    }
+    display: inline-flex;
+    flex-flow: row nowrap;
+    position: relative;
+    width: 100%;
+    z-index: 1;
+    > * {
+        position: relative;
+        z-index: 1;
+    }
+    [class*="admin__control-"] {
+        background-color: transparent;
+        border-color: transparent;
+        order: 1;
+        vertical-align: top;
+        width: auto;
+        .css(appearence,none);
+        .vendor-prefix-flex-grow(1);
+        :focus {
+            box-shadow: 0;
+        }
+        & + [class*="admin__addon-"] {
+            padding-left: 10px;
+            position: static !important;
+            z-index: 0;
+            > * {
+                position: relative;
+                vertical-align: top;
+                z-index: 2;
+            }
+        }
+        & + [class*="admin__addon-"]:before {
+            &:extend(.__form-control-styles);
+            bottom: 0;
+            box-sizing: border-box;
+            content: '';
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 0;
+        }
+        &[disabled] + [class*="admin__addon-"]:before {
+            &:extend(.__form-control-styles[disabled]);
+        }
+        &:focus + label:before {
+            &:extend(.__form-control-styles:focus);
+        }
+    }
+}
+.admin__addon {
+    &-suffix,
+    &-prefix {
+        border: 0;
+        box-sizing: border-box;
+        color: @field-control-addon__color;
+        display: inline-block;
+        font-size: 15px;
+        font-weight: 300;
+        height: 33px;
+        line-height: 33px;
+        padding: 0 3px;
+    }
+    &-suffix {
+        order: 3;
+        &:last-child {
+            padding-right: 10px;
+        }
+    }
+    &-prefix {
+        order: 0;
+    }
+}
+
+.admin__control-value {
+    display: inline-block;
+    padding: 6px 10px;
+}
+
+.admin__control-text + .ui-datepicker-trigger {
+    img {
+        display: none;
+    }
+    .button-reset();
+    .icon-font(
+        @icon-calendar,
+        @_icon-font-size: 38px,
+        @_icon-font-line-height: 33px,
+        @_icon-font-text-hide: true,
+        @_icon-font-position: after,
+        @_icon-font-color: @field-date-icon--color
+    );
+    margin-left: -40px;
+    display: inline-block;
+}

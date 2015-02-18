@@ -7,12 +7,15 @@
  * @var \Magento\Ui\Component\Form $block
  */
 ?>
+
 <script data-mage-init='{ "Magento_Ui/js/core/app": "" }' type="application/json">
     <?php echo $block->getRenderContext()->getConfigBuilder()->toJsonNew($block->getRenderContext()->getStorage()); ?>
 </script>
+<div class="admin__scope">
 <div data-role="spinner" data-component="<?php echo $block->getDataScope(); ?>.areas" class="grid-loading-mask">
-    <div class="grid-loader"></div>
+    <div class="spinner"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 </div>
-<div data-bind="scope: '<?php echo $block->getDataScope(); ?>.areas'" class="entry-edit form-inline">
+</div>
+<div data-bind="scope: '<?php echo $block->getDataScope(); ?>.areas'">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>

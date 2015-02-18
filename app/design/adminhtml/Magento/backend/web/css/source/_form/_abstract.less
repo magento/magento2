@@ -1,0 +1,26 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.extend__form-control-styles() {
+    &:extend(.__form-control-styles);
+    &:focus {
+        &:extend(.__form-control-styles:focus);
+    }
+    &[disabled] {
+        &:extend(.__form-control-styles[disabled]);
+    }
+}
+
+.__form-control-styles {
+    .__form-control-styles();
+    &:focus {
+        .__form-control-styles__focus();
+    }
+    &[disabled] {
+        .__form-control-styles__disabled();
+    }
+}
+
+

@@ -4,29 +4,29 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="field form__field" data-bind="css: {'required': element.required, 'field-disabled': element.disabled, 'field-error': element.error}">
+<div class="admin__field" data-bind="css: {'_required': element.required, '_disabled': element.disabled, '_error': element.error}">
 
     <!-- ko if: element.label -->
-    <label class="label" data-bind="attr: { for: element.uid }, css: {'dublicated': element.label === $parent.label}">
+    <label class="admin__field-label" data-bind="attr: { for: element.uid }, css: {'_dublicated': element.label === $parent.label}">
         <span data-bind="text: element.label"></span>
     </label>
     <!-- /ko -->
 
-    <div class="control">
+    <div class="admin__field-control">
         <!-- ko ifnot: element.hasAddons() -->
             <!-- ko template: element.getTemplate() --><!-- /ko -->
         <!-- /ko -->
 
         <!-- ko if: element.hasAddons() -->
-            <div class="control-addon">
+            <div class="admin__control-addon">
                 <!-- ko template: element.getTemplate() --><!-- /ko -->
 
                 <!-- ko if: element.addbefore -->
-                    <label class="control-before" data-bind="attr: { for: element.uid }"><span data-bind="text: element.addbefore"></span></label>
+                    <label class="admin__addon-prefix" data-bind="attr: { for: element.uid }"><span data-bind="text: element.addbefore"></span></label>
                 <!-- /ko -->
 
                 <!-- ko if: element.addafter -->
-                    <label class="control-after" data-bind="attr: { for: element.uid }"><span data-bind="text: element.addafter"></span></label>
+                    <label class="admin__addon-suffix" data-bind="attr: { for: element.uid }"><span data-bind="text: element.addafter"></span></label>
                 <!-- /ko -->
             </div>
         <!-- /ko -->
@@ -36,12 +36,12 @@
         <!-- /ko -->
 
         <!-- ko if: element.notice -->
-            <div class="note" data-bind="attr: { id: element.noticeId }"><span data-bind="text: element.notice"></span></div>
+            <div class="admin__field-note" data-bind="attr: { id: element.noticeId }"><span data-bind="text: element.notice"></span></div>
         <!-- /ko -->
 
         <!-- ko if: $parent.isSingle() -->
              <!-- ko if: element.error() && !element.hidden() -->
-                <label class="mage-error" data-bind="attr: { for: element.uid }, text: element.error"></label>
+                <label class="admin__field-error" data-bind="attr: { for: element.uid }, text: element.error"></label>
             <!-- /ko -->
         <!-- /ko -->
     </div>

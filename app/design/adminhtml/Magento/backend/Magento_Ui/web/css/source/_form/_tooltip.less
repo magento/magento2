@@ -1,0 +1,91 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+@field-tooltip-icon--color: #fff;
+@field-tooltip-icon--bg-color: #514943;
+@field-tooltip-content--bg-color: #fff8d7;
+@field-tooltip-content--border-color: #adadad;
+
+//
+//  Form Fields
+//  _____________________________________________
+
+.admin__field-tooltip {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    .admin__field-option & {
+        margin-top: 10px
+    }
+    position: relative;
+    &:hover {
+        z-index: 99;
+    }
+    z-index: 1;
+    width:0;
+    overflow: visible;
+    &-action {
+        position: relative;
+        z-index: 2;
+        margin-left: 18px;
+        width: 22px;
+        height: 22px;
+        display: inline-block;
+        cursor: pointer;
+        &:before {
+            content: "?";
+            font-weight: 500;
+            font-size: 18px;
+            display: inline-block;
+            overflow: hidden;
+            height: 22px;
+            border-radius: 11px;
+            line-height: 22px;
+            width: 22px;
+            text-align: center;
+            color: @field-tooltip-icon--color;
+            background-color: @field-tooltip-icon--bg-color;
+        }
+        span {
+            .visually-hidden();
+        }
+    }
+    .admin__control-text:focus + &-content,
+    &:hover &-content {
+        display: block;
+    }
+    &-content {
+        display: none;
+        position: absolute;
+        z-index: 1;
+        width: 320px;
+        background: @field-tooltip-content--bg-color;
+        padding: 15px 25px;
+        right: -66px;
+        border: 1px solid @field-tooltip-content--border-color;
+        border-radius: 1px;
+        bottom: 42px;
+        @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
+        .css(box-shadow, @_shadow);
+        &:after,
+        &:before {
+            content: "";
+            display: block;
+            .arrow(down,16px,@field-tooltip-content--border-color);
+            position: absolute;
+            right: 20px;
+            top: 100%;
+            z-index: 3;
+        }
+        &:after {
+            border-top-color: @field-tooltip-content--bg-color;
+            margin-top: -1px;
+            z-index: 4;
+        }
+    }
+}

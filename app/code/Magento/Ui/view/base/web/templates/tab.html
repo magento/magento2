@@ -4,15 +4,17 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="block tab-nav">
-    <div class="block-title" data-bind="css: { 'ui-accordion-header': collapsible, 'ui-accordion-header-active': opened() && collapsible }, click: toggle, click: onClick, keyboard: { 13: onClick }">
+<div class="admin__scope">
+<div class="admin__section-nav">
+    <div class="admin__section-nav-title" data-bind="css: { '_collapsible': collapsible, '_opened': opened() && collapsible }, click: toggle, click: onClick, keyboard: { 13: onClick }">
         <strong tabindex="1" data-bind="text: label, keyboard: { 13: toggle }"></strong>
     </div>
-    <ul class="tab-nav-items items" data-bind="visible: opened">
+    <ul class="admin__section-nav-items items" data-bind="visible: opened">
         <!-- ko foreach: elems -->
-            <li class="tab-nav-item" tabindex="2" data-bind="css: { 'ui-state-active': active, 'ui-tabs-loading': loading }, click: activate, keyboard: { 13: activate }">
-                <a class="tab-nav-item-link" href="#" data-bind="text: label, css: { changed: changed }, attr: { id: 'tab_' + index }"></a>
+            <li class="admin__section-nav-item" tabindex="2" data-bind="css: { '_active': active, '_loading': loading }, click: activate, keyboard: { 13: activate }">
+                <a class="admin__section-nav-link" href="#" data-bind="text: label, css: { '_changed': changed }, attr: { id: 'tab_' + index }"></a>
             </li>
         <!-- /ko -->
     </ul>
+</div>
 </div>

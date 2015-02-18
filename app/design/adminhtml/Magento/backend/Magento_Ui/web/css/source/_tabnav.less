@@ -1,0 +1,110 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Tab Left Navigation
+//  _____________________________________________
+
+.admin__section-nav {
+    padding-bottom: 1px + 50px;
+}
+.admin__section-nav-title {
+    padding: 0;
+    margin: 0 0 -1px;
+    color: #333333;
+    display: block;
+    padding: 20px 13px;
+    background: #f1f1f1;
+    text-transform: uppercase;
+    border: 1px solid #e3e3e3;
+    line-height: 1.2;
+    &._collapsible {
+        padding-right: 35px;
+        &:after {
+            content: '\e628';
+            font-family: @icons-admin__font-name;
+            -webkit-font-smoothing: antialiased;
+            font-weight: normal;
+            speak: none;
+            position: absolute;
+            right: 18px;
+            top: 22px;
+            font-size: 13px;
+        }
+    }
+    strong {
+        font-weight: 700;
+    }
+}
+.admin__section-nav-items {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.admin__section-nav-item {
+    padding: 0;
+    border-left: 3px solid transparent;
+    margin: 0 0 -1px;
+    &._active {
+        border-color: #eb5202;
+        .admin__section-nav-link {
+            border-color: #e3e3e3;
+            margin: 0;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+    &._loading {
+        position: relative;
+        z-index: 1;
+        &:before {
+            content: "";
+            display: block;
+            position: absolute;
+            z-index: 2;
+            .url('images/loader-2.gif');
+            background: url("@{url}") no-repeat 50% 50%;
+            background-size: 120px;
+            width: 20px;
+            height: 20px;
+            top: 21px;
+            right: 5px;
+        }
+    }
+}
+.admin__section-nav-link {
+    border: 1px solid transparent;
+    border-width: 1px 0;
+    line-height: 1.2;
+    font-weight: 500;
+    color: #333333;
+    display: block;
+    padding: 20px 30px 20px 10px;
+    &:hover {
+        color: #333333;
+        text-decoration: underline;
+    }
+    &._changed {
+        position: relative;
+        z-index: 1;
+        &:before {
+            content: '\e623';
+            font-family: @icons-admin__font-name;
+            -webkit-font-smoothing: antialiased;
+            font-style: normal;
+            font-weight: normal;
+            speak: none;
+            position: absolute;
+            z-index: 2;
+            font-size: 17px;
+            color: #eb5202;
+            width: 20px;
+            height: 20px;
+            top: 15px;
+            right: 5px;
+        }
+    }
+}

@@ -1,0 +1,338 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+
+//
+//  Variables
+//  _____________________________________________
+
+@field-control--border-color: #adadad;
+@field-control_focus--border-color: #007BDB;
+@field-scope--color: #808080;
+@field-label--color: #007BDB;
+@field-divider--color: #ccc;
+@field-label--color: #303030;
+@field-label-disabled--color: #999;
+@field-label_required--color: #EB5202;
+@field-note--color: #303030;
+@field-control--color: #303030;
+@field-control--bg-color: #fff;
+@field-control_disabled--bg-color: #E9E9E9;
+@field-control-addon--color: #858585;
+@field-date-icon--color: #514943;
+@field-error--color: #555;
+@field-error--bg-color: #FFF8D6;
+@field-error--border-color: #E22626;
+
+
+//
+//  Form Fields
+//  _____________________________________________
+
+.mix-grid-width(@_columns-min, @_total:12) {
+    @_gutter: 30px;
+    @_part: @_columns-min/@_total;
+    float: left;
+    width: ~'calc( (100%) * @{_part} - @{_gutter} )';
+    margin-left: @_gutter;
+}
+
+.col-2-left-layout {
+    margin-top: 50px;
+    margin-left: -30px;
+    width: auto;
+    .clearfix();
+    .main-col {
+        .mix-grid-width(9);
+        float: right;
+    }
+    .side-col {
+        .mix-grid-width(3);
+    }
+}
+.admin__fieldset-wrapper-title {
+    padding: 14px 0 16px;
+    margin-bottom: 30px;
+    strong {
+        &:extend(h2);
+    }
+}
+
+//
+//  Form Fields
+//  _____________________________________________
+
+.admin__block {
+    width: 100%;
+    border: 1px solid black;
+}
+.admin__fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+    > .admin__field {
+        border: 0;
+        padding: 0;
+        margin: 0;
+        .clearfix(); // @todo !abstract
+        margin-left: -30px;
+
+        > .admin__field-control {
+            .mix-grid-width(4,9);
+        }
+        > .admin__field-label {
+            .mix-grid-width(3,9);
+        }
+    }
+}
+
+.admin__field-label {
+    margin: 0;
+    color: @field-label--color;
+    text-align: right;
+
+    & + br {
+        display: none;
+    }
+
+    [class]:not(.admin__field-option) > & {
+        font-family: 'Open Sans', arial, sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        padding-top: 0;
+        line-height: 33px;
+        white-space: nowrap;
+        &:before {
+            content: ".";
+            visibility: hidden;
+            width: 0;
+            margin-left: -7px;
+            overflow: hidden;
+        }
+        span {
+            white-space: normal;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1.2;
+        }
+    }
+
+    ._required > & {
+        span:after {
+            content: "*";
+            color: @field-label_required--color;
+            display: inline;
+            font-weight: 500;
+            font-size: 16px;
+            margin-top: 2px;
+            position: absolute;
+            z-index: 1;
+            margin-left: 10px;
+        }
+    }
+
+    ._disabled > & {
+        color: @field-label-disabled--color;
+    }
+}
+
+
+.admin__field {
+
+    margin-bottom: 0;
+    & + & {
+        margin-top: 15px;
+    }
+    &:not(.admin__field-option) ~ .admin__field-option {
+        margin-left: 20px;
+        margin-top: 5px;
+    }
+    &.admin__field-option ~ .admin__field-option {
+        margin-top: 9px;
+    }
+    & ~ .admin__field-option:last-child {
+        margin-bottom: 8px;
+    }
+
+    .admin__fieldset > & {
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
+        &:hover {
+            z-index: 2;
+        }
+    }
+
+    &[data-config-scope] {
+        &:before {
+            .mix-grid-width(2);
+            position: absolute;
+            right: 0;
+            display: inline-block;
+            content: attr(data-config-scope);
+            float: right;
+            color: @field-scope--color;
+        }
+        .admin__field-control &:nth-child(n+2):before {
+            content: "";
+        }
+    }
+
+    &._error {
+        .admin__field-control [class*="admin__addon-"]:before,
+        .admin__field-control > [class*="admin__control-"] {
+            border-color: @field-error--border-color;
+        }
+    }
+}
+
+.admin__field-error {
+    border: 1px solid @field-error--border-color;
+    display: block;
+    margin: 2px 0 0;
+    padding: 6px 10px 10px;
+    background: @field-error--bg-color;
+    color: @field-error--color;
+    font-size: 12px;
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+.admin__field-note {
+    color: @field-note--color;
+    padding: 0;
+    margin: 10px 0 0;
+}
+
+.admin__control-fields {
+    .admin__field-label ~ .admin__field-control {
+        width: 100%;
+    }
+}
+
+.admin__field-option {
+    .admin__field-label {
+        text-align: left;
+    }
+    padding-top: 8px;
+    .admin__field-control > & {
+        &:nth-child(1):nth-last-child(2),
+        &:nth-child(2):nth-last-child(1) {
+            display: inline-block;
+            & + .admin__field-option {
+                display: inline-block;
+                margin-left: 41px;
+                margin-top: 0;
+            }
+            & + .admin__field-option:before {
+                content: "";
+                position: absolute;
+                display: inline-block;
+                height: 20px;
+                top: 8px;
+                left: -20px;
+                width: 1px;
+                background: @field-divider--color;
+            }
+        }
+    }
+}
+
+.admin__control-fields {
+    .admin__field:nth-child(n+2):not(.admin__field-option) {
+        > .admin__field-label {
+            .visually-hidden; // @todo !abstract
+        }
+    }
+}
+
+[class*="admin__control-grouped"] {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    box-sizing: border-box;
+    & > .admin__field {
+        display: table-cell;
+        width: 50%;
+        vertical-align: top;
+        > .admin__field-control {
+            width: 100%;
+            float: none;
+        }
+        &:nth-child(n+2) {
+            padding-left: 20px;
+            &:not(.admin__field-option) .admin__field-label {
+                .visually-hidden();
+            }
+        }
+    }
+}
+
+[class*="admin__control-grouped"],
+.admin__control-fields {
+    & > .admin__field:first-child {
+        position: static;
+        & > .admin__field-label {
+
+            position: absolute;
+            left: 0;
+            top: 0;
+            .mix-grid-width(3);
+            opacity: 0;
+            cursor: pointer;
+        }
+    }
+}
+
+// @todo Move to other place:
+.address-item-edit-content {
+    padding: 15px 30px;
+    .admin__field > .admin__field-control,
+    .admin__field > .admin__field-label {
+        text-align: left;
+        float: none;
+    }
+    .admin__field > .admin__field-control {
+        width: ~'calc( 100% - 30px )';
+    }
+    .admin__field-label {
+        margin-top: -16px;
+    }
+    ._required .admin__field-label span {
+        padding-left: 15px;
+        &:after {
+            left: 0;
+            margin-left: 30px;
+        }
+    }
+
+}
+.address-list {
+    list-style-type: none;
+    margin:0;
+    padding: 0;
+    width: 360px;
+    float: left;
+    .address-list-item {
+        margin-bottom: 30px;
+    }
+    .action-delete {
+        background-color: transparent;
+        padding: 0;
+        &:hover {
+            box-shadow: 0;
+            border: 0;
+        }
+    }
+}
+.address-item-edit {
+    margin-left: 359px;
+    .admin__legend {
+        display: none;
+    }
+}
+
+

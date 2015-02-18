@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="form__field choice">
-    <input type="checkbox" class="control-checkbox" data-bind="checked: value, attr: { id: uid, disabled: disabled, name: inputName }, hasFocus: focused">
-    
-    <label class="label" data-bind="checked: value, attr: { for: uid }">
+<div class="admin__field admin__field-option">
+    <input type="checkbox" class="admin__control-checkbox" data-bind="checked: value, attr: { id: uid, disabled: disabled, name: inputName }, hasFocus: focused">
+
+    <label class="admin__field-label" data-bind="checked: value, attr: { for: uid }">
         <!-- ko if: $parent.isSingle() -->
             <span data-bind="text: description"></span>
         <!-- /ko -->
@@ -15,8 +15,8 @@
             <span data-bind="text: description || label"></span>
         <!-- /ko -->
     </label>
-    
+
     <!-- ko if: notice -->
-        <div class="note" data-bind="attr: {id: noticeId}"><span data-bind="text: notice"></span></div>
+        <div class="admin__field-note" data-bind="attr: {id: noticeId}"><span data-bind="text: notice"></span></div>
     <!-- /ko -->
 </div>

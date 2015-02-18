@@ -76,8 +76,6 @@ module.exports = function (grunt) {
             files: [
                 'css/styles-old',
                 'css/styles',
-                'css/pages',
-                'css/admin',
                 'css/styles-migration'
             ]
         }
@@ -654,7 +652,7 @@ module.exports = function (grunt) {
 
     //  Tests
     //  ---------------------------------------------
-    
+
     grunt.registerTask('spec', [
         'specRunner:lib',
         'specRunner:backend',

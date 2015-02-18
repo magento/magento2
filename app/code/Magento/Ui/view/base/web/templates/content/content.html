@@ -7,7 +7,9 @@
 <div data-bind="html: content"></div>
 
 <!--ko if: showSpinner -->
+<div class="admin__scope">
 <div data-role="spinner" class="grid-loading-mask" data-bind="visible: loading">
-    <div class="grid-loader"></div>
+    <div class="spinner"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+</div>
 </div>
 <!-- /ko -->
