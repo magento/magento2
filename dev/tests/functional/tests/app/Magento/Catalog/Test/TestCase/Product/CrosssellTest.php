@@ -61,9 +61,10 @@ class CrosssellTest extends Functional
         $productPage = Factory::getPageFactory()->getCatalogProductView();
         Factory::getClientBrowser()->open($_ENV['app_frontend_url'] . $simple1->getUrlKey() . '.html');
         $productPage->getViewBlock()->addToCart($simple1);
+        $productPage->getMessagesBlock()->waitSuccessMessage();
 
         $checkoutCartPage = Factory::getPageFactory()->getCheckoutCartIndex();
-        $checkoutCartPage->getMessagesBlock()->waitSuccessMessage();
+        $checkoutCartPage->open();
 
         $cartBlock = $checkoutCartPage->getCartBlock();
         $this->assertTrue($cartBlock->isProductInShoppingCart($simple1));
@@ -88,8 +89,11 @@ class CrosssellTest extends Functional
         $productPage = Factory::getPageFactory()->getCatalogProductView();
         Factory::getClientBrowser()->open($_ENV['app_frontend_url'] . $configurable->getUrlKey() . '.html');
         $productPage->getViewBlock()->addToCart($configurable);
+        $productPage->getMessagesBlock()->waitSuccessMessage();
 
         $checkoutCartPage = Factory::getPageFactory()->getCheckoutCartIndex();
+        $checkoutCartPage->open();
+
         $cartBlock = $checkoutCartPage->getCartBlock();
         $this->assertTrue($cartBlock->isProductInShoppingCart($configurable));
         $this->assertTrue($cartBlock->isProductInShoppingCart($simple1));
@@ -100,8 +104,11 @@ class CrosssellTest extends Functional
         $productPage = Factory::getPageFactory()->getCatalogProductView();
         Factory::getClientBrowser()->open($_ENV['app_frontend_url'] . $simple2->getUrlKey() . '.html');
         $productPage->getViewBlock()->addToCart($simple2);
+        $productPage->getMessagesBlock()->waitSuccessMessage();
 
         $checkoutCartPage = Factory::getPageFactory()->getCheckoutCartIndex();
+        $checkoutCartPage->open();
+
         $cartBlock = $checkoutCartPage->getCartBlock();
         $this->assertTrue($cartBlock->isProductInShoppingCart($configurable));
         $this->assertTrue($cartBlock->isProductInShoppingCart($simple1));

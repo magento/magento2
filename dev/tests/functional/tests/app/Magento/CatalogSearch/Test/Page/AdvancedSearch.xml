@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="catalogsearch/advanced" module="Magento_CatalogSearch">
-    <blocks>
-        <form>
-            <class>Magento\CatalogSearch\Test\Block\Advanced\Form</class>
-            <locator>.form.search.advanced</locator>
-            <strategy>css selector</strategy>
-        </form>
-        <widgetView>
-            <class>Magento\Widget\Test\Block\WidgetView</class>
-            <locator>.widget</locator>
-            <strategy>css selector</strategy>
-        </widgetView>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="AdvancedSearch" mca="catalogsearch/advanced" module="Magento_CatalogSearch">
+    <block name="form" class="Magento\CatalogSearch\Test\Block\Advanced\Form" locator=".form.search.advanced" strategy="css selector"/>
+    <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".widget" strategy="css selector"/>
+  </page>
+</config>

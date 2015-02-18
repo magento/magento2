@@ -44,7 +44,7 @@ class RadioTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Radio::__construct
+     * covers \Magento\Framework\Data\Form\Element\Radio::__construct
      */
     public function testConstruct()
     {

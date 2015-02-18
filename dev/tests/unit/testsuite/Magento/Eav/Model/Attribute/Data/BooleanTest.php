@@ -22,7 +22,7 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Boolean::_getOptionText
+     * covers \Magento\Eav\Model\Attribute\Data\Boolean::_getOptionText
      *
      * @param string $format
      * @param mixed $value

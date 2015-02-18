@@ -72,7 +72,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected $_canUseBaseUrl;
 
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $_formKeyValidator;
 

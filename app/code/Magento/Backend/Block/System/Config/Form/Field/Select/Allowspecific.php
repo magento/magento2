@@ -22,9 +22,9 @@ class Allowspecific extends \Magento\Framework\Data\Form\Element\Select
      */
     public function getAfterElementHtml()
     {
-        $javaScript = "\n            <script type=\"text/javascript\">\n                Event.observe('{$this->getHtmlId()}', 'change', function(){\n                    specific=\$('{$this
+        $javaScript = "\n            <script type=\"text/javascript\">require(['prototype'], function(){\n                Event.observe('{$this->getHtmlId()}', 'change', function(){\n                    specific=\$('{$this
             ->getHtmlId()}').value;\n                    \$('{$this
-            ->_getSpecificCountryElementId()}').disabled = (!specific || specific!=1);\n                });\n            </script>";
+            ->_getSpecificCountryElementId()}').disabled = (!specific || specific!=1);\n                });\n            });</script>";
         return $javaScript . parent::getAfterElementHtml();
     }
 
