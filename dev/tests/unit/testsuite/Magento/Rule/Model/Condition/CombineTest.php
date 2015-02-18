@@ -62,7 +62,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
 
     /**
      *
-     * @covers \Magento\Rule\Model\Condition\AbstractCondition::getValueName
+     * covers \Magento\Rule\Model\Condition\AbstractCondition::getValueName
      *
      * @dataProvider optionValuesData
      *

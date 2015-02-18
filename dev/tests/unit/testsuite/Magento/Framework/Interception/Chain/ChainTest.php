@@ -25,8 +25,8 @@ class ChainTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers  \Magento\Framework\Interception\Chain\Chain::invokeNext
-     * @covers  \Magento\Framework\Interception\Chain\Chain::__construct
+     * covers  \Magento\Framework\Interception\Chain\Chain::invokeNext
+     * covers  \Magento\Framework\Interception\Chain\Chain::__construct
      */
     public function testInvokeNextBeforePlugin()
     {
@@ -64,7 +64,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers  \Magento\Framework\Interception\Chain\Chain::invokeNext
+     * covers  \Magento\Framework\Interception\Chain\Chain::invokeNext
      */
     public function testInvokeNextAroundPlugin()
     {
@@ -95,7 +95,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers  \Magento\Framework\Interception\Chain\Chain::invokeNext
+     * covers  \Magento\Framework\Interception\Chain\Chain::invokeNext
      */
     public function testInvokeNextAfterPlugin()
     {

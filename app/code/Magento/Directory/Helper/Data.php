@@ -26,6 +26,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     const XML_PATH_DISPLAY_ALL_STATES = 'general/region/display_all';
 
+    /**#@+
+     * Path to config value, which is default country
+     */
+    const XML_PATH_DEFAULT_COUNTRY = 'general/country/default';
+    const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
+    const XML_PATH_DEFAULT_TIMEZONE = 'general/locale/timezone';
+    /**#@-*/
+
     /**
      * Country collection
      *
@@ -87,11 +95,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_config;
-
-    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
@@ -99,7 +102,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -108,8 +110,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
         \Magento\Core\Helper\Data $coreHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config
+        \Magento\Directory\Model\CurrencyFactory $currencyFactory
     ) {
         parent::__construct($context);
         $this->_configCacheType = $configCacheType;
@@ -118,7 +119,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_coreHelper = $coreHelper;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
-        $this->_config = $config;
     }
 
     /**
@@ -226,7 +226,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         if (null === $this->_optZipCountries) {
             $value = trim(
-                $this->_config->getValue(
+                $this->scopeConfig->getValue(
                     self::OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
@@ -260,7 +260,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCountriesWithStatesRequired($asJson = false)
     {
         $value = trim(
-            $this->_config->getValue(self::XML_PATH_STATES_REQUIRED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            $this->scopeConfig->getValue(self::XML_PATH_STATES_REQUIRED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
         );
         $countryList = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
         if ($asJson) {
@@ -276,7 +276,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isShowNonRequiredState()
     {
-        return (bool)$this->_config->getValue(
+        return (bool)$this->scopeConfig->getValue(
             self::XML_PATH_DISPLAY_ALL_STATES,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
@@ -304,6 +304,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getBaseCurrencyCode()
     {
-        return $this->_config->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default');
+        return $this->scopeConfig->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default');
+    }
+
+    /**
+     * Return default country code
+     *
+     * @param \Magento\Store\Model\Store|string|int $store
+     * @return string
+     */
+    public function getDefaultCountry($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_DEFAULT_COUNTRY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 }
