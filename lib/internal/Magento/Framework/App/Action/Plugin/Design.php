@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\App\Action\Plugin;
+namespace Magento\Framework\App\Action\Plugin;
 
 class Design
 {

@@ -7,7 +7,6 @@
         "magento/module-page-cache": "0.42.0-beta8",
         "magento/module-directory": "0.42.0-beta8",
         "magento/module-backend": "0.42.0-beta8",
-        "magento/module-core": "0.42.0-beta8",
         "magento/framework": "0.42.0-beta8",
         "magento/magento-composer-installer": "*"
     },

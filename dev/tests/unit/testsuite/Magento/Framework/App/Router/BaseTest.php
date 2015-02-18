@@ -1,16 +1,16 @@
 <?php
 /**
- * Tests Magento\Core\App\Router\Base
+ * Tests Magento\Framework\App\Router\Base
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\App\Router;
+namespace Magento\Framework\App\Router;
 
 class BaseTest extends \Magento\Test\BaseTestCase
 {
     /**
-     * @var \Magento\Core\App\Router\Base
+     * @var \Magento\Framework\App\Router\Base
      */
     private $model;
 
@@ -89,7 +89,7 @@ class BaseTest extends \Magento\Test\BaseTestCase
             'nameBuilder' => $this->nameBuilderMock,
             'defaultPath' => $this->defaultPathMock,
         ];
-        $this->model = $this->objectManager->getObject('Magento\Core\App\Router\Base', $mocks);
+        $this->model = $this->objectManager->getObject('Magento\Framework\App\Router\Base', $mocks);
     }
 
     public function testMatch()

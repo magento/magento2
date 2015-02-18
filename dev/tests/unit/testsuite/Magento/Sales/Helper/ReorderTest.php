@@ -38,37 +38,23 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $contextMock = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config')
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
-
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $contextMock = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contextMock->expects($this->any())
+            ->method('getScopeConfig')
+            ->willReturn($this->scopeConfigMock);
 
         $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $pricingCurrencyMock = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->helper = new \Magento\Sales\Helper\Reorder(
             $contextMock,
-            $this->scopeConfigMock,
-            $storeManagerMock,
-            $appStateMock,
-            $pricingCurrencyMock,
             $this->customerSessionMock
         );
 

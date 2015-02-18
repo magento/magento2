@@ -90,20 +90,6 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_downloadableFile;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
@@ -124,29 +110,23 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param File $downloadableFile
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Filesystem $filesystem
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param Filesystem\File\ReadFactory $fileReadFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory
     ) {
         parent::__construct($context);
-        $this->_coreData = $coreData;
         $this->_downloadableFile = $downloadableFile;
         $this->_coreFileStorageDb = $coreFileStorageDb;
-        $this->_scopeConfig = $scopeConfig;
         $this->_filesystem = $filesystem;
         $this->_session = $session;
         $this->fileReadFactory = $fileReadFactory;
@@ -302,6 +282,6 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getContentDisposition($store = null)
     {
-        return $this->_scopeConfig->getValue(self::XML_PATH_CONTENT_DISPOSITION, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->getValue(self::XML_PATH_CONTENT_DISPOSITION, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 }
