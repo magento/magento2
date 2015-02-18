@@ -551,8 +551,7 @@ input.search,
 input[type=tel],
 input[type=color],
 textarea,
-select,
-.input-text {
+select {
     box-sizing: border-box;
     border: 1px solid #adadad;
     border-radius: 1px;
@@ -565,6 +564,46 @@ select,
     &:focus {
         border-color: #007bdb;
         outline: 0;
+    }
+}
+
+select {
+    &:not([multiple]),
+    &:not([size]) {
+        .css(appearance, none, 1);
+
+        display: inline-block;
+        vertical-align: middle;
+        background-repeat: no-repeat;
+        background-image+: url('../images/arrows-bg.svg');
+        background-position+: ~'calc(100% - 12px)' -34px;
+        background-size+: auto;
+
+        background-image+: linear-gradient(#e3e3e3, #e3e3e3);
+        background-position+: 100%;
+        background-size+: 33px 100%;
+
+        background-image+: linear-gradient(#adadad, #adadad);
+        background-position+: ~'calc(100% - 33px)' 0;
+        background-size+: 1px 100%;
+
+        padding-right: 34px+10px;
+        &:focus {
+            background-image+: url('../images/arrows-bg.svg');
+            background-position+: ~'calc(100% - 12px)' 13px;
+
+            background-image+: linear-gradient(#e3e3e3, #e3e3e3);
+            background-position+: 100%;
+
+            background-image+: linear-gradient(#007bdb, #007bdb);
+            background-position+: ~'calc(100% - 33px)' 0;
+        }
+        &::-ms-expand {
+            display: none;
+        }
+        .ie9 & {
+            padding-right: 0;
+        }
     }
 }
 
