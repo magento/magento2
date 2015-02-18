@@ -494,7 +494,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $locale = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
         );
-        $time = new \Magento\Framework\Stdlib\DateTime\Date(time());
+        $time = new \DateTime('@' . time());
         $this->assertEquals($locale->formatTime($time), $this->_block->formatTime($time));
     }
 

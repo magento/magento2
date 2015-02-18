@@ -91,7 +91,7 @@ class Date extends AbstractElement
      * Get date value as string.
      * Format can be specified, or it will be taken from $this->getFormat()
      *
-     * @param string $format (compatible with \Magento\Framework\Stdlib\DateTime\Date
+     * @param string $format (compatible with \DateTime)
      * @return string
      */
     public function getValue($format = null)
@@ -110,7 +110,7 @@ class Date extends AbstractElement
     /**
      * Get value instance, if any
      *
-     * @return \Magento\Framework\Stdlib\DateTime\Date
+     * @return \DateTime
      */
     public function getValueInstance()
     {
@@ -123,8 +123,8 @@ class Date extends AbstractElement
     /**
      * Output the input field and assign calendar instance to it.
      * In order to output the date:
-     * - the value must be instantiated (\Magento\Framework\Stdlib\DateTime\Date)
-     * - output format must be set (compatible with \Magento\Framework\Stdlib\DateTime\Date)
+     * - the value must be instantiated (\DateTime)
+     * - output format must be set (compatible with \DateTime)
      *
      * @throws \Exception
      * @return string
