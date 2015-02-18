@@ -35,10 +35,10 @@ module.exports = function (grunt) {
         tmpSource: 'var/view_preprocessed/source/',
         tmp: 'var',
         css: {
-            setup: 'setup/pub/magento/setup/css'
+            setup: 'setup/pub/styles'
         },
         less: {
-            setup: 'setup/module/Magento/Setup/styles'
+            setup: 'setup/view/styles'
         },
         uglify: {
             legacy: 'lib/web/legacy-build.min.js'
