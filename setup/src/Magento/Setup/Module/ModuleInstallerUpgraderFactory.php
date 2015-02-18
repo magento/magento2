@@ -66,6 +66,20 @@ class ModuleInstallerUpgraderFactory
     }
 
     /**
+     * Creates recurring upgrader for a module
+     *
+     * @param $moduleName
+     * @return InstallSchemaInterface | null
+     */
+    public function createRecurringUpgrader($moduleName)
+    {
+        $modulePath = str_replace('_', '/', $moduleName);
+        $recurringUpgrader = $this->directoryList->getPath(DirectoryList::MODULES)
+            . '/' . $modulePath . '/Setup/Recurring';
+        return $this->getInstallerUpgrader($recurringUpgrader);
+    }
+
+    /**
      * Get the installer or upgrader for a module
      *
      * @param $path

@@ -24,6 +24,10 @@ class ModuleInstallerUpgraderFactoryTest extends \PHPUnit_Framework_TestCase
                 'Bar\Two\Setup\UpgradeSchema',
                 $this->getMockForAbstractClass('Magento\Framework\Setup\UpgradeSchemaInterface'),
             ],
+            [
+                'Foo\One\Setup\Recurring',
+                $this->getMockForAbstractClass('Magento\Framework\Setup\InstallSchemaInterface'),
+            ],
         ];
 
         $serviceLocatorMock = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
@@ -52,5 +56,11 @@ class ModuleInstallerUpgraderFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $upgrader = $this->moduleInstallerUpgraderFactory->createSchemaUpgrader('Bar_Two');
         $this->assertInstanceOf('Magento\Framework\Setup\UpgradeSchemaInterface', $upgrader);
+    }
+
+    public function testCreateRecurringUpgrader()
+    {
+        $installer = $this->moduleInstallerUpgraderFactory->createRecurringUpgrader('Foo_One');
+        $this->assertInstanceOf('Magento\Framework\Setup\InstallSchemaInterface', $installer);
     }
 }

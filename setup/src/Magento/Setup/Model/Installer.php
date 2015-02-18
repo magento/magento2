@@ -606,16 +606,18 @@ class Installer
         $this->assertDbAccessible();
         $this->setupModuleRegistry();
 
+        $moduleNames = $this->moduleList->getNames();
+
         $this->log->log('Schema creation/updates:');
-        foreach ($this->moduleList->getNames() as $moduleName) {
+        foreach ($moduleNames as $moduleName) {
             $this->log->log("Module '{$moduleName}':");
             $dbVer = $this->resource->getDbVersion($moduleName);
             $moduleConfig = $this->moduleList->getOne($moduleName);
             $configVer = $moduleConfig['setup_version'];
-            $moduleContext = new ModuleContext($moduleConfig);
             // Module is installed
             if ($dbVer !== false) {
                 if (version_compare($configVer, $dbVer, '>')) {
+                    $moduleContext = new ModuleContext($dbVer);
                     $moduleUpgrader = $this->moduleInstallerUpgraderFactory->createSchemaUpgrader($moduleName);
                     if ($moduleUpgrader) {
                         $moduleUpgrader->upgrade($this->setup, $moduleContext);
@@ -623,6 +625,7 @@ class Installer
                     }
                 }
             } elseif ($configVer) {
+                $moduleContext = new ModuleContext('');
                 $moduleInstaller = $this->moduleInstallerUpgraderFactory->createSchemaInstaller($moduleName);
                 if ($moduleInstaller) {
                     $moduleInstaller->install($this->setup, $moduleContext);
@@ -630,6 +633,17 @@ class Installer
                 $this->resource->setDbVersion($moduleName, $configVer);
             }
             $this->logProgress();
+        }
+
+        $this->log->log('Schema post-updates:');
+        foreach ($moduleNames as $moduleName) {
+            $this->log->log("Module '{$moduleName}':");
+            $dbVer = $this->resource->getDbVersion($moduleName);
+            $moduleContext = new ModuleContext($dbVer);
+            $modulePostUpdater = $this->moduleInstallerUpgraderFactory->createRecurringUpgrader($moduleName);
+            if ($modulePostUpdater) {
+                $modulePostUpdater->install($this->setup, $moduleContext);
+            }
         }
     }
 

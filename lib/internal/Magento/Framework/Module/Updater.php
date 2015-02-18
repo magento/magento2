@@ -62,10 +62,10 @@ class Updater
                 $dataVer = $resource->getDataVersion($moduleName);
                 $moduleConfig = $this->_moduleList->getOne($moduleName);
                 $configVer = $moduleConfig['setup_version'];
-                $moduleContext = new \Magento\Setup\Model\ModuleContext($dataVer);
                 if ($dataVer !== false) {
                     $status = version_compare($configVer, $dataVer);
                     if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
+                        $moduleContext = new \Magento\Setup\Model\ModuleContext($dataVer);
                         $moduleUpgrader = $this->setupFactory->create($moduleName, 'upgrade');
                         if ($moduleUpgrader) {
                             $moduleUpgrader->upgrade($this->dataSetup, $moduleContext);
@@ -73,6 +73,7 @@ class Updater
                         }
                     }
                 } elseif ($configVer) {
+                    $moduleContext = new \Magento\Setup\Model\ModuleContext('');
                     $moduleInstaller = $this->setupFactory->create($moduleName, 'install');
                     if ($moduleInstaller) {
                         $moduleInstaller->install($this->dataSetup, $moduleContext);
