@@ -12,23 +12,24 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Webapi\Rest\Response\Renderer\Json */
     protected $_restJsonRenderer;
 
-    /** @var \Magento\Core\Helper\Data */
-    protected $_helperMock;
+    /** @var \Magento\Framework\Json\Encoder */
+    protected $encoderMock;
 
     protected function setUp()
     {
         /** Prepare mocks and objects for SUT constructor. */
-        $this->_helperMock = $this->getMockBuilder(
-            'Magento\Core\Helper\Data'
-        )->disableOriginalConstructor()->getMock();
+        $this->encoderMock = $this->getMockBuilder('Magento\Framework\Json\Encoder')
+            ->disableOriginalConstructor()
+            ->setMethods(['jsonEncode'])
+            ->getMock();
         /** Initialize SUT. */
-        $this->_restJsonRenderer = new \Magento\Framework\Webapi\Rest\Response\Renderer\Json($this->_helperMock);
+        $this->_restJsonRenderer = new \Magento\Framework\Webapi\Rest\Response\Renderer\Json($this->encoderMock);
         parent::setUp();
     }
 
     protected function tearDown()
     {
-        unset($this->_helperMock);
+        unset($this->encoderMock);
         unset($this->_restJsonRenderer);
         parent::tearDown();
     }
@@ -40,7 +41,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     {
         $arrayToRender = ['key' => 'value'];
         /** Assert that jsonEncode method in mocked helper will run once */
-        $this->_helperMock->expects($this->once())->method('jsonEncode');
+        $this->encoderMock->expects($this->once())->method('jsonEncode');
         $this->_restJsonRenderer->render($arrayToRender);
     }
 

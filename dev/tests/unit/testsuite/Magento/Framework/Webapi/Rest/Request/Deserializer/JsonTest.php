@@ -15,8 +15,8 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Webapi\Rest\Request\Deserializer\Json */
     protected $_jsonDeserializer;
 
-    /** @var \Magento\Core\Helper\Data */
-    protected $_helperMock;
+    /** @var \Magento\Framework\Json\Decoder */
+    protected $decoderMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_appStateMock;
@@ -24,11 +24,14 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
+        $this->decoderMock = $this->getMockBuilder('Magento\Framework\Json\Decoder')
+            ->disableOriginalConstructor()
+            ->setMethods(['jsonDecode'])
+            ->getMock();
         $this->_appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         /** Initialize SUT. */
         $this->_jsonDeserializer = new \Magento\Framework\Webapi\Rest\Request\Deserializer\Json(
-            $this->_helperMock,
+            $this->decoderMock,
             $this->_appStateMock
         );
         parent::setUp();
@@ -37,7 +40,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_jsonDeserializer);
-        unset($this->_helperMock);
+        unset($this->decoderMock);
         unset($this->_appStateMock);
         parent::tearDown();
     }
@@ -57,7 +60,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             'key2' => 'test2',
             'array' => ['test01' => 'some1', 'test02' => 'some2'],
         ];
-        $this->_helperMock->expects(
+        $this->decoderMock->expects(
             $this->once()
         )->method(
             'jsonDecode'
@@ -75,7 +78,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     public function testDeserializeInvalidEncodedBodyExceptionDeveloperModeOff()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_helperMock->expects($this->once())
+        $this->decoderMock->expects($this->once())
             ->method('jsonDecode')
             ->will($this->throwException(new \Zend_Json_Exception));
         $this->_appStateMock->expects($this->once())
@@ -100,7 +103,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     public function testDeserializeInvalidEncodedBodyExceptionDeveloperModeOn()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_helperMock->expects(
+        $this->decoderMock->expects(
             $this->once()
         )->method(
             'jsonDecode'
