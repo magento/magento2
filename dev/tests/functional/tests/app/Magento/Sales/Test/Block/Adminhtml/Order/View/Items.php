@@ -78,7 +78,7 @@ class Items extends Block
                 $valueKey = $checkoutOption['value'];
                 $attributeName = $attributesData[$titleKey]['frontend_label'];
                 $optionLabel = $attributesData[$titleKey]['options'][$valueKey]['label'];
-                $optionsDetails[] = "{$attributeName} {$optionLabel}";
+                $optionsDetails[] = "{$attributeName}{$optionLabel}";
                 $matrixKey[] = "{$titleKey}:{$valueKey}";
 
                 $optionsPrice += $attributesData[$titleKey]['options'][$valueKey]['pricing_value'];
@@ -86,7 +86,7 @@ class Items extends Block
             $optionsDetails = implode(' ', $optionsDetails);
             $matrixKey = implode(' ', $matrixKey);
 
-            $productDisplay = $productName . ' SKU: ' . $matrix[$matrixKey]['sku'] . ' ' . $optionsDetails;
+            $productDisplay = $productName . 'SKU: ' . $matrix[$matrixKey]['sku'] . $optionsDetails;
         } else {
             $productDisplay = $productName . 'SKU: ' . $product->getSku();
         }
