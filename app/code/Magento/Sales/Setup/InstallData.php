@@ -12,11 +12,15 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
     /**
+     * Sales setup factory
+     *
      * @var SalesSetupFactory
      */
     private $salesSetupFactory;
 
     /**
+     * Init
+     *
      * @param SalesSetupFactory $salesSetupFactory
      */
     public function __construct(SalesSetupFactory $salesSetupFactory)

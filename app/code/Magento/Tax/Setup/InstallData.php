@@ -12,11 +12,15 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
     /**
+     * Tax setup factory
+     *
      * @var TaxSetupFactory
      */
     private $taxSetupFactory;
 
     /**
+     * Init
+     *
      * @param TaxSetupFactory $taxSetupFactory
      */
     public function __construct(TaxSetupFactory $taxSetupFactory)

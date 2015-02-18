@@ -20,6 +20,8 @@ class ModuleContext implements ModuleContextInterface
     private $version;
 
     /**
+     * Init
+     *
      * @param string $version Current version of a module
      */
     public function __construct($version)

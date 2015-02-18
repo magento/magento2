@@ -11,14 +11,18 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
-class InstallData implements InstallDataInterface 
+class InstallData implements InstallDataInterface
 {
     /**
+     * EAV setup factory
+     *
      * @var EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
+     * Init
+     *
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(EavSetupFactory $eavSetupFactory)
@@ -45,7 +49,10 @@ class InstallData implements InstallDataInterface
             'group_price',
         ];
         foreach ($fieldList as $field) {
-            $applyTo = explode(',', $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field, 'apply_to'));
+            $applyTo = explode(
+                ',',
+                $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field, 'apply_to')
+            );
             if (!in_array('bundle', $applyTo)) {
                 $applyTo[] = 'bundle';
                 $eavSetup->updateAttribute(

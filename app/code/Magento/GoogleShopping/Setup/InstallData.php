@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\GoogleShopping\Setup;
 
 use Magento\Framework\Module\Manager;
@@ -17,16 +15,22 @@ use Magento\GoogleShopping\Model\ConfigFactory;
 class InstallData implements InstallDataInterface
 {
     /**
+     * Configuration factory
+     *
      * @var ConfigFactory
      */
     private $configFactory;
 
     /**
+     * Modules manager
+     *
      * @var Manager
      */
     private $moduleManager;
 
     /**
+     * Init
+     *
      * @param ConfigFactory $configFactory
      * @param Manager $moduleManager
      */
@@ -68,7 +72,9 @@ class InstallData implements InstallDataInterface
                 [
                     'id',
                     'attribute_id',
-                    'gbase_attribute' => new \Zend_Db_Expr("IF(gbase_attribute IN ({$attributes}), gbase_attribute, '')"),
+                    'gbase_attribute' => new \Zend_Db_Expr(
+                        "IF(gbase_attribute IN ({$attributes}), gbase_attribute, '')"
+                    ),
                     'type_id'
                 ]
             )->insertFromSelect(

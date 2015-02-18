@@ -14,11 +14,15 @@ use Magento\Authorization\Model\UserContextInterface;
 class InstallData implements InstallDataInterface
 {
     /**
+     * Authorization factory
+     *
      * @var AuthorizationFactory
      */
     private $authFactory;
 
     /**
+     * Init
+     *
      * @param AuthorizationFactory $authFactory
      */
     public function __construct(AuthorizationFactory $authFactory)

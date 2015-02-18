@@ -17,21 +17,29 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class EavSetup
 {
     /**
+     * Cache
+     *
      * @var CacheInterface
      */
     private $cache;
 
     /**
+     * Attribute group collection factory
+     *
      * @var CollectionFactory
      */
     private $attrGroupCollectionFactory;
 
     /**
+     * Attribute mapper
+     *
      * @var PropertyMapperInterface
      */
     private $attributeMapper;
 
     /**
+     * Setup model
+     *
      * @var ModuleDataSetupInterface
      */
     private $setup;
@@ -65,6 +73,8 @@ class EavSetup
     private $_defaultAttributeSetName = 'Default';
 
     /**
+     * Init
+     *
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
@@ -83,6 +93,8 @@ class EavSetup
     }
 
     /**
+     * Gets setup model
+     *
      * @return ModuleDataSetupInterface
      */
     public function getSetup()
@@ -91,6 +103,8 @@ class EavSetup
     }
 
     /**
+     * Gets attribute group collection factory
+     *
      * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection
      */
     public function getAttributeGroupCollectionFactory()
@@ -198,7 +212,13 @@ class EavSetup
      */
     public function updateEntityType($code, $field, $value = null)
     {
-        $this->setup->updateTableRow('eav_entity_type', 'entity_type_id', $this->getEntityTypeId($code), $field, $value);
+        $this->setup->updateTableRow(
+            'eav_entity_type',
+            'entity_type_id',
+            $this->getEntityTypeId($code),
+            $field,
+            $value
+        );
         return $this;
     }
 
@@ -381,7 +401,11 @@ class EavSetup
      */
     public function removeAttributeSet($entityTypeId, $id)
     {
-        $this->setup->deleteTableRow('eav_attribute_set', 'attribute_set_id', $this->getAttributeSetId($entityTypeId, $id));
+        $this->setup->deleteTableRow(
+            'eav_attribute_set',
+            'attribute_set_id',
+            $this->getAttributeSetId($entityTypeId, $id)
+        );
         return $this;
     }
 
@@ -408,7 +432,8 @@ class EavSetup
      */
     public function getAllAttributeSetIds($entityTypeId = null)
     {
-        $select = $this->setup->getConnection()->select()->from($this->setup->getTable('eav_attribute_set'), 'attribute_set_id');
+        $select = $this->setup->getConnection()->select()
+            ->from($this->setup->getTable('eav_attribute_set'), 'attribute_set_id');
 
         $bind = [];
         if ($entityTypeId !== null) {
@@ -990,7 +1015,7 @@ class EavSetup
                 $setupCache->setRow($mainTable, $entityTypeId, $id, false);
             } else {
                 $setupCache->setRow($mainTable, $entityTypeId, $row['attribute_id'], $row);
-                $setupCache->setRow($mainTable, $entityTypeId, $row['attribute_code'],$row);
+                $setupCache->setRow($mainTable, $entityTypeId, $row['attribute_code'], $row);
             }
         }
 
@@ -1073,8 +1098,9 @@ class EavSetup
         $attribute = $this->getAttribute($entityTypeId, $code);
         if ($attribute) {
             $this->setup->deleteTableRow('eav_attribute', 'attribute_id', $attribute['attribute_id']);
-            if (isset($this->setup->getSetupCache()[$mainTable][$attribute['entity_type_id']][$attribute['attribute_code']])) {
-                unset($this->setup->getSetupCache()[$mainTable][$attribute['entity_type_id']][$attribute['attribute_code']]);
+            $setupCache = $this->setup->getSetupCache();
+            if ($setupCache->has($mainTable, $attribute['entity_type_id'], $attribute['attribute_code'])) {
+                $setupCache->remove($mainTable, $attribute['entity_type_id'], $attribute['attribute_code']);
             }
         }
         return $this;
@@ -1227,6 +1253,16 @@ class EavSetup
     /******************* BULK INSTALL *****************/
 
     /**
+     * Gets default entities and attributes
+     *
+     * @return array
+     */
+    public function getDefaultEntities()
+    {
+        return [];
+    }
+
+    /**
      * Install entities
      *
      * @param array $entities
@@ -1256,8 +1292,6 @@ class EavSetup
                             $attr['backend'] = $backendPrefix;
                         } elseif ('_' === $attr['backend'][0]) {
                             $attr['backend'] = $backendPrefix . $attr['backend'];
-                        } else {
-                            $attr['backend'] = $attr['backend'];
                         }
                     }
                     if (!empty($attr['frontend'])) {
@@ -1265,8 +1299,6 @@ class EavSetup
                             $attr['frontend'] = $frontendPrefix;
                         } elseif ('_' === $attr['frontend'][0]) {
                             $attr['frontend'] = $frontendPrefix . $attr['frontend'];
-                        } else {
-                            $attr['frontend'] = $attr['frontend'];
                         }
                     }
                     if (!empty($attr['source'])) {
@@ -1274,8 +1306,6 @@ class EavSetup
                             $attr['source'] = $sourcePrefix;
                         } elseif ('_' === $attr['source'][0]) {
                             $attr['source'] = $sourcePrefix . $attr['source'];
-                        } else {
-                            $attr['source'] = $attr['source'];
                         }
                     }
 

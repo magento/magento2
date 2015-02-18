@@ -41,6 +41,8 @@ class Setup implements SetupInterface
     private $connectionName;
 
     /**
+     * Init
+     *
      * @param \Magento\Framework\App\Resource $resource
      * @param string $connectionName
      */

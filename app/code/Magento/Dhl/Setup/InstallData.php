@@ -13,11 +13,15 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
     /**
+     * Locale list
+     *
      * @var ListsInterface
      */
     private $localeLists;
 
     /**
+     * Init
+     *
      * @param ListsInterface $localeLists
      */
     public function __construct(ListsInterface $localeLists)

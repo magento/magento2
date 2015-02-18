@@ -11,6 +11,8 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class SetupFactory
 {
     /**
+     * Service locator
+     *
      * @var ServiceLocatorInterface
      */
     private $serviceLocator;

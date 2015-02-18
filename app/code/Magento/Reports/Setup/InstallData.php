@@ -13,11 +13,15 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements \Magento\Framework\Setup\InstallDataInterface
 {
     /**
+     * Page factory
+     *
      * @var PageFactory
      */
     private $pageFactory;
 
     /**
+     * Init
+     *
      * @param PageFactory $pageFactory
      */
     public function __construct(PageFactory $pageFactory)

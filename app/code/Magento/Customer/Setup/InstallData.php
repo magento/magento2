@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
 
 namespace Magento\Customer\Setup;
 
@@ -15,11 +14,15 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
     /**
+     * Customer setup factory
+     *
      * @var CustomerSetupFactory
      */
     private $customerSetupFactory;
 
     /**
+     * Init
+     *
      * @param CustomerSetupFactory $customerSetupFactory
      */
     public function __construct(CustomerSetupFactory $customerSetupFactory)

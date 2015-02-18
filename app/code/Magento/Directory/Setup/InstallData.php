@@ -14,10 +14,17 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
     /**
+     * Directory data
+     *
      * @var Data
      */
     private $directoryData;
 
+    /**
+     * Init
+     *
+     * @param Data $directoryData
+     */
     public function __construct(Data $directoryData)
     {
         $this->directoryData = $directoryData;

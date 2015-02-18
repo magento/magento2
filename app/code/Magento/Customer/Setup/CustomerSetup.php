@@ -17,11 +17,15 @@ use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
 class CustomerSetup extends EavSetup
 {
     /**
+     * EAV configuration
+     *
      * @var Config
      */
     protected $eavConfig;
 
     /**
+     * Init
+     *
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
@@ -104,7 +108,8 @@ class CustomerSetup extends EavSetup
         }
 
         if ($data) {
-            $this->getSetup()->getConnection()->insertMultiple($this->getSetup()->getTable('customer_form_attribute'), $data);
+            $this->getSetup()->getConnection()
+                ->insertMultiple($this->getSetup()->getTable('customer_form_attribute'), $data);
         }
     }
 
@@ -445,6 +450,8 @@ class CustomerSetup extends EavSetup
     }
 
     /**
+     * Gets EAV configuration
+     *
      * @return Config
      */
     public function getEavConfig()
