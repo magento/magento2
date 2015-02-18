@@ -25,13 +25,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfigMock;
 
     /**
-     * Context mock
-     *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Helper\Context
-     */
-    protected $contextMock;
-
-    /**
      * Quote mock
      *
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote
@@ -47,20 +40,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
         $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->helper = $objectManager->getObject(
-            'Magento\Multishipping\Helper\Data',
-            [
-                'context' => $this->contextMock,
-                'scopeConfig' => $this->scopeConfigMock,
-                'checkoutSession' => $this->checkoutSessionMock
-            ]
-        );
+        $arguments = $objectManager->getConstructArguments('Magento\Multishipping\Helper\Data');
+        $this->helper = $objectManager->getObject('Magento\Multishipping\Helper\Data', $arguments);
+        $this->checkoutSessionMock = $arguments['checkoutSession'];
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
+        $this->scopeConfigMock = $context->getScopeConfig();
     }
 
     public function testGetMaximumQty()
