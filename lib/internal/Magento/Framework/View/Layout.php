@@ -120,6 +120,9 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      */
     protected $cacheable;
 
+    /** @var bool */
+    private $isCacheable;
+
     /**
      * @var \Magento\Framework\View\Page\Config\Structure
      */
@@ -994,9 +997,12 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      */
     public function isCacheable()
     {
-        $this->build();
-        $cacheableXml = !(bool)count($this->_xml->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]'));
-        return $this->cacheable && $cacheableXml;
+        if (is_null($this->isCacheable)) {
+            $this->build();
+            $cacheableXml = !(bool)count($this->_xml->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]'));
+            $this->isCacheable = $this->cacheable && $cacheableXml;
+        }
+        return $this->isCacheable;
     }
 
     /**
