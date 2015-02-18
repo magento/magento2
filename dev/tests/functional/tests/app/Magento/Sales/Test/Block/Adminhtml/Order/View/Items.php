@@ -22,7 +22,7 @@ class Items extends Block
      *
      * @var string
      */
-    protected $priceSelector = '//div[@class="price-excl-tax"]//span[@class="price"]';
+    protected $priceSelector = '//td[@class="col-price"]//div[@class="price-excl-tax"]//span[@class="price"]';
 
     // @codingStandardsIgnoreStart
     /**
@@ -88,7 +88,7 @@ class Items extends Block
 
             $productDisplay = $productName . ' SKU: ' . $matrix[$matrixKey]['sku'] . ' ' . $optionsDetails;
         } else {
-            $productDisplay = $productName . ' SKU: ' . $product->getSku();
+            $productDisplay = $productName . 'SKU: ' . $product->getSku();
         }
 
         $selector = '//tr[normalize-space(td)="' . $productDisplay . '"]' . $this->priceSelector;

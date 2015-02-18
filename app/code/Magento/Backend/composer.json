@@ -6,6 +6,7 @@
         "magento/module-store": "0.42.0-beta8",
         "magento/module-directory": "0.42.0-beta8",
         "magento/module-core": "0.42.0-beta8",
+        "magento/module-developer": "0.42.0-beta8",
         "magento/module-eav": "0.42.0-beta8",
         "magento/module-cron": "0.42.0-beta8",
         "magento/module-theme": "0.42.0-beta8",

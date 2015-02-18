@@ -207,7 +207,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      * Test for getHeader method
      *
      * @dataProvider headersDataProvider
-     * @covers       \Magento\Framework\App\Response\Http::getHeader
+     * covers       \Magento\Framework\App\Response\Http::getHeader
      * @param string $header
      */
     public function testGetHeaderExists($header)
@@ -232,7 +232,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for getHeader method. Validation for attempt to get not existing header
      *
-     * @covers \Magento\Framework\App\Response\Http::getHeader
+     * covers \Magento\Framework\App\Response\Http::getHeader
      */
     public function testGetHeaderNotExists()
     {
@@ -261,7 +261,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for the magic method __wakeup
      *
-     * @covers \Magento\Framework\App\Response\Http::__wakeup
+     * covers \Magento\Framework\App\Response\Http::__wakeup
      */
     public function testWakeUpWith()
     {
