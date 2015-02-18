@@ -325,7 +325,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
                 'Entity already exists'
             ],
             'cannot_save_title' => [
-                new LocalizedException('Cannot save titles'),
+                new LocalizedException(__('Cannot save titles')),
                 'Magento\Framework\Exception\LocalizedException',
                 'Cannot save titles'
             ]

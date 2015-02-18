@@ -262,7 +262,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->shipmentLoaderMock->expects($this->once())->method('setTracking')->with($tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->throwException(new \Magento\Framework\Exception\LocalizedException('message')));
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
         $this->exceptionResponse();
 
         $this->assertNull($this->controller->execute());

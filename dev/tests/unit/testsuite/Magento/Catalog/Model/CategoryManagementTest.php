@@ -168,7 +168,7 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())
             ->method('move')
             ->with($parentId, $afterId)
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException('message'));
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
         $this->model->move($categoryId, $parentId, $afterId);
     }
 }

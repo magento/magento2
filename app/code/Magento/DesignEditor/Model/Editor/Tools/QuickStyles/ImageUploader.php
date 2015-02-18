@@ -106,6 +106,7 @@ class ImageUploader extends \Magento\Framework\Object
      *
      * @param string $key
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function uploadFile($key)
     {
@@ -118,7 +119,7 @@ class ImageUploader extends \Magento\Framework\Object
 
         if (!$uploader->save($this->getStoragePath())) {
             /** @todo add translator */
-            throw new \Magento\Framework\Exception\LocalizedException('Cannot upload file.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Cannot upload file.'));
         }
         $result['css_path'] = implode(
             '/',

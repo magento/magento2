@@ -87,7 +87,9 @@ class Labels extends \Magento\Shipping\Model\Shipping
         $shipmentCarrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         $baseCurrencyCode = $this->_storeManager->getStore($shipmentStoreId)->getBaseCurrencyCode();
         if (!$shipmentCarrier) {
-            throw new \Magento\Framework\Exception\LocalizedException('Invalid carrier: ' . $shippingMethod->getCarrierCode());
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Invalid carrier: %1' , $shippingMethod->getCarrierCode())
+            );
         }
         $shipperRegionCode = $this->_scopeConfig->getValue(
             Shipment::XML_PATH_STORE_REGION_ID,

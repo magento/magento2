@@ -91,14 +91,14 @@ class AdminTokenService implements AdminTokenServiceInterface
     {
         $tokenCollection = $this->tokenModelCollectionFactory->create()->addFilterByAdminId($adminId);
         if ($tokenCollection->getSize() == 0) {
-            throw new LocalizedException("This user has no tokens.");
+            throw new LocalizedException(__('This user has no tokens.'));
         }
         try {
             foreach ($tokenCollection as $token) {
                 $token->setRevoked(1)->save();
             }
         } catch (\Exception $e) {
-            throw new LocalizedException("The tokens could not be revoked.");
+            throw new LocalizedException(__('The tokens could not be revoked.'));
         }
         return true;
     }

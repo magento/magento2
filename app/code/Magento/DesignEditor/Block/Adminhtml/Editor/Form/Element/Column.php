@@ -85,7 +85,9 @@ class Column extends \Magento\Framework\Data\Form\Element\Fieldset implements
     public function getRendererFactory()
     {
         if (!$this->_rendererFactory) {
-            throw new \Magento\Framework\Exception\LocalizedException('Renderer factory was not set');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Renderer factory was not set')
+            );
         }
         return $this->_rendererFactory;
     }
@@ -107,7 +109,7 @@ class Column extends \Magento\Framework\Data\Form\Element\Fieldset implements
     public function getElementsFactory()
     {
         if (!$this->_elementsFactory) {
-            throw new \Magento\Framework\Exception\LocalizedException('Form elements factory was not set');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Form elements factory was not set'));
         }
         return $this->_elementsFactory;
     }

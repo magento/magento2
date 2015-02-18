@@ -203,7 +203,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $this->_getWriteAdapter()->commit();
         } catch (\Exception $e) {
             $this->_getWriteAdapter()->rollBack();
-            throw new LocalizedException('Cannot unassing status from state');
+            throw new LocalizedException(__('Cannot unassing status from state'));
         }
 
         return $this;

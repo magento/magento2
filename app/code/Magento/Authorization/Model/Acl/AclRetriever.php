@@ -83,7 +83,7 @@ class AclRetriever
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new LocalizedException(
-                'Error happened while getting a list of allowed resources. Check exception log for details.'
+                __('Error happened while getting a list of allowed resources. Check exception log for details.')
             );
         }
         return $allowedResources;

@@ -22,7 +22,7 @@ class Qtyincrements extends \Magento\Framework\App\Config\Value
     {
         $value = $this->getValue();
         if (floor($value) != $value) {
-            throw new LocalizedException('Decimal qty increments is not allowed.');
+            throw new LocalizedException(__('Decimal qty increments is not allowed.'));
         }
     }
 }

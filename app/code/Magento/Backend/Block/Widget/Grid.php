@@ -223,7 +223,9 @@ class Grid extends \Magento\Backend\Block\Widget
     public function getExportBlock()
     {
         if (!$this->getChildBlock('grid.export')) {
-            throw new \Magento\Framework\Exception\LocalizedException('Export block for grid ' . $this->getNameInLayout() . ' is not defined');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Export block for grid %1 is not defined', $this->getNameInLayout())
+            );
         }
         return $this->getChildBlock('grid.export');
     }

@@ -189,7 +189,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->throwException(new \Magento\Framework\Exception\LocalizedException('message')));
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
         $this->responseMock->expects($this->once())->method('representJson');
 
         $this->assertNull($this->controller->execute());
@@ -231,7 +231,9 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
         $this->labelGenerator->expects($this->once())
             ->method('create')
             ->with($this->shipmentMock, $this->requestMock)
-            ->will($this->throwException(new \Magento\Framework\Exception\LocalizedException('message')));
+            ->will($this->throwException(
+                new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('message'))
+            ));
         $this->responseMock->expects($this->once())->method('representJson');
 
         $this->assertNull($this->controller->execute());

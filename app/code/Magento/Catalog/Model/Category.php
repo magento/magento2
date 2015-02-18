@@ -820,7 +820,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function beforeDelete()
     {
         if ($this->getResource()->isForbiddenToDelete($this->getId())) {
-            throw new \Magento\Framework\Exception\LocalizedException("Can't delete root category.");
+            throw new \Magento\Framework\Exception\LocalizedException(__('Can\'t delete root category.'));
         }
         return parent::beforeDelete();
     }
