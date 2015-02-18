@@ -65,4 +65,5 @@
     <constraint name="assertChangePasswordFailMessage" module="Magento_Customer" severity="low"/>
     <constraint name="assertWrongPassConfirmationMessage" module="Magento_Customer" severity="low"/>
     <constraint name="assertCustomerRedirectToDashboard" module="Magento_Customer" severity="low"/>
+    <constraint name="assertCustomerBackendFormTitle" module="Magento_Customer" severity="middle"/>
 </config>
