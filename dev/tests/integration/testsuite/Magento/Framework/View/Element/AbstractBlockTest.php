@@ -481,23 +481,6 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertStringMatchesFormat('http://localhost/pub/static/frontend/%s/en_US/css/styles.css', $actualResult);
     }
 
-    public function testFormatDate()
-    {
-        $locale = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
-        );
-        $this->assertEquals($locale->formatDate(), $this->_block->formatDate());
-    }
-
-    public function testFormatTime()
-    {
-        $locale = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
-        );
-        $time = new \DateTime('@' . time());
-        $this->assertEquals($locale->formatTime($time), $this->_block->formatTime($time));
-    }
-
     public function testGetModuleName()
     {
         $this->assertEquals('Magento_Core', $this->_block->getModuleName());

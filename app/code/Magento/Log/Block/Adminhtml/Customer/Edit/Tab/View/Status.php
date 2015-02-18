@@ -120,7 +120,7 @@ class Status extends \Magento\Backend\Block\Template
     {
         $date = $this->getCustomerLog()->getLoginAt();
         if ($date) {
-            return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
+            return $this->formatDate($date, \IntlDateFormatter::MEDIUM, true);
         }
         return __('Never');
     }
@@ -133,7 +133,7 @@ class Status extends \Magento\Backend\Block\Template
         $date = $this->getCustomerLog()->getLoginAtTimestamp();
         if ($date) {
             $date = $this->_localeDate->scopeDate($this->getCustomer()->getStoreId(), $date, true);
-            return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
+            return $this->formatDate($date, \IntlDateFormatter::MEDIUM, true);
         }
         return __('Never');
     }

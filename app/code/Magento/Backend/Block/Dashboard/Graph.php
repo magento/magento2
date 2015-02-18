@@ -398,16 +398,17 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                             switch ($this->getDataHelper()->getParam('period')) {
                                 case '24h': {
                                     $period = new \DateTime($_label);
-                                    $this->_axisLabels[$idx][$_index] = $this->formatTime(
-                                        $period->setTime($period->format('H'), 0, 0),
-                                        'short',
-                                        false
+                                    $period->setTime($period->format('H'), 0, 0);
+                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
+                                        $period,
+                                        \IntlDateFormatter::NONE,
+                                        \IntlDateFormatter::SHORT
                                     );
                                     break;
                                 }
                                 case '7d':
                                 case '1m':
-                                    $this->_axisLabels[$idx][$_index] = $this->formatDate(
+                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
                                         new \DateTime($_label)
                                     );
                                     break;

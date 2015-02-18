@@ -11,22 +11,6 @@ namespace Magento\Framework\Stdlib\DateTime;
 interface TimezoneInterface
 {
     /**
-     * Default timezone
-     */
-    const DEFAULT_TIMEZONE = 'UTC';
-
-    /**
-     * Date and time format codes
-     */
-    const FORMAT_TYPE_FULL = 'full';
-
-    const FORMAT_TYPE_LONG = 'long';
-
-    const FORMAT_TYPE_MEDIUM = 'medium';
-
-    const FORMAT_TYPE_SHORT = 'short';
-
-    /**
      * Return path to default timezone
      *
      * @return string
@@ -123,7 +107,7 @@ interface TimezoneInterface
      */
     public function formatDate(
         $date = null,
-        $format = \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+        $format = \IntlDateFormatter::SHORT,
         $showTime = false
     );
 
@@ -137,7 +121,7 @@ interface TimezoneInterface
      */
     public function formatTime(
         $time = null,
-        $format = \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+        $format = \IntlDateFormatter::SHORT,
         $showDate = false
     );
 
@@ -157,4 +141,20 @@ interface TimezoneInterface
      * @return bool
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
+
+    /**
+     * @param \DateTime $date
+     * @param int $dateType
+     * @param int $timeType
+     * @param null $locale
+     * @param null $timezone
+     * @return mixed
+     */
+    public function formatDateTime(
+        \DateTime $date,
+        $dateType = \IntlDateFormatter::SHORT,
+        $timeType = \IntlDateFormatter::SHORT,
+        $locale = null,
+        $timezone = null
+    );
 }

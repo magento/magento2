@@ -43,13 +43,17 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             //calculate end date considering timezone specification
             /** @var $datetimeTo \DateTime */
             $datetimeTo->setTimezone(
-                $this->_scopeConfig->getValue(
-                    $this->_localeDate->getDefaultTimezonePath(),
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                new \DateTimeZone(
+                    $this->_scopeConfig->getValue(
+                        $this->_localeDate->getDefaultTimezonePath(),
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    )
                 )
             );
             $datetimeTo->modify('+1 day')->modify('-1 second');
-            $datetimeTo->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
+            $datetimeTo->setTimezone(
+                new \DateTimeZone('UTC')
+            );
         }
         return $value;
     }
@@ -88,12 +92,12 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     public function getHtml()
     {
         $htmlId = $this->mathRandom->getUniqueHash($this->_getHtmlId());
-        $format = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
         $timeFormat = '';
 
         if ($this->getColumn()->getFilterTime()) {
             $timeFormat = $this->_localeDate->getTimeFormat(
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                \IntlDateFormatter::SHORT
             );
         }
 
@@ -152,7 +156,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             if ($value instanceof \DateTime) {
                 return $value->format(
                     $this->_localeDate->getDateTimeFormat(
-                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                        \IntlDateFormatter::SHORT
                     )
                 );
             }

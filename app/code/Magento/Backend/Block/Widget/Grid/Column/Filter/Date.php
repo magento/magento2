@@ -50,7 +50,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     public function getHtml()
     {
         $htmlId = $this->mathRandom->getUniqueHash($this->_getHtmlId());
-        $format = $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_SHORT);
+        $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
         $html = '<div class="range" id="' .
             $htmlId .
             '_range"><div class="range-line date">' .
@@ -131,7 +131,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
         if ($value instanceof \DateTime) {
             return $value->format(
                 $this->_localeDate->getDateFormat(
-                    \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                    \IntlDateFormatter::SHORT
                 )
             );
         }

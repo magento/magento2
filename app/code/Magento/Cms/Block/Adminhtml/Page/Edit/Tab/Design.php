@@ -116,7 +116,7 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
         );
 
         $dateFormat = $this->_localeDate->getDateFormat(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+            \IntlDateFormatter::SHORT
         );
 
         $designFieldset->addField(

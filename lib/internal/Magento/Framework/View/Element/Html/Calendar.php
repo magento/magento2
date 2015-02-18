@@ -114,13 +114,13 @@ class Calendar extends \Magento\Framework\View\Element\Template
         $this->assign(
             'defaultFormat',
             $this->encoder->encode(
-                $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_MEDIUM)
+                $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM)
             )
         );
         $this->assign(
             'toolTipFormat',
             $this->encoder->encode(
-                $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_LONG)
+                $this->_localeDate->getDateFormat(\IntlDateFormatter::LONG)
             )
         );
 
@@ -164,7 +164,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
      */
     public function getYearRange()
     {
-        return (int)$this->_localeDate->date('Y')->__toString() - 100
-            . ':' . $this->_localeDate->date('Y')->__toString();
+        return (new \DateTime('- 100 years'))->format('Y')
+            . ':' . (new \DateTime())->format('Y');
     }
 }

@@ -43,7 +43,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
             if (is_null(self::$_format)) {
                 try {
                     self::$_format = $this->_localeDate->getDateFormat(
-                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+                        \IntlDateFormatter::MEDIUM
                     );
                 } catch (\Exception $e) {
                     $this->_logger->critical($e);

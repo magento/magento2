@@ -192,7 +192,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
         if ($subscriber->getChangeStatusAt()) {
             return $this->formatDate(
                 $subscriber->getChangeStatusAt(),
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+                \IntlDateFormatter::MEDIUM,
                 true
             );
         }

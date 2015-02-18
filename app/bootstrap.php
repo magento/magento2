@@ -35,5 +35,5 @@ if (!empty($_SERVER['MAGE_PROFILER'])) {
     \Magento\Framework\Profiler::applyConfig($_SERVER['MAGE_PROFILER'], BP, !empty($_REQUEST['isAjax']));
 }
 if (ini_get('date.timezone') == '') {
-    date_default_timezone_set(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
+    date_default_timezone_set('UTC');
 }

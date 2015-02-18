@@ -138,13 +138,13 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
                 case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT:
                 case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_HTML:
                 case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_PDF:
-                    $this->_dateFilterFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
+                    $this->_dateFilterFormat(\IntlDateFormatter::MEDIUM);
                     break;
             }
             $value = $this->_applyOutputFilter($value);
         }
 
-        $this->_dateFilterFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $this->_dateFilterFormat(\IntlDateFormatter::SHORT);
 
         return $value;
     }
