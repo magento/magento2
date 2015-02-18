@@ -6,6 +6,7 @@
 namespace Magento\Integration\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Authentication;
 
 class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -52,5 +53,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $item = $this->_webApiCall($serviceInfo, [], null, null, $this->integration);
         $this->assertEquals($itemId, $item['entity_id'], 'id field returned incorrectly');
         $this->assertEquals($name, $item['name'], 'name field returned incorrectly');
+
+        OauthHelper::clearApiAccessCredentials();
     }
 }
