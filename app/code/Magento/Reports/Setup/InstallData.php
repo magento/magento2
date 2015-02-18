@@ -6,6 +6,8 @@
  */
 namespace Magento\Reports\Setup;
 
+// @codingStandardsIgnoreFile
+
 use Magento\Cms\Model\PageFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
