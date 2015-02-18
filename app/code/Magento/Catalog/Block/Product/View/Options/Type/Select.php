@@ -14,27 +14,6 @@ namespace Magento\Catalog\Block\Product\View\Options\Type;
 class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
     /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreHelper;
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreHelper
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\Data $coreHelper,
-        \Magento\Catalog\Helper\Data $catalogData,
-        array $data = []
-    ) {
-        $this->_coreHelper = $coreHelper;
-        parent::__construct($context, $coreHelper, $catalogData, $data);
-    }
-
-    /**
      * Return html for control element
      *
      * @return string
@@ -78,7 +57,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                 $select->addOption(
                     $_value->getOptionTypeId(),
                     $_value->getTitle() . ' ' . $priceStr . '',
-                    ['price' => $this->_coreHelper->currencyByStore($_value->getPrice(true), $store, false)]
+                    ['price' => $this->pricingHelper->currencyByStore($_value->getPrice(true), $store, false)]
                 );
             }
             if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_MULTIPLE) {
@@ -169,7 +148,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     '" ' .
                     $checked .
                     ' price="' .
-                    $this->_coreHelper->currencyByStore($_value->getPrice(true), $store, false) .
+                    $this->pricingHelper->currencyByStore($_value->getPrice(true), $store, false) .
                     '" />' .
                     '<label class="label" for="options_' .
                     $_option->getId() .

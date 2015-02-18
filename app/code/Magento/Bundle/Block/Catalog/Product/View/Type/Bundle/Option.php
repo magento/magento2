@@ -8,8 +8,6 @@
 
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 
-use Magento\Bundle\Model\Product\Price;
-
 /**
  * Bundle option renderer
  */
@@ -30,9 +28,9 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     protected $_showSingle;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Pricing\Helper\Data
      */
-    protected $_coreHelper;
+    protected $pricingHelper;
 
     /**
      * @var \Magento\Tax\Helper\Data
@@ -53,7 +51,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -67,10 +65,10 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Checkout\Helper\Cart $cartHelper,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Pricing\Helper\Data $pricingHelper,
         array $data = []
     ) {
-        $this->_coreHelper = $coreHelper;
+        $this->pricingHelper = $pricingHelper;
         $this->_catalogHelper = $catalogData;
         $this->_taxHelper = $taxData;
         parent::__construct(
@@ -248,7 +246,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
                 1
             );
             if (is_numeric($price)) {
-                $price = $this->_coreHelper->currencyByStore($price, $store, false);
+                $price = $this->pricingHelper->currencyByStore($price, $store, false);
             }
         }
         return is_numeric($price) ? $price : 0;
