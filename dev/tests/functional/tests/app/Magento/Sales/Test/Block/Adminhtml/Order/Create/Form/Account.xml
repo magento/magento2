@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <group>
+            <selector>[name="order[account][group_id]"]</selector>>
+            <strategy>css selector</strategy>
+            <input></input>>
+        </group>
+        <email>
+            <selector>[name="order[account][email]"]</selector>>
+            <strategy>css selector</strategy>
+        </email>
+    </fields>
+</mapping>

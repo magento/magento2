@@ -95,6 +95,13 @@ class Create extends Block
     protected $addSelectedProducts = 'button[onclick="order.productGridAddSelected()"]';
 
     /**
+     * Sales order create account information block
+     *
+     * @var string
+     */
+    protected $accountInformationBlock = '#order-form_account';
+
+    /**
      * Getter for order selected products grid
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items
@@ -191,6 +198,19 @@ class Create extends Block
     }
 
     /**
+     * Get sales order create account information block
+     *
+     * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Form\Account
+     */
+    public function getAccountBlock()
+    {
+        return $this->blockFactory->create(
+            'Magento\Sales\Test\Block\Adminhtml\Order\Create\Form\Account',
+            ['element' => $this->_rootElement->find($this->accountInformationBlock, Locator::SELECTOR_CSS)]
+        );
+    }
+
+    /**
      * Wait display order items grid
      *
      * @return void
@@ -235,13 +255,16 @@ class Create extends Block
      * Fill addresses based on present data in customer and order fixtures
      *
      * @param FixtureInterface $address
+     * @param string $saveAddress
      * @return void
      */
-    public function fillAddresses(FixtureInterface $address)
+    public function fillAddresses(FixtureInterface $address, $saveAddress)
     {
         $this->getShippingAddressBlock()->uncheckSameAsBillingShippingAddress();
         $this->getTemplateBlock()->waitLoader();
         $this->getBillingAddressBlock()->fill($address);
+        $this->getBillingAddressBlock()->saveInAddressBookBillingAddress($saveAddress);
+        $this->getTemplateBlock()->waitLoader();
         $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
         $this->getTemplateBlock()->waitLoader();
     }
@@ -288,5 +311,17 @@ class Create extends Block
     public function addSelectedProductsToOrder()
     {
         $this->_rootElement->find($this->addSelectedProducts)->click();
+    }
+
+
+    /**
+     * Fill addresses based on present data in customer and order fixtures
+     *
+     * @param string $emailAddress
+     * @return void
+     */
+    public function fillEmail($emailAddress)
+    {
+        $this->getAccountBlock()->fillEmailAddress($emailAddress);
     }
 }

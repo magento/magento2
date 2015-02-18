@@ -133,5 +133,27 @@
                 <item name="presets" xsi:type="string">US_address_NY, US_address</item>
             </field>
         </dataset>
+
+        <dataset name="customer_US_address">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="address" xsi:type="array">
+                <item name="presets" xsi:type="string">customer_US</item>
+            </field>
+        </dataset>
+
+        <dataset name="customer_UK_address">
+            <field name="firstname" xsi:type="string">Jane</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="address" xsi:type="array">
+                <item name="presets" xsi:type="string">customer_UK</item>
+            </field>
+        </dataset>
     </storage>
 </repository>
