@@ -110,7 +110,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             $storeId = $this->attributeHelper->getSelectedStoreId();
             if ($attributesData) {
                 $dateFormat = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
-                    ->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+                    ->getDateFormat(\IntlDateFormatter::SHORT);
 
                 foreach ($attributesData as $attributeCode => $value) {
                     $attribute = $this->_objectManager->get('Magento\Eav\Model\Config')

@@ -125,7 +125,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     {
         $createdAt = $this->_block->formatDate(
             $this->_loadCustomer()->getCreatedAt(),
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+            \IntlDateFormatter::MEDIUM,
             true
         );
         $this->assertEquals($createdAt, $this->_block->getCreateDate());
@@ -140,7 +140,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $date = $this->_context->getLocaleDate()->scopeDate($customer->getStoreId(), $customer->getCreatedAt(), true);
         $storeCreateDate = $this->_block->formatDate(
             $date,
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+            \IntlDateFormatter::MEDIUM,
             true
         );
         $this->assertEquals($storeCreateDate, $this->_block->getStoreCreateDate());

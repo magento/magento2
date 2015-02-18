@@ -325,12 +325,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
                  * Convert dates into \Zend_Date
                  */
                 if (in_array($key, ['from_date', 'to_date']) && $value) {
-                    $value = $this->_localeDate->date(
-                        $value,
-                        \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
-                        null,
-                        false
-                    );
+                    $value = new \DateTime($value);
                 }
                 $this->setData($key, $value);
             }

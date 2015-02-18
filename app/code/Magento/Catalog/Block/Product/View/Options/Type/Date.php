@@ -93,7 +93,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         )->setImage(
             $this->getViewFileUrl('Magento_Core::calendar.png')
         )->setDateFormat(
-            $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+            $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)
         )->setValue(
             $value
         )->setYearsRange(

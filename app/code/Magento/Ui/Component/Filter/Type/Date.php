@@ -154,7 +154,7 @@ class Date extends FilterAbstract
             $dateObj->set($date, null, $locale);
 
             //convert store date to default date in UTC timezone without DST
-            $dateObj->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
+            $dateObj->setTimezone('UTC');
 
             return $dateObj;
         } catch (\Exception $e) {

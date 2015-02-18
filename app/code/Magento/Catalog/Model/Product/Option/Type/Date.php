@@ -183,12 +183,12 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         if ($this->_formattedOptionValue === null) {
             if ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE) {
                 $format = $this->_localeDate->getDateFormat(
-                    \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+                    \IntlDateFormatter::MEDIUM
                 );
                 $result = $this->_localeDate->date($optionValue, \Zend_Date::ISO_8601, null, false)->toString($format);
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME) {
                 $format = $this->_localeDate->getDateTimeFormat(
-                    \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                    \IntlDateFormatter::SHORT
                 );
                 $result = $this->_localeDate->date(
                     $optionValue,

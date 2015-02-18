@@ -177,7 +177,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
                 if ($item->getUseSpecial()) {
                     $special = '<br />' . __('Special Expires On: %1', $this->formatDate(
                         (new \DateTime($item->getSpecialToDate())),
-                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+                        \IntlDateFormatter::MEDIUM
                     ));
                 }
                 $specialPrice = sprintf(

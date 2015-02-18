@@ -187,7 +187,7 @@ class Main extends Generic implements TabInterface
         );
 
         $dateFormat = $this->_localeDate->getDateFormat(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+            \IntlDateFormatter::SHORT
         );
         $fieldset->addField(
             'from_date',

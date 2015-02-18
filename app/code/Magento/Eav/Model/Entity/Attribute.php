@@ -275,7 +275,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             // save default date value as timestamp
             if ($hasDefaultValue) {
                 $format = $this->_localeDate->getDateFormat(
-                    \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                    \IntlDateFormatter::SHORT
                 );
                 try {
                     $defaultValue = $this->_localeDate->date($defaultValue, $format, null, false)->toValue();

@@ -64,7 +64,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      */
     public function formatDeliveryDate($date)
     {
-        $format = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
+        $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
         return $this->_localeDate->date(strtotime($date), \Zend_Date::TIMESTAMP, null, false)->toString($format);
     }
 
@@ -81,7 +81,7 @@ class Popup extends \Magento\Framework\View\Element\Template
             $time = $date . ' ' . $time;
         }
 
-        $format = $this->_localeDate->getTimeFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $format = $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT);
         return $this->_localeDate->date(strtotime($time), \Zend_Date::TIMESTAMP, null, false)->toString($format);
     }
 

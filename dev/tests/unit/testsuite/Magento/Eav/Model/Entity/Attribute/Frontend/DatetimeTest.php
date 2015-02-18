@@ -61,7 +61,7 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('text'));
 
         $this->localeDateMock->expects($this->once())->method('getDateFormat')
-            ->with(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM)
+            ->with(\IntlDateFormatter::MEDIUM)
             ->will($this->returnValue($dateFormat));
         $dateMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\DateInterface');
         $dateMock->expects($this->once())->method('toString')->with($dateFormat)
@@ -79,7 +79,7 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
         $dateFormat = 'dd-mm-yyyy';
         $object = new \Magento\Framework\Object(['datetime' => $attributeValue]);
         $this->localeDateMock->expects($this->once())->method('getDateFormat')
-            ->with(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM)
+            ->with(\IntlDateFormatter::MEDIUM)
             ->will($this->returnValue($dateFormat));
         $this->attributeMock->expects($this->any())->method('getData')->with('frontend_input')
             ->will($this->returnValue('text'));

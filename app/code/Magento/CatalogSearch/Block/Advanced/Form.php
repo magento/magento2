@@ -348,7 +348,7 @@ class Form extends Template
         )->setImage(
             $this->getViewFileUrl('Magento_Core::calendar.png')
         )->setDateFormat(
-            $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+            $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)
         )->setClass(
             'input-text'
         )->getHtml();

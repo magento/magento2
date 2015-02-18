@@ -30,7 +30,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
             if (is_null(self::$_format)) {
                 try {
                     self::$_format = $this->_localeDate->getDateTimeFormat(
-                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+                        \IntlDateFormatter::MEDIUM
                     );
                 } catch (\Exception $e) {
                     $this->_logger->critical($e);

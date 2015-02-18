@@ -37,7 +37,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
     {
         $data = '';
         $value = parent::getValue($object);
-        $format = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
+        $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
 
         if ($value) {
             try {
