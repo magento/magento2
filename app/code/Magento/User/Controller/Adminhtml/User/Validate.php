@@ -27,7 +27,7 @@ class Validate extends \Magento\User\Controller\Adminhtml\User
             $errors = $model->validate();
         } catch (\Magento\Framework\Validator\ValidatorException $exception) {
             /* @var $error Error */
-            foreach ($exception->getMessages() as $error) {
+            foreach ($exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR) as $error) {
                 $errors[] = $error->getText();
             }
         }
