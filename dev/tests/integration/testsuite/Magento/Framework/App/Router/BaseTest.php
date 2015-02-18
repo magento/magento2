@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\App\Router;
+namespace Magento\Framework\App\Router;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\App\Router\Base
+     * @var \Magento\Framework\App\Router\Base
      */
     protected $_model;
 
@@ -16,7 +16,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $options = ['routerId' => 'standard'];
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\App\Router\Base',
+            'Magento\Framework\App\Router\Base',
             $options
         );
     }

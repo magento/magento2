@@ -9,6 +9,7 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
