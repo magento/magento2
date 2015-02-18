@@ -67,7 +67,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             $messages = $e->getMessages();
             $this->messageManager->addMessages($messages);
             $this->redirectToEdit($model, $data);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) { //
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($e->getMessage()) {
                 $this->messageManager->addError($e->getMessage());
             }
@@ -78,6 +78,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     /**
      * @param \Magento\User\Model\User $model
      * @param array $data
+     * @return void
      */
     protected function redirectToEdit(\Magento\User\Model\User $model, array $data)
     {
