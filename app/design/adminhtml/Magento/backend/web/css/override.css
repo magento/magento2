@@ -7,6 +7,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+._show {
+  display: block !important;
+}
+._hide {
+  display: none !important;
+}
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -195,9 +201,7 @@ th {
   box-shadow: none;
   outline: 0;
 }
-.keyfocus *:focus,
-.keyfocus .admin__control-radio:focus + label,
-.keyfocus .admin__control-checkbox:focus + label {
+.keyfocus *:focus {
   box-shadow: 0 0 0 1px #008bdb;
 }
 img,
@@ -252,8 +256,7 @@ h1 {
   line-height: 3.4rem;
   margin: 0 0 2rem;
 }
-h2,
-.admin__fieldset-wrapper-title strong {
+h2 {
   font-size: 2rem;
   color: #41362f;
   font-weight: 400;
@@ -512,278 +515,6 @@ nav ol {
 .list-definition > dd {
   margin-bottom: 1em;
   margin-left: 20rem;
-}
-.__form-control-styles,
-.admin__control-text,
-.admin__control-select,
-.admin__control-textarea,
-.admin__control-multiselect,
-.admin__control-addon [class*="admin__control-"] + [class*="admin__addon-"]:before {
-  background-color: #ffffff;
-  border-radius: 1px;
-  border: 1px solid #adadad;
-  color: #303030;
-  font-size: 15px;
-  font-weight: 500;
-  height: 33px;
-  max-width: 100%;
-  padding: 0 10px;
-}
-.__form-control-styles:focus,
-.admin__control-text:focus,
-.admin__control-select:focus,
-.admin__control-textarea:focus,
-.admin__control-multiselect:focus,
-.admin__control-addon [class*="admin__control-"]:focus + label:before {
-  border-color: #007bdb;
-  box-shadow: none;
-  outline: 0;
-}
-.__form-control-styles[disabled],
-.admin__control-text[disabled],
-.admin__control-select[disabled],
-.admin__control-textarea[disabled],
-.admin__control-multiselect[disabled],
-.admin__control-addon [class*="admin__control-"][disabled] + [class*="admin__addon-"]:before {
-  background-color: #e9e9e9;
-  border-color: #adadad;
-  color: #303030;
-  opacity: .5;
-}
-.admin__control-text {
-  line-height: normal;
-  width: 100%;
-}
-.admin__control-select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  appearance: none;
-  background-repeat: no-repeat;
-  background-image: url('../images/arrows-bg.svg'), linear-gradient(#e3e3e3, #e3e3e3), linear-gradient(#adadad, #adadad);
-  background-position: ~" calc(100% - 12px) -34px, 100%, calc(100% - 33px) 0";
-  background-size: auto, 33px 100%, 1px 100%;
-  padding-right: 44px;
-}
-.admin__control-select:focus {
-  background-image: url('../images/arrows-bg.svg'), linear-gradient(#e3e3e3, #e3e3e3), linear-gradient(#007bdb, #007bdb);
-  background-position: ~" calc(100% - 12px) 13px, 100%, calc(100% - 33px) 0";
-}
-.admin__control-select::-ms-expand {
-  display: none;
-}
-.ie9 .admin__control-select {
-  padding-right: 0;
-}
-option:empty {
-  display: none;
-}
-.admin__control-file {
-  background: transparent;
-  border: 0;
-}
-.admin__control-textarea,
-.admin__control-multiselect {
-  height: ~" calc(6 * 1.2em + 14px)";
-  line-height: 1.2;
-  padding: 6px 10px;
-  width: 100%;
-}
-.admin__control-textarea {
-  line-height: 1.18em;
-  padding-top: 8px;
-}
-.admin__control-radio,
-.admin__control-checkbox {
-  margin: 3px 0 0 0;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  vertical-align: top;
-}
-.admin__control-radio + label,
-.admin__control-checkbox + label {
-  cursor: pointer;
-  display: inline-block;
-  padding-left: 26px;
-}
-.admin__control-radio + label:before,
-.admin__control-checkbox + label:before {
-  background: url('../Magento_Ui/images/choice_bkg.png') no-repeat -100% -100% #ffffff;
-  border-radius: 2px;
-  border: 1px solid #adadad;
-  content: '';
-  float: left;
-  height: 14px;
-  line-height: 14px;
-  margin: 1px 10px 0 -26px;
-  text-align: center;
-  vertical-align: top;
-  width: 14px;
-}
-.admin__control-radio:focus + label:before,
-.admin__control-checkbox:focus + label:before {
-  border-color: #007bdb;
-}
-.admin__control-radio[disabled] + label,
-.admin__control-checkbox[disabled] + label {
-  color: #303030;
-  opacity: .5;
-}
-.admin__control-radio[disabled] + label:before,
-.admin__control-checkbox[disabled] + label:before {
-  background-color: #e9e9e9;
-  border-color: #adadad;
-}
-.admin__control-radio + label:before {
-  border-radius: 8px;
-}
-.admin__control-radio:checked + label:before {
-  background-position: -26px -1px;
-}
-.admin__control-checkbox:checked + label:before {
-  background-position: -1px -1px;
-}
-.admin__control-addon {
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  display: inline-flex;
-  flex-flow: row nowrap;
-  position: relative;
-  width: 100%;
-  z-index: 1;
-}
-.admin__control-addon > * {
-  -webkit-flex-basis: auto;
-  flex-basis: auto;
-  -webkit-flex-grow: 0;
-  flex-grow: 0;
-  -webkit-flex-shrink: 0;
-  flex-shrink: 0;
-}
-.admin__control-addon > * {
-  position: relative;
-  z-index: 1;
-}
-.admin__control-addon [class*="admin__control-"] {
-  background-color: transparent;
-  border-color: transparent;
-  order: 1;
-  vertical-align: top;
-  width: auto;
-  appearence: none;
-  -webkit-flex-grow: 1;
-  flex-grow: 1;
-}
-.admin__control-addon [class*="admin__control-"] :focus {
-  box-shadow: 0;
-}
-.admin__control-addon [class*="admin__control-"] + [class*="admin__addon-"] {
-  padding-left: 10px;
-  position: static !important;
-  z-index: 0;
-}
-.admin__control-addon [class*="admin__control-"] + [class*="admin__addon-"] > * {
-  position: relative;
-  vertical-align: top;
-  z-index: 2;
-}
-.admin__control-addon [class*="admin__control-"] + [class*="admin__addon-"]:before {
-  bottom: 0;
-  box-sizing: border-box;
-  content: '';
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 0;
-}
-.admin__addon-suffix,
-.admin__addon-prefix {
-  border: 0;
-  box-sizing: border-box;
-  color: #858585;
-  display: inline-block;
-  font-size: 15px;
-  font-weight: 300;
-  height: 33px;
-  line-height: 33px;
-  padding: 0 3px;
-}
-.admin__addon-suffix {
-  order: 3;
-}
-.admin__addon-suffix:last-child {
-  padding-right: 10px;
-}
-.admin__addon-prefix {
-  order: 0;
-}
-.admin__control-value {
-  display: inline-block;
-  padding: 6px 10px;
-}
-/*! END ._form*/
-.admin__control-text + .ui-datepicker-trigger {
-  background-image: none;
-  background: none;
-  border: 0;
-  margin: 0;
-  padding: 0;
-  -moz-box-sizing: content-box;
-  box-shadow: none;
-  text-shadow: none;
-  line-height: inherit;
-  font-weight: 400;
-  text-decoration: none;
-  margin-left: -40px;
-  display: inline-block;
-}
-.admin__control-text + .ui-datepicker-trigger img {
-  display: none;
-}
-.admin__control-text + .ui-datepicker-trigger:focus,
-.admin__control-text + .ui-datepicker-trigger:active {
-  background: none;
-  border: none;
-}
-.admin__control-text + .ui-datepicker-trigger:hover {
-  background: none;
-  border: none;
-}
-.admin__control-text + .ui-datepicker-trigger.disabled,
-.admin__control-text + .ui-datepicker-trigger[disabled],
-fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
-  cursor: not-allowed;
-  pointer-events: none;
-  opacity: 0.5;
-}
-.admin__control-text + .ui-datepicker-trigger > span {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-.admin__control-text + .ui-datepicker-trigger:after {
-  font-family: 'icons-blank-theme';
-  content: '\e612';
-  font-size: 38px;
-  line-height: 33px;
-  color: #514943;
-  overflow: hidden;
-  speak: none;
-  font-weight: normal;
-  -webkit-font-smoothing: antialiased;
-  display: inline-block;
-  vertical-align: middle;
-  text-align: center;
 }
 .action,
 button {
@@ -1069,6 +800,795 @@ button.tertiary:active {
 }
 .actions-split button:hover {
   box-shadow: none;
+}
+.fieldset {
+  padding: 0;
+  margin: 0 0 2rem;
+  border: 0;
+  letter-spacing: -0.31em;
+}
+.fieldset > * {
+  letter-spacing: normal;
+}
+.fieldset > .legend {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  font-size: 2rem;
+  line-height: 1.2;
+  box-sizing: border-box;
+  float: left;
+}
+.fieldset > .legend + br {
+  display: block;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  clear: both;
+}
+fieldset.field [class^='fields-group-'] .field .control {
+  margin: 0 0 0 20px;
+  width: auto;
+}
+.fieldset-wrapper > .fieldset-wrapper-title,
+.fieldset > .legend {
+  border-bottom: 1px solid #cac3b4;
+  box-sizing: border-box;
+  float: left;
+  margin: 0 0 18px;
+  padding: 0;
+  position: static;
+  width: 100%;
+}
+.fieldset-wrapper > .fieldset-wrapper-title {
+  float: none;
+}
+.form-inline .label,
+.form-inline .control {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  margin: 0;
+  width: 55%;
+}
+.form-inline .label {
+  padding: 5px 15px 0 0;
+  text-align: right;
+  width: 45%;
+}
+.form-inline .no-label .control {
+  margin-left: 20%;
+  width: 60%;
+}
+.form-inline .field-service {
+  box-sizing: border-box;
+  color: #999;
+  float: left;
+  font-size: 12px;
+  letter-spacing: .05em;
+  padding: 7px 0 0 15px;
+  width: 20%;
+}
+.form-inline .field-service .checkbox {
+  margin: 0;
+  vertical-align: middle;
+}
+.form-inline .field-service[value-scope]:before {
+  content: attr(value-scope) !important;
+  display: block;
+  margin-bottom: 5px;
+  white-space: nowrap;
+}
+.form-inline .choice {
+  position: relative;
+  z-index: 1;
+}
+.form-inline .choice .control {
+  left: 45%;
+  margin-top: 4px;
+  position: absolute;
+  width: auto;
+}
+.form-inline .choice .tooltip {
+  margin-left: 20px;
+  margin-top: 7px;
+  position: relative;
+  z-index: 1;
+}
+.form-inline .with-tooltip:not(.choice) {
+  padding-top: 20px;
+}
+.control *:first-child {
+  margin-bottom: 0;
+}
+.control > input {
+  width: 100%;
+}
+.control > input[type='button'],
+.control > input[type='radio'],
+.control > input[type='checkbox'],
+.control > input[type='file'] {
+  width: auto;
+}
+.control > input.hasDatepicker {
+  width: 160px;
+}
+.control > table {
+  width: 100%;
+}
+.control .input-file {
+  margin-top: 4px;
+}
+.control .hasDatepicker + img {
+  margin: -3px 0 0 5px;
+  vertical-align: middle;
+}
+.control .control-value {
+  display: inline-block;
+  padding: 6px 0 0;
+  vertical-align: top;
+}
+.control .control-value.special {
+  font-weight: bold;
+}
+.control .nested {
+  padding: 0;
+}
+.field-tooltip {
+  display: inline-block;
+  margin-top: 5px;
+  overflow: visible;
+  position: relative;
+  vertical-align: top;
+  width: 0;
+  z-index: 1;
+}
+.field-choice .field-tooltip {
+  margin-top: 10px;
+}
+.field-tooltip:hover {
+  z-index: 99;
+}
+.field-tooltip-action {
+  color: #514943;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'Icons';
+  margin-left: 18px;
+  margin-top: -6px;
+  position: relative;
+  z-index: 2;
+}
+.field-tooltip-action:hover {
+  color: #514943;
+  text-decoration: none;
+}
+.field-tooltip-action:before {
+  content: '\e633';
+  font-size: 22px;
+}
+.field-tooltip-action span {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.control-text:focus + .field-tooltip-content,
+.field-tooltip:hover .field-tooltip-content {
+  display: block;
+}
+.field-tooltip-content {
+  background: #fff8d6;
+  border: 1px solid #adadad;
+  border-radius: 1px;
+  bottom: 42px;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+  display: none;
+  padding: 15px 25px;
+  position: absolute;
+  right: -66px;
+  width: 320px;
+  z-index: 1;
+}
+.field-tooltip-content:after,
+.field-tooltip-content:before {
+  border: 16px solid transparent;
+  height: 0;
+  width: 0;
+  border-top-color: #adadad;
+  content: '';
+  display: block;
+  position: absolute;
+  right: 20px;
+  top: 100%;
+  z-index: 3;
+}
+.field-tooltip-content:after {
+  border-top-color: #fff8d6;
+  margin-top: -1px;
+  z-index: 4;
+}
+.form__field {
+  position: relative;
+  z-index: 1;
+}
+.form__field:before,
+.form__field:after {
+  content: "";
+  display: table;
+}
+.form__field:after {
+  clear: both;
+}
+.form__field:hover {
+  z-index: 2;
+}
+.control .form__field {
+  position: static;
+}
+.form__field.field-error .control [class*='control-'] {
+  border-color: #e22626;
+}
+.form__field.field-error .control [class*='control-']:before {
+  border-color: #e22626;
+}
+.form__field .mage-error {
+  background: #fff8d6;
+  border: 1px solid #e22626;
+  box-sizing: border-box;
+  color: #555555;
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 2px 0 0;
+  max-width: 380px;
+  padding: 6px 10px 10px;
+}
+.no-flexbox.no-flexboxlegacy .form__field .control-addon + .mage-error {
+  display: inline-block;
+  width: 100%;
+}
+.form__field[data-config-scope]:before {
+  color: #808080;
+  content: attr(data-config-scope);
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  top: 6px;
+}
+.control .form__field[data-config-scope]:nth-child(n+2):before {
+  content: '';
+}
+.form__field.field-disabled > .label {
+  color: #999999;
+}
+.form__field.field-disabled.field .control [class*='control-'][disabled] {
+  background-color: #e9e9e9;
+  border-color: #adadad;
+  color: #303030;
+  opacity: .5;
+}
+.control-fields .label ~ .control {
+  width: 100%;
+}
+.form__field {
+  border: 0;
+  padding: 0;
+}
+.form__field .note {
+  color: #303030;
+  margin: 10px 0 0;
+  max-width: 380px;
+  padding: 0;
+}
+.form__field .note:before {
+  display: none;
+}
+.form__field.form__field {
+  margin-bottom: 0;
+}
+.form__field.form__field + .form__field.form__field {
+  margin-top: 15px;
+}
+.form__field.form__field:not(.choice) ~ .choice {
+  margin-left: 20px;
+  margin-top: 5px;
+}
+.form__field.form__field.choice ~ .choice {
+  margin-top: 9px;
+}
+.form__field.form__field ~ .choice:last-child {
+  margin-bottom: 8px;
+}
+.fieldset > .form__field {
+  margin-bottom: 30px;
+}
+.form__field .label {
+  color: #303030;
+}
+.form__field:not(.choice) > .label {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 33px;
+  padding-right: 30px;
+  padding-top: 0;
+  white-space: nowrap;
+  width: 30%;
+}
+.form__field:not(.choice) > .label:before {
+  content: '.';
+  margin-left: -7px;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+}
+.form__field:not(.choice) > .label span {
+  display: inline-block;
+  line-height: 1.2;
+  vertical-align: middle;
+  white-space: normal;
+}
+.form__field.required > .label span:after {
+  color: #eb5202;
+  content: '*';
+  display: inline;
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 10px;
+  margin-top: 2px;
+  position: absolute;
+  z-index: 1;
+}
+.form__field.required > .label:after {
+  content: '';
+  margin-left: 0;
+}
+.form__field .control-file {
+  margin-top: 6px;
+}
+.form__field .control-select {
+  line-height: 33px;
+}
+.form__field .control-select:not([multiple]),
+.form__field .control-text {
+  height: 33px;
+  max-width: 380px;
+}
+.form__field .control-addon {
+  max-width: 380px;
+}
+.form__field .control-textarea,
+.form__field .control-select,
+.form__field .control-text {
+  background-color: #ffffff;
+  border: 1px solid #adadad;
+  border-radius: 1px;
+  color: #303030;
+  font-size: 15px;
+  font-weight: 500;
+  min-width: 11em;
+  padding: 0 10px;
+}
+.form__field .control-textarea:focus,
+.form__field .control-select:focus,
+.form__field .control-text:focus {
+  border-color: #007bdb;
+  box-shadow: none;
+  outline: 0;
+}
+.form__field .control-text {
+  line-height: auto;
+}
+.form__field .control-textarea {
+  line-height: 1.18em;
+  padding-bottom: 6px;
+  padding-top: 6px;
+}
+.form__field .control-select[multiple],
+.form__field .control-textarea {
+  height: ~" calc(6 * 1.2em + 14px)";
+  width: 100%;
+}
+.form__field .control-value {
+  display: inline-block;
+  padding: 6px 10px;
+}
+.form__field .control-fields .form__field:nth-child(n+2):not(.choice) > .label {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.form__field .control-select {
+  padding: 0;
+}
+.form__field .control-select option {
+  box-sizing: border-box;
+  display: block;
+  padding: 4px 10px;
+}
+.form__field .control-select optgroup {
+  display: block;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 33px;
+  list-style: inside;
+  padding: 4px 10px;
+}
+.form__field .control-range > .form__field:nth-child(2):before {
+  content: '\2014';
+  display: inline-block;
+  float: left;
+  line-height: 33px;
+  margin-left: -25px;
+  text-align: center;
+  width: 20px;
+}
+.form__field.choice {
+  padding-left: 26px;
+  padding-right: 0;
+  padding-top: 8px;
+  position: relative;
+  z-index: 1;
+}
+.form__field.choice .label {
+  display: inline;
+  float: none;
+  font-weight: 500;
+  line-height: 18px;
+  padding: 0;
+}
+.form__field.choice input {
+  margin-top: 3px !important;
+  position: absolute;
+  top: 8px;
+}
+.form__field.choice input[disabled] + .label {
+  cursor: not-allowed;
+  opacity: .5;
+}
+.control > .form__field.choice {
+  max-width: 380px;
+}
+.control > .form__field.choice:nth-child(1):nth-last-child(2),
+.control > .form__field.choice:nth-child(2):nth-last-child(1) {
+  display: inline-block;
+}
+.control > .form__field.choice:nth-child(1):nth-last-child(2) + .choice,
+.control > .form__field.choice:nth-child(2):nth-last-child(1) + .choice {
+  margin-left: 41px;
+  margin-top: 0;
+}
+.control > .form__field.choice:nth-child(1):nth-last-child(2) + .choice:before,
+.control > .form__field.choice:nth-child(2):nth-last-child(1) + .choice:before {
+  background: #cccccc;
+  content: '';
+  display: inline-block;
+  height: 20px;
+  left: -20px;
+  position: absolute;
+  top: 8px;
+  width: 1px;
+}
+.form__field.choice .label {
+  cursor: pointer;
+}
+.form__field.choice .label:before {
+  background: url('../Magento_Ui/images/choice_bkg.png') no-repeat -100% -100%;
+  border: 1px solid #adadad;
+  border-radius: 2px;
+  content: '';
+  height: 14px;
+  left: 0;
+  position: absolute;
+  top: 10px;
+  width: 14px;
+  z-index: 1;
+}
+.form__field.choice input:focus + .label:before {
+  border-color: #007bdb;
+  outline: 0;
+}
+.form__field.choice .control-radio + .label:before {
+  border-radius: 8px;
+}
+.form__field.choice .control-radio:checked + .label:before {
+  background-position: -26px -1px;
+}
+.form__field.choice .control-checkbox:checked + .label:before {
+  background-position: -1px -1px;
+}
+.form__field.choice input {
+  opacity: 0;
+}
+.fieldset > .form__field.choice {
+  margin-left: 30%;
+}
+.form__field .control-after,
+.form__field .control-before {
+  border: 0;
+  box-sizing: border-box;
+  color: #858585;
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 300;
+  height: 33px;
+  line-height: 33px;
+  padding: 0 3px;
+}
+.no-flexbox.no-flexboxlegacy .form__field .control-before,
+.no-flexbox.no-flexboxlegacy .form__field .control-addon {
+  float: left;
+  white-space: nowrap;
+}
+.form__field .control-addon {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  max-width: 380px;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+.form__field .control-addon > * {
+  position: relative;
+  z-index: 1;
+}
+.form__field .control-addon .control-text[disabled][type],
+.form__field .control-addon .control-select[disabled][type],
+.form__field .control-addon .control-select,
+.form__field .control-addon .control-text {
+  background: transparent!important;
+  border: 0;
+  flex: 1;
+  order: 1;
+  vertical-align: top;
+  width: auto;
+}
+.form__field .control-addon .control-text[disabled][type]:focus,
+.form__field .control-addon .control-select[disabled][type]:focus,
+.form__field .control-addon .control-select:focus,
+.form__field .control-addon .control-text:focus {
+  box-shadow: none;
+}
+.form__field .control-addon .control-text[disabled][type]:focus + label:before,
+.form__field .control-addon .control-select[disabled][type]:focus + label:before,
+.form__field .control-addon .control-select:focus + label:before,
+.form__field .control-addon .control-text:focus + label:before {
+  border-color: #007bdb;
+  outline: 0;
+}
+.form__field .control-addon .control-text[disabled][type] + label,
+.form__field .control-addon .control-select[disabled][type] + label,
+.form__field .control-addon .control-select + label,
+.form__field .control-addon .control-text + label {
+  padding-left: 10px;
+  position: static!important;
+  z-index: 0;
+}
+.form__field .control-addon .control-text[disabled][type] + label > *,
+.form__field .control-addon .control-select[disabled][type] + label > *,
+.form__field .control-addon .control-select + label > *,
+.form__field .control-addon .control-text + label > * {
+  position: relative;
+  vertical-align: top;
+  z-index: 2;
+}
+.form__field .control-addon .control-text[disabled][type] + label:before,
+.form__field .control-addon .control-select[disabled][type] + label:before,
+.form__field .control-addon .control-select + label:before,
+.form__field .control-addon .control-text + label:before {
+  background: #ffffff;
+  border: 1px solid #adadad;
+  border-radius: 1px;
+  box-sizing: border-box;
+  content: '';
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 0;
+}
+.form__field .control-addon .control-text[disabled][type][disabled] + label:before,
+.form__field .control-addon .control-select[disabled][type][disabled] + label:before,
+.form__field .control-addon .control-select[disabled] + label:before,
+.form__field .control-addon .control-text[disabled] + label:before {
+  background: #e9e9e9;
+  opacity: .5;
+}
+.form__field .control-after {
+  order: 3;
+}
+.form__field .control-after:last-child {
+  padding-right: 10px;
+}
+.form__field .control-before {
+  order: 0;
+}
+.form__field .control-some {
+  display: flex;
+}
+.form__field [class*='control-grouped'] {
+  box-sizing: border-box;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+.form__field [class*='control-grouped'] > .form__field {
+  display: table-cell;
+  vertical-align: top;
+  width: 50%;
+}
+.form__field [class*='control-grouped'] > .form__field > .control {
+  float: none;
+  width: 100%;
+}
+.form__field [class*='control-grouped'] > .form__field:nth-child(n+2) {
+  padding-left: 20px;
+}
+.form__field [class*='control-grouped'] > .form__field:nth-child(n+2):not(.choice) .label {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.form__field [required] {
+  box-shadow: none;
+}
+fieldset.form__field {
+  position: relative;
+}
+fieldset.form__field [class*='control-grouped'] > .form__field:first-child > .label,
+fieldset.form__field .control-fields > .form__field:first-child > .label {
+  cursor: pointer;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 30%;
+}
+.control-text + .ui-datepicker-trigger {
+  background-image: none;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  -moz-box-sizing: content-box;
+  box-shadow: none;
+  text-shadow: none;
+  line-height: inherit;
+  font-weight: 400;
+  display: inline-block;
+  text-decoration: none;
+  margin-left: -40px;
+}
+.control-text + .ui-datepicker-trigger:focus,
+.control-text + .ui-datepicker-trigger:active {
+  background: none;
+  border: none;
+}
+.control-text + .ui-datepicker-trigger:hover {
+  background: none;
+  border: none;
+}
+.control-text + .ui-datepicker-trigger.disabled,
+.control-text + .ui-datepicker-trigger[disabled],
+fieldset[disabled] .control-text + .ui-datepicker-trigger {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.control-text + .ui-datepicker-trigger > span {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.control-text + .ui-datepicker-trigger:after {
+  font-family: 'icons-blank-theme';
+  content: '\e612';
+  font-size: 38px;
+  line-height: 33px;
+  color: #514943;
+  overflow: hidden;
+  speak: none;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+.control-text + .ui-datepicker-trigger img {
+  display: none;
+}
+.form-select-label {
+  border: 1px solid #adadad;
+  border-radius: 0;
+  color: #303030;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+}
+.form-select-label:hover,
+.form-select-label:hover:after {
+  border-color: #949494;
+}
+.form-select-label:focus,
+.form-select-label:focus:after,
+.form-select-label:active,
+.form-select-label:active:after {
+  border-color: #007bdb;
+}
+.form-select-label:after {
+  background: #e3e3e3;
+  border-left: 1px solid #adadad;
+  bottom: 0;
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2.36em;
+  z-index: -2;
+}
+.ie9 .form-select-label:after {
+  display: none;
+}
+.form-select-label:before {
+  border-color: #514943 transparent transparent transparent;
+  border-style: solid;
+  border-width: 5px 4px 0 4px;
+  content: '';
+  height: 0;
+  margin-right: -4px;
+  margin-top: -2.5px;
+  position: absolute;
+  right: 1.18em;
+  top: 50%;
+  width: 0;
+  z-index: -1;
+}
+.ie9 .form-select-label:before {
+  display: none;
+}
+.form-select-label .form-el-select {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  content: '';
+  display: block;
+  margin: 0;
+  padding: ~" 0.35em calc(2.36em + 10%) 0.35em 0.55em";
+  width: 110%;
+}
+.ie9 .form-select-label .form-el-select {
+  padding-right: 0.55em;
+  width: 100%;
+}
+.form-el-select {
+  background: #ffffff;
+  border: 1px solid #adadad;
+  border-radius: 0;
+  color: #303030;
+  display: block;
+  padding: 0.35em 0.55em;
 }
 table {
   color: #303030;
@@ -2077,7 +2597,8 @@ table th.required:after {
 }
 .menu-wrapper .logo {
   display: block;
-  margin-bottom: 1.8rem;
+  margin-bottom: 2.2rem;
+  height: 4.1rem;
   position: relative;
   text-align: center;
 }
@@ -2089,14 +2610,15 @@ table th.required:after {
   transform: scale(0.95);
 }
 .menu-wrapper .logo .logo-img {
+  width: 3.5rem;
+  height: 4.1rem;
   transition: -webkit-filter 0.2s linear, filter 0.2s linear, transform 0.1s linear;
 }
 .admin__menu {
   position: relative;
 }
-.admin__menu ul > li {
+.admin__menu li {
   display: block;
-  text-align: center;
 }
 .admin__menu .level-0:first-child > a {
   position: relative;
@@ -2112,8 +2634,13 @@ table th.required:after {
   width: 68%;
   margin-left: 16%;
 }
-.admin__menu .level-0:first-child > a.active:after {
+.admin__menu .level-0:first-child > a._hover:after {
   display: none;
+}
+.admin__menu .level-0._hover > a,
+.admin__menu .level-0:hover > a {
+  color: #f7f3eb;
+  background-color: #524d49;
 }
 .admin__menu .level-0 > a {
   color: #aaa6a0;
@@ -2126,15 +2653,11 @@ table th.required:after {
   text-decoration: none;
   text-transform: uppercase;
   transition: background-color 0.1s linear;
+  text-align: center;
 }
-.admin__menu .level-0 > a.active {
-  background-color: #524d49;
+.admin__menu .level-0 > a._active {
   color: #f7f3eb;
-}
-.admin__menu .level-0 > a.hover,
-.admin__menu .level-0 > a:hover {
-  color: #f7f3eb;
-  background-color: #524d49;
+  font-weight: 700;
 }
 .admin__menu .level-0 > a:before {
   content: '\e606';
@@ -2143,6 +2666,63 @@ table th.required:after {
   font-size: 2.2rem;
   margin-bottom: .3rem;
   height: 2.2rem;
+}
+.admin__menu .level-0 > .submenu {
+  display: none;
+  position: absolute;
+  top: -7.5rem;
+  left: 100%;
+  padding: 2rem 0 0;
+  background-color: #524d49;
+  opacity: 0;
+  visibility: hidden;
+  min-height: ~" calc(7.5rem + 2rem + 100%)";
+}
+.admin__menu .level-0._recent._hover .submenu {
+  opacity: 1;
+  visibility: visible;
+}
+.admin__menu .level-1 {
+  margin-right: 3rem;
+  margin-left: 3rem;
+}
+.admin__menu [class*='level-']:not(.level-0) {
+  margin-bottom: 2.5rem;
+}
+.admin__menu .submenu > ul {
+  min-width: 20.8rem;
+}
+.admin__menu .submenu a {
+  color: #fcfcfc;
+}
+.admin__menu .submenu .parent {
+  margin-bottom: 6rem;
+}
+.admin__menu .submenu .parent > a {
+  display: block;
+  margin-bottom: 2.2rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #a79d95;
+  pointer-events: none;
+}
+.admin__menu .submenu .column {
+  display: table-cell;
+}
+.admin__menu .submenu-title {
+  display: block;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-right: 3rem;
+  margin-left: 3rem;
+  margin-bottom: 4.2rem;
+}
+.admin__menu .submenu-sub-title {
+  display: block;
+  margin: -3.8rem 3rem 3.8rem;
+  color: #ffffff;
+  font-size: 1.19rem;
 }
 .admin__menu .item-dashboard > a:before {
   padding-top: 0.4rem;
@@ -2313,478 +2893,4 @@ table th.required:after {
 .dashboard-sales-value {
   font-size: 2.4rem;
   font-weight: 600;
-}
-.col-2-left-layout {
-  margin-top: 50px;
-  margin-left: -30px;
-  width: auto;
-}
-.col-2-left-layout:before,
-.col-2-left-layout:after {
-  content: "";
-  display: table;
-}
-.col-2-left-layout:after {
-  clear: both;
-}
-.col-2-left-layout .main-col {
-  float: left;
-  width: ~" calc( (100%) * 0.75 - 30px )";
-  margin-left: 30px;
-  float: right;
-}
-.col-2-left-layout .side-col {
-  float: left;
-  width: ~" calc( (100%) * 0.25 - 30px )";
-  margin-left: 30px;
-}
-.admin__fieldset-wrapper-title {
-  padding: 14px 0 16px;
-  margin-bottom: 30px;
-}
-.admin__block {
-  width: 100%;
-  border: 1px solid black;
-}
-.admin__fieldset {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  min-width: 0;
-}
-.admin__fieldset > .admin__field {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  margin-left: -30px;
-}
-.admin__fieldset > .admin__field:before,
-.admin__fieldset > .admin__field:after {
-  content: "";
-  display: table;
-}
-.admin__fieldset > .admin__field:after {
-  clear: both;
-}
-.admin__fieldset > .admin__field > .admin__field-control {
-  float: left;
-  width: ~" calc( (100%) * 0.4444444444444444 - 30px )";
-  margin-left: 30px;
-}
-.admin__fieldset > .admin__field > .admin__field-label {
-  float: left;
-  width: ~" calc( (100%) * 0.3333333333333333 - 30px )";
-  margin-left: 30px;
-}
-.admin__field-label {
-  margin: 0;
-  color: #303030;
-  text-align: right;
-}
-.admin__field-label + br {
-  display: none;
-}
-[class]:not(.admin__field-option) > .admin__field-label {
-  font-family: 'Open Sans', arial, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  padding-top: 0;
-  line-height: 33px;
-  white-space: nowrap;
-}
-[class]:not(.admin__field-option) > .admin__field-label:before {
-  content: ".";
-  visibility: hidden;
-  width: 0;
-  margin-left: -7px;
-  overflow: hidden;
-}
-[class]:not(.admin__field-option) > .admin__field-label span {
-  white-space: normal;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 1.2;
-}
-._required > .admin__field-label span:after {
-  content: "*";
-  color: #eb5202;
-  display: inline;
-  font-weight: 500;
-  font-size: 16px;
-  margin-top: 2px;
-  position: absolute;
-  z-index: 1;
-  margin-left: 10px;
-}
-._disabled > .admin__field-label {
-  color: #999999;
-}
-.admin__field {
-  margin-bottom: 0;
-}
-.admin__field + .admin__field {
-  margin-top: 15px;
-}
-.admin__field:not(.admin__field-option) ~ .admin__field-option {
-  margin-left: 20px;
-  margin-top: 5px;
-}
-.admin__field.admin__field-option ~ .admin__field-option {
-  margin-top: 9px;
-}
-.admin__field ~ .admin__field-option:last-child {
-  margin-bottom: 8px;
-}
-.admin__fieldset > .admin__field {
-  margin-bottom: 30px;
-  position: relative;
-  z-index: 1;
-}
-.admin__fieldset > .admin__field:hover {
-  z-index: 2;
-}
-.admin__field[data-config-scope]:before {
-  float: left;
-  width: ~" calc( (100%) * 0.16666666666666666 - 30px )";
-  margin-left: 30px;
-  position: absolute;
-  right: 0;
-  display: inline-block;
-  content: attr(data-config-scope);
-  float: right;
-  color: #808080;
-}
-.admin__field-control .admin__field[data-config-scope]:nth-child(n+2):before {
-  content: "";
-}
-.admin__field._error .admin__field-control [class*="admin__addon-"]:before,
-.admin__field._error .admin__field-control > [class*="admin__control-"] {
-  border-color: #e22626;
-}
-.admin__field-error {
-  border: 1px solid #e22626;
-  display: block;
-  margin: 2px 0 0;
-  padding: 6px 10px 10px;
-  background: #fff8d6;
-  color: #555555;
-  font-size: 12px;
-  font-weight: 500;
-  box-sizing: border-box;
-}
-.admin__field-note {
-  color: #303030;
-  padding: 0;
-  margin: 10px 0 0;
-}
-.admin__control-fields .admin__field-label ~ .admin__field-control {
-  width: 100%;
-}
-.admin__field-option {
-  padding-top: 8px;
-}
-.admin__field-option .admin__field-label {
-  text-align: left;
-}
-.admin__field-control > .admin__field-option:nth-child(1):nth-last-child(2),
-.admin__field-control > .admin__field-option:nth-child(2):nth-last-child(1) {
-  display: inline-block;
-}
-.admin__field-control > .admin__field-option:nth-child(1):nth-last-child(2) + .admin__field-option,
-.admin__field-control > .admin__field-option:nth-child(2):nth-last-child(1) + .admin__field-option {
-  display: inline-block;
-  margin-left: 41px;
-  margin-top: 0;
-}
-.admin__field-control > .admin__field-option:nth-child(1):nth-last-child(2) + .admin__field-option:before,
-.admin__field-control > .admin__field-option:nth-child(2):nth-last-child(1) + .admin__field-option:before {
-  content: "";
-  position: absolute;
-  display: inline-block;
-  height: 20px;
-  top: 8px;
-  left: -20px;
-  width: 1px;
-  background: #cccccc;
-}
-.admin__control-fields .admin__field:nth-child(n+2):not(.admin__field-option) > .admin__field-label {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-[class*="admin__control-grouped"] {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-  box-sizing: border-box;
-}
-[class*="admin__control-grouped"] > .admin__field {
-  display: table-cell;
-  width: 50%;
-  vertical-align: top;
-}
-[class*="admin__control-grouped"] > .admin__field > .admin__field-control {
-  width: 100%;
-  float: none;
-}
-[class*="admin__control-grouped"] > .admin__field:nth-child(n+2) {
-  padding-left: 20px;
-}
-[class*="admin__control-grouped"] > .admin__field:nth-child(n+2):not(.admin__field-option) .admin__field-label {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-[class*="admin__control-grouped"] > .admin__field:first-child,
-.admin__control-fields > .admin__field:first-child {
-  position: static;
-}
-[class*="admin__control-grouped"] > .admin__field:first-child > .admin__field-label,
-.admin__control-fields > .admin__field:first-child > .admin__field-label {
-  position: absolute;
-  left: 0;
-  top: 0;
-  float: left;
-  width: ~" calc( (100%) * 0.25 - 30px )";
-  margin-left: 30px;
-  opacity: 0;
-  cursor: pointer;
-}
-.address-item-edit-content {
-  padding: 15px 30px;
-}
-.address-item-edit-content .admin__field > .admin__field-control,
-.address-item-edit-content .admin__field > .admin__field-label {
-  text-align: left;
-  float: none;
-}
-.address-item-edit-content .admin__field > .admin__field-control {
-  width: ~" calc( 100% - 30px )";
-}
-.address-item-edit-content .admin__field-label {
-  margin-top: -16px;
-}
-.address-item-edit-content ._required .admin__field-label span {
-  padding-left: 15px;
-}
-.address-item-edit-content ._required .admin__field-label span:after {
-  left: 0;
-  margin-left: 30px;
-}
-.address-list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 360px;
-  float: left;
-}
-.address-list .address-list-item {
-  margin-bottom: 30px;
-}
-.address-list .action-delete {
-  background-color: transparent;
-  padding: 0;
-}
-.address-list .action-delete:hover {
-  box-shadow: 0;
-  border: 0;
-}
-.address-item-edit {
-  margin-left: 359px;
-}
-.address-item-edit .admin__legend {
-  display: none;
-}
-.admin__section-nav {
-  padding-bottom: 51px;
-}
-.admin__section-nav-title {
-  padding: 0;
-  margin: 0 0 -1px;
-  color: #333333;
-  display: block;
-  padding: 20px 13px;
-  background: #f1f1f1;
-  text-transform: uppercase;
-  border: 1px solid #e3e3e3;
-  line-height: 1.2;
-}
-.admin__section-nav-title._collapsible {
-  padding-right: 35px;
-}
-.admin__section-nav-title._collapsible:after {
-  content: '\e628';
-  font-family: 'Icons';
-  -webkit-font-smoothing: antialiased;
-  font-weight: normal;
-  speak: none;
-  position: absolute;
-  right: 18px;
-  top: 22px;
-  font-size: 13px;
-}
-.admin__section-nav-title strong {
-  font-weight: 700;
-}
-.admin__section-nav-items {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-.admin__section-nav-item {
-  padding: 0;
-  border-left: 3px solid transparent;
-  margin: 0 0 -1px;
-}
-.admin__section-nav-item._active {
-  border-color: #eb5202;
-}
-.admin__section-nav-item._active .admin__section-nav-link {
-  border-color: #e3e3e3;
-  margin: 0;
-}
-.admin__section-nav-item._active .admin__section-nav-link:hover {
-  text-decoration: none;
-}
-.admin__section-nav-item._loading {
-  position: relative;
-  z-index: 1;
-}
-.admin__section-nav-item._loading:before {
-  content: "";
-  display: block;
-  position: absolute;
-  z-index: 2;
-  background: url("../images/loader-2.gif") no-repeat 50% 50%;
-  background-size: 120px;
-  width: 20px;
-  height: 20px;
-  top: 21px;
-  right: 5px;
-}
-.admin__section-nav-link {
-  border: 1px solid transparent;
-  border-width: 1px 0;
-  line-height: 1.2;
-  font-weight: 500;
-  color: #333333;
-  display: block;
-  padding: 20px 30px 20px 10px;
-}
-.admin__section-nav-link:hover {
-  color: #333333;
-  text-decoration: underline;
-}
-.admin__section-nav-link._changed {
-  position: relative;
-  z-index: 1;
-}
-.admin__section-nav-link._changed:before {
-  content: '\e623';
-  font-family: 'Icons';
-  -webkit-font-smoothing: antialiased;
-  font-style: normal;
-  font-weight: normal;
-  speak: none;
-  position: absolute;
-  z-index: 2;
-  font-size: 17px;
-  color: #eb5202;
-  width: 20px;
-  height: 20px;
-  top: 15px;
-  right: 5px;
-}
-.admin__field-tooltip {
-  display: inline-block;
-  vertical-align: top;
-  margin-top: 5px;
-  position: relative;
-  z-index: 1;
-  width: 0;
-  overflow: visible;
-}
-.admin__field-option .admin__field-tooltip {
-  margin-top: 10px;
-}
-.admin__field-tooltip:hover {
-  z-index: 99;
-}
-.admin__field-tooltip-action {
-  position: relative;
-  z-index: 2;
-  margin-left: 18px;
-  width: 22px;
-  height: 22px;
-  display: inline-block;
-  cursor: pointer;
-}
-.admin__field-tooltip-action:before {
-  content: "?";
-  font-weight: 500;
-  font-size: 18px;
-  display: inline-block;
-  overflow: hidden;
-  height: 22px;
-  border-radius: 11px;
-  line-height: 22px;
-  width: 22px;
-  text-align: center;
-  color: #ffffff;
-  background-color: #514943;
-}
-.admin__field-tooltip-action span {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-.admin__control-text:focus + .admin__field-tooltip-content,
-.admin__field-tooltip:hover .admin__field-tooltip-content {
-  display: block;
-}
-.admin__field-tooltip-content {
-  display: none;
-  position: absolute;
-  z-index: 1;
-  width: 320px;
-  background: #fff8d7;
-  padding: 15px 25px;
-  right: -66px;
-  border: 1px solid #adadad;
-  border-radius: 1px;
-  bottom: 42px;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
-}
-.admin__field-tooltip-content:after,
-.admin__field-tooltip-content:before {
-  content: "";
-  display: block;
-  border: 16px solid transparent;
-  height: 0;
-  width: 0;
-  border-top-color: #adadad;
-  position: absolute;
-  right: 20px;
-  top: 100%;
-  z-index: 3;
-}
-.admin__field-tooltip-content:after {
-  border-top-color: #fff8d7;
-  margin-top: -1px;
-  z-index: 4;
 }

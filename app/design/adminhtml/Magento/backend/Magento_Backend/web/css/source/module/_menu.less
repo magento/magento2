@@ -9,7 +9,14 @@
 
 //
 //  Variables
-//  _____________________________________________
+//  ---------------------------------------------
+
+@menu-wrapper__padding-horizontal: 1.2rem;
+
+@menu-logo__margin-bottom: 2.2rem;
+@menu-logo-img__width: 3.5rem;
+@menu-logo-img__height: 4.1rem;
+@menu-logo__outer-size: @menu-wrapper__padding-horizontal + @menu-logo-img__height + @menu-logo__margin-bottom;
 
 @menu__background-color: @color-very-dark-grayish-orange;
 
@@ -17,32 +24,42 @@
 @menu-item__color: @color-gray65-lighten;
 @menu-item__active__color: @color-ivory;
 @menu-item__active__background-color: @color-brownie-almost;
-
 @menu-item-icon__height: 2.2rem;
 
 @menu-line-before__height: 1px;
 @menu-line-before__background-color: @color-brownie-vanilla;
 
+@submenu__background-color: @menu-item__active__background-color;
+@submenu__padding-horizontal: 3rem;
+@submenu__padding-vertical: 2rem;
+@submenu-title__color: @color-white;
+@submenu-link__color: @color-very-light-gray;
+@submenu-section-label__color: @color-gray65-almost;
+@submenu-heading-group__indent-bottom: 3.8rem;
+
 //
+//  Menu wrapper
+//  ---------------------------------------------
 
 .menu-wrapper {
     background-color: @menu__background-color;
     height: 100%;
     left: 0;
-    padding: 1.2rem 0;
+    padding: @menu-wrapper__padding-horizontal 0;
     position: fixed;
     top: 0;
     width: @menu__width;
     z-index: @menu__z-index;
     .logo {
         display: block;
-        margin-bottom: 1.8rem;
+        margin-bottom: @menu-logo__margin-bottom;
+        height: @menu-logo-img__height;
         position: relative;
         text-align: center;
         &:hover {
             .logo-img {
                 -webkit-filter: brightness(1.1);
-                        filter: brightness(1.1);
+                filter: brightness(1.1);
             }
         }
         &:active {
@@ -51,20 +68,23 @@
             }
         }
         .logo-img {
+            width: @menu-logo-img__width;
+            height: @menu-logo-img__height;
             transition: -webkit-filter .2s linear,
-                                filter .2s linear,
-                        transform .1s linear;
+            filter .2s linear,
+            transform .1s linear;
         }
     }
 }
 
+//
+//  First menu level
+//  ---------------------------------------------
+
 .admin__menu {
     position: relative;
-    ul {
-        > li {
-            display: block;
-            text-align: center;
-        }
+    li {
+        display: block;
     }
     .level-0 {
         &:first-child {
@@ -83,11 +103,19 @@
                     width: @_menu-separator__width;
                     margin-left: (100% - @_menu-separator__width) / 2;
                 }
-                &.active {
-                  &:after {
-                      display: none;
-                  }
+                &._hover {
+                    &:after {
+                        display: none;
+                    }
                 }
+            }
+        }
+        //  Hover state for menu level 0 item
+        &._hover,
+        &:hover {
+            > a {
+                color: @menu-item__active__color;
+                background-color: @menu-item__active__background-color;
             }
         }
         > a {
@@ -101,14 +129,11 @@
             text-decoration: none;
             text-transform: uppercase;
             transition: background-color .1s linear;
-            &.active {
-                background-color: @menu-item__active__background-color;
+            text-align: center;
+            //  Active state for menu level 0 item
+            &._active {
                 color: @menu-item__active__color;
-            }
-            &.hover,
-            &:hover {
-                color: @menu-item__active__color;
-                background-color: @menu-item__active__background-color;
+                font-weight: @font-weight__bold;
             }
             &:before {
                 &:extend(.abs-icon all);
@@ -120,6 +145,84 @@
                 height: @menu-item-icon__height;
             }
         }
+    }
+
+    //
+    //  Second menu level
+    //  ---------------------------------------------
+
+    .level-0 {
+        > .submenu {
+            display: none;
+            position: absolute;
+            top: -@menu-logo__outer-size;
+            left: 100%;
+            padding: @submenu__padding-vertical 0 0;
+            background-color: @submenu__background-color;
+            opacity: 0;
+            visibility: hidden;
+            min-height: ~'calc(@{menu-logo__outer-size} + 2rem + 100%)';
+        }
+        &._recent {
+            &._hover {
+                .submenu {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+        }
+    }
+
+    .level-1 {
+        margin-right: @submenu__padding-horizontal;
+        margin-left: @submenu__padding-horizontal;
+    }
+
+    [class*='level-'] {
+        &:not(.level-0) {
+            margin-bottom: 2.5rem;
+        }
+    }
+
+    .submenu {
+        > ul {
+            min-width: 20.8rem;
+        }
+        a {
+            color: @submenu-link__color;
+        }
+        .parent {
+            margin-bottom: 6rem;
+            //  Section title
+            > a {
+                display: block;
+                margin-bottom: 2.2rem;
+                font-size: 1.6rem;
+                font-weight: @font-weight__semibold;
+                color: @submenu-section-label__color;
+                pointer-events: none;
+            }
+        }
+        .column {
+            display: table-cell;
+        }
+    }
+
+    .submenu-title {
+        display: block;
+        font-size: 2.2rem;
+        font-weight: @font-weight__semibold;
+        color: @submenu-title__color;
+        margin-right: @submenu__padding-horizontal;
+        margin-left: @submenu__padding-horizontal;
+        margin-bottom: .4rem + @submenu-heading-group__indent-bottom;
+    }
+
+    .submenu-sub-title {
+        display: block;
+        margin: -(@submenu-heading-group__indent-bottom) @submenu__padding-horizontal 3.8rem;
+        color: @submenu-title__color;
+        font-size: @font-size__small;
     }
 
     //

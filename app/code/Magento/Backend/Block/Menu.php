@@ -165,7 +165,7 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _renderAnchorCssClass($menuItem, $level)
     {
-        return $this->_isItemActive($menuItem, $level) ? 'active' : '';
+        return $this->_isItemActive($menuItem, $level) ? '_active' : '';
     }
 
     /**
@@ -191,7 +191,7 @@ class Menu extends \Magento\Backend\Block\Template
         $output = ($this->_isItemActive(
             $menuItem,
             $level
-        ) ? 'active' : '') .
+        ) ? '_active' : '') .
             ' ' .
             ($menuItem->hasChildren() ? 'parent' : '') .
             ' ' .
@@ -409,6 +409,9 @@ class Menu extends \Magento\Backend\Block\Template
         $colStops = null;
         if ($level == 0 && $limit) {
             $colStops = $this->_columnBrake($menuItem->getChildren(), $limit);
+        }
+        if (!($level == 1 && $limit)) {
+            $output .= '<strong class="submenu-title">' . $this->_getAnchorLabel($menuItem) . '</strong>';
         }
         $output .= $this->renderNavigation($menuItem->getChildren(), $level + 1, $limit, $colStops);
         $output .= '</div>';
