@@ -123,7 +123,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
     /**
      * Validation of object data. Checking for unique variable code
      *
-     * @return bool|string
+     * @return \Magento\Framework\Phrase|bool
      */
     public function validate()
     {

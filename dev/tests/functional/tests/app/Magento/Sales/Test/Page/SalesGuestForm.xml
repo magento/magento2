@@ -1,16 +1,12 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="sales/guest/form" module="Magento_Sales">
-    <blocks>
-        <searchForm>
-            <class>Magento\Sales\Test\Block\Widget\Guest\Form</class>
-            <locator>#oar-widget-orders-and-returns-form</locator>
-            <strategy>css selector</strategy>
-        </searchForm>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="SalesGuestForm" mca="sales/guest/form" module="Magento_Sales">
+    <block name="searchForm" class="Magento\Sales\Test\Block\Widget\Guest\Form" locator="#oar-widget-orders-and-returns-form" strategy="css selector"/>
+  </page>
+</config>

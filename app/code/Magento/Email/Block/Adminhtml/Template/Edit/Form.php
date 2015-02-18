@@ -52,7 +52,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $this->pageConfig->addPageAsset('prototype/window.js');
         $this->pageConfig->addPageAsset('prototype/windows/themes/default.css');
-        $this->pageConfig->addPageAsset('Magento_Core::prototype/magento.css');
+        $this->pageConfig->addPageAsset('Magento_Theme::prototype/magento.css');
         return parent::_prepareLayout();
     }
 

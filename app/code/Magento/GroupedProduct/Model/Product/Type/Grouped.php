@@ -61,7 +61,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -92,7 +92,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Msrp\Helper\Data $msrpData
@@ -111,7 +111,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
         \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
         \Magento\Msrp\Helper\Data $msrpData
@@ -336,7 +336,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Object $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
-     * @return array|string
+     * @return \Magento\Framework\Phrase|array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _prepareProduct(\Magento\Framework\Object $buyRequest, $product, $processMode)
@@ -364,7 +364,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                             }
 
                             if (!isset($_result[0])) {
-                                return __('We cannot process the item.');
+                                return __('We cannot process the item.')->render();
                             }
 
                             if ($isStrictProcessMode) {
@@ -402,7 +402,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
         }
 
-        return __('Please specify the quantity of product(s).');
+        return __('Please specify the quantity of product(s).')->render();
     }
 
     /**

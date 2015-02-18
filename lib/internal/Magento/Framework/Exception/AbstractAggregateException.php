@@ -74,7 +74,7 @@ abstract class AbstractAggregateException extends LocalizedException
                 // First call: simply overwrite the message and params
                 $this->rawMessage = $rawMessage;
                 $this->params = $params;
-                $this->message = __($rawMessage, $params);
+                $this->message = (string)new \Magento\Framework\Phrase($rawMessage, $params);
             } elseif (2 === $this->addErrorCalls) {
                 // Second call: store the error from the first call and the second call in the array
                 // restore the message and params to their original value

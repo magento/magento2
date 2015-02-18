@@ -13,7 +13,7 @@
         <section id="section_1" sortOrder="10" type="text">
             <class>css class</class>
             <label>section label</label>
-            <resource>Magento_Adminhtml::acl</resource>
+            <resource>Magento_Backend::acl</resource>
             <header_css>some css class</header_css>
             <tab>tab_1</tab>
             <group id="group_1" sortOrder="10" type="text">

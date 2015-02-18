@@ -85,7 +85,7 @@ class Config extends \Magento\Framework\Object
     protected $_backendUrl;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -97,7 +97,7 @@ class Config extends \Magento\Framework\Object
      * @param \Magento\Variable\Model\Variable\Config $variableConfig
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $windowSize
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -110,7 +110,7 @@ class Config extends \Magento\Framework\Object
         \Magento\Variable\Model\Variable\Config $variableConfig,
         \Magento\Widget\Model\Widget\Config $widgetConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $windowSize = [],
         array $data = []
     ) {
@@ -218,7 +218,7 @@ class Config extends \Magento\Framework\Object
     {
         $wysiwygState = $this->_scopeConfig->getValue(
             self::WYSIWYG_STATUS_CONFIG_PATH,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
         return in_array($wysiwygState, [self::WYSIWYG_ENABLED, self::WYSIWYG_HIDDEN]);
@@ -233,7 +233,7 @@ class Config extends \Magento\Framework\Object
     {
         $status = $this->_scopeConfig->getValue(
             self::WYSIWYG_STATUS_CONFIG_PATH,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return $status == self::WYSIWYG_HIDDEN;
     }

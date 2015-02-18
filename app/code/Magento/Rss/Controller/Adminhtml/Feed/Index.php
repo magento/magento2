@@ -22,7 +22,7 @@ class Index extends \Magento\Rss\Controller\Adminhtml\Feed
      */
     public function execute()
     {
-        if (!$this->scopeConfig->getValue('rss/config/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)) {
+        if (!$this->scopeConfig->getValue('rss/config/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             throw new NotFoundException();
         }
 

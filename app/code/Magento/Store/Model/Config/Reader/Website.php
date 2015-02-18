@@ -69,7 +69,7 @@ class Website implements \Magento\Framework\App\Config\Scope\ReaderInterface
         $website = $this->_websiteFactory->create();
         $website->load($code);
         $collection = $this->_collectionFactory->create(
-            ['scope' => \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITES, 'scopeId' => $website->getId()]
+            ['scope' => \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES, 'scopeId' => $website->getId()]
         );
         $dbWebsiteConfig = [];
         foreach ($collection as $configValue) {

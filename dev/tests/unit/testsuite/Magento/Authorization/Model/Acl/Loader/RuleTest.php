@@ -25,7 +25,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false);
-        $this->_rootResourceMock = new \Magento\Framework\Acl\RootResource('Magento_Adminhtml::all');
+        $this->_rootResourceMock = new \Magento\Framework\Acl\RootResource('Magento_Backend::all');
         $this->_model = new \Magento\Authorization\Model\Acl\Loader\Rule(
             $this->_rootResourceMock,
             $this->_resourceMock
@@ -48,7 +48,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 [
-                    ['role_id' => 1, 'resource_id' => 'Magento_Adminhtml::all', 'permission' => 'allow'],
+                    ['role_id' => 1, 'resource_id' => 'Magento_Backend::all', 'permission' => 'allow'],
                     ['role_id' => 2, 'resource_id' => 1, 'permission' => 'allow'],
                     ['role_id' => 3, 'resource_id' => 1, 'permission' => 'deny'],
                 ]
@@ -60,7 +60,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $aclMock = $this->getMock('Magento\Framework\Acl');
         $aclMock->expects($this->any())->method('has')->will($this->returnValue(true));
         $aclMock->expects($this->at(1))->method('allow')->with('1', null, null);
-        $aclMock->expects($this->at(2))->method('allow')->with('1', 'Magento_Adminhtml::all', null);
+        $aclMock->expects($this->at(2))->method('allow')->with('1', 'Magento_Backend::all', null);
         $aclMock->expects($this->at(4))->method('allow')->with('2', 1, null);
         $aclMock->expects($this->at(6))->method('deny')->with('3', 1, null);
 

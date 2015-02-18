@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Test\Constraint;
 
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
@@ -37,7 +37,7 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
      * Assert that message from dataSet is displayed on order(s) view page on backend.
      *
      * @param GiftMessage $giftMessage
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @param OrderIndex $orderIndex
      * @param array $products
      * @param string $orderId
@@ -45,7 +45,7 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
      */
     public function processAssert(
         GiftMessage $giftMessage,
-        OrderView $orderView,
+        SalesOrderView $orderView,
         OrderIndex $orderIndex,
         array $products,
         $orderId
