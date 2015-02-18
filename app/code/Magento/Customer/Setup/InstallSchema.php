@@ -1,8 +1,8 @@
 <?php
 /**
-* Copyright © 2015 Magento. All rights reserved.
-* See COPYING.txt for license details.
-*/
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Customer\Setup;
 
@@ -349,14 +349,22 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('customer_address_entity_decimal', 'entity_id', 'customer_address_entity', 'entity_id'),
+            $installer->getFkName('customer_address_entity_decimal',
+                'entity_id',
+                'customer_address_entity',
+                'entity_id'
+            ),
             'entity_id',
             $installer->getTable('customer_address_entity'),
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('customer_address_entity_decimal', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
+            $installer->getFkName('customer_address_entity_decimal',
+                'entity_type_id',
+                'eav_entity_type',
+                'entity_type_id'
+            ),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
