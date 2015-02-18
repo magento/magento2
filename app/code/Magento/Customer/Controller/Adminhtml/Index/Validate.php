@@ -47,7 +47,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
             $errors = $this->customerAccountManagement->validate($customer);
         } catch (\Magento\Framework\Validator\ValidatorException $exception) {
             /* @var $error Error */
-            foreach ($exception->getMessages() as $error) {
+            foreach ($exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR) as $error) {
                 $errors[] = $error->getText();
             }
         }

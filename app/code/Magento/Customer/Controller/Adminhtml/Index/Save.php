@@ -245,7 +245,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->messageManager->addSuccess(__('You saved the customer.'));
                 $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
             } catch (\Magento\Framework\Validator\ValidatorException $exception) {
-                $this->_addSessionErrorMessages($exception->getMessages());
+                $messages = $exception->getMessages();
+                if (empty($messages)) {
+                    $messages = $exception->getMessage();
+                }
+                $this->_addSessionErrorMessages($messages);
                 $this->_getSession()->setCustomerData($originalRequestData);
                 $returnToEdit = true;
             } catch (LocalizedException $exception) {

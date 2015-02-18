@@ -741,9 +741,10 @@ class Payment extends Info implements OrderPaymentInterface
                     );
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     if (!$captureTxn) {
-                        $message = $e->getMessage();
                         throw new \Magento\Framework\Exception\LocalizedException(
-                            $message . ' ' . 'If the invoice was created offline, try creating an offline credit memo.'
+                            'If the invoice was created offline, try creating an offline credit memo.',
+                            [],
+                            $e
                         );
                     }
                     throw $e;
