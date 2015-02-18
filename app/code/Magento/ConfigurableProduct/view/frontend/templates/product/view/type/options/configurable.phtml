@@ -29,9 +29,13 @@ $_attributes = $block->decorateArray($block->getAllowAttributes());
             </div>
         </div>
     <?php endforeach; ?>
-    <script>
-require(["jquery", "Magento_ConfigurableProduct/js/configurable"], function($){
-    $('#product_addtocart_form').configurable({"spConfig":<?php echo $block->getJsonConfig() ?>});
-});
-</script>
+    <script type="text/x-magento-init">
+        {
+            "#product_addtocart_form": {
+                "configurable": {
+                    "spConfig": <?php echo $block->getJsonConfig() ?>
+                }
+            }
+        }
+    </script>
 <?php endif;?>

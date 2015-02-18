@@ -99,16 +99,15 @@
         <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a>
     </div>
 </div>
-
-<script>
-require(['jquery', "mage/mage"], function(jQuery){
-
-    jQuery('.page-main').mage('address', {
-        deleteAddress: "li.item a[role='delete-address']",
-        deleteUrlPrefix: '<?php echo $block->getDeleteUrl() ?>id/',
-        addAddress: "button[role='add-address']",
-        addAddressLocation: '<?php echo $block->getAddAddressUrl() ?>'
-    });
-
-});
+<script type="text/x-magento-init">
+    {
+        ".page-main": {
+            "address": {
+                "deleteAddress": "li.item a[role='delete-address']",
+                "deleteUrlPrefix": "<?php echo $block->getDeleteUrl() ?>id/",
+                "addAddress": "button[role='add-address']",
+                "addAddressLocation": "<?php echo $block->getAddAddressUrl() ?>"
+            }
+        }
+    }
 </script>

@@ -11,15 +11,16 @@
 
 <?php $_options = $block->decorateArray($block->getOptions()) ?>
 <?php if (count($_options)):?>
-<script>
-require([ 'jquery', 'Magento_Catalog/js/price-options' ], function($){
-    $('#product_addtocart_form')
-        .priceOptions({
-            'optionConfig':<?php echo $block->getJsonConfig()?>,
-            'controlContainer': '.field',
-            'priceHolderSelector': '[data-role=priceBox]'
-        });
-});
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "priceOptions": {
+                "optionConfig": <?php echo $block->getJsonConfig()?>,
+                "controlContainer": ".field",
+                "priceHolderSelector": "[data-role=priceBox]"
+            }
+        }
+    }
 </script>
     <?php foreach ($_options as $_option): ?>
         <?php echo $block->getOptionHtml($_option) ?>

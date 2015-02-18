@@ -9,18 +9,17 @@
  * @var \Magento\Ui\Component\Listing $block
  */
 ?>
-<script>
-    var allowLocalCache = true;
-</script>
-<script data-mage-init='{"Magento_Ui/js/lib/provider": ""}' type="application/json">
-    <?php
-        echo $block->getRenderContext()
-            ->getConfigBuilder()
-                ->toJson($block->getRenderContext()->getStorage(), $block->getName());
-    ?>
-</script>
-<script data-mage-init='{"Magento_Ui/js/listing/grid": ""}' type="application/json">
-    <?php echo $block->getConfigBuilder()->toJson($block->getConfig()); ?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/lib/provider":
+                                    <?php echo $block->getRenderContext()
+                                                ->getConfigBuilder()
+                                                ->toJson($block->getRenderContext()->getStorage(), $block->getName());
+                                    ?>,
+        "Magento_Ui/js/listing/grid": <?php echo $block->getConfigBuilder()->toJson($block->getConfig()); ?>
+    }
+}
 </script>
 <?php echo $block->getChildHtml('listing_head'); ?>
 <div class="grid">

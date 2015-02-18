@@ -22,22 +22,17 @@
             </div>
         </div>
     </div>
-    <script>
-        require([
-            "jquery",
-            "mage/mage"
-        ], function($){
-
-    // <![CDATA[
-            $('#notice-cookie-block').mage('cookieNotices', {
-                cookieAllowButtonSelector: '#btn-cookie-allow',
-                cookieName: '<?php echo \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
-                cookieValue: '<?php echo $this->helper('Magento\Cookie\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
-                cookieLifetime: <?php echo $this->helper('Magento\Cookie\Helper\Cookie')->getCookieRestrictionLifetime()?>,
-                noCookiesUrl: '<?php echo $block->getUrl('cookie/index/noCookies') ?>'
-            });
-    // ]]>
-
-        });
+    <script type="text/x-magento-init">
+        {
+            "#notice-cookie-block": {
+                "cookieNotices": {
+                    "cookieAllowButtonSelector": "#btn-cookie-allow",
+                    "cookieName": "<?php echo \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
+                    "cookieValue": "<?php echo $this->helper('Magento\Cookie\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>",
+                    "cookieLifetime": <?php echo $this->helper('Magento\Cookie\Helper\Cookie')->getCookieRestrictionLifetime()?>,
+                    "noCookiesUrl": "<?php echo $block->getUrl('cookie/index/noCookies') ?>"
+                }
+            }
+        }
     </script>
 <?php endif; ?>

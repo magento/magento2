@@ -7,8 +7,12 @@
  * @var \Magento\Ui\Component\Form $block
  */
 ?>
-<script data-mage-init='{ "Magento_Ui/js/core/app": "" }' type="application/json">
-    <?php echo $block->getRenderContext()->getConfigBuilder()->toJsonNew($block->getRenderContext()->getStorage()); ?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": <?php echo $block->getRenderContext()->getConfigBuilder()->toJsonNew($block->getRenderContext()->getStorage()); ?>
+        }
+    }
 </script>
 <div data-role="spinner" data-component="<?php echo $block->getDataScope(); ?>.areas" class="grid-loading-mask">
     <div class="grid-loader"></div>

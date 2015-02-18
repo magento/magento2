@@ -111,6 +111,8 @@ define([
                     this.options.form = this.element.closest('form').length ? $(this.element.closest('form')[0]) : null;
                 }
 
+                this.options.form = $(this.options.form);
+
                 this.options.form && this.options.form.data('validation') && this.options.form.validation('clearError',
                     this.options.regionListId, this.options.regionInputId, this.options.postcodeId);
             }

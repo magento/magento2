@@ -32,20 +32,15 @@
             </div>
         </fieldset>
     </div>
-
-    <script>
-require([
-    "jquery",
-    "mage/mage"
-], function($){
-
-    var addtocartForm = $('#product_addtocart_form');
-    addtocartForm.mage('validation');
-    addtocartForm.mage('addToCart', {
-        cartButtonId: "#product-updatecart-button",
-        cartForm: "#product_addtocart_form"
-    });
-
-});
-</script>
+    <script type="text/x-magento-init">
+        {
+            "#product_addtocart_form": {
+                "validation": {},
+                "addToCart": {
+                    "cartButtonId": "#product-updatecart-button",
+                    "cartForm": "#product_addtocart_form"
+                }
+            }
+        }
+    </script>
 <?php endif; ?>
