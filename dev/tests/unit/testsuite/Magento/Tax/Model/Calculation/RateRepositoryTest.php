@@ -271,7 +271,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
      * @param string $exceptionMessage
      * @throws LocalizedException
      * @throws \Exception
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testSaveThrowsExceptionIfCannotSaveTitles($expectedException, $exceptionType, $exceptionMessage)
     {
@@ -320,8 +320,8 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'entity_already_exists' => [
-                new AlreadyExistsException('Entity already exists'),
-                'Magento\Framework\Exception\InputException',
+                new AlreadyExistsException(__('Entity already exists')),
+                'Magento\Framework\Exception\AlreadyExistsException',
                 'Entity already exists'
             ],
             'cannot_save_title' => [
