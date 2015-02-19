@@ -40,7 +40,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->_cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->_request = $this->getMock(
             'Magento\Webapi\Controller\Rest\Request',
-            ['getHeader', 'getMethod', 'isGet', 'isPost', 'isPut', 'isDelete', 'getRawBody'],
+            ['getHeader', 'getMethod', 'isGet', 'isPost', 'isPut', 'isDelete', 'getContent'],
             [$areaListMock, $configScopeMock, $this->_cookieManagerMock, $this->_deserializerFactory, ]
         );
 
@@ -92,8 +92,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareSutForGetBodyParamsTest($params)
     {
-        $rawBody = 'rawBody';
-        $this->_request->expects($this->once())->method('getRawBody')->will($this->returnValue($rawBody));
+        $content = 'rawBody';
+        $this->_request->expects($this->once())->method('getContent')->will($this->returnValue($content));
         $contentType = 'contentType';
         $this->_request->expects(
             $this->once()
@@ -114,7 +114,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         )->method(
             'deserialize'
         )->with(
-            $rawBody
+            $content
         )->will(
             $this->returnValue($params)
         );

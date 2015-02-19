@@ -8,8 +8,10 @@
 
 namespace Magento\Framework\Stdlib\Cookie;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Zend\Stdlib\Parameters;
 
 /**
  * Test CookieScope
@@ -20,17 +22,23 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ObjectManagerInterface
      */
-    private $objectManager;
+    protected $objectManager;
+
+    /**
+     * @var RequestInterface
+     */
+    protected $request;
 
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->request = $this->objectManager->get('Magento\Framework\App\RequestInterface');
     }
 
     public function testGetSensitiveCookieMetadataEmpty()
     {
         $serverVal = $_SERVER;
-        $_SERVER['HTTPS'] = 'on';
+        $this->request->setServer(new Parameters(array_merge($_SERVER, ['HTTPS' => 'on'])));
         $cookieScope = $this->createCookieScope();
 
         $this->assertEquals(
@@ -40,7 +48,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
             ],
             $cookieScope->getSensitiveCookieMetadata()->__toArray());
 
-        $_SERVER = $serverVal;
+        $this->request->setServer(new Parameters($serverVal));
     }
 
     public function testGetPublicCookieMetadataEmpty()

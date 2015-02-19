@@ -5,6 +5,8 @@
  */
 namespace Magento\Core\Helper;
 
+use Zend\Stdlib\Parameters;
+
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     const DATE_TIMEZONE = 'America/Los_Angeles';

@@ -37,7 +37,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         // check if data sent
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             $id = $this->getRequest()->getParam('block_id');
             $model = $this->_objectManager->create('Magento\Cms\Model\Block')->load($id);
