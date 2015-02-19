@@ -190,14 +190,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $format = $this->_localeDate->getDateTimeFormat(
                     \IntlDateFormatter::SHORT
                 );
-                $result = $this->_localeDate->date(
-                    $optionValue,
-                    \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT,
-                    null,
-                    false
-                )->toString(
-                    $format
-                );
+                $result = \IntlDateFormatter::formatObject(new \DateTime($optionValue), $format);
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME) {
                 $result = (new \DateTime($optionValue))->format($this->is24hTimeFormat() ? 'H:i' : 'h:i a');
             } else {
