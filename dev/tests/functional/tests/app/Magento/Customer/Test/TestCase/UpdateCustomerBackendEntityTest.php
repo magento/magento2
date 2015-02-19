@@ -6,8 +6,8 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Address;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Mtf\TestCase\Injectable;
@@ -55,14 +55,14 @@ class UpdateCustomerBackendEntityTest extends Injectable
     }
 
     /**
-     * @param CustomerInjectable $initialCustomer
-     * @param CustomerInjectable $customer
-     * @param AddressInjectable $address
+     * @param Customer $initialCustomer
+     * @param Customer $customer
+     * @param Address $address
      */
     public function testUpdateCustomerBackendEntity(
-        CustomerInjectable $initialCustomer,
-        CustomerInjectable $customer,
-        AddressInjectable $address
+        Customer $initialCustomer,
+        Customer $customer,
+        Address $address
     ) {
         // Prepare data
         $address = $address->hasData() ? $address : null;

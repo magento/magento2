@@ -121,6 +121,7 @@ class ResetCurrencySymbolEntityTest extends Injectable
         $this->importCurrencyRate($configData);
 
         // Steps
+        $this->currencySymbolIndex->open();
         $this->currencySymbolIndex->getCurrencySymbolForm()->fill($currencySymbol);
         $this->currencySymbolIndex->getPageActions()->save();
 

@@ -8,6 +8,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="CreateSimpleProductEntityTest">
     <variation name="CreateSimpleProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with custom options(fixed price)</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -19,6 +23,8 @@
       <data name="product/data/weight" xsi:type="string">50</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">657</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
@@ -26,6 +32,9 @@
       <data name="product/data/price/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
       <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
@@ -33,6 +42,10 @@
       <constraint name="assertProductInCart" prev="assertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with custom options(percent price)</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -44,6 +57,8 @@
       <data name="product/data/weight" xsi:type="string">51</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">658</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
@@ -51,6 +66,9 @@
       <data name="product/data/price/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
       <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
@@ -58,6 +76,10 @@
       <constraint name="assertProductInCart" prev="assertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with special price and custom options(fixed price)</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -69,6 +91,8 @@
       <data name="product/data/weight" xsi:type="string">52</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">659</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
@@ -76,6 +100,9 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23029</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
       <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
@@ -83,6 +110,10 @@
       <constraint name="assertProductInCart" prev="assertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with special price and custom options(percent price)</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -94,6 +125,8 @@
       <data name="product/data/weight" xsi:type="string">53</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">660</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
@@ -101,6 +134,9 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23030</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
       <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
@@ -108,6 +144,10 @@
       <constraint name="assertProductInCart" prev="assertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with group price and custom options(percent price)</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -119,6 +159,8 @@
       <data name="product/data/weight" xsi:type="string">54</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">661</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
@@ -126,6 +168,9 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23030</data>
       <data name="product/data/group_price/preset" xsi:type="string">MAGETWO-23055</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
       <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
@@ -133,6 +178,10 @@
       <constraint name="assertProductInCart" prev="assertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with group price and custom options(fixed price)</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -144,6 +193,8 @@
       <data name="product/data/weight" xsi:type="string">55</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">662</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
@@ -151,6 +202,9 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23029</data>
       <data name="product/data/group_price/preset" xsi:type="string">MAGETWO-23055</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
       <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
@@ -158,6 +212,10 @@
       <constraint name="assertProductInCart" prev="assertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with tier price and custom options(percent price)</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -169,6 +227,8 @@
       <data name="product/data/weight" xsi:type="string">56</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">663</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">drop_down_with_one_option_percent_price</data>
@@ -176,6 +236,9 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23030</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">MAGETWO-23002</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
       <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
@@ -183,6 +246,10 @@
       <constraint name="assertProductInCart" prev="assertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with tier price and custom options(fixed price)</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -194,6 +261,8 @@
       <data name="product/data/weight" xsi:type="string">57</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">664</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
@@ -201,6 +270,9 @@
       <data name="product/data/price/preset" xsi:type="string">MAGETWO-23029</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">MAGETWO-23002</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
       <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
@@ -208,6 +280,10 @@
       <constraint name="assertProductInCart" prev="assertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product without custom options</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -219,6 +295,8 @@
       <data name="product/data/weight" xsi:type="string">58</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">665</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
@@ -226,12 +304,19 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductVisibleInCategory" prev="assertProductSaveMessage"/>
       <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInGrid"/>
       <constraint name="assertProductPage" prev="assertProductVisibleInCategory"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation10" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product that is in stock</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -243,6 +328,8 @@
       <data name="product/data/weight" xsi:type="string">59</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">75</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
@@ -250,10 +337,17 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInStock"/>
       <constraint name="assertProductInStock" prev="assertProductSaveMessage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation11" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product that is out stock</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -265,6 +359,8 @@
       <data name="product/data/weight" xsi:type="string">60</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">0</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
@@ -272,10 +368,17 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductOutOfStock"/>
       <constraint name="assertProductOutOfStock" prev="assertProductSaveMessage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation12" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product that visible only in search</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -287,6 +390,8 @@
       <data name="product/data/weight" xsi:type="string">61</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">138</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Search</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
@@ -294,10 +399,17 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductSearchableBySku"/>
       <constraint name="assertProductSearchableBySku" prev="assertProductSaveMessage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation13" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create simple product and check search by sku</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -309,6 +421,8 @@
       <data name="product/data/weight" xsi:type="string">62</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">139</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
@@ -316,6 +430,9 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
@@ -324,6 +441,10 @@
       <constraint name="assertProductPage" prev="assertProductSearchableBySku"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation14" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create simple product and check visibility in category</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -335,6 +456,8 @@
       <data name="product/data/weight" xsi:type="string">63</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">140</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
@@ -342,6 +465,9 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
@@ -350,6 +476,10 @@
       <constraint name="assertProductPage" prev="assertProductVisibleInCategory"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation15" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with tax class and group price</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -361,6 +491,8 @@
       <data name="product/data/weight" xsi:type="string">64</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">141</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
@@ -368,6 +500,9 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">default</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
@@ -377,6 +512,10 @@
       <constraint name="assertProductGroupedPriceOnProductPage" prev="assertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation16" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with tax class and check absent special price</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -388,6 +527,8 @@
       <data name="product/data/weight" xsi:type="string">65</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">142</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
@@ -395,6 +536,9 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
@@ -404,6 +548,10 @@
       <constraint name="assertProductSpecialPriceOnProductPage" prev="assertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation17" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product without tax class and tier price</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -415,6 +563,8 @@
       <data name="product/data/weight" xsi:type="string">66</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">143</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
@@ -422,6 +572,9 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">default</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
@@ -431,6 +584,10 @@
       <constraint name="assertProductTierPriceOnProductPage" prev="assertProductPage"/>
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation18" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product wit suite of custom options</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
@@ -442,6 +599,8 @@
       <data name="product/data/weight" xsi:type="string">67</data>
       <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">144</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/custom_options/preset" xsi:type="string">options-suite</data>
       <data name="product/data/checkout_data/preset" xsi:type="string">options-suite</data>
@@ -449,6 +608,9 @@
       <data name="product/data/price/preset" xsi:type="string">-</data>
       <data name="product/data/group_price/preset" xsi:type="string">-</data>
       <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductInGrid"/>
@@ -456,6 +618,269 @@
       <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
       <constraint name="assertProductPage" next="assertProductCustomOptionsOnProductPage" prev="assertProductVisibleInCategory"/>
       <constraint name="assertProductCustomOptionsOnProductPage" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation19" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with cross-sell products</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/price/value" xsi:type="string">10018</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
+      <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
+      <data name="product/data/weight" xsi:type="string">59</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">75</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">catalogProductSimple::default, configurableProduct::default</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductForm" next="assertProductCrossSells" prev="assertProductInGrid"/>
+      <constraint name="assertProductCrossSells" prev="assertProductForm"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation20" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with up-sell products</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/price/value" xsi:type="string">10019</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
+      <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
+      <data name="product/data/weight" xsi:type="string">59</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">75</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">catalogProductSimple::default, configurableProduct::default</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductForm" next="assertProductUpSells" prev="assertProductInGrid"/>
+      <constraint name="assertProductUpSells" prev="assertProductForm"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation21" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create product with related products</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/price/value" xsi:type="string">10020</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
+      <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
+      <data name="product/data/weight" xsi:type="string">59</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">75</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">catalogProductSimple::default, configurableProduct::default</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductForm" next="assertProductRelatedProducts" prev="assertProductInGrid"/>
+      <constraint name="assertProductRelatedProducts" prev="assertProductForm"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation22" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12423: Can't Add Out of Stock Products to Shopping Cart</data>
+      <data name="configData" xsi:type="string">display_out_of_stock</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/price/value" xsi:type="string">10021</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">68</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">0</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <constraint name="assertProductSaveMessage" next="assertAddToCartButtonAbsent"/>
+      <constraint name="assertAddToCartButtonAbsent" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation23" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-13345: Create Simple Product with Creating New Category (Required Fields Only)</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">yes</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
+      <data name="product/data/url_key" xsi:type="string">simple%isolation%</data>
+      <data name="product/data/name" xsi:type="string">simple%isolation%</data>
+      <data name="product/data/sku" xsi:type="string">simple%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInCategory"/>
+      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductPage" prev="assertProductInCategory"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation24" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12514: Create Simple Product and Assigning It to Category</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">1</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">1000</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" prev="assertProductInCategory"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation25" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12703: Create Simple Product with Custom Options and Assign it to the Category</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">1</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">1000</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
+      <constraint name="assertProductInGrid" next="assertProductInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductInGrid"/>
+      <constraint name="assertProductPage" next="assertProductCustomOptionsOnProductPage" prev="assertProductInCategory"/>
+      <constraint name="assertProductCustomOptionsOnProductPage" prev="assertProductPage"/>
+    </variation>
+    <variation name="CreateSimpleProductEntityTestVariation26" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12914: Create Simple Product with Advanced Inventory and Assign It to the Category</data>
+      <data name="configData" xsi:type="string">-</data>
+      <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/price/value" xsi:type="string">10</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/short_description" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
+      <data name="product/data/stock_data/qty" xsi:type="string">1</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/cross_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
+      <data name="product/data/related_products/presets" xsi:type="string">-</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <constraint name="assertProductSaveMessage" next="assertProductInCategory"/>
+      <constraint name="assertProductInCategory" prev="assertProductSaveMessage"/>
     </variation>
   </testCase>
 </config>

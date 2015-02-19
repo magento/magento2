@@ -11,6 +11,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
         <css src="mage/calendar.css"/>
         <script src="requirejs/require.js"/>
+        <script src="storefront_bundle_tmp.js"/>
+        <script src="mage/requirejs/static.js"/>
     </head>
     <body>
         <referenceContainer name="after.body.start">
