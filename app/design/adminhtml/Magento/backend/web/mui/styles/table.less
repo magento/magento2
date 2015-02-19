@@ -424,8 +424,10 @@ table {
     }
     input[type="checkbox"],
     input[type="radio"] {
-        position: static;
-        opacity: 1;
+        &:not(.config-inherit) {
+            position: static;
+            opacity: 1;
+        }
     }
 }
 

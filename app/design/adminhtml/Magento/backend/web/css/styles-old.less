@@ -1044,6 +1044,13 @@ input.mage-error ~ .addafter {
 
 .fieldset .field {
     margin: 0 0 29px;
+    .form-inline & {
+        > input[type="radio"] + label:before,
+        > input[type="checkbox"] + label:before {
+            position: absolute;
+            left: 20%;
+        }
+    }
 }
 
 .with-note .note,
@@ -5941,7 +5948,7 @@ table.items-to-invoice tbody tr:hover td {
     right:0;
     bottom:0;
     float:right;
-    margin: 6px -20px 0 0;
+    margin: 6px -28px 0 0;
 }
 .accordion .config .value.with-tooltip .tooltip-content {
     padding: 18px;
