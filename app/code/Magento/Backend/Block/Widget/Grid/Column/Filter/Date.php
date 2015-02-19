@@ -129,10 +129,9 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     {
         $value = $this->getValue($index);
         if ($value instanceof \DateTime) {
-            return $value->format(
-                $this->_localeDate->getDateFormat(
-                    \IntlDateFormatter::SHORT
-                )
+            return \IntlDateFormatter::formatObject(
+                $value,
+                $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)
             );
         }
         return $value;
