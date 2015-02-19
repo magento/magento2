@@ -38,11 +38,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $config;
 
     /**
-     * @var \Magento\Setup\Module\SetupFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $setupFactory;
-
-    /**
      * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleList;
@@ -119,29 +114,16 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      */
     private $resourceMock;
 
-    /**
-     * @var \Magento\Setup\Module\ModuleInstallerUpgraderFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $updaterMock;
-
     protected function setUp()
     {
         $this->filePermissions = $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false);
         $this->configWriter = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
         $this->config = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
-        $table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
-        $connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
-
-        $setup->expects($this->any())->method('getConnection')->willReturn($connection);
-        $table->expects($this->any())->method('addColumn')->willReturn($table);
-        $table->expects($this->any())->method('setComment')->willReturn($table);
-        $connection->expects($this->any())->method('newTable')->willReturn($table);
-
-        $this->setupFactory = $this->getMock('Magento\Setup\Module\SetupFactory', [], [], '', false);
-        $this->setupFactory->expects($this->any())->method('createSetup')->willReturn($setup);
 
         $this->moduleList = $this->getMockForAbstractClass('Magento\Framework\Module\ModuleListInterface');
+        $this->moduleList->expects($this->any())->method('getOne')->willReturn(
+            ['setup_version' => '2.0.0']
+        );
         $this->moduleList->expects($this->any())->method('getNames')->willReturn(
             ['Foo_One', 'Bar_Two']
         );
@@ -161,7 +143,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->sampleData = $this->getMock('Magento\Setup\Model\SampleData', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->updaterMock = $this->getMock('Magento\Setup\Module\ModuleInstallerUpgraderFactory', [], [], '', false);
         $this->object = $this->createObject();
     }
 
@@ -186,7 +167,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->filePermissions,
             $this->configWriter,
             $this->config,
-            $this->setupFactory,
             $this->moduleList,
             $this->moduleLoader,
             $this->directoryList,
@@ -198,8 +178,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->filesystem,
             $this->sampleData,
             $objectManagerFactory,
-            $this->resourceMock,
-            $this->updaterMock
+            $this->resourceMock
         );
     }
 
@@ -217,15 +196,24 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             [DbConfig::CONFIG_KEY, self::$dbConfig],
             [EncryptConfig::CONFIG_KEY, [EncryptConfig::KEY_ENCRYPTION_KEY => 'encryption_key']]
         ]));
-        $moduleUpdater = $this->getMock('Magento\Framework\Module\Updater', [], [], '', false);
-        $moduleUpdater->expects($this->once())->method('updateData');
+
+        $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
+        $table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
+        $connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
+        $setup->expects($this->any())->method('getConnection')->willReturn($connection);
+        $table->expects($this->any())->method('addColumn')->willReturn($table);
+        $table->expects($this->any())->method('setComment')->willReturn($table);
+        $connection->expects($this->any())->method('newTable')->willReturn($table);
+        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($connection);
+        $dataSetup = $this->getMock('Magento\Setup\Module\DataSetup', [], [], '', false);
         $cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
         $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
         $cacheManager->expects($this->once())->method('setEnabled')->willReturn(['foo', 'bar']);
         $this->objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
-                ['Magento\Framework\Module\Updater', [], $moduleUpdater],
+                ['Magento\Setup\Module\Setup', ['resource' => $this->resourceMock], $setup],
+                ['Magento\Setup\Module\DataSetup', [], $dataSetup],
                 ['Magento\Framework\App\Cache\Manager', [], $cacheManager],
             ]));
         $this->adminFactory->expects($this->once())->method('create')->willReturn(
@@ -243,14 +231,17 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->at(11))->method('log')->with("Module 'Bar_Two':");
         $this->logger->expects($this->at(13))->method('log')->with('Schema post-updates:');
         $this->logger->expects($this->at(14))->method('log')->with("Module 'Foo_One':");
-        $this->logger->expects($this->at(15))->method('log')->with("Module 'Bar_Two':");
-        $this->logger->expects($this->at(17))->method('log')->with('Installing user configuration...');
-        $this->logger->expects($this->at(19))->method('log')->with('Installing data...');
-        $this->logger->expects($this->at(21))->method('log')->with('Installing admin user...');
-        $this->logger->expects($this->at(23))->method('log')->with('Enabling caches:');
-        $this->logger->expects($this->at(24))->method('log')->with('Current status:');
-        $this->logger->expects($this->at(27))->method('log')->with('Disabling Maintenance Mode:');
-        $this->logger->expects($this->at(29))->method('log')->with('Post installation file permissions check...');
+        $this->logger->expects($this->at(16))->method('log')->with("Module 'Bar_Two':");
+        $this->logger->expects($this->at(19))->method('log')->with('Installing user configuration...');
+        $this->logger->expects($this->at(21))->method('log')->with('Installing data...');
+        $this->logger->expects($this->at(22))->method('log')->with('Data install/update:');
+        $this->logger->expects($this->at(23))->method('log')->with("Module 'Foo_One':");
+        $this->logger->expects($this->at(25))->method('log')->with("Module 'Bar_Two':");
+        $this->logger->expects($this->at(28))->method('log')->with('Installing admin user...');
+        $this->logger->expects($this->at(30))->method('log')->with('Enabling caches:');
+        $this->logger->expects($this->at(31))->method('log')->with('Current status:');
+        $this->logger->expects($this->at(34))->method('log')->with('Disabling Maintenance Mode:');
+        $this->logger->expects($this->at(36))->method('log')->with('Post installation file permissions check...');
         $this->logger->expects($this->once())->method('logSuccess')->with('Magento installation complete.');
         $this->object->install($request);
     }
