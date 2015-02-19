@@ -148,4 +148,14 @@ Magento/Weee/Model/Resource
 Magento/Theme/Model/Design/Backend
 Magento/Core/Model/Resource/Layout/Link
 Magento/Theme/Model/Resource/Design
-Magento/*/Setup
+Magento/Catalog/Setup/InstallSchema.php
+Magento/CatalogInventory/Setup/InstallSchema.php
+Magento/Checkout/Setup/InstallData.php
+Magento/Customer/Setup/InstallSchema.php
+Magento/Eav/Setup/InstallSchema.php
+Magento/Quote/Setup/InstallSchema.php
+Magento/Quote/Setup/QuoteSetup.php
+Magento/Reports/Setup/InstallSchema.php
+Magento/Sales/Setup/InstallSchema.php
+Magento/Sales/Setup/SalesSetup.php
+Magento/SalesRule/Setup/InstallSchema.php

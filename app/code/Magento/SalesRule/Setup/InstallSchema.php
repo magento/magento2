@@ -472,7 +472,8 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION
         )->addForeignKey(
-            $installer->getFkName('salesrule_product_attribute',
+            $installer->getFkName(
+                'salesrule_product_attribute',
                 'customer_group_id',
                 'customer_group',
                 'customer_group_id'
@@ -783,7 +784,8 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('salesrule_customer_group',
+            $installer->getFkName(
+                'salesrule_customer_group',
                 'customer_group_id',
                 'customer_group',
                 'customer_group_id'

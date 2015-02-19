@@ -3253,7 +3253,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_index_tier_price',
+                $installer->getFkName(
+                    'catalog_product_index_tier_price',
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'
