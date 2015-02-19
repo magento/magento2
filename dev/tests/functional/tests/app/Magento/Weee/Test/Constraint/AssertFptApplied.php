@@ -158,6 +158,7 @@ class AssertFptApplied extends AbstractConstraint
         $actualPrices['product_page_fpt'] = $viewWeeeBlock->getFptBlock($this->fptLabel)->getFpt();
         $actualPrices['product_page_fpt_total'] = $viewWeeeBlock->getFptBlock($this->fptLabel)->getFptTotal();
         $viewBlock->clickAddToCart();
+        $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
 
         return $actualPrices;
     }
@@ -171,6 +172,7 @@ class AssertFptApplied extends AbstractConstraint
      */
     protected function getCartPrice(CatalogProductSimple $product, array $actualPrices)
     {
+        $this->checkoutCart->open();
         $productItem = $this->checkoutCart->getCartBlock()->getCartItem($product);
         $productWeeeItem = $this->checkoutCart->getWeeeCartBlock()->getCartItem($product);
         $actualPrices['cart_item_price'] = $productItem->getPrice();

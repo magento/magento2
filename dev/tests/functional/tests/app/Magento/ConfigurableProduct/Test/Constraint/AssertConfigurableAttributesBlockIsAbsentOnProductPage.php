@@ -7,7 +7,7 @@
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -25,13 +25,13 @@ class AssertConfigurableAttributesBlockIsAbsentOnProductPage extends AbstractCon
      *
      * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
-     * @param ConfigurableProductInjectable $product
+     * @param ConfigurableProduct $product
      * @return void
      */
     public function processAssert(
         BrowserInterface $browser,
         CatalogProductView $catalogProductView,
-        ConfigurableProductInjectable $product
+        ConfigurableProduct $product
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         \PHPUnit_Framework_Assert::assertFalse(
