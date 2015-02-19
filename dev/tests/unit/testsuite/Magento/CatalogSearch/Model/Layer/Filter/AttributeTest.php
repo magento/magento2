@@ -108,8 +108,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->frontend));
 
         $this->request = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['getParam'])
             ->getMockForAbstractClass();
 
         $stripTagsFilter = $this->getMockBuilder('\Magento\Framework\Filter\StripTags')

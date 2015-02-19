@@ -53,7 +53,7 @@ class AbstractActionTest extends \Magento\Backend\Utility\Controller
             ],
         ];
 
-        $this->getRequest()->setPost($postLogin);
+        $this->getRequest()->setPostValue($postLogin);
         $this->dispatch('backend/admin/system_account/index');
 
         $expected = 'backend/admin/system_account/index';
