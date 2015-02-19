@@ -19,7 +19,7 @@ use Magento\Store\Model\ScopeInterface;
 class ConfirmTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Customer\Controller\Account
+     * @var \Magento\Customer\Controller\Account\Confirm
      */
     protected $model;
 
@@ -388,12 +388,12 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('*/*/index'), ['_secure' => true])
             ->will($this->returnValue($successUrl));
 
-        $this->redirectMock->expects($this->never())
+        $this->redirectMock->expects($this->once())
             ->method('success')
             ->with($this->equalTo($resultUrl))
             ->will($this->returnValue($resultUrl));
 
-        $this->scopeConfigMock->expects($this->never())
+        $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with(
                 $this->equalTo(Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD),
