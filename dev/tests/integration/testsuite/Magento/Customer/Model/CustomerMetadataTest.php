@@ -47,18 +47,7 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomAttributesMetadata()
     {
         $customAttributesMetadata = $this->_service->getCustomAttributesMetadata();
-        $this->assertCount(3, $customAttributesMetadata, "Invalid number of attributes returned.");
-        $configAttributeCode = 'customer_attribute_1';
-        $configAttributeFound = false;
-        foreach ($customAttributesMetadata as $attribute) {
-            if ($attribute->getAttributeCode() == $configAttributeCode) {
-                $configAttributeFound = true;
-                break;
-            }
-        }
-        if (!$configAttributeFound) {
-            $this->fail("Custom attribute declared in the config not found.");
-        }
+        $this->assertCount(1, $customAttributesMetadata, "Invalid number of attributes returned.");
     }
 
     public function testGetNestedOptionsCustomAttributesMetadata()
@@ -104,7 +93,7 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
         if (!$customAttributesFound) {
             $this->fail("Custom attributes declared in the config not found.");
         }
-        $this->assertCount(5, $customAttributesMetadata, "Invalid number of attributes returned.");
+        $this->assertCount(3, $customAttributesMetadata, "Invalid number of attributes returned.");
     }
 
     /**

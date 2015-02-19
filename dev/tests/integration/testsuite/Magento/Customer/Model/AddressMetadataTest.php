@@ -31,18 +31,7 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomAttributesMetadata()
     {
         $customAttributesMetadata = $this->_service->getCustomAttributesMetadata();
-        $this->assertCount(2, $customAttributesMetadata, "Invalid number of attributes returned.");
-        $configAttributeCode = 'address_attribute_1';
-        $configAttributeFound = false;
-        foreach ($customAttributesMetadata as $attribute) {
-            if ($attribute->getAttributeCode() == $configAttributeCode) {
-                $configAttributeFound = true;
-                break;
-            }
-        }
-        if (!$configAttributeFound) {
-            $this->fail("Custom attribute declared in the config not found.");
-        }
+        $this->assertCount(0, $customAttributesMetadata, "Invalid number of attributes returned.");
     }
 
     /**
@@ -69,7 +58,7 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
         if (!$customAttributesFound) {
             $this->fail("Custom attributes declared in the config not found.");
         }
-        $this->assertCount(4, $customAttributesMetadata, "Invalid number of attributes returned.");
+        $this->assertCount(2, $customAttributesMetadata, "Invalid number of attributes returned.");
     }
 
     public function testGetAddressAttributeMetadata()
