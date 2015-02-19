@@ -120,12 +120,11 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
         $this->storage->expects($this->once())->method('processStorageFile')->with($path)->willReturn(true);
 
         $this->objectManager->expects($this->any())->method('get')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     ['Magento\Framework\Filesystem', $this->fileSystemMock],
                     ['Magento\Core\Helper\File\Storage', $this->storage]
                 ]
-            )
         );
 
         $this->urlDecoderMock->expects($this->once())->method('decode')->with($decodedFile)->willReturn($file);
@@ -158,9 +157,8 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
         $path = 'path';
         $stat = ['size' => 10, 'mtime' => 10];
 
-        $this->requestMock->expects($this->at(0))->method('getParam')->with('file')->willReturn(null);
-        $this->requestMock->expects($this->at(1))->method('getParam')->with('image')->willReturn($decodedFile);
-        $this->requestMock->expects($this->at(2))->method('getParam')->with('image')->willReturn($decodedFile);
+        $this->requestMock->expects($this->any())->method('getParam')
+            ->willReturnMap([['file', null, null], ['image', null, $decodedFile]]);
 
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($fileName)->willReturn($path);
         $this->directoryMock->expects($this->once())->method('stat')->with($path)->willReturn($stat);
@@ -171,26 +169,27 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
 
         $this->storage->expects($this->once())->method('processStorageFile')->with($path)->willReturn(true);
 
-        $this->objectManager->expects($this->at(0))->method('get')->with('Magento\Framework\Filesystem')
-            ->willReturn($this->fileSystemMock);
-        $this->objectManager->expects($this->at(1))->method('get')->with('Magento\Core\Helper\File\Storage')
-            ->willReturn($this->storage);
+        $this->objectManager->expects($this->any())->method('get')
+            ->willReturnMap(
+                [
+                    ['Magento\Framework\Filesystem', $this->fileSystemMock],
+                    ['Magento\Core\Helper\File\Storage', $this->storage]
+                ]
+            );
+
 
         $this->urlDecoderMock->expects($this->once())->method('decode')->with($decodedFile)->willReturn($file);
 
         $this->resultRawMock->expects($this->once())->method('setHttpResponseCode')->with(200)->willReturnSelf();
-        $this->resultRawMock->expects($this->at(1))->method('setHeader')
-            ->with('Pragma', 'public', true)
-            ->willReturnSelf();
-        $this->resultRawMock->expects($this->at(2))->method('setHeader')
-            ->with('Content-type', 'application/octet-stream', true)
-            ->willReturnSelf();
-        $this->resultRawMock->expects($this->at(3))->method('setHeader')
-            ->with('Content-Length', $stat['size'])
-            ->willReturnSelf();
-        $this->resultRawMock->expects($this->at(4))->method('setHeader')
-            ->with('Last-Modified', date('r', $stat['mtime']))
-            ->willReturnSelf();
+        $this->resultRawMock->expects($this->any())->method('setHeader')
+            ->willReturnMap(
+                [
+                    ['Pragma', 'public', true, $this->resultRawMock],
+                    ['Content-type', 'application/octet-stream', true, $this->resultRawMock],
+                    ['Content-Length', $stat['size'], false, $this->resultRawMock],
+                    ['Pragma', 'public', true, $this->resultRawMock],
+                ]
+            );
 
         $this->resultRawFactoryMock = $this->getMock(
             'Magento\Framework\Controller\Result\RawFactory',
