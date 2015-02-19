@@ -20,7 +20,7 @@ module.exports = {
         setup: 'setup/module/Magento/Setup/styles'
     },
     uglify: {
-        legacy: 'lib/web/legacy-build.js'
+        legacy: 'lib/web/legacy-build.min.js'
     },
     doc: 'lib/web/css/docs',
     spec: 'dev/tests/js/spec'
