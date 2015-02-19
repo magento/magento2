@@ -21,6 +21,7 @@
       <data name="giftMessage/data/recipient" xsi:type="string">Jane Doe</data>
       <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
       <data name="payment/method" xsi:type="string">cashondelivery</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-33079</data>
       <constraint name="assertOrderSuccessPlacedMessage" next="assertGiftMessageInFrontendOrder"/>
       <constraint name="assertGiftMessageInFrontendOrder" prev="assertOrderSuccessPlacedMessage"/>
     </variation>

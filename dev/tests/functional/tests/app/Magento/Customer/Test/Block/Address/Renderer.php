@@ -6,10 +6,10 @@
 
 namespace Magento\Customer\Test\Block\Address;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
+use Magento\Customer\Test\Fixture\Address;
 
 /**
- * Render output from AddressInjectable fixture according to data format type.
+ * Render output from Address fixture according to data format type.
  */
 class Renderer
 {
@@ -21,18 +21,18 @@ class Renderer
     protected $type;
 
     /**
-     * AddressInjectable fixture.
+     * Address fixture.
      *
-     * @var AddressInjectable
+     * @var Address
      */
     protected $address;
 
     /**
      * @constructor
-     * @param AddressInjectable $address
+     * @param Address $address
      * @param string $type
      */
-    public function __construct(AddressInjectable $address, $type = null)
+    public function __construct(Address $address, $type = null)
     {
         $this->address = $address;
         $this->type = $type;

@@ -33,6 +33,7 @@
         <field name="website_ids" xsi:type="array">
             <item name="0" xsi:type="string">Main Website</item>
         </field>
+        <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
     </dataset>
     <data_config>
         <item name="type_id" xsi:type="string">simple</item>

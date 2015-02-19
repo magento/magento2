@@ -5,7 +5,7 @@
  */
 namespace Magento\Multishipping\Test\TestStep;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\ObjectManager;
 use Magento\Multishipping\Test\Page\MultishippingCheckoutAddresses;
 use Magento\Mtf\TestStep\TestStepInterface;
@@ -45,13 +45,13 @@ class FillCustomerAddressesStep implements TestStepInterface
 
     /**
      * @param MultishippingCheckoutAddresses $addresses
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param ObjectManager $objectManager
      * @param array $products
      */
     public function __construct(
         MultishippingCheckoutAddresses $addresses,
-        CustomerInjectable $customer,
+        Customer $customer,
         ObjectManager $objectManager,
         $products
     ) {
