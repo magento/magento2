@@ -138,8 +138,7 @@ class StockItemRepository implements StockItemRepositoryInterface
                 $stockItem->setLowStockDate(null);
                 if ($this->stockStateProvider->verifyNotification($stockItem)) {
                     $stockItem->setLowStockDate(
-                        $this->localeDate->date(null, null, null, false)
-                            ->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+                        (new \DateTime())->format('Y-m-d H:i:s')
                     );
                 }
                 $stockItem->setStockStatusChangedAuto(0);
