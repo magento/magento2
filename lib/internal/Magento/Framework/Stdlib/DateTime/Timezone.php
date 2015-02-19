@@ -149,6 +149,8 @@ class Timezone implements TimezoneInterface
 
         if (empty($date)) {
             return new \DateTime('now', new \DateTimeZone($timezone));
+        } elseif ($date instanceof \DateTime) {
+            return $date->setTimezone(new \DateTimeZone($timezone));
         } elseif (!is_numeric($date)) {
             $formatter = new \IntlDateFormatter(
                 $locale,
