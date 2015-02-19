@@ -18,7 +18,7 @@ class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statist
     {
         try {
             $collectionsNames = $this->_getCollectionNames();
-            /** @var \Magento\Framework\Stdlib\DateTime\DateInterface $currentDate */
+            /** @var \DateTime $currentDate */
             $currentDate = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface')->date();
             $date = $currentDate->subHour(25);
             foreach ($collectionsNames as $collectionName) {

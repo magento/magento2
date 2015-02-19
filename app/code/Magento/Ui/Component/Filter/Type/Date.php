@@ -130,11 +130,12 @@ class Date extends FilterAbstract
      *
      * @param int $date
      * @param LocaleInterface $locale
-     * @return \Magento\Framework\Stdlib\DateTime\DateInterface|null
+     * @return \DateTime|null
      */
     protected function convertDate($date, LocaleInterface $locale)
     {
         try {
+            /** @var \DateTime $dateObj */
             $dateObj = $this->localeDate->date(null, null, $locale, false);
 
             //set default timezone for store (admin)

@@ -42,7 +42,7 @@ class Collection extends \Magento\Framework\Data\Collection
      * Get if updated
      *
      * @param string $reportCode
-     * @return string|\Magento\Framework\Stdlib\DateTime\DateInterface
+     * @return string|\DateTime
      */
     protected function _getUpdatedAt($reportCode)
     {
