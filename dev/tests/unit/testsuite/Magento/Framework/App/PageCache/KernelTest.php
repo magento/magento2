@@ -98,8 +98,11 @@ class KernelTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessSaveCache()
     {
-        $cacheControlHeader = 'public, max-age=100, s-maxage=100';
         $httpCode = 200;
+
+        $cacheControlHeader = \Zend\Http\Header\CacheControl::fromString(
+            'Cache-Control: public, max-age=100, s-maxage=100'
+        );
 
         $this->responseMock->expects(
             $this->at(0)
@@ -108,7 +111,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         )->with(
             'Cache-Control'
         )->will(
-            $this->returnValue(['value' => $cacheControlHeader])
+            $this->returnValue($cacheControlHeader)
         );
         $this->responseMock->expects(
             $this->once()
@@ -135,6 +138,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessNotSaveCache($cacheControlHeader, $httpCode, $isGet, $overrideHeaders)
     {
+        $header = \Zend\Http\Header\CacheControl::fromString("Cache-Control: $cacheControlHeader");
         $this->responseMock->expects(
             $this->once()
         )->method(
@@ -142,7 +146,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         )->with(
             'Cache-Control'
         )->will(
-            $this->returnValue(['value' => $cacheControlHeader])
+            $this->returnValue($header)
         );
         $this->responseMock->expects($this->any())->method('getHttpResponseCode')->will($this->returnValue($httpCode));
         $this->requestMock->expects($this->any())->method('isGet')->will($this->returnValue($isGet));

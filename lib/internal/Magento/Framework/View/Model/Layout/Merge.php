@@ -131,25 +131,25 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected $cacheSuffix;
 
     /**
-     * Status for new added handle
+     * All processed handles used in this update
      *
-     * @var int
+     * @var array
      */
-    protected $handleAdded = 1;
+    protected $allHandles = [];
 
     /**
      * Status for handle being processed
      *
      * @var int
      */
-    protected $handleProcessing = 2;
+    protected $handleProcessing = 1;
 
     /**
      * Status for processed handle
      *
      * @var int
      */
-    protected $handleProcessed = 3;
+    protected $handleProcessed = 2;
 
     /**
      * Init merge model
@@ -234,10 +234,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     {
         if (is_array($handleName)) {
             foreach ($handleName as $name) {
-                $this->handles[$name] = $this->handleAdded;
+                $this->handles[$name] = 1;
             }
         } else {
-            $this->handles[$handleName] = $this->handleAdded;
+            $this->handles[$handleName] = 1;
         }
         return $this;
     }
@@ -418,7 +418,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
         $this->addHandle($handles);
 
-        $cacheId = $this->_getCacheId(md5(implode('|', $this->getHandles())));
+        $cacheId = $this->getCacheId();
         $cacheIdPageLayout = $cacheId . '_' . self::PAGE_LAYOUT_CACHE_SUFFIX;
         $result = $this->_loadCache($cacheId);
         if ($result) {
@@ -493,12 +493,12 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     protected function _merge($handle)
     {
-        if (!isset($this->handles[$handle]) || $this->handles[$handle] == $this->handleAdded) {
-            $this->handles[$handle] = $this->handleProcessing;
+        if (!isset($this->allHandles[$handle])) {
+            $this->allHandles[$handle] = $this->handleProcessing;
             $this->_fetchPackageLayoutUpdates($handle);
             $this->_fetchDbLayoutUpdates($handle);
-            $this->handles[$handle] = $this->handleProcessed;
-        } elseif ($this->handles[$handle] == $this->handleProcessing
+            $this->allHandles[$handle] = $this->handleProcessed;
+        } elseif ($this->allHandles[$handle] == $this->handleProcessing
             && $this->appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER
         ) {
             $this->logger->info('Cyclic dependency in merged layout for handle: ' . $handle);
@@ -615,7 +615,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         if ($this->layoutUpdatesCache) {
             return $this->layoutUpdatesCache;
         }
-        $cacheId = $this->_getCacheId($this->cacheSuffix);
+        $cacheId = $this->generateCacheId($this->cacheSuffix);
         $result = $this->_loadCache($cacheId);
         if ($result) {
             $result = $this->_loadXmlString($result);
@@ -628,12 +628,12 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     }
 
     /**
-     * Retrieve cache identifier taking into account current area/package/theme/store
+     * Generate cache identifier taking into account current area/package/theme/store
      *
      * @param string $suffix
      * @return string
      */
-    protected function _getCacheId($suffix = '')
+    protected function generateCacheId($suffix = '')
     {
         return "LAYOUT_{$this->theme->getArea()}_STORE{$this->scope->getId()}_{$this->theme->getId()}{$suffix}";
     }
@@ -838,5 +838,15 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     public function getScope()
     {
         return $this->scope;
+    }
+
+    /**
+     * Return cache ID based current area/package/theme/store and handles
+     *
+     * @return string
+     */
+    public function getCacheId()
+    {
+        return $this->generateCacheId(md5(implode('|', $this->getHandles())));
     }
 }

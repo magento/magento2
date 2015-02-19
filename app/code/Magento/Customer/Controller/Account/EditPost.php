@@ -6,7 +6,7 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Core\App\Action\FormKeyValidator;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerExtractor;
@@ -28,7 +28,7 @@ class EditPost extends \Magento\Customer\Controller\Account
     /** @var CustomerRepositoryInterface  */
     protected $customerRepository;
 
-    /** @var FormKeyValidator */
+    /** @var Validator */
     protected $formKeyValidator;
 
     /** @var CustomerExtractor */
@@ -41,7 +41,7 @@ class EditPost extends \Magento\Customer\Controller\Account
      * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
-     * @param FormKeyValidator $formKeyValidator
+     * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -52,7 +52,7 @@ class EditPost extends \Magento\Customer\Controller\Account
         PageFactory $resultPageFactory,
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
-        FormKeyValidator $formKeyValidator,
+        Validator $formKeyValidator,
         CustomerExtractor $customerExtractor
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
@@ -122,7 +122,7 @@ class EditPost extends \Magento\Customer\Controller\Account
             }
 
             if ($this->messageManager->getMessages()->getCount() > 0) {
-                $this->_getSession()->setCustomerFormData($this->getRequest()->getPost());
+                $this->_getSession()->setCustomerFormData($this->getRequest()->getPostValue());
                 $resultRedirect->setPath('*/*/edit');
                 return $resultRedirect;
             }

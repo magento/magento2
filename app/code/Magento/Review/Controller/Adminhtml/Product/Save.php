@@ -14,7 +14,7 @@ class Save extends \Magento\Review\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        if (($data = $this->getRequest()->getPost()) && ($reviewId = $this->getRequest()->getParam('id'))) {
+        if (($data = $this->getRequest()->getPostValue()) && ($reviewId = $this->getRequest()->getParam('id'))) {
             $review = $this->_reviewFactory->create()->load($reviewId);
             if (!$review->getId()) {
                 $this->messageManager->addError(__('The review was removed by another user or does not exist.'));

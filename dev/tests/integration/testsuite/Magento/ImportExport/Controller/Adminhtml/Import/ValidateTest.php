@@ -23,9 +23,9 @@ class ValidateTest extends \Magento\Backend\Utility\Controller
 
         /** @var $formKey \Magento\Framework\Data\Form\FormKey */
         $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
-        $this->getRequest()->setPost('form_key', $formKey->getFormKey());
-        $this->getRequest()->setPost('entity', 'catalog_product');
-        $this->getRequest()->setPost('behavior', 'replace');
+        $this->getRequest()->setPostValue('form_key', $formKey->getFormKey());
+        $this->getRequest()->setPostValue('entity', 'catalog_product');
+        $this->getRequest()->setPostValue('behavior', 'replace');
 
 
         $name = 'catalog_product.csv';
