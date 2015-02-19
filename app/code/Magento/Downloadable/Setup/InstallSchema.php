@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -427,7 +428,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('downloadable_link_purchased_item',
+                $installer->getFkName(
+                    'downloadable_link_purchased_item',
                     'order_item_id',
                     'sales_order_item',
                     'item_id'

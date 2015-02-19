@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -345,7 +346,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('newsletter_queue_link',
+                $installer->getFkName(
+                    'newsletter_queue_link',
                     'subscriber_id',
                     'newsletter_subscriber',
                     'subscriber_id'

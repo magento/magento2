@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -405,7 +406,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['website_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalogrule_group_website',
+                $installer->getFkName(
+                    'catalogrule_group_website',
                     'customer_group_id',
                     'customer_group',
                     'customer_group_id'

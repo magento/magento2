@@ -52,4 +52,7 @@
             <argument name="cache" xsi:type="object">Magento\Webapi\Model\Cache\Type</argument>
         </arguments>
     </type>
+    <type name="Magento\Integration\Model\Manager">
+        <plugin name="webapiSetup" type="Magento\Webapi\Model\Plugin\Manager" />
+    </type>
 </config>

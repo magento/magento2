@@ -148,3 +148,14 @@ Magento/Weee/Model/Resource
 Magento/Theme/Model/Design/Backend
 Magento/Core/Model/Resource/Layout/Link
 Magento/Theme/Model/Resource/Design
+Magento/Catalog/Setup
+Magento/CatalogInventory/Setup
+Magento/Checkout/Setup
+Magento/Customer/Setup
+Magento/Eav/Setup
+Magento/Quote/Setup
+Magento/Reports/Setup
+Magento/Sales/Setup
+Magento/SalesRule/Setup
+Magento/CatalogPermissions/Setup
+Magento/Eav/Setup

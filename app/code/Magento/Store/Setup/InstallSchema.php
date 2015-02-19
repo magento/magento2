@@ -15,6 +15,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -184,7 +185,8 @@ class InstallSchema implements InstallSchemaInterface
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Store Activity'
         )->addIndex(
-            $installer->getIdxName('store',
+            $installer->getIdxName(
+                'store',
                 ['code'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),

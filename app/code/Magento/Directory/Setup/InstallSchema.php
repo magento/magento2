@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -155,7 +156,8 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getIdxName('directory_country_region_name', ['region_id']),
             ['region_id']
         )->addForeignKey(
-            $installer->getFkName('directory_country_region_name',
+            $installer->getFkName(
+                'directory_country_region_name',
                 'region_id',
                 'directory_country_region',
                 'region_id'

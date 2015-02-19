@@ -17,16 +17,14 @@ class InstallSchema implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        $installer = $setup;
-
-        $installer->startSetup();
-        $connection = $installer->getConnection();
+        $setup->startSetup();
+        $connection = $setup->getConnection();
 
         /**
          * Create table 'vde_theme_change'
          */
-        $table = $installer->getConnection()->newTable(
-            $installer->getTable('vde_theme_change')
+        $table = $connection->newTable(
+            $setup->getTable('vde_theme_change')
         )->addColumn(
             'change_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -46,9 +44,9 @@ class InstallSchema implements InstallSchemaInterface
             ['nullable' => false],
             'Change Time'
         )->addForeignKey(
-            $installer->getFkName('vde_theme_change', 'theme_id', 'theme', 'theme_id'),
+            $setup->getFkName('vde_theme_change', 'theme_id', 'theme', 'theme_id'),
             'theme_id',
-            $installer->getTable('theme'),
+            $setup->getTable('theme'),
             'theme_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
@@ -56,9 +54,9 @@ class InstallSchema implements InstallSchemaInterface
             'Design Editor Theme Change'
         );
 
-        $installer->getConnection()->createTable($table);
+        $connection->createTable($table);
 
-        $installer->endSetup();
+        $setup->endSetup();
 
     }
 }

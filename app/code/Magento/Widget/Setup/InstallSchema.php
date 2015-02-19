@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -274,7 +275,8 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('widget_instance_page_layout',
+            $installer->getFkName(
+                'widget_instance_page_layout',
                 'layout_update_id',
                 'core_layout_update',
                 'layout_update_id'

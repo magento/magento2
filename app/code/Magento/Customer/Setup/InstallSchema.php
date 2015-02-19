@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -349,7 +350,8 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('customer_address_entity_decimal',
+            $installer->getFkName(
+                'customer_address_entity_decimal',
                 'entity_id',
                 'customer_address_entity',
                 'entity_id'
@@ -360,7 +362,8 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('customer_address_entity_decimal',
+            $installer->getFkName(
+                'customer_address_entity_decimal',
                 'entity_type_id',
                 'eav_entity_type',
                 'entity_type_id'

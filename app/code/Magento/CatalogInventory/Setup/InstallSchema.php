@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -270,7 +271,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['stock_id']
             )
             ->addForeignKey(
-                $installer->getFkName('cataloginventory_stock_item',
+                $installer->getFkName(
+                    'cataloginventory_stock_item',
                     'product_id',
                     'catalog_product_entity',
                     'entity_id'

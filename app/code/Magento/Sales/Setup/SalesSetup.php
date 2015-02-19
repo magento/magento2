@@ -129,7 +129,8 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
         $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
         $this->getSetup()->getConnection()->addColumn(
             $this->getSetup()->getTable($table),
-            $attribute, $columnDefinition
+            $attribute,
+            $columnDefinition
         );
         return $this;
     }

@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -4393,7 +4394,8 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('sales_payment_transaction',
+            $installer->getFkName(
+                'sales_payment_transaction',
                 'parent_id',
                 'sales_payment_transaction',
                 'transaction_id'
@@ -4794,7 +4796,8 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('sales_bestsellers_aggregated_daily',
+            $installer->getFkName(
+                'sales_bestsellers_aggregated_daily',
                 'product_id',
                 'catalog_product_entity',
                 'entity_id'
@@ -4884,7 +4887,8 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('sales_bestsellers_aggregated_monthly',
+            $installer->getFkName(
+                'sales_bestsellers_aggregated_monthly',
                 'product_id',
                 'catalog_product_entity',
                 'entity_id'
@@ -4974,7 +4978,8 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('sales_bestsellers_aggregated_yearly',
+            $installer->getFkName(
+                'sales_bestsellers_aggregated_yearly',
                 'product_id',
                 'catalog_product_entity',
                 'entity_id'
