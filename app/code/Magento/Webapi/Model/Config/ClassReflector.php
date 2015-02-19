@@ -94,7 +94,7 @@ class ClassReflector
         /** @var \Zend\Server\Reflection\ReflectionParameter $parameter */
         foreach ($prototype->getParameters() as $parameter) {
             $parameterData = [
-                'type' => $this->_typeProcessor->process($parameter->getType()),
+                'type' => $this->_typeProcessor->register($parameter->getType()),
                 'required' => !$parameter->isOptional(),
                 'documentation' => $parameter->getDescription(),
             ];
@@ -105,7 +105,7 @@ class ClassReflector
         }
         if ($prototype->getReturnType() != 'void' && $prototype->getReturnType() != 'null') {
             $methodData['interface']['out']['parameters']['result'] = [
-                'type' => $this->_typeProcessor->process($prototype->getReturnType()),
+                'type' => $this->_typeProcessor->register($prototype->getReturnType()),
                 'documentation' => $prototype->getReturnValue()->getDescription(),
                 'required' => true,
             ];

@@ -112,10 +112,10 @@ class TypeProcessor
      * Process type name. In case parameter type is a complex type (class) - process its properties.
      *
      * @param string $type
-     * @return string
+     * @return string Complex type name
      * @throws \LogicException
      */
-    public function process($type)
+    public function register($type)
     {
         $typeName = $this->normalizeType($type);
         if (!$this->isTypeSimple($typeName) && !$this->isTypeAny($typeName)) {
@@ -150,7 +150,7 @@ class TypeProcessor
         $typeName = $this->translateTypeName($class);
         $this->_types[$typeName] = [];
         if ($this->isArrayType($class)) {
-            $this->process($this->getArrayItemType($class));
+            $this->register($this->getArrayItemType($class));
         } else {
             if (!(class_exists($class) || interface_exists($class))) {
                 throw new \InvalidArgumentException(
@@ -189,7 +189,7 @@ class TypeProcessor
             $returnMetadata = $this->getGetterReturnType($methodReflection);
             $fieldName = $this->dataObjectGetterNameToFieldName($methodReflection->getName());
             $this->_types[$typeName]['parameters'][$fieldName] = [
-                'type' => $this->process($returnMetadata['type']),
+                'type' => $this->register($returnMetadata['type']),
                 'required' => $returnMetadata['isRequired'],
                 'documentation' => $returnMetadata['description'],
             ];

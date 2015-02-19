@@ -49,6 +49,11 @@ class Generator
     protected $storeManager;
 
     /**
+     * @var array
+     */
+    protected $customAttributeMapArray = null;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Model\Soap\Config $apiConfig
@@ -62,13 +67,15 @@ class Generator
         Factory $wsdlFactory,
         \Magento\Webapi\Model\Cache\Type $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Api\CustomAttributeMap $customAttributeMap
     ) {
         $this->_apiConfig = $apiConfig;
         $this->_wsdlFactory = $wsdlFactory;
         $this->_cache = $cache;
         $this->_typeProcessor = $typeProcessor;
         $this->storeManager = $storeManager;
+        $this->customAttributeMapArray = array_values($customAttributeMap->getData());
     }
 
     /**
@@ -114,6 +121,8 @@ class Generator
         $wsdl = $this->_wsdlFactory->create(self::WSDL_NAME, $endPointUrl);
         $wsdl->addSchemaTypeSection();
         $faultMessageName = $this->_addGenericFaultComplexTypeNodes($wsdl);
+        $wsdl = $this->addCustomAttributeTypes($wsdl);
+
         foreach ($requestedServices as $serviceClass => $serviceData) {
             $portTypeName = $this->getPortTypeName($serviceClass);
             $bindingName = $this->getBindingName($serviceClass);
@@ -157,6 +166,21 @@ class Generator
             }
         }
         return $wsdl->toXML();
+    }
+
+    /**
+     * Create and add WSDL Types for complex custom attribute classes
+     *
+     * @param \Magento\Webapi\Model\Soap\Wsdl $wsdl
+     * @return \Magento\Webapi\Model\Soap\Wsdl
+     */
+    protected function addCustomAttributeTypes($wsdl)
+    {
+        foreach ($this->customAttributeMapArray as $customAttributeClass) {
+            $typeName = $this->_typeProcessor->register($customAttributeClass);
+            $wsdl->addComplexType($typeName);
+        }
+        return $wsdl;
     }
 
     /**
