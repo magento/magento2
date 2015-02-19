@@ -157,7 +157,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $form->getElement(
                 'date'
             )->setValue(
-                $this->_localeDate->date($queue->getQueueStartAt(), \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+                $this->_localeDate->date(new \DateTime($queue->getQueueStartAt()))
             );
         }
 

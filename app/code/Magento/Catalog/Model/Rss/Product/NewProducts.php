@@ -51,11 +51,11 @@ class NewProducts
         $product = $this->productFactory->create();
         $todayStartOfDayDate = $this->localeDate->date()
             ->setTime(0, 0)
-            ->format(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+            ->format('Y-m-d H:i:s');
 
         $todayEndOfDayDate = $this->localeDate->date()
             ->setTime(23, 59, 59)
-            ->format(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+            ->format('Y-m-d H:i:s');
         /** @var $products \Magento\Catalog\Model\Resource\Product\Collection */
         $products = $product->getResourceCollection();
         $products->setStoreId($storeId);

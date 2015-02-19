@@ -21,6 +21,6 @@ class Datetime extends \Magento\Backend\Block\System\Config\Form\Field
         $format = $this->_localeDate->getDateTimeFormat(
             \IntlDateFormatter::MEDIUM
         );
-        return $this->_localeDate->date(intval($element->getValue()))->toString($format);
+        return \IntlDateFormatter::formatObject($this->_localeDate->date(intval($element->getValue())), $format);
     }
 }

@@ -278,7 +278,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
                     \IntlDateFormatter::SHORT
                 );
                 try {
-                    $defaultValue = $this->_localeDate->date($defaultValue, $format, null, false)->toValue();
+                    $defaultValue = \IntlDateFormatter::formatObject(new \DateTime($defaultValue), $format);
                     $this->setDefaultValue($defaultValue);
                 } catch (\Exception $e) {
                     throw new Exception(__('Invalid default date'));
