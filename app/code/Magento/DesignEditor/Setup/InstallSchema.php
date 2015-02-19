@@ -23,7 +23,7 @@ class InstallSchema implements InstallSchemaInterface
         /**
          * Create table 'vde_theme_change'
          */
-        $table = $$connection->newTable(
+        $table = $connection->newTable(
             $setup->getTable('vde_theme_change')
         )->addColumn(
             'change_id',
