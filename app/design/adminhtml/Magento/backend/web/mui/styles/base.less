@@ -11,43 +11,42 @@
     @font-style: normal
 );
 
-@font-face {
-    font-family: 'MUI-Icons';
-    src: url('../fonts/MUI-Icons/MUI-Icons.eot');
-    src: url('../fonts/MUI-Icons/MUI-Icons.eot?#iefix') format('embedded-opentype'), url('../fonts/MUI-Icons/MUI-Icons.svg#MUI-Icons') format('svg'), url('../fonts/MUI-Icons/MUI-Icons.woff') format('woff'), url('../fonts/MUI-Icons/MUI-Icons.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
+.font-face(
+    @family-name: 'MUI-Icons',
+    @font-path: '@{baseDir}fonts/MUI-Icons/MUI-Icons',
+    @font-weight: 300,
+    @font-style: normal
+);
 
-/* @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600,700 <http://fonts.googleapis.com/css?family=Open+Sans:400italic%2c400%2c600%2c700>); */
+.font-face(
+    @family-name: @font-family-name__base,
+    @font-path: '@{baseDir}fonts/opensans/light/opensans-300',
+    @font-weight: 300,
+    @font-style: normal
+);
 
-@font-face {
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Open Sans'), local('OpenSans'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 600;
-    src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/MTP_ySUJH_bn48VBG8sNSnhCUOGz7vYGh680lGh-uXM.woff) format('woff');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 700;
-    src: local('Open Sans Bold'), local('OpenSans-Bold'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: italic;
-    font-weight: 400;
-    src: local('Open Sans Italic'), local('OpenSans-Italic'), url(//themes.googleusercontent.com/static/fonts/opensans/v6/xjAJXh38I15wypJXxuGMBobN6UDyHWBl620a-IRfuBk.woff) format('woff');
-}
+.font-face(
+    @family-name: @font-family-name__base,
+    @font-path: '@{baseDir}fonts/opensans/regular/opensans-400',
+    @font-weight: 400,
+    @font-style: normal
+);
+
+.font-face(
+    @family-name: @font-family-name__base,
+    @font-path: '@{baseDir}fonts/opensans/semibold/opensans-600',
+    @font-weight: 600,
+    @font-style: normal
+);
+
+.font-face(
+    @family-name: @font-family-name__base,
+    @font-path: '@{baseDir}fonts/opensans/bold/opensans-700',
+    @font-weight: 700,
+    @font-style: normal
+);
 
 // Headings
-
 h1 {
     color: @h1color;
     font: @h1font;
