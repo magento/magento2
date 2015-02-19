@@ -141,5 +141,4 @@ class View extends \Magento\Framework\Config\AbstractXml
     {
         return isset($this->_data['exclude']) ? $this->_data['exclude'] : [];
     }
-
 }

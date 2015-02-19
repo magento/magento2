@@ -69,7 +69,7 @@ class Bundle
      * @param App\Config\ScopeConfigInterface $scopeConfig
      * @param Bundle\ResolverInterface $resolver
      */
-    function __construct(
+    public function __construct(
         App\Config\ScopeConfigInterface $scopeConfig,
         Bundle\ResolverInterface $resolver
     ) {
@@ -115,7 +115,7 @@ class Bundle
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return void
      */

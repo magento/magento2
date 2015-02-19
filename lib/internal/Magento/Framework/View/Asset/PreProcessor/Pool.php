@@ -39,6 +39,7 @@ class Pool
      * Execute preprocessors instances suitable to convert source content type into a destination one
      *
      * @param Chain $chain
+     * @return void
      */
     public function process(Chain $chain)
     {
@@ -52,8 +53,8 @@ class Pool
     /**
      * Retrieve preProcessors by types
      *
-     * @param $fromType
-     * @param $toType
+     * @param string $fromType
+     * @param string $toType
      * @return PreProcessorInterface[]
      */
     private function getPreProcessors($fromType, $toType)
