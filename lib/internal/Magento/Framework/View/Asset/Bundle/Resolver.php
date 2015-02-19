@@ -8,7 +8,6 @@ namespace Magento\Framework\View\Asset\Bundle;
 
 use Magento\Framework\View;
 use Magento\Framework\View\Asset;
-use Magento\Tools;
 use Magento\Framework\View\Design\Theme\ListInterface;
 
 class Resolver implements ResolverInterface
@@ -48,23 +47,15 @@ class Resolver implements ResolverInterface
     protected $currentPart = 0;
 
     /**
-     * @var Tools\View\Deployer\Log
-     */
-    protected $logger;
-
-    /**
      * @param View\ConfigInterface $config
      * @param ListInterface $themeList
-     * @param Tools\View\Deployer\Log $logger
      */
     public function __construct(
         View\ConfigInterface $config,
-        ListInterface $themeList,
-        Tools\View\Deployer\Log $logger
+        ListInterface $themeList
     ) {
         $this->viewConfig = $config;
         $this->themeList = $themeList;
-        $this->logger = $logger;
     }
 
     /**
@@ -110,12 +101,11 @@ class Resolver implements ResolverInterface
         $bundleSize = $this->getBundleSize();
 
         $currentSize = 0;
-        $totalSize = 0;
         foreach ($assets as $path => $asset) {
             $freeSpace = $bundleSize - $currentSize;
             $content = utf8_encode($asset->getContent());
             $size = $this->getContentSize($content);
-            $totalSize += $size;
+
             if ($bundleSize == 0) {
                 $this->bundle[0][$path] = $content;
                 continue;
@@ -131,18 +121,7 @@ class Resolver implements ResolverInterface
                 }
             }
         }
-        $this->logBundleSize($totalSize);
         return $this->bundle;
-    }
-
-    protected function logBundleSize($totalSize)
-    {
-        $this->logger->logMessage(
-            '=== ' . $this->context->getAreaCode() .
-            ' -> ' . $this->context->getThemePath() .
-            ' -> ' . $this->context->getLocaleCode() . ' ==='
-        );
-        $this->logger->logMessage('Total bundle size: ' . round($totalSize, 2) . " KB\n");
     }
 
     /**
@@ -201,15 +180,21 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * @param \Magento\Framework\View\Asset\LocalInterface[] $bundle
-     * @return \Magento\Framework\View\Asset\LocalInterface[]
+     * @param Asset\LocalInterface[] $bundle
+     * @return Asset\LocalInterface[]
      */
     public function appendHtmlPart($bundle)
     {
+        if (!(isset($bundle[0]) && isset($bundle[1]))) {
+            return false;
+        }
+        if (!$this->context) {
+            $this->context = reset($bundle[0])->getContext();
+        }
+
         $bundleSize = $this->getBundleSize();
         if (!$bundleSize) {
-            $bundle[0] .= $bundle[1];
-            return [$bundle[0]];
+            return [array_merge($bundle[0], $bundle[1])];
         }
         return $bundle;
     }
