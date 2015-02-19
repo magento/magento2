@@ -135,28 +135,10 @@ class Date extends FilterAbstract
     protected function convertDate($date, LocaleInterface $locale)
     {
         try {
-            /** @var \DateTime $dateObj */
-            $dateObj = $this->localeDate->date(null, null, $locale, false);
-
-            //set default timezone for store (admin)
-            $dateObj->setTimezone(
-                $this->scopeConfig->getValue(
-                    $this->localeDate->getDefaultTimezonePath(),
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
-                )
-            );
-
-            //set beginning of day
-            $dateObj->setHour(00);
-            $dateObj->setMinute(00);
-            $dateObj->setSecond(00);
-
-            //set date with applying timezone of store
-            $dateObj->set($date, null, $locale);
-
+            $dateObj = $this->localeDate->date($date, null, $locale, false);
+            $dateObj->setTime(0, 0, 0);
             //convert store date to default date in UTC timezone without DST
-            $dateObj->setTimezone('UTC');
-
+            $dateObj->setTimezone(new \DateTimeZone('UTC'));
             return $dateObj;
         } catch (\Exception $e) {
             return null;

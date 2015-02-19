@@ -147,11 +147,11 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
                         $to = array_shift($exportFilter[$attributeCode]);
 
                         if (is_scalar($from) && !empty($from)) {
-                            $date = $this->_localeDate->date($from, null, null, false)->toString('MM/dd/YYYY');
+                            $date = (new \DateTime($from))->format('m/d/Y');
                             $collection->addAttributeToFilter($attributeCode, ['from' => $date, 'date' => true]);
                         }
                         if (is_scalar($to) && !empty($to)) {
-                            $date = $this->_localeDate->date($to, null, null, false)->toString('MM/dd/YYYY');
+                            $date = (new \DateTime($to))->format('m/d/Y');
                             $collection->addAttributeToFilter($attributeCode, ['to' => $date, 'date' => true]);
                         }
                     }
