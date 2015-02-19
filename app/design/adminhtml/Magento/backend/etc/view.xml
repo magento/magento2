@@ -6,6 +6,9 @@
  */
 -->
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
+    <vars module="Js_Bundle">
+        <var name="bundle_size">500KB</var>
+    </vars>
     <exclude>
         <item type="file">mage/common.js</item>
         <item type="file">mage/cookies.js</item>
@@ -33,13 +36,34 @@
         <item type="file">mage/zoom.js</item>
         <item type="file">mage/validation/dob-rule.js</item>
         <item type="file">mage/validation/validation.js</item>
+        <item type="file">mage/adminhtml/varienLoader.js</item>
+        <item type="file">mage/adminhtml/tools.js</item>
+        <item type="file">jquery/jquery.min.js</item>
         <item type="file">jquery/jquery.parsequery.js</item>
         <item type="file">jquery/jquery.mobile.custom.js</item>
         <item type="file">jquery/jquery-ui.js</item>
-        <item type="file">jquery/jquery.js</item>
-        <item type="file">jquery/autocomplete/jquery.autocomplete.js</item>
+        <item type="file">jquery/jquery-ui.min.js</item>
         <item type="file">matchMedia.js</item>
-        <item type="directory">requirejs</item>
+        <item type="file">requirejs/require.js</item>
+        <item type="file">date-format-normalizer.js</item>
+        <item type="file">varien/js.js</item>
+        <item type="file">tiny_mce/jquery.tinymce.js</item>
+        <item type="file">tiny_mce/tiny_mce.js</item>
+        <item type="file">tiny_mce/tiny_mce_dev.js</item>
+        <item type="file">tiny_mce/tiny_mce_jquery.js</item>
+        <item type="file">tiny_mce/tiny_mce_jquery_src.js</item>
+        <item type="file">tiny_mce/tiny_mce_popup.js</item>
+        <item type="file">tiny_mce/tiny_mce_prototype.js</item>
+        <item type="file">tiny_mce/tiny_mce_prototype_src.js</item>
+        <item type="directory">css</item>
+        <item type="directory">lib</item>
         <item type="directory">prototype</item>
+        <item type="directory">scriptaculous</item>
+        <item type="directory">mage/requirejs</item>
+        <item type="directory">tiny_mce/classes</item>
+        <item type="directory">tiny_mce/langs</item>
+        <item type="directory">tiny_mce/plugins</item>
+        <item type="directory">tiny_mce/themes</item>
+        <item type="directory">tiny_mce/utils</item>
     </exclude>
 </view>

@@ -13,8 +13,6 @@ use Magento\Framework\App;
  */
 class Bundle
 {
-    const XML_PATH_NUMBER_OF_BUNDLES = '';
-
     const BUNDLE_TYPE_JS = 'js';
 
     const BUNDLE_TYPE_HTML = 'html';
@@ -25,14 +23,14 @@ class Bundle
     protected $bundlePath;
 
     /**
-     * @var int
+     * @var array
      */
-    protected $numberOfBundles;
+    protected $assets = [];
 
     /**
      * @var array
      */
-    protected $assets = [];
+    protected $htmlAssets = [];
 
     /**
      * @var array
@@ -45,9 +43,14 @@ class Bundle
     protected $scopeConfig;
 
     /**
-     * @var string
+     * @var ContextInterface
      */
-    protected $type;
+    protected $context;
+
+    /**
+     * @var Bundle\ResolverInterface
+     */
+    protected $resolver;
 
     /**
      * @var array
@@ -64,52 +67,51 @@ class Bundle
 
     /**
      * @param App\Config\ScopeConfigInterface $scopeConfig
+     * @param Bundle\ResolverInterface $resolver
      */
     function __construct(
-        App\Config\ScopeConfigInterface $scopeConfig
+        App\Config\ScopeConfigInterface $scopeConfig,
+        Bundle\ResolverInterface $resolver
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->init();
+        $this->resolver = $resolver;
     }
 
     /**
-     * @param string $type
+     * @param LocalInterface $asset
      * @return bool
      */
-    public static function isValidType($type)
+    public static function isValid(LocalInterface $asset)
     {
-        return in_array($type, self::$availableTypes);
+        $type = $asset->getContentType();
+        if (!in_array($type, self::$availableTypes)) {
+            return false;
+        }
+
+        if ($type == self::BUNDLE_TYPE_HTML) {
+            return $asset->getModule() !== '';
+        }
+
+        return true;
     }
 
     /**
+     * Set bundle area
+     *
+     * @param ContextInterface $context
      * @return void
      */
-    protected function init()
+    protected function setContext($context)
     {
-        $this->numberOfBundles = $this->scopeConfig->getValue(
-            self::XML_PATH_NUMBER_OF_BUNDLES,
-            App\ScopeInterface::SCOPE_DEFAULT
-        );
+        $this->context = $context;
     }
 
     /**
-     * @param string $type
-     *
-     * @return void
+     * @return ContextInterface
      */
-    public function setType($type)
+    protected function getContext()
     {
-        $this->type = $type;
-    }
-
-    /**
-     * @return string
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
+        return $this->context;
     }
 
     /**
@@ -139,7 +141,12 @@ class Bundle
      */
     public function addAsset(LocalInterface $asset)
     {
-        $this->assets[$this->getAssetKey($asset)] = $asset;
+        $this->setContext($asset->getContext());
+        if ($asset->getContentType() == self::BUNDLE_TYPE_HTML) {
+            $this->htmlAssets[$this->getAssetKey($asset)] = $asset;
+        } else {
+            $this->assets[$this->getAssetKey($asset)] = $asset;
+        }
     }
 
     /**
@@ -156,36 +163,22 @@ class Bundle
     /**
      * Divided bundle on small parts
      *
-     * @return void
+     * @return bool
      */
     protected function divide()
     {
-        $perBundlePart = ceil(count($this->assets) / $this->numberOfBundles);
-        $this->bundle = array_chunk($this->assets, $perBundlePart, true);
+        $this->bundle = $this->resolver->resolve($this->assets);
     }
 
     /**
-     * Fill bundle with real content
-     *
      * @return void
      */
-    protected function fill()
+    protected function merge()
     {
-        foreach ($this->assets as $path => $asset) {
-            $this->assets[$path] = utf8_encode($asset->getContent());
+        foreach ($this->htmlAssets as $path => $asset) {
+            $this->htmlAssets[$path] = utf8_encode($asset->getContent());
         }
-    }
-
-    /**
-     * Convert bundle content to json
-     *
-     * @return void
-     */
-    protected function toJson()
-    {
-        foreach ($this->bundle as &$part) {
-            $part = json_encode($part, JSON_UNESCAPED_SLASHES);
-        }
+        $this->bundle[] = $this->htmlAssets;
     }
 
     /**
@@ -193,14 +186,21 @@ class Bundle
      *
      * @return void
      */
-    protected function wrapp()
+    protected function prepare()
     {
-        foreach ($this->bundle as &$part) {
+        foreach ($this->bundle as $key => $part) {
+            if (empty($part)) {
+                continue;
+            }
+            $path = array_keys($part)[0];
+            $partType = substr($path, strrpos($path, '.') + 1);
+            $part = json_encode($part, JSON_UNESCAPED_SLASHES);
             $part = "require.config({\n" .
-            "    config: {\n" .
-            "        '" . $this->getJsName() . "':" . $part . "\n" .
-            "    }\n" .
-            "});\n";
+                "    config: {\n" .
+                "        '" . $this->bundleNames[$partType] . "':" . $part . "\n" .
+                "    }\n" .
+                "});\n";
+            $this->bundle[$key] = $part;
         }
     }
 
@@ -209,17 +209,14 @@ class Bundle
      */
     protected function addInitJs()
     {
-        if ($this->getType() != self::BUNDLE_TYPE_HTML) {
-            return false;
-        }
-
         $part = reset($this->bundle);
         $part = "require.config({\n" .
                 "    bundles: {\n" .
                 "        'mage/requirejs/static': [\n" .
                 "            'jsbuild',\n" .
                 "            'buildTools',\n" .
-                "            'text'\n" .
+                "            'text',\n" .
+                "            'statistician'\n" .
                 "        ]\n" .
                 "    },\n" .
                 "    deps: [\n" .
@@ -233,34 +230,18 @@ class Bundle
     }
 
     /**
-     * @return string
-     */
-    public function getJsName()
-    {
-        return $this->bundleNames[$this->getType()];
-    }
-
-    /**
      * Get bundle content
      *
-     *
-     * @return array
+     * @return \Magento\Framework\View\Asset\LocalInterface[]
      */
     public function getContent()
     {
-        $this->prepare();
-        return $this->bundle;
-    }
-
-    /**
-     * @return void
-     */
-    protected function prepare()
-    {
-        $this->fill();
         $this->divide();
-        $this->toJson();
-        $this->wrapp();
+        $this->merge();
+        $this->prepare();
         $this->addInitJs();
+        $this->bundle = $this->resolver->appendHtmlPart($this->bundle);
+
+        return $this->bundle;
     }
 }

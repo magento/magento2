@@ -130,6 +130,12 @@
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
+    <preference for="Magento\Framework\View\Asset\Bundle\ResolverInterface" type="Magento\Framework\View\Asset\Bundle\Resolver" />
+    <type name="Magento\Tools\View\Deployer\Log">
+        <arguments>
+            <argument name="verbosity" xsi:type="const">Magento\Tools\View\Deployer\Log::ERROR</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>

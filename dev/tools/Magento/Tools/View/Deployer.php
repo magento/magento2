@@ -38,7 +38,7 @@ class Deployer
     /** @var \Magento\Framework\App\View\Asset\Publisher */
     private $assetPublisher;
 
-    /** @var \Magento\Framework\View\Asset\BundleService */
+    /** @var \Magento\Framework\View\Asset\Bundle\Service */
     private $bundleService;
 
     /** @var bool */
@@ -186,7 +186,7 @@ class Deployer
         $objectManager->configure($configLoader->load($areaCode));
         $this->assetRepo = $objectManager->get('Magento\Framework\View\Asset\Repository');
         $this->assetPublisher = $objectManager->get('Magento\Framework\App\View\Asset\Publisher');
-        $this->bundleService = $objectManager->get('Magento\Framework\View\Asset\BundleService');
+        $this->bundleService = $objectManager->get('Magento\Framework\View\Asset\Bundle\Service');
         $this->htmlMinifier = $objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
     }
 
