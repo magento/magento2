@@ -4128,12 +4128,16 @@ tr.dynamic-grid input.input-text {
 
 .tax-rate-popup .field {
     margin-bottom: 20px;
+    > input[type="radio"] + label:before,
+    > input[type="checkbox"] + label:before {
+        left: 36%;
+    }
 }
 
 .tax-rate-popup .field .label {
     margin: 5px 0 0;
-    width: 26%;
-    padding: 0 20px 0 0;
+    width: 30%;
+    padding: 0 30px 0 0;
     float: left;
     text-align: right;
     box-sizing: content-box;
