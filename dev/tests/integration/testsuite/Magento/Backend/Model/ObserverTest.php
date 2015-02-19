@@ -93,7 +93,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Framework\App\RequestInterface');
-        $request->setPost(
+        $request->setPostValue(
             'login',
             [
                 'username' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,

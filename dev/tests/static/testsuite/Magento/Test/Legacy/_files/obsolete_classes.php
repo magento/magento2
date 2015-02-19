@@ -2959,6 +2959,7 @@ return [
     ['Magento\Core\Block\RequireCookie', 'Magento\Cookie\Block\RequireCookie'],
     ['Magento\Core\Controller\Index\NoCookies', 'Magento\Cookie\Controller\Index\NoCookies'],
     ['Magento\Core\Model\Asset\Config', 'Magento\Framework\View\Asset\Config'],
+    ['Magento\Framework\App\Http\RequestInterface'],
     ['Magento\Core\Model\Layout\Merge', 'Magento\Framework\View\Model\Layout\Merge'],
     ['Magento\Core\Model\Layout\Translator', 'Magento\Framework\View\Model\Layout\Translator'],
     ['Magento\Core\Model\Layout\Update\Validator', 'Magento\Framework\View\Model\Layout\Update\Validator'],
@@ -2971,4 +2972,8 @@ return [
     ['Magento\Core\Model\Resource\Layout\Update', 'Magento\Widget\Model\Resource\Layout\Update'],
     ['Magento\Core\Model\Resource\Layout\Update\Collection', 'Magento\Widget\Model\Resource\Layout\Update\Collection'],
     ['Magento\Backend\Model\View', 'Magento\Framework\App\View'],
+    ['Zend_Controller_Router_Route'],
+    ['Zend_Controller_Router_Route_Interface'],
+    ['Zend_Controller_Response_Abstract', 'Magento\Framework\HTTP\PhpEnvironment\Response'],
+    ['Zend_Controller_Response_Http', 'Magento\Framework\HTTP\PhpEnvironment\Response'],
 ];

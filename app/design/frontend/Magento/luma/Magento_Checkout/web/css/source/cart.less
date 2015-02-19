@@ -91,10 +91,8 @@
             }
 
             .fieldset.estimate {
-                >.legend {
-                    &:extend(.abs-visually-hidden all);
-                }
-                >.legend + br {
+                > .legend,
+                > .legend + br {
                     &:extend(.abs-no-display all);
                 }
             }
@@ -150,6 +148,9 @@
                 padding: 6px 0 6px 14px;
                 text-align: right;
             }
+        }
+        .table-caption {
+            &:extend(.abs-no-display all);
         }
         .grand {
             th,
@@ -687,7 +688,7 @@
                     }
                 }
                 .content {
-                    display: block !important;
+                    display: block !important; // Need for overwriting collapsible widget
                     padding: 0;
                 }
             }

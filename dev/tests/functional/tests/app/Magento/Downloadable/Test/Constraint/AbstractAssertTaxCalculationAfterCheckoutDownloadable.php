@@ -9,8 +9,8 @@ namespace Magento\Downloadable\Test\Constraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
-use Magento\Sales\Test\Page\OrderView;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Sales\Test\Page\CustomerOrderView;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Tax\Test\Constraint\AbstractAssertTaxCalculationAfterCheckout;
 
@@ -34,7 +34,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckoutDownloadable extends Abs
      * @param CheckoutCart $checkoutCart
      * @param CheckoutOnepage $checkoutOnepage
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
-     * @param OrderView $orderView
+     * @param CustomerOrderView $customerOrderView
      * @return void
      */
     public function processAssert(
@@ -43,10 +43,10 @@ abstract class AbstractAssertTaxCalculationAfterCheckoutDownloadable extends Abs
         CheckoutCart $checkoutCart,
         CheckoutOnepage $checkoutOnepage,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
-        OrderView $orderView
+        CustomerOrderView $customerOrderView
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
-        $this->orderView = $orderView;
+        $this->customerOrderView = $customerOrderView;
 
         $checkoutCart->getProceedToCheckoutBlock()->proceedToCheckout();
         $checkoutOnepage->getBillingBlock()->clickContinue();

@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -26,11 +26,11 @@ class AssertCustomerInvalidEmail extends AbstractConstraint
      * Assert that error message "Please correct this email address: "%email%"." is displayed
      * after customer with invalid email save
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CustomerIndexNew $pageCustomerIndexNew
      * @return void
      */
-    public function processAssert(CustomerInjectable $customer, CustomerIndexNew $pageCustomerIndexNew)
+    public function processAssert(Customer $customer, CustomerIndexNew $pageCustomerIndexNew)
     {
         $expectMessage = str_replace('%email%', $customer->getEmail(), self::ERROR_EMAIL_MESSAGE);
         $actualMessage = $pageCustomerIndexNew->getMessagesBlock()->getErrorMessages();
