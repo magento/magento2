@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\View\Layout\Reader;
+namespace Magento\Framework\View\Layout;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
-class PoolTest extends \PHPUnit_Framework_TestCase
+class ReaderPoolTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
@@ -39,7 +39,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
     public function testInterpret()
     {
-        /** @var Context $contextMock */
+        /** @var Reader\Context $contextMock */
         $contextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
             ->disableOriginalConstructor()->getMock();
 
@@ -52,7 +52,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
          */
         $moveReaderMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Move')
             ->disableOriginalConstructor()->getMock();
-        $moveReaderMock->expects($this->once())->method('interpret')
+        $moveReaderMock->expects($this->exactly(2))->method('interpret')
             ->willReturn($this->returnSelf());
         $moveReaderMock->method('getSupportedNodes')
             ->willReturn(['move']);
@@ -62,13 +62,13 @@ class PoolTest extends \PHPUnit_Framework_TestCase
          */
         $removeReaderMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Remove')
             ->disableOriginalConstructor()->getMock();
-        $removeReaderMock->expects($this->once())->method('interpret')
+        $removeReaderMock->expects($this->exactly(2))->method('interpret')
             ->with()
             ->willReturn($this->returnSelf());
         $removeReaderMock->method('getSupportedNodes')
             ->willReturn(['remove']);
 
-        $this->readerFactoryMock->expects($this->any())
+        $this->readerFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValueMap(
                 [
@@ -77,6 +77,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                 ]
             ));
 
+        $this->pool->interpret($contextMock, $currentElement);
         $this->pool->interpret($contextMock, $currentElement);
     }
 }
