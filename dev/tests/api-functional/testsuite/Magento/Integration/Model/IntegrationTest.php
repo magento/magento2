@@ -13,22 +13,36 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     /** @var  \Magento\Integration\Model\Integration */
     protected $integration;
 
-    public function testConfigBasedIntegrationCreation()
+
+    protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-
-        /** @var \Magento\Integration\Model\Integration $integrationModel */
-        $integrationModel = $objectManager->get('Magento\Integration\Model\Integration');
-        $integrationModel->loadByConsumerId(1);
-        $this->assertEquals('test-integration@magento.com', $integrationModel->getEmail());
-        $this->assertEquals('http://example.com/endpoint1', $integrationModel->getEndpoint());
-        $this->assertEquals('Test Integration1', $integrationModel->getName());
-        $this->assertEquals(Integration::TYPE_CONFIG, $integrationModel->getSetupType());
-
         /** @var $integrationService \Magento\Integration\Service\V1\IntegrationInterface */
         $integrationService = $objectManager->get('Magento\Integration\Service\V1\IntegrationInterface');
-        $this->integration = $integrationService->findByName('Test Integration1');
-        $this->integration->setStatus(Integration::STATUS_ACTIVE)->save();
+
+        $params = [
+            'all_resources' => false,
+            'integration_id' => 1,
+            'status' => Integration::STATUS_ACTIVE,
+            'name' => 'Test Integration1'
+        ];
+        $this->integration = $integrationService->update($params);
+        parent::setUp();
+    }
+
+    protected function tearDown()
+    {
+        unset($this->integration);
+        OauthHelper::clearApiAccessCredentials();
+        parent::tearDown();
+    }
+
+    public function testConfigBasedIntegrationCreation()
+    {
+        $this->assertEquals('test-integration@magento.com', $this->integration->getEmail());
+        $this->assertEquals('http://example.com/endpoint1', $this->integration->getEndpoint());
+        $this->assertEquals('Test Integration1', $this->integration->getName());
+        $this->assertEquals(Integration::TYPE_CONFIG, $this->integration->getSetupType());
     }
 
     /**
@@ -39,21 +53,16 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     public function testGetServiceCall()
     {
         $this->_markTestAsRestOnly();
-        $version = 'V1';
-        $restResourcePath = "/{$version}/testmodule4/";
-
         $itemId = 1;
         $name = 'Test';
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => $restResourcePath . $itemId,
+                'resourcePath' => '/V1/testmodule4/' . $itemId,
                 'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
             ],
         ];
         $item = $this->_webApiCall($serviceInfo, [], null, null, $this->integration);
         $this->assertEquals($itemId, $item['entity_id'], 'id field returned incorrectly');
         $this->assertEquals($name, $item['name'], 'name field returned incorrectly');
-
-        OauthHelper::clearApiAccessCredentials();
     }
 }
