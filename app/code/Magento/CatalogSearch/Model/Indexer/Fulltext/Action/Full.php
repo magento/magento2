@@ -28,7 +28,7 @@ class Full
     protected $separator = ' | ';
 
     /**
-     * Array of \Magento\Framework\Stdlib\DateTime\DateInterface objects per store
+     * Array of \DateTime objects per store
      *
      * @var array
      */

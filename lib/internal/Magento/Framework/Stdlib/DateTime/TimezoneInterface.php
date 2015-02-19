@@ -67,22 +67,22 @@ interface TimezoneInterface
     public function date($date = null, $part = null, $locale = null, $useTimezone = true);
 
     /**
-     * Create \Magento\Framework\Stdlib\DateTime\DateInterface object with date converted to scope timezone and scope Locale
+     * Create \DateTime object with date converted to scope timezone and scope Locale
      *
      * @param   mixed $scope Information about scope
-     * @param   string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface|array|null $date date in UTC
+     * @param   string|integer|\DateTime|array|null $date date in UTC
      * @param   boolean $includeTime flag for including time to date
      * @return  \DateTime
      */
     public function scopeDate($scope = null, $date = null, $includeTime = false);
 
     /**
-     * Create \Magento\Framework\Stdlib\DateTime\DateInterface object with date converted from scope's timezone
+     * Create \DateTime object with date converted from scope's timezone
      * to UTC time zone. Date can be passed in format of scope's locale
      * or in format which was passed as parameter.
      *
      * @param mixed $scope Information about scope
-     * @param string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface|array|null $date date in scope's timezone
+     * @param string|integer|\DateTime|array|null $date date in scope's timezone
      * @param boolean $includeTime flag for including time to date
      * @return \DateTime
      */
@@ -100,7 +100,7 @@ interface TimezoneInterface
     /**
      * Format date using current locale options and time zone.
      *
-     * @param \DateTime|\Magento\Framework\Stdlib\DateTime\DateInterface|null $date
+     * @param \DateTime|null $date
      * @param string $format
      * @param bool $showTime
      * @return string
@@ -114,7 +114,7 @@ interface TimezoneInterface
     /**
      * Format time using current locale options
      *
-     * @param \Magento\Framework\Stdlib\DateTime\DateInterface|null $time
+     * @param \DateTime|null $time
      * @param string $format
      * @param bool $showDate
      * @return string

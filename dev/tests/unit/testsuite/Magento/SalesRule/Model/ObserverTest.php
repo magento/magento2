@@ -249,20 +249,16 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testAggregateSalesReportCouponsData()
     {
-        $dateMock = $this->getMockBuilder('DateTime')->disableOriginalConstructor()->getMock();
+        $data = new \DateTime();
         $this->localeResolver->expects($this->once())
             ->method('emulate')
             ->with(0);
         $this->localeDate->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($dateMock));
-        $dateMock->expects($this->once())
-            ->method('modify')
-            ->with('-25 hours')
-            ->will($this->returnSelf());
+            ->will($this->returnValue($data));
         $this->reportRule->expects($this->once())
             ->method('aggregate')
-            ->with($dateMock);
+            ->with($data);
         $this->localeResolver->expects($this->once())
             ->method('revert');
 

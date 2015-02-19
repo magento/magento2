@@ -164,7 +164,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
      */
     public function getYearRange()
     {
-        return (new \DateTime('- 100 years'))->format('Y')
+        return (new \DateTime())->modify('- 100 years')->format('Y')
             . ':' . (new \DateTime())->format('Y');
     }
 }

@@ -162,10 +162,6 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['date'])
             ->getMockForAbstractClass();
-        $dateMock = $this->getMockBuilder('DateTime')
-            ->disableOriginalConstructor()
-            ->setMethods(['format'])
-            ->getMock();
 
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(
@@ -179,13 +175,11 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $model->setScheduledAt($scheduledAt);
         $model->setCronExprArr($cronExprArr);
         if ($scheduledAt && $cronExprArr) {
-            $timezoneMock->expects($this->once())->method('date')->willReturn($dateMock);
-            $date = getdate(is_numeric($scheduledAt) ? $scheduledAt : strtotime($scheduledAt));
-            $dateMock->expects($this->at(0))->method('format')->with('i')->willReturn($date['minutes']);
-            $dateMock->expects($this->at(1))->method('format')->with('H')->willReturn($date['hours']);
-            $dateMock->expects($this->at(2))->method('format')->with('d')->willReturn($date['mday']);
-            $dateMock->expects($this->at(3))->method('format')->with('m')->willReturn($date['mon']);
-            $dateMock->expects($this->at(4))->method('format')->with('N')->willReturn($date['wday']);
+            $date = is_numeric($scheduledAt) ? $scheduledAt : strtotime($scheduledAt);
+            $timezoneMock->expects($this->once())
+                ->method('date')
+                ->with($date)
+                ->willReturn((new \DateTime())->setTimestamp($date));
         }
 
         // 3. Run tested method
