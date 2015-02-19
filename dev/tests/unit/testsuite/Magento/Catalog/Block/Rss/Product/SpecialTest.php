@@ -130,7 +130,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
         $this->rssModel->expects($this->once())->method('getProductsCollection')
             ->will($this->returnValue([$item]));
         $this->msrpHelper->expects($this->once())->method('canApplyMsrp')->will($this->returnValue(false));
-        $this->localeDate->expects($this->once())->method('formatDate')->will($this->returnValue(date('Y-m-d')));
+        $this->localeDate->expects($this->once())->method('formatDateTime')->will($this->returnValue(date('Y-m-d')));
 
         $this->priceCurrency->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
 
@@ -185,7 +185,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
                 'getUseSpecial',
             ])->disableOriginalConstructor()->getMock();
         $item->expects($this->once())->method('getAllowedInRss')->will($this->returnValue(true));
-        $item->expects($this->exactly(3))->method('getSpecialToDate')->will($this->returnValue(date('Y-m-d')));
+        $item->expects($this->any())->method('getSpecialToDate')->will($this->returnValue(date('Y-m-d')));
         $item->expects($this->exactly(2))->method('getFinalPrice')->will($this->returnValue(10));
         $item->expects($this->once())->method('getSpecialPrice')->will($this->returnValue(15));
         $item->expects($this->exactly(2))->method('getAllowedPriceInRss')->will($this->returnValue(true));

@@ -133,8 +133,8 @@ class Collection extends \Magento\Framework\Data\Collection
             if (!$this->_from && !$this->_to) {
                 return $this->_intervals;
             }
-            $dateStart = new \DateTime($this->_from);
-            $dateEnd = new \DateTime($this->_to);
+            $dateStart = $this->_from;
+            $dateEnd = $this->_to;
 
             $firstInterval = true;
             while ($dateStart <= $dateEnd) {

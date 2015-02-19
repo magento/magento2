@@ -145,7 +145,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
             if ($item->getSpecialToDate() && $item->getFinalPrice() <= $item->getSpecialPrice() &&
                 $item->getAllowedPriceInRss()
             ) {
-                if ($currentDate <= $item->getSpecialToDate()) {
+                if ($currentDate->format('Y-m-d') <= $item->getSpecialToDate()) {
                     $item->setUseSpecial(true);
                 }
             }
@@ -176,7 +176,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
                 $special = '';
                 if ($item->getUseSpecial()) {
                     $special = '<br />' . __('Special Expires On: %1', $this->formatDate(
-                        (new \DateTime($item->getSpecialToDate())),
+                        $item->getSpecialToDate(),
                         \IntlDateFormatter::MEDIUM
                     ));
                 }
