@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * Exception to be thrown when an validation data is failed
+ */
 class ValidatorException extends \Magento\Framework\Exception\InputException
 {
     /**
@@ -44,6 +47,8 @@ class ValidatorException extends \Magento\Framework\Exception\InputException
     }
 
     /**
+     * Setter for message
+     *
      * @param \Magento\Framework\Message\AbstractMessage $message
      * @return $this
      */
@@ -57,17 +62,19 @@ class ValidatorException extends \Magento\Framework\Exception\InputException
     }
 
     /**
+     * Getter for messages by type or all
+     *
      * @param string $type
      * @return array
      */
     public function getMessages($type = '')
     {
         if ('' == $type) {
-            $arrRes = [];
+            $allMessages = [];
             foreach ($this->messages as $messages) {
-                $arrRes = array_merge($arrRes, $messages);
+                $allMessages = array_merge($allMessages, $messages);
             }
-            return $arrRes;
+            return $allMessages;
         }
         return isset($this->messages[$type]) ? $this->messages[$type] : [];
     }
