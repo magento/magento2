@@ -43,7 +43,7 @@ $orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), \IntlDate
                 </tr>
                 <?php if ($orderAdminDate != $orderStoreDate):?>
                 <tr>
-                    <th><?php echo __('Order Date (%1)', $_order->getCreatedAtStoreDate()->getTimezone()) ?></th>
+                    <th><?php echo __('Order Date (%1)', $_order->getCreatedAtStoreDate()->getTimezone()->getName()) ?></th>
                     <td><?php echo $orderStoreDate ?></td>
                 </tr>
                 <?php endif;?>
