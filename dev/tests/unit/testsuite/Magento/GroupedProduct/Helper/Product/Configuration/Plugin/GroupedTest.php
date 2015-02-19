@@ -70,7 +70,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::aroundGetOptions
+     * covers Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::aroundGetOptions
      */
     public function testAroundGetOptionsGroupedProductWithAssociated()
     {
@@ -136,7 +136,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::aroundGetOptions
+     * covers Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::aroundGetOptions
      */
     public function testAroundGetOptionsGroupedProductWithoutAssociated()
     {
@@ -173,7 +173,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::aroundGetOptions
+     * covers Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped::aroundGetOptions
      */
     public function testAroundGetOptionsAnotherProductType()
     {

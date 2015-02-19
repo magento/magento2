@@ -38,7 +38,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         $isNew = $this->getRequest()->getParam('is_new');
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

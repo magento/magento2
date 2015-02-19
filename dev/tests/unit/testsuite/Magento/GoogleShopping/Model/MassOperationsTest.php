@@ -28,7 +28,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Notification\NotifierInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $notificationInterface;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerInterface;
 
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -58,7 +58,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->notificationInterface = $this->getMock('Magento\Framework\Notification\NotifierInterface');
-        $this->storeManagerInterface = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->googleShoppingHelper = $this->getMock('Magento\GoogleShopping\Helper\Data', [], [], '', false);
         $this->googleShoppingCategoryHelper = $this->getMock('Magento\GoogleShopping\Helper\Category');

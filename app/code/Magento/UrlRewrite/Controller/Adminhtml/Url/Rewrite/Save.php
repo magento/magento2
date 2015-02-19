@@ -138,7 +138,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             /** @var $session \Magento\Backend\Model\Session */
             $session = $this->_objectManager->get('Magento\Backend\Model\Session');

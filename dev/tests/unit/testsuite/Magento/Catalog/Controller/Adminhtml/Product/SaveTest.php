@@ -108,7 +108,7 @@ class SaveTest extends \Magento\Catalog\Controller\Adminhtml\ProductTest
     {
         $productData = ['product' => ['name' => 'test-name']];
 
-        $this->request->expects($this->any())->method('getPost')->willReturn($productData);
+        $this->request->expects($this->any())->method('getPostValue')->willReturn($productData);
         $this->initializationHelper->expects($this->any())->method('initialize')
             ->willReturn($this->product);
         $this->product->expects($this->any())->method('getSku')->willThrowException(new $exceptionType('message'));

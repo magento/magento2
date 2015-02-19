@@ -21,7 +21,7 @@ class TaxTest extends \Magento\Backend\Utility\Controller
      */
     public function testAjaxSaveAction($postData, $expectedData)
     {
-        $this->getRequest()->setPost($postData);
+        $this->getRequest()->setPostValue($postData);
 
         $this->dispatch('backend/tax/tax/ajaxSave');
 
@@ -70,7 +70,7 @@ class TaxTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals($taxClassData['class_type'], $class->getClassType());
 
         $postData = [ 'class_id' => $taxClassId ];
-        $this->getRequest()->setPost($postData);
+        $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/tax/tax/ajaxDelete');
 
         $isFound = true;

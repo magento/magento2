@@ -9,7 +9,7 @@ namespace Magento\Framework\Controller\Result;
 /**
  * Class JSONTest
  *
- * @covers Magento\Framework\Controller\Result\JSON
+ * covers Magento\Framework\Controller\Result\JSON
  */
 class JSONTest extends \PHPUnit_Framework_TestCase
 {

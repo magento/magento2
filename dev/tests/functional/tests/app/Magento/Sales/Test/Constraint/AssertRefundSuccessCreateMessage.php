@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -27,10 +27,10 @@ class AssertRefundSuccessCreateMessage extends AbstractConstraint
     /**
      * Assert that success create credit memo message is present on order view page
      *
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @return void
      */
-    public function processAssert(OrderView $orderView)
+    public function processAssert(SalesOrderView $orderView)
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_CREATE_MESSAGE,

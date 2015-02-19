@@ -11,7 +11,7 @@ namespace Magento\Catalog\Model\Layer\Filter\Dynamic;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class AlgorithmFactory
 {

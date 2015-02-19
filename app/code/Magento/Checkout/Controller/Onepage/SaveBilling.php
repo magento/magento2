@@ -11,12 +11,12 @@ class SaveBilling extends \Magento\Checkout\Controller\Onepage
     /**
      * Save checkout billing address
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         if (!$this->getRequest()->isPost() || $this->_expireAjax()) {
-            return;
+            return $this->_ajaxRedirectResponse();
         }
         $data = $this->getRequest()->getPost('billing', []);
         $customerAddressId = $this->getRequest()->getPost('billing_address_id', false);
@@ -40,7 +40,7 @@ class SaveBilling extends \Magento\Checkout\Controller\Onepage
                         'error' => -1,
                         'message' => $this->scopeConfig->getValue(
                             'sales/minimum_order/error_message',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             $quote->getStoreId()
                         ),
                     ];
@@ -60,8 +60,6 @@ class SaveBilling extends \Magento\Checkout\Controller\Onepage
             }
         }
 
-        $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
-        );
+        return $this->resultJsonFactory->create()->setData($result);
     }
 }

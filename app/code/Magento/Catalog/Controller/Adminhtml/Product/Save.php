@@ -67,7 +67,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $productId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             try {
                 $product = $this->initializationHelper->initialize($this->productBuilder->build($this->getRequest()));

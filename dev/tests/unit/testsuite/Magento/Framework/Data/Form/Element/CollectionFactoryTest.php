@@ -36,7 +36,7 @@ class CollectionFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\CollectionFactory::create
+     * covers \Magento\Framework\Data\Form\Element\CollectionFactory::create
      */
     public function testCreate()
     {

@@ -41,7 +41,7 @@ class UrlBuilder implements UrlBuilderInterface
      */
     public function getUrl(array $queryParams = [])
     {
-        if (!$this->config->getValue('rss/config/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)) {
+        if (!$this->config->getValue('rss/config/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             return '';
         }
 

@@ -88,7 +88,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->will($this->returnValue($items));
 
-        $storeManager = $this->getMockBuilder('\Magento\Framework\Store\StoreManagerInterface')
+        $storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getStore', 'hasSingleStore', 'isSingleStoreMode', 'getStores', 'getWebsite', 'getWebsites',
                 'reinitStores', 'getDefaultStoreView', 'setIsSingleStoreModeAllowed', 'getGroup', 'getGroups',
@@ -668,7 +668,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $taxTotalsCalcModel = $objectManager->getObject('Magento\Tax\Model\Sales\Total\Quote\Tax');
-        $this->assertSame($taxTotalsCalcModel->getLabel(), __('Tax'));
+        $this->assertEquals($taxTotalsCalcModel->getLabel(), __('Tax'));
     }
 
     /**
