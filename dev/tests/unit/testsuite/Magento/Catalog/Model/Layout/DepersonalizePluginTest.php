@@ -74,7 +74,8 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
         $this->moduleManagerMock->expects($this->once())->method('isEnabled')->with('Magento_PageCache')
             ->willReturn(true);
         $this->cacheConfigMock->expects($this->once())->method('isEnabled')->willReturn(true);
-        $this->requestMock->expects($this->once($this->once()))->method('isAjax')->willReturn(false);
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(false);
+        $this->requestMock->expects($this->once())->method('isGet')->willReturn(true);
         $this->layoutMock->expects($this->once())->method('isCacheable')->willReturn(true);
         $this->catalogSessionMock->expects($this->once())->method('clearStorage');
 
@@ -114,7 +115,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('Magento_PageCache'))
             ->willReturn(true);
         $this->cacheConfigMock->expects($this->once())->method('isEnabled')->willReturn(true);
-        $this->requestMock->expects($this->once($this->once()))->method('isAjax')->willReturn(true);
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
         $this->catalogSessionMock->expects($this->never())->method('clearStorage');
 
         $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $this->resultLayout);
@@ -128,8 +129,25 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('Magento_PageCache'))
             ->willReturn(true);
         $this->cacheConfigMock->expects($this->once())->method('isEnabled')->willReturn(true);
-        $this->requestMock->expects($this->once($this->once()))->method('isAjax')->willReturn(false);
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(false);
+        $this->requestMock->expects($this->once())->method('isGet')->willReturn(true);
         $this->layoutMock->expects($this->once())->method('isCacheable')->willReturn(false);
+        $this->catalogSessionMock->expects($this->never())->method('clearStorage');
+
+        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $this->resultLayout);
+        $this->assertEquals($this->resultLayout, $actualResult);
+    }
+
+    public function testIsPost()
+    {
+        $this->moduleManagerMock->expects($this->once())
+            ->method('isEnabled')
+            ->with($this->equalTo('Magento_PageCache'))
+            ->willReturn(true);
+        $this->cacheConfigMock->expects($this->once())->method('isEnabled')->willReturn(true);
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(false);
+        $this->requestMock->expects($this->once())->method('isGet')->willReturn(false);
+        $this->requestMock->expects($this->once())->method('isHead')->willReturn(false);
         $this->catalogSessionMock->expects($this->never())->method('clearStorage');
 
         $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $this->resultLayout);

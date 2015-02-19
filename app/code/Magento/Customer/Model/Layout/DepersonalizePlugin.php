@@ -92,9 +92,11 @@ class DepersonalizePlugin
      */
     public function beforeGenerateXml(\Magento\Framework\View\LayoutInterface $subject)
     {
-        if ($this->moduleManager->isEnabled(
-            'Magento_PageCache'
-        ) && $this->cacheConfig->isEnabled() && !$this->request->isAjax() && $subject->isCacheable()
+        if ($this->moduleManager->isEnabled('Magento_PageCache')
+            && $this->cacheConfig->isEnabled()
+            && !$this->request->isAjax()
+            && ($this->request->isGet() || $this->request->isHead())
+            && $subject->isCacheable()
         ) {
             $this->customerGroupId = $this->customerSession->getCustomerGroupId();
             $this->formKey = $this->session->getData(\Magento\Framework\Data\Form\FormKey::FORM_KEY);
@@ -114,6 +116,7 @@ class DepersonalizePlugin
         if ($this->moduleManager->isEnabled('Magento_PageCache')
             && $this->cacheConfig->isEnabled()
             && !$this->request->isAjax()
+            && ($this->request->isGet() || $this->request->isHead())
             && $subject->isCacheable()
         ) {
             $this->visitor->setSkipRequestLogging(true);

@@ -64,6 +64,7 @@ class DepersonalizePlugin
         if ($this->moduleManager->isEnabled('Magento_PageCache')
             && $this->cacheConfig->isEnabled()
             && !$this->request->isAjax()
+            && ($this->request->isGet() || $this->request->isHead())
             && $subject->isCacheable()
         ) {
             $this->catalogSession->clearStorage();

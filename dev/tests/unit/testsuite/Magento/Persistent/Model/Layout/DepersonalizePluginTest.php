@@ -57,29 +57,10 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->requestMock = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['isAjax']
-        );
-        $this->moduleManagerMock = $this->getMock(
-            'Magento\Framework\Module\Manager',
-            ['isEnabled'],
-            [],
-            '',
-            false
-        );
-        $this->cacheConfigMock = $this->getMock(
-            'Magento\PageCache\Model\Config',
-            ['isEnabled'],
-            [],
-            '',
-            false
-        );
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+
+        $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', ['isEnabled'], [], '', false);
+        $this->cacheConfigMock = $this->getMock('Magento\PageCache\Model\Config', ['isEnabled'], [], '', false);
 
         $this->plugin = $this->objectManager->getObject(
             'Magento\Persistent\Model\Layout\DepersonalizePlugin',
@@ -126,24 +107,16 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->with('Magento_PageCache')
             ->willReturn($result);
-        $this->cacheConfigMock->expects($this->any())
-            ->method('isEnabled')
-            ->willReturn($result);
-        $this->requestMock->expects($this->any())
-            ->method('isAjax')
-            ->willReturn(!$result);
-        $subjectMock->expects($this->any())
-            ->method('isCacheable')
-            ->willReturn($result);
+        $this->cacheConfigMock->expects($this->any())->method('isEnabled')->willReturn($result);
+        $this->requestMock->expects($this->any())->method('isAjax')->willReturn(!$result);
+        $this->requestMock->expects($this->any())->method('isGet')->willReturn($result);
+        $this->requestMock->expects($this->any())->method('isHead')->willReturn($result);
+        $subjectMock->expects($this->any())->method('isCacheable')->willReturn($result);
 
         if ($result) {
-            $this->persistentSessionMock->expects($this->once())
-                ->method('setCustomerId')
-                ->with(null);
+            $this->persistentSessionMock->expects($this->once())->method('setCustomerId')->with(null);
         } else {
-            $this->persistentSessionMock->expects($this->never())
-                ->method('setCustomerId')
-                ->with(null);
+            $this->persistentSessionMock->expects($this->never())->method('setCustomerId')->with(null);
         }
 
         $this->assertEquals($resultMock, $this->plugin->afterGenerateXml($subjectMock, $resultMock));
@@ -156,9 +129,6 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderAfterGenerateXml()
     {
-        return [
-            ['result' => true],
-            ['result' => false]
-        ];
+        return [['result' => true], ['result' => false]];
     }
 }

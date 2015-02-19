@@ -86,18 +86,14 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->with($this->equalTo('Magento_PageCache'))
             ->will($this->returnValue(true));
-        $this->requestMock->expects($this->once($this->once()))
-            ->method('isAjax')
-            ->will($this->returnValue(false));
-        $this->layoutMock->expects($this->once())
-            ->method('isCacheable')
-            ->will($this->returnValue(true));
+        $this->requestMock->expects($this->once($this->once()))->method('isAjax')->will($this->returnValue(false));
+        $this->requestMock->expects($this->once($this->once()))->method('isGet')->will($this->returnValue(true));
+        $this->layoutMock->expects($this->once())->method('isCacheable')->will($this->returnValue(true));
 
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with($this->equalTo('depersonalize_clear_session'));
-        $this->messageSessionMock->expects($this->once())
-            ->method('clearStorage');
+        $this->messageSessionMock->expects($this->once())->method('clearStorage');
 
         $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
         $this->assertEquals($expectedResult, $actualResult);
@@ -113,9 +109,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->with($this->equalTo('Magento_PageCache'))
             ->will($this->returnValue(false));
-        $this->requestMock->expects($this->never())
-            ->method('isAjax')
-            ->will($this->returnValue(false));
+        $this->requestMock->expects($this->never())->method('isAjax')->will($this->returnValue(false));
         $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
         $this->assertEquals($expectedResult, $actualResult);
     }
