@@ -109,8 +109,8 @@ class ValidatorFile extends Validator
 
             $fileInfo = $upload->getFileInfo($file)[$file];
             $fileInfo['title'] = $fileInfo['name'];
-        } catch (\Magento\Framework\Validator\ValidatorException $r) {
-            throw $r;
+        } catch (\Magento\Framework\Validator\ValidatorException $e) {
+            throw $e;
         } catch (\Exception $e) {
             // when file exceeds the upload_max_filesize, $_FILES is empty
             if ($this->validateContentLength()) {
