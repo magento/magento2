@@ -9,11 +9,13 @@
     <update handle="checkout_cart_item_renderers"/>
     <update handle="checkout_shipping_price_renderer"/>
     <body>
+        <referenceContainer name="page.messages">
+            <block class="Magento\Checkout\Block\Cart\ValidationMessages" name="checkout.cart.validationmessages"/>
+        </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="cart.phtml">
                 <container name="checkout.cart.items" as="with-items">
                     <container name="checkout.cart.form.before" as="form_before" label="Shopping Cart Items Before" htmlTag="div" htmlClass="rewards" before="checkout.cart.form"/>
-                    <block class="Magento\Checkout\Block\Cart\Validation" name="checkout.cart.validation"/>
                     <block class="Magento\Checkout\Block\Cart" name="checkout.cart.form" as="cart-items" template="cart/form.phtml">
                         <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>
                     </block>

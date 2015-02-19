@@ -139,10 +139,6 @@ class Info extends \Magento\Framework\View\Element\Template
      */
     protected function _toHtml()
     {
-        if ($this->currentCustomer->getCustomerId()) {
-            return parent::_toHtml();
-        } else {
-            return '';
-        }
+        return $this->currentCustomer->getCustomerId() ? parent::_toHtml() : '';
     }
 }

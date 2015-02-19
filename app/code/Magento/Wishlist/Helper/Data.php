@@ -397,7 +397,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected function _getCartUrlParameters($item)
     {
         $continueUrl = $this->urlEncoder->encode(
-            $this->_getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
+            $this->_getUrl('wishlist/index/index', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
         );
 
         return [

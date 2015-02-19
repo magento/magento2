@@ -11,7 +11,7 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
 ?>
 
 <?php if ($block->hasWishlistItems()): ?>
-    <form class="form shared wishlist" action="<?php echo $block->getUrl('*/*/update') ?>" method="post">
+    <form class="form shared wishlist" action="<?php echo $block->getUrl('wishlist/index/update') ?>" method="post">
         <div class="wishlist table-wrapper">
             <table class="table data wishlist" id="wishlist-table">
                 <caption class="table-caption"><?php echo __('Wish List'); ?></caption>

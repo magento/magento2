@@ -224,7 +224,7 @@ class Cart extends Object implements CartInterface
      *
      * @return $this
      */
-    protected function reinitState()
+    protected function reinitializeState()
     {
         $quote = $this->getQuote()->setCheckoutMethod('');
         $this->_checkoutSession->setCartWasUpdated(true);
@@ -558,7 +558,7 @@ class Cart extends Object implements CartInterface
          * Cart save usually called after changes with cart items.
          */
         $this->_eventManager->dispatch('checkout_cart_save_after', ['cart' => $this]);
-        $this->reinitState();
+        $this->reinitializeState();
         return $this;
     }
 

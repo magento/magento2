@@ -77,12 +77,12 @@ class Recent extends \Magento\Framework\View\Element\Template
     /**
      * Return collection of reviews
      *
-     * @return bool|\Magento\Review\Model\Resource\Review\Product\Collection
+     * @return array|\Magento\Review\Model\Resource\Review\Product\Collection
      */
     public function getReviews()
     {
         if (!($customerId = $this->currentCustomer->getCustomerId())) {
-            return false;
+            return [];
         }
         if (!$this->_collection) {
             $this->_collection = $this->_collectionFactory->create();

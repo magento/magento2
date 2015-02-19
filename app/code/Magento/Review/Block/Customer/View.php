@@ -223,10 +223,6 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     protected function _toHtml()
     {
-        if ($this->currentCustomer->getCustomerId()) {
-            return parent::_toHtml();
-        } else {
-            return '';
-        }
+        return $this->currentCustomer->getCustomerId() ? parent::_toHtml() : '';
     }
 }

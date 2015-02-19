@@ -8,54 +8,55 @@ namespace Magento\Checkout\Block\Cart;
 /**
  * Shopping cart validation messages block
  */
-class Validation extends \Magento\Framework\View\Element\AbstractBlock
+class ValidationMessages extends \Magento\Framework\View\Element\Messages
 {
     /** @var \Magento\Checkout\Helper\Cart */
     protected $cartHelper;
 
-    /** @var \Magento\Customer\Model\Session */
-    protected $customerSession;
-
     /** @var \Magento\Framework\Locale\CurrencyInterface */
     protected $currency;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface */
-    protected $storeManager;
-
-    /** @var \Magento\Framework\Message\ManagerInterface */
-    protected $messages;
-
     /**
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Message\Factory $messageFactory
+     * @param \Magento\Framework\Message\CollectionFactory $collectionFactory
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Framework\Message\ManagerInterface $messages
+     * @param \Magento\Framework\Locale\CurrencyInterface $currency
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Message\Factory $messageFactory,
+        \Magento\Framework\Message\CollectionFactory $collectionFactory,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Framework\Message\ManagerInterface $messages,
         \Magento\Framework\Locale\CurrencyInterface $currency,
         array $data = []
     ) {
         parent::__construct(
             $context,
+            $messageFactory,
+            $collectionFactory,
+            $messageManager,
             $data
         );
         $this->cartHelper = $cartHelper;
-        $this->customerSession = $customerSession;
         $this->currency = $currency;
-        $this->storeManager = $storeManager;
-        $this->messages = $messages;
         $this->_isScopePrivate = true;
+    }
 
-        if ($customerSession->getCustomerId()) {
+    /**
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
+        if ($this->cartHelper->getItemsCount()) {
             $this->validateMinimunAmount();
             $this->addQuoteMessages();
+            return parent::_prepareLayout();
         }
+        return $this;
     }
 
     /**
@@ -69,7 +70,7 @@ class Validation extends \Magento\Framework\View\Element\AbstractBlock
                 \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
             if (!$warning) {
-                $currencyCode = $this->storeManager->getStore()->getCurrentCurrencyCode();
+                $currencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
                 $minimumAmount = $this->currency->getCurrency($currencyCode)->toCurrency(
                     $this->_scopeConfig->getValue(
                         'sales/minimum_order/amount',
@@ -78,7 +79,7 @@ class Validation extends \Magento\Framework\View\Element\AbstractBlock
                 );
                 $warning = __('Minimum order amount is %1', $minimumAmount);
             }
-            $this->messages->addNotice($warning);
+            $this->messageManager->addNotice($warning);
         }
     }
 
@@ -89,7 +90,7 @@ class Validation extends \Magento\Framework\View\Element\AbstractBlock
     {
         // Compose array of messages to add
         $messages = [];
-        /** @var \Magento\Framework\Message\MessageInterface $message  */
+        /** @var \Magento\Framework\Message\MessageInterface $message */
         foreach ($this->cartHelper->getQuote()->getMessages() as $message) {
             if ($message) {
                 // Escape HTML entities in quote message to prevent XSS
@@ -97,6 +98,6 @@ class Validation extends \Magento\Framework\View\Element\AbstractBlock
                 $messages[] = $message;
             }
         }
-        $this->messages->addUniqueMessages($messages);
+        $this->messageManager->addUniqueMessages($messages);
     }
 }
