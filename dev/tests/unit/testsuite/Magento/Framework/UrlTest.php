@@ -96,7 +96,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected function getRequestMock($mockMethods = [])
     {
         $interfaceMethods =
-            ['getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie'];
+            ['getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie', 'isSecure'];
         return $this->getMock('Magento\Framework\App\RequestInterface', array_merge($interfaceMethods, $mockMethods));
     }
 
@@ -300,9 +300,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $requestMock = $this->getRequestMock([
             'isDirectAccessFrontendName',
             'getAlias',
-            'getRequestedRouteName',
-            'getRequestedControllerName',
-            'getRequestedActionName',
+            'getRouteName',
+            'getControllerName',
         ]);
         $routeConfigMock = $this->getMock('Magento\Framework\App\Route\ConfigInterface');
         $model = $this->getUrlModel(
@@ -323,11 +322,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['key' => 'value']));
         $requestMock->expects($this->once())->method('isDirectAccessFrontendName')->will($this->returnValue(true));
 
-        $requestMock->expects($this->once())->method('getRequestedRouteName')->will($this->returnValue('catalog'));
+        $requestMock->expects($this->once())->method('getRouteName')->will($this->returnValue('catalog'));
         $requestMock->expects($this->once())
-            ->method('getRequestedControllerName')
+            ->method('getControllerName')
             ->will($this->returnValue('product'));
-        $requestMock->expects($this->once())->method('getRequestedActionName')->will($this->returnValue('view'));
+        $requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('view'));
         $routeConfigMock->expects($this->once())->method('getRouteFrontName')->will($this->returnValue('catalog'));
 
         $url = $model->getUrl('*/*/*/key/value');

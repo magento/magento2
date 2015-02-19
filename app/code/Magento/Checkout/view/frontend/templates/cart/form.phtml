@@ -37,15 +37,25 @@
     </div>
     <div class="cart main actions">
         <?php if ($block->getContinueShoppingUrl()): ?>
-            <a class="action continue" href="<?php echo $block->getContinueShoppingUrl() ?>" title="<?php echo __('Continue Shopping') ?>">
+            <a class="action continue"
+               href="<?php echo $block->getContinueShoppingUrl() ?>"
+               title="<?php echo $block->escapeHtml(__('Continue Shopping')); ?>">
                 <span><?php echo __('Continue Shopping') ?></span>
             </a>
         <?php endif; ?>
-        <button type="submit" name="update_cart_action" value="update_qty" title="<?php echo __('Update Shopping Cart'); ?>" class="action update">
-            <span><?php echo __('Update Shopping Cart'); ?></span>
-        </button>
-        <button type="submit" name="update_cart_action" value="empty_cart" title="<?php echo __('Clear Shopping Cart'); ?>" class="action clear" id="empty_cart_button">
+        <button type="submit"
+                name="update_cart_action"
+                value="empty_cart"
+                title="<?php echo $block->escapeHtml(__('Clear Shopping Cart')); ?>"
+                class="action clear" id="empty_cart_button">
             <span><?php echo __('Clear Shopping Cart'); ?></span>
+        </button>
+        <button type="submit"
+                name="update_cart_action"
+                value="update_qty"
+                title="<?php echo $block->escapeHtml(__('Update Shopping Cart')); ?>"
+                class="action update">
+            <span><?php echo __('Update Shopping Cart'); ?></span>
         </button>
         <!--[if lt IE 8]>
         <input type="hidden" value="" id="update_cart_action_container" />

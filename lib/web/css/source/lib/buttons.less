@@ -175,14 +175,16 @@
     @_link-color: @link-color,
     @_link-color-hover: @link-color-hover,
     @_line-height: @line-height-base,
-    @_disabled_opacity: @button-disabled-opacity
+    @_disabled_opacity: @button-disabled-opacity,
+    @_margin: 0,
+    @_padding: 0
 ) {
     background: none;
     border: 0;
     display: inline;
     .css(line-height, @_line-height);
-    margin: 0;
-    padding: 0;
+    .css(margin, @_margin);
+    .css(padding, @_padding);
     .link();
     &:hover {
         .css(color, @_link-color-hover);

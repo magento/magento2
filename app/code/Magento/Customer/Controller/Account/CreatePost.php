@@ -276,7 +276,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
             $this->messageManager->addException($e, __('Cannot save the customer.'));
         }
 
-        $this->_getSession()->setCustomerFormData($this->getRequest()->getPost());
+        $this->_getSession()->setCustomerFormData($this->getRequest()->getPostValue());
         $defaultUrl = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
         $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
         return $resultRedirect;
