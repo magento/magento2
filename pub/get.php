@@ -53,7 +53,7 @@ if ($mediaDirectory) {
 
     if (is_readable($request->getFilePath())) {
         $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
-            new \Magento\Framework\Controller\Response\Http(),
+            new \Magento\Framework\HTTP\PhpEnvironment\Response(),
             new \Magento\Framework\File\Mime()
         );
         $transfer->send($request->getFilePath());

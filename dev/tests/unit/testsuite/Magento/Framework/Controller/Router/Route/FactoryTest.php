@@ -6,65 +6,62 @@
 
 namespace Magento\Framework\Controller\Router\Route;
 
+use Magento\Framework\Controller\Router\Route\Factory as RouteFactory;
+use Magento\TestFramework\Helper\ObjectManager as ObjectManager;
+
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManager;
+
+    /**
+     * @var RouteFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $factory;
 
     public function setUp()
     {
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+
+        $objectManager = new ObjectManager($this);
+        $this->factory = $objectManager->getObject(
+            'Magento\Framework\Controller\Router\Route\Factory',
+            [
+                'objectManager' => $this->objectManager,
+            ]
+        );
     }
 
     /**
      * @test
+     * @return void
      */
     public function testCreateRoute()
     {
-        $routerClass = 'router';
+        $routeClass = 'router';
+        $paramRoute = 'route';
 
-        $router = $this->getMockBuilder('Zend_Controller_Router_Route_Interface')
-            ->setMockClassName($routerClass)
+        $router = $this->getMockBuilder('Magento\Framework\App\RouterInterface')
+            ->setMockClassName($routeClass)
             ->getMock();
-
-        $parameterRoute    = 'route';
-        $parameterDefaults = 'defaults';
-        $parameterRegs     = 'regs';
-        $parameterLocale   = 'locale';
 
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with(
-                $this->logicalOr(
-                    $routerClass,
-                    [
-                        'route'    => $parameterRoute,
-                        'defaults' => $parameterDefaults,
-                        'regs'     => $parameterRegs,
-                        'locale'   => $parameterLocale,
-                    ]
-                )
-            )
+            ->with($routeClass, ['route' => $paramRoute])
             ->will($this->returnValue($router));
 
-        $object = new \Magento\Framework\Controller\Router\Route\Factory($this->objectManager);
-        $expectedRouter = $object->createRoute(
-            $routerClass,
-            $parameterRoute,
-            $parameterDefaults,
-            $parameterRegs,
-            $parameterLocale
-        );
+        $result = $this->factory->createRoute($routeClass, $paramRoute);
 
-        $this->assertInstanceOf($routerClass, $expectedRouter);
-        $this->assertInstanceOf('Zend_Controller_Router_Route_Interface', $expectedRouter);
+        $this->assertInstanceOf($routeClass, $result);
+        $this->assertInstanceOf('Magento\Framework\App\RouterInterface', $result);
     }
 
     /**
      * @test
      * @expectedException \LogicException
+     * @return void
      */
     public function testCreateRouteNegative()
     {
@@ -72,7 +69,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue(new \StdClass()));
 
-        $object = new \Magento\Framework\Controller\Router\Route\Factory($this->objectManager);
+        $object = new Factory($this->objectManager);
         $object->createRoute(
             'routerClass',
             'router'

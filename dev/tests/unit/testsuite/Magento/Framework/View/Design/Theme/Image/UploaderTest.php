@@ -125,7 +125,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider uploadDataProvider
-     * @covers \Magento\Framework\View\Design\Theme\Image\Uploader::uploadPreviewImage
+     * covers \Magento\Framework\View\Design\Theme\Image\Uploader::uploadPreviewImage
      */
     public function testUploadPreviewImage($isUploaded, $isValid, $checkExtension, $save, $result, $exception)
     {

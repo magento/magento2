@@ -20,7 +20,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     public function execute()
     {
         // check if data sent
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             // init model and set data
             /** @var \Magento\Sitemap\Model\Sitemap $model */

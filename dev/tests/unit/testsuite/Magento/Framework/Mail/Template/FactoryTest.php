@@ -24,8 +24,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Mail\Template\Factory::get
-     * @covers \Magento\Framework\Mail\Template\Factory::__construct
+     * covers \Magento\Framework\Mail\Template\Factory::get
+     * covers \Magento\Framework\Mail\Template\Factory::__construct
      */
     public function testGet()
     {

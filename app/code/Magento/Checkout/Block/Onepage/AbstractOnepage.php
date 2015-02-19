@@ -64,9 +64,9 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     protected $_countryCollectionFactory;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Directory\Helper\Data
      */
-    protected $_coreData;
+    protected $directoryHelper;
 
     /**
      * @var CustomerRepositoryInterface
@@ -90,7 +90,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $resourceSession
@@ -105,7 +105,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $resourceSession,
@@ -117,7 +117,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         array $data = []
     ) {
-        $this->_coreData = $coreData;
+        $this->directoryHelper = $directoryHelper;
         $this->_configCacheType = $configCacheType;
         $this->_customerSession = $customerSession;
         $this->_checkoutSession = $resourceSession;
@@ -282,7 +282,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     {
         $countryId = $this->getAddress()->getCountryId();
         if (is_null($countryId)) {
-            $countryId = $this->_coreData->getDefaultCountry();
+            $countryId = $this->directoryHelper->getDefaultCountry();
         }
         $select = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Select'

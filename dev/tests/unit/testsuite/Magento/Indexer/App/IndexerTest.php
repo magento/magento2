@@ -42,15 +42,29 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->entryPoint = new Indexer('reportDir', $this->filesystem, $this->processor, $this->_response);
     }
 
-    public function testExecute()
+    /**
+     * @param bool $isExist
+     * @param array $callCount
+     * @dataProvider executeProvider
+     */
+    public function testExecute($isExist, $callCount)
     {
         $this->_response->expects($this->once())->method('setCode')->with(0);
         $this->_response->expects($this->once())->method('getCode')->will($this->returnValue(0));
         $dir = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
         $dir->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $dir->expects($this->once())->method('isExist')->will($this->returnValue($isExist));
+        $dir->expects($this->exactly($callCount))->method('delete')->will($this->returnValue(true));
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($dir));
         $this->processor->expects($this->once())->method('reindexAll');
         $this->assertEquals(0, $this->entryPoint->launch()->getCode());
+    }
+
+    public function executeProvider(){
+        return [
+            'set1' => ['isExist' => true, 'expectsValue' => 1],
+            'set1' => ['delete' => false, 'expectsValue' => 0]
+        ];
     }
 
     public function testCatchException()
