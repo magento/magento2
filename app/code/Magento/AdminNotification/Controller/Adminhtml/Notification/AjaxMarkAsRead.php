@@ -15,7 +15,7 @@ class AjaxMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Not
      */
     public function execute()
     {
-        if (!$this->getRequest()->getPost()) {
+        if (!$this->getRequest()->getPostValue()) {
             return;
         }
         $notificationId = (int)$this->getRequest()->getPost('id');

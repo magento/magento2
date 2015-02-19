@@ -32,7 +32,7 @@ class Fromcart extends Action\Action implements IndexInterface
     /**
      * Add cart item to wishlist and remove from cart
      *
-     * @return \Zend_Controller_Response_Abstract
+     * @return \Magento\Framework\App\Response\Http
      * @throws NotFoundException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */

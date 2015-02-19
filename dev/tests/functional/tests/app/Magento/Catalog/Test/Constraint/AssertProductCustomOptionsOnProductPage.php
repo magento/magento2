@@ -22,43 +22,43 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
      * @var array
      */
     protected $skippedFieldOptions = [
-        'Field' => [
+        'Text/Field' => [
             'price_type',
             'sku',
         ],
-        'Area' => [
+        'Text/Area' => [
             'price_type',
             'sku',
         ],
-        'Drop-down' => [
+        'Select/Drop-down' => [
             'price_type',
             'sku',
         ],
-        'File' => [
+        'File/File' => [
             'price_type',
             'sku',
         ],
-        'Radio Buttons' => [
+        'Select/Radio Buttons' => [
             'price_type',
             'sku',
         ],
-        'Checkbox' => [
+        'Select/Checkbox' => [
             'price_type',
             'sku',
         ],
-        'Multiple Select' => [
+        'Select/Multiple Select' => [
             'price_type',
             'sku',
         ],
-        'Date' => [
+        'Date/Date' => [
             'price_type',
             'sku',
         ],
-        'Date & Time' => [
+        'Date/Date & Time' => [
             'price_type',
             'sku',
         ],
-        'Time' => [
+        'Date/Time' => [
             'price_type',
             'sku',
         ],

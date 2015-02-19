@@ -73,6 +73,6 @@ class ActionFlag
      */
     protected function _getControllerKey()
     {
-        return $this->_request->getRequestedRouteName() . '_' . $this->_request->getRequestedControllerName();
+        return $this->_request->getRouteName() . '_' . $this->_request->getControllerName();
     }
 }

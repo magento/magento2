@@ -9,7 +9,7 @@
   <testCase name="Magento\Catalog\Test\TestCase\Product\ProductTypeSwitchingOnUpdateTest">
     <variation name="ProductTypeSwitchingOnUpdateTestVariation1">
       <data name="productOrigin" xsi:type="string">catalogProductSimple::default</data>
-      <data name="product" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="product" xsi:type="string">configurableProduct::default</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
@@ -26,15 +26,15 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnUpdateTestVariation3">
-      <data name="productOrigin" xsi:type="string">configurableProductInjectable::default</data>
+    <variation name="ProductTypeSwitchingOnUpdateTestVariation3" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="productOrigin" xsi:type="string">configurableProduct::default</data>
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <data name="actionName" xsi:type="string">deleteAttributes</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnUpdateTestVariation4">
-      <data name="productOrigin" xsi:type="string">configurableProductInjectable::default</data>
+    <variation name="ProductTypeSwitchingOnUpdateTestVariation4" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="productOrigin" xsi:type="string">configurableProduct::default</data>
       <data name="product" xsi:type="string">catalogProductVirtual::default</data>
       <data name="actionName" xsi:type="string">deleteAttributes</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
@@ -49,7 +49,7 @@
     </variation>
     <variation name="ProductTypeSwitchingOnUpdateTestVariation6">
       <data name="productOrigin" xsi:type="string">catalogProductVirtual::default</data>
-      <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
+      <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
@@ -61,7 +61,7 @@
     </variation>
     <variation name="ProductTypeSwitchingOnUpdateTestVariation7">
       <data name="productOrigin" xsi:type="string">catalogProductVirtual::default</data>
-      <data name="product" xsi:type="string">downloadableProductInjectable::default</data>
+      <data name="product" xsi:type="string">downloadableProduct::default</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
@@ -70,16 +70,16 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
       <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnUpdateTestVariation8">
-      <data name="productOrigin" xsi:type="string">downloadableProductInjectable::default</data>
+    <variation name="ProductTypeSwitchingOnUpdateTestVariation8" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="productOrigin" xsi:type="string">downloadableProduct::default</data>
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnUpdateTestVariation9">
-      <data name="productOrigin" xsi:type="string">downloadableProductInjectable::default</data>
-      <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
+    <variation name="ProductTypeSwitchingOnUpdateTestVariation9" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="productOrigin" xsi:type="string">downloadableProduct::default</data>
+      <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
@@ -89,8 +89,8 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
       <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
     </variation>
-    <variation name="ProductTypeSwitchingOnUpdateTestVariation10">
-      <data name="productOrigin" xsi:type="string">downloadableProductInjectable::default</data>
+    <variation name="ProductTypeSwitchingOnUpdateTestVariation10" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="productOrigin" xsi:type="string">downloadableProduct::default</data>
       <data name="product" xsi:type="string">catalogProductVirtual::default</data>
       <data name="actionName" xsi:type="string">clearDownloadableData</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
@@ -98,7 +98,7 @@
     </variation>
     <variation name="ProductTypeSwitchingOnUpdateTestVariation11">
       <data name="productOrigin" xsi:type="string">catalogProductSimple::default</data>
-      <data name="product" xsi:type="string">downloadableProductInjectable::default</data>
+      <data name="product" xsi:type="string">downloadableProduct::default</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>

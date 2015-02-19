@@ -10,7 +10,6 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderCancelSuccessMessage
  * Assert that after cancel sales order successful message appears
  */
 class AssertOrderCancelSuccessMessage extends AbstractConstraint
@@ -23,14 +22,14 @@ class AssertOrderCancelSuccessMessage extends AbstractConstraint
     /**
      * Assert that after cancel sales order successful message appears
      *
-     * @param SalesOrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @return void
      */
-    public function processAssert(SalesOrderView $orderView)
+    public function processAssert(SalesOrderView $salesOrderView)
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_CANCEL_MESSAGE,
-            $orderView->getMessagesBlock()->getSuccessMessages()
+            $salesOrderView->getMessagesBlock()->getSuccessMessages()
         );
     }
 

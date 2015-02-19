@@ -7,15 +7,15 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="DeleteTermEntityTest">
-    <variation name="DeleteTermEntityTestVariation1" firstConstraint="assertTermSuccessDeleteMessage" method="test">
+    <variation name="DeleteTermEntityTestVariation1" firstConstraint="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessDeleteMessage" method="test">
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <data name="agreement/dataSet" xsi:type="string">term_enabled_text</data>
       <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
       <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
       <data name="payment/method" xsi:type="string">checkmo</data>
-      <constraint name="assertTermSuccessDeleteMessage" next="assertTermAbsentInGrid"/>
-      <constraint name="assertTermAbsentInGrid" next="assertTermAbsentOnCheckout" prev="assertTermSuccessDeleteMessage"/>
-      <constraint name="assertTermAbsentOnCheckout" prev="assertTermAbsentInGrid"/>
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessDeleteMessage" next="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentInGrid"/>
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentInGrid" next="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" prev="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessDeleteMessage"/>
+      <constraint name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout" prev="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentInGrid"/>
     </variation>
   </testCase>
 </config>

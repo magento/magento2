@@ -10,7 +10,6 @@
     <variation name="ReAuthorizeTokensIntegrationEntityTestVariation1">
       <data name="description" xsi:type="string">Re-authorize integration</data>
       <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessReauthorizeMessage"/>
-      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm"/>
       <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensAfterReauthorize"/>
     </variation>
   </testCase>

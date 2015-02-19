@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" ?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
@@ -193,5 +193,17 @@
     <field name="stock_data" group="advanced-inventory"/>
     <field name="category_id" group="product-details"/>
     <field name="website_ids" group="websites"/>
+    <field name="cross_sell_products" 
+           group="crosssells"
+           source="Magento\Catalog\Test\Fixture\CatalogProductSimple\UpSellProducts"
+            />
+    <field name="up_sell_products"
+           group="upsells"
+           source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CrossSellProducts"
+            />
+    <field name="related_products" 
+           group="related-products" 
+           source="Magento\Catalog\Test\Fixture\CatalogProductSimple\RelatedProducts"
+            />
   </fixture>
 </config>

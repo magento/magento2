@@ -7,7 +7,8 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="Magento\Bundle\Test\TestCase\CreateBundleProductEntityTest">
-    <variation name="CreateBundleProductEntityTestVariation1">
+    <variation name="CreateBundleProductEntityTestVariation1" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create default bundle with dynamic options</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">-</data>
@@ -43,7 +44,8 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation2">
+    <variation name="CreateBundleProductEntityTestVariation2" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create offline dynamic bundle with dynamic price and out of stock</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -78,7 +80,8 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotSearchableBySku"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation3">
+    <variation name="CreateBundleProductEntityTestVariation3" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create dynamic bundle with price randle and all types options</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -121,7 +124,8 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation4">
+    <variation name="CreateBundleProductEntityTestVariation4" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create fixed bundle</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -160,7 +164,8 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation5">
+    <variation name="CreateBundleProductEntityTestVariation5" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create fixed bundle with all types options</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -203,7 +208,9 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation6">
+    <variation name="CreateBundleProductEntityTestVariation6" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="issue" xsi:type="string">Bug: MAGETWO-33071</data>
+      <data name="description" xsi:type="string">Create fixed bundle which is out of stock</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -242,7 +249,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation7">
+    <variation name="CreateBundleProductEntityTestVariation7" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -282,7 +289,8 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertTierPriceOnBundleProductPage"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation8">
+    <variation name="CreateBundleProductEntityTestVariation8" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create dynamic bundle with special price</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -317,7 +325,8 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation9">
+    <variation name="CreateBundleProductEntityTestVariation9" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create dynamic bundle with group price</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -354,7 +363,8 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation10">
+    <variation name="CreateBundleProductEntityTestVariation10" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create dynamic bundle</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -391,7 +401,8 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation11">
+    <variation name="CreateBundleProductEntityTestVariation11" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create fixed product with checkout first option</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -429,7 +440,8 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertProductCustomOptionsOnBundleProductPage"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation12">
+    <variation name="CreateBundleProductEntityTestVariation12" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create fixed product with checkout second option</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -466,7 +478,8 @@
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
       <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation13">
+    <variation name="CreateBundleProductEntityTestVariation13" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create default dynamic bundle</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
@@ -500,7 +513,8 @@
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
     </variation>
-    <variation name="CreateBundleProductEntityTestVariation14">
+    <variation name="CreateBundleProductEntityTestVariation14" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Create default fixed bundle</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -533,6 +547,84 @@
       <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
       <data name="product/data/gift_message_available" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+    </variation>
+    <variation name="CreateBundleProductEntityTestVariation15" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12622: Create Bundle (fixed) Product and Assign it to Category</data>
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Fixed</data>
+      <data name="product/data/sku" xsi:type="string">sku_bundle_fixed_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">Fixed</data>
+      <data name="product/data/price/value" xsi:type="string">100</data>
+      <data name="product/data/price/preset" xsi:type="string">fixed-100</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">Fixed</data>
+      <data name="product/data/weight" xsi:type="string">1</data>
+      <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">Together</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">two_options_with_fixed_and_percent_prices</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">-</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" next="Magento\Bundle\Test\Constraint\AssertBundleInCategory" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory" next="Magento\Bundle\Test\Constraint\AssertBundleProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" prev="Magento\Bundle\Test\Constraint\AssertBundleInCategory"/>
+    </variation>
+    <variation name="CreateBundleProductEntityTestVariation16" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12702: Create Bundle (dynamic) Product and Assign it to the Category</data>
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">-</data>
+      <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="product/data/price_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">dynamic-560</data>
+      <data name="product/data/tax_class_id/dataSet" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/weight_type" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/group_price/preset" xsi:type="string">-</data>
+      <data name="product/data/special_price" xsi:type="string">-</data>
+      <data name="product/data/special_from_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/special_to_date/pattern" xsi:type="string">-</data>
+      <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+      <data name="product/data/price_view" xsi:type="string">-</data>
+      <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">-</data>
+      <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
+      <data name="product/data/shipment_type" xsi:type="string">Together</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">one_options_assigned_simple_big_qty</data>
+      <data name="product/data/bundle_selections/products" xsi:type="string">-</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/preset" xsi:type="string">-</data>
+      <data name="product/data/custom_options/import_products" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/use_config_gift_message_available" xsi:type="string">-</data>
+      <data name="product/data/gift_message_available" xsi:type="string">-</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" next="Magento\Bundle\Test\Constraint\AssertBundleInCategory" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory" next="Magento\Bundle\Test\Constraint\AssertBundleProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" prev="Magento\Bundle\Test\Constraint\AssertBundleInCategory"/>
     </variation>
   </testCase>
 </config>

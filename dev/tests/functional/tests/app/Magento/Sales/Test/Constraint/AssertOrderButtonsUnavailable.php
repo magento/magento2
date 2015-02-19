@@ -12,7 +12,6 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderButtonsUnavailable
  * Assert that buttons from dataSet are not present on page
  */
 class AssertOrderButtonsUnavailable extends AbstractConstraint
@@ -21,14 +20,14 @@ class AssertOrderButtonsUnavailable extends AbstractConstraint
      * Assert that buttons from dataSet are not present on page
      *
      * @param OrderIndex $orderIndex
-     * @param SalesOrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param OrderInjectable $order
      * @param string $orderButtonsUnavailable
      * @return void
      */
     public function processAssert(
         OrderIndex $orderIndex,
-        SalesOrderView $orderView,
+        SalesOrderView $salesOrderView,
         OrderInjectable $order,
         $orderButtonsUnavailable
     ) {
@@ -37,7 +36,7 @@ class AssertOrderButtonsUnavailable extends AbstractConstraint
         $buttons = explode(',', $orderButtonsUnavailable);
         $matches = [];
         foreach ($buttons as $button) {
-            if ($orderView->getPageActions()->isActionButtonVisible(trim($button))) {
+            if ($salesOrderView->getPageActions()->isActionButtonVisible(trim($button))) {
                 $matches[] = $button;
             }
         }

@@ -6,8 +6,8 @@
 
 namespace Magento\Checkout\Test\Block\Onepage;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Address;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Block\Form;
 
 /**
@@ -40,14 +40,14 @@ class Billing extends Form
     /**
      * Fill billing address
      *
-     * @param AddressInjectable $billingAddress
-     * @param CustomerInjectable $customer
+     * @param Address $billingAddress
+     * @param Customer $customer
      * @param bool $isShippingAddress
      * @return void
      */
     public function fillBilling(
-        AddressInjectable $billingAddress = null,
-        CustomerInjectable $customer = null,
+        Address $billingAddress = null,
+        Customer $customer = null,
         $isShippingAddress = false
     ) {
         if ($billingAddress) {

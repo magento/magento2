@@ -6,7 +6,6 @@
 
 namespace Magento\Bundle\Test\Block\Catalog\Product\View\Type;
 
-use Magento\Bundle\Test\Fixture\Bundle as BundleDataFixture;
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option;
@@ -93,15 +92,9 @@ class Bundle extends Block
      */
     public function getOptions(FixtureInterface $product)
     {
-        if ($product instanceof InjectableFixture) {
-            /** @var BundleProduct  $product */
-            $bundleSelections = $product->getBundleSelections();
-            $bundleOptions = isset($bundleSelections['bundle_options']) ? $bundleSelections['bundle_options'] : [];
-        } else {
-            // TODO: Removed after refactoring(removed) old product fixture.
-            /** @var BundleDataFixture $product */
-            $bundleOptions = $product->getBundleOptions();
-        }
+        /** @var BundleProduct  $product */
+        $bundleSelections = $product->getBundleSelections();
+        $bundleOptions = isset($bundleSelections['bundle_options']) ? $bundleSelections['bundle_options'] : [];
 
         $listFormOptions = $this->getListOptions();
         $formOptions = [];

@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Sales\Test\Page\SalesGuestPrint;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -19,10 +19,10 @@ class AssertSalesPrintOrderBillingAddress extends AbstractConstraint
      * Assert that BillingAddress printed correctly on sales guest print page.
      *
      * @param SalesGuestPrint $salesGuestPrint
-     * @param AddressInjectable $billingAddress
+     * @param Address $billingAddress
      * @return void
      */
-    public function processAssert(SalesGuestPrint $salesGuestPrint, AddressInjectable $billingAddress)
+    public function processAssert(SalesGuestPrint $salesGuestPrint, Address $billingAddress)
     {
         $addressRenderer = $this->objectManager->create(
             'Magento\Customer\Test\Block\Address\Renderer',

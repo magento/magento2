@@ -13,7 +13,6 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertInvoiceInInvoicesTab
  * Assert that invoice is present in the invoices tab of the order with corresponding amount(Grand Total)
  */
 class AssertInvoiceInInvoicesTab extends AbstractConstraint
@@ -21,23 +20,23 @@ class AssertInvoiceInInvoicesTab extends AbstractConstraint
     /**
      * Assert that invoice is present in the invoices tab of the order with corresponding amount(Grand Total)
      *
-     * @param SalesOrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex
      * @param OrderInjectable $order
      * @param array $ids
      * @return void
      */
     public function processAssert(
-        SalesOrderView $orderView,
+        SalesOrderView $salesOrderView,
         OrderIndex $orderIndex,
         OrderInjectable $order,
         array $ids
     ) {
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
-        $orderView->getOrderForm()->openTab('invoices');
+        $salesOrderView->getOrderForm()->openTab('invoices');
         /** @var Grid $grid */
-        $grid = $orderView->getOrderForm()->getTabElement('invoices')->getGridBlock();
+        $grid = $salesOrderView->getOrderForm()->getTabElement('invoices')->getGridBlock();
         $amount = $order->getPrice();
         foreach ($ids['invoiceIds'] as $key => $invoiceId) {
             $filter = [

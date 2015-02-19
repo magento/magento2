@@ -14,7 +14,7 @@
       <data name="urlRewrite/data/request_path" xsi:type="string">cat%isolation%-redirect.html</data>
       <data name="urlRewrite/data/redirect_type" xsi:type="string">Permanent (301)</data>
       <data name="urlRewrite/data/description" xsi:type="string">End-to-end test</data>
-      <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
       <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage"/>
       <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryRedirect"/>
     </variation>

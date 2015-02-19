@@ -7,25 +7,25 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="ConfigureProductInCustomerWishlistOnBackendTest">
-    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation1" firstConstraint="assertProductInCustomerWishlistOnBackendGrid" method="test">
+    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation1" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid" method="test">
       <data name="product" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
-      <constraint name="assertProductInCustomerWishlistOnBackendGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid"/>
     </variation>
-    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation2" firstConstraint="assertConfigurableProductInCustomerWishlistOnBackendGrid" method="test">
-      <data name="product" xsi:type="string">configurableProductInjectable::default</data>
-      <constraint name="assertConfigurableProductInCustomerWishlistOnBackendGrid"/>
+    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation2" firstConstraint="Magento\Configurable\Test\Constraint\AssertConfigurableProductInCustomerWishlistOnBackendGrid" method="test">
+      <data name="product" xsi:type="string">configurableProduct::default</data>
+      <constraint name="Magento\Configurable\Test\Constraint\AssertConfigurableProductInCustomerWishlistOnBackendGrid"/>
     </variation>
-    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation3" firstConstraint="assertBundleProductInCustomerWishlistOnBackendGrid" method="test">
+    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation3" firstConstraint="Magento\Bundle\Test\Constraint\AssertBundleProductInCustomerWishlistOnBackendGrid" method="test">
       <data name="product" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
-      <constraint name="assertBundleProductInCustomerWishlistOnBackendGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductInCustomerWishlistOnBackendGrid"/>
     </variation>
-    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation4" firstConstraint="assertDownloadableProductInCustomerWishlistOnBackendGrid" method="test">
-      <data name="product" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
-      <constraint name="assertDownloadableProductInCustomerWishlistOnBackendGrid"/>
+    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation4" firstConstraint="Magento\Downloadable\Test\Constraint\AssertDownloadableProductInCustomerWishlistOnBackendGrid" method="test">
+      <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links</data>
+      <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductInCustomerWishlistOnBackendGrid"/>
     </variation>
-    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation5" firstConstraint="assertGroupedProductInCustomerWishlistOnBackendGrid" method="test">
-      <data name="product" xsi:type="string">groupedProductInjectable::three_simple_products</data>
-      <constraint name="assertGroupedProductInCustomerWishlistOnBackendGrid"/>
+    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation5" firstConstraint="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductInCustomerWishlistOnBackendGrid" method="test">
+      <data name="product" xsi:type="string">groupedProduct::three_simple_products</data>
+      <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductInCustomerWishlistOnBackendGrid"/>
     </variation>
   </testCase>
 </config>

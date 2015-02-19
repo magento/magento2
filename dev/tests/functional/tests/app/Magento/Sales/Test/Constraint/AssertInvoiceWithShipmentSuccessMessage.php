@@ -10,7 +10,6 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertInvoiceWithShipmentSuccessMessage
  * Assert success created the invoice and shipment message presents
  */
 class AssertInvoiceWithShipmentSuccessMessage extends AbstractConstraint
@@ -23,14 +22,14 @@ class AssertInvoiceWithShipmentSuccessMessage extends AbstractConstraint
     /**
      * Assert success message presents
      *
-     * @param SalesOrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @return void
      */
-    public function processAssert(SalesOrderView $orderView)
+    public function processAssert(SalesOrderView $salesOrderView)
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
-            $orderView->getMessagesBlock()->getSuccessMessages()
+            $salesOrderView->getMessagesBlock()->getSuccessMessages()
         );
     }
 

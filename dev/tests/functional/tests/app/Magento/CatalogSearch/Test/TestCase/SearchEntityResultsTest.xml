@@ -10,7 +10,7 @@
     <variation name="SearchEntityResultsTestVariation1">
       <data name="description" xsi:type="string">MAGETWO-12420: Use Quick Search to Find the Product</data>
       <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::sku</data>
-      <data name="tag" xsi:type="string">bamboo_plan:BAT,test_type:acceptance_test</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult"/>
     </variation>
     <variation name="SearchEntityResultsTestVariation2">
@@ -25,17 +25,17 @@
     </variation>
     <variation name="SearchEntityResultsTestVariation4">
       <data name="description" xsi:type="string">Search configurable product</data>
-      <data name="catalogSearch/data/query_text/value" xsi:type="string">configurableProductInjectable::default::configurable</data>
+      <data name="catalogSearch/data/query_text/value" xsi:type="string">configurableProduct::default::configurable</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult"/>
     </variation>
     <variation name="SearchEntityResultsTestVariation5">
       <data name="description" xsi:type="string">Search downloadable product</data>
-      <data name="catalogSearch/data/query_text/value" xsi:type="string">downloadableProductInjectable::default::downloadable</data>
+      <data name="catalogSearch/data/query_text/value" xsi:type="string">downloadableProduct::default::downloadable</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult"/>
     </variation>
     <variation name="SearchEntityResultsTestVariation6">
       <data name="description" xsi:type="string">Search grouped product</data>
-      <data name="catalogSearch/data/query_text/value" xsi:type="string">groupedProductInjectable::default::grouped</data>
+      <data name="catalogSearch/data/query_text/value" xsi:type="string">groupedProduct::default::grouped</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult"/>
     </variation>
     <variation name="SearchEntityResultsTestVariation7">

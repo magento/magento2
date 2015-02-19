@@ -20,6 +20,7 @@
       <data name="productAttribute/data/default_value_date/pattern" xsi:type="string">-</data>
       <data name="productAttribute/data/default_value_yesno" xsi:type="string">-</data>
       <data name="productAttribute/data/is_unique" xsi:type="string">-</data>
+      <data name="productAttribute/data/manage_frontend_label" xsi:type="string">-</data>
       <data name="productAttribute/data/is_searchable" xsi:type="string">-</data>
       <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">-</data>
       <data name="productAttribute/data/is_comparable" xsi:type="string">-</data>
@@ -30,7 +31,6 @@
       <data name="productAttribute/data/is_visible_on_front" xsi:type="string">-</data>
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
-      <data name="issue" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
@@ -48,17 +48,17 @@
       <data name="productAttribute/data/default_value_date/pattern" xsi:type="string">-</data>
       <data name="productAttribute/data/default_value_yesno" xsi:type="string">-</data>
       <data name="productAttribute/data/is_unique" xsi:type="string">No</data>
-      <data name="productAttribute/data/is_searchable" xsi:type="string">Area_Field%isolation%</data>
+      <data name="productAttribute/data/manage_frontend_label" xsi:type="string">Area_Field%isolation%</data>
+      <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_filterable" xsi:type="string">Yes</data>
+      <data name="productAttribute/data/is_filterable" xsi:type="string">-</data>
       <data name="productAttribute/data/is_filterable_in_search" xsi:type="string">-</data>
       <data name="productAttribute/data/is_used_for_promo_rules" xsi:type="string">-</data>
       <data name="productAttribute/data/is_html_allowed_on_front" xsi:type="string">-</data>
       <data name="productAttribute/data/is_visible_on_front" xsi:type="string">-</data>
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
-      <data name="issue" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
@@ -80,17 +80,17 @@
       <data name="productAttribute/data/default_value_date/pattern" xsi:type="string">n/j/y</data>
       <data name="productAttribute/data/default_value_yesno" xsi:type="string">-</data>
       <data name="productAttribute/data/is_unique" xsi:type="string">No</data>
-      <data name="productAttribute/data/is_searchable" xsi:type="string">Date_Store_View</data>
+      <data name="productAttribute/data/manage_frontend_label" xsi:type="string">Date_Store_View</data>
+      <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_filterable" xsi:type="string">No</data>
+      <data name="productAttribute/data/is_comparable" xsi:type="string">No</data>
+      <data name="productAttribute/data/is_filterable" xsi:type="string">-</data>
       <data name="productAttribute/data/is_filterable_in_search" xsi:type="string">-</data>
       <data name="productAttribute/data/is_used_for_promo_rules" xsi:type="string">-</data>
       <data name="productAttribute/data/is_html_allowed_on_front" xsi:type="string">-</data>
-      <data name="productAttribute/data/is_visible_on_front" xsi:type="string">-</data>
+      <data name="productAttribute/data/is_visible_on_front" xsi:type="string">Yes</data>
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">Yes</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">Yes</data>
-      <data name="issue" xsi:type="string">Yes</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
@@ -110,7 +110,8 @@
       <data name="productAttribute/data/default_value_date/pattern" xsi:type="string">-</data>
       <data name="productAttribute/data/default_value_yesno" xsi:type="string">No</data>
       <data name="productAttribute/data/is_unique" xsi:type="string">-</data>
-      <data name="productAttribute/data/is_searchable" xsi:type="string">Yes/No_Global</data>
+      <data name="productAttribute/data/manage_frontend_label" xsi:type="string">Yes/No_Global</data>
+      <data name="productAttribute/data/is_searchable" xsi:type="string">-</data>
       <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">-</data>
       <data name="productAttribute/data/is_comparable" xsi:type="string">-</data>
       <data name="productAttribute/data/is_filterable" xsi:type="string">-</data>
@@ -120,7 +121,6 @@
       <data name="productAttribute/data/is_visible_on_front" xsi:type="string">-</data>
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
-      <data name="issue" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
@@ -138,17 +138,17 @@
       <data name="productAttribute/data/default_value_date/pattern" xsi:type="string">-</data>
       <data name="productAttribute/data/default_value_yesno" xsi:type="string">-</data>
       <data name="productAttribute/data/is_unique" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_searchable" xsi:type="string">-</data>
+      <data name="productAttribute/data/manage_frontend_label" xsi:type="string">-</data>
+      <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_filterable" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_filterable_in_search" xsi:type="string">Filterable (with results)</data>
-      <data name="productAttribute/data/is_used_for_promo_rules" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_html_allowed_on_front" xsi:type="string">-</data>
+      <data name="productAttribute/data/is_filterable" xsi:type="string">Filterable (with results)</data>
+      <data name="productAttribute/data/is_filterable_in_search" xsi:type="string">Yes</data>
+      <data name="productAttribute/data/is_used_for_promo_rules" xsi:type="string">-</data>
+      <data name="productAttribute/data/is_html_allowed_on_front" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_visible_on_front" xsi:type="string">Yes</data>
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/used_for_sort_by" xsi:type="string">Yes</data>
-      <data name="issue" xsi:type="string">-</data>
+      <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
@@ -173,17 +173,17 @@
       <data name="productAttribute/data/default_value_date/pattern" xsi:type="string">-</data>
       <data name="productAttribute/data/default_value_yesno" xsi:type="string">-</data>
       <data name="productAttribute/data/is_unique" xsi:type="string">No</data>
-      <data name="productAttribute/data/is_searchable" xsi:type="string">-</data>
+      <data name="productAttribute/data/manage_frontend_label" xsi:type="string">-</data>
+      <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_filterable" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_filterable_in_search" xsi:type="string">Filterable (with results)</data>
-      <data name="productAttribute/data/is_used_for_promo_rules" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_html_allowed_on_front" xsi:type="string">-</data>
+      <data name="productAttribute/data/is_filterable" xsi:type="string">Filterable (with results)</data>
+      <data name="productAttribute/data/is_filterable_in_search" xsi:type="string">Yes</data>
+      <data name="productAttribute/data/is_used_for_promo_rules" xsi:type="string">-</data>
+      <data name="productAttribute/data/is_html_allowed_on_front" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_visible_on_front" xsi:type="string">Yes</data>
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">Yes</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">Yes</data>
-      <data name="issue" xsi:type="string">Yes</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
@@ -212,17 +212,17 @@
       <data name="productAttribute/data/default_value_date/pattern" xsi:type="string">-</data>
       <data name="productAttribute/data/default_value_yesno" xsi:type="string">-</data>
       <data name="productAttribute/data/is_unique" xsi:type="string">No</data>
-      <data name="productAttribute/data/is_searchable" xsi:type="string">Price_StoreView</data>
+      <data name="productAttribute/data/manage_frontend_label" xsi:type="string">Price_StoreView</data>
+      <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_filterable" xsi:type="string">No</data>
-      <data name="productAttribute/data/is_filterable_in_search" xsi:type="string">Filterable (with results)</data>
-      <data name="productAttribute/data/is_used_for_promo_rules" xsi:type="string">Yes</data>
+      <data name="productAttribute/data/is_comparable" xsi:type="string">No</data>
+      <data name="productAttribute/data/is_filterable" xsi:type="string">Filterable (with results)</data>
+      <data name="productAttribute/data/is_filterable_in_search" xsi:type="string">Yes</data>
+      <data name="productAttribute/data/is_used_for_promo_rules" xsi:type="string">-</data>
       <data name="productAttribute/data/is_html_allowed_on_front" xsi:type="string">-</data>
       <data name="productAttribute/data/is_visible_on_front" xsi:type="string">-</data>
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
-      <data name="issue" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
@@ -244,7 +244,8 @@
       <data name="productAttribute/data/default_value_date/pattern" xsi:type="string">-</data>
       <data name="productAttribute/data/default_value_yesno" xsi:type="string">-</data>
       <data name="productAttribute/data/is_unique" xsi:type="string">-</data>
-      <data name="productAttribute/data/is_searchable" xsi:type="string">Fixed_Product_Tax_Storeview</data>
+      <data name="productAttribute/data/manage_frontend_label" xsi:type="string">Fixed_Product_Tax_Storeview</data>
+      <data name="productAttribute/data/is_searchable" xsi:type="string">-</data>
       <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">-</data>
       <data name="productAttribute/data/is_comparable" xsi:type="string">-</data>
       <data name="productAttribute/data/is_filterable" xsi:type="string">-</data>
@@ -254,7 +255,6 @@
       <data name="productAttribute/data/is_visible_on_front" xsi:type="string">-</data>
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
-      <data name="issue" xsi:type="string">-</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
@@ -272,17 +272,18 @@
       <data name="productAttribute/data/default_value_date/pattern" xsi:type="string">-</data>
       <data name="productAttribute/data/default_value_yesno" xsi:type="string">-</data>
       <data name="productAttribute/data/is_unique" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_searchable" xsi:type="string">Area_Field%isolation%</data>
+      <data name="productAttribute/data/manage_frontend_label" xsi:type="string">Text_Field%isolation%</data>
+      <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
       <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
-      <data name="productAttribute/data/is_filterable" xsi:type="string">Yes</data>
+      <data name="productAttribute/data/is_filterable" xsi:type="string">-</data>
       <data name="productAttribute/data/is_filterable_in_search" xsi:type="string">-</data>
       <data name="productAttribute/data/is_used_for_promo_rules" xsi:type="string">-</data>
       <data name="productAttribute/data/is_html_allowed_on_front" xsi:type="string">-</data>
       <data name="productAttribute/data/is_visible_on_front" xsi:type="string">-</data>
       <data name="productAttribute/data/used_in_product_listing" xsi:type="string">-</data>
       <data name="productAttribute/data/used_for_sort_by" xsi:type="string">-</data>
-      <data name="issue" xsi:type="string">-</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-33625</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUnique"/>
     </variation>
   </testCase>

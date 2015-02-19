@@ -12,7 +12,6 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertNoInvoiceButton
  * Assert no Invoice button the order grid
  */
 class AssertNoInvoiceButton extends AbstractConstraint
@@ -20,17 +19,17 @@ class AssertNoInvoiceButton extends AbstractConstraint
     /**
      * Assert no Invoice button the order grid
      *
-     * @param SalesOrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex
      * @param OrderInjectable $order
      * @return void
      */
-    public function processAssert(SalesOrderView $orderView, OrderIndex $orderIndex, OrderInjectable $order)
+    public function processAssert(SalesOrderView $salesOrderView, OrderIndex $orderIndex, OrderInjectable $order)
     {
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
         \PHPUnit_Framework_Assert::assertFalse(
-            $orderView->getPageActions()->isActionButtonVisible('Invoice'),
+            $salesOrderView->getPageActions()->isActionButtonVisible('Invoice'),
             'Invoice button is present on order view page.'
         );
     }

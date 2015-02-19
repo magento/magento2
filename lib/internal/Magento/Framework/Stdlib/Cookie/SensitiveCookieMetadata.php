@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Stdlib\Cookie;
 
-use Magento\Framework\App\Http\RequestInterface;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Class SensitiveCookieMetadata

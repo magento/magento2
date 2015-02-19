@@ -217,7 +217,7 @@
       <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
       <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
       <data name="category/data/category_products/dataSet" xsi:type="string">-</data>
-      <data name="tag" xsi:type="string">bamboo_plan:BAT,test_type:acceptance_test</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage"/>
@@ -244,8 +244,8 @@
       <data name="category/data/use_config_price_range" xsi:type="string">-</data>
       <data name="category/data/layered_navigation_price_step" xsi:type="string">-</data>
       <data name="category/data/category_products_data/preset" xsi:type="string">-</data>
-      <data name="category/data/category_products/dataSet" xsi:type="string">catalogProductSimple::default, configurableProductInjectable::default, bundleProduct::bundle_fixed_product</data>
-      <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
+      <data name="category/data/category_products/dataSet" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts"/>
     </variation>

@@ -7,13 +7,13 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="DeleteProductFromCustomerWishlistOnBackendTest">
-    <variation name="DeleteProductFromCustomerWishlistOnBackendTestVariation1" firstConstraint="assertProductsIsAbsentInWishlist" method="test">
-      <data name="product" xsi:type="string">configurableProductInjectable::default</data>
-      <constraint name="assertProductsIsAbsentInWishlist"/>
+    <variation name="DeleteProductFromCustomerWishlistOnBackendTestVariation1" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist" method="test">
+      <data name="product" xsi:type="string">configurableProduct::default</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist"/>
     </variation>
-    <variation name="DeleteProductFromCustomerWishlistOnBackendTestVariation2" firstConstraint="assertProductsIsAbsentInWishlist" method="test">
+    <variation name="DeleteProductFromCustomerWishlistOnBackendTestVariation2" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist" method="test">
       <data name="product" xsi:type="string">catalogProductSimple::simple_for_composite_products</data>
-      <constraint name="assertProductsIsAbsentInWishlist"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist"/>
     </variation>
   </testCase>
 </config>

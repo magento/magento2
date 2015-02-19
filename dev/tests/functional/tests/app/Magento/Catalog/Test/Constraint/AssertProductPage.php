@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureInterface;
@@ -28,7 +28,7 @@ class AssertProductPage extends AbstractAssertForm
     /**
      * Product fixture
      *
-     * @var ConfigurableProductInjectable
+     * @var ConfigurableProduct
      */
     protected $product;
 
