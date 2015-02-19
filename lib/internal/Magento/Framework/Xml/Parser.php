@@ -158,7 +158,7 @@ class Parser
 
         try {
             $this->getDom()->loadXML($string);
-        } catch(\Magento\Framework\Exception $e) {
+        } catch (\Magento\Framework\Exception $e) {
             restore_error_handler();
             throw new \Magento\Framework\Exception($e->getMessage(), $e->getCode(), $e);
         }
