@@ -26,24 +26,24 @@ class ActionFlagTest extends \PHPUnit_Framework_TestCase
     public function testSetIfActionNotExist()
     {
         $this->_requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('action_name'));
-        $this->_requestMock->expects($this->once())->method('getRequestedRouteName');
-        $this->_requestMock->expects($this->once())->method('getRequestedControllerName');
+        $this->_requestMock->expects($this->once())->method('getRouteName');
+        $this->_requestMock->expects($this->once())->method('getControllerName');
         $this->_actionFlag->set('', 'flag', 'value');
     }
 
     public function testSetIfActionExist()
     {
         $this->_requestMock->expects($this->never())->method('getActionName');
-        $this->_requestMock->expects($this->once())->method('getRequestedRouteName');
-        $this->_requestMock->expects($this->once())->method('getRequestedControllerName');
+        $this->_requestMock->expects($this->once())->method('getRouteName');
+        $this->_requestMock->expects($this->once())->method('getControllerName');
         $this->_actionFlag->set('action', 'flag', 'value');
     }
 
     public function testGetIfFlagNotExist()
     {
         $this->_requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('action_name'));
-        $this->_requestMock->expects($this->once())->method('getRequestedRouteName');
-        $this->_requestMock->expects($this->once())->method('getRequestedControllerName');
+        $this->_requestMock->expects($this->once())->method('getRouteName');
+        $this->_requestMock->expects($this->once())->method('getControllerName');
         $this->assertEquals([], $this->_actionFlag->get(''));
     }
 
@@ -53,14 +53,14 @@ class ActionFlagTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock->expects(
             $this->exactly(3)
         )->method(
-            'getRequestedRouteName'
+            'getRouteName'
         )->will(
             $this->returnValue('route')
         );
         $this->_requestMock->expects(
             $this->exactly(3)
         )->method(
-            'getRequestedControllerName'
+            'getControllerName'
         )->will(
             $this->returnValue('controller')
         );
@@ -74,14 +74,14 @@ class ActionFlagTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock->expects(
             $this->once()
         )->method(
-            'getRequestedRouteName'
+            'getRouteName'
         )->will(
             $this->returnValue('route')
         );
         $this->_requestMock->expects(
             $this->once()
         )->method(
-            'getRequestedControllerName'
+            'getControllerName'
         )->will(
             $this->returnValue('controller')
         );
