@@ -7,7 +7,7 @@
 namespace Magento\Customer\Test\TestCase;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Mtf\TestCase\Injectable;
@@ -62,14 +62,14 @@ class CreateExistingCustomerFrontendEntity extends Injectable
      * @param CustomerAccountCreate $customerAccountCreate
      * @param CustomerAccountLogout $customerAccountLogout
      * @param CmsIndex $cmsIndex
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
     public function __inject(
         CustomerAccountCreate $customerAccountCreate,
         CustomerAccountLogout $customerAccountLogout,
         CmsIndex $cmsIndex,
-        CustomerInjectable $customer
+        Customer $customer
     ) {
         $this->customerAccountLogout = $customerAccountLogout;
         $this->customerAccountCreate = $customerAccountCreate;
@@ -84,10 +84,10 @@ class CreateExistingCustomerFrontendEntity extends Injectable
     /**
      * Create Existing Customer account on frontend
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return void
      */
-    public function testCreateExistingCustomer(CustomerInjectable $customer)
+    public function testCreateExistingCustomer(Customer $customer)
     {
         //Steps
         $this->cmsIndex->open();

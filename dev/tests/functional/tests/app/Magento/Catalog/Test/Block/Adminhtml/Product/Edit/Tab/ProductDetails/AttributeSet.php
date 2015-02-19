@@ -29,6 +29,13 @@ class AttributeSet extends SuggestElement
     protected $actionToggle = '.action-toggle';
 
     /**
+     * Magento loader
+     *
+     * @var string
+     */
+    protected $loader = '[data-role="loader"]';
+
+    /**
      * Set value
      *
      * @param string $value
@@ -40,6 +47,14 @@ class AttributeSet extends SuggestElement
             $this->find($this->actionToggle)->click();
             parent::setValue($value);
         }
+        // Wait loader
+        $element = $this->driver;
+        $selector = $this->loader;
+        $element->waitUntil(
+            function () use ($element, $selector) {
+                return $element->find($selector)->isVisible() == false ? true : null;
+            }
+        );
     }
 
     /**

@@ -74,6 +74,7 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
             [
                 'getParam',
                 'getPost',
+                'getPostValue',
                 'get',
                 'has',
                 'setModuleName',

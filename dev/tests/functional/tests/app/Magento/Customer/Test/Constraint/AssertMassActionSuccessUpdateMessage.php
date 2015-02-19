@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -28,7 +28,7 @@ class AssertMassActionSuccessUpdateMessage extends AbstractConstraint
     /**
      * Assert update message is appears on customer grid (Customers > All Customers)
      *
-     * @param CustomerInjectable|CustomerInjectable[] $customer
+     * @param Customer|Customer[] $customer
      * @param CustomerIndex $pageCustomerIndex
      * @return void
      */

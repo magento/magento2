@@ -9,6 +9,5 @@
     <cart module="Magento_Checkout">
         <type>flat</type>
         <entity_type>quote</entity_type>
-        <collection>Magento\Checkout\Model\Resource\Cart</collection>
     </cart>
 </fixture>

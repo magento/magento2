@@ -21,7 +21,7 @@ class ThemeControllerTest extends \Magento\Backend\Utility\Controller
             ->getCollection()
             ->getFirstItem();
 
-        $this->getRequest()->setPost('id', $theme->getId());
+        $this->getRequest()->setPostValue('id', $theme->getId());
         $this->dispatch('backend/admin/system_design_theme/uploadjs');
         $output = $this->getResponse()->getBody();
         $this->assertContains('"error":false', $output);

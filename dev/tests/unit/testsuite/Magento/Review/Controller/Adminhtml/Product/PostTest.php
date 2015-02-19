@@ -118,13 +118,14 @@ class PostTest extends \PHPUnit_Framework_TestCase
     protected function _prepareMockObjects()
     {
         $requestMethods = [
-            'getPost',
+            'getPostValue',
             'getModuleName',
             'setModuleName',
             'getActionName',
             'setActionName',
             'getParam',
-            'getCookie'
+            'getCookie',
+            'isSecure',
         ];
         $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $this->_requestMock = $this->getMock(
@@ -182,7 +183,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
         $this->_requestMock->expects($this->at(2))->method('getParam')
             ->will($this->returnValue(['1' => '1']));
-        $this->_requestMock->expects($this->once())->method('getPost')
+        $this->_requestMock->expects($this->once())->method('getPostValue')
             ->will($this->returnValue(['status_id' => 1]));
         $this->_objectManagerMock->expects($this->at(0))->method('get')
             ->with('Magento\Store\Model\StoreManagerInterface')

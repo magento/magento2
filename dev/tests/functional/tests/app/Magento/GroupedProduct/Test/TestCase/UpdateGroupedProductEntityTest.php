@@ -8,7 +8,7 @@ namespace Magento\GroupedProduct\Test\TestCase;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
+use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -69,11 +69,11 @@ class UpdateGroupedProductEntityTest extends Injectable
     /**
      * Test update grouped product
      *
-     * @param GroupedProductInjectable $product
-     * @param GroupedProductInjectable $originalProduct
+     * @param GroupedProduct $product
+     * @param GroupedProduct $originalProduct
      * @return void
      */
-    public function test(GroupedProductInjectable $product, GroupedProductInjectable $originalProduct)
+    public function test(GroupedProduct $product, GroupedProduct $originalProduct)
     {
         // Precondition
         $originalProduct->persist();
