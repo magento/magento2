@@ -5,12 +5,10 @@
  */
 namespace Magento\Backend\Helper\Dashboard;
 
-use Magento\Core\Helper\Data as HelperData;
-
 /**
  * Adminhtml abstract  dashboard helper.
  */
-abstract class AbstractDashboard extends HelperData
+abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Helper collection

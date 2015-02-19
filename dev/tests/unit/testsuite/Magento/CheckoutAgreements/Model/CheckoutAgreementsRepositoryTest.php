@@ -5,7 +5,7 @@
  */
 namespace Magento\CheckoutAgreements\Model;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -46,7 +46,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->model = new CheckoutAgreementsRepository(
             $this->factoryMock,

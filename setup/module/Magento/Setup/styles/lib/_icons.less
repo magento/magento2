@@ -1,0 +1,94 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.font-face(
+    @family-name: 'Icons',
+    @font-path: '@{path-to-pub}fonts/icons/icons',
+    @font-weight: normal,
+    @font-style: normal
+);
+
+[class*='icon-'] {
+    display: inline-block;
+    line-height: 1;
+    &:after {
+        font-family: @icons__font-family;
+    }
+}
+
+.icon-success-thick {
+    &:after {
+        content: @icon-success-thick__content;
+    }
+}
+
+.icon-success {
+    &:after {
+        content: '\e601';
+    }
+}
+
+.icon-collapse {
+    &:after {
+        content: @icon-collapse__content;
+    }
+}
+
+.icon-failed-thick {
+    &:after {
+        content: @icon-failed-thick__content;
+    }
+}
+
+.icon-failed {
+    &:after {
+        content: '\e604';
+    }
+}
+
+.icon-expand {
+    &:after {
+        content: @icon-expand__content;
+    }
+}
+
+.icon-warning {
+    &:after {
+        content: '\e606';
+    }
+}
+
+.icon-success-round,
+.icon-failed-round {
+    border-radius: 100%;
+    color: @color-white;
+    font-size: @icons-round__size;
+    height: 1em;
+    position: relative;
+    text-align: center;
+    width: 1em;
+    &:after {
+        bottom: 0;
+        font-size: .8em;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: .15em;
+    }
+}
+
+.icon-success-round {
+    background-color: @color-success;
+    &:after {
+        content: @icon-success-thick__content;
+    }
+}
+
+.icon-failed-round {
+    background-color: @color-failed;
+    &:after {
+        content: @icon-failed-thick__content;
+    }
+}

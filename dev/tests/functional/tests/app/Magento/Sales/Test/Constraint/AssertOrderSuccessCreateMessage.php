@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -27,10 +27,10 @@ class AssertOrderSuccessCreateMessage extends AbstractConstraint
     /**
      * Assert that after create sales order successful message appears
      *
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @return void
      */
-    public function processAssert(OrderView $orderView)
+    public function processAssert(SalesOrderView $orderView)
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,

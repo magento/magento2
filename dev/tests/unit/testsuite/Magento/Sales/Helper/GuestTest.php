@@ -23,14 +23,8 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $appContextHelperMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $scopeConfigInterfaceMock;
-
-    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerInterfaceMock;
-
-    /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
-    protected $stateMock;
 
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registryMock;
@@ -56,9 +50,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->appContextHelperMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->scopeConfigInterfaceMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->storeManagerInterfaceMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
-        $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->storeManagerInterfaceMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->registryMock = $this->getMock('Magento\Framework\Registry');
         $this->sessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
@@ -78,9 +70,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Helper\Guest',
             [
                 'context' => $this->appContextHelperMock,
-                'scopeConfig' => $this->scopeConfigInterfaceMock,
                 'storeManager' => $this->storeManagerInterfaceMock,
-                'appState' => $this->stateMock,
                 'coreRegistry' => $this->registryMock,
                 'customerSession' => $this->sessionMock,
                 'cookieManager' => $this->cookieManagerMock,

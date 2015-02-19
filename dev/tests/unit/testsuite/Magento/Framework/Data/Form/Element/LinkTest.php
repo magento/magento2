@@ -44,7 +44,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Link::__construct
+     * covers \Magento\Framework\Data\Form\Element\Link::__construct
      */
     public function testConstruct()
     {
@@ -52,7 +52,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Link::getElementHtml
+     * covers \Magento\Framework\Data\Form\Element\Link::getElementHtml
      */
     public function testGetElementHtml()
     {
@@ -69,7 +69,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Link::getHtmlAttributes
+     * covers \Magento\Framework\Data\Form\Element\Link::getHtmlAttributes
      */
     public function testGetHtmlAttributes()
     {

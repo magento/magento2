@@ -18,14 +18,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Core\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Developer\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $helperMock;
 
     protected function setUp()
     {
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->helperMock = $this->getMock('Magento\Core\Helper\Data', ['isDevAllowed'], [], '', false);
+        $this->helperMock = $this->getMock('Magento\Developer\Helper\Data', ['isDevAllowed'], [], '', false);
         $this->model = new Config(
             $this->scopeConfigMock,
             $this->helperMock
@@ -43,7 +43,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'isSetFlag'
         )->with(
             $this->equalTo('dev/translate_inline/active'),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->equalTo($store)
         )->will(
             $this->returnValue($result)

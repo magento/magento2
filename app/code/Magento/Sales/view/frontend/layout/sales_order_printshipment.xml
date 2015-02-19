@@ -19,6 +19,6 @@
                 <block class="Magento\Framework\View\Element\RendererList" name="sales.order.print.shipment.renderers" as="renderer.list"/>
             </block>
         </referenceContainer>
-        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Theme::template.phtml"/>
     </body>
 </page>

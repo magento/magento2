@@ -69,7 +69,7 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManagerMock = $this->getMockBuilder('\Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -94,8 +94,8 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory::getStore
-     * @covers \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory::getSaveUrl
+     * covers \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory::getStore
+     * covers \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory::getSaveUrl
      */
     public function testGetSaveUrl()
     {

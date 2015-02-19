@@ -22,7 +22,7 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify that hidden input is present in multiselect
      *
-     * @covers \Magento\Framework\Data\Form\Element\Multiselect::getElementHtml
+     * covers \Magento\Framework\Data\Form\Element\Multiselect::getElementHtml
      */
     public function testHiddenFieldPresentInMultiSelect()
     {

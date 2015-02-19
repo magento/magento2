@@ -8,6 +8,8 @@
 
 namespace Magento\Wishlist\Model\Rss;
 
+use Magento\Directory\Helper\Data;
+
 class WishlistTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -161,13 +163,13 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'advanced/modules_disable_output/Magento_Rss',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             null,
                             null,
                         ],
                         [
-                            \Magento\Core\Helper\Data::XML_PATH_DEFAULT_LOCALE,
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            Data::XML_PATH_DEFAULT_LOCALE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             null,
                             $locale
                         ],
@@ -286,7 +288,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     public function testIsAllowed()
     {
         $this->scopeConfig->expects($this->once())->method('getValue')
-            ->with('rss/wishlist/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            ->with('rss/wishlist/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
         $this->assertTrue($this->model->isAllowed());
     }

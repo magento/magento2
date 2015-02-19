@@ -51,7 +51,7 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Widget\Button::getAttributesHtml
+     * covers \Magento\Backend\Block\Widget\Button::getAttributesHtml
      * @dataProvider getAttributesHtmlDataProvider
      */
     public function testGetAttributesHtml($data, $expect)

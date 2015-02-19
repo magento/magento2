@@ -5,9 +5,9 @@
  */
 namespace Magento\Msrp\Model;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Escaper;
 
 class Config
@@ -27,7 +27,7 @@ class Config
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -43,12 +43,12 @@ class Config
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param Escaper $escaper
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager,
         Escaper $escaper
     ) {
         $this->scopeConfig = $scopeConfig;
@@ -77,7 +77,7 @@ class Config
     {
         return (bool)$this->scopeConfig->getValue(
             self::XML_PATH_MSRP_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $this->storeId
         );
     }
@@ -91,7 +91,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_MSRP_DISPLAY_ACTUAL_PRICE_TYPE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $this->storeId
         );
     }
@@ -106,7 +106,7 @@ class Config
         return $this->escaper->escapeHtml(
             $this->scopeConfig->getValue(
                 self::XML_PATH_MSRP_EXPLANATION_MESSAGE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $this->storeId
             ),
             ['b', 'br', 'strong', 'i', 'u', 'p', 'span']
@@ -123,7 +123,7 @@ class Config
         return $this->escaper->escapeHtml(
             $this->scopeConfig->getValue(
                 self::XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $this->storeId
             ),
             ['b', 'br', 'strong', 'i', 'u', 'p', 'span']

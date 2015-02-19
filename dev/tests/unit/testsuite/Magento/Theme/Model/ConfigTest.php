@@ -51,7 +51,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         /** @var $this->_themeMock \Magento\Theme\Model\Theme */
         $this->_themeMock = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
         $this->_storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Store\StoreManagerInterface',
+            'Magento\Store\Model\StoreManagerInterface',
             [],
             '',
             true,
@@ -95,7 +95,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Config::assignToStore
+     * cover \Magento\Theme\Model\Config::assignToStore
      */
     public function testAssignToStoreInSingleStoreMode()
     {
@@ -119,7 +119,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'addFieldToFilter'
         )->with(
             'scope',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORES
         )->will(
             $this->returnValue($this->_configData)
         );
@@ -146,7 +146,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Config::assignToStore
+     * cover \Magento\Theme\Model\Config::assignToStore
      */
     public function testAssignToStoreNonSingleStoreMode()
     {
@@ -170,7 +170,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'addFieldToFilter'
         )->with(
             'scope',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORES
         )->will(
             $this->returnValue($this->_configData)
         );

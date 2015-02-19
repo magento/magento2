@@ -20,7 +20,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $blockFactory;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -37,37 +37,19 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->blockFactory = $this->getMockBuilder(
-            'Magento\Framework\View\Element\BlockFactory'
-        )->disableOriginalConstructor()->getMock();
-        $this->storeManager = $this->getMockBuilder(
-            'Magento\Framework\Store\StoreManagerInterface'
-        )->disableOriginalConstructor()->getMock();
-        $this->scopeConfig = $this->getMockBuilder(
-            'Magento\Framework\App\Config\ScopeConfigInterface'
-        )->disableOriginalConstructor()->getMock();
-        $this->customerMetadataService = $this->getMockBuilder(
-            'Magento\Customer\Api\CustomerMetadataInterface'
-        )->disableOriginalConstructor()->getMock();
-        $this->addressConfig = $this->getMockBuilder(
-            'Magento\Customer\Model\Address\Config'
-        )->disableOriginalConstructor()->getMock();
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $className = 'Magento\Customer\Helper\Address';
+        $arguments = $objectManagerHelper->getConstructArguments($className);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $this->context = $arguments['context'];
+        $this->blockFactory = $arguments['blockFactory'];
+        $this->storeManager = $arguments['storeManager'];
+        $this->scopeConfig = $this->context->getScopeConfig();
+        $this->customerMetadataService = $arguments['customerMetadataService'];
+        $this->addressConfig = $arguments['addressConfig'];
+        $this->addressMetadataService = $arguments['addressMetadataService'];
 
-        $this->addressMetadataService = $this->getMockBuilder('Magento\Customer\Api\AddressMetadataInterface')
-            ->getMock();
-
-        $this->helper = new \Magento\Customer\Helper\Address(
-            $this->context,
-            $this->blockFactory,
-            $this->storeManager,
-            $this->scopeConfig,
-            $this->customerMetadataService,
-            $this->addressMetadataService,
-            $this->addressConfig
-        );
+        $this->helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
     /**
@@ -119,7 +101,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->context,
             $blockFactory,
             $this->storeManager,
-            $this->scopeConfig,
             $this->customerMetadataService,
             $this->addressMetadataService,
             $this->addressConfig
@@ -155,7 +136,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('1'));
         $this->scopeConfig->expects($this->once())//test method cache
             ->method('getValue')
-            ->with('customer/address', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
+            ->with('customer/address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
             ->will($this->returnValue($result));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->assertNull($this->helper->getConfig('unavailable_key'));
@@ -231,7 +212,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VAT_VALIDATION_ENABLED,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
             ->will($this->returnValue($result));
@@ -261,7 +242,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VIV_ON_EACH_TRANSACTION,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
             ->will($this->returnValue($result));
@@ -291,7 +272,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
             ->will($this->returnValue($result));
@@ -316,7 +297,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
             ->will($this->returnValue(true));
         $this->assertTrue($this->helper->isDisableAutoGroupAssignDefaultValue());
@@ -328,7 +309,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VAT_FRONTEND_VISIBILITY,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
             ->will($this->returnValue(true));
         $this->assertTrue($this->helper->isVatAttributeVisible());

@@ -68,35 +68,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**#@-*/
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_config;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * @var \Magento\Framework\Registry
      */
     protected $_registry;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Registry $registry
     ) {
         parent::__construct($context);
-        $this->_config = $config;
-        $this->_scopeConfig = $scopeConfig;
         $this->_registry = $registry;
     }
 
@@ -107,9 +91,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isGoogleAdwordsActive()
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ACTIVE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) &&
             $this->getConversionId() &&
             $this->getConversionLanguage() &&
@@ -125,7 +109,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getLanguageCodes()
     {
-        return (array)$this->_config->getValue(self::XML_PATH_LANGUAGES, 'default');
+        return (array)$this->scopeConfig->getValue(self::XML_PATH_LANGUAGES, 'default');
     }
 
     /**
@@ -136,7 +120,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function convertLanguageCodeToLocaleCode($language)
     {
-        $convertArray = (array)$this->_config->getValue(self::XML_PATH_LANGUAGE_CONVERT, 'default');
+        $convertArray = (array)$this->scopeConfig->getValue(self::XML_PATH_LANGUAGE_CONVERT, 'default');
         return isset($convertArray[$language]) ? $convertArray[$language] : $language;
     }
 
@@ -147,7 +131,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionJsSrc()
     {
-        return (string)$this->_config->getValue(self::XML_PATH_CONVERSION_JS_SRC, 'default');
+        return (string)$this->scopeConfig->getValue(self::XML_PATH_CONVERSION_JS_SRC, 'default');
     }
 
     /**
@@ -158,7 +142,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getConversionImgSrc()
     {
         return sprintf(
-            $this->_config->getValue(self::XML_PATH_CONVERSION_IMG_SRC, 'default'),
+            $this->scopeConfig->getValue(self::XML_PATH_CONVERSION_IMG_SRC, 'default'),
             $this->getConversionId(),
             $this->getConversionLabel()
         );
@@ -171,9 +155,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionId()
     {
-        return (int)$this->_scopeConfig->getValue(
+        return (int)$this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_ID,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -184,9 +168,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionLanguage()
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_LANGUAGE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -197,9 +181,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionFormat()
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_FORMAT,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -210,9 +194,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionColor()
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_COLOR,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -223,9 +207,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionLabel()
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_LABEL,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -236,9 +220,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionValueType()
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_VALUE_TYPE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -259,9 +243,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionValueConstant()
     {
-        return (double)$this->_scopeConfig->getValue(
+        return (double)$this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_VALUE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

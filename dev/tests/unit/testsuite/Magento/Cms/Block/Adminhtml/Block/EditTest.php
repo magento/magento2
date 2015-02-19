@@ -6,7 +6,7 @@
 namespace Magento\Cms\Block\Adminhtml\Block;
 
 /**
- * @covers \Magento\Cms\Block\Adminhtml\Block\Edit
+ * covers \Magento\Cms\Block\Adminhtml\Block\Edit
  */
 class EditTest extends \PHPUnit_Framework_TestCase
 {
@@ -59,7 +59,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Block\Adminhtml\Block\Edit::getHeaderText
+     * covers \Magento\Cms\Block\Adminhtml\Block\Edit::getHeaderText
      * @param integer|null $modelBlockId
      *
      * @dataProvider getHeaderTextDataProvider
@@ -84,7 +84,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with($title)
             ->willReturn($escapedTitle);
 
-        $this->assertInternalType('string', $this->this->getHeaderText());
+        $this->assertInstanceOf('Magento\Framework\Phrase', $this->this->getHeaderText());
     }
 
     public function getHeaderTextDataProvider()

@@ -18,7 +18,7 @@ class ReservedAttributeListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Model\Product\ReservedAttributeList::isReservedAttribute
+     * covers \Magento\Catalog\Model\Product\ReservedAttributeList::isReservedAttribute
      * @dataProvider dataProvider
      */
     public function testIsReservedAttribute($isUserDefined, $attributeCode, $expected)
