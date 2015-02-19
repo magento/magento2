@@ -15,7 +15,7 @@ class Start extends \Magento\ImportExport\Controller\Adminhtml\Import
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             $this->_view->loadLayout(false);
 

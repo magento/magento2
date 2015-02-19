@@ -65,7 +65,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->_responseMock = $this->getMockBuilder('Magento\Webapi\Controller\Response')
             ->disableOriginalConstructor()
-            ->setMethods(['clearHeaders', 'setHeader', 'sendResponse'])
+            ->setMethods(['clearHeaders', 'setHeader', 'sendResponse', 'getHeaders'])
             ->getMock();
         $this->_errorProcessorMock = $this->getMockBuilder('Magento\Webapi\Controller\ErrorProcessor')
             ->disableOriginalConstructor()
@@ -86,6 +86,11 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $localeResolverMock->expects($this->any())->method('getLocale')->will($this->returnValue($localeMock));
 
         $this->_responseMock->expects($this->any())->method('clearHeaders')->will($this->returnSelf());
+        $this->_responseMock
+            ->expects($this->any())
+            ->method('getHeaders')
+            ->will($this->returnValue(new \Zend\Http\Headers()));
+
         $this->_soapServerMock->expects($this->any())->method('setWSDL')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setEncoding')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setReturnResponse')->will($this->returnSelf());

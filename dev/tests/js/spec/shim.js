@@ -20,12 +20,7 @@
         Fp.bind = function (context) {
             var func = this,
                 args = slice.call(arguments, 1);
-
-            /**
-             * [type]
-             *
-             * @return {*}
-             */
+                
             function bound() {
                 var invokedAsConstructor = func.prototype && (this instanceof func);
 

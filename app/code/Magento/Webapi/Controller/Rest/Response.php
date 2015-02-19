@@ -21,9 +21,15 @@ class Response extends \Magento\Webapi\Controller\Response
     protected $_appState;
 
     /**
+     * Exception stack
+     * @var \Exception
+     */
+    protected $exceptions = [];
+
+    /**
      * Initialize dependencies.
      *
-     * @param \Magento\Webapi\Controller\Rest\Response\Renderer\Factory $rendererFactory
+     * @param Response\Renderer\Factory $rendererFactory
      * @param \Magento\Webapi\Controller\ErrorProcessor $errorProcessor
      * @param \Magento\Framework\App\State $appState
      */
@@ -133,5 +139,54 @@ class Response extends \Magento\Webapi\Controller\Response
         $mimeType = $this->_renderer->getMimeType();
         $body = $this->_renderer->render($data);
         $this->setMimeType($mimeType)->setBody($body);
+    }
+
+    /**
+     * Register an exception with the response
+     *
+     * @param \Exception $e
+     * @return $this
+     */
+    public function setException($e)
+    {
+        $this->exceptions[] = $e;
+        return $this;
+    }
+
+    /**
+     * Has an exception been registered with the response?
+     *
+     * @return boolean
+     */
+    public function isException()
+    {
+        return !empty($this->exceptions);
+    }
+
+    /**
+     * Retrieve the exception stack
+     *
+     * @return array
+     */
+    public function getException()
+    {
+        return $this->exceptions;
+    }
+
+    /**
+     * Does the response object contain an exception of a given type?
+     *
+     * @param  string $type
+     * @return boolean
+     */
+    public function hasExceptionOfType($type)
+    {
+        foreach ($this->exceptions as $e) {
+            if ($e instanceof $type) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
