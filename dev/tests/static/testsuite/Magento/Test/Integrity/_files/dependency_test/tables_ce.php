@@ -116,8 +116,6 @@ return [
     'core_file_storage' => 'Magento_Core',
     'core_flag' => 'Magento_Core',
     'core_resource' => 'Magento_Core',
-    'core_variable' => 'Magento_Core',
-    'core_variable_value' => 'Magento_Core',
     'core_session' => 'Magento_Core',
     'store' => 'Magento_Store',
     'store_group' => 'Magento_Store',
@@ -314,5 +312,7 @@ return [
     'admin_system_messages' => 'Magento_AdminNotification',
     'theme' => 'Magento_Theme',
     'theme_files' => 'Magento_Theme',
-    'vde_theme_change' => 'Magento_DesignEditor'
+    'vde_theme_change' => 'Magento_DesignEditor',
+    'variable' => 'Magento_Variable',
+    'variable_value' => 'Magento_Variable',
 ];
