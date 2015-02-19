@@ -64,13 +64,18 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductsCollection()
     {
-        /** @var \Magento\Framework\Stdlib\DateTime\Date|\PHPUnit_Framework_MockObject_MockObject $dateObject */
-        $dateObject = $this->getMock('Magento\Framework\Stdlib\DateTime\Date');
-        $dateObject->expects($this->any())->method('setTime')->will($this->returnSelf());
-        $dateObject->expects($this->any())->method('toString')->will(
-            $this->returnValue(date(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT))
-        );
-        $this->timezone->expects($this->exactly(2))->method('date')->will($this->returnValue($dateObject));
+        /** @var \DateTime|\PHPUnit_Framework_MockObject_MockObject $dateObject */
+        $dateObject = $this->getMock('DateTime');
+        $dateObject->expects($this->any())
+            ->method('setTime')
+            ->will($this->returnSelf());
+        $dateObject->expects($this->any())
+            ->method('format')
+            ->will($this->returnValue(date(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)));
+
+        $this->timezone->expects($this->exactly(2))
+            ->method('date')
+            ->will($this->returnValue($dateObject));
 
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
         $productCollection = $this->getMock('Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);

@@ -69,7 +69,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
     /**
      * Get object created at date affected current active store timezone
      *
-     * @return \Magento\Framework\Stdlib\DateTime\Date
+     * @return \DateTime
      */
     public function getCreatedAtDate()
     {

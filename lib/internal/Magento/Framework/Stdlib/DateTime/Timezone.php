@@ -36,11 +36,6 @@ class Timezone implements TimezoneInterface
     protected $_dateTime;
 
     /**
-     * @var DateFactory
-     */
-    protected $_dateFactory;
-
-    /**
      * @var string
      */
     protected $_defaultTimezonePath;
@@ -54,7 +49,6 @@ class Timezone implements TimezoneInterface
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param DateFactory $dateFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      * @param string $defaultTimezonePath
@@ -63,7 +57,6 @@ class Timezone implements TimezoneInterface
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        DateFactory $dateFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $scopeType,
         $defaultTimezonePath
@@ -71,7 +64,6 @@ class Timezone implements TimezoneInterface
         $this->_scopeResolver = $scopeResolver;
         $this->_localeResolver = $localeResolver;
         $this->_dateTime = $dateTime;
-        $this->_dateFactory = $dateFactory;
         $this->_defaultTimezonePath = $defaultTimezonePath;
         $this->_scopeConfig = $scopeConfig;
         $this->_scopeType = $scopeType;
@@ -138,7 +130,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return \DateTime
      */
     public function date($date = null, $part = null, $locale = null, $useTimezone = true)
     {

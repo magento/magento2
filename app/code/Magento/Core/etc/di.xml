@@ -55,7 +55,6 @@
     <preference for="Magento\Framework\Locale\FormatInterface" type="Magento\Framework\Locale\Format" />
     <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Framework\Locale\Resolver" />
     <preference for="Magento\Framework\Stdlib\DateTime\TimezoneInterface" type="Magento\Framework\Stdlib\DateTime\Timezone" />
-    <preference for="Magento\Framework\Stdlib\DateTime\DateInterface" type="Magento\Framework\Stdlib\DateTime\Date" />
     <preference for="Magento\Framework\Less\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Less\PreProcessor\ErrorHandler" />
     <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\Resource" />
     <preference for="Magento\Framework\App\Config\Resource\ConfigInterface" type="Magento\Core\Model\Resource\Config" />

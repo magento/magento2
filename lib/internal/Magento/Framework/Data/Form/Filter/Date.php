@@ -30,7 +30,7 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
     /**
      * Initialize filter
      *
-     * @param string $format    \Magento\Framework\Stdlib\DateTime\Date input/output format
+     * @param string $format \DateTime input/output format
      * @param \Zend_Locale $locale
      */
     public function __construct($format = null, $locale = null)

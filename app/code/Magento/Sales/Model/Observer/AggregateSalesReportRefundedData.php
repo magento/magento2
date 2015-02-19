@@ -52,7 +52,7 @@ class AggregateSalesReportRefundedData
     {
         $this->localeResolver->emulate(0);
         $currentDate = $this->localeDate->date();
-        $date = $currentDate->subHour(25);
+        $date = $currentDate->sub(new \DateInterval('PT25H'));
         $this->refundedFactory->create()->aggregate($date);
         $this->localeResolver->revert();
     }

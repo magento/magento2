@@ -256,7 +256,7 @@ interface DateInterface
     public function isLater($date, $part = null, $locale = null);
 
     /**
-     * Returns only the time of the date as new \Magento\Framework\Stdlib\DateTime\Date object
+     * Returns only the time of the date as new object
      * For example:
      * 15.May.2000 10:11:23 will return a dateobject equal to 01.Jan.1970 10:11:23
      *
