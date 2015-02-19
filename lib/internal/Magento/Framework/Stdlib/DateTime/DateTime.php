@@ -136,7 +136,7 @@ class DateTime
             $result = strtotime($input);
         }
         $date = $this->_localeDate->date($result);
-        $timestamp = $date->get(\Zend_Date::TIMESTAMP) + $date->get(\Zend_Date::TIMEZONE_SECS);
+        $timestamp = $date->getTimestamp() + $date->getTimezone()->getOffset($date);
         unset($date);
         return $timestamp;
     }
