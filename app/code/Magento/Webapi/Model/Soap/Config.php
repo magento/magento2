@@ -339,18 +339,4 @@ class Config
 
         throw new \InvalidArgumentException(sprintf('The service interface name "%s" is invalid.', $className));
     }
-
-    /**
-     * @return array
-     */
-    public function getSelectedResources()
-    {
-        $selectedResourceIds = [];
-        $currentIntegration = $this->registry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
-        if ($currentIntegration && isset($currentIntegration['resource']) && is_array($currentIntegration['resource'])
-        ) {
-            $selectedResourceIds = $currentIntegration['resource'];
-        }
-        return $selectedResourceIds;
-    }
 }

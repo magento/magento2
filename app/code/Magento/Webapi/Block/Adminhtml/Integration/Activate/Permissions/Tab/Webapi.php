@@ -28,11 +28,11 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /** @var \Magento\Integration\Helper\Data */
     protected $_integrationData;
 
-    /** @var \Magento\Webapi\Model\Soap\Config */
-    protected $_config;
-
     /** @var \Magento\Framework\Json\Encoder */
     protected $encoder;
+
+    /** @var \Magento\Integration\Service\V1\Integration */
+    protected $integrationService;
 
     /**
      * Initialize dependencies.
@@ -43,8 +43,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
-     * @param \Magento\Webapi\Model\Soap\Config $config
      * @param \Magento\Framework\Json\Encoder $encoder
+     * @param \Magento\Integration\Service\V1\Integration $integrationService
      * @param array $data
      */
     public function __construct(
@@ -54,15 +54,15 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
-        \Magento\Webapi\Model\Soap\Config $config,
         \Magento\Framework\Json\Encoder $encoder,
+        \Magento\Integration\Service\V1\Integration $integrationService,
         array $data = []
     ) {
         $this->_rootResource = $rootResource;
         $this->_resourceProvider = $resourceProvider;
         $this->_integrationData = $integrationData;
-        $this->_config = $config;
         $this->encoder = $encoder;
+        $this->integrationService = $integrationService;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -75,7 +75,17 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected function _construct()
     {
         parent::_construct();
-        $this->_selectedResources = $this->_config->getSelectedResources();
+        $integrationData = $this->_coreRegistry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
+        if (is_array($integrationData)
+            && isset($integrationData['integration_id'])
+            && $integrationData['integration_id']
+        ) {
+            $this->_selectedResources = $this->integrationService->getSelectedResources(
+                $integrationData['integration_id']
+            );
+        } else {
+            $this->_selectedResources = [];
+        }
     }
 
     /**

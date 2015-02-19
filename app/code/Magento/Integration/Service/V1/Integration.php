@@ -179,4 +179,19 @@ class Integration implements \Magento\Integration\Service\V1\IntegrationInterfac
             }
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSelectedResources($integrationId)
+    {
+        $integration = $this->_loadIntegrationById($integrationId);
+        $data = $integration->getData();
+
+        $selectedResourceIds = [];
+        if ($data && isset($data['resource']) && is_array($data['resource'])) {
+            $selectedResourceIds = $data['resource'];
+        }
+        return $selectedResourceIds;
+    }
 }
