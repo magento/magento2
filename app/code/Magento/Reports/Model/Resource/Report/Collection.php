@@ -109,8 +109,8 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * Set interval
      *
-     * @param int $fromDate
-     * @param int $toDate
+     * @param \DateTime $fromDate
+     * @param \DateTime $toDate
      * @return $this
      */
     public function setInterval($fromDate, $toDate)

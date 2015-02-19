@@ -20,8 +20,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIntervalsWithoutSpecifiedPeriod()
     {
-        $startDate = date('m/d/Y', strtotime('-3 day'));
-        $endDate = date('m/d/Y', strtotime('+3 day'));
+        $startDate = new \DateTime('-3 day');
+        $endDate = new \DateTime('+3 day');
         $this->_model->setInterval($startDate, $endDate);
 
         $this->assertEquals(0, $this->_model->getSize());

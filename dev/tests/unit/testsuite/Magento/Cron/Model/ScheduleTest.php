@@ -181,11 +181,11 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         if ($scheduledAt && $cronExprArr) {
             $timezoneMock->expects($this->once())->method('date')->willReturn($dateMock);
             $date = getdate(is_numeric($scheduledAt) ? $scheduledAt : strtotime($scheduledAt));
-            $dateMock->expects($this->at(0))->method('get')->with(\Zend_Date::MINUTE)->willReturn($date['minutes']);
-            $dateMock->expects($this->at(1))->method('get')->with(\Zend_Date::HOUR)->willReturn($date['hours']);
-            $dateMock->expects($this->at(2))->method('get')->with(\Zend_Date::DAY)->willReturn($date['mday']);
-            $dateMock->expects($this->at(3))->method('get')->with(\Zend_Date::MONTH)->willReturn($date['mon']);
-            $dateMock->expects($this->at(4))->method('get')->with(\Zend_Date::WEEKDAY)->willReturn($date['wday']);
+            $dateMock->expects($this->at(0))->method('format')->with('i')->willReturn($date['minutes']);
+            $dateMock->expects($this->at(1))->method('format')->with('H')->willReturn($date['hours']);
+            $dateMock->expects($this->at(2))->method('format')->with('d')->willReturn($date['mday']);
+            $dateMock->expects($this->at(3))->method('format')->with('m')->willReturn($date['mon']);
+            $dateMock->expects($this->at(4))->method('format')->with('N')->willReturn($date['wday']);
         }
 
         // 3. Run tested method

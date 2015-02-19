@@ -35,9 +35,9 @@ class Coupon extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         if (!$object->getExpirationDate()) {
             $object->setExpirationDate(null);
-        } elseif ($object->getExpirationDate() instanceof \Zend_Date) {
+        } elseif ($object->getExpirationDate() instanceof \DateTimeInterface) {
             $object->setExpirationDate(
-                $object->getExpirationDate()->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+                $object->getExpirationDate()->format('Y-m-d H:i:s')
             );
         }
 

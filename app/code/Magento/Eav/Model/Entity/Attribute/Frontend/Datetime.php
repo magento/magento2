@@ -40,11 +40,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
         $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
 
         if ($value) {
-            try {
-                $data = $this->_localeDate->date($value, \Zend_Date::ISO_8601, null, false)->toString($format);
-            } catch (\Exception $e) {
-                $data = $this->_localeDate->date($value, null, null, false)->toString($format);
-            }
+            $data = \IntlDateFormatter::formatObject($this->_localeDate->date($value), $format);
         }
 
         return $data;

@@ -114,11 +114,11 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
 
         $dateWithTimezone = $this->timezone->date($time);
 
-        $match = $this->matchCronExpression($e[0], $dateWithTimezone->get(\Zend_Date::MINUTE))
-            && $this->matchCronExpression($e[1], $dateWithTimezone->get(\Zend_Date::HOUR))
-            && $this->matchCronExpression($e[2], $dateWithTimezone->get(\Zend_Date::DAY))
-            && $this->matchCronExpression($e[3], $dateWithTimezone->get(\Zend_Date::MONTH))
-            && $this->matchCronExpression($e[4], $dateWithTimezone->get(\Zend_Date::WEEKDAY));
+        $match = $this->matchCronExpression($e[0], $dateWithTimezone->format('i'))
+            && $this->matchCronExpression($e[1], $dateWithTimezone->format('H'))
+            && $this->matchCronExpression($e[2], $dateWithTimezone->format('d'))
+            && $this->matchCronExpression($e[3], $dateWithTimezone->format('m'))
+            && $this->matchCronExpression($e[4], $dateWithTimezone->format('N'));
 
         return $match;
     }

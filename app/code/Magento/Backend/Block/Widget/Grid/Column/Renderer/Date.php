@@ -65,26 +65,18 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             $format = $this->_getFormat();
             try {
-                if ($this->getColumn()->getGmtoffset()) {
-                    $data = $this->_localeDate->date(
-                        $data,
-                        \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-                    )->toString(
-                        $format
-                    );
-                } else {
-                    $data = $this->_localeDate->date($data, \Zend_Date::ISO_8601, null, false)->toString($format);
-                }
+                $data = \IntlDateFormatter::formatObject($this->_localeDate->date($data), $format);
             } catch (\Exception $e) {
                 if ($this->getColumn()->getTimezone()) {
-                    $data = $this->_localeDate->date(
-                        $data,
-                        \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-                    )->toString(
+                    $data = \IntlDateFormatter::formatObject(
+                        $this->_localeDate->date($data),
                         $format
                     );
                 } else {
-                    $data = $this->_localeDate->date($data, null, null, false)->toString($format);
+                    $data = \IntlDateFormatter::formatObject(
+                        $this->_localeDate->date($data, null, null, false),
+                        $format
+                    );
                 }
             }
             return $data;

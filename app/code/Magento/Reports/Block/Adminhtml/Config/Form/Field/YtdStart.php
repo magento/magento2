@@ -23,7 +23,7 @@ class YtdStart extends \Magento\Backend\Block\System\Config\Form\Field
     {
         $_months = [];
         for ($i = 1; $i <= 12; $i++) {
-            $_months[$i] = $this->_localeDate->date(mktime(null, null, null, $i))->get(\Zend_Date::MONTH_NAME);
+            $_months[$i] = $this->_localeDate->date(mktime(null, null, null, $i))->format('m');
         }
 
         $_days = [];

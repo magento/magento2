@@ -121,11 +121,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
                 try {
                     $from = $this->_localeDate->date(
                         $this->getFilter('report_from'),
-                        \Zend_Date::DATE_SHORT,
+                        null,
                         null,
                         false
                     );
-                    $to = $this->_localeDate->date($this->getFilter('report_to'), \Zend_Date::DATE_SHORT, null, false);
+                    $to = $this->_localeDate->date($this->getFilter('report_to'), null, null, false);
 
                     $collection->setInterval($from, $to);
                 } catch (\Exception $e) {

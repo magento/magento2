@@ -68,6 +68,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
      */
     public function render(\Magento\Framework\Object $row)
     {
+        //@todo: check this logic manually
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             switch ($this->getColumn()->getPeriodType()) {
                 case 'month':
@@ -83,33 +84,35 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
 
             $format = $this->_getFormat();
             try {
-                $data = $this->getColumn()->getGmtoffset() ? $this->_localeDate->date(
-                    $data,
-                    $dateFormat
-                )->toString(
-                    $format
-                ) : $this->_localeDate->date(
-                    $data,
-                    \Zend_Date::ISO_8601,
-                    null,
-                    false
-                )->toString(
-                    $format
-                );
+                $data = $this->getColumn()->getGmtoffset()
+                    ? \IntlDateFormatter::formatObject(
+                        $this->_localeDate->date($data),
+                        $format
+                    )
+                    : \IntlDateFormatter::formatObject(
+                        $this->_localeDate->date(
+                            $data,
+                            null,
+                            null,
+                            false
+                        ),
+                        $format
+                    );
             } catch (\Exception $e) {
-                $data = $this->getColumn()->getTimezone() ? $this->_localeDate->date(
-                    $data,
-                    $dateFormat
-                )->toString(
-                    $format
-                ) : $this->_localeDate->date(
-                    $data,
-                    $dateFormat,
-                    null,
-                    false
-                )->toString(
-                    $format
-                );
+                $data = $this->getColumn()->getTimezone()
+                    ? \IntlDateFormatter::formatObject(
+                        $this->_localeDate->date($data),
+                        $format
+                    )
+                    : \IntlDateFormatter::formatObject(
+                        $this->_localeDate->date(
+                            $data,
+                            null,
+                            null,
+                            false
+                        ),
+                        $format
+                    );
             }
             return $data;
         }
