@@ -9,7 +9,7 @@ namespace Magento\Customer\Test\Block\Form;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Customer account edit form.
@@ -56,7 +56,7 @@ class CustomerForm extends Form
      */
     public function fill(FixtureInterface $customer, SimpleElement $element = null)
     {
-        /** @var CustomerInjectable $customer */
+        /** @var Customer $customer */
         if ($customer->hasData()) {
             return parent::fill($customer, $element);
         }
@@ -65,10 +65,10 @@ class CustomerForm extends Form
     /**
      * Get all error validation messages for fields.
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
-    public function getValidationMessages(CustomerInjectable $customer)
+    public function getValidationMessages(Customer $customer)
     {
         $messages = [];
         foreach (array_keys($customer->getData()) as $field) {

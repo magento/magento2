@@ -124,11 +124,11 @@ class IntegrationGrid extends Grid
      */
     public function getResourcesPopup()
     {
+        /** @var ResourcesPopup $resourcesPopup */
         $resourcesPopup = $this->blockFactory->create(
             'Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\ResourcesPopup',
             ['element' => $this->_rootElement->find($this->resourcesPopupSelector, Locator::SELECTOR_XPATH)]
         );
-        $this->waitForElementVisible($this->resourcesPopupSelector, Locator::SELECTOR_XPATH);
 
         return $resourcesPopup;
     }

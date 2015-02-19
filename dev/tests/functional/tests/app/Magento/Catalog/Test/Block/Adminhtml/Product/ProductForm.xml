@@ -162,7 +162,7 @@
             <type>
                 <selector>.field [id$='_type']</selector>
                 <strategy>css selector</strategy>
-                <input>strictselect</input>
+                <input>optgroupselect</input>
             </type>
         </fields>
     </customer-options>
