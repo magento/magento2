@@ -27,11 +27,6 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $scopeConfigMock;
 
     /**
@@ -56,13 +51,6 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface');
-        $this->urlEncoder = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')->getMock();
-        $this->urlEncoder->expects($this->any())
-            ->method('encode')
-            ->willReturnCallback(function ($url) {
-                return strtr(base64_encode($url), '+/=', '-_,');
-            });
         $this->requestMock = $this->getMock(
             '\Magento\Framework\App\RequestInterface',
             [
@@ -73,26 +61,32 @@ class CartTest extends \PHPUnit_Framework_TestCase
                 'getActionName',
                 'setModuleName',
                 'getModuleName',
-                'getCookie'
+                'getCookie',
+                'isAjax',
             ]
         );
-        $contextMock = $this->getMock('\Magento\Framework\App\Helper\Context', [], [], '', false);
-        $contextMock->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilderMock));
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getUrlEncoder')->will($this->returnValue($this->urlEncoder));
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
-        $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->cartMock = $this->getMock('\Magento\Checkout\Model\Cart', [], [], '', false);
-        $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
-
-        $this->helper = new Cart(
-            $contextMock,
-            $this->storeManagerMock,
-            $this->scopeConfigMock,
-            $this->cartMock,
-            $this->checkoutSessionMock
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $objectManagerHelper->getObject(
+            'Magento\Framework\App\Helper\Context',
+            [
+                'httpRequest' => $this->requestMock,
+            ]
         );
+        $className = 'Magento\Checkout\Helper\Cart';
+        $arguments = $objectManagerHelper->getConstructArguments($className, ['context' => $context]);
+        $this->urlBuilderMock = $context->getUrlBuilder();
+        $this->urlEncoder = $context->getUrlEncoder();
+        $this->urlEncoder->expects($this->any())
+            ->method('encode')
+            ->willReturnCallback(function ($url) {
+                return strtr(base64_encode($url), '+/=', '-_,');
+            });
+        $this->scopeConfigMock = $context->getScopeConfig();
+        $this->cartMock = $arguments['checkoutCart'];
+        $this->checkoutSessionMock = $arguments['checkoutSession'];
+
+        $this->helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
     public function testGetCart()
@@ -208,52 +202,25 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDeletePostJson($id, $url, $isAjax, $expectedPostData)
     {
-        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
-        $coreData = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
-        $scopeConfig = $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface');
-        $checkoutCart = $this->getMock('\Magento\Checkout\Model\Cart', [], [], '', false);
-        $checkoutSession = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
-
-        $context = $this->getMock('\Magento\Framework\App\Helper\Context', [], [], '', false);
-        $urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
-        $context->expects($this->once())
-            ->method('getUrlBuilder')
-            ->will($this->returnValue($urlBuilder));
-        $context->expects($this->any())
-            ->method('getUrlEncoder')
-            ->willReturn($this->urlEncoder);
-
         $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $request = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
-        $context->expects($this->once())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
-        $helper = new Cart(
-            $context,
-            $storeManager,
-            $scopeConfig,
-            $checkoutCart,
-            $checkoutSession
-        );
 
         $item->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($id));
 
-        $request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('isAjax')
             ->will($this->returnValue($isAjax));
 
-        $urlBuilder->expects($this->any())
+        $this->urlBuilderMock->expects($this->any())
             ->method('getCurrentUrl')
             ->will($this->returnValue($url));
 
-        $urlBuilder->expects($this->once())
+        $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->will($this->returnValue($url));
 
-        $result = $helper->getDeletePostJson($item);
+        $result = $this->helper->getDeletePostJson($item);
         $this->assertEquals($expectedPostData, $result);
     }
 

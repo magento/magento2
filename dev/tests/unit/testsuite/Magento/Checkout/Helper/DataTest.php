@@ -51,29 +51,18 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected  $_storeManager;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_eventManager;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected  $_context;
 
     protected function setUp()
     {
-        $this->_translator = $this->getMockBuilder('Magento\Framework\Translate\Inline\StateInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_context = $this->getMock('\Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->_eventManager = $this->getMockForAbstractClass('\Magento\Framework\Event\ManagerInterface');
-        $this->_context->expects($this->once())
-            ->method('getEventManager')
-            ->will($this->returnValue($this->_eventManager));
-        $this->_scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $className = 'Magento\Checkout\Helper\Data';
+        $arguments = $objectManagerHelper->getConstructArguments($className);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
+        $this->_translator = $arguments['inlineTranslation'];
+        $this->_eventManager = $context->getEventManager();
+        $this->_scopeConfig = $context->getScopeConfig();
         $this->_scopeConfig->expects($this->any())
             ->method('getValue')
             ->will(
@@ -131,35 +120,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->_storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
-
-        $this->_checkoutSession = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
-
-        $localeDate = $this->getMock(
-            '\Magento\Framework\Stdlib\DateTime\TimezoneInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_checkoutSession = $arguments['checkoutSession'];
+        $localeDate = $arguments['localeDate'];
         $localeDate->expects($this->any())->method('date')->will($this->returnValue('Oct 02, 2013'));
 
-        $this->_transportBuilder = $this->getMockBuilder('Magento\Framework\Mail\Template\TransportBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_transportBuilder = $arguments['transportBuilder'];
 
-        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $this->priceCurrency = $arguments['priceCurrency'];
 
-        $this->_helper = new Data(
-            $this->_context,
-            $this->_scopeConfig,
-            $this->_storeManager,
-            $this->_checkoutSession,
-            $localeDate,
-            $this->_transportBuilder,
-            $this->_translator,
-            $this->priceCurrency
-        );
+        $this->_helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
     /**
