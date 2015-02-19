@@ -782,7 +782,7 @@ return [
     ['Mage_Core_Model_Design_Source_Apply'],
     ['Mage_Core_Model_Language'],
     ['Magento\Core\Model\Flag', 'Magento\Framework\Flag'],
-    ['Magento\Core\Exception', 'Magento\Framework\Model\Exception'],
+    ['Magento\Framework\Model\Exception', 'Magento\Framework\Exception\LocalizedException'],
     ['Magento\Core\Model\AbstractModel', 'Magento\Framework\Model\AbstractModel'],
     ['Magento\Core\Model\Email\Info', 'Magento\Framework\Mail\MessageInterface'],
     ['Magento\Core\Model\Email\Sender', 'Magento\Framework\Mail\Template\TransportBuilder'],
@@ -2229,7 +2229,10 @@ return [
     ['Magento\Core\Model\Resource\Website\Grid\Collection', 'Magento\Store\Model\Resource\Website\Grid\Collection'],
     ['Magento\Core\Model\ScopeInterface', 'Magento\Store\Model\ScopeInterface'],
     ['Magento\Core\Model\Store', 'Magento\Store\Model\Store'],
-    ['Magento\Store\Model\Exception', 'Magento\Framework\Model\Exception, Magento\Framework\App\InitException'],
+    [
+        'Magento\Store\Model\Exception',
+        'Magento\Framework\Exception\LocalizedException, Magento\Framework\App\InitException'
+    ],
     ['Magento\Core\Model\Store\Group', 'Magento\Store\Model\Group'],
     ['Magento\Core\Model\Store\Group\Factory', 'Magento\Store\Model\GroupFactory'],
     ['Magento\Core\Model\Store\Storage\Db', 'Magento\Store\Model\Storage\Db'],

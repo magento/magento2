@@ -208,7 +208,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
     {
         $referer = 'http://referer-url.com';
 
-        $exception = new \Magento\Framework\Model\Exception('Message');
+        $exception = new \Magento\Framework\Exception\LocalizedException(__('Message'));
         $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', [], [], '', false);
         $wishlist
             ->expects($this->once())
