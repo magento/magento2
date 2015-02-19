@@ -209,7 +209,8 @@
       <constraint name="assertBundlePriceType" prev="assertBundlePriceView"/>
     </variation>
     <variation name="CreateBundleProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="description" xsi:type="string">Create offline fixed bundle</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-33071</data>
+      <data name="description" xsi:type="string">Create fixed bundle which is out of stock</data>
       <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
       <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
       <data name="product/data/sku_type" xsi:type="string">Fixed</data>

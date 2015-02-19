@@ -54,6 +54,8 @@ class AssertProductInCart extends AbstractConstraint
      * @param FixtureInterface $product
      * @param CheckoutCart $checkoutCart
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function assertOnShoppingCart(FixtureInterface $product, CheckoutCart $checkoutCart)
     {

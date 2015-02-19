@@ -7,7 +7,6 @@
 namespace Magento\Downloadable\Test\Fixture\DownloadableProduct;
 
 /**
- * Class CheckoutData
  * Data for fill product form on frontend
  *
  * Data keys:
@@ -20,6 +19,8 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
      *
      * @param $name
      * @return array|null
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function getPreset($name)
     {

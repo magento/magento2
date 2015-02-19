@@ -75,6 +75,8 @@ class AssertTermOnCheckout extends AbstractConstraint
 
         $browser->open($_ENV['app_frontend_url'] . $product['products'][0]->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->clickAddToCartButton();
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
+        $checkoutCart->open();
         $checkoutCart->getCartBlock()->getOnepageLinkBlock()->proceedToCheckout();
         $checkoutOnepage->getLoginBlock()->guestCheckout();
         $checkoutOnepage->getLoginBlock()->clickContinue();

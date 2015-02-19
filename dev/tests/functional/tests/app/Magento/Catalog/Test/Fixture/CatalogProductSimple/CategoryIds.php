@@ -35,6 +35,8 @@ class CategoryIds implements FixtureInterface
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         FixtureFactory $fixtureFactory,

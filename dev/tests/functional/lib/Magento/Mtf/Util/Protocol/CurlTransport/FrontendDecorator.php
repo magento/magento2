@@ -11,7 +11,6 @@ use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
- * Class FrontendDecorator
  * Curl transport on frontend
  */
 class FrontendDecorator implements CurlInterface
@@ -117,6 +116,8 @@ class FrontendDecorator implements CurlInterface
      * @param array $headers
      * @param array $params
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function write($method, $url, $httpVer = '1.1', $headers = [], $params = [])
     {

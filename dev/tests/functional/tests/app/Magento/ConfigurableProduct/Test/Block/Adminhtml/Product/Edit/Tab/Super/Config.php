@@ -88,6 +88,8 @@ class Config extends Tab
      * @param array $fields
      * @param SimpleElement|null $element
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
@@ -182,6 +184,8 @@ class Config extends Tab
      * @param array|null $fields
      * @param SimpleElement|null $element
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
