@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\OrderHistory;
@@ -27,7 +27,7 @@ class AssertOrderNotVisibleOnMyAccount extends AbstractConstraint
      * Assert order is not visible in customer account on frontend
      *
      * @param OrderInjectable $order
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param ObjectManager $objectManager
      * @param CustomerAccountIndex $customerAccountIndex
      * @param OrderHistory $orderHistory
@@ -36,7 +36,7 @@ class AssertOrderNotVisibleOnMyAccount extends AbstractConstraint
      */
     public function processAssert(
         OrderInjectable $order,
-        CustomerInjectable $customer,
+        Customer $customer,
         ObjectManager $objectManager,
         CustomerAccountIndex $customerAccountIndex,
         OrderHistory $orderHistory,

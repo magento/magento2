@@ -16,20 +16,20 @@
         <argument name="registerPage">Magento\Customer\Test\Page\CustomerAccountCreate</argument>
     </constraint>
     <constraint name="assertCustomerInGrid" module="Magento_Customer" severity="middle">
-        <argument name="customer">Magento\Customer\Test\Fixture\CustomerInjectable</argument>
+        <argument name="customer">Magento\Customer\Test\Fixture\Customer</argument>
         <argument name="pageCustomerIndex">Magento\Customer\Test\Page\Adminhtml\CustomerIndex</argument>
     </constraint>
     <constraint name="assertCustomerNotInGrid" module="Magento_Customer" severity="middle">
-        <argument name="customer">Magento\Customer\Test\Fixture\CustomerInjectable</argument>
+        <argument name="customer">Magento\Customer\Test\Fixture\Customer</argument>
         <argument name="customerIndexPage">Magento\Customer\Test\Page\Adminhtml\CustomerIndex</argument>
     </constraint>
     <constraint name="assertCustomerForm" module="Magento_Customer" severity="middle">
-        <argument name="customer">Magento\Customer\Test\Fixture\CustomerInjectable</argument>
+        <argument name="customer">Magento\Customer\Test\Fixture\Customer</argument>
         <argument name="pageCustomerIndex">Magento\Customer\Test\Page\Adminhtml\CustomerIndex</argument>
         <argument name="pageCustomerIndexEdit">Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit</argument>
     </constraint>
     <constraint name="assertCustomerInvalidEmail" module="Magento_Customer" severity="middle">
-        <argument name="customer">Magento\Customer\Test\Fixture\CustomerInjectable</argument>
+        <argument name="customer">Magento\Customer\Test\Fixture\Customer</argument>
         <argument name="addresses">Magento\Customer\Test\Fixture\AddressInjectable</argument>
         <argument name="pageCustomerIndexNew">Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew</argument>
     </constraint>
@@ -65,4 +65,5 @@
     <constraint name="assertChangePasswordFailMessage" module="Magento_Customer" severity="low"/>
     <constraint name="assertWrongPassConfirmationMessage" module="Magento_Customer" severity="low"/>
     <constraint name="assertCustomerRedirectToDashboard" module="Magento_Customer" severity="low"/>
+    <constraint name="assertCustomerBackendFormTitle" module="Magento_Customer" severity="middle"/>
 </config>

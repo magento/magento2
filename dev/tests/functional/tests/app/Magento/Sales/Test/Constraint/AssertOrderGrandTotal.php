@@ -11,7 +11,6 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderGrandTotal
  * Assert that Order Grand Total is correct on order page in backend
  */
 class AssertOrderGrandTotal extends AbstractConstraint
