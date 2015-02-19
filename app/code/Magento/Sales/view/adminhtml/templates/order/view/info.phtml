@@ -10,8 +10,8 @@
 <?php /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Info */ ?>
 <?php $_order = $block->getOrder() ?>
 <?php
-$orderAdminDate = $block->formatDate($_order->getCreatedAtDate(), 'medium', true);
-$orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), 'medium', true);
+$orderAdminDate = $block->formatDate($_order->getCreatedAtDate(), \IntlDateFormatter::MEDIUM, true);
+$orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), \IntlDateFormatter::MEDIUM, true);
 ?>
 
 <?php /* the opening and closing divs of these two clearfixes are in app\code\core\Mage\Adminhtml\view\adminhtml\sales\order\invoice\create\form.phtml */?>

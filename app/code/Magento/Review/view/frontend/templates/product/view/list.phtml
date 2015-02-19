@@ -15,7 +15,7 @@
 ?>
 <?php
     $_items = $block->getReviewsCollection()->getItems();
-    $format = $block->getDateFormat() ?: 'short';
+    $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
 ?>
 <?php if (count($_items)):?>
 <div class="block review-list" id="customer-reviews">

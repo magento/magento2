@@ -18,7 +18,7 @@
         <h3 class="subtitle"><?php echo $block->getTitle() ?></h3>
         <dl class="order comments">
             <?php foreach ($block->getComments() as $_commentItem): ?>
-                <dt class="comment date"><?php echo $block->formatDate($_commentItem->getCreatedAtStoreDate(), 'medium', true) ?></dt>
+                <dt class="comment date"><?php echo $block->formatDate($_commentItem->getCreatedAtStoreDate(), \IntlDateFormatter::MEDIUM, true) ?></dt>
                 <dd class="comment text"><?php echo $block->escapeHtml($_commentItem->getComment()) ?></dd>
             <?php endforeach; ?>
         </dl>

@@ -91,14 +91,14 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
         /** @var $rule \Magento\SalesRule\Model\Rule */
         foreach ($this->rssModel->getDiscountCollection($websiteId, $customerGroupId) as $rule) {
             $toDate = $rule->getToDate()
-                ? '<br/>Discount End Date: ' . $this->formatDate($rule->getToDate(), 'medium')
+                ? '<br/>Discount End Date: ' . $this->formatDate($rule->getToDate(), \IntlDateFormatter::MEDIUM)
                 : '';
             $couponCode = $rule->getCouponCode() ? '<br/> Coupon Code: ' . $rule->getCouponCode() : '';
 
             $description = sprintf(
                 '<table><tr><td style="text-decoration:none;">%s<br/>Discount Start Date: %s %s %s</td></tr></table>',
                 $rule->getDescription(),
-                $this->formatDate($rule->getFromDate(), 'medium'),
+                $this->formatDate($rule->getFromDate(), \IntlDateFormatter::MEDIUM),
                 $toDate,
                 $couponCode
             );

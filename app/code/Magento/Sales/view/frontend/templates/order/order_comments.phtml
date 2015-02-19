@@ -16,7 +16,7 @@
         <div class="block-content">
             <dl class="order-comments">
                 <?php foreach ($_history as $_historyItem): ?>
-                    <dt class="comment-date"><?php echo $block->formatDate($_historyItem->getCreatedAtStoreDate(), 'medium', true) ?></dt>
+                    <dt class="comment-date"><?php echo $block->formatDate($_historyItem->getCreatedAtStoreDate(), \IntlDateFormatter::MEDIUM, true) ?></dt>
                     <dd class="comment-content"><?php echo $block->escapeHtml($_historyItem->getComment()) ?></dd>
                 <?php endforeach; ?>
             </dl>

@@ -96,7 +96,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             'Shipment #%1 | %3 (%2)',
             $this->getShipment()->getIncrementId(),
             $emailSent,
-            $this->formatDate($this->getShipment()->getCreatedAtDate(), 'medium', true)
+            $this->formatDate($this->getShipment()->getCreatedAtDate(), \IntlDateFormatter::MEDIUM, true)
         );
     }
 
