@@ -43,18 +43,38 @@ class Chain
     private $targetContentType;
 
     /**
+     * @var string
+     */
+    private $appMode;
+
+    private $targetAssetPath;
+
+    /**
      * @param \Magento\Framework\View\Asset\LocalInterface $asset
      * @param string $origContent
      * @param string $origContentType
      */
-    public function __construct(\Magento\Framework\View\Asset\LocalInterface $asset, $origContent, $origContentType)
-    {
+    public function __construct(
+        \Magento\Framework\View\Asset\LocalInterface $asset,
+        $origContent,
+        $origContentType,
+        $origPath,
+        $appMode = \Magento\Framework\App\State::MODE_DEFAULT
+    ) {
         $this->asset = $asset;
         $this->origContent = $origContent;
         $this->content = $origContent;
         $this->origContentType = $origContentType;
         $this->contentType = $origContentType;
-        $this->targetContentType = $asset->getContentType();
+        $this->appMode = $appMode;
+
+        if ($appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
+            $this->targetContentType = $this->origContentType;
+            $this->targetAssetPath = $origPath;
+        } else {
+            $this->targetContentType = $asset->getContentType();
+            $this->targetAssetPath = $asset->getPath();
+        }
     }
 
     /**
@@ -137,6 +157,16 @@ class Chain
     public function getTargetContentType()
     {
         return $this->targetContentType;
+    }
+
+    /**
+     * Get the target asset path
+     *
+     * @return string
+     */
+    public function getTargetAssetPath()
+    {
+        return $this->targetAssetPath;
     }
 
     /**

@@ -17,7 +17,7 @@ class Renderer
     /**
      * @var array
      */
-    protected $assetTypeOrder = ['css', 'ico', 'js'];
+    protected $assetTypeOrder = ['css', 'less', 'ico', 'js'];
 
     /**
      * @var \Magento\Framework\View\Page\Config
@@ -222,6 +222,9 @@ class Renderer
         /** @var $group \Magento\Framework\View\Asset\PropertyGroup */
         foreach ($this->pageConfig->getAssetCollection()->getGroups() as $group) {
             $type = $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE);
+            if ($type == 'js') {
+                $resultGroups[$type] .= $this->renderLessJsInclude();
+            }
             if (!isset($resultGroups[$type])) {
                 $resultGroups[$type] = '';
             }
@@ -308,6 +311,10 @@ class Renderer
             case 'css':
                 $attributes = ' rel="stylesheet" type="text/css" ' . ($attributes ?: ' media="all"');
                 break;
+
+            case 'less':
+                $attributes = ' rel="stylesheet/less" type="text/css" ' . ($attributes ?: ' media="all"');
+                break;
         }
         return $attributes;
     }
@@ -325,6 +332,7 @@ class Renderer
                 break;
 
             case 'css':
+            case 'less':
             default:
                 $groupTemplate = '<link ' . $attributes . ' href="%s" />' . "\n";
                 break;
@@ -357,14 +365,40 @@ class Renderer
     {
         $result = '';
         try {
-            /** @var $asset \Magento\Framework\View\Asset\AssetInterface */
+            /** @var $asset \Magento\Framework\View\Asset\File */
             foreach ($assets as $asset) {
-                $result .= sprintf($template, $asset->getUrl());
+
+                if (true) {
+                    if ($asset->getSourceUrl() != $asset->getUrl()) {
+                        $attributes = $this->addDefaultAttributes('less', []);
+                        $groupTemplate = $this->getAssetTemplate('less', $attributes);
+                        $result .= sprintf($groupTemplate, $asset->getSourceUrl());
+                    } else {
+                        $result .= sprintf($template, $asset->getSourceUrl());
+                    }
+
+                } else {
+                    $result .= sprintf($template, $asset->getUrl());
+                }
             }
         } catch (\Magento\Framework\Exception $e) {
             $this->logger->critical($e);
             $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
         }
+        return $result;
+    }
+
+    private function renderLessJsInclude()
+    {
+        $result = '';
+        $result .= '<script>
+      less = {
+        env: "production",
+        async: false,
+        fileAsync: false
+      };
+    </script>' ;
+        $result .= sprintf('<script src="%s"></script>' . "\n", '//cdnjs.cloudflare.com/ajax/libs/less.js/2.3.1/less.min.js') ;
         return $result;
     }
 }
