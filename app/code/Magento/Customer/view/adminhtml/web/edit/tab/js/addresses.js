@@ -3,11 +3,12 @@
  * See COPYING.txt for license details.
  */
 define([
-    "jquery",
-    "jquery/ui",
-    "jquery/template",
-    "mage/backend/tabs"
-], function($){
+    'jquery',
+    'mage/template',
+    'jquery/ui',
+    'mage/backend/tabs'
+], function ($, mageTemplate) {
+    'use strict';
 
     $.widget('mage.addressTabs', $.mage.tabs, {
         options: {
@@ -44,21 +45,25 @@ define([
                 this.options.itemCount++;
             }
 
-            var formName = this.options.baseItemId + this.options.itemCount;
+            var formName = this.options.baseItemId + this.options.itemCount,
+                newForm = $('#form_' + formName),
+                formTemplate = this.element.find(this.options.formTemplateSelector).html(),
+                itemTemplate = this.element.find(this.options.tabTemplateSelector).html();
 
-            // add the new address form
-            var formData = {
-                formName: formName,
-                itemCount: this.options.itemCount
-            };
-            var formTemplate = this.element.find(this.options.formTemplateSelector).tmpl(formData).html();
+            formTemplate = mageTemplate(formTemplate, {
+                data: {
+                    formName: formName,
+                    itemCount: this.options.itemCount
+                }
+            });
+
+            itemTemplate = mageTemplate(itemTemplate, {
+                data: {
+                    'itemId': this.options.itemCount
+                }
+            });
+
             this.element.find(this.options.formsSelector).append(this._prepareTemplate(formTemplate));
-
-            var newForm = $('#form_' + formName);
-
-            // Replace template attributes
-            var itemData = {'itemId': this.options.itemCount};
-            var itemTemplate = this.element.find(this.options.tabTemplateSelector).tmpl(itemData).html();
 
             // add the new address to the tabs list before the add new action list
             this.element.find(this.options.addAddressSelector).before(itemTemplate);
@@ -77,12 +82,13 @@ define([
             newForm.find(this.options.formLastNameSelector).val($(this.options.accountLastNameSelector).val());
 
             var accountWebsiteId = $(this.options.accountWebsiteIdSelector).val();
-            if (accountWebsiteId !== '' && undefined !== this.options.defaultCountries[accountWebsiteId]) {
+
+            if (accountWebsiteId !== '' && typeof this.options.defaultCountries[accountWebsiteId] !== 'undefined') {
                 newForm.find(this.options.formCountrySelector).val(this.options.defaultCountries[accountWebsiteId]);
             }
 
             // .val does not trigger change event, so manually trigger. (Triggering change of any field will handle update of all fields.)
-            firstname.trigger("change");
+            firstname.trigger('change');
 
             this._bindCountryRegionRelation(newForm);
         },
@@ -91,8 +97,13 @@ define([
          * This method is used to bind events associated with this widget.
          */
         _bind: function () {
-            this._on(this.element.find(this.options.addAddressButtonSelector),{'click': '_addNewAddress'});
-            this._on({'formchange': '_updateAddress', 'dataItemDelete': '_deleteItemPrompt'});
+            this._on(this.element.find(this.options.addAddressButtonSelector), {
+                'click': '_addNewAddress'
+            });
+            this._on({
+                'formchange': '_updateAddress',
+                'dataItemDelete': '_deleteItemPrompt'
+            });
             this.element.find('.countries').addressCountry({
                 regionsUrl: this.options.regionsUrl,
                 optionalZipCountries: this.options.optionalZipCountries,
@@ -112,7 +123,7 @@ define([
          * This method deletes the item in the list.
          * @private
          */
-        _deleteItem: function(dataItem) {
+        _deleteItem: function (dataItem) {
             // remove the elements from the page
             this.element.find('[data-item="' + dataItem + '"]').remove();
 
@@ -124,25 +135,26 @@ define([
          * This method prompts the user to confirm the deletion of the item in the list.
          * @private
          */
-        _deleteItemPrompt: function(event, data) {
-            if(window.confirm(this.options.deleteConfirmPrompt)){
+        _deleteItemPrompt: function (event, data) {
+            if (window.confirm(this.options.deleteConfirmPrompt)) {
                 this._deleteItem(data.item);
             }
         },
 
         /**
          * Initialize form template variables for the new address item.
-         * @param {Element} template Address form html 'template'.
+         * @param {Element} template - Address form html 'template'.
          * @private
          */
         _prepareTemplate: function (template) {
-            var re = new RegExp(this.options.templatePrefix, "g");
+            var re = new RegExp(this.options.templatePrefix, 'g');
+
             return template.replace(re, '_item' + this.options.itemCount);
         },
 
         /**
          * This method is used to grab the data from the form and display it nicely.
-         * @param {Element} container Address form container.
+         * @param {Element} container - Address form container.
          * @private
          */
         _syncFormData: function (container) {
@@ -151,17 +163,21 @@ define([
 
                 $(container).find(':input').each(function (index, inputField) {
                     var id = inputField.id;
+
                     if (id) {
                         id = id.replace(/^(_item)?[0-9]+/, '');
                         id = id.replace(/^(id)?[0-9]+/, '');
                         var value = inputField.getValue();
                         var tagName = inputField.tagName.toLowerCase();
-                        if (tagName == 'select') {
+
+                        if (tagName === 'select') {
                             if (inputField.multiple) {
                                 var values = $([]);
                                 var l = inputField.options.length;
-                                for (j = 0; j < l; j++) {
+
+                                for (var j = 0; j < l; j++) {
                                     var o = inputField.options[j];
+
                                     if (o.selected === true) {
                                         values[values.length] = o.text.escapeHTML();
                                     }
@@ -185,16 +201,22 @@ define([
                 }
 
                 // Set data to html
-                var itemContainer = this.element.find("[aria-selected='true'] address");
+                var itemContainer = this.element.find("[aria-selected='true'] address"),
+                    tmpl;
+
                 if (itemContainer.length && itemContainer[0]) {
-                    itemContainer[0].innerHTML = $(this.options.tabAddressTemplateSelector).tmpl(data).html();
+                    tmpl = mageTemplate(this.options.tabAddressTemplateSelector, {
+                        data: data
+                    });
+
+                    itemContainer[0].innerHTML = tmpl;
                 }
             }
         },
 
         /**
          * This method processes the event associated with a form field changing.
-         * @param event Event occurring.
+         * @param {EventObject} event - Event occurring.
          * @private
          */
         _updateAddress: function (event) {
@@ -203,22 +225,23 @@ define([
 
         /**
          * This method returns the form containing this element.
-         * @param {JQuery|Element} element JQuery object or DOM element.
+         * @param {JQuery|Element} element - JQuery object or DOM element.
          * @private
          */
-        _getFormContainer: function(element) {
-            if (!(element instanceof jQuery)) {
+        _getFormContainer: function (element) {
+            if (!(element instanceof $)) {
                 element = $(element);
             }
+
             return element.closest('[data-item]');
         },
 
         /**
          * This method binds a country element on the given form to the addressCountry widget.
-         * @param {JQuery} formElement The form containing the country.
+         * @param {JQuery} formElement - The form containing the country.
          * @private
          */
-        _bindCountryRegionRelation : function(formElement){
+        _bindCountryRegionRelation: function (formElement) {
             $(formElement).find('.countries').addressCountry({
                 regionsUrl: this.options.regionsUrl,
                 optionalZipCountries: this.options.optionalZipCountries,
@@ -249,27 +272,27 @@ define([
         /**
          * Create, Initialize this widget.
          */
-         _create: function () {
+        _create: function () {
             this._bind();
         },
 
         /**
          * This method updates country dependent fields; region input, and region and zipCode required indicator.
-         * @param {Event} event Change event occurring.
+         * @param {Event} event - Change event occurring.
          * @private
          */
-        _onAddressCountryChange : function(event){
-            var countryElement = event.target;
+        _onAddressCountryChange: function (event) {
+            var countryElement = event.target,
+                formElement = $(countryElement).closest('[data-item]'),
+                fieldElement = $(formElement).find('.field-region'),
+                regionElement = $(fieldElement).find('.input-text');
+
             this.options.countryElement = countryElement;
 
-            var formElement = $(countryElement).closest('[data-item]');
-            var fieldElement = $(formElement).find('.field-region');
-            var regionElement =  $(fieldElement).find('.input-text');
-            if ('select' == $(regionElement).prop("tagName").toLowerCase()) {
+            if ($(regionElement).prop('tagName').toLowerCase() === 'select') {
                 this.options.regionIdElement = regionElement;
                 this.options.regionElement = regionElement.next();
-            }
-            else {
+            } else {
                 this.options.regionElement = regionElement;
                 this.options.regionIdElement = regionElement.next();
             }
@@ -281,9 +304,11 @@ define([
                     type: 'post',
                     dataType: 'json',
                     showLoader: true,
-                    data: {parent: countryElement.value},
+                    data: {
+                        parent: countryElement.value
+                    },
                     context: this,
-                    success: jQuery.proxy(this._refreshRegionField, this)
+                    success: $.proxy(this._refreshRegionField, this)
                 });
             } else {
                 // Set empty text field in region
@@ -295,33 +320,35 @@ define([
 
         /**
          * This method updates the region input from the server response.
-         * @param {Object} serverResponse Regions (state/province) or empty if regions n/a for the country.
+         * @param {Object} data - Regions (state/province) or empty if regions n/a for the country.
          * @private
          */
-        _refreshRegionField : function(data){
-            var regionField = $(this.options.regionElement).closest('div.field');
-            var regionControl = regionField.find('.control');
+        _refreshRegionField: function (data) {
+            var regionField = $(this.options.regionElement).closest('div.field'),
+                regionControl = regionField.find('.control'),
+                regionInput,
+                regionIdInput,
+                newInput,
+                regionValue;
+
             // clear current region input/select
             regionControl.empty();
-
-            var regionInput = null;
-            var regionIdInput = null;
-            var newInput = null; // id of input that was added to a page - filled below
 
             if (data.length) {
                 // Create visible selectbox 'region_id' and hidden 'region'
                 regionIdInput = $('<select>').attr({
-                    'name': this.options.regionIdElement.attr("name"),
-                    'id': this.options.regionIdElement.attr("id"),
-                    'class': "required-entry input-text select",
-                    'title': this.options.regionIdElement.attr("title")
+                    'name': this.options.regionIdElement.attr('name'),
+                    'id': this.options.regionIdElement.attr('id'),
+                    'class': 'required-entry input-text select',
+                    'title': this.options.regionIdElement.attr('title')
                 }).appendTo(regionControl);
 
-                var regionValue = this.options.regionElement.attr('value');
-                $.each(data, function(idx, item) {
-                    var regionOption = $("<option />").val(item.value).text(item.label);
+                regionValue = this.options.regionElement.attr('value');
 
-                    if(regionValue && regionValue == item.label) {
+                $.each(data, function (idx, item) {
+                    var regionOption = $('<option />').val(item.value).text(item.label);
+
+                    if (regionValue && regionValue == item.label) {
                         regionOption.attr('selected', 'selected');
                     }
 
@@ -329,27 +356,26 @@ define([
                 });
 
                 regionInput = $('<input>').attr({
-                    'name': this.options.regionElement.attr("name"),
-                    'id': this.options.regionElement.attr("id"),
-                    'type': "hidden"
+                    'name': this.options.regionElement.attr('name'),
+                    'id': this.options.regionElement.attr('id'),
+                    'type': 'hidden'
                 }).appendTo(regionControl);
 
                 newInput = regionIdInput;
-            }
-            else {
+            } else {
                 // Create visible text input 'region' and hidden 'region_id'
                 regionInput = $('<input>').attr({
-                    'type': "text",
-                    'name': this.options.regionElement.attr("name"),
-                    'id': this.options.regionElement.attr("id"),
-                    'class': "input-text",
-                    'title': this.options.regionElement.attr("title")
+                    'type': 'text',
+                    'name': this.options.regionElement.attr('name'),
+                    'id': this.options.regionElement.attr('id'),
+                    'class': 'input-text',
+                    'title': this.options.regionElement.attr('title')
                 }).appendTo(regionControl);
 
                 regionIdInput = $('<input>').attr({
-                    'type': "hidden",
-                    'name': this.options.regionIdElement.attr("name"),
-                    'id': this.options.regionIdElement.attr("id")
+                    'type': 'hidden',
+                    'name': this.options.regionIdElement.attr('name'),
+                    'id': this.options.regionIdElement.attr('id')
                 }).appendTo(regionControl);
 
                 newInput = regionInput;
@@ -376,18 +402,17 @@ define([
 
         /**
          * This method updates the region input required/optional and validation classes.
-         * @param {Array} elements Region elements
-         * @param {Element} activeElement Active Region element
-         * @param {Element} regionField Region section element
+         * @param {Array} elements - Region elements
+         * @param {Element} activeElement - Active Region element
+         * @param {Element} regionField - Region section element
          * @private
          */
-        _checkRegionRequired: function(elements, activeElement, regionField)
-        {
+        _checkRegionRequired: function (elements, activeElement, regionField) {
             var regionRequired = this.options.requiredStateForCountries.indexOf(this.options.countryElement.value) >= 0;
 
-            elements.each(function(currentElement) {
-                var form = $(currentElement).closest("form");
-                var validationInstance = form ? jQuery(form).data('validation') : null;
+            elements.each(function (currentElement) {
+                var form = $(currentElement).closest('form'),
+                    validationInstance = form ? $(form).data('validation') : null;
 
                 if (validationInstance) {
                     validationInstance.clearError(currentElement);
@@ -397,10 +422,12 @@ define([
                     if (regionField.hasClass('required')) {
                         regionField.removeClass('required');
                     }
+
                     if (currentElement.hasClass('required-entry')) {
                         currentElement.removeClass('required-entry');
                     }
-                    if ('select' == currentElement.prop("tagName").toLowerCase() &&
+
+                    if (currentElement.prop('tagName').toLowerCase() === 'select' &&
                         currentElement.hasClass('validate-select')) {
                         currentElement.removeClass('validate-select');
                     }
@@ -408,11 +435,13 @@ define([
                     if (regionField.hasClass('required') === false) {
                         regionField.addClass('required');
                     }
+
                     if (activeElement == currentElement) {
                         if (!currentElement.hasClass('required-entry')) {
                             currentElement.addClass('required-entry');
                         }
-                        if ('select' == currentElement.prop("tagName").toLowerCase() &&
+
+                        if (currentElement.prop('tagName').toLowerCase() === 'select' &&
                             !currentElement.hasClass('validate-select')) {
                             currentElement.addClass('validate-select');
                         }
@@ -426,13 +455,13 @@ define([
          * @param {Element} countryElement
          * @private
          */
-        _setPostcodeOptional: function(countryElement) {
-            var formElement = $(countryElement).closest('[data-item]');
-            var fieldElement = $(formElement).find('.field-postcode');
-            var zipElement = $(fieldElement).find('.input-text');
+        _setPostcodeOptional: function (countryElement) {
+            var formElement = $(countryElement).closest('[data-item]'),
+                fieldElement = $(formElement).find('.field-postcode'),
+                zipElement = $(fieldElement).find('.input-text'),
+                zipField = $(zipElement).closest('.field-postcode');
 
-            var zipField = $(zipElement).closest('.field-postcode');
-            if (this.options.optionalZipCountries.indexOf(countryElement.value) != -1) {
+            if (this.options.optionalZipCountries.indexOf(countryElement.value) !== -1) {
                 if ($(zipElement).hasClass('required-entry')) {
                     $(zipElement).removeClass('required-entry');
                 }
@@ -453,7 +482,9 @@ define([
          * This method is used to bind events associated with this widget.
          */
         _bind: function () {
-            this._on(this.element.find(':input').not('.countries'), {'change': '_triggerChange'});
+            this._on(this.element.find(':input').not('.countries'), {
+                'change': '_triggerChange'
+            });
         },
 
         _create: function () {
@@ -466,7 +497,10 @@ define([
          */
         _triggerChange: function (element) {
             // send the name of the captor and the field that changed
-            this.element.trigger('formchange', {'name': this.options.name, 'element': element.target});
+            this.element.trigger('formchange', {
+                'name': this.options.name,
+                'element': element.target
+            });
         }
     });
 
@@ -482,18 +516,21 @@ define([
          * This method is used to bind events associated with this widget.
          */
         _bind: function () {
-            this._on(this.element.find('[data-role="delete"]'), {'click': '_triggerDelete'});
+            this._on(this.element.find('[data-role="delete"]'), {
+                'click': '_triggerDelete'
+            });
         },
 
         _create: function () {
-            this._super();
+            this._super();            
             this._bind();
 
             // if the item was not specified, find the data-item element wrapper
             if (this.options.item.length === 0) {
                 var dataItemContainer = this.element.parents('[data-item]');
+
                 if (dataItemContainer.length === 1) {
-                    this.options.item = dataItemContainer.attr("data-item");
+                    this.options.item = dataItemContainer.attr('data-item');
                 }
             }
         },
@@ -503,7 +540,9 @@ define([
          */
         _triggerDelete: function () {
             // send the name of the captor and the field that changed
-            this.element.trigger('dataItemDelete', {'item': this.options.item});
+            this.element.trigger('dataItemDelete', {
+                'item': this.options.item
+            });
 
             // we are handling the click, so stop processing
             return false;
@@ -511,9 +550,9 @@ define([
     });
 
     return {
-        addressTabs:            $.mage.addressTabs,
-        addressCountry:         $.mage.addressCountry,
-        observableInputs:       $.mage.observableInputs,
-        dataItemDeleteButton:   $.mage.dataItemDeleteButton
+        addressTabs: $.mage.addressTabs,
+        addressCountry: $.mage.addressCountry,
+        observableInputs: $.mage.observableInputs,
+        dataItemDeleteButton: $.mage.dataItemDeleteButton
     };
 });

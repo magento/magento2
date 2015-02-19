@@ -2,22 +2,20 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint jquery:true*/
 define([
-    "jquery",
-    "jquery/ui",
-    "jquery/template"
-], function($){
-
+    'jquery',
+    'mage/template',
+    'jquery/ui'
+], function ($, mageTemplate) {
     'use strict';
 
     $.widget('theme.themeJsList', {
-        options : {
-            templateId : null,
-            emptyTemplateId : null,
-            refreshFileListEvent : null,
-            prefixItemId : '',
-            suffixItemId : ''
+        options: {
+            templateId: null,
+            emptyTemplateId: null,
+            refreshFileListEvent: null,
+            prefixItemId: '',
+            suffixItemId: ''
         },
 
         /**
@@ -25,7 +23,7 @@ define([
          *
          * @protected
          */
-        _create : function () {
+        _create: function () {
             this._bind();
         },
 
@@ -34,7 +32,7 @@ define([
          *
          * @protected
          */
-        _bind : function () {
+        _bind: function () {
             $('body').on(this.options.refreshFileListEvent, $.proxy(this._onRefreshList, this));
         },
 
@@ -45,8 +43,9 @@ define([
          * @param data
          * @protected
          */
-        _onRefreshList : function (event, data) {
+        _onRefreshList: function (event, data) {
             $(this.element).html('');
+
             if (data.jsList.length) {
                 this._renderList(data.jsList);
             } else {
@@ -61,7 +60,7 @@ define([
          * @return string
          * @protected
          */
-        _getItemId : function (fileId) {
+        _getItemId: function (fileId) {
             return this.options.prefixItemId + fileId + this.options.suffixItemId;
         },
 
@@ -71,12 +70,24 @@ define([
          * @param jsList
          * @protected
          */
-        _renderList : function (jsList) {
-            for (var index = 0; index < jsList.length; index++) {
-                var itemTmpl = $("<li></li>").html($(this.options.templateId).html());
+        _renderList: function (jsList) {
+            var itemTmpl,
+                index,
+                tmpl;
+
+            for (index = 0; index < jsList.length; index++) {
+                itemTmpl = $('<li></li>').html($(this.options.templateId).html());
+
                 $(itemTmpl).attr('class', ($(this.options.templateId).attr('class')));
+
                 itemTmpl.attr('id', this._getItemId(jsList[index].id));
-                itemTmpl.html(itemTmpl.tmpl(jsList[index]));
+
+                tmpl = mageTemplate(itemTmpl.html(), {
+                    data: jsList[index]
+                });
+
+                itemTmpl.html(tmpl);
+
                 itemTmpl.removeClass('no-display');
                 itemTmpl.appendTo(this.element);
             }
@@ -87,14 +98,14 @@ define([
          *
          * @protected
          */
-        _renderEmptyList : function () {
+        _renderEmptyList: function () {
             var itemTmpl = $("<li></li>").html($(this.options.emptyTemplateId).html());
+
             $(itemTmpl).attr('class', ($(this.options.emptyTemplateId).attr('class')));
+
             itemTmpl.attr('id', 'empty-js-list');
             itemTmpl.removeClass('no-display');
             itemTmpl.appendTo(this.element);
         }
     });
-
-
 });

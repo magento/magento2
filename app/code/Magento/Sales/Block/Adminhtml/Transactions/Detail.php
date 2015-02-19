@@ -75,7 +75,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
     /**
      * Retrieve header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

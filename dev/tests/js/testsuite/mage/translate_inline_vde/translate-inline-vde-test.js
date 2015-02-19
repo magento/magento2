@@ -5,8 +5,8 @@
 TranslateInlineVdeTest = TestCase('TranslateInlineVdeTest');
 TranslateInlineVdeTest.prototype.testInit = function() {
     /*:DOC += <div data-translate="true">text</div>
-    <script data-template="translate-inline-icon" type="text/x-jQuery-tmpl">
-        <img src="${img}" height="16" width="16">
+    <script data-template="translate-inline-icon" type="text/x-magento-template">
+        <img src="<%= data.img %>" height="16" width="16">
     </script>
     */
     var translateInlineVde = jQuery('[data-translate]').translateInlineVde();
@@ -15,8 +15,8 @@ TranslateInlineVdeTest.prototype.testInit = function() {
 };
 TranslateInlineVdeTest.prototype.testCreate = function() {
     /*:DOC += <div data-translate="true">text</div>
-    <script data-template="translate-inline-icon" type="text/x-jQuery-tmpl">
-        <img src="${img}" height="16" width="16">
+    <script data-template="translate-inline-icon" type="text/x-magento-template">
+        <img src="<%= data.img %>" height="16" width="16">
     </script>
     */
     assertEquals(0, jQuery('[data-translate] > img').size());
@@ -26,8 +26,8 @@ TranslateInlineVdeTest.prototype.testCreate = function() {
 };
 TranslateInlineVdeTest.prototype.testHideAndShow = function() {
     /*:DOC += <div data-translate="true">text</div>
-    <script data-template="translate-inline-icon" type="text/x-jQuery-tmpl">
-        <img src="${img}" height="16" width="16">
+    <script data-template="translate-inline-icon" type="text/x-magento-template">
+        <img src="<%= data.img %>" height="16" width="16">
     </script>
     */
     var translateInlineVde = jQuery('[data-translate]').translateInlineVde(),
@@ -46,8 +46,8 @@ TranslateInlineVdeTest.prototype.testHideAndShow = function() {
 TranslateInlineVdeTest.prototype.testReplaceTextNormal = function() {
     /*:DOC += <div id="translateElem"
       data-translate="[{&quot;shown&quot; : &quot;Some value&quot;, &quot;translated&quot; : &quot;Translated value&quot;}]">text</div>
-    <script data-template="translate-inline-icon" type="text/x-jQuery-tmpl">
-        <img src="${img}" height="16" width="16">
+    <script data-template="translate-inline-icon" type="text/x-magento-template">
+        <img src="<%= data.img %>" height="16" width="16">
     </script>
     */
     var translateInlineVde = jQuery('[data-translate]').translateInlineVde();
@@ -64,8 +64,8 @@ TranslateInlineVdeTest.prototype.testReplaceTextNormal = function() {
 TranslateInlineVdeTest.prototype.testReplaceTextNullOrBlank = function() {
     /*:DOC += <div id="translateElem"
       data-translate="[{&quot;shown&quot; : &quot;Some value&quot;, &quot;translated&quot; : &quot;Translated value&quot;}]">text</div>
-    <script data-template="translate-inline-icon" type="text/x-jQuery-tmpl">
-        <img src="${img}" height="16" width="16">
+    <script data-template="translate-inline-icon" type="text/x-magento-template">
+        <img src="<%= data.img %>" height="16" width="16">
     </script>
     */
     var translateInlineVde = jQuery('[data-translate]').translateInlineVde();
@@ -95,8 +95,8 @@ TranslateInlineVdeTest.prototype.testReplaceTextNullOrBlank = function() {
 };
 TranslateInlineVdeTest.prototype.testClick = function() {
     /*:DOC += <div id="translateElem" data-translate="[]">text</div>
-    <script data-template="translate-inline-icon" type="text/x-jQuery-tmpl">
-        <img src="${img}" height="16" width="16">
+    <script data-template="translate-inline-icon" type="text/x-magento-template">
+        <img src="<%= data.img %>" height="16" width="16">
     </script>
     */
     var counter = 0;
@@ -116,8 +116,8 @@ TranslateInlineVdeTest.prototype.testClick = function() {
 };
 TranslateInlineVdeTest.prototype.testDblClick = function() {
     /*:DOC += <div id="translateElem" data-translate="[]">text</div>
-    <script data-template="translate-inline-icon" type="text/x-jQuery-tmpl">
-        <img src="${img}" height="16" width="16">
+    <script data-template="translate-inline-icon" type="text/x-magento-template">
+        <img src="<%= data.img %>" height="16" width="16">
     </script>
     */
     var counter = 0;

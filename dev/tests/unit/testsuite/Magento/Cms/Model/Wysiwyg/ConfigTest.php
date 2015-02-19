@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model\Wysiwyg;
 
 /**
- * @covers \Magento\Cms\Model\Wysiwyg\Config
+ * covers \Magento\Cms\Model\Wysiwyg\Config
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,7 +46,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -85,7 +85,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
@@ -116,7 +116,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Config::getConfig
+     * covers \Magento\Cms\Model\Wysiwyg\Config::getConfig
      * @param array $data
      * @param boolean $isAuthorizationAllowed
      * @param array $expectedResults
@@ -187,7 +187,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Config::getSkinImagePlaceholderPath
+     * covers \Magento\Cms\Model\Wysiwyg\Config::getSkinImagePlaceholderPath
      */
     public function testGetSkinImagePlaceholderPath()
     {
@@ -213,7 +213,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Config::isEnabled
+     * covers \Magento\Cms\Model\Wysiwyg\Config::isEnabled
      * @param string $wysiwygState
      * @param boolean $expectedResult
      *
@@ -245,7 +245,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Config::isHidden
+     * covers \Magento\Cms\Model\Wysiwyg\Config::isHidden
      * @param string $status
      * @param boolean $expectedResult
      *

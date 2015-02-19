@@ -13,7 +13,7 @@ namespace Magento\ImportExport\Helper;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\Core\Helper\Data
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**#@+
      * XML path for config data
@@ -31,30 +31,15 @@ class Data extends \Magento\Core\Helper\Data
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\File\Size $fileSize
-     * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\File\Size $fileSize,
-        $dbCompatibleMode = true
+        \Magento\Framework\File\Size $fileSize
     ) {
         $this->_fileSize = $fileSize;
         parent::__construct(
-            $context,
-            $scopeConfig,
-            $storeManager,
-            $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $context
         );
     }
 
@@ -81,7 +66,7 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function getLocalValidPaths()
     {
-        $paths = $this->_scopeConfig->getValue(self::XML_PATH_EXPORT_LOCAL_VALID_PATH, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+        $paths = $this->scopeConfig->getValue(self::XML_PATH_EXPORT_LOCAL_VALID_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         return $paths;
     }
 
@@ -92,6 +77,6 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function getBunchSize()
     {
-        return (int)$this->_scopeConfig->getValue(self::XML_PATH_BUNCH_SIZE, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_BUNCH_SIZE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 }

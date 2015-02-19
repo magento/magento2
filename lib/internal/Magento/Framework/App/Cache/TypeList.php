@@ -121,6 +121,20 @@ class TypeList implements TypeListInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getTypeLabels()
+    {
+        $types = [];
+        foreach ($this->_config->getTypes() as $type => $node) {
+            if (array_key_exists('label', $node)) {
+                $types[$type] = $node['label'];
+            }
+        }
+        return $types;
+    }
+
+    /**
      * Get array of all invalidated cache types
      *
      * @return array

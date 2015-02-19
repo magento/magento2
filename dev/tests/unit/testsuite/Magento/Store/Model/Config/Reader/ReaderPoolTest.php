@@ -50,7 +50,7 @@ class ReaderPoolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Store\Model\Config\Reader\ReaderPool::getReader
+     * covers \Magento\Store\Model\Config\Reader\ReaderPool::getReader
      * @dataProvider getReaderDataProvider
      * @param string $scope
      * @param string $instanceType

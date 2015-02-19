@@ -22,7 +22,7 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Multiselect::extractValue
+     * covers \Magento\Eav\Model\Attribute\Data\Multiselect::extractValue
      *
      * @param mixed $param
      * @param mixed $expectedResult
@@ -62,7 +62,7 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Multiselect::outputValue
+     * covers \Magento\Eav\Model\Attribute\Data\Multiselect::outputValue
      *
      * @param string $format
      * @param mixed $expectedResult

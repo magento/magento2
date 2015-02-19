@@ -72,7 +72,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected $_canUseBaseUrl;
 
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $_formKeyValidator;
 
@@ -202,8 +202,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
         }
 
         if ($request->isDispatched() && $request->getActionName() !== 'denied' && !$this->_isAllowed()) {
-            $this->_response->setHeader('HTTP/1.1', '403 Forbidden');
-            $this->_response->setHttpResponseCode(403);
+            $this->_response->setStatusHeader(403, '1.1', 'Forbidden');
             if (!$this->_auth->isLoggedIn()) {
                 return $this->_redirect('*/auth/login');
             }

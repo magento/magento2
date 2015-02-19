@@ -35,7 +35,7 @@ class ResetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Page\System\Config\Robots\Reset::getRobotsDefaultCustomInstructions
+     * covers \Magento\Backend\Block\Page\System\Config\Robots\Reset::getRobotsDefaultCustomInstructions
      */
     public function testGetRobotsDefaultCustomInstructions()
     {

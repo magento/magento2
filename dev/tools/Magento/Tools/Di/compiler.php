@@ -19,14 +19,12 @@ use Magento\Framework\ObjectManager\Code\Generator\Repository;
 use Magento\Framework\ObjectManager\Code\Generator\Persistor;
 use Magento\Framework\Api\Code\Generator\ObjectExtensionInterface;
 use Magento\Tools\Di\Code\Scanner;
-use Magento\Tools\Di\Compiler\Directory;
 use Magento\Tools\Di\Compiler\Log\Log;
 use Magento\Tools\Di\Compiler\Log\Writer;
 use Magento\Tools\Di\Definition\Compressor;
-use Magento\Tools\Di\Definition\Serializer;
+use Magento\Tools\Di\Definition\Serializer\Igbinary;
+use Magento\Tools\Di\Definition\Serializer\Standard;
 
-$filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
-$codeScanDir = realpath($rootDir . '/app');
 try {
     $opt = new Zend_Console_Getopt(
         [
@@ -41,7 +39,6 @@ try {
 
     $generationDir = $opt->getOption('generation') ? $opt->getOption('generation') : $rootDir . '/var/generation';
     $diDir = $opt->getOption('di') ? $opt->getOption('di') : $rootDir . '/var/di';
-    $compiledFile = $diDir . '/definitions.php';
     $relationsFile = $diDir . '/relations.ser';
     $pluginDefFile = $diDir . '/plugins.ser';
 
@@ -53,21 +50,16 @@ try {
 
     /** @var Writer\WriterInterface $logWriter Writer model for success messages */
     $logWriter = $opt->getOption('v') ? new Writer\Console() : new Writer\Quiet();
+    $log = new Log($logWriter, new Writer\Console());
 
-    /** @var Writer\WriterInterface $logWriter Writer model for error messages */
-    $errorWriter = new Writer\Console();
-
-    $log = new Log($logWriter, $errorWriter);
-    $serializer = $opt->getOption('serializer') == 'igbinary' ? new Serializer\Igbinary() : new Serializer\Standard();
-
-    $validator = new \Magento\Framework\Code\Validator();
-    $validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
-    $validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
+    $serializer = $opt->getOption('serializer') == Igbinary::NAME ? new Igbinary() : new Standard();
 
     AutoloaderRegistry::getAutoloader()->addPsr4('Magento\\', $generationDir . '/Magento/');
 
     // 1 Code generation
     // 1.1 Code scan
+    $filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
+    $codeScanDir = realpath($rootDir . '/app');
     $directoryScanner = new Scanner\DirectoryScanner();
     $files = $directoryScanner->scan($codeScanDir, $filePatterns);
     $files['additional'] = [$opt->getOption('extra-classes-file')];
@@ -112,8 +104,6 @@ try {
     $generatorAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
     spl_autoload_register([$generatorAutoloader, 'load']);
 
-
-
     foreach ($repositories as $entityName) {
         switch ($generator->generateClass($entityName)) {
             case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
@@ -153,10 +143,22 @@ try {
 
     // 2. Compilation
     // 2.1 Code scan
-    $directoryCompiler = new Directory($log, $validator);
+
+    $validator = new \Magento\Framework\Code\Validator();
+    $validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
+    $validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
+
+    $directoryInstancesNamesList = new \Magento\Tools\Di\Code\Reader\InstancesNamesList\Directory(
+        $log,
+        new \Magento\Framework\Code\Reader\ClassReader(),
+        new \Magento\Tools\Di\Code\Reader\ClassesScanner(),
+        $validator,
+        $generationDir
+    );
+
     foreach ($compilationDirs as $path) {
         if (is_readable($path)) {
-            $directoryCompiler->compile($path);
+            $directoryInstancesNamesList->getList($path);
         }
     }
 
@@ -186,20 +188,16 @@ try {
         }
     }
 
-    //2.1.2 Compile definitions for Proxy/Interceptor classes
-    $directoryCompiler->compile($generationDir, false);
+    //2.1.2 Compile relations for Proxy/Interceptor classes
+    $directoryInstancesNamesList->getList($generationDir);
 
-    list($definitions, $relations) = $directoryCompiler->getResult();
+    $relations = $directoryInstancesNamesList->getRelations();
 
     // 2.2 Compression
-    $compressor = new Compressor($serializer);
-    $output = $compressor->compress($definitions);
-    if (!file_exists(dirname($compiledFile))) {
-        mkdir(dirname($compiledFile), 0777, true);
+    if (!file_exists(dirname($relationsFile))) {
+        mkdir(dirname($relationsFile), 0777, true);
     }
     $relations = array_filter($relations);
-
-    file_put_contents($compiledFile, $output);
     file_put_contents($relationsFile, $serializer->serialize($relations));
 
     // 3. Plugin Definition Compilation
@@ -210,7 +208,7 @@ try {
     $pluginDefinitionList = new \Magento\Framework\Interception\Definition\Runtime();
     foreach ($pluginList as $type => $entityList) {
         foreach ($entityList as $entity) {
-            $pluginDefinitions[$entity] = $pluginDefinitionList->getMethodList($entity);
+            $pluginDefinitions[ltrim($entity, '\\')] = $pluginDefinitionList->getMethodList($entity);
         }
     }
 

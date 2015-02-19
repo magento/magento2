@@ -104,7 +104,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         // should be redirected to forgotpassword page
         $response = $this->getResponse();
         $this->assertEquals(302, $response->getHttpResponseCode());
-        $this->assertContains('customer/account/forgotpassword', $response->getHeader('Location')['value']);
+        $this->assertContains('customer/account/forgotpassword', $response->getHeader('Location')->getFieldValue());
     }
 
     /**
@@ -132,7 +132,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         // Setting data for request
         $this->getRequest()
-            ->setServer(['REQUEST_METHOD' => 'POST'])
+            ->setMethod('POST')
             ->setParam('firstname', 'firstname1')
             ->setParam('lastname', 'lastname1')
             ->setParam('company', '')
@@ -149,7 +149,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setParam('default_billing', '1')
             ->setParam('default_shipping', '1')
             ->setParam('is_subscribed', '0')
-            ->setPost('create_address', true);
+            ->setPostValue('create_address', true);
 
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringContains('customer/account/index/'));
@@ -169,7 +169,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         // Setting data for request
         $email = 'test2@email.com';
         $this->getRequest()
-            ->setServer(['REQUEST_METHOD' => 'POST'])
+            ->setMethod('POST')
             ->setParam('firstname', 'firstname2')
             ->setParam('lastname', 'lastname2')
             ->setParam('company', '')
@@ -186,7 +186,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setParam('default_billing', '1')
             ->setParam('default_shipping', '1')
             ->setParam('is_subscribed', '1')
-            ->setPost('create_address', true);
+            ->setPostValue('create_address', true);
 
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringContains('customer/account/index/'));
@@ -208,7 +208,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         // Setting data for request
         $this->getRequest()
-            ->setServer(['REQUEST_METHOD' => 'POST'])
+            ->setMethod('POST')
             ->setParam('firstname', 'firstname')
             ->setParam('lastname', 'lastname')
             ->setParam('company', '')
@@ -225,7 +225,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setParam('default_billing', '1')
             ->setParam('default_shipping', '1')
             ->setParam('is_subscribed', '1')
-            ->setPost('create_address', true);
+            ->setPostValue('create_address', true);
 
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringContains('customer/account/create/'));
@@ -260,7 +260,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $headers = $this->getResponse()->getHeaders();
         $failed = false;
         foreach ($headers as $header) {
-            if (preg_match('~customer\/account\/login~', $header['value'])) {
+            if (preg_match('~customer\/account\/login~', $header->getFieldValue())) {
                 $failed = true;
                 break;
             }
@@ -274,8 +274,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testInactiveUserConfirmationAction()
     {
         $this->getRequest()
-            ->setServer(['REQUEST_METHOD' => 'POST'])
-            ->setPost(['email' => 'customer@needAconfirmation.com']);
+            ->setMethod('POST')
+            ->setPostValue(['email' => 'customer@needAconfirmation.com']);
 
         $this->dispatch('customer/account/confirmation');
         $this->assertRedirect($this->stringContains('customer/account/index'));
@@ -291,8 +291,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testActiveUserConfirmationAction()
     {
         $this->getRequest()
-            ->setServer(['REQUEST_METHOD' => 'POST'])
-            ->setPost([
+            ->setMethod('POST')
+            ->setPostValue([
                 'email' => 'customer@example.com',
             ]);
 
@@ -309,7 +309,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $email = 'customer@example.com';
 
         $this->getRequest()
-            ->setPost([
+            ->setPostValue([
                 'email' => $email,
             ]);
 
@@ -327,7 +327,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testForgotPasswordPostWithBadEmailAction()
     {
         $this->getRequest()
-            ->setPost([
+            ->setPostValue([
                 'email' => 'bad@email',
             ]);
 
@@ -347,7 +347,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()
             ->setParam('id', 1)
             ->setParam('token', '8ed8677e6c79e68b94e61658bd756ea5')
-            ->setPost([
+            ->setPostValue([
                 'password' => 'new-password',
                 'password_confirmation' => 'new-password',
             ]);
@@ -367,9 +367,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testResetPasswordPostAction()
     {
         $this->getRequest()
-            ->setQuery('id', 1)
-            ->setQuery('token', '8ed8677e6c79e68b94e61658bd756ea5')
-            ->setPost([
+            ->setQueryValue('id', 1)
+            ->setQueryValue('token', '8ed8677e6c79e68b94e61658bd756ea5')
+            ->setPostValue([
                 'password' => 'new-password',
                 'password_confirmation' => 'new-password',
             ]);
@@ -431,8 +431,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->login(1);
         $this->getRequest()
-            ->setServer(['REQUEST_METHOD' => 'POST'])
-            ->setPost([
+            ->setMethod('POST')
+            ->setPostValue([
                 'form_key'  => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname' => 'John',
                 'lastname'  => 'Doe',
@@ -468,8 +468,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->login(1);
         $this->getRequest()
-            ->setServer(['REQUEST_METHOD' => 'POST'])
-            ->setPost([
+            ->setMethod('POST')
+            ->setPostValue([
                 'form_key'         => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',
@@ -501,8 +501,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->login(1);
         $this->getRequest()
-            ->setServer(['REQUEST_METHOD' => 'POST'])
-            ->setPost([
+            ->setMethod('POST')
+            ->setPostValue([
                 'form_key'  => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname' => 'John',
                 'lastname'  => 'Doe',
@@ -525,8 +525,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->login(1);
         $this->getRequest()
-            ->setServer(['REQUEST_METHOD' => 'POST'])
-            ->setPost([
+            ->setMethod('POST')
+            ->setPostValue([
                 'form_key'         => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',
@@ -554,8 +554,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->login(1);
         $this->getRequest()
-            ->setServer(['REQUEST_METHOD' => 'POST'])
-            ->setPost([
+            ->setMethod('POST')
+            ->setPostValue([
                 'form_key'         => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',

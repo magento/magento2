@@ -227,7 +227,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false),
             $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
             $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false),
-            $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false),
+            $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false),
             $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
             $this->getMock(
                 'Magento\Catalog\Model\Resource\Product\Option\CollectionFactory',
@@ -558,7 +558,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::getEntityTypeCode
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::getEntityTypeCode
      */
     public function testGetEntityTypeCode()
     {
@@ -566,15 +566,15 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::importData
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_importData
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveOptions
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveTitles
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_savePrices
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveSpecificTypeValues
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveSpecificTypePrices
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveSpecificTypeTitles
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_updateProducts
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::importData
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_importData
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveOptions
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveTitles
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_savePrices
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveSpecificTypeValues
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveSpecificTypePrices
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveSpecificTypeTitles
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_updateProducts
      */
     public function testImportDataAppendBehavior()
     {
@@ -582,8 +582,8 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_importData
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_deleteEntities
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_importData
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_deleteEntities
      */
     public function testImportDataDeleteBehavior()
     {
@@ -632,7 +632,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for validation of row without custom option
      *
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_isRowWithCustomOption
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_isRowWithCustomOption
      */
     public function testValidateRowNoCustomOption()
     {
@@ -646,15 +646,15 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @param array $rowData
      * @param array $errors
      *
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::validateRow
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_isRowWithCustomOption
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_isMainOptionRow
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_isSecondaryOptionRow
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_validateMainRow
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_validateMainRowAdditionalData
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_validateSecondaryRow
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_validateSpecificTypeParameters
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_validateSpecificParameterData
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::validateRow
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_isRowWithCustomOption
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_isMainOptionRow
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_isSecondaryOptionRow
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_validateMainRow
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_validateMainRowAdditionalData
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_validateSecondaryRow
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_validateSpecificTypeParameters
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_validateSpecificParameterData
      * @dataProvider validateRowDataProvider
      */
     public function testValidateRow(array $rowData, array $errors)
@@ -675,11 +675,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @param string|null $behavior
      * @param int $numberOfValidations
      *
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::validateAmbiguousData
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_findNewOptionsWithTheSameTitles
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_findOldOptionsWithTheSameTitles
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_findNewOldOptionsTypeMismatch
-     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveNewOptionData
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::validateAmbiguousData
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_findNewOptionsWithTheSameTitles
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_findOldOptionsWithTheSameTitles
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_findNewOldOptionsTypeMismatch
+     * covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveNewOptionData
      * @dataProvider validateAmbiguousDataDataProvider
      */
     public function testValidateAmbiguousData(

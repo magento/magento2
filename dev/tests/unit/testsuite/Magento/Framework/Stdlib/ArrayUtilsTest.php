@@ -21,7 +21,7 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Stdlib\ArrayUtils::ksortMultibyte
+     * covers \Magento\Framework\Stdlib\ArrayUtils::ksortMultibyte
      * @dataProvider ksortMultibyteDataProvider
      */
     public function testKsortMultibyte($input, $locale)
@@ -45,7 +45,7 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Stdlib\ArrayUtils::decorateArray
+     * covers \Magento\Framework\Stdlib\ArrayUtils::decorateArray
      */
     public function testDecorateArray()
     {

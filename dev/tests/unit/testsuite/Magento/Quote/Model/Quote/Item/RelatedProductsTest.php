@@ -28,7 +28,7 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
      * @param int|bool $productId
      * @param array $expectedResult
      *
-     * @covers \Magento\Quote\Model\Quote\Item\RelatedProducts::getRelatedProductIds
+     * covers \Magento\Quote\Model\Quote\Item\RelatedProducts::getRelatedProductIds
      * @dataProvider getRelatedProductIdsDataProvider
      */
     public function testGetRelatedProductIds($optionValue, $productId, $expectedResult)
@@ -75,7 +75,7 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Quote\Model\Quote\Item\RelatedProducts::getRelatedProductIds
+     * covers \Magento\Quote\Model\Quote\Item\RelatedProducts::getRelatedProductIds
      */
     public function testGetRelatedProductIdsNoOptions()
     {

@@ -18,6 +18,6 @@ class Dashboard extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Adminhtml::dashboard');
+        return $this->_authorization->isAllowed('Magento_Backend::dashboard');
     }
 }

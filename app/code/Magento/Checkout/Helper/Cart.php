@@ -31,13 +31,6 @@ class Cart extends \Magento\Core\Helper\Url
     const COUPON_CODE_MAX_LENGTH = 255;
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * @var \Magento\Checkout\Model\Cart
      */
     protected $_checkoutCart;
@@ -49,19 +42,16 @@ class Cart extends \Magento\Core\Helper\Url
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Model\Session $checkoutSession
     ) {
-        $this->_scopeConfig = $scopeConfig;
         $this->_checkoutCart = $checkoutCart;
         $this->_checkoutSession = $checkoutSession;
         parent::__construct($context, $storeManager);
@@ -210,6 +200,6 @@ class Cart extends \Magento\Core\Helper\Url
      */
     public function getShouldRedirectToCart($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(self::XML_PATH_REDIRECT_TO_CART, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->isSetFlag(self::XML_PATH_REDIRECT_TO_CART, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 }

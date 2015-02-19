@@ -20,7 +20,7 @@ class Resource extends DataFixture
      * @var array
      */
     protected $resources = [
-        'Magento_Adminhtml::dashboard' => null,
+        'Magento_Backend::dashboard' => null,
         'Magento_Sales::sales' => null,
         'Magento_Sales::sales_operation' => 'Magento_Sales::sales',
         'Magento_Sales::sales_order' => 'Magento_Sales::sales_operation',

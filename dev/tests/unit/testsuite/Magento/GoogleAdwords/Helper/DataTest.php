@@ -10,16 +10,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_configNodeMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_scopeConfigMock;
 
     /**
@@ -34,21 +24,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-
+        $className = 'Magento\GoogleAdwords\Helper\Data';
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->_helper = $objectManager->getObject(
-            'Magento\GoogleAdwords\Helper\Data',
-            [
-                'config' => $this->_configMock,
-                'scopeConfig' => $this->_scopeConfigMock,
-                'registry' => $this->_registryMock,
-                'context' => $context
-            ]
-        );
+        $arguments = $objectManager->getConstructArguments($className);
+        $this->_helper = $objectManager->getObject($className, $arguments);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
+        $this->_scopeConfigMock = $context->getScopeConfig();
+        $this->_registryMock = $arguments['registry'];
     }
 
     /**
@@ -95,7 +78,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetLanguageCodes()
     {
         $languages = ['en', 'ru', 'uk'];
-        $this->_configMock->expects(
+        $this->_scopeConfigMock->expects(
             $this->once()
         )->method(
             'getValue'
@@ -126,7 +109,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testConvertLanguageCodeToLocaleCode($language, $returnLanguage)
     {
         $convertArray = ['zh_TW' => 'zh_Hant', 'iw' => 'he', 'zh_CN' => 'zh_Hans'];
-        $this->_configMock->expects(
+        $this->_scopeConfigMock->expects(
             $this->once()
         )->method(
             'getValue'
@@ -148,8 +131,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $conversionId,
             $label
         );
-        $this->_configMock->expects(
-            $this->once()
+        $this->_scopeConfigMock->expects(
+            $this->at(0)
         )->method(
             'getValue'
         )->with(
@@ -164,7 +147,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetConversionJsSrc()
     {
         $jsSrc = 'some-js-src';
-        $this->_configMock->expects(
+        $this->_scopeConfigMock->expects(
             $this->once()
         )->method(
             'getValue'

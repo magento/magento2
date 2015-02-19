@@ -54,7 +54,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
     protected $_messageManager;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeManager;
 
@@ -75,10 +75,10 @@ class PostTest extends \PHPUnit_Framework_TestCase
         );
         $this->_url = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
         $this->_messageManager = $this->getMock('\Magento\Framework\Message\ManagerInterface', [], [], '', false);
-        $this->_request = $this->getMock('\Magento\Framework\App\Request\Http', ['getPost'], [], '', false);
+        $this->_request = $this->getMock('\Magento\Framework\App\Request\Http', ['getPostValue'], [], '', false);
         $this->_redirect = $this->getMock('\Magento\Framework\App\Response\RedirectInterface', [], [], '', false);
         $this->_view = $this->getMock('\Magento\Framework\App\ViewInterface', [], [], '', false);
-        $this->_storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
+        $this->_storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $this->_transportBuilder = $this->getMock(
             '\Magento\Framework\Mail\Template\TransportBuilder',
             [],
@@ -130,7 +130,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteEmptyPost()
     {
-        $this->_request->expects($this->once())->method('getPost')->will($this->returnValue([]));
+        $this->_request->expects($this->once())->method('getPostValue')->will($this->returnValue([]));
         $this->_redirect->expects($this->once())->method('redirect');
         $this->_controller->execute();
     }
@@ -141,7 +141,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
     public function testExecutePostValidation($postData, $exceptionExpected)
     {
         $this->_request->expects($this->any())
-            ->method('getPost')
+            ->method('getPostValue')
             ->will($this->returnValue($postData));
 
         if ($exceptionExpected) {
@@ -174,7 +174,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $post = ['name' => 'Name', 'comment' => 'Comment', 'email' => 'valid@mail.com', 'hideit' => null];
 
         $this->_request->expects($this->any())
-            ->method('getPost')
+            ->method('getPostValue')
             ->will($this->returnValue($post));
 
         $store = $this->getMock('\Magento\Store\Model\Store', ['getId', '__sleep', '__wakeup'], [], '', false);

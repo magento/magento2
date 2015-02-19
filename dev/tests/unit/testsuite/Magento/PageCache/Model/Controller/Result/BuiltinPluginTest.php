@@ -24,10 +24,17 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
         $processCount
     ) {
         $cacheControl = 'test';
-        $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
 
-        $response->expects($getHeaderCount)->method('getHeader')->with('Cache-Control')
-                ->will($this->returnValue(['value' => $cacheControl]));
+        $header = $this->getMockBuilder('Zend\Http\Header\HeaderInterface')
+            ->getMockForAbstractClass();
+        $header->expects($this->any())->method('getFieldValue')
+            ->willReturn($cacheControl);
+
+        $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $response->expects($getHeaderCount)
+            ->method('getHeader')
+            ->with('Cache-Control')
+            ->willReturn($header);
         $response->expects($setCacheControlHeaderCount)->method('setHeader')
                 ->with('X-Magento-Cache-Control', $cacheControl);
         $response->expects($setCacheDebugHeaderCount)->method('setHeader')
