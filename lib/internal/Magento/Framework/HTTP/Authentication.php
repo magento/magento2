@@ -45,7 +45,7 @@ class Authentication
      */
     public function getCredentials()
     {
-        $server = $this->request->getServer();
+        $server = $this->request->getServerValue();
         $user = '';
         $pass = '';
 
@@ -84,10 +84,8 @@ class Authentication
      */
     public function setAuthenticationFailed($realm)
     {
+        $this->response->setStatusHeader(401, '1.1', 'Unauthorized');
         $this->response->setHeader(
-            'HTTP/1.1',
-            '401 Unauthorized'
-        )->setHeader(
             'WWW-Authenticate',
             'Basic realm="' . $realm . '"'
         )->setBody(

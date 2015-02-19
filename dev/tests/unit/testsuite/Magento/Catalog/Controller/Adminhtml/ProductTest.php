@@ -41,7 +41,7 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['add'])->disableOriginalConstructor()->getMock();
         $title->expects($this->any())->method('prepend')->withAnyParameters()->will($this->returnSelf());
         $requestInterfaceMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')->setMethods(
-            ['getParam', 'getFullActionName', 'getPost']
+            ['getParam', 'getFullActionName', 'getPostValue']
         )->disableOriginalConstructor()->getMock();
 
         $responseInterfaceMock = $this->getMockBuilder('Magento\Framework\App\ResponseInterface')->setMethods(
