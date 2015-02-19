@@ -20,5 +20,4 @@ class Passthrough implements PreProcessorInterface
     {
         $chain->setContentType($chain->getTargetContentType());
     }
-
 }

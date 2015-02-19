@@ -71,7 +71,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
             ->method('getTargetContentType')
             ->willReturn($targetContentType);
         $processorMaps = [];
-        foreach($expectedResult as $processor) {
+        foreach ($expectedResult as $processor) {
             $processorMock = $this->getMock($processor, ['process'], [], '', false);
             $processorMock->expects($this->any())
                 ->method('process')
