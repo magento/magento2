@@ -12,6 +12,8 @@ use Magento\Webapi\Model\Config\Converter;
 
 /**
  * Webapi Config Model for Soap.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Config
 {
