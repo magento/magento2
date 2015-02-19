@@ -139,7 +139,9 @@ abstract class Validator
         }
         if (count($dimensions) > 0) {
             if (!is_null($fileFullPath) && !$this->isImage($fileFullPath)) {
-                throw new \Magento\Framework\Exception\InputException(__('File \'%1\' is not an image.', $fileFullPath));
+                throw new \Magento\Framework\Exception\InputException(
+                    __('File \'%1\' is not an image.', $option->getTitle())
+                );
             }
             $object->addValidator(new \Zend_Validate_File_ImageSize($dimensions));
         }
