@@ -9,7 +9,7 @@
   <testCase name="ProductTypeSwitchingOnCreationTest">
     <variation name="ProductTypeSwitchingOnCreationTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">simple</data>
-      <data name="product" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="product" xsi:type="string">configurableProduct::default</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
       <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
@@ -45,7 +45,7 @@
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">virtual</data>
-      <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
+      <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
       <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>
@@ -57,7 +57,7 @@
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">virtual</data>
-      <data name="product" xsi:type="string">downloadableProductInjectable::default</data>
+      <data name="product" xsi:type="string">downloadableProduct::default</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertDownloadableProductForm" next="assertProductPage" prev="assertProductInGrid"/>
@@ -72,7 +72,7 @@
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
       <data name="createProduct" xsi:type="string">downloadable</data>
-      <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
+      <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
       <constraint name="assertChildProductsInGrid" next="assertConfigurableProductForm" prev="assertProductInGrid"/>

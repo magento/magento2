@@ -9,7 +9,7 @@ namespace Magento\Review\Test\TestCase;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
@@ -125,10 +125,10 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     /**
      * Prepare data
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
-    public function __prepare(CustomerInjectable $customer)
+    public function __prepare(Customer $customer)
     {
         $customer->persist();
         return ['customer' => $customer];
@@ -175,13 +175,13 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
      *
      * @param Review $reviewInitial
      * @param Review $review
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
     public function test(
         Review $reviewInitial,
         Review $review,
-        CustomerInjectable $customer
+        Customer $customer
     ) {
         // Preconditions
         $this->login($customer);
@@ -211,10 +211,10 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     /**
      * Login customer on frontend
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return void
      */
-    protected function login(CustomerInjectable $customer)
+    protected function login(Customer $customer)
     {
         $this->cmsIndex->open();
         if (!$this->cmsIndex->getLinksBlock()->isLinkVisible('Log Out')) {

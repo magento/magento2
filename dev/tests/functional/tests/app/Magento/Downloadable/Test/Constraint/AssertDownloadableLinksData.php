@@ -7,7 +7,7 @@
 namespace Magento\Downloadable\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
+use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 
@@ -47,13 +47,13 @@ class AssertDownloadableLinksData extends AbstractAssertForm
      * Assert Link block for downloadable product on front-end
      *
      * @param CatalogProductView $catalogProductView
-     * @param DownloadableProductInjectable $product
+     * @param DownloadableProduct $product
      * @param BrowserInterface $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        DownloadableProductInjectable $product,
+        DownloadableProduct $product,
         BrowserInterface $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
@@ -68,10 +68,10 @@ class AssertDownloadableLinksData extends AbstractAssertForm
     /**
      * Prepare fixture data for verify
      *
-     * @param DownloadableProductInjectable $product
+     * @param DownloadableProduct $product
      * @return array
      */
-    protected function prepareFixtureData(DownloadableProductInjectable $product)
+    protected function prepareFixtureData(DownloadableProduct $product)
     {
         $data = $this->sortDataByPath($product->getDownloadableLinks(), 'downloadable/link::sort_order');
 
