@@ -68,6 +68,10 @@ angular.module('web-configuration', ['ngStorage'])
             }
         });
 
+        $scope.populateHttps = function() {
+            $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
+        };
+
         $scope.showEncryptKey = function() {
             return angular.equals($scope.config.encrypt.type, 'user');
         }

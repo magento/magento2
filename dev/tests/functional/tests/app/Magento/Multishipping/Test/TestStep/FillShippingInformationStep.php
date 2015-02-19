@@ -5,7 +5,7 @@
  */
 namespace Magento\Multishipping\Test\TestStep;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Multishipping\Test\Page\MultishippingCheckoutShipping;
 use Magento\Mtf\TestStep\TestStepInterface;
 
@@ -24,7 +24,7 @@ class FillShippingInformationStep implements TestStepInterface
     /**
      * Customer fixture containing addresses.
      *
-     * @var CustomerInjectable
+     * @var Customer
      */
     protected $customer;
 
@@ -37,12 +37,12 @@ class FillShippingInformationStep implements TestStepInterface
 
     /**
      * @param MultishippingCheckoutShipping $shippingInformation
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param array $shippingMethod
      */
     public function __construct(
         MultishippingCheckoutShipping $shippingInformation,
-        CustomerInjectable $customer,
+        Customer $customer,
         array $shippingMethod
     ) {
         $this->shippingInformation = $shippingInformation;

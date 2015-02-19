@@ -44,7 +44,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Text::__construct
+     * covers \Magento\Framework\Data\Form\Element\Text::__construct
      */
     public function testConstruct()
     {
@@ -53,7 +53,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Text::getHtml
+     * covers \Magento\Framework\Data\Form\Element\Text::getHtml
      */
     public function testGetHtml()
     {
@@ -63,7 +63,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Text::getHtmlAttributes
+     * covers \Magento\Framework\Data\Form\Element\Text::getHtmlAttributes
      */
     public function testGetHtmlAttributes()
     {

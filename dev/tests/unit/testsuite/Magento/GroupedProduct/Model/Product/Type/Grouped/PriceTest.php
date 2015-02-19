@@ -29,7 +29,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Model\Product\Type\Grouped\Price::getFinalPrice
+     * covers Magento\GroupedProduct\Model\Product\Type\Grouped\Price::getFinalPrice
      */
     public function testGetFinalPriceIfQtyIsNullAndFinalPriceExist()
     {
@@ -55,7 +55,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      * @param $expectedFinalPrice
      *
      * @dataProvider getFinalPriceDataProvider
-     * @covers Magento\GroupedProduct\Model\Product\Type\Grouped\Price::getFinalPrice
+     * covers Magento\GroupedProduct\Model\Product\Type\Grouped\Price::getFinalPrice
      */
     public function testGetFinalPrice(
         array $associatedProducts,

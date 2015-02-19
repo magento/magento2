@@ -14,8 +14,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for setter and getter of file name property
      *
-     * @covers \Magento\ImportExport\Model\Export\AbstractEntity::getFileName
-     * @covers \Magento\ImportExport\Model\Export\AbstractEntity::setFileName
+     * covers \Magento\ImportExport\Model\Export\AbstractEntity::getFileName
+     * covers \Magento\ImportExport\Model\Export\AbstractEntity::setFileName
      */
     public function testGetFileNameAndSetFileName()
     {

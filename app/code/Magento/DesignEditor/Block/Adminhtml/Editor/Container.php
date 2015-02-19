@@ -44,7 +44,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
     /**
      * Get header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

@@ -9,7 +9,9 @@ module.exports = function (grunt) {
 
     //  Required plugins
     //  _____________________________________________
-    var specRunner = require('./dev/tests/js/framework/spec_runner')(grunt);
+
+    var specRunner = require('./dev/tests/js/framework/spec_runner')(grunt),
+        svgo = require('imagemin-svgo');
 
     require('./dev/tools/grunt/tasks/mage-minify')(grunt);
 
@@ -20,8 +22,6 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt, {
         pattern: ['grunt-*', '!grunt-template-jasmine-requirejs']
     });
-
-    var svgo = require('imagemin-svgo');
 
     //  Configuration
     //  _____________________________________________
@@ -35,10 +35,10 @@ module.exports = function (grunt) {
         tmpSource: 'var/view_preprocessed/source/',
         tmp: 'var',
         css: {
-            setup: 'setup/pub/magento/setup/css'
+            setup: 'setup/pub/styles'
         },
         less: {
-            setup: 'setup/module/Magento/Setup/styles'
+            setup: 'setup/view/styles'
         },
         uglify: {
             legacy: 'lib/web/legacy-build.min.js'
@@ -318,7 +318,8 @@ module.exports = function (grunt) {
 
         cssmin: {
             options: {
-                report: 'gzip'
+                report: 'gzip',
+                keepSpecialComments: 0
             },
             setup: {
                 files: {
@@ -339,6 +340,20 @@ module.exports = function (grunt) {
             },
             setup: {
                 src: '<%= path.css.setup %>/setup.css'
+            }
+        },
+
+        //  Concatenation
+        //  ---------------------------------------------
+
+        concat: {
+            options: {
+                stripBanners: true,
+                banner: '/**\n * Copyright © <%= grunt.template.today("yyyy") %> Magento. All rights reserved.\n * See COPYING.txt for license details.\n */\n'
+            },
+            setup: {
+                src: '<%= path.css.setup %>/setup.css',
+                dest: '<%= path.css.setup %>/setup.css'
             }
         },
 
@@ -545,7 +560,8 @@ module.exports = function (grunt) {
             grunt.task.run([
                 'less:' + component,
                 'autoprefixer:' + component,
-                'cssmin:' + component
+                'cssmin:' + component,
+                'concat:' + component
             ]);
         }
         if (component == undefined) {

@@ -125,11 +125,11 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 ['showInDefault' => 0, 'showInStore' => 1, 'showInWebsite' => 0],
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ],
             [
                 ['showInDefault' => 0, 'showInStore' => 0, 'showInWebsite' => 1],
-                \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE
+                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
             ]
         ];
     }
@@ -154,11 +154,11 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 ['showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 1],
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ],
             [
                 ['showInDefault' => 1, 'showInStore' => 1, 'showInWebsite' => 0],
-                \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE
+                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
             ]
         ];
     }

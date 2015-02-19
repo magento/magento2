@@ -15,9 +15,6 @@ use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Class DeleteProductsFromShoppingCartTest
- * Test delete products from shopping cart
- *
  * Preconditions
  * 1. Test products are created
  *
@@ -141,6 +138,7 @@ class DeleteProductsFromShoppingCartTest extends Injectable
      */
     protected function removeProducts(array $products)
     {
+        $this->cartPage->open();
         foreach ($products as $product) {
             $this->cartPage->getCartBlock()->getCartItem($product)->removeItem();
         }

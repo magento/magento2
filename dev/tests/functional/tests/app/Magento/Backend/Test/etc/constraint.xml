@@ -1,21 +1,14 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<constraint>
-    <assertGlobalSearchProductName module="Magento_Backend">
-        <severity>low</severity>
-    </assertGlobalSearchProductName>
-    <assertGlobalSearchOrderId module="Magento_Backend">
-        <severity>low</severity>
-    </assertGlobalSearchOrderId>
-    <assertGlobalSearchNoRecordsFound module="Magento_Backend">
-        <severity>low</severity>
-    </assertGlobalSearchNoRecordsFound>
-    <assertGlobalSearchCustomerName module="Magento_Backend">
-        <severity>low</severity>
-    </assertGlobalSearchCustomerName>
-</constraint>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/constraints.xsd">
+    <constraint name="assertGlobalSearchProductName" module="Magento_Backend" severity="low"/>
+    <constraint name="assertGlobalSearchOrderId" module="Magento_Backend" severity="low"/>
+    <constraint name="assertGlobalSearchNoRecordsFound" module="Magento_Backend" severity="low"/>
+    <constraint name="assertGlobalSearchCustomerName" module="Magento_Backend" severity="low"/>
+    <constraint name="assertBestsellersOnDashboard" module="Magento_Backend" severity="low"/>
+</config>

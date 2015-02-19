@@ -9,7 +9,7 @@
     <update handle="sales_order_create_customer_block"/>
     <head>
         <link src="Magento_Sales::js/bootstrap/order-create-index.js"/>
-        <css src="Magento_Core::prototype/magento.css"/>
+        <css src="Magento_Theme::prototype/magento.css"/>
     </head>
     <update handle="sales_order_create_item_price"/>
     <body>

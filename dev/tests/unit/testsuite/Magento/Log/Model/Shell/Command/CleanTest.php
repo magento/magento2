@@ -46,7 +46,7 @@ class CleanTest extends \PHPUnit_Framework_TestCase
             ->with(
                 \Magento\Log\Model\Log::XML_LOG_CLEAN_DAYS,
                 10,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
 
         $this->_logMock->expects($this->once())->method('clean');

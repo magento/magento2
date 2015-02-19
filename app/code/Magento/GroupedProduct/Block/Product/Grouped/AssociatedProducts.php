@@ -19,7 +19,7 @@ class AssociatedProducts extends \Magento\Backend\Block\Catalog\Product\Tab\Cont
     /**
      * Return Tab label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {

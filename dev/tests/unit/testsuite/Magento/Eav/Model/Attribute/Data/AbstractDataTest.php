@@ -27,8 +27,8 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\AbstractData::getEntity
-     * @covers \Magento\Eav\Model\Attribute\Data\AbstractData::setEntity
+     * covers \Magento\Eav\Model\Attribute\Data\AbstractData::getEntity
+     * covers \Magento\Eav\Model\Attribute\Data\AbstractData::setEntity
      */
     public function testGetEntity()
     {
@@ -41,7 +41,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Entity object is undefined
      *
-     * @covers \Magento\Eav\Model\Attribute\Data\AbstractData::getEntity
+     * covers \Magento\Eav\Model\Attribute\Data\AbstractData::getEntity
      */
     public function testGetEntityWhenEntityNotSet()
     {
@@ -49,8 +49,8 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\AbstractData::getExtractedData
-     * @covers \Magento\Eav\Model\Attribute\Data\AbstractData::setExtractedData
+     * covers \Magento\Eav\Model\Attribute\Data\AbstractData::getExtractedData
+     * covers \Magento\Eav\Model\Attribute\Data\AbstractData::setExtractedData
      *
      * @param string $index
      * @param mixed $expectedResult
@@ -86,7 +86,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\AbstractData::_getRequestValue
+     * covers \Magento\Eav\Model\Attribute\Data\AbstractData::_getRequestValue
      *
      * @param string $requestScope
      * @param string $value

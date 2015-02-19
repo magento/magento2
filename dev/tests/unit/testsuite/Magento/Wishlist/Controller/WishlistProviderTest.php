@@ -43,7 +43,7 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->request = $this->getMock(
             '\Magento\Framework\App\RequestInterface',
-            ['getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getCookie', 'getParam'],
+            ['getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getCookie', 'getParam', 'isSecure'],
             [],
             '',
             false

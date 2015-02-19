@@ -21,7 +21,7 @@ class Block extends \Magento\Framework\View\Element\AbstractBlock implements \Ma
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -37,14 +37,14 @@ class Block extends \Magento\Framework\View\Element\AbstractBlock implements \Ma
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Cms\Model\Template\FilterProvider $filterProvider,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Cms\Model\BlockFactory $blockFactory,
         array $data = []
     ) {

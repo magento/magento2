@@ -9,7 +9,7 @@ namespace Magento\Checkout\Controller\Cart;
 class EstimateUpdatePost extends \Magento\Checkout\Controller\Cart
 {
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -17,6 +17,6 @@ class EstimateUpdatePost extends \Magento\Checkout\Controller\Cart
         if (!empty($code)) {
             $this->cart->getQuote()->getShippingAddress()->setShippingMethod($code)->save();
         }
-        $this->_goBack();
+        return $this->_goBack();
     }
 }

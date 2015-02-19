@@ -346,7 +346,7 @@ class Form extends Template
         )->setValue(
             $value
         )->setImage(
-            $this->getViewFileUrl('Magento_Core::calendar.png')
+            $this->getViewFileUrl('Magento_Theme::calendar.png')
         )->setDateFormat(
             $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
         )->setClass(

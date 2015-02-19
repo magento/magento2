@@ -34,7 +34,7 @@ class Files extends \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getStorageType()
     {

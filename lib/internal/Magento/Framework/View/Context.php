@@ -454,9 +454,9 @@ class Context
      *
      * @return string|false Raw body, or false if not present
      */
-    public function getRawBody()
+    public function getContent()
     {
-        return $this->getRequest()->getRawBody();
+        return $this->getRequest()->getContent();
     }
 
     /**

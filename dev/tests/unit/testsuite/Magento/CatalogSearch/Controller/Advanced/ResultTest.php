@@ -21,8 +21,8 @@ class ResultTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $request = $this->getMock('Magento\Framework\App\Console\Request', ['getQuery'], [], '', false);
-        $request->expects($this->once())->method('getQuery')->will($this->returnValue($expectedQuery));
+        $request = $this->getMock('Magento\Framework\App\Console\Request', ['getQueryValue'], [], '', false);
+        $request->expects($this->once())->method('getQueryValue')->will($this->returnValue($expectedQuery));
 
         $catalogSearchAdvanced = $this->getMock(
             'Magento\CatalogSearch\Model\Advanced',

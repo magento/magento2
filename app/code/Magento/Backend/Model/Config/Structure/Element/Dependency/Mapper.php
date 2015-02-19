@@ -66,7 +66,7 @@ class Mapper
             if (false == $dependentField->isVisible()) {
                 $valueInStore = $this->_scopeConfig->getValue(
                     $dependentField->getPath($fieldPrefix),
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $storeCode
                 );
                 $shouldAddDependency = !$field->isValueSatisfy($valueInStore);

@@ -10,7 +10,7 @@
     <route url="/V1/modules" method="GET">
         <service class="Magento\Backend\Service\V1\ModuleServiceInterface" method="getModules"/>
         <resources>
-            <resource ref="Magento_Adminhtml::admin"/>
+            <resource ref="Magento_Backend::admin"/>
         </resources>
     </route>
 </routes>

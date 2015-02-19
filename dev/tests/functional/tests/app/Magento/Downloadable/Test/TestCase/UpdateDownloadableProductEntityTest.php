@@ -9,7 +9,7 @@ namespace Magento\Downloadable\Test\TestCase;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
+use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
@@ -43,7 +43,7 @@ class UpdateDownloadableProductEntityTest extends Injectable
     /**
      * Downloadable product fixture
      *
-     * @var DownloadableProductInjectable
+     * @var DownloadableProduct
      */
     protected $product;
 
@@ -89,7 +89,7 @@ class UpdateDownloadableProductEntityTest extends Injectable
         FixtureFactory $fixtureFactory
     ) {
         $this->product = $fixtureFactory->createByCode(
-            'downloadableProductInjectable',
+            'downloadableProduct',
             ['dataSet' => 'default']
         );
         $this->product->persist();
@@ -100,11 +100,11 @@ class UpdateDownloadableProductEntityTest extends Injectable
     /**
      * Test update downloadable product
      *
-     * @param DownloadableProductInjectable $product
+     * @param DownloadableProduct $product
      * @param Category $category
      * @return void
      */
-    public function test(DownloadableProductInjectable $product, Category $category)
+    public function test(DownloadableProduct $product, Category $category)
     {
         // Steps
         $filter = ['sku' => $this->product->getSku()];

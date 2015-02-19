@@ -5,12 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<page mca="multishipping/checkout/overview">
-    <blocks>
-        <agreementReview>
-            <class>\Magento\CheckoutAgreements\Test\Block\Multishipping\MultishippingAgreementReview</class>
-            <locator>#checkout-agreements</locator>
-            <strategy>css selector</strategy>
-        </agreementReview>
-    </blocks>
-</page>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="MultishippingCheckoutOverview" mca="multishipping/checkout/overview" module="Magento_Checkout">
+        <block name="agreementReview" class="Magento\CheckoutAgreements\Test\Block\Multishipping\MultishippingAgreementReview" locator="#checkout-agreements" strategy="css selector"/>
+    </page>
+</config>

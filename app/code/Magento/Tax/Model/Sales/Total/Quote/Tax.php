@@ -365,7 +365,7 @@ class Tax extends CommonTaxCollector
     /**
      * Get Tax label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getLabel()
     {

@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\App\Action\Plugin;
 
+use Magento\TestFramework\Helper\ObjectManager;
+
 class MassactionKeyTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -34,11 +36,20 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
         };
         $this->subjectMock = $this->getMock('Magento\Backend\App\AbstractAction', [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->plugin = new \Magento\Backend\App\Action\Plugin\MassactionKey();
+
+        $objectManager = new ObjectManager($this);
+        $this->plugin = $objectManager->getObject(
+            'Magento\Backend\App\Action\Plugin\MassactionKey',
+            [
+                'subject' => $this->subjectMock,
+                'closure' => $this->closureMock,
+                'request' => $this->requestMock,
+            ]
+        );
     }
 
     /**
-     * @covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
+     * covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
      *
      * @param $postData array|string
      * @param array $convertedData
@@ -46,17 +57,18 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
      */
     public function testAroundDispatchWhenMassactionPrepareKeyRequestExists($postData, $convertedData)
     {
-        $this->requestMock->expects(
-            $this->at(0)
-        )->method(
-            'getPost'
-        )->with(
-            'massaction_prepare_key'
-        )->will(
-            $this->returnValue('key')
-        );
-        $this->requestMock->expects($this->at(1))->method('getPost')->with('key')->will($this->returnValue($postData));
-        $this->requestMock->expects($this->once())->method('setPost')->with('key', $convertedData);
+        $this->requestMock->expects($this->at(0))
+            ->method('getPost')
+            ->with('massaction_prepare_key')
+            ->will($this->returnValue('key'));
+        $this->requestMock->expects($this->at(1))
+            ->method('getPost')
+            ->with('key')
+            ->will($this->returnValue($postData));
+        $this->requestMock->expects($this->once())
+            ->method('setPostValue')
+            ->with('key', $convertedData);
+
         $this->assertEquals(
             'Expected',
             $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
@@ -72,20 +84,17 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
+     * covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
      */
     public function testAroundDispatchWhenMassactionPrepareKeyRequestNotExists()
     {
-        $this->requestMock->expects(
-            $this->once()
-        )->method(
-            'getPost'
-        )->with(
-            'massaction_prepare_key'
-        )->will(
-            $this->returnValue(false)
-        );
-        $this->requestMock->expects($this->never())->method('setPost');
+        $this->requestMock->expects($this->once())
+            ->method('getPost')
+            ->with('massaction_prepare_key')
+            ->will($this->returnValue(false));
+        $this->requestMock->expects($this->never())
+            ->method('setPostValue');
+
         $this->assertEquals(
             'Expected',
             $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)

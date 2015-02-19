@@ -48,7 +48,7 @@ class Selector extends \Magento\Backend\Block\Template
     /**
      * Label getter
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getSelectorLabel()
     {

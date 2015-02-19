@@ -35,24 +35,8 @@ class ObjectManagerProviderTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $this->locator->expects($this->once())->method('get')->with(InitParamListener::BOOTSTRAP_PARAM)->willReturn([]);
-        $this->deploymentConfig->expects($this->once())
-            ->method('isAvailable')
-            ->will($this->returnValue(true));
         $objectManager = $this->object->get();
         $this->assertInstanceOf('Magento\Framework\ObjectManagerInterface', $objectManager);
         $this->assertSame($objectManager, $this->object->get());
-    }
-
-    /**
-     * @expectedException \Magento\Setup\Exception
-     * @expectedExceptionMessage Please, install the deployment configuration first
-     */
-    public function testGetNoDeploymentConfig()
-    {
-        $this->deploymentConfig->expects($this->once())
-            ->method('isAvailable')
-            ->will($this->returnValue(false));
-        $this->locator->expects($this->never())->method('get');
-        $this->object->get();
     }
 }

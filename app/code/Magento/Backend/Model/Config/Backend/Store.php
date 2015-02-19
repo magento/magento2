@@ -46,7 +46,7 @@ class Store extends \Magento\Framework\App\Config\Value
         $this->_mutableConfig->setValue(
             \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
             $this->getValue(),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $this->_cacheManager->clean();
     }

@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\TestCase;
 
 use Magento\Checkout\Test\Constraint\AssertAddedProductToCartSuccessMessage;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
@@ -36,10 +36,10 @@ class MoveProductFromShoppingCartToWishlistTest extends AbstractWishlistTest
     /**
      * Prepare data for test
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
-    public function __prepare(CustomerInjectable $customer)
+    public function __prepare(Customer $customer)
     {
         $customer->persist();
 
@@ -49,14 +49,14 @@ class MoveProductFromShoppingCartToWishlistTest extends AbstractWishlistTest
     /**
      * Run Move from ShoppingCard to Wishlist test
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param string $product
      * @param AssertAddedProductToCartSuccessMessage $assertAddedProductToCartSuccessMessage
      * @param CheckoutCart $checkoutCart
      * @return array
      */
     public function test(
-        CustomerInjectable $customer,
+        Customer $customer,
         $product,
         AssertAddedProductToCartSuccessMessage $assertAddedProductToCartSuccessMessage,
         CheckoutCart $checkoutCart

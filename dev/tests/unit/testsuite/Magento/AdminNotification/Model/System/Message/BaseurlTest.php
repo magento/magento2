@@ -5,6 +5,8 @@
  */
 namespace Magento\AdminNotification\Model\System\Message;
 
+use Magento\Store\Model\Store;
+
 class BaseurlTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -48,7 +50,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
         $this->_configMock = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
         $this->_urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface');
 
-        $this->_storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $configFactoryMock = $this->getMock(
             'Magento\Framework\App\Config\ValueFactory',
             ['create'],
@@ -111,13 +113,13 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
     {
         $map = [
             [
-                \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL,
+                Store::XML_PATH_UNSECURE_BASE_URL,
                 'default',
                 null,
                 \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER,
             ],
             [
-                \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL,
+                Store::XML_PATH_SECURE_BASE_URL,
                 'default',
                 null,
                 \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER

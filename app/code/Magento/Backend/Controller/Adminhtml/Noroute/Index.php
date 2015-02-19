@@ -34,7 +34,7 @@ class Index extends \Magento\Backend\App\Action
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setHeader('HTTP/1.1', '404 Not Found');
+        $resultPage->setStatusHeader(404, '1.1', 'Forbidden');
         $resultPage->setHeader('Status', '404 File not found');
         $resultPage->addHandle('adminhtml_noroute');
         return $resultPage;

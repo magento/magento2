@@ -342,7 +342,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get qty title
      *
      * @param Item $item
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getQtyTitle($item)
     {
@@ -502,7 +502,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Get including/excluding tax message
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getInclExclTaxMessage()
     {

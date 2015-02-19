@@ -6,7 +6,7 @@
 
 namespace Magento\Reports\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Reports\Test\Page\Adminhtml\CustomerAccounts;
 use Magento\Mtf\TestCase\Injectable;
@@ -64,11 +64,11 @@ class NewAccountsReportEntityTest extends Injectable
     /**
      * New Accounts Report.
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param array $customersReport
      * @return void
      */
-    public function test(CustomerInjectable $customer, array $customersReport)
+    public function test(Customer $customer, array $customersReport)
     {
         $this->markTestIncomplete('MAGETWO-26663');
         // Preconditions

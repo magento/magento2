@@ -47,7 +47,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 'google/googleshopping/' . $configPasswordKey,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             )->will($this->returnValue($password));
         $this->assertEquals($password, $this->model->getAccountPassword($storeId));

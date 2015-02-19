@@ -68,7 +68,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * Set the selected resources, which is an array of resource ids. If everything is allowed, the
-     * array will contain just the root resource id, which is "Magento_Adminhtml::all".
+     * array will contain just the root resource id, which is "Magento_Backend::all".
      *
      * @return void
      */
@@ -139,7 +139,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Return an array of selected resource ids. If everything is allowed then iterate through all
      * available resources to generate a comprehensive array of all resource ids, rather than just
-     * returning "Magento_Adminhtml::all".
+     * returning "Magento_Backend::all".
      *
      * @return string
      */

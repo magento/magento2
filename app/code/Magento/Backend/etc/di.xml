@@ -79,7 +79,7 @@
             <argument name="scopeResolver" xsi:type="object">Magento\Backend\Model\Url\ScopeResolver</argument>
             <argument name="authSession" xsi:type="object">Magento\Backend\Model\Auth\Session\Proxy</argument>
             <argument name="formKey" xsi:type="object">Magento\Framework\Data\Form\FormKey\Proxy</argument>
-            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
             <argument name="backendHelper" xsi:type="object">Magento\Backend\Helper\Data\Proxy</argument>
         </arguments>
     </type>
@@ -108,7 +108,7 @@
     </type>
     <type name="Magento\Framework\Acl\RootResource">
         <arguments>
-            <argument name="identifier" xsi:type="string">Magento_Adminhtml::all</argument>
+            <argument name="identifier" xsi:type="string">Magento_Backend::all</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
