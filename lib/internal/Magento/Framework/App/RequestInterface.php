@@ -56,4 +56,11 @@ interface RequestInterface
      * @return string|null
      */
     public function getCookie($name, $default);
+
+    /**
+     * Returns whether request was delivered over HTTPS
+     *
+     * @return bool
+     */
+    public function isSecure();
 }
