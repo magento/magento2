@@ -1337,6 +1337,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $value = new \Zend_Db_Expr('NULL');
         }
 
+        if ($value instanceof \DateTimeInterface) {
+            $value = $value->format('Y-m-d H:i:s');
+        }
+
         return parent::quoteInto($text, $value, $type, $count);
     }
 
