@@ -156,7 +156,12 @@ class Parser
             set_error_handler([$this, 'errorHandler']);
         }
 
-        $this->getDom()->loadXML($string);
+        try {
+            $this->getDom()->loadXML($string);
+        } catch(\Magento\Framework\Exception $e) {
+            restore_error_handler();
+            throw new \Magento\Framework\Exception($e->getMessage(), $e->getCode(), $e);
+        }
 
         if ($this->errorHandlerIsActive) {
             restore_error_handler();
@@ -168,10 +173,10 @@ class Parser
     /**
      * Custom XML lib error handler
      *
-     * @param $errorNo
-     * @param $errorStr
-     * @param $errorFile
-     * @param $errorLine
+     * @param int $errorNo
+     * @param string $errorStr
+     * @param string $errorFile
+     * @param int $errorLine
      * @throws \Magento\Framework\Exception
      * @return void
      */

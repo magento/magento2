@@ -32,6 +32,7 @@ class Loader
 
     /**
      * Parser
+     *
      * @var \Magento\Framework\Xml\Parser
      */
     private $parser;
@@ -67,8 +68,9 @@ class Loader
                 $this->parser->loadXML($contents);
             } catch (\Magento\Framework\Exception $e) {
                 throw new \Magento\Framework\Exception(
-                    'Invalid Document: ' . $file . PHP_EOL
-                    . ' Error: ' . $e->getMessage()
+                    'Invalid Document: ' . $file . PHP_EOL . ' Error: ' . $e->getMessage(),
+                    $e->getCode(),
+                    $e
                 );
             }
 
