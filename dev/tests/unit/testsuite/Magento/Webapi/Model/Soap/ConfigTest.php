@@ -74,9 +74,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         /**
-         * @var $cacheMock \Magento\Webapi\Model\Cache\Type
+         * @var $cacheMock \Magento\Framework\App\Cache\Type\Webapi
          */
-        $cacheMock = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type')
+        $cacheMock = $this->getMockBuilder('Magento\Framework\App\Cache\Type\Webapi')
             ->disableOriginalConstructor()
             ->getMock();
         $this->_soapConfig = new \Magento\Webapi\Model\Soap\Config(
@@ -105,7 +105,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'class' => 'Magento\Customer\Api\AccountManagementInterface',
             ],
         ];
-        $result = $this->_soapConfig->getRequestedSoapServices(['customerAccountManagementV1', 'moduleBarV2', 'moduleBazV1']);
+        $result = $this->_soapConfig->getRequestedSoapServices(
+            ['customerAccountManagementV1', 'moduleBarV2', 'moduleBazV1']
+        );
         $this->assertEquals($expectedResult, $result);
     }
 

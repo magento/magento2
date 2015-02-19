@@ -5,11 +5,11 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
+use Magento\Framework\App\Cache\Type\Webapi as WebApiCache;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Webapi\Model\Config\Converter;
-use Magento\Webapi\Model\Cache\Type as WebApiCache;
 
 /**
  * Webapi Config Model for Soap.

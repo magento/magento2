@@ -131,7 +131,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         );
         /** Set exception to Rest response to get in to the _renderMessages method. */
         $this->_responseRest->setException(
-            new \Magento\Framework\Webapi\Exception('Message.', 0, \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST)
+            new \Magento\Framework\Webapi\Exception(
+                'Message.',
+                0,
+                \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST
+            )
         );
         $this->_responseRest->sendResponse();
     }

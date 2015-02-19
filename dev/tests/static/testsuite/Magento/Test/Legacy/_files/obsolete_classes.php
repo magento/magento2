@@ -2990,4 +2990,6 @@ return [
     ['Magento\Webapi\Model\IntegrationConfig', 'Magento\Integration\Model\IntegrationConfig'],
     ['Magento\Webapi\Model\Plugin\Service\V1\Integration', 'Magento\Integration\Model\Plugin\Service\V1\Integration'],
     ['Magento\Webapi\Model\Plugin\Setup', 'Magento\Integration\Model\Plugin\Setup'],
+    ['Magento\Webapi\Model\Cache\Type', 'Magento\Framework\App\Cache\Type\Webapi'],
+
 ];

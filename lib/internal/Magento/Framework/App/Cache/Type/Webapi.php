@@ -3,13 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\App\Cache\Type;
 
 /**
  * System / Cache Management / Cache type "Web Services Configuration"
  */
-namespace Magento\Webapi\Model\Cache;
-
-class Type extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
+class Webapi extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**
      * Cache type code unique among all cache types

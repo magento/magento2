@@ -18,7 +18,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**  @var \Magento\Webapi\Model\Soap\WsdlFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_wsdlFactoryMock;
 
-    /** @var \Magento\Webapi\Model\Cache\Type|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Cache\Type\Webapi|\PHPUnit_Framework_MockObject_MockObject */
     protected $_cacheMock;
 
     /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
@@ -59,7 +59,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_wsdlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($_wsdlMock));
 
         $this->_cacheMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Cache\Type'
+            'Magento\Framework\App\Cache\Type\Webapi'
         )->disableOriginalConstructor()->getMock();
         $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
         $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));

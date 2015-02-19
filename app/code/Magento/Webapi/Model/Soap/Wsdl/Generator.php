@@ -25,7 +25,7 @@ class Generator
     protected $_wsdlFactory;
 
     /**
-     * @var \Magento\Webapi\Model\Cache\Type
+     * @var \Magento\Framework\App\Cache\Type\Webapi
      */
     protected $_cache;
 
@@ -54,14 +54,14 @@ class Generator
      *
      * @param \Magento\Webapi\Model\Soap\Config $apiConfig
      * @param WsdlFactory $wsdlFactory
-     * @param \Magento\Webapi\Model\Cache\Type $cache
+     * @param \Magento\Framework\App\Cache\Type\Webapi $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Webapi\Model\Soap\Config $apiConfig,
         WsdlFactory $wsdlFactory,
-        \Magento\Webapi\Model\Cache\Type $cache,
+        \Magento\Framework\App\Cache\Type\Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
@@ -96,7 +96,7 @@ class Generator
         }
 
         $wsdlContent = $this->_generate($services, $endPointUrl);
-        $this->_cache->save($wsdlContent, $cacheId, [\Magento\Webapi\Model\Cache\Type::CACHE_TAG]);
+        $this->_cache->save($wsdlContent, $cacheId, [\Magento\Framework\App\Cache\Type\Webapi::CACHE_TAG]);
 
         return $wsdlContent;
     }

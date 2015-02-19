@@ -34,7 +34,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
         $objectFactory = new ServiceInputProcessor\WebapiBuilderFactory($objectManager);
         /** @var \Magento\Framework\Reflection\TypeProcessor $typeProcessor */
         $typeProcessor = $objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
-        $cache = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type')
+        $cache = $this->getMockBuilder('Magento\Framework\App\Cache\Type\Webapi')
             ->disableOriginalConstructor()
             ->getMock();
         $cache->expects($this->any())->method('load')->willReturn(false);
@@ -457,7 +457,6 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 return $objectManager->getObject(
                     'Magento\Framework\Webapi\ServiceInputProcessor\ObjectWithCustomAttributes',
                     ['data' => []]
-
                 );
             default:
                 return null;

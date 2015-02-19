@@ -24,7 +24,7 @@
     <type name="Magento\Server\Reflection" shared="false" />
     <type name="Magento\Framework\Reflection\DataObjectProcessor">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Webapi\Model\Cache\Type</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Webapi</argument>
         </arguments>
     </type>
 </config>

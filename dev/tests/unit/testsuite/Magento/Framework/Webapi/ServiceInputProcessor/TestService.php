@@ -102,8 +102,8 @@ class TestService
      * @return \Magento\Framework\Webapi\ServiceInputProcessor\ObjectWithCustomAttributes
      */
     public function objectWithCustomAttributesMethod(
-        \Magento\Framework\Webapi\ServiceInputProcessor\ObjectWithCustomAttributes $param)
-    {
+        \Magento\Framework\Webapi\ServiceInputProcessor\ObjectWithCustomAttributes $param
+    ) {
         return $param;
     }
 }

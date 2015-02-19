@@ -145,7 +145,10 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
     {
         $itemArr = [['item_id' => 1, 'name' => 'testProduct1'], ['item_id' => 2, 'name' => 'testProduct2']];
         $serviceInfo = [
-            'rest' => ['resourcePath' => $this->_restResourcePath, 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET],
+            'rest' => [
+                'resourcePath' => $this->_restResourcePath,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET
+            ],
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Items'],
         ];
         $item = $this->_webApiCall($serviceInfo);
@@ -159,7 +162,10 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
     {
         $createdItemName = 'createdItemName';
         $serviceInfo = [
-            'rest' => ['resourcePath' => $this->_restResourcePath, 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST],
+            'rest' => [
+                'resourcePath' => $this->_restResourcePath,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Create'],
         ];
         $requestData = ['name' => $createdItemName];
@@ -174,7 +180,10 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
     {
         $createdItemName = 'createdItemName';
         $serviceInfo = [
-            'rest' => ['resourcePath' => $this->_restResourcePath, 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST],
+            'rest' => [
+                'resourcePath' => $this->_restResourcePath,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Create'],
         ];
         $requestData = ['name' => $createdItemName];

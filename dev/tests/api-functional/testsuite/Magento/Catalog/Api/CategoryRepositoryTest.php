@@ -195,7 +195,10 @@ class CategoryRepositoryTest extends WebapiAbstract
     protected function createCategory($category)
     {
         $serviceInfo = [
-            'rest' => ['resourcePath' => self::RESOURCE_PATH, 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST],
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => 'V1',

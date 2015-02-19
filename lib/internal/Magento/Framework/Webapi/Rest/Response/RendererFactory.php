@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Webapi\Rest\Response;
 
+use Magento\Framework\Phrase;
+
 class RendererFactory
 {
     /**
@@ -80,10 +82,10 @@ class RendererFactory
         }
         /** If server does not have renderer for any of the accepted types it SHOULD send 406 (not acceptable). */
         throw new \Magento\Framework\Webapi\Exception(
-            __(
+            new Phrase(
                 'Server cannot match any of the given Accept HTTP header media type(s) from the request: "%1" '.
                 'with media types from the config of response renderer.',
-                implode(',', $acceptTypes)
+                $acceptTypes
             ),
             0,
             \Magento\Framework\Webapi\Exception::HTTP_NOT_ACCEPTABLE
