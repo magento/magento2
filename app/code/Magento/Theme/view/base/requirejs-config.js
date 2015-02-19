@@ -46,3 +46,7 @@ var config = {
         "jquery/jquery-migrate"
     ]
 };
+
+require(['jquery'], function(){
+    jQuery.noConflict();
+});
