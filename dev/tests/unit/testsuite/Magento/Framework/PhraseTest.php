@@ -92,4 +92,9 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(true);
         $property->setValue($this->phrase, null);
     }
+
+    public function testGlobalFunction()
+    {
+        $this->assertFalse(is_object(__('Test')));
+    }
 }
