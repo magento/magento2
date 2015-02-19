@@ -228,7 +228,9 @@ class Item extends AbstractModel implements ItemInterface
         if (!isset($this->_optionsByCode[$option->getCode()])) {
             $this->_optionsByCode[$option->getCode()] = $option;
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('An item option with code %1 already exists.', $option->getCode()));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('An item option with code %1 already exists.', $option->getCode())
+            );
         }
         return $this;
     }

@@ -592,7 +592,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!($model = $this->_productTypeFactory->create($productTypeConfig['model'], ['params' => $params]))
             ) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    sprintf("Entity type model '%s' is not found", $productTypeConfig['model'])
+                    __("Entity type model '%1' is not found", $productTypeConfig['model'])
                 );
             }
             if (!$model instanceof \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType) {
@@ -1206,7 +1206,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             $tmpPath = $this->_mediaDirectory->getAbsolutePath('import');
             if (!$this->_fileUploader->setTmpDir($tmpPath)) {
-                throw new \Magento\Framework\Exception\LocalizedException(sprintf("File directory '%s' is not readable.", $tmpPath));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __("File directory '%1' is not readable.", $tmpPath)
+                );
             }
             $destinationDir = "catalog/product";
             $destinationPath = $this->_mediaDirectory->getAbsolutePath($destinationDir);
@@ -1214,7 +1216,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_mediaDirectory->create($destinationDir);
             if (!$this->_fileUploader->setDestDir($destinationPath)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    sprintf("File directory '%s' is not writable.", $destinationPath)
+                    __("File directory '%1' is not writable.", $destinationPath)
                 );
             }
         }

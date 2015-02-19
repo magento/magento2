@@ -7,7 +7,7 @@
 namespace Magento\Framework\Model\Resource\Db;
 
 use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\LocalizedException as ModelException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Abstract resource model class
@@ -214,13 +214,13 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     /**
      * Get primary key field name
      *
-     * @throws ModelException
+     * @throws LocalizedException
      * @return string
      */
     public function getIdFieldName()
     {
         if (empty($this->_idFieldName)) {
-            throw new ModelException((string)new \Magento\Framework\Phrase('Empty identifier field name'));
+            throw new LocalizedException((string)new \Magento\Framework\Phrase('Empty identifier field name'));
         }
         return $this->_idFieldName;
     }
@@ -229,13 +229,13 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      * Returns main table name - extracted from "module/table" style and
      * validated by db adapter
      *
-     * @throws ModelException
+     * @throws LocalizedException
      * @return string
      */
     public function getMainTable()
     {
         if (empty($this->_mainTable)) {
-            throw new ModelException((string)new \Magento\Framework\Phrase('Empty main table name'));
+            throw new LocalizedException((string)new \Magento\Framework\Phrase('Empty main table name'));
         }
         return $this->getTable($this->_mainTable);
     }
