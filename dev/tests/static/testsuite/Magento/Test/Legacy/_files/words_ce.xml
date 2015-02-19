@@ -36,22 +36,6 @@
             <path>dev/build/publication/extra_files/ce/CHANGELOG.md</path>
         </item>
         <item>
-            <path>app/code/Magento/User/data/user_setup/data-upgrade-1.6.1.1-1.6.1.2.php</path>
-            <word>xmlconnect</word>
-            <word>system/convert/gui</word>
-            <word>system/convert/profiles</word>
-            <word>Mage_Adminhtml::gui</word>
-            <word>Mage_Adminhtml::profiles</word>
-        </item>
-        <item>
-            <path>app/code/Magento/User/sql/user_setup/upgrade-1.6.1.2-1.6.1.3.php</path>
-            <word>xmlconnect</word>
-            <word>system/convert/gui</word>
-            <word>system/convert/profiles</word>
-            <word>Mage_Adminhtml::gui</word>
-            <word>Mage_Adminhtml::profiles</word>
-        </item>
-        <item>
             <path>dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd_ruleset.xsd</path>
             <word>dataflow</word>
         </item>
