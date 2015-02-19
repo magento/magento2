@@ -6,7 +6,7 @@
  */
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Review\Test\Repository\ReviewInjectable">
+    <storage class="Magento\Review\Test\Repository\Review">
         <dataset name="review_for_simple_product_with_rating">
             <field name="status_id" xsi:type="string">Approved</field>
             <field name="select_stores" xsi:type="array">
