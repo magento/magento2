@@ -21,7 +21,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $integrationService = $objectManager->get('Magento\Integration\Service\V1\IntegrationInterface');
 
         $params = [
-            'all_resources' => false,
+            'all_resources' => true,
             'integration_id' => 1,
             'status' => Integration::STATUS_ACTIVE,
             'name' => 'Test Integration1'
