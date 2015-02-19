@@ -36,6 +36,7 @@ module.exports = function (grunt) {
              */
             config.callback = function (err) {
                 if (err) {
+                    console.log(err);
                     done(false);
                 } else if (i === total - 1) {
                     done();

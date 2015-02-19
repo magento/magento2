@@ -204,7 +204,7 @@ class Observer
             if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $this->_session->setCustomerFormData($controller->getRequest()->getPost());
+                $this->_session->setCustomerFormData($controller->getRequest()->getPostValue());
                 $url = $this->_urlManager->getUrl('*/*/create', ['_nosecret' => true]);
                 $controller->getResponse()->setRedirect($this->redirect->error($url));
             }

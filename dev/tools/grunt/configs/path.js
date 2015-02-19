@@ -1,3 +1,8 @@
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 'use strict';
 
 /**
@@ -15,7 +20,7 @@ module.exports = {
         setup: 'setup/module/Magento/Setup/styles'
     },
     uglify: {
-        legacy: 'lib/web/legacy-build.min.js'
+        legacy: 'lib/web/legacy-build.js'
     },
     doc: 'lib/web/css/docs',
     spec: 'dev/tests/js/spec'
