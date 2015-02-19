@@ -693,7 +693,9 @@ class Storage extends \Magento\Framework\Object
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot delete root directory %1.', $path));
         }
         if (strpos($path, $root) !== 0) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Directory %1 is not under storage root path.', $path));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Directory %1 is not under storage root path.', $path)
+            );
         }
     }
 

@@ -26,7 +26,9 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         try {
             $theme = $themeFactory->create($themeId);
             if (!$theme) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('We cannot find a theme with id "%1".', $themeId));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('We cannot find a theme with id "%1".', $themeId)
+                );
             }
             $jsFileData = $serviceModel->uploadJsFile('js_files_uploader');
             $jsFile = $jsService->create();

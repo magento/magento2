@@ -32,7 +32,9 @@ class Info extends \Magento\Framework\View\Element\Template
     {
         $info = $this->getData('info');
         if (!$info instanceof \Magento\Payment\Model\Info) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot retrieve the payment info model object.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot retrieve the payment info model object.')
+            );
         }
         return $info;
     }

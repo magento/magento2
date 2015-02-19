@@ -89,7 +89,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                     $model->load($attributeSetId);
                 }
                 if (!$model->getId()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('This attribute set no longer exists.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('This attribute set no longer exists.')
+                    );
                 }
                 $data = $this->_objectManager->get('Magento\Core\Helper\Data')
                     ->jsonDecode($this->getRequest()->getPost('data'));

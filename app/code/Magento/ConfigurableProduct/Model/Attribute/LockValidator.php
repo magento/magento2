@@ -58,7 +58,9 @@ class LockValidator implements LockValidatorInterface
         }
 
         if ($adapter->fetchOne($select, $bind)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('This attribute is used in configurable products.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('This attribute is used in configurable products.')
+            );
         }
     }
 }

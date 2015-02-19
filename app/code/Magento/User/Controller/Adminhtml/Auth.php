@@ -53,7 +53,9 @@ class Auth extends \Magento\Backend\App\AbstractAction
         /** @var $user \Magento\User\Model\User */
         $user = $this->_userFactory->create()->load($userId);
         if (!$user->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify the correct account and try again.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please specify the correct account and try again.')
+            );
         }
 
         $userToken = $user->getRpToken();

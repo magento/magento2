@@ -84,7 +84,9 @@ class Save extends \Magento\Backend\App\Action
             $creditmemo = $this->creditmemoLoader->load();
             if ($creditmemo) {
                 if (!$creditmemo->isValidGrandTotal()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Credit memo\'s total must be positive.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Credit memo\'s total must be positive.')
+                    );
                 }
 
                 $comment = '';

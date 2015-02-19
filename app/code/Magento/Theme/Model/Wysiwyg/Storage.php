@@ -181,7 +181,9 @@ class Storage
     public function createFolder($name, $path)
     {
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Use only standard alphanumeric, dashes and underscores.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Use only standard alphanumeric, dashes and underscores.')
+            );
         }
         if (!$this->mediaWriteDirectory->isWritable($path)) {
             $path = $this->_helper->getStorageRoot();

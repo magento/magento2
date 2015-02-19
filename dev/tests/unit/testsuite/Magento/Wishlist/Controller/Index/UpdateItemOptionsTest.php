@@ -6,6 +6,9 @@
 
 namespace Magento\Wishlist\Controller\Index;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**

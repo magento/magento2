@@ -149,7 +149,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                     foreach ($validate as $code => $error) {
                         if ($error === true) {
                             $attribute = $category->getResource()->getAttribute($code)->getFrontend()->getLabel();
-                            throw new \Magento\Framework\Exception\LocalizedException(__('Attribute "%1" is required.', $attribute));
+                            throw new \Magento\Framework\Exception\LocalizedException(
+                                __('Attribute "%1" is required.', $attribute)
+                            );
                         } else {
                             throw new \Magento\Framework\Exception\LocalizedException($error);
                         }

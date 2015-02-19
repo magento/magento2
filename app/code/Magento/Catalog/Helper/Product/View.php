@@ -12,6 +12,7 @@ use Magento\Framework\View\Result\Page as ResultPage;
 
 /**
  * Catalog category helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View extends \Magento\Framework\App\Helper\AbstractHelper
 {

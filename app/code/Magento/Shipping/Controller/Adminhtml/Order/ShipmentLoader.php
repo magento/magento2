@@ -139,7 +139,9 @@ class ShipmentLoader extends Object
             if ($this->getTracking()) {
                 foreach ((array)$this->getTracking() as $data) {
                     if (empty($data['number'])) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a tracking number.'));
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('Please enter a tracking number.')
+                        );
                     }
                     $track = $this->trackFactory->create()->addData($data);
                     $shipment->addTrack($track);

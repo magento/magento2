@@ -55,7 +55,9 @@ class AddComment extends \Magento\Backend\App\Action
             $this->getRequest()->setParam('shipment_id', $this->getRequest()->getParam('id'));
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
-                throw new \Magento\Framework\Exception\LocalizedException(__("The comment text field cannot be empty."));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __("The comment text field cannot be empty.")
+                );
             }
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));

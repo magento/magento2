@@ -809,7 +809,9 @@ class Setup extends \Magento\Framework\Module\DataSetup
 
                 // Default value
                 if (!isset($values[0])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Default option value is not defined'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Default option value is not defined')
+                    );
                 }
                 $condition = ['option_id =?' => $intOptionId];
                 $this->_connection->delete($optionValueTable, $condition);

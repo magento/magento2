@@ -48,7 +48,9 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         $length = $this->string->strlen($password);
         if ($length > 0) {
             if ($length < self::MIN_PASSWORD_LENGTH) {
-                throw new LocalizedException(__('The password must have at least %1 characters.', self::MIN_PASSWORD_LENGTH));
+                throw new LocalizedException(
+                    __('The password must have at least %1 characters.', self::MIN_PASSWORD_LENGTH)
+                );
             }
 
             if ($this->string->substr(

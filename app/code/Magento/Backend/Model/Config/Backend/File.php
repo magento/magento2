@@ -163,7 +163,9 @@ class File extends \Magento\Framework\App\Config\Value
         /* @var $fieldConfig \Magento\Framework\Simplexml\Element */
 
         if (!array_key_exists('upload_dir', $fieldConfig)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The base directory to upload file is not specified.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The base directory to upload file is not specified.')
+            );
         }
 
         if (is_array($fieldConfig['upload_dir'])) {

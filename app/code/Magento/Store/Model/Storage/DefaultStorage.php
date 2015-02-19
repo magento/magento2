@@ -52,6 +52,7 @@ class DefaultStorage implements \Magento\Store\Model\StoreManagerInterface
      *
      * @param bool $value
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setIsSingleStoreModeAllowed($value)
     {
@@ -91,6 +92,7 @@ class DefaultStorage implements \Magento\Store\Model\StoreManagerInterface
      * @param bool $withDefault
      * @param bool $codeKey
      * @return \Magento\Store\Model\Store[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getStores($withDefault = false, $codeKey = false)
     {
@@ -188,6 +190,7 @@ class DefaultStorage implements \Magento\Store\Model\StoreManagerInterface
      *
      * @param null|bool|int|string|\Magento\Store\Model\Website $websiteId
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function clearWebsiteCache($websiteId = null)
     {
@@ -198,6 +201,7 @@ class DefaultStorage implements \Magento\Store\Model\StoreManagerInterface
      *
      * @param string $store
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCurrentStore($store)
     {

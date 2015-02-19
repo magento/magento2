@@ -331,7 +331,9 @@ class Service extends \Magento\Framework\Object
         // check whether is authenticated before placing order
         if ($this->getIsPlaceOrder()) {
             if ($validationState->getChecksum() != $newChecksum) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Payment information error. Please start over.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Payment information error. Please start over.')
+                );
             }
             if ($validationState->isAuthenticateSuccessful()) {
                 return;
@@ -347,7 +349,9 @@ class Service extends \Magento\Framework\Object
             if ($validationState->isLookupSuccessful()) {
                 return;
             }
-            throw new \Magento\Framework\Exception\LocalizedException(__('This card has failed validation and cannot be used.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('This card has failed validation and cannot be used.')
+            );
         }
     }
 

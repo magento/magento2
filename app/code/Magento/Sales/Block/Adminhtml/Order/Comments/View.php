@@ -42,7 +42,9 @@ class View extends \Magento\Backend\Block\Template
     protected function _beforeToHtml()
     {
         if (!$this->getParentBlock()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the parent block for this block.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please correct the parent block for this block.')
+            );
         }
         $this->setEntity($this->getParentBlock()->getSource());
         parent::_beforeToHtml();

@@ -100,11 +100,17 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } elseif (!$isValid && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
             $this->setIsValid(false);
             if (!$dateValid) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Please specify date required option(s).'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Please specify date required option(s).')
+                );
             } elseif (!$timeValid) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Please specify time required option(s).'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Please specify time required option(s).')
+                );
             } else {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Please specify the product\'s required option(s).'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Please specify the product\'s required option(s).')
+                );
             }
         } else {
             $this->setUserValue(null);

@@ -101,7 +101,9 @@ class ValidatorInfo extends Validator
                 throw new \Magento\Framework\Exception\LocalizedException(implode("\n", $errors));
             }
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify the product\'s required option(s).'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please specify the product\'s required option(s).')
+            );
         }
         return $result;
     }

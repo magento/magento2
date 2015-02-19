@@ -116,7 +116,9 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
         $values = array_unique($adapter->fetchCol($adapter->select()->from($this->getMainTable(), [$code])));
 
         if (count($values) != 1) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Error in data structure: %1 values are mixed', $code));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Error in data structure: %1 values are mixed', $code)
+            );
         }
         return $values[0];
     }

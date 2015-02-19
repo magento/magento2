@@ -231,7 +231,9 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
     public function setFile(&$content)
     {
         if (!$this->hasData('time') || !$this->hasData('type') || !$this->hasData('path')) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the order of creation for a new backup.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please correct the order of creation for a new backup.')
+            );
         }
 
         $this->varDirectory->writeFile($this->_getFilePath(), $content);

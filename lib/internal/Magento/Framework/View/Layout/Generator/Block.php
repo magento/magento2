@@ -200,7 +200,9 @@ class Block implements Layout\GeneratorInterface
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid block type: %1', $block));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Invalid block type: %1', $block)
+            );
         }
         return $block;
     }

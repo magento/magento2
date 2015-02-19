@@ -88,6 +88,7 @@ class View extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

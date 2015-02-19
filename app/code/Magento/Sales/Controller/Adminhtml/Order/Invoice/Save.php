@@ -14,6 +14,9 @@ use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**

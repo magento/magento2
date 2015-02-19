@@ -61,7 +61,9 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
         if ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
             && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId)
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('This email address is already assigned to another user.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('This email address is already assigned to another user.')
+            );
         }
     }
 

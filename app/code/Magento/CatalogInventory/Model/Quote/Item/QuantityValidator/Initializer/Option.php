@@ -59,7 +59,9 @@ class Option
             $quoteItem->getStore()->getWebsiteId()
         );
         if (!$stockItem->getItemId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The stock item for Product in option is not valid.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The stock item for Product in option is not valid.')
+            );
         }
         /**
          * define that stock item is child for composite product

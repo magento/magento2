@@ -340,7 +340,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
         if (!$this->_productTypeModels) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('There are no product types available for export'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('There are no product types available for export')
+            );
         }
         $this->_disabledAttrs = array_unique($this->_disabledAttrs);
 

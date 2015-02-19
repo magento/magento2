@@ -54,7 +54,9 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if ($this->getAttribute()->getIsUnique()) {
             if (!$this->getAttribute()->getEntity()->checkAttributeUniqueValue($this->getAttribute(), $object)) {
                 $label = $this->getAttribute()->getFrontend()->getLabel();
-                throw new \Magento\Framework\Exception\LocalizedException(__('The value of attribute "%1" must be unique.', $label));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The value of attribute "%1" must be unique.', $label)
+                );
             }
         }
 

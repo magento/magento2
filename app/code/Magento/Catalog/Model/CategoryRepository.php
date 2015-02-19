@@ -170,7 +170,9 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             foreach ($validate as $code => $error) {
                 if ($error === true) {
                     $attribute = $this->categoryResource->getAttribute($code)->getFrontend()->getLabel();
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Attribute "%1" is required.', $attribute));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Attribute "%1" is required.', $attribute)
+                    );
                 } else {
                     throw new \Magento\Framework\Exception\LocalizedException($error);
                 }

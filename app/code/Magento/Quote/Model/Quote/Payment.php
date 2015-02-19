@@ -165,7 +165,9 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
 
         $methodSpecification = $this->methodSpecificationFactory->create($data->getChecks());
         if (!$method->isAvailable($quote) || !$methodSpecification->isApplicable($method, $quote)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The requested Payment Method is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The requested Payment Method is not available.')
+            );
         }
 
         $method->assignData($data);

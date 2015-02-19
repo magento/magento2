@@ -99,7 +99,9 @@ class Info extends AbstractExtensibleModel
     {
         if (!$this->hasMethodInstance()) {
             if (!$this->getMethod()) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The payment method you requested is not available.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The payment method you requested is not available.')
+                );
             }
 
             try {

@@ -21,7 +21,9 @@ class Form extends \Magento\Framework\View\Element\Template
         $method = $this->getData('method');
 
         if (!$method instanceof \Magento\Payment\Model\MethodInterface) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot retrieve the payment method model object.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot retrieve the payment method model object.')
+            );
         }
         return $method;
     }

@@ -601,7 +601,9 @@ abstract class AbstractType
                     $customOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
                     if (!$customOption || strlen($customOption->getValue()) == 0) {
                         $product->setSkipCheckRequiredOption(true);
-                        throw new \Magento\Framework\Exception\LocalizedException(__('The product has required options.'));
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('The product has required options.')
+                        );
                     }
                 }
             }

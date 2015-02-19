@@ -94,6 +94,7 @@ class ValidatorFile extends Validator
      * @throws \Magento\Framework\Validator\ValidatorException
      * @throws \Magento\Catalog\Model\Product\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function validate($processingParams, $option)
     {

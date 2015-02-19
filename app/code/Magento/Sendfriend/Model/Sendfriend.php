@@ -377,7 +377,9 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     {
         $sender = $this->_getData('_sender');
         if (!$sender instanceof \Magento\Framework\Object) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please define the correct Sender information.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please define the correct Sender information.')
+            );
         }
         return $sender;
     }

@@ -45,7 +45,9 @@ class Factory
     {
         $taxClassType = $taxClass->getClassType();
         if (!array_key_exists($taxClassType, $this->_types)) {
-            throw new \Magento\Framework\Exception\LocalizedException(sprintf('Invalid type of tax class "%s"', $taxClassType));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                sprintf('Invalid type of tax class "%s"', $taxClassType)
+            );
         }
         return $this->_objectManager->create(
             $this->_types[$taxClassType],
