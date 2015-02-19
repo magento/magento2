@@ -96,7 +96,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'wsdlFactory' => $this->_wsdlFactoryMock,
                 'cache' => $this->_cacheMock,
                 'typeProcessor' => $this->_typeProcessor,
-                'storeManagerMock' => $this->storeManagerMock
+                'storeManagerMock' => $this->storeManagerMock,
+                'customAttributeMap' => new \Magento\Framework\Api\CustomAttributeMap()
             ]
         );
 
@@ -190,6 +191,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 $this->_cacheMock,
                 $this->_typeProcessor,
                 $this->storeManagerMock,
+                new \Magento\Framework\Api\CustomAttributeMap()
             ]
         )->getMock();
 
