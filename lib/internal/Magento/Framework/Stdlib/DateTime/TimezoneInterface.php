@@ -27,10 +27,10 @@ interface TimezoneInterface
     /**
      * Retrieve ISO date format
      *
-     * @param   string $type
+     * @param   int $type
      * @return  string
      */
-    public function getDateFormat($type = null);
+    public function getDateFormat($type = \IntlDateFormatter::SHORT);
 
     /**
      * Retrieve short date format with 4-digit year
@@ -143,7 +143,7 @@ interface TimezoneInterface
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
 
     /**
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
      * @param null $locale
@@ -151,7 +151,7 @@ interface TimezoneInterface
      * @return mixed
      */
     public function formatDateTime(
-        \DateTime $date,
+        \DateTimeInterface $date,
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,

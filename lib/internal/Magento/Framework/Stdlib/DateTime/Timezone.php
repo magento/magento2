@@ -96,9 +96,13 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function getDateFormat($type = null)
+    public function getDateFormat($type = \IntlDateFormatter::SHORT)
     {
-        return $this->_getTranslation($type, 'date');
+        return (new \IntlDateFormatter(
+            $this->_localeResolver->getLocaleCode(),
+            $type,
+            $type
+        ))->getPattern();
     }
 
     /**
@@ -109,7 +113,7 @@ class Timezone implements TimezoneInterface
         return preg_replace(
             '/(?<!y)yy(?!y)/',
             'yyyy',
-            $this->_getTranslation(\IntlDateFormatter::SHORT, 'date')
+            $this->getDateFormat()
         );
     }
 
@@ -259,7 +263,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * @param \DateTime $date
+     * @param \DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
      * @param null $locale
@@ -267,7 +271,7 @@ class Timezone implements TimezoneInterface
      * @return mixed
      */
     public function formatDateTime(
-        \DateTime $date,
+        \DateTimeInterface $date,
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,
