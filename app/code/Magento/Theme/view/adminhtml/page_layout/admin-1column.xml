@@ -22,7 +22,7 @@
                 <container name="page.formkey" as="page.formkey"/>
                 <container name="page.js.translate" as="page.js.translate"/>
 
-                <container name="page.content" as="page_content" htmlTag="section" htmlId="anchor-content" htmlClass="page-content">
+                <container name="page.content" as="page_content" htmlTag="main" htmlId="anchor-content" htmlClass="page-content">
                     <container name="main.top" as="main-top" label="main-top"/>
                     <container name="messages.wrapper" as="messages.wrapper" htmlTag="div" htmlId="messages" htmlClass="messages">
                         <container name="page.messages" as="page.messages"/>
@@ -33,8 +33,8 @@
                     </container>
                 </container>
                 <container name="js" as="js" label="JavaScript"/>
-                <container name="page.footer.wrapper" as="page_footer_wrapper" after="page.content" htmlTag="div" htmlClass="page-footer-wrapper">
-                    <container name="footer" htmlTag="footer" htmlClass="page-footer"/>
+                <container name="page.footer.wrapper" as="page_footer_wrapper" after="page.content" htmlTag="footer" htmlClass="page-footer">
+                    <container name="footer" htmlTag="div" htmlClass="page-footer-content row" />
                 </container>
             </container>
             <container name="before.body.end" as="before_body_end" label="Before Body End" after="-"/>

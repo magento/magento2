@@ -18,6 +18,7 @@
 //  ---------------------------------------------
 
 .form-select-label {
+    background-color: @form-el__background-color;
     border: 1px solid @form-el__border-color;
     border-radius: @form-el__border-radius;
     color: @form-el__color;
@@ -44,7 +45,7 @@
         right: 0;
         top: 0;
         width: @select-check__size;
-        z-index: -2;
+        z-index: 1;
         .ie9 & {
             display: none;
         }
@@ -61,7 +62,7 @@
         right: @select-check__size / 2;
         top: 50%;
         width: 0;
-        z-index: -1;
+        z-index: 2;
         .ie9 & {
             display: none;
         }
@@ -74,7 +75,9 @@
         display: block;
         margin: 0;
         padding: @form-el__padding-top ~'calc(@{select-check__size} + 10%)' @form-el__padding-bottom @form-el__padding-side;
+        position: relative;
         width: 110%;
+        z-index: 3;
         .ie9 & {
             padding-right: @form-el__padding-side;
             width: 100%;

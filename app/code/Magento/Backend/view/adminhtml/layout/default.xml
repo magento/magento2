@@ -58,9 +58,10 @@
         </referenceContainer>
         <referenceContainer name="footer">
             <block class="Magento\Backend\Block\Page\Locale" name="locale.switcher" template="Magento_Backend::page/locale.phtml"/>
-            <container name="legal" htmlTag="div" htmlClass="footer-legal">
-                <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
-                <block class="Magento\Backend\Block\Page\Footer" name="version" as="version">
+            <container name="legal" htmlTag="div" htmlClass="footer-legal col-m-6 col-m-offset-1">
+                <block class="Magento\Backend\Block\Page\Footer" name="version" as="version" />
+                <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright" />
+                <block class="Magento\Framework\View\Element\Template" name="report" as="report" template="Magento_Backend::page/report.phtml">
                     <arguments>
                         <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
                     </arguments>
