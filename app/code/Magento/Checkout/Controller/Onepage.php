@@ -169,7 +169,7 @@ class Onepage extends Action
     protected function _ajaxRedirectResponse()
     {
         $resultRaw = $this->resultRawFactory->create();
-        $resultRaw->setHeader('HTTP/1.1', '403 Session Expired')
+        $resultRaw->setStatusHeader(403, '1.1', 'Session Expired')
             ->setHeader('Login-Required', 'true');
         return $resultRaw;
     }

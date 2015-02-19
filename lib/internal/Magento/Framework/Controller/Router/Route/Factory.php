@@ -5,19 +5,22 @@
  */
 namespace Magento\Framework\Controller\Router\Route;
 
+use Magento\Framework\App\RouterInterface;
+use Magento\Framework\ObjectManagerInterface as ObjectManager;
+
 class Factory
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManager
      */
-    protected $_objectManager;
+    protected $objectManager;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManager $objectManager)
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -25,20 +28,14 @@ class Factory
      *
      * @param string $routeClass
      * @param string $route Map used to match with later submitted URL path
-     * @param array $defaults Defaults for map variables with keys as variable names
-     * @param array $reqs Regular expression requirements for variables (keys as variable names)
-     * @param mixed $locale
-     * @return \Zend_Controller_Router_Route_Interface
+     * @return RouterInterface
      * @throws \LogicException If specified route class does not implement proper interface.
      */
-    public function createRoute($routeClass, $route, $defaults = [], $reqs = [], $locale = null)
+    public function createRoute($routeClass, $route)
     {
-        $route = $this->_objectManager->create(
-            $routeClass,
-            ['route' => $route, 'defaults' => $defaults, 'regs' => $reqs, 'locale' => $locale]
-        );
-        if (!$route instanceof \Zend_Controller_Router_Route_Interface) {
-            throw new \LogicException('Route must implement "Zend_Controller_Router_Route_Interface".');
+        $route = $this->objectManager->create($routeClass, ['route' => $route]);
+        if (!$route instanceof RouterInterface) {
+            throw new \LogicException('Route must implement "Magento\Framework\App\RouterInterface".');
         }
         return $route;
     }
