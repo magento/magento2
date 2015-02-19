@@ -9,6 +9,11 @@ namespace Magento\Store\Model;
 interface StoreManagerInterface
 {
     /**
+     * Store cache context
+     */
+    const CONTEXT_STORE = 'store';
+
+    /**
      * Allow or disallow single store mode
      *
      * @param bool $value

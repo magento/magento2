@@ -8,6 +8,7 @@
 
 namespace Magento\Store\App\Action\Plugin;
 use Magento\Framework\App\Http\Context;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class ContextPluginTest
@@ -133,7 +134,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->will($this->returnValueMap([
                 [Context::CONTEXT_CURRENCY, 'UAH', 'UAH', $this->httpContextMock],
-                [Context::CONTEXT_STORE, 'default', 'default', $this->httpContextMock],
+                [StoreManagerInterface::CONTEXT_STORE, 'default', 'default', $this->httpContextMock],
             ]));
         $this->assertEquals(
             'ExpectedValue',

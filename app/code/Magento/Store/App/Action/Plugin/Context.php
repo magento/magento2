@@ -7,6 +7,7 @@
 namespace Magento\Store\App\Action\Plugin;
 
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class ContextPlugin
@@ -71,7 +72,7 @@ class Context
         );
 
         $this->httpContext->setValue(
-            HttpContext::CONTEXT_STORE,
+            StoreManagerInterface::CONTEXT_STORE,
             $this->httpRequest->getParam(
                 '___store',
                 $defaultStore->getStoreCodeFromCookie()
