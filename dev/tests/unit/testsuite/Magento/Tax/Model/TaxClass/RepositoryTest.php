@@ -266,7 +266,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($originTaxClass);
 
         $this->taxClassResourceMock->expects($this->once())->method('save')->with($taxClass)
-            ->willThrowException(new LocalizedException(\Magento\Tax\Model\Resource\TaxClass::UNIQUE_TAX_CLASS_MSG));
+            ->willThrowException(new LocalizedException(__('Class name and class type')));
         $this->model->save($taxClass);
     }
 
