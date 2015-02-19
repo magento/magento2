@@ -72,7 +72,7 @@ class BuiltinPlugin
         }
 
         if ($this->state->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
-            $cacheControl = $response->getHeader('Cache-Control')['value'];
+            $cacheControl = $response->getHeader('Cache-Control')->getFieldValue();
             $response->setHeader('X-Magento-Cache-Control', $cacheControl);
             $response->setHeader('X-Magento-Cache-Debug', 'MISS', true);
         }
