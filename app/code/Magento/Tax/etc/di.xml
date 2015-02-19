@@ -15,13 +15,6 @@
             <argument name="taxConfig" xsi:type="object">Magento\Tax\Model\Config\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="tax_setup" xsi:type="string">Magento\Tax\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Tax\Model\Resource\Calculation">
         <arguments>
             <argument name="taxData" xsi:type="object">Magento\Tax\Helper\Data\Proxy</argument>

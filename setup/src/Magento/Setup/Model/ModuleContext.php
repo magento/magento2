@@ -36,4 +36,15 @@ class ModuleContext implements ModuleContextInterface
     {
         return $this->version;
     }
+
+    /**
+     * Sets version of the module
+     *
+     * @param string $version
+     * @return void
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+    }
 }

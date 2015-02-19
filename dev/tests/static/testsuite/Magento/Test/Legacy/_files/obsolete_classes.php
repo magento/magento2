@@ -2935,7 +2935,8 @@ return [
     ['Magento\Integration\Model\Resource\Setup', 'Magento\Integration\Model\Manager::processIntegrationConfig()'],
     ['Magento\Framework\Module\ResourceResolver'],
     ['Magento\Framework\Module\ResourceResolverInterface'],
-    ['Magento\Framework\Setup\ModuleSchemaResourceInterface'],
     ['Magento\Setup\Module\SetupModule'],
     ['Magento\Setup\Module\Setup\FileResolver'],
+    ['Magento\Framework\Module\Updater'],
+    ['Magento\Setup\Module\SetupFactory'],
 ];

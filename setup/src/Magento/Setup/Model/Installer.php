@@ -24,11 +24,12 @@ use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
 use Magento\Setup\Module\ConnectionFactory;
-use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Module\Setup;
 use Magento\Store\Model\Store;
-use Magento\Setup\Module\ModuleInstallerUpgraderFactory;
-
+use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -65,6 +66,15 @@ class Installer
     const PROGRESS_LOG_REGEX = '/\[Progress: (\d+) \/ (\d+)\]/s';
     /**#@- */
 
+    /**#@+
+     * Instance types for schema and data handler
+     */
+    const SCHEMA_INSTALL = 'Magento\Framework\Setup\InstallSchemaInterface';
+    const SCHEMA_UPGRADE = 'Magento\Framework\Setup\UpgradeSchemaInterface';
+    const DATA_INSTALL = 'Magento\Framework\Setup\InstallDataInterface';
+    const DATA_UPGRADE = 'Magento\Framework\Setup\UpgradeDataInterface';
+    /**#@- */
+
     const INFO_MESSAGE = 'message';
 
     /**
@@ -85,13 +95,6 @@ class Installer
      * @var Writer
      */
     private $deploymentConfigWriter;
-
-    /**
-     * Resource setup factory
-     *
-     * @var Setup;
-     */
-    private $setup;
 
     /**
      * Module list
@@ -198,15 +201,9 @@ class Installer
     private $objectManagerFactory;
 
     /**
-     * @var \Magento\Framework\Module\Resource
+     * @var Resource
      */
     private $resource;
-
-    /**
-     *
-     * @var ModuleInstallerUpgraderFactory
-     */
-    private $moduleInstallerUpgraderFactory;
 
     /**
      * Constructor
@@ -214,7 +211,6 @@ class Installer
      * @param FilePermissions $filePermissions
      * @param Writer $deploymentConfigWriter
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
-     * @param SetupFactory $setupFactory
      * @param ModuleListInterface $moduleList
      * @param ModuleLoader $moduleLoader
      * @param DirectoryList $directoryList
@@ -227,13 +223,11 @@ class Installer
      * @param SampleData $sampleData
      * @param ObjectManagerFactory $objectManagerFactory
      * @param \Magento\Framework\App\Resource $resource
-     * @param ModuleInstallerUpgraderFactory $moduleInstallerUpgraderFactory
      */
     public function __construct(
         FilePermissions $filePermissions,
         Writer $deploymentConfigWriter,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
-        SetupFactory $setupFactory,
         ModuleListInterface $moduleList,
         ModuleLoader $moduleLoader,
         DirectoryList $directoryList,
@@ -245,12 +239,10 @@ class Installer
         Filesystem $filesystem,
         SampleData $sampleData,
         ObjectManagerFactory $objectManagerFactory,
-        \Magento\Framework\App\Resource $resource,
-        ModuleInstallerUpgraderFactory $moduleInstallerUpgraderFactory
+        \Magento\Framework\App\Resource $resource
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
-        $this->setup = $setupFactory->createSetup($resource);
         $this->moduleList = $moduleList;
         $this->moduleLoader = $moduleLoader;
         $this->directoryList = $directoryList;
@@ -265,8 +257,7 @@ class Installer
         $this->installInfo[self::INFO_MESSAGE] = array();
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerFactory = $objectManagerFactory;
-        $this->resource = new \Magento\Framework\Module\Resource($resource);
-        $this->moduleInstallerUpgraderFactory = $moduleInstallerUpgraderFactory;
+        $this->resource = $resource;
     }
 
     /**
@@ -303,7 +294,7 @@ class Installer
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
 
         $estimatedModules = $this->createModulesConfig($request);
-        $total = count($script) + count(array_filter($estimatedModules->getData()));
+        $total = count($script) + 3 * count(array_filter($estimatedModules->getData()));
         $this->progress = new Installer\Progress($total, 0);
 
         $this->log->log('Starting Magento installation:');
@@ -561,17 +552,18 @@ class Installer
     /**
      * Set up setup_module table to register modules' versions, skip this process if it already exists
      *
+     * @param \Magento\Setup\Module $setup
      * @return void
      */
-    private function setupModuleRegistry()
+    private function setupModuleRegistry($setup)
     {
-        $connection = $this->setup->getConnection();
+        $connection = $setup->getConnection();
 
-        if (!$connection->isTableExists($this->setup->getTable('setup_module'))) {
+        if (!$connection->isTableExists($setup->getTable('setup_module'))) {
             /**
              * Create table 'setup_module'
              */
-            $table = $connection->newTable($this->setup->getTable('setup_module'))
+            $table = $connection->newTable($setup->getTable('setup_module'))
                 ->addColumn(
                     'module',
                     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -602,35 +594,43 @@ class Installer
      */
     public function installSchema()
     {
+        $setup = $this->getObjectManager()->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
+        $resource = new \Magento\Framework\Module\Resource($this->resource);
+
         $this->assertDeploymentConfigExists();
         $this->assertDbAccessible();
-        $this->setupModuleRegistry();
+        $this->setupModuleRegistry($setup);
 
         $moduleNames = $this->moduleList->getNames();
+        $moduleContextList = $this->generateListOfModuleContext($resource, 'schema-version');
 
         $this->log->log('Schema creation/updates:');
         foreach ($moduleNames as $moduleName) {
             $this->log->log("Module '{$moduleName}':");
-            $dbVer = $this->resource->getDbVersion($moduleName);
-            $moduleConfig = $this->moduleList->getOne($moduleName);
-            $configVer = $moduleConfig['setup_version'];
-            // Module is installed
-            if ($dbVer !== false) {
-                if (version_compare($configVer, $dbVer, '>')) {
-                    $moduleContext = new ModuleContext($dbVer);
-                    $moduleUpgrader = $this->moduleInstallerUpgraderFactory->createSchemaUpgrader($moduleName);
-                    if ($moduleUpgrader) {
-                        $moduleUpgrader->upgrade($this->setup, $moduleContext);
-                        $this->resource->setDbVersion($moduleName, $configVer);
+            $configVer = $this->getConfigVersion($moduleName);
+            $moduleContext = $moduleContextList[$moduleName];
+            $curVer = $moduleContext->getVersion();
+            // Schema is installed
+            if ($curVer !== '') {
+                $status = version_compare($configVer, $curVer);
+                if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
+                    $schemaUpgrader = $this->getSchemaDataHandler($moduleName, 'schema-upgrade');
+                    if ($schemaUpgrader) {
+                        $schemaUpgrader->upgrade($setup, $moduleContext);
                     }
+                    $resource->setDbVersion($moduleName, $configVer);
                 }
             } elseif ($configVer) {
-                $moduleContext = new ModuleContext('');
-                $moduleInstaller = $this->moduleInstallerUpgraderFactory->createSchemaInstaller($moduleName);
-                if ($moduleInstaller) {
-                    $moduleInstaller->install($this->setup, $moduleContext);
+                $schemaInstaller =  $this->getSchemaDataHandler($moduleName, 'schema-install');
+                if ($schemaInstaller) {
+                    $schemaInstaller->install($setup, $moduleContext);
                 }
-                $this->resource->setDbVersion($moduleName, $configVer);
+                $moduleContext->setVersion($configVer);
+                $schemaUpgrader = $this->getSchemaDataHandler($moduleName, 'schema-upgrade');
+                if ($schemaUpgrader) {
+                    $schemaUpgrader->upgrade($setup, $moduleContext);
+                }
+                $resource->setDbVersion($moduleName, $configVer);
             }
             $this->logProgress();
         }
@@ -638,12 +638,12 @@ class Installer
         $this->log->log('Schema post-updates:');
         foreach ($moduleNames as $moduleName) {
             $this->log->log("Module '{$moduleName}':");
-            $dbVer = $this->resource->getDbVersion($moduleName);
-            $moduleContext = new ModuleContext($dbVer);
-            $modulePostUpdater = $this->moduleInstallerUpgraderFactory->createRecurringUpgrader($moduleName);
+            $moduleContext = $moduleContextList[$moduleName];
+            $modulePostUpdater = $this->getSchemaDataHandler($moduleName, 'schema-recurring');
             if ($modulePostUpdater) {
-                $modulePostUpdater->install($this->setup, $moduleContext);
+                $modulePostUpdater->install($setup, $moduleContext);
             }
+            $this->logProgress();
         }
     }
 
@@ -659,9 +659,45 @@ class Installer
         $this->assertDeploymentConfigExists();
         $this->assertDbAccessible();
 
-        /** @var \Magento\Framework\Module\Updater $updater */
-        $updater = $this->getObjectManager()->create('Magento\Framework\Module\Updater');
-        $updater->updateData($this->resource, $this->moduleInstallerUpgraderFactory);
+        $resource = new \Magento\Framework\Module\Resource($this->resource);
+        $setup = $this->getObjectManager()->create('Magento\Setup\Module\DataSetup');
+        $dbVersionInfo = new \Magento\Framework\Module\DbVersionInfo($this->moduleList, $resource);
+
+        $moduleNames = $this->moduleList->getNames();
+        $moduleContextList = $this->generateListOfModuleContext($resource, 'data-version');
+
+        $this->log->log('Data install/update:');
+        foreach ($moduleNames as $moduleName) {
+            if (!$dbVersionInfo->isDataUpToDate($moduleName)) {
+                $this->log->log("Module '{$moduleName}':");
+                $configVer = $this->getConfigVersion($moduleName);
+                $moduleContext = $moduleContextList[$moduleName];
+                $curVer = $moduleContext->getVersion();
+                // Data is installed
+                if ($curVer !== '') {
+                    $status = version_compare($configVer, $curVer);
+                    if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
+                        $dataUpgrader = $this->getSchemaDataHandler($moduleName, 'data-upgrade');
+                        if ($dataUpgrader) {
+                            $dataUpgrader->upgrade($setup, $moduleContext);
+                        }
+                        $resource->setDataVersion($moduleName, $configVer);
+                    }
+                } elseif ($configVer) {
+                    $dataInstaller =  $this->getSchemaDataHandler($moduleName, 'data-install');
+                    if ($dataInstaller) {
+                        $dataInstaller->install($setup, $moduleContext);
+                    }
+                    $moduleContext->setVersion($configVer);
+                    $dataUpgrader = $this->getSchemaDataHandler($moduleName, 'data-upgrade');
+                    if ($dataUpgrader) {
+                        $dataUpgrader->upgrade($setup, $moduleContext);
+                    }
+                    $resource->setDataVersion($moduleName, $configVer);
+                }
+                $this->logProgress();
+            }
+        }
     }
 
     /**
@@ -737,7 +773,8 @@ class Installer
     public function installAdminUser($data)
     {
         $this->assertDeploymentConfigExists();
-        $adminAccount = $this->adminAccountFactory->create($this->setup, (array)$data);
+        $setup = $this->getObjectManager()->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
+        $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
         $adminAccount->save();
     }
 
@@ -970,5 +1007,118 @@ class Installer
     {
         $userName = isset($request[AdminAccount::KEY_USERNAME]) ? $request[AdminAccount::KEY_USERNAME] : '';
         $this->sampleData->install($this->getObjectManager(), $this->log, $userName);
+    }
+
+    /**
+     * Get handler for schema or data install/upgrade/backup/uninstall etc.
+     *
+     * @param string $moduleName
+     * @param string $type
+     * @return InstallSchemaInterface | UpgradeSchemaInterface | InstallDataInterface | UpgradeDataInterface | null
+     * @throws \Magento\Setup\Exception
+     */
+    private function getSchemaDataHandler($moduleName, $type)
+    {
+        $className = str_replace('_', '\\', $moduleName) . '\Setup';;
+        switch ($type) {
+            case 'schema-install':
+                $className .= '\InstallSchema';
+                if (class_exists($className)) {
+                    if (false == is_subclass_of($className, self::SCHEMA_INSTALL)
+                        && $className !== self::SCHEMA_INSTALL) {
+                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_INSTALL);
+                    } else {
+                        return $this->getObjectManager()->create($className);
+                    }
+                }
+                break;
+            case 'schema-upgrade':
+                $className .= '\UpgradeSchema';
+                if (class_exists($className)) {
+                    if (false == is_subclass_of($className, self::SCHEMA_UPGRADE)
+                        && $className !== self::SCHEMA_UPGRADE
+                    ) {
+                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_UPGRADE);
+                    } else {
+                        return $this->getObjectManager()->create($className);
+                    }
+                }
+                break;
+            case 'schema-recurring':
+                $className .= '\Recurring';
+                if (class_exists($className)) {
+                    if (false == is_subclass_of($className, self::SCHEMA_INSTALL)
+                        && $className !== self::SCHEMA_INSTALL) {
+                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_INSTALL);
+                    } else {
+                        return $this->getObjectManager()->create($className);
+                    }
+                }
+                break;
+            case 'data-install':
+                $className .= '\InstallData';
+                if (class_exists($className)) {
+                    if (false == is_subclass_of($className, self::DATA_INSTALL)
+                        && $className !== self::DATA_INSTALL
+                    ) {
+                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::DATA_INSTALL);
+                    } else {
+                        return $this->getObjectManager()->create($className);
+                    }
+                }
+                break;
+            case 'data-upgrade':
+                $className .= '\UpgradeData';
+                if (class_exists($className)) {
+                    if (false == is_subclass_of($className, self::DATA_UPGRADE)
+                        && $className !== self::DATA_UPGRADE
+                    ) {
+                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::DATA_UPGRADE);
+                    } else {
+                        return $this->getObjectManager()->create($className);
+                    }
+                }
+                break;
+            default:
+                return  new \Magento\Setup\Exception("$className does not exist");
+                break;
+        }
+    }
+
+    /**
+     * Generates list of ModuleContext
+     *
+     * @param \Magento\Framework\Module\Resource $resource
+     * @param string $type
+     * @return array
+     */
+    private function generateListOfModuleContext($resource, $type)
+    {
+        $moduleContextList = [];
+        foreach ($this->moduleList->getNames() as $moduleName) {
+            if ($type === 'schema-version') {
+                $dbVer = $resource->getDbVersion($moduleName);
+            } elseif ($type === 'data-version') {
+                $dbVer = $resource->getDataVersion($moduleName);
+            }
+            if ($dbVer !== false) {
+                $moduleContextList[$moduleName] = new ModuleContext($dbVer);
+            } else {
+                $moduleContextList[$moduleName] = new ModuleContext('');
+            }
+        }
+        return $moduleContextList;
+    }
+
+    /**
+     * Gets current version of a module
+     *
+     * @param string $moduleName
+     * @return string
+     */
+    private function getConfigVersion($moduleName)
+    {
+        $moduleConfig = $this->moduleList->getOne($moduleName);
+        return $moduleConfig['setup_version'];
     }
 }

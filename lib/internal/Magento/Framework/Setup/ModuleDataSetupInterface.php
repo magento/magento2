@@ -62,21 +62,6 @@ interface ModuleDataSetupInterface extends SetupInterface
     public function updateTableRow($table, $idField, $rowId, $field, $value = null, $parentField = null, $parentId = 0);
 
     /**
-     * Check call afterApplyAllUpdates method for setup class
-     *
-     * @return bool
-     */
-    public function getCallAfterApplyAllUpdates();
-
-    /**
-     * Run each time after applying of all updates,
-     * if setup model set $_callAfterApplyAllUpdates flag to true
-     *
-     * @return $this
-     */
-    public function afterApplyAllUpdates();
-
-    /**
      * Gets event manager
      *
      * @return \Magento\Framework\Event\ManagerInterface

@@ -14,13 +14,6 @@ use Magento\Setup\Module\Setup\SetupCache;
 class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSetupInterface
 {
     /**
-     * Call afterApplyAllUpdates method flag
-     *
-     * @var boolean
-     */
-    private $_callAfterApplyAllUpdates = false;
-
-    /**
      * Tables data cache
      *
      * @var SetupCache
@@ -194,28 +187,6 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
             $this->setupCache->setRow($table, $parentId, $rowId, $newRowData);
         }
 
-        return $this;
-    }
-
-    /**
-     * Check call afterApplyAllUpdates method for setup class
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getCallAfterApplyAllUpdates()
-    {
-        return $this->_callAfterApplyAllUpdates;
-    }
-
-    /**
-     * Run each time after applying of all updates,
-     * if setup model set $_callAfterApplyAllUpdates flag to true
-     *
-     * @return $this
-     */
-    public function afterApplyAllUpdates()
-    {
         return $this;
     }
 

@@ -24,8 +24,8 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false),
             ],
             [
-                'Magento\Setup\Module\SetupFactory',
-                $this->getMock('Magento\Setup\Module\SetupFactory', [], [], '', false),
+                'Magento\Setup\Module\Setup',
+                $this->getMock('Magento\Setup\Module\Setup', [], [], '', false),
             ],
             [
                 'Magento\Framework\Module\ModuleList',
@@ -70,11 +70,7 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
             [
                 'Magento\Framework\App\DeploymentConfig\Reader',
                 $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false),
-            ],
-            [
-                'Magento\Setup\Module\ModuleInstallerUpgraderFactory',
-                $this->getMock('Magento\Setup\Module\ModuleInstallerUpgraderFactory', [], [], '', false),
-            ],
+            ]
         ];
         $serviceLocatorMock = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
         $serviceLocatorMock
