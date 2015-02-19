@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -205,7 +206,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addForeignKey(
             $installer->getFkName('oauth_token', 'admin_id', 'admin_user', 'user_id'),
             'admin_id',
-            $installer->getTable('admin_user'),
+            $adminTable,
             'user_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
@@ -219,7 +220,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addForeignKey(
             $installer->getFkName('oauth_token', 'customer_id', 'customer_entity', 'entity_id'),
             'customer_id',
-            $installer->getTable('customer_entity'),
+            $customerTable,
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE

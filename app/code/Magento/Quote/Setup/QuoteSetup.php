@@ -14,6 +14,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Setup Model of Quote Module
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class QuoteSetup extends EavSetup
 {
@@ -124,6 +125,7 @@ class QuoteSetup extends EavSetup
      * @param string $code
      * @param array $data
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getAttributeColumnDefinition($code, $data)
     {

@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -64,7 +65,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_super_attribute',
+                $installer->getFkName(
+                    'catalog_product_super_attribute',
                     'product_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -217,7 +219,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_super_attribute_pricing',
+                $installer->getFkName(
+                    'catalog_product_super_attribute_pricing',
                     'website_id',
                     'store_website',
                     'website_id'
@@ -285,7 +288,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_super_link',
+                $installer->getFkName(
+                    'catalog_product_super_link',
                     'product_id',
                     'catalog_product_entity',
                     'entity_id'

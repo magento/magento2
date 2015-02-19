@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -102,7 +103,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['sku']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity',
+                $installer->getFkName(
+                    'catalog_product_entity',
                     'attribute_set_id',
                     'eav_attribute_set',
                     'attribute_set_id'
@@ -189,7 +191,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_datetime',
+                $installer->getFkName(
+                    'catalog_product_entity_datetime',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
@@ -201,7 +204,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_datetime',
+                $installer->getFkName(
+                    'catalog_product_entity_datetime',
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -288,7 +292,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['attribute_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_decimal',
+                $installer->getFkName(
+                    'catalog_product_entity_decimal',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
@@ -300,7 +305,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_decimal',
+                $installer->getFkName(
+                    'catalog_product_entity_decimal',
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -478,7 +484,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_text',
+                $installer->getFkName(
+                    'catalog_product_entity_text',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
@@ -490,7 +497,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_text',
+                $installer->getFkName(
+                    'catalog_product_entity_text',
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -577,7 +585,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_varchar',
+                $installer->getFkName(
+                    'catalog_product_entity_varchar',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
@@ -589,7 +598,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_varchar',
+                $installer->getFkName(
+                    'catalog_product_entity_varchar',
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -687,7 +697,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_gallery',
+                $installer->getFkName(
+                    'catalog_product_entity_gallery',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
@@ -699,7 +710,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_gallery',
+                $installer->getFkName(
+                    'catalog_product_entity_gallery',
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -872,7 +884,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_category_entity_datetime',
+                $installer->getFkName(
+                    'catalog_category_entity_datetime',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
@@ -884,7 +897,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_category_entity_datetime',
+                $installer->getFkName(
+                    'catalog_category_entity_datetime',
                     'entity_id',
                     'catalog_category_entity',
                     'entity_id'
@@ -975,7 +989,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_category_entity_decimal',
+                $installer->getFkName(
+                    'catalog_category_entity_decimal',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
@@ -987,7 +1002,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_category_entity_decimal',
+                $installer->getFkName(
+                    'catalog_category_entity_decimal',
                     'entity_id',
                     'catalog_category_entity',
                     'entity_id'
@@ -1086,7 +1102,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_category_entity_int',
+                $installer->getFkName(
+                    'catalog_category_entity_int',
                     'entity_id',
                     'catalog_category_entity',
                     'entity_id'
@@ -1185,7 +1202,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_category_entity_text',
+                $installer->getFkName(
+                    'catalog_category_entity_text',
                     'entity_id',
                     'catalog_category_entity',
                     'entity_id'
@@ -1276,7 +1294,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_category_entity_varchar',
+                $installer->getFkName(
+                    'catalog_category_entity_varchar',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
@@ -1288,7 +1307,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_category_entity_varchar',
+                $installer->getFkName(
+                    'catalog_category_entity_varchar',
                     'entity_id',
                     'catalog_category_entity',
                     'entity_id'
@@ -1341,7 +1361,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['product_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_category_product',
+                $installer->getFkName(
+                    'catalog_category_product',
                     'category_id',
                     'catalog_category_entity',
                     'entity_id'
@@ -1642,7 +1663,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['linked_product_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_link',
+                $installer->getFkName(
+                    'catalog_product_link',
                     'linked_product_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -1662,7 +1684,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_link',
+                $installer->getFkName(
+                    'catalog_product_link',
                     'link_type_id',
                     'catalog_product_link_type',
                     'link_type_id'
@@ -1786,7 +1809,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_link_attribute_decimal',
+                $installer->getFkName(
+                    'catalog_product_link_attribute_decimal',
                     'link_id',
                     'catalog_product_link',
                     'link_id'
@@ -1865,7 +1889,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_link_attribute_int',
+                $installer->getFkName(
+                    'catalog_product_link_attribute_int',
                     'link_id',
                     'catalog_product_link',
                     'link_id'
@@ -1944,7 +1969,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_link_attribute_varchar',
+                $installer->getFkName(
+                    'catalog_product_link_attribute_varchar',
                     'link_id',
                     'catalog_product_link',
                     'link_id'
@@ -2061,7 +2087,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_tier_price',
+                $installer->getFkName(
+                    'catalog_product_entity_tier_price',
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -2130,7 +2157,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['entity_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_media_gallery',
+                $installer->getFkName(
+                    'catalog_product_entity_media_gallery',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
@@ -2408,7 +2436,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_option_price',
+                $installer->getFkName(
+                    'catalog_product_option_price',
                     'option_id',
                     'catalog_product_option',
                     'option_id'
@@ -2482,7 +2511,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_option_title',
+                $installer->getFkName(
+                    'catalog_product_option_title',
                     'option_id',
                     'catalog_product_option',
                     'option_id'
@@ -2547,7 +2577,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['option_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_option_type_value',
+                $installer->getFkName(
+                    'catalog_product_option_type_value',
                     'option_id',
                     'catalog_product_option',
                     'option_id'
@@ -3139,7 +3170,12 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_index_price', 'entity_id', 'catalog_product_entity', 'entity_id'),
+                $installer->getFkName(
+                    'catalog_product_index_price',
+                    'entity_id',
+                    'catalog_product_entity',
+                    'entity_id'
+                ),
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
@@ -4569,7 +4605,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_group_price',
+                $installer->getFkName(
+                    'catalog_product_entity_group_price',
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -4581,7 +4618,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_entity_group_price',
+                $installer->getFkName(
+                    'catalog_product_entity_group_price',
                     'website_id',
                     'store_website',
                     'website_id'
@@ -4656,7 +4694,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_index_group_price',
+                $installer->getFkName(
+                    'catalog_product_index_group_price',
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'

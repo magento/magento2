@@ -62,7 +62,8 @@ class InstallData implements InstallDataInterface
 
             $attributes = '';
             foreach ($this->configFactory->create()->getAttributes() as $destAttribtues) {
-                foreach ($destAttribtues as $code => $info) {
+                $keys = array_keys($destAttribtues);
+                foreach ($keys as $code) {
                     $attributes .= "'{$code}',";
                 }
             }

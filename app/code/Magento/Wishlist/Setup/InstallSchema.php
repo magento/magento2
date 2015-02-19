@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -60,7 +61,8 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getIdxName('wishlist', 'shared'),
             'shared'
         )->addIndex(
-            $installer->getIdxName('wishlist',
+            $installer->getIdxName(
+                'wishlist',
                 'customer_id',
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),

@@ -14,6 +14,7 @@ class InstallData implements InstallDataInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -65,14 +66,14 @@ class InstallData implements InstallDataInterface
         $select = $conn->select()->from(
             $configDataTable
         )->where(
-                'path IN (?)',
-                [
-                    'carriers/fedex/packaging',
-                    'carriers/fedex/dropoff',
-                    'carriers/fedex/free_method',
-                    'carriers/fedex/allowed_methods'
-                ]
-            );
+            'path IN (?)',
+            [
+                'carriers/fedex/packaging',
+                'carriers/fedex/dropoff',
+                'carriers/fedex/free_method',
+                'carriers/fedex/allowed_methods'
+            ]
+        );
         $mapsOld = $conn->fetchAll($select);
         foreach ($mapsOld as $mapOld) {
             $mapNew = '';

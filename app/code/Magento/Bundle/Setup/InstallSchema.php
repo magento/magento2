@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -66,7 +67,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['parent_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_bundle_option',
+                $installer->getFkName(
+                    'catalog_product_bundle_option',
                     'parent_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -237,7 +239,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_bundle_selection',
+                $installer->getFkName(
+                    'catalog_product_bundle_selection',
                     'product_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -290,7 +293,8 @@ class InstallSchema implements InstallSchemaInterface
                 ['website_id']
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_bundle_selection_price',
+                $installer->getFkName(
+                    'catalog_product_bundle_selection_price',
                     'website_id',
                     'store_website',
                     'website_id'
@@ -380,7 +384,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_bundle_price_index',
+                $installer->getFkName(
+                    'catalog_product_bundle_price_index',
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -392,7 +397,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('catalog_product_bundle_price_index',
+                $installer->getFkName(
+                    'catalog_product_bundle_price_index',
                     'website_id',
                     'store_website',
                     'website_id'

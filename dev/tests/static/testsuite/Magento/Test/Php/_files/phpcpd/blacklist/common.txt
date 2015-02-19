@@ -148,3 +148,4 @@ Magento/Weee/Model/Resource
 Magento/Theme/Model/Design/Backend
 Magento/Core/Model/Resource/Layout/Link
 Magento/Theme/Model/Resource/Design
+Magento/*/Setup

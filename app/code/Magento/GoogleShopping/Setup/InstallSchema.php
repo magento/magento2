@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -53,7 +54,8 @@ class InstallSchema implements InstallSchemaInterface
                 'Google product category'
             )
             ->addForeignKey(
-                $installer->getFkName('googleshopping_types',
+                $installer->getFkName(
+                    'googleshopping_types',
                     'attribute_set_id',
                     'eav_attribute_set',
                     'attribute_set_id'

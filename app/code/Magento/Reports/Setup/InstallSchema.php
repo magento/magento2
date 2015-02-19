@@ -14,6 +14,7 @@ class InstallSchema implements InstallSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -111,7 +112,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('report_compared_product_index',
+                $installer->getFkName(
+                    'report_compared_product_index',
                     'product_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -221,7 +223,8 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName('report_viewed_product_index',
+                $installer->getFkName(
+                    'report_viewed_product_index',
                     'product_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -437,7 +440,8 @@ class InstallSchema implements InstallSchemaInterface
                     ['product_id']
                 )
                 ->addForeignKey(
-                    $installer->getFkName('report_compared_product_index',
+                    $installer->getFkName(
+                        'report_compared_product_index',
                         'customer_id',
                         'customer_entity',
                         'entity_id'
@@ -449,7 +453,8 @@ class InstallSchema implements InstallSchemaInterface
                     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
                 )
                 ->addForeignKey(
-                    $installer->getFkName('report_compared_product_index',
+                    $installer->getFkName(
+                        'report_compared_product_index',
                         'product_id',
                         'catalog_product_entity',
                         'entity_id'
@@ -552,7 +557,8 @@ class InstallSchema implements InstallSchemaInterface
                     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
                 )
                 ->addForeignKey(
-                    $installer->getFkName('report_viewed_product_index',
+                    $installer->getFkName(
+                        'report_viewed_product_index',
                         'product_id',
                         'catalog_product_entity',
                         'entity_id'

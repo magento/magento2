@@ -22,7 +22,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             $installer->startSetup();
 
-            $table = $installer->getConnection()
+            $installer->getConnection()
                 ->dropColumn(
                     $installer->getTable('catalog_eav_attribute'),
                     'is_configurable'

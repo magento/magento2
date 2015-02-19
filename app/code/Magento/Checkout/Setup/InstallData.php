@@ -43,6 +43,9 @@ class InstallData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -77,10 +80,10 @@ class InstallData implements InstallDataInterface
             '0'
         );
         $showMiddlename = (bool)$this->customerAddress->getConfig(
-                'middlename_show'
-            ) || $connection->fetchOne(
-                $select
-            ) > 0;
+            'middlename_show'
+        ) || $connection->fetchOne(
+            $select
+        ) > 0;
 
         $select = $connection->select()->from(
             $setup->getTable('core_config_data'),
