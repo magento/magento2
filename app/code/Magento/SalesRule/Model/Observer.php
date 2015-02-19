@@ -157,7 +157,7 @@ class Observer
     {
         $this->_localeResolver->emulate(0);
         $currentDate = $this->_localeDate->date();
-        $date = $currentDate->modify('-25 modify');
+        $date = $currentDate->modify('-25 hours');
         $this->_reportRule->aggregate($date);
         $this->_localeResolver->revert();
         return $this;

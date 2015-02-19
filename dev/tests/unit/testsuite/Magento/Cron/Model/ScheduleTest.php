@@ -162,10 +162,10 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['date'])
             ->getMockForAbstractClass();
-        $dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateInterface')
+        $dateMock = $this->getMockBuilder('DateTime')
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
-            ->getMockForAbstractClass();
+            ->setMethods(['format'])
+            ->getMock();
 
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(
