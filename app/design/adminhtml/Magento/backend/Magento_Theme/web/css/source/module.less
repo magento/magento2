@@ -387,27 +387,30 @@ body {
     margin-left: 5px;
     .help span,
     .help a {
-        width: 16px;
-        height: 16px;
-        text-align: center;
-        background: rgba(194,186,169,.5);
-        cursor: pointer;
-        &:hover {
-            background: #c2baa9;
-        }
-        border-radius: 10px;
+        position: relative;
+        z-index: 2;
+        width: 22px;
+        height: 22px;
+        display: inline-block;
         vertical-align: middle;
-        .icon-font(
-            @_icon-font: @font-family__base,
-            @_icon-font-content: '?',
-            @_icon-font-size: 13px,
-            @_icon-font-line-height: 16px,
-            @_icon-font-color: #5a534a,
-            @_icon-font-text-hide: true,
-            @_icon-font-vertical-align: top
-        );
+        cursor: pointer;
+
         &:before {
-            font-weight: 700;
+            content: "?";
+            font-weight: 500;
+            font-size: 18px;
+            display: inline-block;
+            overflow: hidden;
+            height: 22px;
+            border-radius: 11px;
+            line-height: 22px;
+            width: 22px;
+            text-align: center;
+            color: #ffffff;
+            background-color: #514943;
+        }
+        span {
+            .visually-hidden();
         }
     }
     //TODO Tooltips
