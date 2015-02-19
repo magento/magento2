@@ -11,6 +11,7 @@ use Magento\Framework\Model\Exception as ModelException;
 /**
  * Abstract resource model class
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractResource
 {

@@ -40,7 +40,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Store\Model\StoreManagerInterface$storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Eav\Model\Config $eavConfig,
         $resourcePrefix = null

@@ -22,7 +22,8 @@ class StateTest extends \PHPUnit_Framework_TestCase
             false
         );
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $arguments = $objectManager->getConstructArguments('\Magento\Indexer\Model\Resource\Indexer\State',
+        $arguments = $objectManager->getConstructArguments(
+            '\Magento\Indexer\Model\Resource\Indexer\State',
             ['resource' => $resourceMock]
         );
         $this->model = $objectManager->getObject(

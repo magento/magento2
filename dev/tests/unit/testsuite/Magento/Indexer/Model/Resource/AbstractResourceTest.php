@@ -25,7 +25,8 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $arguments = $objectManager->getConstructArguments('\Magento\Indexer\Model\Resource\AbstractResourceStub',
+        $arguments = $objectManager->getConstructArguments(
+            '\Magento\Indexer\Model\Resource\AbstractResourceStub',
             ['resource' => $this->_resourceMock]
         );
         $this->model = $objectManager->getObject(
