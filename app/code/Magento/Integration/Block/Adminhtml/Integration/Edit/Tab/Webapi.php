@@ -3,7 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Block\Adminhtml\Integration\Edit\Tab;
+
+namespace Magento\Integration\Block\Adminhtml\Integration\Edit\Tab;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;

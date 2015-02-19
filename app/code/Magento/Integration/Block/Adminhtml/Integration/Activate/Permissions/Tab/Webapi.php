@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Block\Adminhtml\Integration\Activate\Permissions\Tab;
+
+namespace Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Webapi\Helper\Data as WebapiHelper;
 
 /**
  * API permissions tab for integration activation dialog.
