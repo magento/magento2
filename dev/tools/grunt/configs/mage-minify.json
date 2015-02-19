@@ -1,11 +1,8 @@
 {
     "legacy": {
         "options": {
-            "type": "yui-js",
-            "tempPath": "var/cache/",
-            "options": [
-                "--nomunge=true"
-            ]
+            "type": "no-compress",
+            "tempPath": "var/cache/"
         },
         "files": {
             "<%= path.uglify.legacy %>": [
@@ -17,7 +14,8 @@
                 "lib/web/prototype/validation.js",
                 "lib/web/varien/js.js",
                 "lib/web/mage/adminhtml/varienLoader.js",
-                "lib/web/mage/adminhtml/tools.js"
+                "lib/web/mage/adminhtml/tools.js",
+                "dev/tools/grunt/assets/legacy-build/shim.js"
             ]
         }
     }

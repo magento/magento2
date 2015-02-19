@@ -36,7 +36,7 @@ var config = {
         "jquery/hover-intent": "jquery/jquery.hoverIntent",
         "jquery/file-uploader": "jquery/fileUploader/jquery.fileupload-fp",
         "jquery/jquery.hashchange": "jquery/jquery.ba-hashchange.min",
-        "prototype": "legacy-build.min",
+        "prototype": "legacy-build",
         "text": "requirejs/text",
         "domReady": "requirejs/domReady",
         "ko": "ko/ko",
