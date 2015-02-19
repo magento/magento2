@@ -87,7 +87,6 @@ class AddAttributeToProductTemplateStep implements TestStepInterface
                 'dataSet' => 'product_with_category_with_anchor',
                 'data' => [
                     'attribute_set_id' => ['attribute_set' => $this->productTemplate],
-                    'custom_attribute' => $this->attribute,
                 ],
             ]
         );

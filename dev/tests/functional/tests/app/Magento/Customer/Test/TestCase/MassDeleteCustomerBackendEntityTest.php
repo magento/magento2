@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -102,13 +102,13 @@ class MassDeleteCustomerBackendEntityTest extends Injectable
      * Create Customers
      *
      * @param int $customersQty
-     * @return CustomerInjectable[]
+     * @return Customer[]
      */
     protected function createCustomers($customersQty)
     {
         $customers = [];
         for ($i = 0; $i < $customersQty; $i++) {
-            $customer = $this->fixtureFactory->createByCode('customerInjectable', ['dataSet' => 'default']);
+            $customer = $this->fixtureFactory->createByCode('customer', ['dataSet' => 'default']);
             $customer->persist();
             $customers[] = $customer;
         }
