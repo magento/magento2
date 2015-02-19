@@ -35,7 +35,7 @@ class Json implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
      */
     public function render($data)
     {
-        return $this->encoder->jsonEncode($data);
+        return $this->encoder->encode($data);
     }
 
     /**

@@ -248,7 +248,7 @@ class ErrorProcessor
         $errorData['messages']['error'][] = $message;
         switch ($format) {
             case self::DATA_FORMAT_JSON:
-                $errorData = $this->encoder->jsonEncode($errorData);
+                $errorData = $this->encoder->encode($errorData);
                 break;
             case self::DATA_FORMAT_XML:
                 $errorData = '<?xml version="1.0"?>'

@@ -16,9 +16,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Model\Soap\Config */
     protected $_soapConfig;
 
-    /** @var \Magento\Webapi\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_configMock;
-
     /**
      * Set up helper.
      */
@@ -38,7 +35,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
         $classReflection->expects($this->any())->method('reflectClassMethods')->will($this->returnValue([]));
-        $this->_configMock = $this->getMock('Magento\Webapi\Model\Config', [], [], '', false);
+
         $servicesConfig = [
             'services' => [
                 'Magento\Customer\Api\AccountManagementInterface' => [
@@ -64,8 +61,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->_configMock->expects($this->once())->method('getServices')->will($this->returnValue($servicesConfig));
-
         /**
          * @var $registryMock \Magento\Framework\Registry
          */
@@ -79,10 +74,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $cacheMock = $this->getMockBuilder('Magento\Framework\App\Cache\Type\Webapi')
             ->disableOriginalConstructor()
             ->getMock();
+
+        /** @var $readerMock \Magento\Webapi\Model\Config\Reader */
+        $readerMock = $this->getMockBuilder('Magento\Webapi\Model\Config\Reader')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $readerMock->expects($this->once())->method('read')->will($this->returnValue($servicesConfig));
+
+        /** @var $config \Magento\Webapi\Model\Config */
+        $config = new \Magento\Webapi\Model\Config($cacheMock, $readerMock);
+
         $this->_soapConfig = new \Magento\Webapi\Model\Soap\Config(
             $objectManagerMock,
             $fileSystemMock,
-            $this->_configMock,
+            $config,
             $classReflection,
             $cacheMock,
             $registryMock

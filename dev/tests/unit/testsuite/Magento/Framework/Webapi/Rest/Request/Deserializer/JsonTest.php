@@ -26,7 +26,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         /** Prepare mocks for SUT constructor. */
         $this->decoderMock = $this->getMockBuilder('Magento\Framework\Json\Decoder')
             ->disableOriginalConstructor()
-            ->setMethods(['jsonDecode'])
+            ->setMethods(['decode'])
             ->getMock();
         $this->_appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         /** Initialize SUT. */
@@ -63,7 +63,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->decoderMock->expects(
             $this->once()
         )->method(
-            'jsonDecode'
+            'decode'
         )->will(
             $this->returnValue($expectedDecodedJson)
         );
@@ -79,7 +79,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     {
         /** Prepare mocks for SUT constructor. */
         $this->decoderMock->expects($this->once())
-            ->method('jsonDecode')
+            ->method('decode')
             ->will($this->throwException(new \Zend_Json_Exception));
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
@@ -106,7 +106,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->decoderMock->expects(
             $this->once()
         )->method(
-            'jsonDecode'
+            'decode'
         )->will(
             $this->throwException(
                 new \Zend_Json_Exception('Decoding error:' . PHP_EOL . 'Decoding failed: Syntax error')

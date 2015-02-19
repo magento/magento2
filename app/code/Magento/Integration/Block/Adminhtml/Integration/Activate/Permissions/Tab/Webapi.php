@@ -143,7 +143,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         $resources = $this->_resourceProvider->getAclResources();
         $aclResourcesTree = $this->_integrationData->mapResources($resources[1]['children']);
 
-        return $this->encoder->jsonEncode($aclResourcesTree);
+        return $this->encoder->encode($aclResourcesTree);
     }
 
     /**
@@ -160,7 +160,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
             $resources = $this->_resourceProvider->getAclResources();
             $selectedResources = $this->_getAllResourceIds($resources[1]['children']);
         }
-        return $this->encoder->jsonEncode($selectedResources);
+        return $this->encoder->encode($selectedResources);
     }
 
     /**

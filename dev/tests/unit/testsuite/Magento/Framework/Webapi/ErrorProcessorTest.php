@@ -30,7 +30,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         /** Set up mocks for SUT. */
         $this->encoderMock = $this->getMockBuilder('Magento\Framework\Json\Encoder')
             ->disableOriginalConstructor()
-            ->setMethods(['jsonEncode'])
+            ->setMethods(['encode'])
             ->getMock();
 
         $this->_appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
@@ -72,7 +72,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         $this->encoderMock->expects(
             $this->once()
         )->method(
-            'jsonEncode'
+            'encode'
         )->will(
             $this->returnCallback([$this, 'callbackJsonEncode'], $this->returnArgument(0))
         );
@@ -111,7 +111,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         $this->encoderMock->expects(
             $this->once()
         )->method(
-            'jsonEncode'
+            'encode'
         )->will(
             $this->returnCallback([$this, 'callbackJsonEncode'], $this->returnArgument(0))
         );
@@ -168,7 +168,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         /** Set undefined rendering format. */
         $_SERVER['HTTP_ACCEPT'] = 'undefined';
         /** Assert that jsonEncode method will be executed at least once. */
-        $this->encoderMock->expects($this->atLeastOnce())->method('jsonEncode');
+        $this->encoderMock->expects($this->atLeastOnce())->method('encode');
         $this->_errorProcessor->renderErrorMessage('Message');
     }
 

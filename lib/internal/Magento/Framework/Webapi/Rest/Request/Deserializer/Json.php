@@ -46,7 +46,7 @@ class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfa
             );
         }
         try {
-            $decodedBody = $this->decoder->jsonDecode($encodedBody);
+            $decodedBody = $this->decoder->decode($encodedBody);
         } catch (\Zend_Json_Exception $e) {
             if ($this->_appState->getMode() !== State::MODE_DEVELOPER) {
                 throw new \Magento\Framework\Webapi\Exception(new Phrase('Decoding error.'));
