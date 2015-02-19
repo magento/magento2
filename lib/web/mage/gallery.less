@@ -33,8 +33,9 @@
 @gallery-lens-border-color: @border-color__base;
 @gallery-lens-border-width: @border-width__base;
 
-@import '../css/source/lib/_lib';
-@import '../css/source/_theme';
+@import '../css/source/lib/_lib'; // Global lib
+@import '../css/source/_theme'; // Theme overrides
+@import '../css/source/_variables'; // Local theme variables
 
 .ui-widget-overlay {
     position: fixed !important;
