@@ -28,7 +28,7 @@
         </fields>
     </properties>
     <advanced-properties>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced</class>
+        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
         <selector>[data-target="#advanced_fieldset-content"]</selector>
         <strategy>css selector</strategy>
         <fields>

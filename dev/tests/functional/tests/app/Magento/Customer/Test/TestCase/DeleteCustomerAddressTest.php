@@ -7,7 +7,7 @@
 namespace Magento\Customer\Test\TestCase;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Mtf\TestCase\Injectable;
@@ -81,10 +81,10 @@ class DeleteCustomerAddressTest extends Injectable
     /**
      * Runs Delete Customer Address test
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
-    public function test(CustomerInjectable $customer)
+    public function test(Customer $customer)
     {
         // Precondition:
         $customer->persist();

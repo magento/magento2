@@ -6,7 +6,7 @@
 
 namespace Magento\GroupedProduct\Test\Fixture\Cart;
 
-use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
+use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
@@ -24,7 +24,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
      */
     public function __construct(FixtureInterface $product)
     {
-        /** @var GroupedProductInjectable $product */
+        /** @var GroupedProduct $product */
         $checkoutData = $product->getCheckoutData();
         $this->data = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
         $associatedProducts = [];

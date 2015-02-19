@@ -7,7 +7,7 @@
 namespace Magento\Wishlist\Test\TestCase;
 
 use Magento\Checkout\Test\Fixture\Cart;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Test Flow:
@@ -34,14 +34,14 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
     /* end tags */
 
     /**
-     * Run suggest searching result test
+     * Run suggest searching result test.
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param string $products
      * @param int $qty
      * @return array
      */
-    public function test(CustomerInjectable $customer, $products, $qty)
+    public function test(Customer $customer, $products, $qty)
     {
         // Preconditions
         $customer->persist();
@@ -59,7 +59,7 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
     }
 
     /**
-     * Add products from wish list to cart
+     * Add products from wish list to cart.
      *
      * @param array $products
      * @param int $qty
@@ -74,14 +74,15 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
                 $this->wishlistIndex->getWishlistBlock()->clickUpdateWishlist();
             }
             $this->wishlistIndex->getItemsBlock()->getItemProduct($product)->clickAddToCart();
-            if ($this->wishlistIndex->getItemsBlock()->isVisible()) {
+            if (!$this->wishlistIndex->getWishlistBlock()->isVisible()) {
                 $this->catalogProductView->getViewBlock()->addToCart($product);
+                $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
             }
         }
     }
 
     /**
-     * Create cart fixture
+     * Create cart fixture.
      *
      * @param array $products
      * @return Cart
