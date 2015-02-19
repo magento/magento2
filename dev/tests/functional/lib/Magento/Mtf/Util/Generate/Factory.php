@@ -66,6 +66,7 @@ class Factory extends AbstractGenerate
      *
      * @param string $className
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function generate($className)
     {
