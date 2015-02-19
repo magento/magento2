@@ -141,7 +141,7 @@ class Install extends AbstractActionController
         $result[Installer::ENABLE_MODULES] = isset($source['store']['selectedModules'])
             ? implode(',', $source['store']['selectedModules']) : '';
         $result[Installer::DISABLE_MODULES] = isset($source['store']['allModules'])
-            ? implode( ',', array_diff($source['store']['allModules'], $source['store']['selectedModules'])) : '';
+            ? implode(',', array_diff($source['store']['allModules'], $source['store']['selectedModules'])) : '';
         return $result;
     }
 
