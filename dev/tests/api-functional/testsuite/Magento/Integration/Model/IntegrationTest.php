@@ -6,7 +6,7 @@
 namespace Magento\Integration\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Authentication;
+use Magento\TestFramework\Authentication\OauthHelper;
 
 class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
