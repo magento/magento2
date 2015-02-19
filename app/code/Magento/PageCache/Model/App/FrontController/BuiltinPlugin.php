@@ -89,7 +89,7 @@ class BuiltinPlugin
      */
     protected function addDebugHeaders(ResponseHttp $result)
     {
-        $cacheControl = $result->getHeader('Cache-Control')['value'];
+        $cacheControl = $result->getHeader('Cache-Control')->getFieldValue();
         $this->addDebugHeader($result, 'X-Magento-Cache-Control', $cacheControl);
         $this->addDebugHeader($result, 'X-Magento-Cache-Debug', 'MISS', true);
         return $result;

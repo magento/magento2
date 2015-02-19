@@ -23,24 +23,14 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
     protected $localeResolver;
 
     /**
-     * Store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\Locale\ResolverInterface $localeResolver
     ) {
         $this->localeResolver = $localeResolver;
-        $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -55,7 +45,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
         $carriersCodes = [];
         foreach ($this->scopeConfig->getValue(
             self::XML_PATH_CARRIERS_ROOT,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         ) as $carrierCode => $carrier) {
             if (isset($carrier['is_online']) && $carrier['is_online']) {
@@ -77,7 +67,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             sprintf('%s/%s/%s', self::XML_PATH_CARRIERS_ROOT, $carrierCode, $configPath),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

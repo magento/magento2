@@ -68,7 +68,7 @@ class Pviewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
     /**
      * Get header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

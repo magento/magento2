@@ -42,14 +42,6 @@ define([
                 e.preventDefault();
                 window.print();
             });
-
-            $.each(this.options.selectors, function(i, selector) {
-                $(selector).on('click', function(e) {
-                    e.preventDefault();
-                    window.location.href = $(this).data('url');
-                });
-            });
-
         }
     });
 

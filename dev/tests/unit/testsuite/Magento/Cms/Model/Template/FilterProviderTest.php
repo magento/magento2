@@ -31,7 +31,7 @@ class FilterProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Template\FilterProvider::getBlockFilter
+     * covers \Magento\Cms\Model\Template\FilterProvider::getBlockFilter
      */
     public function testGetBlockFilter()
     {
@@ -39,7 +39,7 @@ class FilterProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Template\FilterProvider::getPageFilter
+     * covers \Magento\Cms\Model\Template\FilterProvider::getPageFilter
      */
     public function testGetPageFilter()
     {
@@ -47,7 +47,7 @@ class FilterProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Template\FilterProvider::getPageFilter
+     * covers \Magento\Cms\Model\Template\FilterProvider::getPageFilter
      */
     public function testGetPageFilterInnerCache()
     {
@@ -57,7 +57,7 @@ class FilterProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Template\FilterProvider::getPageFilter
+     * covers \Magento\Cms\Model\Template\FilterProvider::getPageFilter
      * @expectedException \Exception
      */
     public function testGetPageWrongInstance()

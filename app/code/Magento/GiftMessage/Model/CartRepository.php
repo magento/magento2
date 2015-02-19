@@ -26,7 +26,7 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
     /**
      * Store manager interface.
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -53,14 +53,14 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
 
     /**
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GiftMessageManager $giftMessageManager
      * @param \Magento\GiftMessage\Helper\Message $helper
      * @param MessageFactory $messageFactory
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\GiftMessage\Model\GiftMessageManager $giftMessageManager,
         \Magento\GiftMessage\Helper\Message $helper,
         \Magento\GiftMessage\Model\MessageFactory $messageFactory

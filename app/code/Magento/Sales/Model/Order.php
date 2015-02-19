@@ -304,7 +304,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     protected $entityType = 'order';
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -395,7 +395,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Order\Config $orderConfig
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
@@ -425,7 +425,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory,

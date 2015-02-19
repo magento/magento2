@@ -118,7 +118,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Return currently unavailable product configuration message
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getWrongConfigurationMessage()
     {

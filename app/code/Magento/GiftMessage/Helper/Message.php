@@ -12,7 +12,7 @@ namespace Magento\GiftMessage\Helper;
  * Gift Message helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Message extends \Magento\Core\Helper\Data
+class Message extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Gift messages allow section in configuration
@@ -64,44 +64,38 @@ class Message extends \Magento\Core\Helper\Data
     protected $skipMessageCheck = [];
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $_storeManager;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\GiftMessage\Model\MessageFactory $giftMessageFactory
      * @param \Magento\Framework\Escaper $escaper
      * @param array $skipMessageCheck
-     * @param bool $dbCompatibleMode
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\GiftMessage\Model\MessageFactory $giftMessageFactory,
         \Magento\Framework\Escaper $escaper,
-        $skipMessageCheck = [],
-        $dbCompatibleMode = true
+        $skipMessageCheck = []
     ) {
         $this->_escaper = $escaper;
         $this->productRepository = $productRepository;
         $this->_layoutFactory = $layoutFactory;
         $this->_giftMessageFactory = $giftMessageFactory;
         $this->skipMessageCheck = $skipMessageCheck;
+        $this->_storeManager = $storeManager;
+
         parent::__construct(
-            $context,
-            $scopeConfig,
-            $storeManager,
-            $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $context
         );
     }
 
@@ -148,7 +142,7 @@ class Message extends \Magento\Core\Helper\Data
         if ($type == 'items') {
             $items = $entity->getAllItems();
             if (!is_array($items) || empty($items)) {
-                return $this->_scopeConfig->getValue(self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store);
+                return $this->scopeConfig->getValue(self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
             }
             if ($entity instanceof \Magento\Quote\Model\Quote) {
                 $_type = $entity->getIsMultiShipping() ? 'address_item' : 'item';
@@ -183,7 +177,7 @@ class Message extends \Magento\Core\Helper\Data
                 $store
             );
         } else {
-            return $this->_scopeConfig->getValue(self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store);
+            return $this->scopeConfig->getValue(self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
         }
         return false;
     }
@@ -197,7 +191,7 @@ class Message extends \Magento\Core\Helper\Data
      */
     protected function _getDependenceFromStoreConfig($productGiftMessageAllow, $store = null)
     {
-        $result = $this->_scopeConfig->getValue(self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store);
+        $result = $this->scopeConfig->getValue(self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
         if ($productGiftMessageAllow === '' || is_null($productGiftMessageAllow)) {
             return $result;
         } else {

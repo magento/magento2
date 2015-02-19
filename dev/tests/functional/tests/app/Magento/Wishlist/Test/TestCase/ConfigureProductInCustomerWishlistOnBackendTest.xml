@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="ConfigureProductInCustomerWishlistOnBackendTest">
+    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation1" firstConstraint="assertProductInCustomerWishlistOnBackendGrid" method="test">
+      <data name="product" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
+      <constraint name="assertProductInCustomerWishlistOnBackendGrid"/>
+    </variation>
+    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation2" firstConstraint="assertConfigurableProductInCustomerWishlistOnBackendGrid" method="test">
+      <data name="product" xsi:type="string">configurableProductInjectable::default</data>
+      <constraint name="assertConfigurableProductInCustomerWishlistOnBackendGrid"/>
+    </variation>
+    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation3" firstConstraint="assertBundleProductInCustomerWishlistOnBackendGrid" method="test">
+      <data name="product" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+      <constraint name="assertBundleProductInCustomerWishlistOnBackendGrid"/>
+    </variation>
+    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation4" firstConstraint="assertDownloadableProductInCustomerWishlistOnBackendGrid" method="test">
+      <data name="product" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
+      <constraint name="assertDownloadableProductInCustomerWishlistOnBackendGrid"/>
+    </variation>
+    <variation name="ConfigureProductInCustomerWishlistOnBackendTestVariation5" firstConstraint="assertGroupedProductInCustomerWishlistOnBackendGrid" method="test">
+      <data name="product" xsi:type="string">groupedProductInjectable::three_simple_products</data>
+      <constraint name="assertGroupedProductInCustomerWishlistOnBackendGrid"/>
+    </variation>
+  </testCase>
+</config>

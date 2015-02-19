@@ -27,7 +27,7 @@ class ShipmentIdentity extends Container implements IdentityInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_EMAIL_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->getStore()->getStoreId()
         );
     }

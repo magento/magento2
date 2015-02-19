@@ -36,7 +36,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     protected $themeResolverMock;
 
     /**
-     * @var \Magento\Core\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $processorMock;
 
@@ -44,11 +44,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eventManagerMock;
-
-    /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $schStructureMock;
 
     /**
      * @var \Magento\Framework\View\Layout\Generator\Block|\PHPUnit_Framework_MockObject_MockObject
@@ -59,6 +54,41 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\View\Layout\Generator\Container|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $generatorContainerMock;
+
+    /**
+     * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheMock;
+
+    /**
+     * @var \Magento\Framework\View\Layout\ReaderPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $readerPoolMock;
+
+    /**
+     * @var \Magento\Framework\View\Layout\GeneratorPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $generatorPoolMock;
+
+    /**
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $messageManagerMock;
+
+    /**
+     * @var \Magento\Framework\View\Layout\Reader\ContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $readerContextFactoryMock;
+
+    /**
+     * @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $readerContextMock;
+
+    /**
+     * @var \Magento\Framework\View\Layout\Generator\ContextFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $generatorContextFactoryMock;
 
     protected function setUp()
     {
@@ -72,21 +102,28 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->themeResolverMock = $this->getMockForAbstractClass(
             'Magento\Framework\View\Design\Theme\ResolverInterface'
         );
-        $this->processorMock = $this->getMock('Magento\Core\Model\Layout\Merge', [], [], '', false);
-        $this->schStructureMock = $this->getMock('Magento\Framework\View\Layout\ScheduledStructure', [], [], '', false);
+        $this->processorMock = $this->getMock('Magento\Framework\View\Model\Layout\Merge', [], [], '', false);
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->generatorBlockMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Block')
             ->disableOriginalConstructor()->getMock();
         $this->generatorContainerMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Container')
             ->disableOriginalConstructor()->getMock();
+        $this->cacheMock = $this->getMockBuilder('Magento\Framework\Cache\FrontendInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->readerPoolMock = $this->getMockBuilder('Magento\Framework\View\Layout\ReaderPool')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $generatorPoolMock = $this->getMockBuilder('Magento\Framework\View\Layout\GeneratorPool')
+        $this->generatorPoolMock = $this->getMockBuilder('Magento\Framework\View\Layout\GeneratorPool')
             ->disableOriginalConstructor()->getMock();
-        $generatorPoolMock->expects($this->any())
+        $this->generatorPoolMock->expects($this->any())
             ->method('getGenerator')
             ->will(
                 $this->returnValueMap([
@@ -95,18 +132,32 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 ])
             );
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->model = $objectManagerHelper->getObject(
-            'Magento\Framework\View\Layout',
-            [
-                'structure' => $this->structureMock,
-                'themeResolver' => $this->themeResolverMock,
-                'processorFactory' => $this->processorFactoryMock,
-                'appState' => $this->appStateMock,
-                'eventManager' => $this->eventManagerMock,
-                'scheduledStructure' => $this->schStructureMock,
-                'generatorPool' => $generatorPoolMock
-            ]
+        $this->readerContextFactoryMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\ContextFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->readerContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->readerContextFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->readerContextMock);
+        $this->generatorContextFactoryMock = $this->getMockBuilder(
+                'Magento\Framework\View\Layout\Generator\ContextFactory'
+            )->disableOriginalConstructor()
+            ->getMock();
+
+        $this->model = new \Magento\Framework\View\Layout(
+            $this->processorFactoryMock,
+            $this->eventManagerMock,
+            $this->structureMock,
+            $this->messageManagerMock,
+            $this->themeResolverMock,
+            $this->readerPoolMock,
+            $this->generatorPoolMock,
+            $this->cacheMock,
+            $this->readerContextFactoryMock,
+            $this->generatorContextFactoryMock,
+            true
         );
     }
 
@@ -400,9 +451,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout::setBlock
-     * @covers \Magento\Framework\View\Layout::getAllBlocks
-     * @covers \Magento\Framework\View\Layout::unsetElement
+     * covers \Magento\Framework\View\Layout::setBlock
+     * covers \Magento\Framework\View\Layout::getAllBlocks
+     * covers \Magento\Framework\View\Layout::unsetElement
      */
     public function testSetGetBlock()
     {
@@ -623,5 +674,132 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 false
             ],
         ];
+    }
+
+    public function testGenerateElementsWithoutCache()
+    {
+        $layoutCacheId = 'layout_cache_id';
+        $handles = ['default', 'another'];
+        /** @var \Magento\Framework\View\Layout\Element $xml */
+        $xml = simplexml_load_string('<layout/>', 'Magento\Framework\View\Layout\Element');
+        $this->model->setXml($xml);
+
+        $themeMock = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $this->themeResolverMock->expects($this->once())
+            ->method('get')
+            ->willReturn($themeMock);
+        $this->processorFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['theme' => $themeMock])
+            ->willReturn($this->processorMock);
+
+        $this->processorMock->expects($this->once())
+            ->method('getCacheId')
+            ->willReturn($layoutCacheId);
+        $this->processorMock->expects($this->once())
+            ->method('getHandles')
+            ->willReturn($handles);
+
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->with('structure_' . $layoutCacheId)
+            ->willReturn(false);
+
+        $this->readerPoolMock->expects($this->once())
+            ->method('interpret')
+            ->with($this->readerContextMock, $xml)
+            ->willReturnSelf();
+
+        $this->cacheMock->expects($this->once())
+            ->method('save')
+            ->with(serialize($this->readerContextMock), 'structure_' . $layoutCacheId, $handles)
+            ->willReturn(true);
+
+        $generatorContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->generatorContextFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['structure' => $this->structureMock, 'layout' => $this->model])
+            ->willReturn($generatorContextMock);
+
+        $this->generatorPoolMock->expects($this->once())
+            ->method('process')
+            ->with($this->readerContextMock, $generatorContextMock)
+            ->willReturn(true);
+
+        $elements = [
+            'name_1' => ['type' => '', 'parent' => null],
+            'name_2' => ['type' => \Magento\Framework\View\Layout\Element::TYPE_CONTAINER, 'parent' => null],
+            'name_3' => ['type' => '', 'parent' => 'parent'],
+            'name_4' => ['type' => \Magento\Framework\View\Layout\Element::TYPE_CONTAINER, 'parent' => 'parent'],
+        ];
+
+        $this->structureMock->expects($this->once())
+            ->method('exportElements')
+            ->willReturn($elements);
+
+        $this->model->generateElements();
+    }
+
+    public function testGenerateElementsWithCache()
+    {
+        $layoutCacheId = 'layout_cache_id';
+        /** @var \Magento\Framework\View\Layout\Element $xml */
+        $xml = simplexml_load_string('<layout/>', 'Magento\Framework\View\Layout\Element');
+        $this->model->setXml($xml);
+
+        $themeMock = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $this->themeResolverMock->expects($this->once())
+            ->method('get')
+            ->willReturn($themeMock);
+        $this->processorFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['theme' => $themeMock])
+            ->willReturn($this->processorMock);
+
+        $this->processorMock->expects($this->once())
+            ->method('getCacheId')
+            ->willReturn($layoutCacheId);
+
+        $readerContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->with('structure_' . $layoutCacheId)
+            ->willReturn(serialize($readerContextMock));
+
+        $this->readerPoolMock->expects($this->never())
+            ->method('interpret');
+        $this->cacheMock->expects($this->never())
+            ->method('save');
+
+        $generatorContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->generatorContextFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['structure' => $this->structureMock, 'layout' => $this->model])
+            ->willReturn($generatorContextMock);
+
+        $this->generatorPoolMock->expects($this->once())
+            ->method('process')
+            ->with($readerContextMock, $generatorContextMock)
+            ->willReturn(true);
+
+        $elements = [
+            'name_1' => ['type' => '', 'parent' => null],
+            'name_2' => ['type' => \Magento\Framework\View\Layout\Element::TYPE_CONTAINER, 'parent' => null],
+            'name_3' => ['type' => '', 'parent' => 'parent'],
+            'name_4' => ['type' => \Magento\Framework\View\Layout\Element::TYPE_CONTAINER, 'parent' => 'parent'],
+        ];
+
+        $this->structureMock->expects($this->once())
+            ->method('exportElements')
+            ->willReturn($elements);
+
+        $this->model->generateElements();
     }
 }

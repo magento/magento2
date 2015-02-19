@@ -25,7 +25,7 @@ class Available extends \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\Tab
     /**
      * Return Tab title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

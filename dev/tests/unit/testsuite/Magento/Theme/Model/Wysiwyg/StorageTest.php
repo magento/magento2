@@ -102,8 +102,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::_createThumbnail
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::uploadFile
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::_createThumbnail
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::uploadFile
      */
     public function testUploadFile()
     {
@@ -154,7 +154,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::uploadFile
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::uploadFile
      * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testUploadInvalidFile()
@@ -183,7 +183,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider booleanCasesDataProvider
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::createFolder
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::createFolder
      */
     public function testCreateFolder($isWritable)
     {
@@ -252,7 +252,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::createFolder
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::createFolder
      * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateFolderWithInvalidName()
@@ -262,7 +262,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::createFolder
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::createFolder
      * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateFolderDirectoryAlreadyExist()
@@ -294,7 +294,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::getDirsCollection
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::getDirsCollection
      */
     public function testGetDirsCollection()
     {
@@ -318,7 +318,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::getDirsCollection
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::getDirsCollection
      * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetDirsCollectionWrongDirName()
@@ -337,7 +337,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::getFilesCollection
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::getFilesCollection
      */
     public function testGetFilesCollection()
     {
@@ -373,7 +373,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::getFilesCollection
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::getFilesCollection
      */
     public function testGetFilesCollectionImageType()
     {
@@ -417,7 +417,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::getTreeArray
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::getTreeArray
      */
     public function testTreeArray()
     {
@@ -460,7 +460,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::deleteFile
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::deleteFile
      */
     public function testDeleteFile()
     {
@@ -503,7 +503,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
      */
     public function testDeleteDirectory()
     {
@@ -523,7 +523,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
+     * cover \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
      * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testDeleteRootDirectory()

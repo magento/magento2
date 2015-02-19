@@ -47,7 +47,7 @@ class Multishipping extends \Magento\Framework\Object
     protected $_session;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -146,7 +146,7 @@ class Multishipping extends \Magento\Framework\Object
      * @param \Magento\Quote\Model\Quote\Address\ToOrderAddress $quoteAddressToOrderAddress
      * @param \Magento\Quote\Model\Quote\Payment\ToOrderPayment $quotePaymentToOrderPayment
      * @param \Magento\Quote\Model\Quote\Item\ToOrderItem $quoteItemToOrderItem
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification
      * @param \Magento\Multishipping\Helper\Data $helper
      * @param OrderSender $orderSender
@@ -170,7 +170,7 @@ class Multishipping extends \Magento\Framework\Object
         \Magento\Quote\Model\Quote\Address\ToOrderAddress $quoteAddressToOrderAddress,
         \Magento\Quote\Model\Quote\Payment\ToOrderPayment $quotePaymentToOrderPayment,
         \Magento\Quote\Model\Quote\Item\ToOrderItem $quoteItemToOrderItem,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification,
         \Magento\Multishipping\Helper\Data $helper,
         OrderSender $orderSender,
@@ -766,10 +766,10 @@ class Multishipping extends \Magento\Framework\Object
     {
         return !($this->_scopeConfig->isSetFlag(
             'sales/minimum_order/active',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) && $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) && !$this->getQuote()->validateMinimumAmount());
     }
 
@@ -782,12 +782,12 @@ class Multishipping extends \Magento\Framework\Object
     {
         $descr = $this->_scopeConfig->getValue(
             'sales/minimum_order/multi_address_description',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (empty($descr)) {
             $descr = $this->_scopeConfig->getValue(
                 'sales/minimum_order/description',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
         return $descr;
@@ -800,12 +800,12 @@ class Multishipping extends \Magento\Framework\Object
     {
         $error = $this->_scopeConfig->getValue(
             'sales/minimum_order/multi_address_error_message',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (empty($error)) {
             $error = $this->_scopeConfig->getValue(
                 'sales/minimum_order/error_message',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
         return $error;

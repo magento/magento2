@@ -85,7 +85,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $storeId = $this->getRequest()->getParam('store');
         $refreshTree = false;
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
             if (!$category->getId()) {
@@ -93,7 +93,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 if (!$parentId) {
                     if ($storeId) {
                         $parentId = $this->_objectManager->get(
-                            'Magento\Framework\Store\StoreManagerInterface'
+                            'Magento\Store\Model\StoreManagerInterface'
                         )->getStore(
                             $storeId
                         )->getRootCategoryId();

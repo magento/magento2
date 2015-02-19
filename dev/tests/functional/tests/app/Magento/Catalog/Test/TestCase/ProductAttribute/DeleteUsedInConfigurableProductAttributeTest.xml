@@ -5,11 +5,13 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
-    <testCase name="DeleteUsedInConfigurableProductAttributeTest">
-        <variation name="DeleteUsedInConfigurableProductAttributeTestVariation1">
-            <data name="product/dataSet">one_variation</data>
-            <data name="constraint">assertUsedSuperAttributeImpossibleDeleteMessages, assertProductAttributeInGrid, assertConfigurableProductForm</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteUsedInConfigurableProductAttributeTest">
+    <variation name="DeleteUsedInConfigurableProductAttributeTestVariation1" firstConstraint="assertUsedSuperAttributeImpossibleDeleteMessages" method="test">
+      <data name="product/dataSet" xsi:type="string">one_variation</data>
+      <constraint name="assertUsedSuperAttributeImpossibleDeleteMessages" next="assertProductAttributeInGrid"/>
+      <constraint name="assertProductAttributeInGrid" next="assertConfigurableProductForm" prev="assertUsedSuperAttributeImpossibleDeleteMessages"/>
+      <constraint name="assertConfigurableProductForm" prev="assertProductAttributeInGrid"/>
+    </variation>
+  </testCase>
 </config>

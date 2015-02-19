@@ -36,7 +36,7 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
         $this->visibilityMock = $this->getMock('Magento\Catalog\Model\Product\Visibility', [], [], '', false);
         $this->catalogConfigMock = $this->getMock('\Magento\Catalog\Model\Config', [], [], '', false);
 
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
 
         $this->model = $objectManager->getObject(
             'Magento\Catalog\Model\Layer\Search\CollectionFilter',
@@ -49,8 +49,8 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Model\Layer\Search\CollectionFilter::filter
-     * @covers \Magento\Catalog\Model\Layer\Search\CollectionFilter::__construct
+     * covers \Magento\Catalog\Model\Layer\Search\CollectionFilter::filter
+     * covers \Magento\Catalog\Model\Layer\Search\CollectionFilter::__construct
      */
     public function testFilter()
     {

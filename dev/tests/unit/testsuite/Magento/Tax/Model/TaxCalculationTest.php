@@ -80,7 +80,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
             ->getMock();

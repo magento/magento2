@@ -4,12 +4,13 @@
  * See COPYING.txt for license details.
  */
 ?>
-<div class="row">
-    <div ng-include="'index.php/navigation/menu'"></div>
-
-    <div class="container {{class}}" ng-controller="mainController" id="main">
-        <div ui-view="root">
-            <div ui-view></div>
-        </div>
+<div ng-include="'index.php/navigation/menu'"></div>
+<div
+    id="main"
+    class="main {{class}}"
+    ng-controller="mainController"
+    >
+    <div ui-view="root">
+        <div ui-view></div>
     </div>
 </div>

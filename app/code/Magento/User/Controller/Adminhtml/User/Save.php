@@ -16,7 +16,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     public function execute()
     {
         $userId = (int)$this->getRequest()->getParam('user_id');
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if (!$data) {
             $this->_redirect('adminhtml/*/');
             return;

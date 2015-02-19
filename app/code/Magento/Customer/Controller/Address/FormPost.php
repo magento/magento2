@@ -75,7 +75,7 @@ class FormPost extends \Magento\Customer\Controller\Address
         }
 
         if (!$this->getRequest()->isPost()) {
-            $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
+            $this->_getSession()->setAddressFormData($this->getRequest()->getPostValue());
             return $this->resultRedirectFactory->create()->setUrl(
                 $this->_redirect->error($this->_buildUrl('*/*/edit'))
             );
@@ -96,7 +96,7 @@ class FormPost extends \Magento\Customer\Controller\Address
             $this->messageManager->addException($e, __('Cannot save address.'));
         }
 
-        $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
+        $this->_getSession()->setAddressFormData($this->getRequest()->getPostValue());
         $url = $this->_buildUrl('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
         return $this->resultRedirectFactory->create()->setUrl($this->_redirect->error($url));
     }

@@ -43,7 +43,7 @@ class SaveRatesTest extends \Magento\Backend\Utility\Controller
         $rate = 1.0000;
 
         $request = $this->getRequest();
-        $request->setPost(
+        $request->setPostValue(
             'rate',
             [
                 $currencyCode => [$currencyTo => $rate]
@@ -52,7 +52,7 @@ class SaveRatesTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/system_currency/saveRates');
 
         $this->assertSessionMessages(
-            $this->contains(__('All valid rates have been saved.')),
+            $this->contains((string)__('All valid rates have been saved.')),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
 
@@ -75,7 +75,7 @@ class SaveRatesTest extends \Magento\Backend\Utility\Controller
         $rate = '0';
 
         $request = $this->getRequest();
-        $request->setPost(
+        $request->setPostValue(
             'rate',
             [
                 $currencyCode => [$currencyTo => $rate]
@@ -84,7 +84,7 @@ class SaveRatesTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/system_currency/saveRates');
 
         $this->assertSessionMessages(
-            $this->contains(__('Please correct the input data for %1 => %2 rate', $currencyCode, $currencyTo)),
+            $this->contains((string)__('Please correct the input data for %1 => %2 rate', $currencyCode, $currencyTo)),
             \Magento\Framework\Message\MessageInterface::TYPE_WARNING
         );
     }

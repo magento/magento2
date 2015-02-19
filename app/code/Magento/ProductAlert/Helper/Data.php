@@ -29,34 +29,24 @@ class Data extends \Magento\Core\Helper\Url
     protected $_coreRegistry = null;
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\View\LayoutInterface $layout
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_layout = $layout;
-        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $storeManager);
     }
 
@@ -135,9 +125,9 @@ class Data extends \Magento\Core\Helper\Url
      */
     public function isStockAlertAllowed()
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             \Magento\ProductAlert\Model\Observer::XML_PATH_STOCK_ALLOW,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -148,9 +138,9 @@ class Data extends \Magento\Core\Helper\Url
      */
     public function isPriceAlertAllowed()
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             \Magento\ProductAlert\Model\Observer::XML_PATH_PRICE_ALLOW,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 }

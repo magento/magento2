@@ -220,7 +220,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     public function getIdFieldName()
     {
         if (empty($this->_idFieldName)) {
-            throw new ModelException(__('Empty identifier field name'));
+            throw new ModelException((string)new \Magento\Framework\Phrase('Empty identifier field name'));
         }
         return $this->_idFieldName;
     }
@@ -235,7 +235,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     public function getMainTable()
     {
         if (empty($this->_mainTable)) {
-            throw new ModelException(__('Empty main table name'));
+            throw new ModelException((string)new \Magento\Framework\Phrase('Empty main table name'));
         }
         return $this->getTable($this->_mainTable);
     }
@@ -636,9 +636,9 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
 
         if (!empty($existent)) {
             if (count($existent) == 1) {
-                $error = __('%1 already exists.', $existent[0]);
+                $error = (string)new \Magento\Framework\Phrase('%1 already exists.', [$existent[0]]);
             } else {
-                $error = __('%1 already exist.', implode(', ', $existent));
+                $error = (string)new \Magento\Framework\Phrase('%1 already exist.', [implode(', ', $existent)]);
             }
             throw new AlreadyExistsException($error);
         }

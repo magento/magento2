@@ -9,6 +9,8 @@
  */
 namespace Magento\Test\Integrity\Magento\Payment;
 
+use Magento\Framework\App\State;
+
 class MethodsTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -25,7 +27,7 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Element\BlockFactory'
         );
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore()->getId();
         /** @var $model \Magento\Payment\Model\MethodInterface */
         if (empty($methodClass)) {
@@ -50,6 +52,8 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
             );
             $model->setInfoInstance($paymentInfo);
         }
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setMode(State::MODE_DEVELOPER);
         $this->assertNotEmpty($model->getTitle());
         foreach ([$model->getFormBlockType(), $model->getInfoBlockType()] as $blockClass) {
             $message = "Block class: {$blockClass}";
@@ -60,20 +64,20 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
             if ($model->canUseInternal()) {
                 try {
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                        'Magento\Framework\Store\StoreManagerInterface'
+                        'Magento\Store\Model\StoreManagerInterface'
                     )->getStore()->setId(
                         \Magento\Store\Model\Store::DEFAULT_STORE_ID
                     );
                     $block->setArea('adminhtml');
                     $this->assertFileExists($block->getTemplateFile(), $message);
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                        'Magento\Framework\Store\StoreManagerInterface'
+                        'Magento\Store\Model\StoreManagerInterface'
                     )->getStore()->setId(
                         $storeId
                     );
                 } catch (\Exception $e) {
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                        'Magento\Framework\Store\StoreManagerInterface'
+                        'Magento\Store\Model\StoreManagerInterface'
                     )->getStore()->setId(
                         $storeId
                     );
@@ -81,6 +85,8 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
                 }
             }
         }
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setMode(State::MODE_DEFAULT);
     }
 
     /**

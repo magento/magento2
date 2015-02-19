@@ -11,13 +11,13 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Url\DecoderInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Core\App\Action\FormKeyValidator;
+use Magento\Framework\Data\Form\FormKey\Validator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -27,7 +27,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface */
+    /** @var StoreManagerInterface */
     protected $storeManager;
 
     /** @var AccountManagementInterface */
@@ -39,7 +39,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /** @var CustomerUrl */
     protected $customerUrl;
 
-    /** @var FormKeyValidator */
+    /** @var Validator */
     protected $formKeyValidator;
 
     /**
@@ -52,7 +52,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
      * @param AccountManagementInterface $customerAccountManagement
      * @param DecoderInterface $urlDecoder
      * @param CustomerUrl $customerHelperData
-     * @param FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -66,7 +66,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
         AccountManagementInterface $customerAccountManagement,
         DecoderInterface $urlDecoder,
         CustomerUrl $customerHelperData,
-        FormKeyValidator $formKeyValidator
+        Validator $formKeyValidator
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
@@ -101,7 +101,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
             if ($this->_getSession()->isLoggedIn()) {
                 if (!$this->scopeConfig->isSetFlag(
                     CustomerUrl::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
                 ) {
                     $referer = $this->getRequest()->getParam(CustomerUrl::REFERER_QUERY_PARAM_NAME);
