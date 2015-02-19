@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\MultisuggestElement;
 
 /**

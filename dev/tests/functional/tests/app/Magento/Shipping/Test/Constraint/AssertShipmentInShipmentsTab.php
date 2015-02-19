@@ -12,7 +12,6 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertShipmentInShipmentsTab
  * Assert that shipment is present in the Shipments tab with correct shipped items quantity
  */
 class AssertShipmentInShipmentsTab extends AbstractConstraint
@@ -24,21 +23,21 @@ class AssertShipmentInShipmentsTab extends AbstractConstraint
     /**
      * Assert that shipment is present in the Shipments tab with correct shipped items quantity
      *
-     * @param SalesOrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex
      * @param OrderInjectable $order
      * @param array $ids
      * @return void
      */
     public function processAssert(
-        SalesOrderView $orderView,
+        SalesOrderView $salesOrderView,
         OrderIndex $orderIndex,
         OrderInjectable $order,
         array $ids
     ) {
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
-        $orderView->getOrderForm()->openTab('shipments');
+        $salesOrderView->getOrderForm()->openTab('shipments');
         $totalQty = $order->getTotalQtyOrdered();
         $totalQty = is_array($totalQty) ? $totalQty : [$totalQty];
 
@@ -49,7 +48,7 @@ class AssertShipmentInShipmentsTab extends AbstractConstraint
                 'qty_to' => $totalQty[$key],
             ];
             \PHPUnit_Framework_Assert::assertTrue(
-                $orderView->getOrderForm()->getTabElement('shipments')->getGridBlock()->isRowVisible($filter),
+                $salesOrderView->getOrderForm()->getTabElement('shipments')->getGridBlock()->isRowVisible($filter),
                 'Shipment is absent on shipments tab.'
             );
         }

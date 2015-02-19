@@ -36,7 +36,7 @@ class Form extends ParentForm
      *
      * @var string
      */
-    protected $fieldSelector = '//div[label and div]';
+    protected $fieldSelector = './/div[label and div]';
 
     /**
      * Label element selector.
