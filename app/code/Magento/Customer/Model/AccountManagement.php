@@ -69,9 +69,6 @@ class AccountManagement implements AccountManagementInterface
 
     const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
 
-    /**
-     * Codes of exceptions related to customer model
-     */
     // Constants for the type of new account email to be sent
     const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';
 
