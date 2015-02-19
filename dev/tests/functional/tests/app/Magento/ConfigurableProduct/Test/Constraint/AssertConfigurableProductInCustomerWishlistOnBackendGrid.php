@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Wishlist\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid;
 use Magento\Mtf\Fixture\FixtureInterface;
 
@@ -24,7 +24,7 @@ class AssertConfigurableProductInCustomerWishlistOnBackendGrid extends AssertPro
      */
     protected function prepareOptions(FixtureInterface $product)
     {
-        /** @var ConfigurableProductInjectable $product */
+        /** @var ConfigurableProduct $product */
         $productOptions = parent::prepareOptions($product);
         $checkoutData = $product->getCheckoutData()['options'];
         if (!empty($checkoutData['configurable_options'])) {

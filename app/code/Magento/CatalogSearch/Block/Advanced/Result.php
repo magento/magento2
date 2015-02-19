@@ -160,7 +160,7 @@ class Result extends Template
     public function getFormUrl()
     {
         return $this->_urlFactory->create()->addQueryParams(
-            $this->getRequest()->getQuery()
+            $this->getRequest()->getQueryValue()
         )->getUrl(
             '*/*/',
             ['_escape' => true]

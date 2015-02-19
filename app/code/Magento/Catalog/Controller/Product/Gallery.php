@@ -56,7 +56,8 @@ class Gallery extends \Magento\Catalog\Controller\Product
     {
         $result = null;
         if (!$this->_initProduct()) {
-            if (isset($_GET['store']) && !$this->getResponse()->isRedirect()) {
+            $store = $this->getRequest()->getQuery('store');
+            if (isset($store) && !$this->getResponse()->isRedirect()) {
                 $result = $this->resultRedirectFactory->create();
                 $result->setPath('');
             } elseif (!$this->getResponse()->isRedirect()) {

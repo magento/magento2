@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 
@@ -38,10 +38,10 @@ class ViewProductInCustomerWishlistOnBackendTest extends AbstractWishlistTest
     /**
      * Prepare customer for test.
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
-    public function __prepare(CustomerInjectable $customer)
+    public function __prepare(Customer $customer)
     {
         $customer->persist();
 
@@ -51,14 +51,14 @@ class ViewProductInCustomerWishlistOnBackendTest extends AbstractWishlistTest
     /**
      * Configure customer wish list on backend.
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param string $product
      * @param CustomerIndex $customerIndex
      * @param CustomerIndexEdit $customerIndexEdit
      * @return array
      */
     public function test(
-        CustomerInjectable $customer,
+        Customer $customer,
         $product,
         CustomerIndex $customerIndex,
         CustomerIndexEdit $customerIndexEdit

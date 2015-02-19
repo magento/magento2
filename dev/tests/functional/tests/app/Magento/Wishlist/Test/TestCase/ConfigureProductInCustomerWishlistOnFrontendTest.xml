@@ -13,7 +13,7 @@
       <constraint name="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
     </variation>
     <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation2" firstConstraint="assertProductIsPresentInWishlist" method="test">
-      <data name="product" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="product" xsi:type="string">configurableProduct::default</data>
       <constraint name="assertProductIsPresentInWishlist" next="assertProductDetailsInWishlist"/>
       <constraint name="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
     </variation>
@@ -23,12 +23,12 @@
       <constraint name="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
     </variation>
     <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation4" firstConstraint="assertProductIsPresentInWishlist" method="test">
-      <data name="product" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
+      <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links</data>
       <constraint name="assertProductIsPresentInWishlist" next="assertProductDetailsInWishlist"/>
       <constraint name="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
     </variation>
     <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation5" firstConstraint="assertProductIsPresentInWishlist" method="test">
-      <data name="product" xsi:type="string">groupedProductInjectable::three_simple_products</data>
+      <data name="product" xsi:type="string">groupedProduct::three_simple_products</data>
       <constraint name="assertProductIsPresentInWishlist" next="assertProductDetailsInWishlist"/>
       <constraint name="assertProductDetailsInWishlist" prev="assertProductIsPresentInWishlist"/>
     </variation>

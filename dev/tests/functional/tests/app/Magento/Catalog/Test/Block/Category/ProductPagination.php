@@ -7,26 +7,24 @@
 namespace Magento\Catalog\Test\Block\Category;
 
 use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\ElementInterface;
 
 /**
- * Class ProductPagination
- * Pagination page product list
- *
- * @package Magento\Catalog\Test\Block\Category
+ * Pagination page product list.
  */
 class ProductPagination extends Block
 {
     /**
-     * Selector next active element
+     * Selector next active element.
      *
      * @var string
      */
     protected $nextPageSelector = '.item.current + .item a';
 
     /**
-     * Getting the active element to go to the next page
+     * Getting the active element to go to the next page.
      *
-     * @return \Magento\Mtf\Client\Element|null
+     * @return ElementInterface|null
      */
     public function getNextPage()
     {

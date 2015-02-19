@@ -63,6 +63,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
                 'getModuleName',
                 'getCookie',
                 'isAjax',
+                'isSecure',
             ]
         );
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
