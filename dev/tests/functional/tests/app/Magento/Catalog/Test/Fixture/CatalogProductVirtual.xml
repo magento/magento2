@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" ?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
@@ -187,10 +187,22 @@
     <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId"/>
     <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions"/>
     <field name="website_ids" group="websites">
-      <default_value xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
-            </default_value>
+        <default_value xsi:type="array">
+            <item name="0" xsi:type="string">Main Website</item>
+        </default_value>
     </field>
     <field name="checkout_data" group="null" source="Magento\Catalog\Test\Fixture\CatalogProductVirtual\CheckoutData"/>
+    <field name="cross_sell_products" 
+           group="crosssells"
+           source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CrossSellProducts"
+            />
+    <field name="up_sell_products" 
+           group="upsells"
+           source="Magento\Catalog\Test\Fixture\CatalogProductSimple\UpSellProducts"
+            />
+    <field name="related_products" 
+           group="related-products"
+           source="Magento\Catalog\Test\Fixture\CatalogProductSimple\RelatedProducts"
+            />
   </fixture>
 </config>

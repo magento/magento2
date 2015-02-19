@@ -6,7 +6,7 @@
 
 namespace Magento\Reports\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -18,12 +18,12 @@ abstract class AbstractAssertCustomerOrderReportResult extends AbstractConstrain
     /**
      * Prepare filter
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param array $columns
      * @param array $report
      * @return array
      */
-    public function prepareFilter(CustomerInjectable $customer, array $columns, array $report)
+    public function prepareFilter(Customer $customer, array $columns, array $report)
     {
         $format = '';
         switch ($report['report_period']) {

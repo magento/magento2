@@ -7,7 +7,7 @@
 namespace Magento\Wishlist\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
@@ -27,7 +27,7 @@ class AssertProductsIsAbsentInWishlist extends AbstractConstraint
      * @param CustomerAccountIndex $customerAccountIndex
      * @param WishlistIndex $wishlistIndex
      * @param InjectableFixture[] $products
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CmsIndex $cmsIndex
      * @param CustomerAccountLogin $customerAccountLogin
      * @param CustomerAccountLogout $customerAccountLogout
@@ -37,7 +37,7 @@ class AssertProductsIsAbsentInWishlist extends AbstractConstraint
         CustomerAccountIndex $customerAccountIndex,
         WishlistIndex $wishlistIndex,
         $products,
-        CustomerInjectable $customer,
+        Customer $customer,
         CmsIndex $cmsIndex,
         CustomerAccountLogin $customerAccountLogin,
         CustomerAccountLogout $customerAccountLogout

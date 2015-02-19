@@ -6,108 +6,60 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class AssertAddToCartButtonPresent
- * Checks the button on the category/product pages
+ * Checks the button on the category/product pages.
  */
 class AssertAddToCartButtonPresent extends AbstractConstraint
 {
     /**
-     * Category Page on Frontend
+     * Assert that "Add to cart" button is present on page.
      *
-     * @var CatalogCategoryView
-     */
-    protected $catalogCategoryView;
-
-    /**
-     * Index Page
-     *
-     * @var CmsIndex
-     */
-    protected $cmsIndex;
-
-    /**
-     * Product simple fixture
-     *
-     * @var CatalogProductSimple
-     */
-    protected $product;
-
-    /**
-     * Product Page on Frontend
-     *
-     * @var CatalogProductView
-     */
-    protected $catalogProductView;
-
-    /**
-     * Assert that "Add to cart" button is present on page
-     *
+     * @param InjectableFixture $product
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
-     * @param CatalogProductSimple $product
      * @param CatalogProductView $catalogProductView
+     * @param Category $category [optional]
      *
      * @return void
      */
     public function processAssert(
+        InjectableFixture $product,
         CmsIndex $cmsIndex,
         CatalogCategoryView $catalogCategoryView,
-        CatalogProductSimple $product,
-        CatalogProductView $catalogProductView
+        CatalogProductView $catalogProductView,
+        Category $category = null
     ) {
-        $this->catalogCategoryView = $catalogCategoryView;
-        $this->cmsIndex = $cmsIndex;
-        $this->product = $product;
-        $this->catalogProductView = $catalogProductView;
+        $cmsIndex->open();
+        $categoryName = $category === null ? $product->getCategoryIds()[0] : $category->getName();
+        $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
 
-        $this->addToCardPresentOnCategory();
-        $this->addToCardPresentOnProduct();
-    }
+        $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
+        while (!$isProductVisible && $catalogCategoryView->getBottomToolbar()->nextPage()) {
+            $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
+        }
+        \PHPUnit_Framework_Assert::assertTrue($isProductVisible, 'Product is absent on category page.');
 
-    /**
-     * "Add to cart" button is display on Category page
-     *
-     * @return void
-     */
-    protected function addToCardPresentOnCategory()
-    {
-        $this->cmsIndex->open();
-        $this->cmsIndex->getTopmenu()->selectCategoryByName(
-            $this->product->getCategoryIds()[0]
-        );
         \PHPUnit_Framework_Assert::assertTrue(
-            $this->catalogCategoryView->getListProductBlock()->checkAddToCardButton(),
+            $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisibleAddToCardButton(),
             "Button 'Add to Card' is absent on Category page."
         );
-    }
 
-    /**
-     * "Add to cart" button is display on Product page
-     *
-     * @return void
-     */
-    protected function addToCardPresentOnProduct()
-    {
-        $this->cmsIndex->open();
-        $this->cmsIndex->getTopmenu()->selectCategoryByName(
-            $this->product->getCategoryIds()[0]
-        );
-        $this->catalogCategoryView->getListProductBlock()->openProductViewPage($this->product->getName());
+        $catalogCategoryView->getListProductBlock()->openProductViewPage($product->getName());
         \PHPUnit_Framework_Assert::assertTrue(
-            $this->catalogProductView->getViewBlock()->checkAddToCardButton(),
+            $catalogProductView->getViewBlock()->isVisibleAddToCardButton(),
             "Button 'Add to Card' is absent on Product page."
         );
     }
 
     /**
-     * Text present button "Add to Cart"  on the category/product pages
+     * Text present button "Add to Cart"  on the category/product pages.
      *
      * @return string
      */

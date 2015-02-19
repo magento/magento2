@@ -65,7 +65,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\GroupedProduct\Test\Constraint\AssertSpecialPriceOnGroupedProductPage"/>
     </variation>
-    <variation name="UpdateGroupedProductEntityTestVariation5">
+    <variation name="UpdateGroupedProductEntityTestVariation5" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="originalProduct/dataSet" xsi:type="string">default</data>
       <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
       <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
@@ -76,8 +76,8 @@
       <data name="product/data/description" xsi:type="string">-</data>
       <data name="product/data/short_description" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">updated-grouped-product-%isolation%</data>
-      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
-      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
     </variation>
   </testCase>
 </config>

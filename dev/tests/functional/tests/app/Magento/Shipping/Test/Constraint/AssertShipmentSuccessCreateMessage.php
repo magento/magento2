@@ -10,7 +10,6 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertShipmentSuccessCreateMessage
  * Assert that success message is displayed after shipment has been created
  */
 class AssertShipmentSuccessCreateMessage extends AbstractConstraint
@@ -23,14 +22,14 @@ class AssertShipmentSuccessCreateMessage extends AbstractConstraint
     /**
      * Assert success message presents
      *
-     * @param SalesOrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @return void
      */
-    public function processAssert(SalesOrderView $orderView)
+    public function processAssert(SalesOrderView $salesOrderView)
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
-            $orderView->getMessagesBlock()->getSuccessMessages()
+            $salesOrderView->getMessagesBlock()->getSuccessMessages()
         );
     }
 

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+  <fixture name="address" module="Magento_Customer" type="eav" entity_type="customer_address" collection="Magento\Customer\Model\Resource\Address\Collection" repository_class="Magento\Customer\Test\Repository\Address" handler_interface="Magento\Customer\Test\Handler\Address\AddressInterface" class="Magento\Customer\Test\Fixture\Address">
+    <dataset name="default">
+        <field name="firstname" xsi:type="string">John</field>
+        <field name="lastname" xsi:type="string">Doe</field>
+        <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+        <field name="company" xsi:type="string">Magento %isolation%</field>
+        <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+        <field name="city" xsi:type="string">Culver City</field>
+        <field name="region_id" xsi:type="string">California</field>
+        <field name="postcode" xsi:type="string">90230</field>
+        <field name="country_id" xsi:type="string">United States</field>
+        <field name="telephone" xsi:type="string">555-55-555-55</field>
+    </dataset>
+    <field name="city" is_required="1">
+      <default_value xsi:type="string">Culver City</default_value>
+    </field>
+    <field name="default_billing" is_required="1">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="default_shipping" is_required="1">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="company" is_required="0">
+      <default_value xsi:type="string">Magento %isolation%</default_value>
+    </field>
+    <field name="country_id" is_required="1">
+      <default_value xsi:type="string">United States</default_value>
+    </field>
+    <field name="fax" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="firstname" is_required="1">
+      <default_value xsi:type="string">John</default_value>
+    </field>
+    <field name="lastname" is_required="1">
+      <default_value xsi:type="string">Doe</default_value>
+    </field>
+    <field name="email" is_required="1">
+      <default_value xsi:type="string">John.Doe%isolation%@example.com</default_value>
+    </field>
+    <field name="middlename" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="postcode" is_required="0">
+      <default_value xsi:type="string">90230</default_value>
+    </field>
+    <field name="prefix" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="region" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="region_id" is_required="0">
+      <default_value xsi:type="string">California</default_value>
+    </field>
+    <field name="street" is_required="1">
+      <default_value xsi:type="string">6161 West Centinela Avenue</default_value>
+    </field>
+    <field name="suffix" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="telephone" is_required="1">
+      <default_value xsi:type="string">555-55-555-55</default_value>
+    </field>
+    <field name="vat_id" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="vat_is_valid" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="vat_request_date" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="vat_request_id" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="vat_request_success" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+  </fixture>
+</config>

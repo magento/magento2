@@ -66,13 +66,13 @@ class AssertCustomVariableForm extends AbstractAssertForm
         $systemVariableIndex->open();
         $systemVariableIndex->getSystemVariableGrid()->searchAndOpen(['code' => $data['code']]);
 
-        $formData = $systemVariableNew->getSystemVariableForm()->getData($customVariable);
+        $formData = $systemVariableNew->getSystemVariableForm()->getData();
         $errors = $this->verifyData($dataOrigin, $formData);
         \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
 
         if ($storeOrigin !== null) {
             $systemVariableNew->getFormPageActions()->selectStoreView($storeOrigin->getName());
-            $formData = $systemVariableNew->getSystemVariableForm()->getData($customVariable);
+            $formData = $systemVariableNew->getSystemVariableForm()->getData();
             $errors = $this->verifyData($data, $formData);
             \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
         }

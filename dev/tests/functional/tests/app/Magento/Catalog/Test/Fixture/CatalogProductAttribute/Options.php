@@ -93,6 +93,10 @@ class Options implements FixtureInterface
                     'view' => '',
                 ],
             ],
+            'two_options' => [
+                ['admin' => 'black'],
+                ['admin' => 'white'],
+            ],
         ];
 
         if (!isset($presets[$name])) {

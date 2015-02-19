@@ -17,7 +17,7 @@
       <data name="productSearch/data/short_description" xsi:type="string">-</data>
       <data name="productSearch/data/price/value/price_from" xsi:type="string">-</data>
       <data name="productSearch/data/price/value/price_to" xsi:type="string">-</data>
-      <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
       <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult"/>
     </variation>
     <variation name="AdvancedSearchEntityTestVariation2">

@@ -33,7 +33,7 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
      * Assert that message from dataSet is displayed on order(s) view page on backend.
      *
      * @param GiftMessage $giftMessage
-     * @param SalesOrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex
      * @param array $products
      * @param string $orderId
@@ -41,7 +41,7 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
      */
     public function processAssert(
         GiftMessage $giftMessage,
-        SalesOrderView $orderView,
+        SalesOrderView $salesOrderView,
         OrderIndex $orderIndex,
         array $products,
         $orderId
@@ -50,13 +50,13 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
 
         if ($giftMessage->getAllowGiftMessagesForOrder()) {
             $expectedData[] = $giftMessage->getData();
-            $actualData[] = $orderView->getGiftOptionsBlock()->getData($giftMessage);
+            $actualData[] = $salesOrderView->getGiftOptionsBlock()->getData($giftMessage);
         }
 
         if ($giftMessage->getAllowGiftOptionsForItems()) {
             foreach ($products as $key => $product) {
                 $expectedData[] = $giftMessage->getItems()[$key]->getData();
-                $actualData[] = $orderView->getGiftItemsBlock()->getItemProduct($product)
+                $actualData[] = $salesOrderView->getGiftItemsBlock()->getItemProduct($product)
                     ->getGiftMessageFormData($giftMessage);
             }
         }

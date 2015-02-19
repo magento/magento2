@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="customerGroupInjectable" module="Magento_Customer" type="flat" entity_type="customer_group" collection="Magento\Customer\Model\Resource\Group\Collection" repository_class="Magento\Customer\Test\Repository\CustomerGroupInjectable" handler_interface="Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface" class="Magento\Customer\Test\Fixture\CustomerGroupInjectable">
+  <fixture name="customerGroup" module="Magento_Customer" type="flat" entity_type="customer_group" collection="Magento\Customer\Model\Resource\Group\Collection" repository_class="Magento\Customer\Test\Repository\CustomerGroup" handler_interface="Magento\Customer\Test\Handler\CustomerGroup\CustomerGroupInterface" class="Magento\Customer\Test\Fixture\CustomerGroup">
     <dataset name="default">
         <field name="customer_group_code" xsi:type="string">customer_code_%isolation%</field>
         <field name="tax_class_id" xsi:type="array">

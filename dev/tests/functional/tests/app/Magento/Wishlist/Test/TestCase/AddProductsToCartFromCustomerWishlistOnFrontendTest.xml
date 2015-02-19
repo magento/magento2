@@ -7,53 +7,53 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="AddProductsToCartFromCustomerWishlistOnFrontendTest">
-    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation1" firstConstraint="assertProductQtyInShoppingCart" method="test">
+    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation1" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" method="test">
       <data name="products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
       <data name="qty" xsi:type="string">2</data>
-      <constraint name="assertProductQtyInShoppingCart" next="assertProductsIsAbsentInWishlist"/>
-      <constraint name="assertProductsIsAbsentInWishlist" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" next="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist" prev="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart"/>
     </variation>
-    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation2" firstConstraint="assertProductQtyInShoppingCart" method="test">
+    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation2" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" method="test">
       <data name="products" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
       <data name="qty" xsi:type="string">1</data>
-      <constraint name="assertProductQtyInShoppingCart" next="assertProductsIsAbsentInWishlist"/>
-      <constraint name="assertProductsIsAbsentInWishlist" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" next="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist" prev="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart"/>
     </variation>
-    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation3" firstConstraint="assertProductQtyInShoppingCart" method="test">
+    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation3" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" method="test">
       <data name="products" xsi:type="string">catalogProductSimple::default,catalogProductVirtual::product_50_dollar,catalogProductSimple::default,catalogProductVirtual::product_50_dollar</data>
       <data name="qty" xsi:type="string">-</data>
-      <constraint name="assertProductQtyInShoppingCart" next="assertWishlistIsEmpty"/>
-      <constraint name="assertWishlistIsEmpty" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" next="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" prev="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart"/>
     </variation>
-    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation4" firstConstraint="assertProductQtyInShoppingCart" method="test">
-      <data name="products" xsi:type="string">groupedProductInjectable::three_simple_products</data>
+    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation4" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" method="test">
+      <data name="products" xsi:type="string">groupedProduct::three_simple_products</data>
       <data name="qty" xsi:type="string">-</data>
-      <constraint name="assertProductQtyInShoppingCart" next="assertProductsIsAbsentInWishlist"/>
-      <constraint name="assertProductsIsAbsentInWishlist" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" next="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist" prev="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart"/>
     </variation>
-    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation5" firstConstraint="assertProductQtyInShoppingCart" method="test">
-      <data name="products" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
+    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation5" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" method="test">
+      <data name="products" xsi:type="string">downloadableProduct::with_two_separately_links</data>
       <data name="qty" xsi:type="string">-</data>
-      <constraint name="assertProductQtyInShoppingCart" next="assertProductsIsAbsentInWishlist"/>
-      <constraint name="assertProductsIsAbsentInWishlist" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" next="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist" prev="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart"/>
     </variation>
-    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation6" firstConstraint="assertProductQtyInShoppingCart" method="test">
-      <data name="products" xsi:type="string">configurableProductInjectable::default</data>
+    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation6" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" method="test">
+      <data name="products" xsi:type="string">configurableProduct::default</data>
       <data name="qty" xsi:type="string">3</data>
-      <constraint name="assertProductQtyInShoppingCart" next="assertProductsIsAbsentInWishlist"/>
-      <constraint name="assertProductsIsAbsentInWishlist" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" next="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist" prev="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart"/>
     </variation>
-    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation7" firstConstraint="assertProductQtyInShoppingCart" method="test">
+    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation7" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" method="test">
       <data name="products" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
       <data name="qty" xsi:type="string">2</data>
-      <constraint name="assertProductQtyInShoppingCart" next="assertProductsIsAbsentInWishlist"/>
-      <constraint name="assertProductsIsAbsentInWishlist" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" next="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist" prev="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart"/>
     </variation>
-    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation8" firstConstraint="assertProductQtyInShoppingCart" method="test">
+    <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation8" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" method="test">
       <data name="products" xsi:type="string">bundleProduct::bundle_fixed_product</data>
       <data name="qty" xsi:type="string">2</data>
-      <constraint name="assertProductQtyInShoppingCart" next="assertProductsIsAbsentInWishlist"/>
-      <constraint name="assertProductsIsAbsentInWishlist" prev="assertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" next="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductsIsAbsentInWishlist" prev="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart"/>
     </variation>
   </testCase>
 </config>

@@ -6,35 +6,34 @@
 
 namespace Magento\GiftMessage\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Sales\Test\Page\OrderHistory;
-use Magento\Sales\Test\Page\OrderView;
+use Magento\Sales\Test\Page\CustomerOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertGiftMessageInFrontendOrder
- * Assert that message from dataSet is displayed on order(s) view page on frontend
+ * Assert that message from dataSet is displayed on order(s) view page on frontend.
  */
 class AssertGiftMessageInFrontendOrder extends AbstractConstraint
 {
     /**
-     * Assert that message from dataSet is displayed on order(s) view page on frontend
+     * Assert that message from dataSet is displayed on order(s) view page on frontend.
      *
      * @param GiftMessage $giftMessage
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param OrderHistory $orderHistory
-     * @param OrderView $orderView
+     * @param CustomerOrderView $customerOrderView
      * @param CustomerAccountLogout $customerAccountLogout
      * @param string $orderId
      * @return void
      */
     public function processAssert(
         GiftMessage $giftMessage,
-        CustomerInjectable $customer,
+        Customer $customer,
         OrderHistory $orderHistory,
-        OrderView $orderView,
+        CustomerOrderView $customerOrderView,
         CustomerAccountLogout $customerAccountLogout,
         $orderId
     ) {
@@ -53,7 +52,7 @@ class AssertGiftMessageInFrontendOrder extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertEquals(
             $expectedData,
-            $orderView->getGiftMessageForOrderBlock()->getGiftMessage(),
+            $customerOrderView->getGiftMessageForOrderBlock()->getGiftMessage(),
             'Wrong gift message is displayed on order.'
         );
         $customerAccountLogout->open();

@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="CreateTaxWithFptTest">
-    <variation name="CreateTaxWithFptTestVariation1" firstConstraint="assertFptApplied" method="test">
+    <variation name="CreateTaxWithFptTestVariation1" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
       <data name="description" xsi:type="string">Check not taxed FPT display set to Excluding, Description and Including FPT on product with custom option catalog price Excluding Tax</data>
       <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_excl</data>
       <data name="productData" xsi:type="string">with_custom_option_and_fpt</data>
@@ -25,9 +25,9 @@
       <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">110.00</data>
       <data name="prices/grand_total" xsi:type="string">118.25</data>
       <data name="prices/total_fpt" xsi:type="string">10.00</data>
-      <constraint name="assertFptApplied"/>
+      <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied"/>
     </variation>
-    <variation name="CreateTaxWithFptTestVariation2" firstConstraint="assertFptApplied" method="test">
+    <variation name="CreateTaxWithFptTestVariation2" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
       <data name="description" xsi:type="string">Check not taxed FPT display set to Including FPT and Description on product with custom option catalog price Excluding Tax</data>
       <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_incl, display_including_tax</data>
       <data name="productData" xsi:type="string">with_custom_option_and_fpt</data>
@@ -41,9 +41,9 @@
       <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.00</data>
       <data name="prices/grand_total" xsi:type="string">118.25</data>
       <data name="prices/total_fpt" xsi:type="string">10.00</data>
-      <constraint name="assertFptApplied"/>
+      <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied"/>
     </variation>
-    <variation name="CreateTaxWithFptTestVariation3" firstConstraint="assertFptApplied" method="test">
+    <variation name="CreateTaxWithFptTestVariation3" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
       <data name="description" xsi:type="string">Check not taxed FPT display set to Excluding, Description and Including FPT on product with special price catalog price Excluding Tax</data>
       <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_incl, display_including_tax</data>
       <data name="productData" xsi:type="string">with_special_price_and_fpt</data>
@@ -57,9 +57,9 @@
       <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.00</data>
       <data name="prices/grand_total" xsi:type="string">118.25</data>
       <data name="prices/total_fpt" xsi:type="string">10.00</data>
-      <constraint name="assertFptApplied"/>
+      <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied"/>
     </variation>
-    <variation name="CreateTaxWithFptTestVariation4" firstConstraint="assertFptApplied" method="test">
+    <variation name="CreateTaxWithFptTestVariation4" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
       <data name="description" xsi:type="string">Check not taxed FPT display set to Including FPT and Description on product with special price catalog price Excluding Tax</data>
       <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_excl,</data>
       <data name="productData" xsi:type="string">with_special_price_and_fpt</data>
@@ -77,9 +77,9 @@
       <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">110.00</data>
       <data name="prices/grand_total" xsi:type="string">118.25</data>
       <data name="prices/total_fpt" xsi:type="string">10.00</data>
-      <constraint name="assertFptApplied"/>
+      <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied"/>
     </variation>
-    <variation name="CreateTaxWithFptTestVariation5" firstConstraint="assertFptApplied" method="test">
+    <variation name="CreateTaxWithFptTestVariation5" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
       <data name="description" xsi:type="string">Check taxed FPT display set to Excluding, Description and Including FPT on product with with custom option catalog price Excluding Tax</data>
       <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_excl_disc_on_excl</data>
       <data name="productData" xsi:type="string">with_custom_option_and_fpt</data>
@@ -97,9 +97,9 @@
       <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">110.00</data>
       <data name="prices/grand_total" xsi:type="string">119.08</data>
       <data name="prices/total_fpt" xsi:type="string">10.00</data>
-      <constraint name="assertFptApplied"/>
+      <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied"/>
     </variation>
-    <variation name="CreateTaxWithFptTestVariation6" firstConstraint="assertFptApplied" method="test">
+    <variation name="CreateTaxWithFptTestVariation6" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
       <data name="description" xsi:type="string">Check taxed FPT display set to Including FPT and Description on product with with custom option catalog price Excluding Tax</data>
       <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_excl_disc_on_incl, display_including_tax</data>
       <data name="productData" xsi:type="string">with_custom_option_and_fpt</data>
@@ -113,9 +113,9 @@
       <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.00</data>
       <data name="prices/grand_total" xsi:type="string">119.08</data>
       <data name="prices/total_fpt" xsi:type="string">10.00</data>
-      <constraint name="assertFptApplied"/>
+      <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied"/>
     </variation>
-    <variation name="CreateTaxWithFptTestVariation7" firstConstraint="assertFptApplied" method="test">
+    <variation name="CreateTaxWithFptTestVariation7" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
       <data name="description" xsi:type="string">Check taxed FPT display set to Excluding, Description and Including FPT on product with special price catalog price Excluding Tax</data>
       <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_excl_disc_on_incl, display_including_tax</data>
       <data name="productData" xsi:type="string">with_special_price_and_fpt</data>
@@ -129,9 +129,9 @@
       <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.00</data>
       <data name="prices/grand_total" xsi:type="string">119.08</data>
       <data name="prices/total_fpt" xsi:type="string">10.00</data>
-      <constraint name="assertFptApplied"/>
+      <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied"/>
     </variation>
-    <variation name="CreateTaxWithFptTestVariation8" firstConstraint="assertFptApplied" method="test">
+    <variation name="CreateTaxWithFptTestVariation8" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
       <data name="description" xsi:type="string">Check taxed FPT display set to Including FPT and Description on product with special price catalog price Excluding Tax</data>
       <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_excl_disc_on_excl</data>
       <data name="productData" xsi:type="string">with_special_price_and_fpt</data>
@@ -149,9 +149,9 @@
       <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">110.00</data>
       <data name="prices/grand_total" xsi:type="string">119.08</data>
       <data name="prices/total_fpt" xsi:type="string">10.00</data>
-      <constraint name="assertFptApplied"/>
+      <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied"/>
     </variation>
-    <variation name="CreateTaxWithFptTestVariation9" firstConstraint="assertFptApplied" method="test">
+    <variation name="CreateTaxWithFptTestVariation9" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
       <data name="description" xsi:type="string">Check taxed FPT display set to Excluding, Description and Including FPT on product with with special price and catalog price Including Tax</data>
       <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_incl_disc_on_excl</data>
       <data name="productData" xsi:type="string">with_special_price_and_fpt</data>
@@ -169,9 +169,9 @@
       <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">101.62</data>
       <data name="prices/grand_total" xsi:type="string">110.00</data>
       <data name="prices/total_fpt" xsi:type="string">10.00</data>
-      <constraint name="assertFptApplied"/>
+      <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied"/>
     </variation>
-    <variation name="CreateTaxWithFptTestVariation10" firstConstraint="assertFptApplied" method="test">
+    <variation name="CreateTaxWithFptTestVariation10" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
       <data name="description" xsi:type="string">Check taxed FPT display set to Including FPT and Description on product with with special price and catalog price Including Tax</data>
       <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_incl_disc_on_incl, display_including_tax</data>
       <data name="productData" xsi:type="string">with_special_price_and_fpt</data>
@@ -185,9 +185,9 @@
       <data name="prices/cart_item_subtotal_fpt" xsi:type="string">9.24</data>
       <data name="prices/grand_total" xsi:type="string">110.00</data>
       <data name="prices/total_fpt" xsi:type="string">10.00</data>
-      <constraint name="assertFptApplied"/>
+      <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied"/>
     </variation>
-    <variation name="CreateTaxWithFptTestVariation11" firstConstraint="assertFptApplied" method="test">
+    <variation name="CreateTaxWithFptTestVariation11" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
       <data name="description" xsi:type="string">Check taxed FPT display set to Excluding, Description and Including FPT on product with with custom option and catalog price Including Tax</data>
       <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_incl_disc_on_excl</data>
       <data name="productData" xsi:type="string">with_custom_option_and_fpt</data>
@@ -205,7 +205,7 @@
       <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">101.62</data>
       <data name="prices/grand_total" xsi:type="string">110.00</data>
       <data name="prices/total_fpt" xsi:type="string">10.00</data>
-      <constraint name="assertFptApplied"/>
+      <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied"/>
     </variation>
   </testCase>
 </config>
