@@ -45,7 +45,7 @@ class MutablePathAssetTest extends AbstractAssetTestCase
      */
     private function prepareRequestedAsMinifiedMock()
     {
-        $this->_asset->expects($this->exactly(2))->method('getPath')->will($this->returnValue('test/admin.min.js'));
+        $this->_asset->expects($this->any())->method('getPath')->will($this->returnValue('test/admin.min.js'));
         $this->_asset->expects($this->once())->method('getSourceFile')->will($this->returnValue('source_file'));
         $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
         $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
@@ -133,12 +133,12 @@ class MutablePathAssetTest extends AbstractAssetTestCase
 
     public function testMinificationFailed()
     {
-        $this->prepareAttemptToMinifyMock(false);
-        $this->_asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
+        $this->prepareAttemptToMinifyMock(false, true, false);
+        $this->_asset->expects($this->exactly(2))->method('getContent')->will($this->returnValue('content'));
         $e = new \Exception('test');
         $this->_adapter->expects($this->once())->method('minify')->with('content')->will($this->throwException($e));
         $this->_logger->expects($this->once())->method('critical');
-        $this->_staticViewDir->expects($this->never())->method('writeFile');
+        $this->_staticViewDir->expects($this->once())->method('writeFile');
         $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
         $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
         $this->_asset->expects($this->once())->method('getUrl')->will($this->returnValue('url'));

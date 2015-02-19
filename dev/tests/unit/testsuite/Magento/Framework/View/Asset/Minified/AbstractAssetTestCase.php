@@ -69,7 +69,7 @@ class AbstractAssetTestCase extends \PHPUnit_Framework_TestCase
         $this->_adapter = $this->getMockForAbstractClass('Magento\Framework\Code\Minifier\AdapterInterface');
     }
 
-    protected function prepareAttemptToMinifyMock($fileExists, $rootDirExpectations = true)
+    protected function prepareAttemptToMinifyMock($fileExists, $rootDirExpectations = true, $originalExists = true)
     {
         $this->_asset->expects($this->atLeastOnce())->method('getPath')->will($this->returnValue('test/admin.js'));
         $this->_asset->expects($this->atLeastOnce())
@@ -86,6 +86,6 @@ class AbstractAssetTestCase extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue(false));
         }
         $this->_baseUrl->expects($this->once())->method('getBaseUrl')->will($this->returnValue('http://example.com/'));
-        $this->_staticViewDir->expects($this->once())->method('isExist')->will($this->returnValue($fileExists));
+        $this->_staticViewDir->expects($this->exactly(2-intval($originalExists)))->method('isExist')->will($this->returnValue($fileExists));
     }
 }

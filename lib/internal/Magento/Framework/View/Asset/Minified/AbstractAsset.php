@@ -206,10 +206,7 @@ abstract class AbstractAsset implements MergeableInterface
      */
     public function getContent()
     {
-        if (null === $this->path) {
-            $this->process();
-        }
-        return $this->staticViewDir->readFile($this->path);
+        return $this->staticViewDir->readFile($this->getPath());
     }
 
     /**
@@ -285,6 +282,11 @@ abstract class AbstractAsset implements MergeableInterface
         $this->filePath = $this->originalAsset->getFilePath();
         $this->context = $this->originalAsset->getContext();
         $this->url = $this->originalAsset->getUrl();
+
+        $isExists = $this->staticViewDir->isExist($this->originalAsset->getPath());
+        if (!$isExists) {
+            $this->staticViewDir->writeFile($this->originalAsset->getPath(), $this->originalAsset->getContent());
+        }
     }
 
     /**

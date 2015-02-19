@@ -1,0 +1,24 @@
+{
+    "options": {
+        "shareDir": "base"
+    },
+    "backend": {
+        "options": {
+            "port": 8000,
+            "areaDir": "adminhtml",
+            "theme": "backend"
+        }
+    },
+    "frontend": {
+        "options": {
+            "port": 3000,
+            "areaDir": "frontend",
+            "theme": "blank"
+        }
+    },
+    "lib": {
+        "options": {
+            "port": 8080
+        }
+    }
+}
