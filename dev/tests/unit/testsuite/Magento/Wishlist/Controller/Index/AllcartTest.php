@@ -19,7 +19,7 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
     protected $itemCarrier;
 
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $formKeyValidator;
 
@@ -43,7 +43,7 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
         $this->wishlistProvider = $this->getMock('Magento\Wishlist\Controller\WishlistProvider', [], [], '', false);
         $this->itemCarrier = $this->getMock('Magento\Wishlist\Model\ItemCarrier', [], [], '', false);
-        $this->formKeyValidator = $this->getMock('Magento\Core\App\Action\FormKeyValidator', [], [], '', false);
+        $this->formKeyValidator = $this->getMock('Magento\Framework\Data\Form\FormKey\Validator', [], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
     }

@@ -28,12 +28,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $context = $this->getMock('\Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->attributeConfig = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Config', [], [], '', false);
-        $scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
-        $eavConfig = $this->getMock('\Magento\Eav\Model\Config', [], [], '', false);
-        $this->_helper = new Data($context, $this->attributeConfig, $scopeConfig, $eavConfig);
-        $this->_eavConfig = $eavConfig;
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $className = '\Magento\Eav\Helper\Data';
+        $arguments = $objectManagerHelper->getConstructArguments($className);
+        $this->attributeConfig = $arguments['attributeConfig'];
+        $this->_eavConfig = $arguments['eavConfig'];
+        $this->_helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
     public function testGetAttributeMetadata()
