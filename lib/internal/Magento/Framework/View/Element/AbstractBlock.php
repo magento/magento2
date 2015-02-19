@@ -775,7 +775,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
         $format = \IntlDateFormatter::SHORT,
         $showTime = false
     ) {
-        $date = $date instanceof \DateTimeInterface ?: new \DateTime($date);
+        $date = $date instanceof \DateTimeInterface ? $date : new \DateTime($date);
         return $this->_localeDate->formatDateTime(
             $date,
             $format,
