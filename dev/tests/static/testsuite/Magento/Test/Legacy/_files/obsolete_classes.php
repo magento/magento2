@@ -2920,4 +2920,5 @@ return [
     ['Magento\Reports\Model\DateFactory'],
     ['Magento\Framework\Stdlib\DateTime\DateFactory'],
     ['Magento\Framework\Stdlib\DateTime\Date'],
+    ['Magento\Framework\Stdlib\DateTime\DateInterface'],
 ];
