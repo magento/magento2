@@ -185,7 +185,7 @@ class Integration implements \Magento\Integration\Service\V1\IntegrationInterfac
      */
     public function getSelectedResources($integrationId)
     {
-        $integration = $this->_loadIntegrationById($integrationId);
+        $integration = $this->get($integrationId);
         $data = $integration->getData();
 
         $selectedResourceIds = [];
