@@ -185,7 +185,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $format = $this->_localeDate->getDateFormat(
                     \IntlDateFormatter::MEDIUM
                 );
-                $result = $this->_localeDate->date($optionValue, \Zend_Date::ISO_8601, null, false)->toString($format);
+                $result = \IntlDateFormatter::formatObject(new \DateTime($optionValue), $format);
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME) {
                 $format = $this->_localeDate->getDateTimeFormat(
                     \IntlDateFormatter::SHORT
