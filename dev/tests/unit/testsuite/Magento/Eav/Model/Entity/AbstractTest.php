@@ -262,16 +262,12 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         );
 
         $backendModel->setAttribute($attribute);
-
         $attribute->expects($this->any())->method('getBackend')->will($this->returnValue($backendModel));
         $attribute->setId(222);
-
         $attributes[$attributeCode] = $attribute;
-
         $eavConfig = $this->getMockBuilder('Magento\Eav\Model\Config')
             ->disableOriginalConstructor()
             ->getMock();
-
         $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $arguments =  $objectManager->getConstructArguments(
@@ -285,13 +281,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-
         /** @var $model \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
         $model = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
             ->setConstructorArgs($arguments)
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback'])
             ->getMock();
-
         $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));
         $eavConfig->expects($this->any())->method('getAttribute')->will(
             $this->returnCallback(
@@ -300,10 +294,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 }
             )
         );
-
         $model->setConnection($this->_getAdapterMock());
         $model->isPartialSave(true);
-
         $model->save($object);
     }
 
