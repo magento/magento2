@@ -14,9 +14,9 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     protected $processorPool;
 
     /**
-     * @var \Magento\Framework\View\Asset\PreProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $processorFactory;
+    protected $objectManager;
 
     /**
      * @var \Magento\Framework\View\Asset\PreProcessor\Chain|\PHPUnit_Framework_MockObject_MockObject
@@ -25,16 +25,15 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+
         $this->processorChain = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->processorFactory = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessorFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+
         $this->processorPool = new Pool(
-            $this->processorFactory,
+            $this->objectManager,
             [
                 'less' => [
                     'css' =>
@@ -77,9 +76,9 @@ class PoolTest extends \PHPUnit_Framework_TestCase
             $processorMock->expects($this->any())
                 ->method('process')
                 ->with($this->processorChain);
-            $processorMaps[] = [$processor, [], $processorMock];
+            $processorMaps[] = [$processor, $processorMock];
         }
-        $this->processorFactory->method('create')->willReturnMap($processorMaps);
+        $this->objectManager->method('get')->willReturnMap($processorMaps);
 
         $this->processorPool->process($this->processorChain);
     }
