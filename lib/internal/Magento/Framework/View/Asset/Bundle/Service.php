@@ -6,19 +6,23 @@
 
 namespace Magento\Framework\View\Asset\Bundle;
 
-use Magento\Framework\App;
-use Magento\Framework\View;
+use Magento\Framework\App\State;
 use Magento\Framework\View\Asset;
 use Magento\Framework\Filesystem;
+use Magento\Framework\View\Asset\Bundle;
+use Magento\Framework\View\ConfigInterface;
+use Magento\Framework\View\Asset\BundleFactory;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Design\Theme\ListInterface;
 
 /**
  * BundleService model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Service
 {
-
     /**
      * @var Filesystem
      */
@@ -30,12 +34,12 @@ class Service
     protected $bundles = [];
 
     /**
-     * @var Asset\BundleFactory
+     * @var BundleFactory
      */
     protected $bundleFactory;
 
     /**
-     * @var View\ConfigInterface
+     * @var ConfigInterface
      */
     protected $viewConfig;
 
@@ -45,12 +49,12 @@ class Service
     protected $bundleConfig;
 
     /**
-     * @var Asset\LocalInterface
+     * @var LocalInterface
      */
     protected $asset;
 
     /**
-     * @var App\State
+     * @var State
      */
     protected $appState;
 
@@ -66,19 +70,19 @@ class Service
 
     /**
      * @param Filesystem $filesystem
-     * @param Asset\BundleFactory $bundleFactory
-     * @param View\ConfigInterface $config
+     * @param BundleFactory $bundleFactory
+     * @param ConfigInterface $config
      * @param ListInterface $themeList
      * @param Asset\ConfigInterface $bundleConfig
-     * @param App\State $appState
+     * @param State $appState
      */
     public function __construct(
         Filesystem $filesystem,
-        Asset\BundleFactory $bundleFactory,
-        View\ConfigInterface $config,
+        BundleFactory $bundleFactory,
+        ConfigInterface $config,
         ListInterface $themeList,
         Asset\ConfigInterface $bundleConfig,
-        App\State $appState
+        State $appState
     ) {
         $this->filesystem = $filesystem;
         $this->bundleFactory = $bundleFactory;
@@ -89,17 +93,17 @@ class Service
     }
 
     /**
-     * @param Asset\LocalInterface $asset
+     * @param LocalInterface $asset
      * @return $this
      */
-    protected function setAsset(Asset\LocalInterface $asset)
+    protected function setAsset(LocalInterface $asset)
     {
         $this->asset = $asset;
         return $this;
     }
 
     /**
-     * @return Asset\LocalInterface
+     * @return LocalInterface
      */
     protected function getAsset()
     {
@@ -107,7 +111,7 @@ class Service
     }
 
     /**
-     * @return Asset\ContextInterface
+     * @return ContextInterface
      */
     protected function getContext()
     {
@@ -140,10 +144,10 @@ class Service
     /**
      * Collect bundle
      *
-     * @param Asset\LocalInterface $asset
+     * @param LocalInterface $asset
      * @return bool
      */
-    public function collect(Asset\LocalInterface $asset)
+    public function collect(LocalInterface $asset)
     {
         $this->setAsset($asset);
         if (!($this->isValidAsset())) {
@@ -180,7 +184,7 @@ class Service
         if (
             $this->isProductionMode()
             && $this->bundleConfig->isMergeJsFiles()
-            && Asset\Bundle::isValid($this->getAsset())
+            && Bundle::isValid($this->getAsset())
             && !$this->isMinAssetExists()
             && !$this->isExcluded()
         ) {
@@ -194,13 +198,13 @@ class Service
      */
     protected function isProductionMode()
     {
-        return $this->appState->getMode() == App\State::MODE_PRODUCTION;
+        return $this->appState->getMode() == State::MODE_PRODUCTION;
     }
 
     /**
      * Return bundle
      *
-     * @return Asset\Bundle
+     * @return Bundle
      */
     protected function getBundle()
     {
@@ -211,7 +215,7 @@ class Service
     /**
      * Create bundle
      *
-     * @return Asset\Bundle
+     * @return Bundle
      */
     protected function createBundle()
     {
@@ -242,7 +246,7 @@ class Service
         $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
 
         foreach ($this->bundles as $bundle) {
-            /** @var Asset\Bundle $bundle */
+            /** @var Bundle $bundle */
             foreach ($bundle->getContent() as $index => $part) {
                 $dir->writeFile($bundle->getPath() . "$index.js", $part);
             }

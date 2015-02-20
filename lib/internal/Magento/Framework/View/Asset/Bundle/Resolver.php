@@ -6,8 +6,9 @@
 
 namespace Magento\Framework\View\Asset\Bundle;
 
-use Magento\Framework\View;
-use Magento\Framework\View\Asset;
+use Magento\Framework\View\ConfigInterface;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Design\Theme\ListInterface;
 
 class Resolver implements ResolverInterface
@@ -22,12 +23,12 @@ class Resolver implements ResolverInterface
     protected $themeList;
 
     /**
-     * @var View\ConfigInterface
+     * @var ConfigInterface
      */
     protected $viewConfig;
 
     /**
-     * @var Asset\ContextInterface
+     * @var ContextInterface
      */
     protected $context;
 
@@ -47,11 +48,11 @@ class Resolver implements ResolverInterface
     protected $currentPart = 0;
 
     /**
-     * @param View\ConfigInterface $config
+     * @param ConfigInterface $config
      * @param ListInterface $themeList
      */
     public function __construct(
-        View\ConfigInterface $config,
+        ConfigInterface $config,
         ListInterface $themeList
     ) {
         $this->viewConfig = $config;
@@ -92,8 +93,8 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * @param Asset\LocalInterface[] $assets
-     * @return Asset\LocalInterface[]
+     * @param LocalInterface[] $assets
+     * @return LocalInterface[]
      */
     public function resolve($assets)
     {
@@ -180,8 +181,8 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * @param Asset\LocalInterface[] $bundle
-     * @return Asset\LocalInterface[]
+     * @param LocalInterface[] $bundle
+     * @return LocalInterface[]
      */
     public function appendHtmlPart($bundle)
     {

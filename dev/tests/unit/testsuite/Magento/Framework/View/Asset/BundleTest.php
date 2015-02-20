@@ -23,9 +23,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     /** @var array */
     protected $assetSet = [];
 
+    // @codingStandardsIgnoreStart
     /**
      * @var string
-     * @SuppressWarnings(PHPMD.Generic.Files.LineLength)
      */
     protected $expectedResult = <<<EOL
 require.config({
@@ -50,7 +50,6 @@ require.config({
 EOL;
     /**
      * @var string
-     * @SuppressWarnings(PHPMD.Generic.Files.LineLength)
      */
     protected $expectedHtmlTypeResult = <<<EOL
 require.config({
@@ -73,6 +72,7 @@ require.config({
 });
 
 EOL;
+    // @codingStandardsIgnoreEnd
 
     protected function setUp()
     {

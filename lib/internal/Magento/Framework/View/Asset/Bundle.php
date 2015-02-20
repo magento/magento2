@@ -7,9 +7,11 @@
 namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\View\Asset\Bundle\ResolverInterface;
 
 /**
- * Bundle model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bundle
 {
@@ -38,7 +40,7 @@ class Bundle
     protected $bundle = [];
 
     /**
-     * @var App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
@@ -48,7 +50,7 @@ class Bundle
     protected $context;
 
     /**
-     * @var Bundle\ResolverInterface
+     * @var ResolverInterface
      */
     protected $resolver;
 
@@ -66,12 +68,12 @@ class Bundle
     protected static $availableTypes = [self::BUNDLE_TYPE_JS, self::BUNDLE_TYPE_HTML];
 
     /**
-     * @param App\Config\ScopeConfigInterface $scopeConfig
-     * @param Bundle\ResolverInterface $resolver
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ResolverInterface $resolver
      */
     public function __construct(
-        App\Config\ScopeConfigInterface $scopeConfig,
-        Bundle\ResolverInterface $resolver
+        ScopeConfigInterface $scopeConfig,
+        ResolverInterface $resolver
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->resolver = $resolver;
@@ -232,7 +234,7 @@ class Bundle
     /**
      * Get bundle content
      *
-     * @return \Magento\Framework\View\Asset\LocalInterface[]
+     * @return LocalInterface[]
      */
     public function getContent()
     {
