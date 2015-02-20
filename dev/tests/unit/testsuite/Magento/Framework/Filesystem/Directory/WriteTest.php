@@ -29,6 +29,11 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     protected $fileFactory;
 
     /**
+     * @var string
+     */
+    protected $path;
+
+    /**
      * Set up
      */
     protected function setUp()
@@ -41,10 +46,11 @@ class WriteTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->path = 'PATH/';
         $this->write = new \Magento\Framework\Filesystem\Directory\Write(
             $this->fileFactory,
             $this->driver,
-            null,
+            $this->path,
             'cool-permissions'
         );
     }
@@ -80,5 +86,67 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     {
         $this->driver->expects($this->once())->method('isWritable')->will($this->returnValue(true));
         $this->assertTrue($this->write->isWritable('correct-path'));
+    }
+
+
+    public function testCreateSymlinkTargetDirectoryExists()
+    {
+        $targetDir = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+            ->getMock();
+        $targetDir->driver = $this->driver;
+        $sourcePath = 'source/path/file';
+        $destinationDirectory = 'destination/path';
+        $destinationFile = $destinationDirectory . '/' . 'file';
+
+        $this->assertIsFileExpectation($sourcePath);
+        $this->driver->expects($this->once())
+            ->method('getParentDirectory')
+            ->with($destinationFile)
+            ->willReturn($destinationDirectory);
+        $targetDir->expects($this->once())
+            ->method('isExist')
+            ->with($destinationDirectory)
+            ->willReturn(true);
+        $targetDir->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with($destinationFile)
+            ->willReturn($this->getAbsolutePath($destinationFile));
+        $this->driver->expects($this->once())
+            ->method('symlink')
+            ->with(
+                $this->getAbsolutePath($sourcePath),
+                $this->getAbsolutePath($destinationFile),
+                $targetDir->driver
+            )->willReturn(true);
+
+        $this->assertTrue($this->write->createSymlink($sourcePath, $destinationFile, $targetDir));
+    }
+
+    /**
+     * Assert is file expectation
+     *
+     * @param string $path
+     */
+    private function assertIsFileExpectation($path)
+    {
+        $this->driver->expects($this->any())
+            ->method('getAbsolutePath')
+            ->with($this->path, $path)
+            ->willReturn($this->getAbsolutePath($path));
+        $this->driver->expects($this->any())
+            ->method('isFile')
+            ->with($this->getAbsolutePath($path))
+            ->willReturn(true);
+    }
+
+    /**
+     * Returns expected absolute path to file
+     *
+     * @param string $path
+     * @return string
+     */
+    private function getAbsolutePath($path)
+    {
+        return $this->path . $path;
     }
 }

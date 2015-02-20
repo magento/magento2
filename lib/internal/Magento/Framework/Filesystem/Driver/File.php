@@ -285,6 +285,34 @@ class File implements DriverInterface
     }
 
     /**
+     * Create symlink on source and place it into destination
+     *
+     * @param string $source
+     * @param string $destination
+     * @param DriverInterface|null $targetDriver
+     * @return bool
+     * @throws FilesystemException
+     */
+    public function symlink($source, $destination, DriverInterface $targetDriver = null)
+    {
+        $result = false;
+        if (get_class($targetDriver) == get_class($this)) {
+            $result = @symlink($this->getScheme() . $source, $destination);
+        }
+        if (!$result) {
+            throw new FilesystemException(
+                sprintf(
+                    'Cannot create a symlink for "%s" and place it to "%s" %s',
+                    $source,
+                    $destination,
+                    $this->getWarningMessage()
+                )
+            );
+        }
+        return $result;
+    }
+
+    /**
      * Delete file
      *
      * @param string $path
