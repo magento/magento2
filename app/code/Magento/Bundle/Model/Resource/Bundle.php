@@ -93,9 +93,10 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function dropAllQuoteChildItems($productId)
     {
-        $adapter = $this->quoteResource->getReadConnection()->select()->getAdapter();
+        $select = $this->quoteResource->getReadConnection()->select();
+        $adapter = $select->getAdapter();
         $quoteItemIds = $adapter->fetchCol(
-            $this->_getReadAdapter()->select()->from(
+            $select->from(
                 $this->getTable('quote_item'),
                 ['item_id']
             )->where(
