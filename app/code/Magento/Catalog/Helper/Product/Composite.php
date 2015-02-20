@@ -153,11 +153,8 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
                 $currentStoreId = $this->_storeManager->getStore()->getId();
             }
 
-            try {
-                $product = $this->productRepository->getById($configureResult->getProductId(), false, $currentStoreId);
-            } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The product is not loaded.'), [], $e);
-            }
+            $product = $this->productRepository->getById($configureResult->getProductId(), false, $currentStoreId);
+
             $this->_coreRegistry->register('current_product', $product);
             $this->_coreRegistry->register('product', $product);
 
