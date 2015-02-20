@@ -44,8 +44,8 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
     /**
      * Creates factory
      *
-     * @param $arguments
-     * @param $factoryClass
+     * @param array $arguments
+     * @param string $factoryClass
      *
      * @return FactoryInterface
      */

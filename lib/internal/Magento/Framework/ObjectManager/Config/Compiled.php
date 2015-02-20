@@ -85,6 +85,7 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      *
      * @param string $type
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isShared($type)
     {

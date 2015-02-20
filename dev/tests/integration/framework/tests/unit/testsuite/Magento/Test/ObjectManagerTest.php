@@ -56,31 +56,32 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $sharedInstances = [
+            'Magento\Framework\App\Cache\Type\Config' => $cache,
+            'Magento\Framework\App\ObjectManager\ConfigLoader' => $configLoader,
+            'Magento\Framework\App\ObjectManager\ConfigCache' => $configCache,
+            'Magento\Framework\Config\ReaderInterface' => $this->getMock(
+                'Magento\Framework\Config\ReaderInterface'
+            ),
+            'Magento\Framework\Config\ScopeInterface' => $this->getMock('Magento\Framework\Config\ScopeInterface'),
+            'Magento\Framework\Config\CacheInterface' => $this->getMock('Magento\Framework\Config\CacheInterface'),
+            'Magento\Framework\Cache\FrontendInterface' =>
+                $this->getMock('Magento\Framework\Cache\FrontendInterface'),
+            'Magento\Framework\App\Resource' => $this->getMockBuilder('Magento\Framework\App\Resource')
+                ->disableOriginalConstructor()
+                ->getMock(),
+            'Magento\Framework\App\Resource\Config' => $this->getMock(
+                'Magento\Framework\App\Resource\Config',
+                [],
+                [],
+                '',
+                false
+            )
+        ];
         $model = new \Magento\TestFramework\ObjectManager(
             $factory,
             $configMock,
-            [
-                'Magento\Framework\App\Cache\Type\Config' => $cache,
-                'Magento\Framework\App\ObjectManager\ConfigLoader' => $configLoader,
-                'Magento\Framework\App\ObjectManager\ConfigCache' => $configCache,
-                'Magento\Framework\Config\ReaderInterface' => $this->getMock(
-                    'Magento\Framework\Config\ReaderInterface'
-                ),
-                'Magento\Framework\Config\ScopeInterface' => $this->getMock('Magento\Framework\Config\ScopeInterface'),
-                'Magento\Framework\Config\CacheInterface' => $this->getMock('Magento\Framework\Config\CacheInterface'),
-                'Magento\Framework\Cache\FrontendInterface' =>
-                    $this->getMock('Magento\Framework\Cache\FrontendInterface'),
-                'Magento\Framework\App\Resource' => $this->getMockBuilder('Magento\Framework\App\Resource')
-                        ->disableOriginalConstructor()
-                        ->getMock(),
-                'Magento\Framework\App\Resource\Config' => $this->getMock(
-                    'Magento\Framework\App\Resource\Config',
-                    [],
-                    [],
-                    '',
-                    false
-                )
-            ],
+            $sharedInstances,
             $primaryLoaderMock
         );
 

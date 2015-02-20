@@ -48,6 +48,7 @@ class BackslashTrim implements ModificationInterface
      * Resolves instances arguments
      *
      * @param array $argument
+     * @return array
      */
     private function resolveArguments(&$argument)
     {

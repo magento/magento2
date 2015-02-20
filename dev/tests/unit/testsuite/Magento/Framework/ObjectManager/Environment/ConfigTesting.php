@@ -18,6 +18,8 @@ class ConfigTesting implements ConfigInterface
      * @param RelationsInterface $relations
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setRelations(RelationsInterface $relations)
     {
@@ -30,6 +32,7 @@ class ConfigTesting implements ConfigInterface
      * @param ConfigCacheInterface $cache
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCache(ConfigCacheInterface $cache)
     {
@@ -41,6 +44,7 @@ class ConfigTesting implements ConfigInterface
      *
      * @param string $type
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getArguments($type)
     {
@@ -52,6 +56,7 @@ class ConfigTesting implements ConfigInterface
      *
      * @param string $type
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isShared($type)
     {
@@ -96,6 +101,7 @@ class ConfigTesting implements ConfigInterface
      *
      * @param array $configuration
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function extend(array $configuration)
     {
@@ -117,6 +123,7 @@ class ConfigTesting implements ConfigInterface
      *
      * @param \Magento\Framework\Interception\ConfigInterface $interceptionConfig
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setInterceptionConfig(\Magento\Framework\Interception\ConfigInterface $interceptionConfig)
     {
@@ -128,6 +135,7 @@ class ConfigTesting implements ConfigInterface
      *
      * @param string $instanceName
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getOriginalInstanceType($instanceName)
     {

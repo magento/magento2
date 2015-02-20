@@ -13,6 +13,11 @@ use Magento\Tools\Di\Code\Reader\Type;
 use Magento\Tools\Di\Compiler\ArgumentsResolverFactory;
 use Magento\Tools\Di\Definition\Collection as DefinitionsCollection;
 
+/**
+ * Class Reader
+ * @package Magento\Tools\Di\Compiler\Config
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Reader
 {
     /**

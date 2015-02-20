@@ -8,4 +8,3 @@ namespace Magento\Framework\ObjectManager\Factory\Fixture\Compiled;
 class DependencySharedTesting
 {
 }
- 

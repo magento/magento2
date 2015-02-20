@@ -32,6 +32,7 @@ class PreferencesResolving implements ModificationInterface
      *
      * @param array $argument
      * @param array $preferences
+     * @return array
      */
     private function resolvePreferences(&$argument, &$preferences)
     {

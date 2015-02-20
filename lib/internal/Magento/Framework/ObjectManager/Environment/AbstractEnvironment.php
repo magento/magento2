@@ -75,7 +75,8 @@ abstract class AbstractEnvironment implements EnvironmentInterface
     /**
      * Decorate factory
      *
-     * @param $arguments
+     * @param array $arguments
+     * @return void
      */
     protected function decorate($arguments)
     {
@@ -90,8 +91,8 @@ abstract class AbstractEnvironment implements EnvironmentInterface
     /**
      * Creates factory
      *
-     * @param $arguments
-     * @param $factoryClass
+     * @param array $arguments
+     * @param string $factoryClass
      *
      * @return FactoryInterface
      */
