@@ -16,7 +16,6 @@ class Pool
 {
     /**
      * @var ObjectManagerInterface
-
      */
     private $objectManager;
 

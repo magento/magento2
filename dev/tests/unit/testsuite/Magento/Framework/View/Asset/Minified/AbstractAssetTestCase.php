@@ -86,6 +86,9 @@ class AbstractAssetTestCase extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue(false));
         }
         $this->_baseUrl->expects($this->once())->method('getBaseUrl')->will($this->returnValue('http://example.com/'));
-        $this->_staticViewDir->expects($this->exactly(2-intval($originalExists)))->method('isExist')->will($this->returnValue($fileExists));
+        $this->_staticViewDir
+            ->expects($this->exactly(2-intval($originalExists)))
+            ->method('isExist')
+            ->will($this->returnValue($fileExists));
     }
 }
