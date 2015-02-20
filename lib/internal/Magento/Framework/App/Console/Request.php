@@ -89,6 +89,28 @@ class Request implements \Magento\Framework\App\RequestInterface
     }
 
     /**
+     * Retrieve all params as array
+     *
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * Set params from key value array
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function setParams(array $data)
+    {
+        $this->params = $data;
+        return $this;
+    }
+
+    /**
      * Stub to satisfy RequestInterface
      *
      * @param null|string $name
