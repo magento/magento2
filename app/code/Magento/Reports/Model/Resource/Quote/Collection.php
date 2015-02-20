@@ -128,14 +128,6 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         $productAttrPriceId = (int)$productAttrPrice->getAttributeId();
         $productAttrPriceTable = $productAttrPrice->getBackend()->getTable();
 
-        $ordersSubSelect = clone $this->getSelect();
-        $ordersSubSelect->reset()->from(
-            ['oi' => $this->getTable('sales_order_item')],
-            ['orders' => new \Zend_Db_Expr('COUNT(1)'), 'product_id']
-        )->group(
-            'oi.product_id'
-        );
-
         $this->getSelect()->useStraightJoin(
             true
         )->reset(
@@ -150,15 +142,16 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
             null
         )->joinInner(
             ['product_name' => $productAttrNameTable],
-            "product_name.entity_id = e.entity_id\n                AND product_name.attribute_id = {$productAttrNameId}\n                AND product_name.store_id = " .
-            \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+            'product_name.entity_id = e.entity_id'
+            . ' AND product_name.attribute_id = ' . $productAttrNameId
+            . ' AND product_name.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
             ['name' => 'product_name.value']
         )->joinInner(
             ['product_price' => $productAttrPriceTable],
             "product_price.entity_id = e.entity_id AND product_price.attribute_id = {$productAttrPriceId}",
             ['price' => new \Zend_Db_Expr('product_price.value * main_table.base_to_global_rate')]
         )->joinLeft(
-            ['order_items' => new \Zend_Db_Expr(sprintf('(%s)', $ordersSubSelect))],
+            ['order_items' => new \Zend_Db_Expr(sprintf('(%s)', $this->getOrdersSubSelect()))],
             'order_items.product_id = e.entity_id',
             []
         )->columns(
@@ -175,6 +168,22 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         );
 
         return $this;
+    }
+
+    /**
+     * @return \Magento\Framework\DB\Select
+     */
+    protected function getOrdersSubSelect()
+    {
+        $ordersSubSelect = clone $this->getSelect();
+        $ordersSubSelect->reset()->from(
+            ['oi' => $this->getTable('sales_order_item')],
+            ['orders' => new \Zend_Db_Expr('COUNT(1)'), 'product_id']
+        )->group(
+            'oi.product_id'
+        );
+
+        return $ordersSubSelect;
     }
 
     /**

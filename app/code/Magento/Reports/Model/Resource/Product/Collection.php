@@ -234,7 +234,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Get select count sql
      *
-     * @return string
+     * @return \Zend_Db_Select
      */
     public function getSelectCountSql()
     {

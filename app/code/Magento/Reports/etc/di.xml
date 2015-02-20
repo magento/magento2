@@ -36,4 +36,5 @@
             <argument name="modulePrefix" xsi:type="string">reports</argument>
         </arguments>
     </type>
+    <preference for="Magento\Reports\Model\Resource\Quote\CollectionFactoryInterface" type="Magento\Reports\Model\Resource\Quote\CollectionFactory"/>
 </config>
