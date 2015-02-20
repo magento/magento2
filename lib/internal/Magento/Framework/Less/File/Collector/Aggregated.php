@@ -46,6 +46,7 @@ class Aggregated implements CollectorInterface
      * @param CollectorInterface $libraryFiles
      * @param CollectorInterface $baseFiles
      * @param CollectorInterface $overriddenBaseFiles
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Factory $fileListFactory,
