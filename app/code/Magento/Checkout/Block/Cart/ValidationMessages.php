@@ -61,6 +61,8 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
 
     /**
      * Validate minimum amount and display notice in error
+     *
+     * @return void
      */
     public function validateMinimunAmount()
     {
@@ -85,6 +87,8 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
 
     /**
      * Add quote messages
+     *
+     * @return void
      */
     public function addQuoteMessages()
     {

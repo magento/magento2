@@ -37,7 +37,6 @@ class Login extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
-        \Magento\Core\Helper\Url $coreUrl,
         array $data = []
     ) {
         parent::__construct($context, $data);

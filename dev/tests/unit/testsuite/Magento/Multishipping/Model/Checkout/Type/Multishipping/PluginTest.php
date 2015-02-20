@@ -43,7 +43,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->willReturn(State::STEP_SELECT_ADDRESSES);
         $this->checkoutSessionMock->expects($this->once())->method('setCheckoutState')
             ->with(Session::CHECKOUT_STATE_BEGIN);
-        $this->model->beforeInit($this->cartMock);
+        $this->model->beforeSave($this->cartMock);
     }
 
     public function testBeforeInitCaseFalse()
@@ -51,6 +51,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->once())->method('getCheckoutState')
             ->willReturn('');
         $this->checkoutSessionMock->expects($this->never())->method('setCheckoutState');
-        $this->model->beforeInit($this->cartMock);
+        $this->model->beforeSave($this->cartMock);
     }
 }
