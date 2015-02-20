@@ -170,21 +170,14 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
         $where = [$adapter->quoteIdentifier($idField) . '=?' => $rowId];
         $adapter->update($table, $data, $where);
 
-        if ($this->setupCache->has($table, $parentId, $rowId)) {
-            if (is_array($field)) {
-                $oldRowData = $this->setupCache->get($table, $parentId, $rowId);
-                if (is_array($oldRowData)) {
-                    $newRowData = array_merge(
-                        $oldRowData,
-                        $field
-                    );
-                } else {
-                    $newRowData = $field;
-                }
-                $this->setupCache->setRow($table, $parentId, $rowId, $newRowData);
-            } else {
-                $this->setupCache->setField($table, $parentId, $rowId, $field, $value);
-            }
+        if (is_array($field)) {
+            $oldRow = $this->setupCache->has($table, $parentId, $rowId) ?
+                $this->setupCache->get($table, $parentId, $rowId) :
+                [];
+            $newRowData = array_merge($oldRow, $field);
+            $this->setupCache->setRow($table, $parentId, $rowId, $newRowData);
+        } else {
+            $this->setupCache->setField($table, $parentId, $rowId, $field, $value);
         }
 
         return $this;

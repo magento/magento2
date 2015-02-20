@@ -973,6 +973,19 @@ class EavSetup
                 $field,
                 $value
             );
+
+            $setupCache = $this->setup->getSetupCache();
+            $mainTable = $this->setup->getTable('eav_attribute');
+            $attribute = $this->getAttribute($entityTypeId, $id);
+            if (is_array($field)) {
+                $oldRow = $setupCache->has($mainTable, $attribute['entity_type_id'], $attribute['attribute_code']) ?
+                    $setupCache->get($mainTable, $attribute['entity_type_id'], $attribute['attribute_code']) :
+                    [];
+                $newRowData = array_merge($oldRow, $field);
+                $setupCache->setRow($mainTable, $attribute['entity_type_id'], $attribute['attribute_code'], $newRowData);
+            } else {
+                $setupCache->setField($mainTable, $attribute['entity_type_id'], $attribute['attribute_code'], $field, $value);
+            }
         }
 
         return $this;
@@ -1013,7 +1026,7 @@ class EavSetup
 
             $row = $this->setup->getConnection()->fetchRow($select, $bind);
             if (!$row) {
-                $setupCache->setRow($mainTable, $entityTypeId, $id, false);
+                $setupCache->setRow($mainTable, $entityTypeId, $id, []);
             } else {
                 $setupCache->setRow($mainTable, $entityTypeId, $row['attribute_id'], $row);
                 $setupCache->setRow($mainTable, $entityTypeId, $row['attribute_code'], $row);
