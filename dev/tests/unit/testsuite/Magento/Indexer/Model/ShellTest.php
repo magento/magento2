@@ -175,12 +175,20 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         }
         if ($args == 'reindexall') {
             $indexerMock->expects($this->any())->method('reindexAll')->will(
-                $this->throwException(new \Magento\Framework\Exception\LocalizedException(__('')))
+                $this->throwException(
+                    new \Magento\Framework\Exception\LocalizedException(
+                        __('Something went wrong during reindexing all.')
+                    )
+                )
             );
         }
         if ($args == '--mode-schedule') {
             $indexerMock->expects($this->any())->method('turnViewOn')->will(
-                $this->throwException(new \Magento\Framework\Exception\LocalizedException(__('')))
+                $this->throwException(
+                    new \Magento\Framework\Exception\LocalizedException(
+                        __('Something went wrong during turning view on.')
+                    )
+                )
             );
         }
         if ($args == '--reindex=price') {
