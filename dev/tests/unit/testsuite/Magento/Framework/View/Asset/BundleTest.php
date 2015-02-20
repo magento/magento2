@@ -23,6 +23,10 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     /** @var array */
     protected $assetSet = [];
 
+    /**
+     * @var string
+     * @SuppressWarnings(PHPMD.Generic.Files.LineLength)
+     */
     protected $expectedResult = <<<EOL
 require.config({
     bundles: {
@@ -44,6 +48,10 @@ require.config({
 });
 
 EOL;
+    /**
+     * @var string
+     * @SuppressWarnings(PHPMD.Generic.Files.LineLength)
+     */
     protected $expectedHtmlTypeResult = <<<EOL
 require.config({
     bundles: {
@@ -76,11 +84,6 @@ EOL;
         );
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $this->resolver = $this->getMock('Magento\Framework\View\Asset\Bundle\ResolverInterface', [], [], '', false);
-    }
-
-    protected function configureResolver()
-    {
-
     }
 
     protected function getBundle($contentType)
@@ -133,51 +136,6 @@ EOL;
             ->willReturn($this->expectedResult);
 
         $result = $bundle->getContent();
-        1+1;
+        $this->assertEquals($this->expectedResult, $result);
     }
-
-    //public function testGetContent()
-    //{
-    //    $this->scopeConf
-    //        ->expects($this->once())
-    //        ->method('getValue')
-    //        ->willReturn(1);
-    //
-    //    $actual = $this->getBundle('js')->getContent();
-    //
-    //    $this->assertInternalType('array', $actual);
-    //
-    //    $this->assertArrayHasKey(0, $actual);
-    //    $this->assertEquals($this->expectedResult, $actual[0]);
-    //}
-    //
-    //public function testGetContentWithHtmlAssetType()
-    //{
-    //    $this->scopeConf
-    //        ->expects($this->once())
-    //        ->method('getValue')
-    //        ->willReturn(1);
-    //
-    //    $actual = $this->getBundle()->getContent();
-    //
-    //    $this->assertInternalType('array', $actual);
-    //
-    //    $this->assertArrayHasKey(0, $actual);
-    //    $this->assertEquals($this->expectedHtmlTypeResult, $actual[0]);
-    //}
-    //
-    //public function testGetContentWithMultipleBundleParts()
-    //{
-    //    $this->scopeConf
-    //        ->expects($this->once())
-    //        ->method('getValue')
-    //        ->willReturn(2);
-    //
-    //    $actual = $this->getBundle()->getContent();
-    //
-    //    $this->assertInternalType('array', $actual);
-    //
-    //    $this->assertArrayHasKey(0, $actual);
-    //    $this->assertArrayHasKey(1, $actual);
-    //}
 }

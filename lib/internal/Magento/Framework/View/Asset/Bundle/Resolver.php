@@ -125,9 +125,9 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * @param $content
-     * @param $path
-     * @param $freeSpace
+     * @param string $content
+     * @param string $path
+     * @param int|float $freeSpace
      *
      * @return void
      */
@@ -157,9 +157,9 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * @param $content
-     * @param $path
-     * @param $freeSpace
+     * @param string $content
+     * @param string $path
+     * @param int|float $freeSpace
      *
      * @return void
      */
