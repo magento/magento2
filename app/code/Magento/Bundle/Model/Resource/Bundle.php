@@ -18,17 +18,25 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_productRelation;
 
     /**
+     * @var \Magento\Quote\Model\Resource\Quote
+     */
+    protected $quoteResource;
+
+    /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Catalog\Model\Resource\Product\Relation $productRelation
-     * @param string|null $resourcePrefix
+     * @param \Magento\Quote\Model\Resource\Quote $quoteResource
+     * @param null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Catalog\Model\Resource\Product\Relation $productRelation,
+        \Magento\Quote\Model\Resource\Quote $quoteResource,
         $resourcePrefix = null
     ) {
         parent::__construct($context, $resourcePrefix);
         $this->_productRelation = $productRelation;
+        $this->quoteResource = $quoteResource;
     }
 
     /**
@@ -85,7 +93,8 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function dropAllQuoteChildItems($productId)
     {
-        $quoteItemIds = $this->_getReadAdapter()->fetchCol(
+        $adapter = $this->quoteResource->getReadConnection()->select()->getAdapter();
+        $quoteItemIds = $adapter->fetchCol(
             $this->_getReadAdapter()->select()->from(
                 $this->getTable('quote_item'),
                 ['item_id']
@@ -96,7 +105,7 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
 
         if ($quoteItemIds) {
-            $this->_getWriteAdapter()->delete(
+            $adapter->delete(
                 $this->getTable('quote_item'),
                 ['parent_item_id IN(?)' => $quoteItemIds]
             );
