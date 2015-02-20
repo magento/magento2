@@ -18,13 +18,13 @@ angular.module('create-admin-account', ['ngStorage'])
                 return;
             }
             var p = $scope.admin.password;
-            if (p.length > 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/) && p.match(/[!@#$%^*()_\/\\\-\+=]+/)) {
+            if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/) && p.match(/[!@#$%^*()_\/\\\-\+=]+/)) {
                 $scope.admin.passwordStatus.class = 'strong';
                 $scope.admin.passwordStatus.label = 'Strong';
-            } else if (p.length > 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/)) {
+            } else if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/)) {
                 $scope.admin.passwordStatus.class = 'good';
                 $scope.admin.passwordStatus.label = 'Good';
-            } else if (p.length > 6 && p.match(/[\d]+/) && p.match(/[a-zA-Z]+/)) {
+            } else if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-zA-Z]+/)) {
                 $scope.admin.passwordStatus.class = 'fair';
                 $scope.admin.passwordStatus.label = 'Fair';
             } else if (p.length >= 6) {
