@@ -242,7 +242,7 @@ class Bundle
         $this->merge();
         $this->prepare();
         $this->addInitJs();
-        $this->bundle = $this->resolver->appendHtmlPart($this->bundle);
+        $this->bundle = $this->resolver->appendHtmlPart($this->bundle, $this->getContext());
 
         return $this->bundle;
     }

@@ -42,7 +42,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function getAssets($dinamicKey = null)
+    protected function getAssets()
     {
         $assets = [];
         for ($i = 0; $i < 10; $i++) {
@@ -50,19 +50,18 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
             $assetMock
                 ->expects($this->any())
                 ->method('getModule')
-                ->willReturn(substr(md5($i . $dinamicKey), 0, 5));
+                ->willReturn(substr(md5($i), 0, 5));
             $assetMock
                 ->expects($this->any())
                 ->method('getFilePath')
-                ->willReturn(substr(md5($i . $dinamicKey), 0, 5) . '.js');
+                ->willReturn(substr(md5($i), 0, 5) . '.js');
             $assetMock
                 ->expects($this->any())
                 ->method('getContent')
                 ->willReturn('Content');
 
-            $amountInvocations = ($i == 0 && !$dinamicKey) ? 1 : 0;
             $assetMock
-                ->expects($this->exactly($amountInvocations))
+                ->expects($this->exactly(($i == 0) ? 1 : 0))
                 ->method('getContext')
                 ->willReturn($this->context);
             
@@ -131,9 +130,6 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testAppendHtmlPartWithoutBundleSize()
     {
-        $asset = $this->getAssets();
-        $htmlAssets = $this->getAssets('html');
-
             $this->viewConfData
                 ->expects($this->once())
                 ->method('getVarValue')
@@ -153,8 +149,10 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
                 ->method('getViewConfig')
                 ->willReturn($this->viewConfData);
 
-        $result = $this->getResolver()->appendHtmlPart([$asset, $htmlAssets]);
-        $this->assertArrayHasKey(0, $result);
-        $this->assertEquals(20, count($result[0]));
+        $resolver = $this->getResolver();
+        $asset = 'Js assets content';
+        $htmlAssets = ' Html assets content';
+        $actual = $resolver->appendHtmlPart([$asset, $htmlAssets], $this->context);
+        $this->assertEquals(['Js assets content Html assets content'], $actual);
     }
 }

@@ -16,7 +16,8 @@ interface ResolverInterface
 
     /**
      * @param \Magento\Framework\View\Asset\LocalInterface[] $bundle
+     * @param \Magento\Framework\View\Asset\ContextInterface $context
      * @return \Magento\Framework\View\Asset\LocalInterface[]
      */
-    public function appendHtmlPart($bundle);
+    public function appendHtmlPart($bundle, $context);
 }

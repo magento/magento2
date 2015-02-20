@@ -181,21 +181,22 @@ class Resolver implements ResolverInterface
     }
 
     /**
+     * Append Html part to Js part
+     *
      * @param LocalInterface[] $bundle
+     * @param ContextInterface $context
      * @return LocalInterface[]
      */
-    public function appendHtmlPart($bundle)
+    public function appendHtmlPart($bundle, $context)
     {
-        if (!(isset($bundle[0]) && isset($bundle[1]))) {
+        if (count($bundle) != 2) {
             return false;
         }
-        if (!$this->context) {
-            $this->context = reset($bundle[0])->getContext();
-        }
-
+        $this->context = $context;
         $bundleSize = $this->getBundleSize();
         if (!$bundleSize) {
-            return [array_merge($bundle[0], $bundle[1])];
+            $bundle[0] .= $bundle[1];
+            return [$bundle[0]];
         }
         return $bundle;
     }
