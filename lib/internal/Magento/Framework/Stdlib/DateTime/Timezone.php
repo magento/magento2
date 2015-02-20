@@ -112,7 +112,7 @@ class Timezone implements TimezoneInterface
     {
         return preg_replace(
             '/(?<!y)yy(?!y)/',
-            'yyyy',
+            'Y',
             $this->getDateFormat()
         );
     }

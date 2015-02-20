@@ -232,16 +232,16 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             switch ($this->getDataHelper()->getParam('period')) {
                 case '7d':
                 case '1m':
-                    $d = $dateStart->format('yyyy-MM-dd');
+                    $d = $dateStart->format('Y-m-d');
                     $dateStart->modify('+1 day');
                     break;
                 case '1y':
                 case '2y':
-                    $d = $dateStart->format('yyyy-MM');
+                    $d = $dateStart->format('Y-m');
                     $dateStart->modify('+1 month');
                     break;
                 default:
-                    $d = $dateStart->format('yyyy-MM-dd HH:00');
+                    $d = $dateStart->format('Y-m-d H:00');
                     $dateStart->modify('+1 hour');
             }
             foreach ($this->getAllSeries() as $index => $serie) {

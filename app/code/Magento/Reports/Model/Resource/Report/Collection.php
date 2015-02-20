@@ -170,8 +170,8 @@ class Collection extends \Magento\Framework\Data\Collection
     {
         $interval = [
             'period' => $dateStart->format($this->_localeDate->getDateFormat()),
-            'start' => $dateStart->format('yyyy-MM-dd HH:mm:ss'),
-            'end' => $dateStart->format('yyyy-MM-dd 23:59:59'),
+            'start' => $dateStart->format('Y-m-d H:i:s'),
+            'end' => $dateStart->format('Y-m-d 23:59:59'),
         ];
         return $interval;
     }
@@ -187,11 +187,11 @@ class Collection extends \Magento\Framework\Data\Collection
     protected function _getMonthInterval(\DateTime $dateStart, \DateTime $dateEnd, $firstInterval)
     {
         $interval = [];
-        $interval['period'] = $dateStart->format('MM/yyyy');
+        $interval['period'] = $dateStart->format('m/Y');
         if ($firstInterval) {
-            $interval['start'] = $dateStart->format('yyyy-MM-dd 00:00:00');
+            $interval['start'] = $dateStart->format('Y-m-d 00:00:00');
         } else {
-            $interval['start'] = $dateStart->format('yyyy-MM-01 00:00:00');
+            $interval['start'] = $dateStart->format('Y-m-01 00:00:00');
         }
 
         if ($dateStart->diff($dateEnd)->m == 0) {
@@ -200,10 +200,10 @@ class Collection extends \Magento\Framework\Data\Collection
                 $dateStart->format('m'),
                 $dateEnd->format('d')
             )->format(
-                'yyyy-MM-dd 23:59:59'
+                'Y-m-d 23:59:59'
             );
         } else {
-            $interval['end'] = $dateStart->format('yyyy-MM-' . date('t', $dateStart->getTimestamp()) . ' 23:59:59');
+            $interval['end'] = $dateStart->format('Y-m-' . date('t', $dateStart->getTimestamp()) . ' 23:59:59');
         }
 
         $dateStart->modify('+1 month');
@@ -226,15 +226,15 @@ class Collection extends \Magento\Framework\Data\Collection
     protected function _getYearInterval(\DateTime $dateStart, \DateTime $dateEnd, $firstInterval)
     {
         $interval = [];
-        $interval['period'] = $dateStart->format('yyyy');
+        $interval['period'] = $dateStart->format('Y');
         $interval['start'] = $firstInterval
-            ? $dateStart->format('yyyy-MM-dd 00:00:00')
-            : $dateStart->format('yyyy-01-01 00:00:00');
+            ? $dateStart->format('Y-m-dd 00:00:00')
+            : $dateStart->format('Y-01-01 00:00:00');
 
         $interval['end'] = $dateStart->diff($dateEnd)->y == 0
             ? $dateStart->setDate($dateStart->format('Y'), $dateEnd->format('m'), $dateEnd->format('d'))
-                ->format('yyyy-MM-dd 23:59:59')
-            : $dateStart->format('yyyy-12-31 23:59:59');
+                ->format('Y-m-d 23:59:59')
+            : $dateStart->format('Y-12-31 23:59:59');
         $dateStart->modify('+1 year');
 
         if ($dateStart->diff($dateEnd)->y == 0) {
