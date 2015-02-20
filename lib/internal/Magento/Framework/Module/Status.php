@@ -215,7 +215,8 @@ class Status
      * @param string $moduleName
      * @return string
      */
-    private function createShortErrorMessage($isEnabled, $moduleName) {
+    private function createShortErrorMessage($isEnabled, $moduleName)
+    {
         if ($isEnabled) {
             return "Cannot enable $moduleName";
         } else {
@@ -233,7 +234,8 @@ class Status
      * @param array $missingDependencies
      * @return string[]
      */
-    private function createVerboseErrorMessage($isEnabled, $moduleName, $missingDependencies) {
+    private function createVerboseErrorMessage($isEnabled, $moduleName, $missingDependencies)
+    {
         if ($isEnabled) {
             $errorMessages[] = "Cannot enable $moduleName, depending on disabled modules:";
         } else {
