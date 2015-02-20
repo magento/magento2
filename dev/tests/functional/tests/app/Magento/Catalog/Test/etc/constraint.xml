@@ -119,7 +119,7 @@
     <constraint name="assertProductAttributeIsUsedPromoRules" module="Magento_Catalog" severity="low"/>
     <constraint name="assertProductAttributeIsUsedInSortOnFrontend" module="Magento_Catalog" severity="low"/>
     <constraint name="assertProductAttributeIsGlobal" module="Magento_Catalog" severity="low"/>
-    <constraint name="assertCrossSellsProductsSection" module="Magento_Catalog" severity="middle">
+    <constraint name="assertProductCrossSells" module="Magento_Catalog" severity="middle">
         <argument name="product1">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
         <argument name="product2">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
         <argument name="cmsIndex">Magento\Cms\Test\Page\CmsIndex</argument>
@@ -128,25 +128,25 @@
         <argument name="checkoutCart">Magento\Checkout\Test\Page\CheckoutCart</argument>
     </constraint>
     <constraint name="assertProductAttributeSuccessDeleteMessage" module="Magento_Catalog" severity="high"/>
-    <constraint name="assertNoCrossSellsProductsSection" module="Magento_Catalog" severity="middle"/>
-    <constraint name="assertRelatedProductsSection" module="Magento_Catalog" severity="middle">
+    <constraint name="assertProductAbsentCrossSells" module="Magento_Catalog" severity="middle"/>
+    <constraint name="assertProductRelatedProducts" module="Magento_Catalog" severity="middle">
         <argument name="product1">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
         <argument name="product2">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
         <argument name="cmsIndex">Magento\Cms\Test\Page\CmsIndex</argument>
         <argument name="catalogCategoryView">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
         <argument name="catalogProductView">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
     </constraint>
+    <constraint name="assertProductAbsentRelatedProducts" module="Magento_Catalog" severity="middle"/>
+    <constraint name="assertProductUpSells" module="Magento_Catalog" severity="middle">
+        <argument name="product1">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+        <argument name="product2">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+        <argument name="cmsIndex">Magento\Cms\Test\Page\CmsIndex</argument>
+        <argument name="catalogCategoryView">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+        <argument name="catalogProductView">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+    </constraint>
+    <constraint name="assertProductAbsentUpSells" module="Magento_Catalog" severity="middle"/>
     <constraint name="assertProductAttributeAbsenceInGrid" module="Magento_Catalog" severity="high"/>
-    <constraint name="assertNoRelatedProductsSection" module="Magento_Catalog" severity="middle"/>
-    <constraint name="assertUpSellsProductsSection" module="Magento_Catalog" severity="middle">
-        <argument name="product1">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
-        <argument name="product2">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
-        <argument name="cmsIndex">Magento\Cms\Test\Page\CmsIndex</argument>
-        <argument name="catalogCategoryView">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
-        <argument name="catalogProductView">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
-    </constraint>
     <constraint name="assertProductAttributeAbsenceInSearchOnProductForm" module="Magento_Catalog" severity="high"/>
-    <constraint name="assertNoUpSellsProductsSection" module="Magento_Catalog" severity="middle"/>
     <constraint name="assertCategorySaveMessage" module="Magento_Catalog" severity="low"/>
     <constraint name="assertCategoryForm" module="Magento_Catalog" severity="low"/>
     <constraint name="assertCategoryPage" module="Magento_Catalog" severity="low"/>
