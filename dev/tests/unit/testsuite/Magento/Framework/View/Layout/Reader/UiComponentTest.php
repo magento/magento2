@@ -22,16 +22,6 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeResolver;
-
-    /**
      * @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;
@@ -42,18 +32,11 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['scheduleStructure'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')->getMock();
-        $this->scopeResolver = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ScopeResolverInterface',
-            [],
-            '',
-            false
-        );
         $this->context = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
-            ->setMethods(['getScheduledStructure'])
+            ->setMethods(['getScheduledStructure', 'setElementToIfconfigList'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = new UiComponent($this->helper, $this->scopeConfig, $this->scopeResolver, null);
+        $this->model = new UiComponent($this->helper, 'scope');
     }
 
     public function testGetSupportedNodes()
@@ -70,11 +53,6 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
      */
     public function testInterpret($element)
     {
-        $scope = $this->getMock('Magento\Framework\App\ScopeInterface', [], [], '', false);
-        $this->scopeResolver->expects($this->any())->method('getScope')->will($this->returnValue($scope));
-        $this->scopeConfig->expects($this->once())->method('isSetFlag')
-            ->with('test', null, $scope)
-            ->will($this->returnValue(false));
         $scheduleStructure = $this->getMock('\Magento\Framework\View\Layout\ScheduledStructure', [], [], '', false);
         $this->context->expects($this->any())->method('getScheduledStructure')->will(
             $this->returnValue($scheduleStructure)
@@ -89,6 +67,9 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
             $element->getAttribute('name'),
             ['attributes' => ['group' => '', 'component' => 'listing']]
         );
+        $scheduleStructure->expects($this->once())->method('setElementToIfconfigList')->with(
+            $element->getAttribute('name'), 'config_path', 'scope'
+        );
         $this->model->interpret($this->context, $element);
     }
 
@@ -97,7 +78,7 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 $this->getElement(
-                    '<ui_component name="cms_block_listing" component="listing" ifconfig="test"/>',
+                    '<ui_component name="cms_block_listing" component="listing" ifconfig="config_path"/>',
                     'ui_component'
                 ),
             ]

@@ -7,49 +7,110 @@
  */
 namespace Magento\Webapi\Controller\Rest\Router;
 
+use Magento\Framework\App\RequestInterface as Request;
+use Magento\TestFramework\Helper\ObjectManager;
+
 class RouteTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Webapi\Controller\Rest\Router\Route */
-    protected $_restRoute;
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var Request|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $request;
 
     protected function setUp()
     {
-        /** Init SUT. */
-        $this->_restRoute = new \Magento\Webapi\Controller\Rest\Router\Route('route');
-        parent::setUp();
-    }
+        $this->objectManager = new ObjectManager($this);
 
-    protected function tearDown()
-    {
-        unset($this->_restRoute);
-        parent::tearDown();
+        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+            ->setMethods(['getPathInfo'])
+            ->getMockForAbstractClass();
     }
 
     /**
-     * Test setServiceName and getServiceName methods.
+     * Test setServiceName and getServiceName methods
+     *
+     * @return void
      */
     public function testResourceName()
     {
+        /** @var Route $model */
+        $model = $this->objectManager->getObject(
+            'Magento\Webapi\Controller\Rest\Router\Route',
+            ['route' => '/V1/one']
+        );
+
         /** Assert that new object has no Resource name set. */
-        $this->assertNull($this->_restRoute->getServiceClass(), 'New object has a set Resource name.');
+        $this->assertNull($model->getServiceClass(), 'New object has a set Resource name.');
         /** Set Resource name. */
         $resourceName = 'Resource name';
-        $this->_restRoute->setServiceClass($resourceName);
+        $model->setServiceClass($resourceName);
         /** Assert that Resource name was set. */
-        $this->assertEquals($resourceName, $this->_restRoute->getServiceClass(), 'Resource name is wrong.');
+        $this->assertEquals($resourceName, $model->getServiceClass(), 'Resource name is wrong.');
     }
 
-    public function testMatch()
+    /**
+     * @param string $route
+     * @param string $path
+     * @param array|bool $params
+     * @return void
+     * @dataProvider dataProviderRoutes
+     */
+    public function testRoute($route, $path, $params)
     {
-        $areaName = 'rest';
-        $testApi = 'test_api';
-        $route = new \Magento\Webapi\Controller\Rest\Router\Route("{$areaName}/:{$testApi}");
+        /** @var Route $model */
+        $model = $this->objectManager->getObject(
+            'Magento\Webapi\Controller\Rest\Router\Route',
+            ['route' => $route]
+        );
 
-        $testUri = "{$areaName}/{$testApi}";
-        $request = new \Zend_Controller_Request_Http();
-        $request->setRequestUri($testUri);
+        $this->request->expects($this->once())
+            ->method('getPathInfo')
+            ->willReturn($path);
 
-        $match = $route->match($request);
-        $this->assertEquals($testApi, $match[$testApi], 'Rest route did not match.');
+        $match = $model->match($this->request);
+        $this->assertEquals($params, $match);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderRoutes()
+    {
+        return [
+            // Success
+            ['/V1/one', '/V1/one', []],
+            ['/V1/one/:twoValue', '/V1/one/2', ['twoValue' => 2]],
+            ['/V1/one/two', '/V1/one/two', []],
+            ['/V1/one/two/:threeValue', '/V1/one/two/3', ['threeValue' => 3]],
+            ['/V1/one/:twoValue/three', '/V1/one/2/three', ['twoValue' => 2]],
+            ['/V1/one/:twoValue/three/:fourValue', '/V1/one/2/three/4', ['twoValue' => 2, 'fourValue' => 4]],
+            ['/V1/one/:twoValue/three/four', '/V1/one/2/three/four', ['twoValue' => 2]],
+            ['/V1/one/two/:threeValue/four/:fiveValue', '/V1/one/two/3/four/5', ['threeValue' => 3, 'fiveValue' => 5]],
+
+            ['/v1/One', '/v1/One', []],
+            ['/v1/oNe', '/V1/one', []],
+            ['/v1/onE', '/V1/oNe', []],
+
+            ['/v1/One/:twoValue', '/V1/one/2', ['twoValue' => 2]],
+            ['/v1/oNe/:TwoValue', '/v1/oNe/2', ['TwoValue' => 2]],
+            ['/v1/onE/:twovalue', '/v1/onE/2', ['twovalue' => 2]],
+
+            ['/V1/one-one', '/V1/one-one', []],
+            ['/V1/one-one/:twoValue', '/V1/one-one/2', ['twoValue' => 2]],
+            ['/V1/one_one/:two-value', '/V1/one_one/2', ['two-value' => 2]],
+            ['/V1/one-one/:two_value', '/V1/one-one/2', ['two_value' => 2]],
+
+            // Error
+            ['/V1/one', '/V1/two', false],
+            ['/V1/one/:twoValue', '/V1/one', false],
+            ['/V1/one/two', '/V1/one', false],
+            ['/V1/one/two', '/V1/one/two/three', false],
+            ['/V1/one/:twoValue/three', '/V1/one/two/3', false],
+        ];
     }
 }

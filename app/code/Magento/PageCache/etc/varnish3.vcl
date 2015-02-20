@@ -48,7 +48,7 @@ sub vcl_recv {
     }
     
     # normalize url in case of leading HTTP scheme and domain
-    set req.url = regsub(req.url, "^http[s]?://[^/]+", "");
+    set req.url = regsub(req.url, "^http[s]?://", "");
 
     # collect all cookies
     std.collect(req.http.Cookie);

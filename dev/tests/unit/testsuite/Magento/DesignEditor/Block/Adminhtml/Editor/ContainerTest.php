@@ -37,8 +37,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\DesignEditor\Block\Adminhtml\Editor\Container::setFrameUrl
-     * @covers \Magento\DesignEditor\Block\Adminhtml\Editor\Container::getFrameUrl
+     * covers \Magento\DesignEditor\Block\Adminhtml\Editor\Container::setFrameUrl
+     * covers \Magento\DesignEditor\Block\Adminhtml\Editor\Container::getFrameUrl
      */
     public function testGetSetFrameUrl()
     {
@@ -52,7 +52,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\DesignEditor\Block\Adminhtml\Editor\Container::_prepareLayout
+     * covers \Magento\DesignEditor\Block\Adminhtml\Editor\Container::_prepareLayout
      */
     public function testPrepareLayout()
     {

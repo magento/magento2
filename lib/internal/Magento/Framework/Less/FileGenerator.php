@@ -65,7 +65,7 @@ class FileGenerator
         \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor
     ) {
         $this->tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->lessDirectory = Source::TMP_MATERIALIZATION_DIR . '/' . self::TMP_LESS_DIR;
+        $this->lessDirectory = DirectoryList::TMP_MATERIALIZATION_DIR . '/' . self::TMP_LESS_DIR;
         $this->assetRepo = $assetRepo;
         $this->magentoImportProcessor = $magentoImportProcessor;
         $this->importProcessor = $importProcessor;

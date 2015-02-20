@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Element;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\View\Template\Html\Minifier;
 
 /**
  * Base html block
@@ -372,7 +373,12 @@ class Template extends AbstractBlock
 
         $themesDir = $this->_filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
         $appDir = $this->_filesystem->getDirectoryRead(DirectoryList::APP)->getAbsolutePath();
+        $compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TEMPLATE_MINIFICATION_DIR)
+            ->getAbsolutePath();
         return ($this->isPathInDirectory(
+            $fileName,
+            $compiledDir
+        ) || $this->isPathInDirectory(
             $fileName,
             $appDir
         ) || $this->isPathInDirectory(

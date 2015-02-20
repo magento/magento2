@@ -63,7 +63,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             $resultElementData['attributes']
         );
         $this->assertEquals(
-            ['test_arg' => ['name' => 'test_arg', 'xsi:type' => 'string', 'value' => 'test-argument-value']],
+            ['test_arg' => 'test-argument-value'],
             $resultElementData['arguments']
         );
 
@@ -93,7 +93,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $resultElementData = $structure->getStructureElementData($this->blockName);
 
         $this->assertEquals(
-            ['test_arg' => ['name' => 'test_arg', 'xsi:type' => 'string', 'value' => 'test-argument-value']],
+            ['test_arg' => 'test-argument-value'],
             $resultElementData['arguments']
         );
     }

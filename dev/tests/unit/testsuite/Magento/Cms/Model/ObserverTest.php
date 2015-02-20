@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model;
 
 /**
- * @covers \Magento\Cms\Model\Observer
+ * covers \Magento\Cms\Model\Observer
  */
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,7 +92,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Observer::noRoute
+     * covers \Magento\Cms\Model\Observer::noRoute
      */
     public function testNoRoute()
     {
@@ -129,7 +129,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Observer::noCookies
+     * covers \Magento\Cms\Model\Observer::noCookies
      * @param string $pageUrl
      * @dataProvider noCookiesDataProvider
      */

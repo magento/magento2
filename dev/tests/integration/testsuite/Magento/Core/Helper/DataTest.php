@@ -5,6 +5,8 @@
  */
 namespace Magento\Core\Helper;
 
+use Zend\Stdlib\Parameters;
+
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     const DATE_TIMEZONE = 'America/Los_Angeles';
@@ -28,69 +30,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_dateTime->setTimezone(new \DateTimeZone(self::DATE_TIMEZONE));
     }
 
-    public function testCurrency()
-    {
-        $price = 10.00;
-        $priceHtml = '<span class="price">$10.00</span>';
-        $this->assertEquals($priceHtml, $this->_helper->currency($price));
-        $this->assertEquals($priceHtml, $this->_helper->formatCurrency($price));
-    }
-
-    public function testFormatPrice()
-    {
-        $price = 10.00;
-        $priceHtml = '<span class="price">$10.00</span>';
-        $this->assertEquals($priceHtml, $this->_helper->formatPrice($price));
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testIsDevAllowedDefault()
-    {
-        $this->assertTrue($this->_helper->isDevAllowed());
-    }
-
-    /**
-     * @magentoConfigFixture current_store dev/restrict/allow_ips 192.168.0.1
-     * @magentoAppIsolation enabled
-     */
-    public function testIsDevAllowedTrue()
-    {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var \Magento\TestFramework\Request $request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
-        $request->setServer(['REMOTE_ADDR' => '192.168.0.1']);
-
-        $this->assertTrue($this->_helper->isDevAllowed());
-    }
-
-    /**
-     * @magentoConfigFixture current_store dev/restrict/allow_ips 192.168.0.1
-     * @magentoAppIsolation enabled
-     */
-    public function testIsDevAllowedFalse()
-    {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var \Magento\TestFramework\Request $request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
-        $request->setServer(['REMOTE_ADDR' => '192.168.0.3']);
-
-        $this->assertFalse($this->_helper->isDevAllowed());
-    }
-
     public function testJsonEncodeDecode()
     {
         $data = ['one' => 1, 'two' => 'two'];
         $jsonData = '{"one":1,"two":"two"}';
         $this->assertEquals($jsonData, $this->_helper->jsonEncode($data));
         $this->assertEquals($data, $this->_helper->jsonDecode($jsonData));
-    }
-
-    public function testGetDefaultCountry()
-    {
-        $this->assertEquals('US', $this->_helper->getDefaultCountry());
     }
 }

@@ -44,7 +44,7 @@ class Repository extends AbstractFactory
         $fallbackComment = $this->_buildFallbackComment($item);
 
         $this->factoryContent .= "\n    /**\n";
-        $this->factoryContent .= "     * @return \\{$item['class']}\n";
+        $this->factoryContent .= "     * @return {$item['class']}\n";
         $this->factoryContent .= "     */\n";
         $this->factoryContent .= "    public function get{$methodNameSuffix}(array \$defaultConfig = [], "
             . "array \$defaultData = [])\n";

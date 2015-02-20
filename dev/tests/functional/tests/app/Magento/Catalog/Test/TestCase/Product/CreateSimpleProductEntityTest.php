@@ -13,9 +13,7 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for CreateSimpleProductEntity
- *
- * Test Flow:
+ * Steps:
  * 1. Login to the backend.
  * 2. Navigate to Products > Catalog.
  * 3. Start to create simple product.
@@ -29,33 +27,20 @@ use Magento\Mtf\TestCase\Injectable;
 class CreateSimpleProductEntityTest extends Injectable
 {
     /* tags */
+    const TEST_TYPE = 'acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
 
     /**
-     * Category fixture
+     * Configuration setting.
      *
-     * @var Category
+     * @var string
      */
-    protected $category;
+    protected $configData;
 
     /**
-     * Product page with a grid
-     *
-     * @var CatalogProductIndex
-     */
-    protected $productGrid;
-
-    /**
-     * Page to create a product
-     *
-     * @var CatalogProductNew
-     */
-    protected $newProductPage;
-
-    /**
-     * Prepare data
+     * Prepare data.
      *
      * @param Category $category
      * @return array
@@ -70,36 +55,49 @@ class CreateSimpleProductEntityTest extends Injectable
     }
 
     /**
-     * Injection data
+     * Run create product simple entity test.
      *
+     * @param string $configData
+     * @param CatalogProductSimple $product
      * @param Category $category
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductNew $newProductPage
-     * @return void
+     * @return array
      */
-    public function __inject(
+    public function testCreate(
+        $configData,
+        CatalogProductSimple $product,
         Category $category,
         CatalogProductIndex $productGrid,
         CatalogProductNew $newProductPage
     ) {
-        $this->category = $category;
-        $this->productGrid = $productGrid;
-        $this->newProductPage = $newProductPage;
+        $this->configData = $configData;
+
+        // Preconditions
+        $this->objectManager->create(
+            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            ['configData' => $this->configData]
+        )->run();
+
+        // Steps
+        $productGrid->open();
+        $productGrid->getGridPageActionBlock()->addProduct('simple');
+        $newProductPage->getProductForm()->fill($product, null, $category);
+        $newProductPage->getFormPageActions()->save();
+
+        return ['product' => $product];
     }
 
     /**
-     * Run create product simple entity test
+     * Clean data after running test.
      *
-     * @param CatalogProductSimple $product
-     * @param Category $category
      * @return void
      */
-    public function testCreate(CatalogProductSimple $product, Category $category)
+    public function tearDown()
     {
-        // Steps
-        $this->productGrid->open();
-        $this->productGrid->getGridPageActionBlock()->addProduct('simple');
-        $this->newProductPage->getProductForm()->fill($product, null, $category);
-        $this->newProductPage->getFormPageActions()->save();
+        $this->objectManager->create(
+            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            ['configData' => $this->configData, 'rollback' => true]
+        )->run();
     }
 }
