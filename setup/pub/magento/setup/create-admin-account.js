@@ -71,7 +71,7 @@ angular.module('create-admin-account', ['ngStorage'])
             require: "ngModel",
             link: function(scope, elm, attrs, ctrl){
                 var validator = function(value){
-                    var minReg = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{6,}$/,
+                    var minReg = /^(?=.*\d)(?=.*[a-zA-Z]).{6,}$/,
                         isValid = typeof value === 'string' && minReg.test(value);
 
                     ctrl.$setValidity('checkPassword', isValid);
