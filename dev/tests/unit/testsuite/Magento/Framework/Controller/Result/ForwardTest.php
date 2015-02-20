@@ -35,7 +35,8 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
                 'getCookie',
                 'setDispatched',
                 'setParams',
-                'setControllerName'
+                'setControllerName',
+                'getParams'
             ],
             [],
             '',

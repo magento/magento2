@@ -79,7 +79,9 @@ class LoginTest extends \PHPUnit_Framework_TestCase
                 'getCookie',
                 'getRawBody',
                 'getMethod',
-                'isXmlHttpRequest'
+                'isXmlHttpRequest',
+                'getParams',
+                'setParams'
             ],
             [],
             '',

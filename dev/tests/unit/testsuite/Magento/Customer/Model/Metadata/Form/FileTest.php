@@ -49,6 +49,7 @@ class FileTest extends AbstractFormTestCase
                     'getActionName',
                     'setActionName',
                     'getCookie',
+                    'setParams'
                 ]
             )
             ->getMock();

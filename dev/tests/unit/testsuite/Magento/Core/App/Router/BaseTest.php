@@ -70,6 +70,7 @@ class BaseTest extends \Magento\Test\BaseTestCase
             'getPost',
             'isSecure',
             'setParams',
+            'getParams'
         ];
 
         $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface', $requestMethods);
