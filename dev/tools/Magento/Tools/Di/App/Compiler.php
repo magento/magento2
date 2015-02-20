@@ -63,7 +63,7 @@ class Compiler implements \Magento\Framework\AppInterface
                     'Magento\Tools\Di\Compiler\Log\Writer\WriterInterface' =>
                         'Magento\Tools\Di\Compiler\Log\Writer\Console'
                 ],
-                'Magento\Tools\Di\Compiler\Config\Chain\ModificationChain' => [
+                'Magento\Tools\Di\Compiler\Config\ModificationChain' => [
                     'arguments' => [
                         'modificationsList' => [
                             'PreferencesResolving' =>

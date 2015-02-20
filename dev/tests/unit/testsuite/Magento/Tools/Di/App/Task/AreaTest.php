@@ -34,7 +34,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     private $configWriterMock;
 
     /**
-     * @var Config\Chain\ModificationChain | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tools\Di\Compiler\Config\ModificationChain | \PHPUnit_Framework_MockObject_MockObject
      */
     private $configChain;
 
@@ -52,7 +52,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->configWriterMock = $this->getMockBuilder('Magento\Tools\Di\Compiler\Config\WriterInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configChain = $this->getMockBuilder('Magento\Tools\Di\Compiler\Config\Chain\ModificationChain')
+        $this->configChain = $this->getMockBuilder('Magento\Tools\Di\Compiler\Config\ModificationChain')
             ->disableOriginalConstructor()
             ->getMock();
     }

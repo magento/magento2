@@ -107,7 +107,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                     'Magento\Tools\Di\Compiler\Log\Writer\WriterInterface' =>
                         'Magento\Tools\Di\Compiler\Log\Writer\Console'
                 ],
-            'Magento\Tools\Di\Compiler\Config\Chain\ModificationChain' => [
+            'Magento\Tools\Di\Compiler\Config\ModificationChain' => [
                 'arguments' => [
                     'modificationsList' => [
                         'PreferencesResolving' =>

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Tools\Di\Compiler\Config\Chain;
+namespace Magento\Tools\Di\Compiler\Config;
 
 interface ModificationInterface
 {

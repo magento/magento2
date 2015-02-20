@@ -39,7 +39,7 @@ class Area implements OperationInterface
     private $data = [];
 
     /**
-     * @var Config\Chain\ModificationChain
+     * @var \Magento\Tools\Di\Compiler\Config\ModificationChain
      */
     private $modificationChain;
 
@@ -48,7 +48,7 @@ class Area implements OperationInterface
      * @param \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area $areaInstancesNamesList
      * @param Config\Reader $configReader
      * @param Config\WriterInterface $configWriter
-     * @param Config\Chain\ModificationChain $modificationChain
+     * @param \Magento\Tools\Di\Compiler\Config\ModificationChain $modificationChain
      * @param array $data
      */
     public function __construct(
@@ -56,7 +56,7 @@ class Area implements OperationInterface
         \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area $areaInstancesNamesList,
         Config\Reader $configReader,
         Config\WriterInterface $configWriter,
-        Config\Chain\ModificationChain $modificationChain,
+        Config\ModificationChain $modificationChain,
         $data = []
     ) {
         $this->areaList = $areaList;

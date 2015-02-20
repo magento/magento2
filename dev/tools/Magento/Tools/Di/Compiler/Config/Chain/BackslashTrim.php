@@ -6,6 +6,8 @@
 
 namespace Magento\Tools\Di\Compiler\Config\Chain;
 
+use Magento\Tools\Di\Compiler\Config\ModificationInterface;
+
 class BackslashTrim implements ModificationInterface
 {
     /**
