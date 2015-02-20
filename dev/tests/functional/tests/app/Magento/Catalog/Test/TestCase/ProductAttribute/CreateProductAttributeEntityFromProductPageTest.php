@@ -54,6 +54,7 @@ class CreateProductAttributeEntityFromProductPageTest extends Scenario
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
+        $this->markTestIncomplete('Bug: MTA-1616');
         $product = $fixtureFactory->createByCode(
             'catalogProductSimple',
             ['dataSet' => 'product_with_category_with_anchor']

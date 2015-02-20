@@ -90,11 +90,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->resultPageMock->expects(
             $this->at(0)
         )->method(
-            'setHeader'
-        )->with(
-            'HTTP/1.1',
-            '404 Not Found'
-        )->will(
+            'setStatusHeader'
+        )->with(404, '1.1', 'Not Found')->will(
             $this->returnSelf()
         );
         $this->resultPageMock->expects(

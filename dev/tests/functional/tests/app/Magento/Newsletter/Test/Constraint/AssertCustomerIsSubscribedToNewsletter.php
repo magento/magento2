@@ -6,7 +6,7 @@
 
 namespace Magento\Newsletter\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Newsletter\Test\Page\Adminhtml\SubscriberIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -23,12 +23,12 @@ class AssertCustomerIsSubscribedToNewsletter extends AbstractConstraint
     /**
      * Assert customer is subscribed to newsletter
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param SubscriberIndex $subscriberIndex
      * @return void
      */
     public function processAssert(
-        CustomerInjectable $customer,
+        Customer $customer,
         SubscriberIndex $subscriberIndex
     ) {
         $filter = [

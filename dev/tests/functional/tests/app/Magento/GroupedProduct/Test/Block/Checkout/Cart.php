@@ -6,7 +6,7 @@
 
 namespace Magento\GroupedProduct\Test\Block\Checkout;
 
-use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
+use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
@@ -44,7 +44,7 @@ class Cart extends \Magento\Checkout\Test\Block\Cart
     {
         $cartItems = [];
 
-        /** @var GroupedProductInjectable $product */
+        /** @var GroupedProduct $product */
         $associatedProducts = $product->getAssociated()['products'];
         foreach ($associatedProducts as $product) {
             $cartItems[$product->getSku()] = parent::getCartItem($product);
