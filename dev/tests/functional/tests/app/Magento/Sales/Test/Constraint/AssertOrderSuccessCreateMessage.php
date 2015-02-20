@@ -6,11 +6,10 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderSuccessCreateMessage
  * Assert that after create sales order successful message appears
  */
 class AssertOrderSuccessCreateMessage extends AbstractConstraint
@@ -27,14 +26,14 @@ class AssertOrderSuccessCreateMessage extends AbstractConstraint
     /**
      * Assert that after create sales order successful message appears
      *
-     * @param OrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @return void
      */
-    public function processAssert(OrderView $orderView)
+    public function processAssert(SalesOrderView $salesOrderView)
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
-            $orderView->getMessagesBlock()->getSuccessMessages(),
+            $salesOrderView->getMessagesBlock()->getSuccessMessages(),
             'Wrong success message is displayed.'
         );
     }

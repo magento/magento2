@@ -9,11 +9,10 @@ namespace Magento\Sales\Test\Constraint;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\CreditMemos\Grid;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertRefundInCreditMemoTab
  * Assert that refund is present in the tab with ID and refunded amount(depending on full/partial refund)
  */
 class AssertRefundInCreditMemoTab extends AbstractConstraint
@@ -25,23 +24,23 @@ class AssertRefundInCreditMemoTab extends AbstractConstraint
     /**
      * Assert that refund is present in the tab with ID and refunded amount(depending on full/partial refund)
      *
-     * @param OrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex
      * @param OrderInjectable $order
      * @param array $ids
      * @return void
      */
     public function processAssert(
-        OrderView $orderView,
+        SalesOrderView $salesOrderView,
         OrderIndex $orderIndex,
         OrderInjectable $order,
         array $ids
     ) {
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
-        $orderView->getOrderForm()->openTab('creditmemos');
+        $salesOrderView->getOrderForm()->openTab('creditmemos');
         /** @var Grid $grid */
-        $grid = $orderView->getOrderForm()->getTabElement('creditmemos')->getGridBlock();
+        $grid = $salesOrderView->getOrderForm()->getTabElement('creditmemos')->getGridBlock();
         $amount = $order->getPrice();
         foreach ($ids['creditMemoIds'] as $key => $creditMemoId) {
             $filter = [

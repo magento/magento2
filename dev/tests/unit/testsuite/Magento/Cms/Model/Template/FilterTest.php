@@ -6,12 +6,12 @@
 namespace Magento\Cms\Model\Template;
 
 /**
- * @covers \Magento\Cms\Model\Template\Filter
+ * covers \Magento\Cms\Model\Template\Filter
  */
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -27,7 +27,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
@@ -44,7 +44,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Template\Filter::mediaDirective
+     * covers \Magento\Cms\Model\Template\Filter::mediaDirective
      */
     public function testMediaDirective()
     {

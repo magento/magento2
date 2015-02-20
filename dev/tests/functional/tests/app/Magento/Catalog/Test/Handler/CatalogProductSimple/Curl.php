@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Handler\CatalogProductSimple;
 
-use Magento\Mtf\Config;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
@@ -147,7 +146,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      *
      * @var array
      */
-    protected $selectOptions = ['Drop-down', 'Radio Buttons', 'Checkbox', 'Multiple Select'];
+    protected $selectOptions = ['drop_down', 'radio', 'checkbox', 'multiple'];
 
     /**
      * Post request for creating simple product.
@@ -264,12 +263,12 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
                 $customOption['options'][$index]['is_delete'] = '';
                 $customOption['options'][$index]['price_type'] = strtolower($option['price_type']);
             }
-            $options[$key] += in_array($customOption['type'], $this->selectOptions)
+            $options[$key]['type'] = $this->optionNameConvert($customOption['type']);
+            $options[$key] += in_array($options[$key]['type'], $this->selectOptions)
                 ? ['values' => $customOption['options']]
                 : $customOption['options'][0];
             unset($customOption['options']);
             $options[$key] += $customOption;
-            $options[$key]['type'] = $this->optionNameConvert($customOption['type']);
         }
         $fields['options'] = $options;
         unset($fields['custom_options']);
@@ -285,6 +284,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function optionNameConvert($optionName)
     {
+        $optionName = substr($optionName, strpos($optionName, "/") + 1);
         $optionName = str_replace(['-', ' & '], "_", trim($optionName));
         $end = strpos($optionName, ' ');
         if ($end !== false) {

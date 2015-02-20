@@ -5,7 +5,6 @@
  */
 namespace Magento\Multishipping\Test\TestStep;
 
-use Magento\Multishipping\Test\Page\MultishippingCheckoutBilling;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Multishipping\Test\Page\MultishippingCheckoutOverview;
 

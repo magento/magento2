@@ -29,10 +29,9 @@ class Rss extends \Magento\Wishlist\Helper\Data
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Helper\PostData $postDataHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
@@ -43,10 +42,9 @@ class Rss extends \Magento\Wishlist\Helper\Data
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Helper\PostData $postDataHelper,
         \Magento\Customer\Helper\View $customerViewHelper,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
@@ -59,7 +57,6 @@ class Rss extends \Magento\Wishlist\Helper\Data
         parent::__construct(
             $context,
             $coreRegistry,
-            $scopeConfig,
             $customerSession,
             $wishlistFactory,
             $storeManager,
@@ -120,9 +117,9 @@ class Rss extends \Magento\Wishlist\Helper\Data
     public function isRssAllow()
     {
         return $this->_moduleManager->isEnabled('Magento_Rss')
-            && $this->_scopeConfig->isSetFlag(
+            && $this->scopeConfig->isSetFlag(
                 'rss/wishlist/active',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
     }
 }

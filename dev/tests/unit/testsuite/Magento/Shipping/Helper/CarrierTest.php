@@ -24,16 +24,13 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->helper = $objectManagerHelper->getObject(
-            'Magento\Shipping\Helper\Carrier',
-            [
-                'context' => $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false),
-                'locale' => $this->getMock('Magento\Framework\LocaleInterface'),
-                'scopeConfig' => $this->scopeConfig
-            ]
-        );
+        $className = 'Magento\Shipping\Helper\Carrier';
+        $arguments = $objectManagerHelper->getConstructArguments($className);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
+        $this->scopeConfig = $context->getScopeConfig();
+        $this->helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
     /**
@@ -49,7 +46,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             'carriers',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue($carriers)
         );
@@ -84,7 +81,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             sprintf('carriers/%s/%s', $carrierCode, $configPath),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue($configValue)
         );

@@ -2,13 +2,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
+/*jshint browser:true*/
 define([
-    "jquery",
-    "jquery/ui",
-    "jquery/template"
-], function($){
-    "use strict";
+    'jquery',
+    'mage/template',
+    'jquery/ui'
+], function ($, mageTemplate) {
+    'use strict';
 
     $.widget('mage.rowBuilder', {
 
@@ -55,8 +55,11 @@ define([
          * Initialize create
          * @private
          */
-        _create: function() {
+        _create: function () {
+            this.rowTemplate = mageTemplate(this.options.rowTemplate);
+
             this.options.rowCount = this.options.rowIndex = 0;
+
             //On document ready related tasks
             $($.proxy(this.ready, this));
 
@@ -69,7 +72,7 @@ define([
          * Initialize template
          * @public
          */
-        ready: function() {
+        ready: function () {
             if (this.options.formDataPost && this.options.formDataPost.formData && this.options.formDataPost.formData.length) {
                 this.processFormDataArr(this.options.formDataPost);
             } else if (this.options.rowIndex === 0 && this.options.maxRows !== 0) {
@@ -84,13 +87,18 @@ define([
          * @public
          * @param {Object} formDataArr
          */
-        processFormDataArr: function(formDataArr) {
+        processFormDataArr: function (formDataArr) {
             var formData = formDataArr.formData,
-                templateFields = formDataArr.templateFields;
-            for (var i = this.options.rowIndex = 0; i < formData.length; this.options.rowIndex = i++) {
+                templateFields = formDataArr.templateFields,
+                formRow,
+                i, j;
+
+            for (i = this.options.rowIndex = 0; i < formData.length; this.options.rowIndex = i++) {
                 this.addRow(i);
-                var formRow = formData[i];
-                for (var j = 0; j < formRow.length; j++) {
+
+                formRow = formData[i];
+
+                for (j = 0; j < formRow.length; j++) {
                     this.setFieldById(templateFields[j] + i, formRow[j]);
                 }
             }
@@ -105,20 +113,32 @@ define([
          * @param {Number} index - current index/count of the created template. This will be used as the id
          * @return {*}
          */
-        addRow: function(index) {
-            var row = $(this.options.rowParentElem);
+        addRow: function (index) {
+            var row = $(this.options.rowParentElem),
+                tmpl;
+
             row.addClass(this.options.rowContainerClass).attr('id', this.options.rowIdPrefix + index);
-            $(this.options.rowTemplate).tmpl([
-                {_index_: index}
-            ]).appendTo(row);
+
+            tmpl = this.rowTemplate({
+                data: {
+                    _index_: index
+                }
+            });
+
+            $(tmpl).appendTo(row);
+
             $(this.options.rowContainer).append(row);
+
             row.addClass(this.options.additionalRowClass);
+
             //Remove 'delete' link and additionalRowClass for first row
             if (this.options.rowIndex === 0 && this.options.hideFirstRowAddSeparator) {
                 $('#' + this._esc(this.options.btnRemoveIdPrefix) + '0').remove();
                 $('#' + this._esc(this.options.rowIdPrefix) + '0').removeClass(this.options.additionalRowClass);
             }
+
             this.maxRowCheck(++this.options.rowCount);
+
             return row;
         },
 
@@ -126,27 +146,28 @@ define([
          * Remove return item information row
          * @public
          * @param {*} rowIndex - return item information row index
-         * @return {boolean}
+         * @return {Boolean}
          */
-        removeRow: function(rowIndex) {
+        removeRow: function (rowIndex) {
             $('#' + this._esc(this.options.rowIdPrefix) + rowIndex).remove();
             this.maxRowCheck(--this.options.rowCount);
+
             return false;
         },
 
         /**
          * Function to check if maximum rows are exceeded and render/hide maxMsg and Add btn
          * @public
-         * @param rowIndex
+         * @param {Number} rowIndex
          */
-        maxRowCheck: function(rowIndex) {
+        maxRowCheck: function (rowIndex) {
             var addRowBtn = $(this.options.addRowBtn),
                 maxRowMsg = $(this.options.maxRowsMsg);
             //liIndex starts from 0
             if (rowIndex >= this.options.maxRows) {
                 addRowBtn.hide();
                 maxRowMsg.show();
-            } else if (addRowBtn.is(":hidden")) {
+            } else if (addRowBtn.is(':hidden')) {
                 addRowBtn.show();
                 maxRowMsg.hide();
             }
@@ -155,12 +176,14 @@ define([
         /**
          * Set the value on given element
          * @public
-         * @param {string} domId
-         * @param {string} value
+         * @param {String} domId
+         * @param {String} value
          */
-        setFieldById: function(domId, value) {
+        setFieldById: function (domId, value) {
             var x = $('#' + this._esc(domId));
+
             if (x.length) {
+
                 if (x.is(':checkbox')) {
                     x.attr('checked', true);
                 } else if (x.is('option')) {
@@ -174,10 +197,11 @@ define([
         /**
          * Delegated handler for adding a row
          * @public
-         * @return {boolean}
+         * @return {Boolean}
          */
-        handleAdd: function() {
+        handleAdd: function () {
             this.addRow(++this.options.rowIndex);
+
             return false;
         },
 
@@ -185,24 +209,25 @@ define([
          * Delegated handler for removing a selected row
          * @public
          * @param {Object} e - Native event object
-         * @return {boolean}
+         * @return {Boolean}
          */
-        handleRemove: function(e) {
+        handleRemove: function (e) {
             this.removeRow($(e.currentTarget).closest("[id^='" + this.options.btnRemoveIdPrefix + "']")
                 .attr('id').replace(this.options.btnRemoveIdPrefix, ''));
+
             return false;
         },
 
-        /*
+        /**
          * Utility function to add escape chars for jquery selector strings
          * @private
-         * @param str - string to be processed
-         * @return {string}
+         * @param {String} str - String to be processed
+         * @return {String}
          */
-        _esc: function(str) {
+        _esc: function (str) {
             return str ? str.replace(/([ ;&,.+*~\':"!\^$\[\]()=>|\/@])/g, '\\$1') : str;
         }
     });
-    
+
     return $.mage.rowBuilder;
 });

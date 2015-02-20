@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteProductsFromWishlistOnFrontendTest">
+    <variation name="DeleteProductsFromWishlistOnFrontendTestVariation1" firstConstraint="assertProductsIsAbsentInWishlist" method="test">
+      <data name="products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
+      <data name="removedProductsIndex" xsi:type="string">1</data>
+      <constraint name="assertProductsIsAbsentInWishlist"/>
+    </variation>
+    <variation name="DeleteProductsFromWishlistOnFrontendTestVariation2" firstConstraint="assertWishlistIsEmpty" method="test">
+      <data name="products" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+      <data name="removedProductsIndex" xsi:type="string">1</data>
+      <constraint name="assertWishlistIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromWishlistOnFrontendTestVariation3" firstConstraint="assertWishlistIsEmpty" method="test">
+      <data name="products" xsi:type="string">catalogProductSimple::default,catalogProductVirtual::product_50_dollar,catalogProductSimple::default,catalogProductVirtual::product_50_dollar</data>
+      <constraint name="assertWishlistIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromWishlistOnFrontendTestVariation4" firstConstraint="assertWishlistIsEmpty" method="test">
+      <data name="products" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+      <data name="removedProductsIndex" xsi:type="string">1</data>
+      <constraint name="assertWishlistIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromWishlistOnFrontendTestVariation5" firstConstraint="assertWishlistIsEmpty" method="test">
+      <data name="products" xsi:type="string">bundleProduct::bundle_fixed_product</data>
+      <data name="removedProductsIndex" xsi:type="string">1</data>
+      <constraint name="assertWishlistIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromWishlistOnFrontendTestVariation6" firstConstraint="assertWishlistIsEmpty" method="test">
+      <data name="products" xsi:type="string">configurableProduct::default</data>
+      <data name="removedProductsIndex" xsi:type="string">1</data>
+      <constraint name="assertWishlistIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromWishlistOnFrontendTestVariation7" firstConstraint="assertWishlistIsEmpty" method="test">
+      <data name="products" xsi:type="string">downloadableProduct::with_two_separately_links</data>
+      <data name="removedProductsIndex" xsi:type="string">1</data>
+      <constraint name="assertWishlistIsEmpty"/>
+    </variation>
+    <variation name="DeleteProductsFromWishlistOnFrontendTestVariation8" firstConstraint="assertWishlistIsEmpty" method="test">
+      <data name="products" xsi:type="string">groupedProduct::three_simple_products</data>
+      <data name="removedProductsIndex" xsi:type="string">1</data>
+      <constraint name="assertWishlistIsEmpty"/>
+    </variation>
+  </testCase>
+</config>

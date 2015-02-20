@@ -1,16 +1,12 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="downloadable/customer/products" module="Magento_Downloadable">
-    <blocks>
-        <mainBlock>
-            <class>Magento\Downloadable\Test\Block\Customer\Products\ListProducts</class>
-            <locator>.column.main</locator>
-            <strategy>css selector</strategy>
-        </mainBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="DownloadableCustomerProducts" mca="downloadable/customer/products" module="Magento_Downloadable">
+    <block name="mainBlock" class="Magento\Downloadable\Test\Block\Customer\Products\ListProducts" locator=".column.main" strategy="css selector"/>
+  </page>
+</config>

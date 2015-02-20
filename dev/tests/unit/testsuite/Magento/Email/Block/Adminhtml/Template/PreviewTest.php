@@ -54,7 +54,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $design = $this->getMock('Magento\Framework\View\DesignInterface');
         $store = $this->getMock('Magento\Store\Model\Store', ['getId', '__wakeup'], [], '', false);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getDefaultStoreView')->will($this->returnValue(null));
         $storeManager->expects($this->any())->method('getStores')->will($this->returnValue([$store]));
 
@@ -140,7 +140,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $eventManage = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $design = $this->getMock('Magento\Framework\View\DesignInterface');
-        $storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getDefaultStoreView')->will($this->returnValue(null));
         $storeManager->expects($this->any())->method('getStores')->will($this->returnValue([]));
 

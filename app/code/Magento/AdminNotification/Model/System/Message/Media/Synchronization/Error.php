@@ -31,7 +31,7 @@ class Error extends \Magento\AdminNotification\Model\System\Message\Media\Abstra
     /**
      * Retrieve message text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getText()
     {

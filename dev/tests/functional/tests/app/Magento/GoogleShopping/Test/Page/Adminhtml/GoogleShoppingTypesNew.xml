@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="admin/googleshopping_types/new" module="Magento_GoogleShopping">
-    <blocks>
-        <pageActions>
-            <class>Magento\GoogleShopping\Test\Block\Adminhtml\Types\FormPageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </pageActions>
-        <googleShoppingForm>
-            <class>Magento\GoogleShopping\Test\Block\Adminhtml\Types\Edit\GoogleShoppingForm</class>
-            <locator>#edit_form</locator>
-            <strategy>css selector</strategy>
-        </googleShoppingForm>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="GoogleShoppingTypesNew" area="Adminhtml" mca="admin/googleshopping_types/new" module="Magento_GoogleShopping">
+    <block name="pageActions" class="Magento\GoogleShopping\Test\Block\Adminhtml\Types\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
+    <block name="googleShoppingForm" class="Magento\GoogleShopping\Test\Block\Adminhtml\Types\Edit\GoogleShoppingForm" locator="#edit_form" strategy="css selector"/>
+  </page>
+</config>

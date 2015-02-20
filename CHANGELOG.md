@@ -1,3 +1,81 @@
+0.42.0-beta8
+=============
+* Various improvements:
+    * Existing Builders were replaced with DataFactories in Customer and Tax modules
+    * Refactored controller actions in the Checkout and CMS modules
+    * Increased coverage with static tests for `.phtml` files
+    * Moved Cookie related functionality from `Theme` and `Core` modules into a new `Cookie` module
+    * Moved minfication configuration settings to the `View` library level
+* UI improvements:
+    * Restyled installation wizard
+    * Prepared styles for Dashboard in the Backend area
+* Framework improvements:
+    * Added `setCustomAttribute` and `setCustomAttributes` methods to `ExtensibleDataInterface`
+    * Added setter methods to data object interfaces
+    * Replaced `Builders` with `Factories`
+    * Added `DataObjectHelper.php` which contains the common set of methods of all builders
+    * Refactored `__()` to return `Phrase` object
+    * Allowed usage of `LocalizedException` on the framework's library level
+    * Added expiration/lifetime management of frontend resources
+    * Unified MTF configurations format for Framework, TestCase variations and TestCase scenario configurations
+* Fixed bugs:
+    * Fixed an issue with product reviews list paging
+    * Fixed an issue where sold products were not displayed in Bestsellers
+    * Fixed an issue with image rendering on the CMS page on Frontend when `webserver rewrites = no`
+* GitHub requests:
+    * [#790](https://github.com/magento/magento2/issues/790) -- Magento API fails in a CGI env (zf1 issue)
+    * [#909](https://github.com/magento/magento2/issues/909) -- Manage Titles in popup window front-end issue
+    * [#996](https://github.com/magento/magento2/issues/996) -- Pager block should support url "fragment".
+    * [#985](https://github.com/magento/magento2/pull/985) -- Allow camelcase in vendorname for menus
+    * [#1025](https://github.com/magento/magento2/pull/1025) -- Wrong parameter for getting base url for 'media' path in "Image" form element.
+
+0.42.0-beta7
+=============
+* Various improvements:
+    * Added Varnish 4 support 
+    * Added CSS minification 
+    * Improved the performance toolkit 
+* Fixed bugs:
+    * Fixed an issue where the compiler for the single tenant mode did not resolve Repositories 
+    * Fixed an issue where the "Select all" mass action on the Customers page did not select all customers 
+    * Fixed an issue where values for a customer  attribute of multiple-select type were not saved
+    * Fixed an issue where the parental wakeup() method was not called in interceptors
+    * Fixed an issue where bundle products with the same configurations added from different pages were displayed in the wishlist as separate items 
+    * Fixed an issue where the number of items added to the wishlist was not displayed on certain pages
+    * Fixed an issue where logging was broken 
+    * Fixed an issue where it was impossible to use \Magento\Customer\Model\Resource\AddressRepository::getList with predefined direction(sortOrder) 
+    * Fixed an issue where editing a product from wishlist led caused a fatal error 
+    * Fixed an issue where the redirect link to continue shopping was absent in the success message after adding product to a wishlist 
+    * Fixed an issue where HTML tags where displayed in product prices on the Customer's Wishlist page in Admin
+    * Fixed an issue where the Name and Email fields were not automatically when creating an email using the Email to Friend functionality
+    * Fixed an issue with the redirect after searching product in a customer wishlist in Admin
+    * Fixed an issue where a configurable product did not go out of stock when last subitem of some option was sold
+    * Fixed an issue with varnish config generation for multiple IPs in access list field
+    * Fixed the wrong di.xml in the Magento_Developer module
+    * Fixed an issue where changes were not saved when default billing/shipping address was not selected in customer addresses 
+    * Fixed the issue where the Update Qty button looked disabled during a partial invoice creation
+    * Fixed an issue where the creation date was not displayed in invoices and credit memo grids
+    * Fixed an issue where it was impossible to install Magento_Quote on PHP 5.6 
+    * Fixed an issue that changes are not saved when default billing/shipping address is unchecked in customer addresses
+    * Fixed an issue where "Update Qty" button looks disabled while creating partial invoice
+    * Fixed an issue where date created column is not populated in invoices and credit memo grid
+    * Fixed an issue with installation of Magento_Quote module on PHP 5.6
+    * Fixed an issue with wrong link "File Permission Help"
+    * Fixed an issue where dev/tools are broken when DI compiler is used due to skipped by the compiler dev/tools/Magento folder
+* Framework improvements:
+    * JavaScript testsuites divided into frontend, backend and lib suites 
+    * Implemented image compression on server side upload
+    * Implemented frontend page resources sorting 
+    * Removed the Magic __call method usage in templates
+    * Introduced Jasmine + PhantomJS JavaScript testing infrastructure
+    * Removed support of PHP 5.4
+* Setup Tool improvements:
+    * Added tools for enabling/disabling modules: "module-enable --modules=Module_One,Module_Two, module-disable --modules=Module_One,Module_Two"
+    * Added help option for displaying list of available modules: "help module-list"
+* GitHub requests :
+    * [#593](https://github.com/magento/magento2/issues/593) -- Allow to use "0" as customer group
+    * [#804](https://github.com/magento/magento2/issues/804) -- Comment about VAT number displayed under different field in Customer Configuration
+    
 0.42.0-beta6
 =============
 * Various improvements:

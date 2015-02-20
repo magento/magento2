@@ -147,8 +147,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Tools\Migration\Acl\Menu\Generator::buildMenuItemsXPath
-     * @covers \Magento\Tools\Migration\Acl\Menu\Generator::buildXPath
+     * covers \Magento\Tools\Migration\Acl\Menu\Generator::buildMenuItemsXPath
+     * covers \Magento\Tools\Migration\Acl\Menu\Generator::buildXPath
      */
     public function testBuildMenuItemsXPath()
     {

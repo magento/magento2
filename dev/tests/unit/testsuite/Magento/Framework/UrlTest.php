@@ -96,7 +96,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected function getRequestMock($mockMethods = [])
     {
         $interfaceMethods =
-            ['getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie'];
+            ['getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie', 'isSecure'];
         return $this->getMock('Magento\Framework\App\RequestInterface', array_merge($interfaceMethods, $mockMethods));
     }
 
@@ -106,7 +106,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected function getUrlModel($arguments = [])
     {
-        $arguments = array_merge($arguments, ['scopeType' => Store\ScopeInterface::SCOPE_STORE]);
+        $arguments = array_merge($arguments, ['scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE]);
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         return $objectManager->getObject('Magento\Framework\Url', $arguments);
     }
@@ -300,9 +300,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $requestMock = $this->getRequestMock([
             'isDirectAccessFrontendName',
             'getAlias',
-            'getRequestedRouteName',
-            'getRequestedControllerName',
-            'getRequestedActionName',
+            'getRouteName',
+            'getControllerName',
         ]);
         $routeConfigMock = $this->getMock('Magento\Framework\App\Route\ConfigInterface');
         $model = $this->getUrlModel(
@@ -323,11 +322,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['key' => 'value']));
         $requestMock->expects($this->once())->method('isDirectAccessFrontendName')->will($this->returnValue(true));
 
-        $requestMock->expects($this->once())->method('getRequestedRouteName')->will($this->returnValue('catalog'));
+        $requestMock->expects($this->once())->method('getRouteName')->will($this->returnValue('catalog'));
         $requestMock->expects($this->once())
-            ->method('getRequestedControllerName')
+            ->method('getControllerName')
             ->will($this->returnValue('product'));
-        $requestMock->expects($this->once())->method('getRequestedActionName')->will($this->returnValue('view'));
+        $requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('view'));
         $routeConfigMock->expects($this->once())->method('getRouteFrontName')->will($this->returnValue('catalog'));
 
         $url = $model->getUrl('*/*/*/key/value');
@@ -499,7 +498,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->with($this->equalTo($configPath), Store\ScopeInterface::SCOPE_STORE, $this->scopeMock)
+            ->with($this->equalTo($configPath), \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->scopeMock)
             ->will($this->returnValue('http://localhost/'));
         $this->routeParamsResolverMock->expects($this->at(0))->method('hasData')->with('secure_is_forced')
             ->will($this->returnValue(false));
@@ -546,7 +545,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 'web/secure/base_url_secure_forced',
-                Store\ScopeInterface::SCOPE_STORE, $this->scopeMock
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->scopeMock
             )
             ->will($this->returnValue('http://localhost/'));
         $this->routeParamsResolverMock->expects($this->once())->method('hasData')->with('secure_is_forced')

@@ -32,18 +32,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_scopeConfig = $this->getMockForAbstractClass(
-            '\Magento\Framework\App\Config\ScopeConfigInterface', ['getValue'], '', false
-        );
-        $this->_customerSession = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
-        $this->_customerViewHelper = $this->getMock('\Magento\Customer\Helper\View', [], [], '', false);
-
-        $this->_helper = new Data(
-            $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false),
-            $this->_scopeConfig,
-            $this->_customerSession,
-            $this->_customerViewHelper
-        );
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $className = '\Magento\Contact\Helper\Data';
+        $arguments = $objectManagerHelper->getConstructArguments($className);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
+        $this->_scopeConfig = $context->getScopeConfig();
+        $this->_customerSession = $arguments['customerSession'];
+        $this->_customerViewHelper = $arguments['customerViewHelper'];
+        $this->_helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
     public function testIsEnabled()

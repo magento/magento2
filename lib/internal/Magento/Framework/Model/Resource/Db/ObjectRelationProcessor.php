@@ -20,6 +20,7 @@ class ObjectRelationProcessor
      * @param array $involvedData
      * @return void
      * @throws \LogicException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function delete(
         TransactionManagerInterface $transactionManager,
@@ -36,6 +37,8 @@ class ObjectRelationProcessor
      *
      * @param string $table
      * @param array $involvedData
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validateDataIntegrity($table, array $involvedData)
     {

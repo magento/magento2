@@ -64,6 +64,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
                     break;
                 } elseif (isset($this->_connectionNames[$pointerResourceName])) {
                     $this->_connectionNames[$resourceName] = $this->_connectionNames[$pointerResourceName];
+                    $connectionName = $this->_connectionNames[$resourceName];
                     break;
                 } elseif (isset($resourcesConfig[$pointerResourceName]['extends'])) {
                     $pointerResourceName = $resourcesConfig[$pointerResourceName]['extends'];

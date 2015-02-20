@@ -45,31 +45,32 @@ $_showWebsite = $block->isMultiWebsites();
 
 <script>
 require([
+    'mage/template',
     "prototype",
     "mage/adminhtml/form"
-], function(){
+], function (mageTemplate) {
 
 //<![CDATA[
 var groupPriceRowTemplate = '<tr>'
     + '<td<?php if (!$_showWebsite): ?> style="display:none"<?php endif; ?>>'
-    + '<select class="<?php echo $_htmlClass; ?> required-entry" name="<?php echo $_htmlName; ?>[{{index}}][website_id]" id="group_price_row_{{index}}_website">'
+    + '<select class="<?php echo $_htmlClass; ?> required-entry" name="<?php echo $_htmlName; ?>[<%= data.index %>][website_id]" id="group_price_row_<%= data.index %>_website">'
     <?php foreach ($block->getWebsites() as $_websiteId => $_info) : ?>
     + '<option value="<?php echo $_websiteId; ?>"><?php echo $block->escapeJsQuote($block->escapeHtml($_info['name'])); ?><?php if (!empty($_info['currency'])) : ?> [<?php echo $block->escapeHtml($_info['currency']); ?>]<?php endif; ?></option>'
     <?php endforeach; ?>
     + '</select></td>'
-    + '<td><select class="<?php echo $_htmlClass; ?> custgroup required-entry" name="<?php echo $_htmlName; ?>[{{index}}][cust_group]" id="group_price_row_{{index}}_cust_group">'
+    + '<td><select class="<?php echo $_htmlClass; ?> custgroup required-entry" name="<?php echo $_htmlName; ?>[<%= data.index %>][cust_group]" id="group_price_row_<%= data.index %>_cust_group">'
     <?php foreach ($block->getCustomerGroups() as $_groupId => $_groupName): ?>
     + '<option value="<?php echo $_groupId; ?>"><?php echo $block->escapeJsQuote($block->escapeHtml($_groupName)); ?></option>'
     <?php endforeach; ?>
     + '</select></td>'
-    + '<td><input class="<?php echo $_htmlClass; ?> required-entry <?php echo $_priceValueValidation; ?>" type="text" name="<?php echo $_htmlName; ?>[{{index}}][price]" value="{{price}}" id="group_price_row_{{index}}_price" /></td>'
-    + '<td class="col-delete"><input type="hidden" name="<?php echo $_htmlName; ?>[{{index}}][delete]" class="delete" value="" id="group_price_row_{{index}}_delete" />'
-    + '<button title="<?php echo __('Delete Group Price'); ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="group_price_row_{{index}}_delete_button" onclick="return groupPriceControl.deleteItem(event);">'
+    + '<td><input class="<?php echo $_htmlClass; ?> required-entry <?php echo $_priceValueValidation; ?>" type="text" name="<?php echo $_htmlName; ?>[<%= data.index %>][price]" value="<%= data.price %>" id="group_price_row_<%= data.index %>_price" /></td>'
+    + '<td class="col-delete"><input type="hidden" name="<?php echo $_htmlName; ?>[<%= data.index %>][delete]" class="delete" value="" id="group_price_row_<%= data.index %>_delete" />'
+    + '<button title="<?php echo __('Delete Group Price'); ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="group_price_row_<%= data.index %>_delete_button" onclick="return groupPriceControl.deleteItem(event);">'
     + '<span><?php echo __('Delete'); ?></span></button></td>'
     + '</tr>';
 
 var groupPriceControl = {
-    template: new Template(groupPriceRowTemplate, new RegExp('(^|.|\\r|\\n)({{\\s*(\\w+)\\s*}})', '')),
+    template: mageTemplate(groupPriceRowTemplate),
     itemsCount: 0,
     addItem : function () {
         <?php if ($_readonly): ?>
@@ -95,7 +96,9 @@ var groupPriceControl = {
         }
 
         Element.insert($('<?php echo $_htmlId; ?>_container'), {
-            bottom : this.template.evaluate(data)
+            bottom : this.template({
+                data: data
+            })
         });
 
         $('group_price_row_' + data.index + '_cust_group').value = data.group;
@@ -153,7 +156,6 @@ $('<?php echo $_htmlId; ?>_container').up('table').select('button')
 <?php endif; ?>
 //]]>
 
-window.groupPriceRowTemplate = groupPriceRowTemplate;
 window.groupPriceControl = groupPriceControl;
 });
 </script>

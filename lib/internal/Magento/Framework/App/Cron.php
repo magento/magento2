@@ -49,7 +49,7 @@ class Cron implements \Magento\Framework\AppInterface
         $this->_eventManager = $eventManager;
         $this->_state = $state;
         $this->_request = $request;
-        $this->_request->setParam($parameters);
+        $this->_request->setParams($parameters);
         $this->_response = $response;
     }
 

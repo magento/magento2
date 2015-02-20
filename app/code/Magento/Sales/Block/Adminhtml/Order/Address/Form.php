@@ -35,7 +35,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
      * @param \Magento\Customer\Model\Options $options
@@ -55,7 +55,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
         \Magento\Customer\Model\Options $options,
@@ -76,7 +76,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
             $priceCurrency,
             $formFactory,
             $dataObjectProcessor,
-            $coreData,
+            $directoryHelper,
             $jsonEncoder,
             $customerFormFactory,
             $options,
@@ -119,7 +119,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
     /**
      * Form header text getter
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

@@ -2,14 +2,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true expr:true*/
 define([
-    "jquery",
-    "jquery/ui",
-    "jquery/template",
-    "Magento_Bundle/js/price-bundle"
-], function($){
-    "use strict";
+    'jquery',
+    'mage/template',
+    'jquery/ui',
+    'Magento_Bundle/js/price-bundle'
+], function ($, mageTemplate) {
+    'use strict';
 
     /**
      * Widget product Summary:
@@ -31,7 +30,7 @@ define([
          * Method attaches event observer to the product form
          * @private
          */
-        _create: function() {
+        _create: function () {
             this.element
                 .closest(this.options.mainContainer)
                 .on('updateProductSummary', $.proxy(this._renderSummaryBox, this))
@@ -41,64 +40,75 @@ define([
         /**
          * Method extracts data from the event and renders Summary box
          * using jQuery template mechanism
-         * @param event
-         * @param data
+         * @param {Event} event
+         * @param {Object} data
          * @private
          */
-        _renderSummaryBox: function(event, data) {
+        _renderSummaryBox: function (event, data) {
             this.cache.currentElement = data.config;
             this.cache.currentElementCount = 0;
 
             // Clear Summary box
-            this.element.html("");
+            this.element.html('');
 
             $.each(this.cache.currentElement.selected, $.proxy(this._renderOption, this));
             this.element
                 .parents(this.options.bundleSummaryContainer)
                 .toggleClass('empty', !this.cache.currentElementCount); // Zero elements equal '.empty' container
         },
-        _renderOption: function(key, row) {
-            if (row !== undefined) {
-                if (row.length > 0 && row[0] !== null) {
-                    this.cache.currentKey = key;
-                    this.cache.summaryContainer = this.element
-                        .closest(this.options.summaryContainer)
-                        .find(this.options.templates.summaryBlock)
-                        .tmpl([{_label_: this.cache.currentElement.options[this.cache.currentKey].title}])
-                        .appendTo(this.element);
 
-                    $.each(row, $.proxy(this._renderOptionRow, this));
-                    this.cache.currentElementCount += row.length;
+        /**
+         * @param {String} key
+         * @param {String} row
+         * @private
+         */
+        _renderOption: function (key, row) {
+            var template;
 
-                    //Reset Cache
-                    this.cache.currentKey = null;
-                }
+            if (row && row.length > 0 && row[0] !== null) {
+                template = this.element
+                    .closest(this.options.summaryContainer)
+                    .find(this.options.templates.summaryBlock)
+                    .html();
+                template = mageTemplate($.trim(template), {
+                    data: {
+                        _label_: this.cache.currentElement.options[key].title
+                    }
+                });
+
+                this.cache.currentKey = key;
+                this.cache.summaryContainer = $(template);
+                this.element.append(this.cache.summaryContainer);
+
+                $.each(row, this._renderOptionRow.bind(this));
+                this.cache.currentElementCount += row.length;
+
+                //Reset Cache
+                this.cache.currentKey = null;
             }
         },
-        _renderOptionRow: function(key, option) {
-            this.cache.currentOptions = [];
-            if (!$.isArray(option)) {   // Regular options (single)
-                this.cache.currentOptions.push({
-                    _quantity_: this.cache.currentElement.options[this.cache.currentKey].selections[option].qty,
-                    _label_: this.cache.currentElement.options[this.cache.currentKey].selections[option].name
-                });
-            } else {    // Used for Multi-select
-                $.each(option, $.proxy(this._pushOptionRow, this));
-            }
-            this.element
+
+        /**
+         * @param {String} key
+         * @param {String} optionIndex
+         * @private
+         */
+        _renderOptionRow: function (key, optionIndex) {
+            var template;
+
+            template = this.element
                 .closest(this.options.summaryContainer)
                 .find(this.options.templates.optionBlock)
-                .tmpl(this.cache.currentOptions)
-                .appendTo(this.cache.summaryContainer.find(this.options.optionSelector));
-
-            // Reset cache
-            this.cache.currentOptions = [];
-        },
-        _pushOptionRow: function(index, value) {
-            this.cache.currentOptions.push({
-                _quantity_: this.cache.currentElement.options[this.cache.currentKey].selections[value].qty,
-                _label_: this.cache.currentElement.options[this.cache.currentKey].selections[value].name
+                .html();
+            template = mageTemplate($.trim(template), {
+                data: {
+                    _quantity_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].qty,
+                    _label_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].name
+                }
             });
+            this.cache.summaryContainer
+                .find(this.options.optionSelector)
+                .append(template);
         }
     });
 

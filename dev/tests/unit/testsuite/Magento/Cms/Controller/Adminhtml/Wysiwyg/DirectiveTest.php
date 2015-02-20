@@ -68,6 +68,16 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
      */
     protected $loggerMock;
 
+    /**
+     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $rawFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Raw|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $rawMock;
+
     protected function setUp()
     {
         $this->actionContextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
@@ -117,6 +127,13 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->rawFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->rawMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Raw')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->actionContextMock->expects($this->any())
             ->method('getRequest')
@@ -133,13 +150,14 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
             'Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive',
             [
                 'context' => $this->actionContextMock,
-                'urlDecoder' => $this->urlDecoderMock
+                'urlDecoder' => $this->urlDecoderMock,
+                'resultRawFactory' => $this->rawFactoryMock
             ]
         );
     }
 
     /**
-     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
+     * covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
     public function testExecute()
     {
@@ -153,23 +171,29 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
         $this->imageAdapterMock->expects($this->once())
             ->method('getMimeType')
             ->willReturn($mimeType);
-        $this->responseMock->expects($this->once())
+        $this->rawMock->expects($this->once())
             ->method('setHeader')
             ->with('Content-Type', $mimeType)
+            ->willReturnSelf();
+        $this->rawMock->expects($this->once())
+            ->method('setContents')
+            ->with($imageBody)
             ->willReturnSelf();
         $this->imageAdapterMock->expects($this->once())
             ->method('getImage')
             ->willReturn($imageBody);
-        $this->responseMock->expects($this->once())
-            ->method('setBody')
-            ->with($imageBody)
-            ->willReturnSelf();
+        $this->rawFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->rawMock);
 
-        $this->wysiwygDirective->execute();
+        $this->assertSame(
+            $this->rawMock,
+            $this->wysiwygDirective->execute()
+        );
     }
 
     /**
-     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
+     * covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
     public function testExecuteException()
     {
@@ -192,22 +216,28 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
         $this->imageAdapterMock->expects($this->once())
             ->method('getMimeType')
             ->willReturn($mimeType);
-        $this->responseMock->expects($this->once())
+        $this->rawMock->expects($this->once())
             ->method('setHeader')
             ->with('Content-Type', $mimeType)
+            ->willReturnSelf();
+        $this->rawMock->expects($this->once())
+            ->method('setContents')
+            ->with($imageBody)
             ->willReturnSelf();
         $this->imageAdapterMock->expects($this->once())
             ->method('getImage')
             ->willReturn($imageBody);
-        $this->responseMock->expects($this->once())
-            ->method('setBody')
-            ->with($imageBody)
-            ->willReturnSelf();
         $this->loggerMock->expects($this->once())
             ->method('critical')
             ->with($exception);
+        $this->rawFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->rawMock);
 
-        $this->wysiwygDirective->execute();
+        $this->assertSame(
+            $this->rawMock,
+            $this->wysiwygDirective->execute()
+        );
     }
 
     protected function prepareExecuteTest()

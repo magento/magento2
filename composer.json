@@ -2,7 +2,7 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.42.0-beta6",
+    "version": "0.42.0-beta8",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -131,6 +131,7 @@
         "magento/module-url-rewrite": "self.version",
         "magento/module-user": "self.version",
         "magento/module-usps": "self.version",
+        "magento/module-version": "self.version",
         "magento/module-webapi": "self.version",
         "magento/module-weee": "self.version",
         "magento/module-widget": "self.version",
@@ -148,7 +149,6 @@
         "magento/framework": "self.version",
         "oyejorge/less.php": "1.7.0",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
-        "components/handlebars.js": "1.3.0",
         "colinmollenhour/cache-backend-redis": "dev-master#193d377b7fb2e88595578b282fa01a62d1185abc",
         "colinmollenhour/credis": "dev-master#f07bbfd4117294f462f0fb19c49221d350bf396f",
         "linkorb/jsmin-php": "1.1.2",
@@ -163,7 +163,6 @@
         "component_paths": {
             "oyejorge/less.php": "lib/internal/Less",
             "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
-            "components/handlebars.js": "lib/web/jquery/handlebars",
             "colinmollenhour/cache-backend-redis": "lib/internal/Cm/Cache/Backend/Redis.php",
             "colinmollenhour/credis": "lib/internal/Credis",
             "linkorb/jsmin-php": "lib/internal/JSMin",

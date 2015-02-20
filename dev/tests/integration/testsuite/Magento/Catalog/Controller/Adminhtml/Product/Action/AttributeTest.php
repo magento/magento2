@@ -37,7 +37,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         );
         $isRedirectPresent = false;
         foreach ($this->getResponse()->getHeaders() as $header) {
-            if ($header['name'] === 'Location' && strpos($header['value'], $expectedUrl) === 0) {
+            if ($header->getFieldName() === 'Location' && strpos($header->getFieldValue(), $expectedUrl) === 0) {
                 $isRedirectPresent = true;
             }
         }

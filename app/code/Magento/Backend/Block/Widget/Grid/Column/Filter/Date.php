@@ -203,7 +203,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             $dateObj->setTimezone(
                 $this->_scopeConfig->getValue(
                     $this->_localeDate->getDefaultTimezonePath(),
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             );
 

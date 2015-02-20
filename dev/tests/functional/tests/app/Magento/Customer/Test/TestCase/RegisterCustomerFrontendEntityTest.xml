@@ -5,38 +5,43 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="RegisterCustomerFrontendEntityTest">
-        <variation name="RegisterCustomerFrontendEntityTestVariation1">
-            <data name="description">Register new customer</data>
-            <data name="customer/data/firstname">john</data>
-            <data name="customer/data/lastname">doe</data>
-            <data name="customer/data/email">johndoe%isolation%@example.com</data>
-            <data name="customer/data/is_subscribed">No</data>
-            <data name="customer/data/password">123123q</data>
-            <data name="customer/data/password_confirmation">123123q</data>
-            <data name="constraint">assertCustomerSuccessRegisterMessage, assertCustomerInGrid</data>
-        </variation>
-        <variation name="RegisterCustomerFrontendEntityTestVariation2">
-            <data name="description">Register new customer with subscribing</data>
-            <data name="customer/data/firstname">john</data>
-            <data name="customer/data/lastname">doe</data>
-            <data name="customer/data/email">johndoe%isolation%@example.com</data>
-            <data name="customer/data/is_subscribed">Yes</data>
-            <data name="customer/data/password">123123q</data>
-            <data name="customer/data/password_confirmation">123123q</data>
-            <data name="constraint">assertCustomerSuccessRegisterMessage, assertCustomerInGrid, assertCustomerForm, assertCustomerIsSubscribedToNewsletter</data>
-        </variation>
-        <variation name="RegisterCustomerFrontendEntityTestVariation3">
-            <data name="description">MAGETWO-12394: Register Customer</data>
-            <data name="customer/data/firstname">john</data>
-            <data name="customer/data/lastname">doe</data>
-            <data name="customer/data/email">johndoe%isolation%@example.com</data>
-            <data name="customer/data/is_subscribed">No</data>
-            <data name="customer/data/password">123123q</data>
-            <data name="customer/data/password_confirmation">123123q</data>
-            <data name="constraint">assertCustomerSuccessRegisterMessage, assertCustomerRedirectToDashboard</data>
-            <data name="tag">bamboo_plan:end_to_end,test_type:acceptance_test</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="RegisterCustomerFrontendEntityTest">
+    <variation name="RegisterCustomerFrontendEntityTestVariation1" firstConstraint="assertCustomerSuccessRegisterMessage" method="test">
+      <data name="description" xsi:type="string">Register new customer</data>
+      <data name="customer/data/firstname" xsi:type="string">john</data>
+      <data name="customer/data/lastname" xsi:type="string">doe</data>
+      <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
+      <data name="customer/data/is_subscribed" xsi:type="string">No</data>
+      <data name="customer/data/password" xsi:type="string">123123q</data>
+      <data name="customer/data/password_confirmation" xsi:type="string">123123q</data>
+      <constraint name="assertCustomerSuccessRegisterMessage" next="assertCustomerInGrid"/>
+      <constraint name="assertCustomerInGrid" prev="assertCustomerSuccessRegisterMessage"/>
+    </variation>
+    <variation name="RegisterCustomerFrontendEntityTestVariation2" firstConstraint="assertCustomerSuccessRegisterMessage" method="test">
+      <data name="description" xsi:type="string">Register new customer with subscribing</data>
+      <data name="customer/data/firstname" xsi:type="string">john</data>
+      <data name="customer/data/lastname" xsi:type="string">doe</data>
+      <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
+      <data name="customer/data/is_subscribed" xsi:type="string">Yes</data>
+      <data name="customer/data/password" xsi:type="string">123123q</data>
+      <data name="customer/data/password_confirmation" xsi:type="string">123123q</data>
+      <constraint name="assertCustomerSuccessRegisterMessage" next="assertCustomerInGrid"/>
+      <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessRegisterMessage"/>
+      <constraint name="assertCustomerForm" next="assertCustomerIsSubscribedToNewsletter" prev="assertCustomerInGrid"/>
+      <constraint name="assertCustomerIsSubscribedToNewsletter" prev="assertCustomerForm"/>
+    </variation>
+    <variation name="RegisterCustomerFrontendEntityTestVariation3" firstConstraint="assertCustomerSuccessRegisterMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12394: Register Customer</data>
+      <data name="customer/data/firstname" xsi:type="string">john</data>
+      <data name="customer/data/lastname" xsi:type="string">doe</data>
+      <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
+      <data name="customer/data/is_subscribed" xsi:type="string">No</data>
+      <data name="customer/data/password" xsi:type="string">123123q</data>
+      <data name="customer/data/password_confirmation" xsi:type="string">123123q</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <constraint name="assertCustomerSuccessRegisterMessage" next="assertCustomerRedirectToDashboard"/>
+      <constraint name="assertCustomerRedirectToDashboard" prev="assertCustomerSuccessRegisterMessage"/>
+    </variation>
+  </testCase>
 </config>

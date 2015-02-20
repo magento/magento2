@@ -6,6 +6,9 @@
  
 namespace Magento\Framework\Model\Resource\Db;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**

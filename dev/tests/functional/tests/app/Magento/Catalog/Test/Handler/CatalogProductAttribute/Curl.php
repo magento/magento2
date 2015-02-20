@@ -8,7 +8,6 @@ namespace Magento\Catalog\Test\Handler\CatalogProductAttribute;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -40,6 +39,11 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
             'Yes' => 1,
             'No' => 0,
         ],
+        'is_filterable' => [
+            'No' => 0,
+            'Filterable (with results)' => 1,
+            'Filterable (no results)' => 2
+        ]
     ];
 
     /**

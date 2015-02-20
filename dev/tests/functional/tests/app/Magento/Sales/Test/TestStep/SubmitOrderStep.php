@@ -6,10 +6,10 @@
 
 namespace Magento\Sales\Test\TestStep;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Address;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 
@@ -28,9 +28,9 @@ class SubmitOrderStep implements TestStepInterface
     /**
      * Sales order view.
      *
-     * @var OrderView
+     * @var SalesOrderView
      */
-    protected $orderView;
+    protected $salesOrderView;
 
     /**
      * Factory for fixtures.
@@ -42,22 +42,22 @@ class SubmitOrderStep implements TestStepInterface
     /**
      * @constructor
      * @param OrderCreateIndex $orderCreateIndex
-     * @param OrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param FixtureFactory $fixtureFactory
-     * @param CustomerInjectable $customer
-     * @param AddressInjectable $billingAddress
+     * @param Customer $customer
+     * @param Address $billingAddress
      * @param \Magento\Mtf\Fixture\FixtureInterface[] $products
      */
     public function __construct(
         OrderCreateIndex $orderCreateIndex,
-        OrderView $orderView,
+        SalesOrderView $salesOrderView,
         FixtureFactory $fixtureFactory,
-        CustomerInjectable $customer,
-        AddressInjectable $billingAddress,
+        Customer $customer,
+        Address $billingAddress,
         array $products
     ) {
         $this->orderCreateIndex = $orderCreateIndex;
-        $this->orderView = $orderView;
+        $this->salesOrderView = $salesOrderView;
         $this->fixtureFactory = $fixtureFactory;
         $this->customer = $customer;
         $this->billingAddress = $billingAddress;
@@ -72,8 +72,8 @@ class SubmitOrderStep implements TestStepInterface
     public function run()
     {
         $this->orderCreateIndex->getCreateBlock()->submitOrder();
-        $this->orderView->getMessagesBlock()->waitSuccessMessage();
-        $orderId = trim($this->orderView->getTitleBlock()->getTitle(), '#');
+        $this->salesOrderView->getMessagesBlock()->waitSuccessMessage();
+        $orderId = trim($this->salesOrderView->getTitleBlock()->getTitle(), '#');
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
             [
