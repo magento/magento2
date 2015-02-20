@@ -12,6 +12,7 @@
 //  ---------------------------------------------
 
 .abs-icon {
+    font-family: @icons-admin__font-name;
     -webkit-font-smoothing: antialiased;
     font-style: normal;
     font-weight: normal;
@@ -22,6 +23,16 @@
 //
 //  Buttons
 //  ---------------------------------------------
+
+.abs-btn-reset {
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    border: none;
+    &:hover {
+        box-shadow: none;
+    }
+}
 
 button {
     &:extend(.action all);
@@ -39,6 +50,10 @@ button {
     }
 }
 
+//
+//  Forms
+//  ---------------------------------------------
+
 //  Validation
 .validation-symbol {
     &:after {
@@ -48,6 +63,10 @@ button {
         margin-left: 3px;
     }
 }
+
+//
+//  Other
+//  ---------------------------------------------
 
 //  Visually hidden
 .abs-visually-hidden {

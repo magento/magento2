@@ -78,6 +78,10 @@ define('globalNavigation', [
         },
 
         _hoverEffects: function (e) {
+
+            // Disable current active class while hover is on level 0
+            $(this).siblings('._active').addClass('_current').removeClass('_active');
+
             $(this)
                 .addClass('_hover _recent')
                 .siblings('.level-0').each(function () {
@@ -104,12 +108,14 @@ define('globalNavigation', [
 
             $(this).toggleClass('reverse', (containerPaddings + colsWidth) > availableWidth);
 
-            submenu
-                .removeClass('_show')
-                .addClass('_show');
+            submenu.removeClass('_show');
         },
 
         _leaveEffects: function (e) {
+
+            // Disable current active class while hover is on level 0
+            $(this).siblings('._current').addClass('_active').removeClass('_current');
+
             var targetSubmenu = $(e.target).closest('.submenu'),
                 self = $(this),
                 submenu = $('> .submenu', this);

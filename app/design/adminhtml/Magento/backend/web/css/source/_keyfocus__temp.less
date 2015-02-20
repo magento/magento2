@@ -1,0 +1,27 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Temporary keyfocus styles
+//  _____________________________________________
+
+//  Should contain css duplicates only
+
+#html-body[class][data-container="body"].keyfocus {
+    .admin__scope {
+        * {
+            &:focus {
+                box-shadow: 0 0 0 1px #008bdb;
+            }
+        }
+    }
+    .admin__menu .submenu a {
+        text-decoration: none;
+    }
+    .admin__menu .submenu a:active,
+    .admin__menu .submenu a:focus {
+        background-color: #403934;
+    }
+}

@@ -21,6 +21,8 @@
 @icon-sales__content: '\e60b';
 @icon-stores__content: '\e60d';
 @icon-systems__content: '\e610';
+@icon-close-mage__content: '\e62f';
+@icon-menu-item__content: '\e63a';
 
 //
 
@@ -43,7 +45,6 @@
 //  Use the following CSS code if you want to have a class per icon
 [class^='icon-']:before,
 [class*=' icon-']:before {
-    font-family: @icons-admin__font-name;
     &:extend(.abs-icon all);
 }
 
@@ -175,7 +176,7 @@
 
 .icon-close-mage {
     &:before {
-        content: '\e62f';
+        content: @icon-close-mage__content;
     }
 }
 
@@ -395,4 +396,8 @@
     }
 }
 
-
+.icon-menu-item {
+    &:before {
+        content: @icon-menu-item__content;
+    }
+}
