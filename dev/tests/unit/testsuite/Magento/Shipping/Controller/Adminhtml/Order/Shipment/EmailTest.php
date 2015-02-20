@@ -99,13 +99,17 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->request = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            ['isPost', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie'],
-            [],
-            '',
-            false
-        );
+        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+            ->setMethods([
+                'isPost',
+                'getModuleName',
+                'setModuleName',
+                'getActionName',
+                'setActionName',
+                'getParam',
+                'getCookie',
+            ])
+            ->getMockForAbstractClass();
         $this->objectManager = $this->getMock(
             'Magento\Framework\ObjectManager\ObjectManager',
             ['create'],

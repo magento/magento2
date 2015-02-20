@@ -415,10 +415,8 @@ abstract class Form
     public function prepareRequest(array $data)
     {
         $request = clone $this->_httpRequest;
-        $request->setParamSources();
         $request->clearParams();
         $request->setParams($data);
-
         return $request;
     }
 

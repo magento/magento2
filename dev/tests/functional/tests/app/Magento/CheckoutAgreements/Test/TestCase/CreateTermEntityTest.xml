@@ -83,8 +83,8 @@
       <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
       <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
       <data name="payment/method" xsi:type="string">checkmo</data>
-      <constraint name="assertTermRequireMessageOnMultishippingCheckout" next="assertOrderSuccessPlacedMessage"/>
-      <constraint name="assertOrderSuccessPlacedMessage" prev="assertTermRequireMessageOnMultishippingCheckout"/>
+      <constraint name="assertTermRequireMessageOnMultishippingCheckout" next="assertMultishippingOrderSuccessPlacedMessage"/>
+      <constraint name="assertMultishippingOrderSuccessPlacedMessage" prev="assertTermRequireMessageOnMultishippingCheckout"/>
     </variation>
   </testCase>
 </config>

@@ -88,18 +88,23 @@ class Config extends Tab
      * @param array $fields
      * @param SimpleElement|null $element
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
-        $attributes = isset($fields['configurable_attributes_data']['value'])
+        $attributes = isset($fields['configurable_attributes_data']['source'])
             ? $fields['configurable_attributes_data']['value']
             : [];
 
         $this->showContent();
-
-        if (!empty($attributes['attributes_data'])) {
-            $this->getAttributeBlock()->fillAttributes($attributes['attributes_data']);
+        $attributesValue = isset($fields['configurable_attributes_data']['source'])
+            ? $fields['configurable_attributes_data']['source']->getAttributesData()
+            : [];
+        foreach ($attributesValue as $key => $value) {
+            $attributesValue[$key] = array_merge($value, $attributes['attributes_data'][$key]);
         }
+        $this->getAttributeBlock()->fillAttributes($attributesValue);
         if (!empty($attributes['matrix'])) {
             $this->generateVariations();
             $this->getVariationsBlock()->fillVariations($attributes['matrix']);
@@ -179,6 +184,8 @@ class Config extends Tab
      * @param array|null $fields
      * @param SimpleElement|null $element
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
