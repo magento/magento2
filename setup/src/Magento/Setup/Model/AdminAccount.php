@@ -169,8 +169,8 @@ class AdminAccount
     {
         $result = $this->setup->getConnection()->fetchRow(
             'SELECT * FROM ' . $this->setup->getTable('authorization_role') . ' ' .
-            'WHERE user_id = :user_id',
-            ['user_id' => $adminId]
+            'WHERE user_id = :user_id AND user_type = :user_type',
+            ['user_id' => $adminId, 'user_type' => UserContextInterface::USER_TYPE_ADMIN]
         );
         if (empty($result)) {
             // No user role exists for this user id, create it
