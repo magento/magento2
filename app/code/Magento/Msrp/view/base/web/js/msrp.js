@@ -88,8 +88,9 @@ define([
          */
         _popupDialog: function (elementTarget, elementTrigger) {
             var target = $(elementTarget),
-                trigger = $(elementTrigger).length ? $(elementTrigger).parent() : $('body'),
+                trigger = $(elementTrigger).length ? $(elementTrigger) : $('body'),
                 counter = 0,
+                triggerClass = 'dropdown-active',
                 options;
 
             options = {
@@ -100,12 +101,12 @@ define([
                 'dialogClass': 'popup map-popup',
                 position: {
                     my: 'left top',
-                    collision: 'flipfit none',
+                    collision: 'fit none',
                     at: 'left bottom',
                     within: 'body',
                     of: trigger
                 },
-                triggerTarget: trigger
+                triggerTarget: trigger.parent()
             };
             options = _.extend(options, this.options.dialog);
 
@@ -118,14 +119,18 @@ define([
             }
             openDropDown = target
                 .dropdownDialog(options)
-                .dropdownDialog('open')
                 .off('dropdowndialogclose')
                 .on('dropdowndialogclose', function () {
                     if (!counter) {
                         openDropDown = null;
                         $(window).off('resize');
                     }
-                });
+                    trigger.removeClass(triggerClass);
+                })
+                .on('dropdowndialogopen', function () {
+                    trigger.addClass(triggerClass);
+                })
+                .dropdownDialog('open');
 
             $(window)
                 .resize(_.debounce(function () {
