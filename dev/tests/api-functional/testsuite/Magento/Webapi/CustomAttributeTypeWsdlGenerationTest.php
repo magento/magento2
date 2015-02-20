@@ -27,7 +27,7 @@ class CustomAttributeTypeWsdlGenerationTest extends \Magento\TestFramework\TestC
         $this->_markTestAsSoapOnly("WSDL generation tests are intended to be executed for SOAP adapter only.");
         $this->_storeCode = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
             ->getStore()->getCode();
-        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModuleMSCAllSoapAndRestV1";
+        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}?wsdl=1&services=testModuleMSCAllSoapAndRestV1";
         parent::setUp();
     }
 
