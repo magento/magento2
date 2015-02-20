@@ -90,6 +90,7 @@ class CrosssellTest extends Functional
         $productPage->getViewBlock()->addToCart($configurable);
 
         $checkoutCartPage = Factory::getPageFactory()->getCheckoutCartIndex();
+        $checkoutCartPage->getMessagesBlock()->waitSuccessMessage();
         $cartBlock = $checkoutCartPage->getCartBlock();
         $this->assertTrue($cartBlock->isProductInShoppingCart($configurable));
         $this->assertTrue($cartBlock->isProductInShoppingCart($simple1));
@@ -102,6 +103,7 @@ class CrosssellTest extends Functional
         $productPage->getViewBlock()->addToCart($simple2);
 
         $checkoutCartPage = Factory::getPageFactory()->getCheckoutCartIndex();
+        $checkoutCartPage->getMessagesBlock()->waitSuccessMessage();
         $cartBlock = $checkoutCartPage->getCartBlock();
         $this->assertTrue($cartBlock->isProductInShoppingCart($configurable));
         $this->assertTrue($cartBlock->isProductInShoppingCart($simple1));
