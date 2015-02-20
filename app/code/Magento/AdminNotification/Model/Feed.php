@@ -9,6 +9,7 @@ namespace Magento\AdminNotification\Model;
  * AdminNotification Feed model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Feed extends \Magento\Framework\Model\AbstractModel
 {
@@ -64,12 +65,15 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param InboxFactory $inboxFactory
+     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
+     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
-     * @param \Magento\Framework\HTTP\Adapter\curlFactory $curlFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
