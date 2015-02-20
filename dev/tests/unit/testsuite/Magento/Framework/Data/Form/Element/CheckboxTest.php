@@ -44,7 +44,7 @@ class CheckboxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Checkbox::__construct
+     * covers \Magento\Framework\Data\Form\Element\Checkbox::__construct
      */
     public function testConstruct()
     {
@@ -53,7 +53,7 @@ class CheckboxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Checkbox::getHtmlAttributes
+     * covers \Magento\Framework\Data\Form\Element\Checkbox::getHtmlAttributes
      */
     public function testGetHtmlAttributes()
     {
@@ -66,7 +66,7 @@ class CheckboxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Checkbox::getElementHtml
+     * covers \Magento\Framework\Data\Form\Element\Checkbox::getElementHtml
      */
     public function testGetElementHtml()
     {

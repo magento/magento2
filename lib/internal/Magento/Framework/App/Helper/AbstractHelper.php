@@ -74,6 +74,11 @@ abstract class AbstractHelper
     protected $urlDecoder;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @param Context $context
      */
     public function __construct(Context $context)
@@ -89,6 +94,7 @@ abstract class AbstractHelper
         $this->_cacheConfig = $context->getCacheConfig();
         $this->urlEncoder = $context->getUrlEncoder();
         $this->urlDecoder = $context->getUrlDecoder();
+        $this->scopeConfig = $context->getScopeConfig();
     }
 
     /**

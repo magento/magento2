@@ -245,7 +245,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method exportItem()
      *
-     * @covers \Magento\CustomerImportExport\Model\Export\Address::exportItem
+     * covers \Magento\CustomerImportExport\Model\Export\Address::exportItem
      */
     public function testExportItem()
     {

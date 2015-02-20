@@ -8,8 +8,8 @@ namespace Magento\Framework\Url;
 class DecoderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Framework\Url\Encoder::encode
-     * @covers \Magento\Framework\Url\Decoder::decode
+     * covers \Magento\Framework\Url\Encoder::encode
+     * covers \Magento\Framework\Url\Decoder::decode
      */
     public function testDecode()
     {

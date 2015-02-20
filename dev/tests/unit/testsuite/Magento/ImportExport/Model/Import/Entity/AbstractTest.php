@@ -67,7 +67,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
      * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Columns number: "1" have empty headers
      */
@@ -80,7 +80,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
      * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Columns number: "1" have empty headers
      */
@@ -93,7 +93,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
      * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Column names: "_test1" are invalid
      */
@@ -107,7 +107,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      * Test for method isAttributeValid()
      *
      * @dataProvider isAttributeValidDataProvider
-     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::isAttributeValid
+     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::isAttributeValid
      *
      * @param string $attrCode
      * @param array $attrParams

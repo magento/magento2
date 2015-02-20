@@ -42,15 +42,19 @@ class AttributeSetId implements FixtureInterface
     {
         $this->params = $params;
         if (isset($data['dataSet']) && $data['dataSet'] !== '-') {
+            /** @var CatalogAttributeSet $attributeSet */
             $attributeSet = $fixtureFactory->createByCode('catalogAttributeSet', ['dataSet' => $data['dataSet']]);
+            if (!$attributeSet->hasData('attribute_set_id')) {
+                $attributeSet->persist();
+            }
         }
         if (isset($data['attribute_set']) && $data['attribute_set'] instanceof CatalogAttributeSet) {
             $attributeSet = $data['attribute_set'];
         }
-        /** @var CatalogAttributeSet $attributeSet */
         if (!isset($data['dataSet']) && !isset($data['attribute_set'])) {
             $this->data = $data;
         } else {
+            /** @var CatalogAttributeSet $attributeSet */
             $this->data = $attributeSet->getAttributeSetName();
             $this->attributeSet = $attributeSet;
         }

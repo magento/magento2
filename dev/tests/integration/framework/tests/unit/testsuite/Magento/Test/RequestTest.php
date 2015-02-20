@@ -5,6 +5,8 @@
  */
 namespace Magento\Test;
 
+use Zend\Stdlib\Parameters;
+
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -28,11 +30,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('localhost', $this->_model->getHttpHost(false));
     }
 
-    public function testSetGetServer()
+    public function testSetGetServerValue()
     {
-        $this->assertSame([], $this->_model->getServer());
-        $this->assertSame($this->_model, $this->_model->setServer(['test' => 'value', 'null' => null]));
-        $this->assertSame(['test' => 'value', 'null' => null], $this->_model->getServer());
+        $this->_model->setServer(new Parameters([]));
+        $this->assertSame([], $this->_model->getServer()->toArray());
+        $this->assertSame(
+            $this->_model,
+            $this->_model->setServer(new Parameters(['test' => 'value', 'null' => null]))
+        );
+        $this->assertSame(['test' => 'value', 'null' => null], $this->_model->getServer()->toArray());
         $this->assertEquals('value', $this->_model->getServer('test'));
         $this->assertSame(null, $this->_model->getServer('non-existing'));
         $this->assertSame('default', $this->_model->getServer('non-existing', 'default'));

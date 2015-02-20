@@ -42,7 +42,7 @@ class AssertCategoryPage extends AbstractConstraint
     /**
      * Browser instance
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 

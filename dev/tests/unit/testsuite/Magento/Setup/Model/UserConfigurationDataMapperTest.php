@@ -7,7 +7,7 @@
 namespace Magento\Setup\Model;
 
 use Magento\Backend\Model\Url;
-use Magento\Core\Helper\Data;
+use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\Currency;
 use Magento\Setup\Module\Setup;
 use Magento\Store\Model\Store;
@@ -26,7 +26,7 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * return array
+     * @return array
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

@@ -43,7 +43,7 @@ class Index extends \Magento\Framework\App\Action\Action
         $pageHelper = $this->_objectManager->get('Magento\Cms\Helper\Page');
         $resultPage = $pageHelper->prepareResultPage($this, $pageId);
         if ($resultPage) {
-            $resultPage->setHeader('HTTP/1.1', '404 Not Found');
+            $resultPage->setStatusHeader(404, '1.1', 'Not Found');
             $resultPage->setHeader('Status', '404 File not found');
             return $resultPage;
         } else {
