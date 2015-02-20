@@ -61,6 +61,7 @@ class Generator
      * @param \Magento\Webapi\Model\Cache\Type $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Object $customAttributeMap
      */
     public function __construct(
         \Magento\Webapi\Model\Soap\Config $apiConfig,
@@ -68,7 +69,7 @@ class Generator
         \Magento\Webapi\Model\Cache\Type $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Api\CustomAttributeMap $customAttributeMap
+        \Magento\Framework\Object $customAttributeMap
     ) {
         $this->_apiConfig = $apiConfig;
         $this->_wsdlFactory = $wsdlFactory;
