@@ -9,7 +9,6 @@
     <head>
         <title>Magento Admin</title>
         <link src="requirejs/require.js"/>
-        <link src="mage/requirejs/static.js"/>
         <css src="mage/calendar.css"/>
         <css src="extjs/resources/css/ext-all.css"/>
         <css src="extjs/resources/css/ytheme-magento.css"/>
