@@ -6,7 +6,7 @@
 
 namespace Magento\Core\Test\Constraint;
 
-use Magento\Cms\Test\Page\Adminhtml\CmsNew;
+use Magento\Cms\Test\Page\Adminhtml\CmsPageNew;
 use Magento\Core\Test\Fixture\SystemVariable;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -22,17 +22,17 @@ class AssertCustomVariableNotInCmsPageForm extends AbstractConstraint
     /**
      * Assert that custom system variable not in cms page form
      *
-     * @param CmsNew $cmsNewPage
+     * @param CmsPageNew $cmsPageNew
      * @param SystemVariable $systemVariable
      * @return void
      */
     public function processAssert(
-        CmsNew $cmsNewPage,
+        CmsPageNew $cmsPageNew,
         SystemVariable $systemVariable
     ) {
         $customVariableName = $systemVariable->getName();
-        $cmsNewPage->open();
-        $cmsPageForm = $cmsNewPage->getPageForm();
+        $cmsPageNew->open();
+        $cmsPageForm = $cmsPageNew->getPageForm();
         $variables = $cmsPageForm->getSystemVariables();
 
         \PHPUnit_Framework_Assert::assertFalse(

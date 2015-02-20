@@ -60,7 +60,7 @@ class AssertTermAbsentOnCheckout extends AbstractConstraint
         );
         $product = $createProductsStep->run();
 
-        $billingAddress = $fixtureFactory->createByCode('addressInjectable', ['dataSet' => 'default']);
+        $billingAddress = $fixtureFactory->createByCode('address', ['dataSet' => 'default']);
 
         $browser->open($_ENV['app_frontend_url'] . $product['products'][0]->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->clickAddToCartButton();

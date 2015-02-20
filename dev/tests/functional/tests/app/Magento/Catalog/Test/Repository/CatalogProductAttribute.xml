@@ -118,5 +118,26 @@
             <field name="frontend_label" xsi:type="string">fpt_%isolation%</field>
             <field name="frontend_input" xsi:type="string">Fixed Product Tax</field>
         </dataset>
+
+        <dataset name="filterable_dropdown_two_options">
+            <field name="frontend_label" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">Yes</field>
+            <field name="is_configurable" xsi:type="string">Yes</field>
+            <field name="is_filterable" xsi:type="string">Filterable (with results)</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">black</item>
+                    <item name="view" xsi:type="string">option_0_%isolation%</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">white</item>
+                    <item name="view" xsi:type="string">option_1_%isolation%</item>
+                </item>
+            </field>
+        </dataset>
     </storage>
 </repository>
