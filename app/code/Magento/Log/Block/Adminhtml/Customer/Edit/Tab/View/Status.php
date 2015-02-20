@@ -7,7 +7,7 @@ namespace Magento\Log\Block\Adminhtml\Customer\Edit\Tab\View;
 
 /**
  * Class Status
- * @SuppressWarning(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Status extends \Magento\Backend\Block\Template
 {
