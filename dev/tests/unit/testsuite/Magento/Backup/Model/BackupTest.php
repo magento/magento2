@@ -1,51 +1,116 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Model;
 
+use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @covers \Magento\Backup\Model\Backup
+ */
 class BackupTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\TestFramework\Helper\ObjectManager
+     */
+    protected $objectManager;
 
-    public function testOutput()
+    /**
+     * @var \Magento\Backup\Model\Backup
+     */
+    protected $backupModel;
+
+    /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystemMock;
+
+    /**
+     * @var \Magento\Backup\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataHelperMock;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $directoryMock;
+
+    public function setUp()
+    {
+        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dataHelperMock = $this->getMockBuilder('Magento\Backup\Helper\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->directoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+            ->getMock();
+
+        $this->filesystemMock->expects($this->atLeastOnce())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::VAR_DIR)
+            ->willReturn($this->directoryMock);
+
+        $this->objectManager = new ObjectManager($this);
+        $this->backupModel = $this->objectManager->getObject(
+            'Magento\Backup\Model\Backup',
+            [
+                'filesystem' => $this->filesystemMock,
+                'helper' => $this->dataHelperMock
+            ]
+        );
+    }
+
+    /**
+     * @covers \Magento\Backup\Model\Backup::output
+     * @param bool $isFile
+     * @param string $result
+     * @dataProvider outputDataProvider
+     */
+    public function testOutput($isFile, $result)
     {
         $path = '/path/to';
         $time = 1;
         $name = 'test';
         $type = 'db';
         $extension = 'sql';
-        $filename = $time . '_' . $type . '_' . $name . '.' . $extension;
-        $relativePath = $path . '/' . $filename;
-        $contents = 'test_content';
+        $relativePath = '/path/to/1_db_test.sql';
+        $contents = 'test_result';
 
-        $directory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false);
-        $directory->expects($this->exactly(2))->method('getRelativePath')
-            ->with($relativePath)->will($this->returnValue($relativePath));
-        $directory->expects($this->once())->method('isFile')->with($relativePath)->will($this->returnValue(true));
-        $directory->expects($this->once())->method('readFile')->with($relativePath)
-            ->will($this->returnValue($contents));
+        $this->directoryMock->expects($this->atLeastOnce())
+            ->method('isFile')
+            ->with($relativePath)
+            ->willReturn($isFile);
+        $this->directoryMock->expects($this->any())
+            ->method('getRelativePath')
+            ->with($relativePath)
+            ->willReturn($relativePath);
+        $this->directoryMock->expects($this->any())
+            ->method('readFile')
+            ->with($relativePath)
+            ->willReturn($contents);
+        $this->dataHelperMock->expects($this->any())
+            ->method('getExtensionByType')
+            ->with($type)
+            ->willReturn($extension);
 
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $filesystem->expects($this->exactly(2))->method('getDirectoryWrite')
-            ->with(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR)
-            ->will($this->returnValue($directory));
+        $this->backupModel->setPath($path);
+        $this->backupModel->setName($name);
+        $this->backupModel->setTime($time);
+        $this->assertEquals($result, $this->backupModel->output());
+    }
 
-        $helper = $this->getMock('\Magento\Backup\Helper\Data', [], [], '', false);
-        $helper->expects($this->exactly(2))->method('getExtensionByType')->with($type)
-            ->will($this->returnValue($extension));
-
-        /** @var Backup $backup */
-        $backup = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(
-            'Magento\Backup\Model\Backup',
-            [
-                'filesystem' => $filesystem,
-                'helper' => $helper
-            ]
-        );
-        $backup->setPath($path);
-        $backup->setName($name);
-        $backup->setTime($time);
-        $this->assertEquals($contents, $backup->output());
+    /**
+     * @return array
+     */
+    public function outputDataProvider()
+    {
+        return [
+            ['isFile' => true, 'result' => 'test_result'],
+            ['isFile' => false, 'result' => null]
+        ];
     }
 }
