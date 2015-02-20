@@ -640,6 +640,7 @@ class Installer
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
         foreach ($moduleNames as $moduleName) {
+            $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
             // Schema/Data is installed
@@ -648,7 +649,7 @@ class Installer
                 if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
                     $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                     if ($upgrader) {
-                        $this->log->log("Upgrading Module '{$moduleName}'");
+                        $this->log->logInline("Upgrading $type.. ");
                         $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                     }
                     if ($type === 'schema') {
@@ -660,12 +661,12 @@ class Installer
             } elseif ($configVer) {
                 $installer =  $this->getSchemaDataHandler($moduleName, $installType);
                 if ($installer) {
-                    $this->log->log("Installing Module '{$moduleName}'");
+                    $this->log->logInline("Installing $type.. ");
                     $installer->install($setup, $moduleContextList[$moduleName]);
                 }
                 $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                 if ($upgrader) {
-                    $this->log->log("Upgrading Module '{$moduleName}'");
+                    $this->log->logInline("Upgrading $type.. ");
                     $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                 }
                 if ($type === 'schema') {
@@ -680,9 +681,10 @@ class Installer
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             foreach ($moduleNames as $moduleName) {
+                $this->log->log("Module '{$moduleName}':");
                 $modulePostUpdater = $this->getSchemaDataHandler($moduleName, 'schema-recurring');
                 if ($modulePostUpdater) {
-                    $this->log->log("Running recurring for Module '{$moduleName}'");
+                    $this->log->logInline("Running recurring.. ");
                     $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
                 }
                 $this->logProgress();
