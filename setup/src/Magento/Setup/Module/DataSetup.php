@@ -181,10 +181,11 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
                 } else {
                     $newRowData = $field;
                 }
+                $this->setupCache->setRow($table, $parentId, $rowId, $newRowData);
             } else {
                 $newRowData = $value;
+                $this->setupCache->setField($table, $parentId, $rowId, $field, $value);
             }
-            $this->setupCache->setRow($table, $parentId, $rowId, $newRowData);
         }
 
         return $this;
