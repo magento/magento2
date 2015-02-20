@@ -14,9 +14,6 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\ListInterface */
     protected $themeList;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Tools\View\Deployer\Log */
-    protected $logger;
-
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\File\FallbackContext */
     protected $context;
 
@@ -27,7 +24,6 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->viewConfig = $this->getMock('Magento\Framework\View\ConfigInterface', [], [], 'viewConfig', false);
         $this->themeList = $this->getMock('Magento\Framework\View\Design\Theme\ListInterface', [], [], '', false);
-        $this->logger = $this->getMock('Magento\Tools\View\Deployer\Log', [], [], '', false);
         $this->context = $this->getMock('Magento\Framework\View\Asset\File\FallbackContext', [], [], '', false);
         $this->viewConfData = $this->getMock(
             'Magento\Framework\Config\View',
@@ -42,8 +38,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     {
         return new Resolver(
             $this->viewConfig,
-            $this->themeList,
-            $this->logger
+            $this->themeList
         );
     }
 
@@ -88,11 +83,11 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
             ->willReturn(0);
 
         $this->context
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(2))
             ->method('getAreaCode')
             ->willReturn('backend');
         $this->context
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(1))
             ->method('getThemePath')
             ->willReturn('Magento/backend');
 
@@ -100,10 +95,6 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getViewConfig')
             ->willReturn($this->viewConfData);
-        $this->logger
-            ->expects($this->exactly(2))
-            ->method('logMessage')
-            ->willReturn(true);
 
         $result = $this->getResolver()->resolve($asset);
         $this->assertArrayHasKey(0, $result);
@@ -121,11 +112,11 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
             ->willReturn('15');
 
         $this->context
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(2))
             ->method('getAreaCode')
             ->willReturn('backend');
         $this->context
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(1))
             ->method('getThemePath')
             ->willReturn('Magento/backend');
 
@@ -133,10 +124,6 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getViewConfig')
             ->willReturn($this->viewConfData);
-        $this->logger
-            ->expects($this->exactly(2))
-            ->method('logMessage')
-            ->willReturn(true);
 
         $result = $this->getResolver()->resolve($asset);
         $this->assertEquals(5, count($result));
