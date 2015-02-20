@@ -2059,5 +2059,4 @@ return [
     ['count', 'Magento\Review\Block\Customer\Recent'],
     ['_getCollection', 'Magento\Review\Block\Customer\Recent'],
     ['getCollection', 'Magento\Review\Block\Customer\Recent', 'Magento\Review\Block\Customer\Recent::getReviews'],
-    ['isReviewOwner', 'Magento\Review\Block\Customer\View'],
 ];

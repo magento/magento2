@@ -83,7 +83,8 @@ class Curl extends AbstractCurl implements CustomerInjectableInterface
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
         $curl->close();
-        if (!strpos($response, 'data-ui-id="global-messages-message-success"')) {
+        // After caching My Account page we cannot check by success message
+        if (!strpos($response, 'customer/account/logout')) {
             throw new \Exception("Customer entity creating  by curl handler was not successful! Response: $response");
         }
 
