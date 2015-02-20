@@ -1583,7 +1583,7 @@ span.required {
 .addon select:last-child,
 .addon input:last-child,
 .addon .addafter:last-child {
-    border-radius: 0 2px 2px 0;
+    border-radius: 0;
 }
 
 .addon .addbefore,
