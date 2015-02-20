@@ -55,6 +55,17 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     {
         $asset = $this->fileManager->createRequireJsAsset();
         $this->pageConfig->getAssetCollection()->add($asset->getFilePath(), $asset);
+
+        /** @var \Magento\Framework\View\Asset\File $bundleAsset */
+        foreach ($this->fileManager->createBandleJsPool() as $bundleAsset) {
+            $this->pageConfig->getAssetCollection()->add($bundleAsset->getFilePath(), $bundleAsset);
+        }
+
+        $staticAsset = $this->fileManager->createStaticJsAsset();
+        if ($staticAsset !== false) {
+            $this->pageConfig->getAssetCollection()->add($staticAsset->getFilePath(), $staticAsset);
+        }
+
         return parent::_prepareLayout();
     }
 

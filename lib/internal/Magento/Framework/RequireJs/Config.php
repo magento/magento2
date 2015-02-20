@@ -23,6 +23,16 @@ class Config
     const CONFIG_FILE_NAME = 'requirejs-config.js';
 
     /**
+     * File name of StaticJs
+     */
+    const STATIC_FILE_NAME = 'static.js';
+
+    /**
+     * File name of StaticJs
+     */
+    const BUNDLE_JS_DIR = 'js/bundle';
+
+    /**
      * Template for combined RequireJs config file
      */
     const FULL_CONFIG_TEMPLATE = <<<config
