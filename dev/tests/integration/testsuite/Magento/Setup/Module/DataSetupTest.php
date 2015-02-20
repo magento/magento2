@@ -29,7 +29,13 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
             'test',
             $this->_model->getTableRow('setup_module', 'module', 'Magento_AdminNotification', 'schema_version')
         );
-        $this->_model->updateTableRow('setup_module', 'module', 'Magento_AdminNotification', 'schema_version', $original);
+        $this->_model->updateTableRow(
+            'setup_module',
+            'module',
+            'Magento_AdminNotification',
+            'schema_version',
+            $original
+        );
     }
 
     /**
