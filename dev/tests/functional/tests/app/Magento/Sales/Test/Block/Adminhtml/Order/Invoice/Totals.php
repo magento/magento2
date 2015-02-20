@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Invoice;
 
-use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**

@@ -44,7 +44,7 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Button::__construct
+     * covers \Magento\Framework\Data\Form\Element\Button::__construct
      */
     public function testConstruct()
     {
@@ -53,7 +53,7 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Button::getHtmlAttributes
+     * covers \Magento\Framework\Data\Form\Element\Button::getHtmlAttributes
      */
     public function testGetHtmlAttributes()
     {

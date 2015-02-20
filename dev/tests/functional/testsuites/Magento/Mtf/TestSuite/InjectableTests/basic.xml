@@ -10,7 +10,11 @@
     <rule scope="testsuite">
         <allow>
             <namespace value="Magento" />
-            <type value="injectable" />
         </allow>
+    </rule>
+    <rule scope="testcase">
+        <deny>
+            <tag group="test_type" value="3rd_party_test" />
+        </deny>
     </rule>
 </config>

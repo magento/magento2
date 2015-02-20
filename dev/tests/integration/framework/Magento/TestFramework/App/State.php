@@ -27,4 +27,12 @@ class State extends \Magento\Framework\App\State
         $this->_areaCode = $code;
         $this->_configScope->setCurrentScope($code);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setMode($mode)
+    {
+        $this->_appMode = $mode;
+    }
 }
