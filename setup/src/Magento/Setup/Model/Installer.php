@@ -626,45 +626,30 @@ class Installer
      */
     private function handleDBSchemaData($setup, $type)
     {
+        if (!(($type === 'schema') || ($type === 'data'))) {
+            throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
+        }
+
         $this->assertDeploymentConfigExists();
         $this->assertDbAccessible();
 
         $resource = new \Magento\Framework\Module\Resource($this->resource);
-        $dbVersionInfo = new \Magento\Framework\Module\DbVersionInfo($this->moduleList, $resource);
         $verType = $type . '-version';
         $installType = $type . '-install';
         $upgradeType = $type . '-upgrade';
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
         foreach ($moduleNames as $moduleName) {
-            if (!$dbVersionInfo->isDataUpToDate($moduleName)) {
-                $this->log->log("Module '{$moduleName}'");
-                $moduleConfig = $this->moduleList->getOne($moduleName);
-                $configVer = $moduleConfig['setup_version'];
-                $moduleContext = $moduleContextList[$moduleName];
-                $curVer = $moduleContext->getVersion();
-                // Schema/Data is installed
-                if ($curVer !== '') {
-                    $status = version_compare($configVer, $curVer);
-                    if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
-                        $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
-                        if ($upgrader) {
-                            $upgrader->upgrade($setup, $moduleContext);
-                        }
-                        if ($type === 'schema') {
-                            $resource->setDbVersion($moduleName, $configVer, $type);
-                        } elseif ($type === 'data') {
-                            $resource->setDataVersion($moduleName, $configVer, $type);
-                        }
-                    }
-                } elseif ($configVer) {
-                    $installer =  $this->getSchemaDataHandler($moduleName, $installType);
-                    if ($installer) {
-                        $installer->install($setup, $moduleContext);
-                    }
+            $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
+            $currentVersion = $moduleContextList[$moduleName]->getVersion();
+            // Schema/Data is installed
+            if ($currentVersion !== '') {
+                $status = version_compare($configVer, $currentVersion);
+                if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
                     $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                     if ($upgrader) {
-                        $upgrader->upgrade($setup, $moduleContext);
+                        $this->log->log("Upgrading Module '{$moduleName}'");
+                        $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                     }
                     if ($type === 'schema') {
                         $resource->setDbVersion($moduleName, $configVer, $type);
@@ -672,18 +657,33 @@ class Installer
                         $resource->setDataVersion($moduleName, $configVer, $type);
                     }
                 }
-                $this->logProgress();
+            } elseif ($configVer) {
+                $installer =  $this->getSchemaDataHandler($moduleName, $installType);
+                if ($installer) {
+                    $this->log->log("Installing Module '{$moduleName}'");
+                    $installer->install($setup, $moduleContextList[$moduleName]);
+                }
+                $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
+                if ($upgrader) {
+                    $this->log->log("Upgrading Module '{$moduleName}'");
+                    $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
+                }
+                if ($type === 'schema') {
+                    $resource->setDbVersion($moduleName, $configVer);
+                } elseif ($type === 'data') {
+                    $resource->setDataVersion($moduleName, $configVer);
+                }
             }
+            $this->logProgress();
         }
 
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             foreach ($moduleNames as $moduleName) {
-                $this->log->log("Module '{$moduleName}'");
-                $moduleContext = $moduleContextList[$moduleName];
                 $modulePostUpdater = $this->getSchemaDataHandler($moduleName, 'schema-recurring');
                 if ($modulePostUpdater) {
-                    $modulePostUpdater->install($setup, $moduleContext);
+                    $this->log->log("Running recurring for Module '{$moduleName}'");
+                    $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
                 }
                 $this->logProgress();
             }
@@ -721,17 +721,18 @@ class Installer
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
-        $dbConnection = $this->setup->getConnection();
+        $setup = $this->getObjectManager()->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
+        $dbConnection = $setup->getConnection();
 
         // get entity_type_id for order
         $select = $dbConnection->select()
-            ->from($this->setup->getTable('eav_entity_type'), 'entity_type_id')
+            ->from($setup->getTable('eav_entity_type'), 'entity_type_id')
             ->where('entity_type_code = \'order\'');
         $entityTypeId = $dbConnection->fetchOne($select);
 
         // See if row already exists
         $incrementRow = $dbConnection->fetchRow(
-            'SELECT * FROM ' . $this->setup->getTable('eav_entity_store') . ' WHERE entity_type_id = ? AND store_id = ?',
+            'SELECT * FROM ' . $setup->getTable('eav_entity_store') . ' WHERE entity_type_id = ? AND store_id = ?',
             [$entityTypeId, Store::DISTRO_STORE_ID]
         );
 
@@ -739,7 +740,7 @@ class Installer
             // row exists, update it
             $entityStoreId = $incrementRow['entity_store_id'];
             $dbConnection->update(
-                $this->setup->getTable('eav_entity_store'),
+                $setup->getTable('eav_entity_store'),
                 ['increment_prefix' => $orderIncrementPrefix],
                 ['entity_store_id' => $entityStoreId]
             );
@@ -750,7 +751,7 @@ class Installer
                 'store_id' => Store::DISTRO_STORE_ID,
                 'increment_prefix' => $orderIncrementPrefix,
             ];
-            $dbConnection->insert($this->setup->getTable('eav_entity_store'), $rowData);
+            $dbConnection->insert($setup->getTable('eav_entity_store'), $rowData);
         }
     }
 
@@ -1009,7 +1010,7 @@ class Installer
      */
     private function getSchemaDataHandler($moduleName, $type)
     {
-        $className = str_replace('_', '\\', $moduleName) . '\Setup';;
+        $className = str_replace('_', '\\', $moduleName) . '\Setup';
         switch ($type) {
             case 'schema-install':
                 $className .= '\InstallSchema';
@@ -1072,6 +1073,8 @@ class Installer
             default:
                 throw  new \Magento\Setup\Exception("$className does not exist");
         }
+
+        return null;
     }
 
     /**
