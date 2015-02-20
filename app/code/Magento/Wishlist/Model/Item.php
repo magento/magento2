@@ -431,7 +431,7 @@ class Item extends AbstractModel implements ItemInterface
         }
 
         if (!$product->isSalable()) {
-            throw new ProductException(__(''));
+            throw new ProductException(__('Product is not salable.'));
         }
 
         $buyRequest = $this->getBuyRequest();

@@ -1915,7 +1915,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
             foreach ($this->_errors as $error) {
                 $this->messageManager->addError($error);
             }
-            throw new \Magento\Framework\Exception\LocalizedException(__(''));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Validation is failed.'));
         }
 
         return $this;
