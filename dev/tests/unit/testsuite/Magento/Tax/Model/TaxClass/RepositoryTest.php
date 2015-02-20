@@ -246,7 +246,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage A class with the same name already exists for ClassType PRODUCT.
      */
     public function testSaveWithSameClassException()
