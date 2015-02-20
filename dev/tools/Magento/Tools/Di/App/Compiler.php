@@ -68,6 +68,8 @@ class Compiler implements \Magento\Framework\AppInterface
                         'modificationsList' => [
                             'PreferencesResolving' =>
                                 ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
+                            'BackslashTrim' =>
+                                ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\BackslashTrim'],
                             'ArgumentsSerialization' =>
                                 ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization'],
                         ]
