@@ -17,10 +17,11 @@
 </fieldset>
 <script>
 require([
+    'jquery',
     'mage/template',
     "prototype",
     "extjs/ext-tree-checkbox"
-], function (mageTemplate) {
+], function (jQuery, mageTemplate) {
 
 //<![CDATA[
 
@@ -476,7 +477,7 @@ var WidgetInstance = {
 
 window.WidgetInstance = WidgetInstance;
 
-Ext.onReady(function(){
+jQuery(function(){
     <?php foreach ($block->getPageGroups() as $pageGroup): ?>
         WidgetInstance.addPageGroup(<?php echo Zend_Json::encode($pageGroup) ?>);
     <?php endforeach; ?>

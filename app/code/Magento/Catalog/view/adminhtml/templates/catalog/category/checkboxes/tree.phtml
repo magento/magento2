@@ -13,10 +13,11 @@
 
 <script>
     require([
+        'jquery',
         "prototype",
         "extjs/ext-tree-checkbox",
         "mage/adminhtml/form"
-    ], function(){
+    ], function(jQuery){
 
 //<![CDATA[
 
@@ -69,7 +70,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
     }
 });
 
-Ext.onReady(function()
+jQuery(function()
 {
     var categoryLoader = new Ext.tree.TreeLoader({
        dataUrl: '<?php echo $block->getLoadTreeUrl() ?>'
