@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\TestCase\Product;
 use Magento\Catalog\Test\Page\Product\CatalogProductCompare;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -76,7 +76,7 @@ abstract class AbstractCompareProductsTest extends Injectable
     /**
      * Fixture customer.
      *
-     * @var CustomerInjectable
+     * @var Customer
      */
     protected $customer;
 
@@ -84,10 +84,10 @@ abstract class AbstractCompareProductsTest extends Injectable
      * Prepare data.
      *
      * @param FixtureFactory $fixtureFactory
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return void
      */
-    public function __prepare(FixtureFactory $fixtureFactory, CustomerInjectable $customer)
+    public function __prepare(FixtureFactory $fixtureFactory, Customer $customer)
     {
         $this->fixtureFactory = $fixtureFactory;
         $customer->persist();

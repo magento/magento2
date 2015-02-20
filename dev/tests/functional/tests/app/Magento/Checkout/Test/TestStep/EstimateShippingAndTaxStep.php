@@ -9,7 +9,7 @@ namespace Magento\Checkout\Test\TestStep;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Customer\Test\Fixture\AddressInjectable;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart;
 use Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart;
 use Magento\Checkout\Test\Constraint\AssertTaxInShoppingCart;
@@ -31,9 +31,9 @@ class EstimateShippingAndTaxStep implements TestStepInterface
     /**
      * Customer Address
      *
-     * @var AddressInjectable
+     * @var Address
      */
-    protected $addressInjectable;
+    protected $address;
 
     /**
      * Assert that Order Grand Total is correct on checkout page review block
@@ -94,7 +94,7 @@ class EstimateShippingAndTaxStep implements TestStepInterface
     /**
      * @constructor
      * @param CheckoutCart $checkoutCart
-     * @param AddressInjectable $addressInjectable
+     * @param Address $address
      * @param AssertSubtotalInShoppingCart $assertSubtotalInShoppingCart
      * @param AssertGrandTotalInShoppingCart $assertGrandTotalInShoppingCart
      * @param AssertTaxInShoppingCart $assertTaxInShoppingCart
@@ -106,7 +106,7 @@ class EstimateShippingAndTaxStep implements TestStepInterface
      */
     public function __construct(
         CheckoutCart $checkoutCart,
-        AddressInjectable $addressInjectable,
+        Address $address,
         AssertSubtotalInShoppingCart $assertSubtotalInShoppingCart,
         AssertGrandTotalInShoppingCart $assertGrandTotalInShoppingCart,
         AssertTaxInShoppingCart $assertTaxInShoppingCart,
@@ -117,7 +117,7 @@ class EstimateShippingAndTaxStep implements TestStepInterface
         array $products
     ) {
         $this->checkoutCart = $checkoutCart;
-        $this->addressInjectable = $addressInjectable;
+        $this->address = $address;
         $this->assertSubtotalInShoppingCart = $assertSubtotalInShoppingCart;
         $this->assertGrandTotalInShoppingCart = $assertGrandTotalInShoppingCart;
         $this->assertTaxInShoppingCart = $assertTaxInShoppingCart;
@@ -135,7 +135,8 @@ class EstimateShippingAndTaxStep implements TestStepInterface
      */
     public function run()
     {
-        $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($this->addressInjectable);
+        $this->checkoutCart->open();
+        $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($this->address);
         if ($this->shipping['shipping_service'] !== '-') {
             $this->checkoutCart->getShippingBlock()->selectShippingMethod($this->shipping);
         }

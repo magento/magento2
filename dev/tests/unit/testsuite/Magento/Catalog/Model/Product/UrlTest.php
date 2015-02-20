@@ -101,9 +101,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getUrlDataProvider
-     * @covers Magento\Catalog\Model\Product\Url::getUrl
-     * @covers Magento\Catalog\Model\Product\Url::getUrlInStore
-     * @covers Magento\Catalog\Model\Product\Url::getProductUrl
+     * covers Magento\Catalog\Model\Product\Url::getUrl
+     * covers Magento\Catalog\Model\Product\Url::getUrlInStore
+     * covers Magento\Catalog\Model\Product\Url::getProductUrl
      *
      * @param $getUrlMethod
      * @param $routePath

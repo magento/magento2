@@ -15,7 +15,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 class OverviewPost extends \Magento\Multishipping\Controller\Checkout
 {
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $formKeyValidator;
 
@@ -27,7 +27,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -35,7 +35,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $accountManagement,
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
     ) {
         $this->formKeyValidator = $formKeyValidator;
         parent::__construct(

@@ -44,7 +44,7 @@ class ObscureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Obscure::__construct
+     * covers \Magento\Framework\Data\Form\Element\Obscure::__construct
      */
     public function testConstruct()
     {
@@ -53,7 +53,7 @@ class ObscureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Obscure::getEscapedValue
+     * covers \Magento\Framework\Data\Form\Element\Obscure::getEscapedValue
      */
     public function testGetEscapedValue()
     {
@@ -64,7 +64,7 @@ class ObscureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Obscure::getHtmlAttributes
+     * covers \Magento\Framework\Data\Form\Element\Obscure::getHtmlAttributes
      */
     public function testGetHtmlAttributes()
     {

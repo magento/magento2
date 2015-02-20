@@ -27,7 +27,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $shipmentMock;
 
     /**
-     * @var \Magento\Backend\Model\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewMock;
 
@@ -95,7 +95,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->viewMock = $this->getMock(
-            'Magento\Backend\Model\View',
+            'Magento\Framework\App\View',
             ['loadLayout', 'getLayout', 'renderLayout', 'getPage'],
             [],
             '',

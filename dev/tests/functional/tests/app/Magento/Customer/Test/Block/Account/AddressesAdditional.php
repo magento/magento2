@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Block\Account;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
@@ -39,10 +39,10 @@ class AddressesAdditional extends Block
     /**
      * Delete Additional Address
      *
-     * @param AddressInjectable $address
+     * @param Address $address
      * @return void
      */
-    public function deleteAdditionalAddress(AddressInjectable $address)
+    public function deleteAdditionalAddress(Address $address)
     {
         $this->_rootElement->find(sprintf($this->addressSelector, $address->getStreet()), Locator::SELECTOR_XPATH)
             ->find($this->deleteAddressLink)->click();

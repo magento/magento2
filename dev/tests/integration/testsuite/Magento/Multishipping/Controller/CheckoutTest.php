@@ -43,7 +43,7 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer = $service->authenticate('customer@example.com', 'password');
 
         $session->setCustomerDataAsLoggedIn($customer);
-        $this->getRequest()->setPost('payment', ['method' => 'checkmo']);
+        $this->getRequest()->setPostValue('payment', ['method' => 'checkmo']);
         $this->dispatch('multishipping/checkout/overview');
         $html = $this->getResponse()->getBody();
         $this->assertContains('<div class="box box-billing-method">', $html);

@@ -8,7 +8,6 @@ namespace Magento\User\Test\Handler\Curl;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl;
-use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -51,7 +50,7 @@ class CreateUser extends Curl
         $response = $curl->read();
         $curl->close();
         preg_match(
-            '/class=\"\scol\-id col\-user_id\W*>\W+(\d+)\W+<\/td>\W+<td[\w\s\"=\-]*?>\W+?' . $data['username'] . '/siu',
+            '/class=\"\scol\-id col\-user_id\W*>\W*(\d+)\W*<\/td>\W*<td[\w\s\"=\-]*?>\W*?' . $data['username'] . '/siu',
             $response,
             $matches
         );
@@ -85,7 +84,7 @@ class CreateUser extends Curl
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
-        $response = $curl->read();
+        $curl->read();
         $curl->close();
         $data['id'] = $this->_getUserId($data);
         return $data;
