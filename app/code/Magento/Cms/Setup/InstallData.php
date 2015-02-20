@@ -46,16 +46,16 @@ class InstallData implements InstallDataInterface
                 'meta_description' => 'Page description',
                 'identifier' => 'no-route',
                 'content_heading' => 'Whoops, our bad...',
-                'content' => '<dl>\r\n<dt>The page you requested was not found, and we have a fine guess why.</dt>\r\n'
-                    . '<dd>\r\n<ul class="disc">\r\n<li>If you typed the URL directly, please make sure the spelling'
-                    . 'is correct.</li>\r\n<li>If you clicked on a link to get here, the link is outdated.</li>\r\n'
-                    . '</ul></dd>\r\n</dl>\r\n<dl>\r\n<dt>What can you do?</dt>\r\n<dd>Have no fear, help is near!'
-                    . 'There are many ways you can get back on track with Magento Store.</dd>\r\n<dd>\r\n'
-                    . '<ul class="disc">\r\n<li><a href="#" onclick="history.go(-1); return false;">Go back</a> to the'
-                    . 'previous page.</li>\r\n<li>Use the search bar at the top of the page to search for your'
-                    . 'products.</li>\r\n<li>Follow these links to get you back on track!<br />'
-                    . '<a href="{{store url=""}}">Store Home</a> <span class="separator">|</span> '
-                    . '<a href="{{store url="customer/account"}}">My Account</a></li></ul></dd></dl>\r\n",',
+                'content' => "<dl>\r\n<dt>The page you requested was not found, and we have a fine guess why.</dt>\r\n"
+                    . "<dd>\r\n<ul class=\"disc\">\r\n<li>If you typed the URL directly, please make sure the spelling"
+                    . "is correct.</li>\r\n<li>If you clicked on a link to get here, the link is outdated.</li>\r\n"
+                    . "</ul></dd>\r\n</dl>\r\n<dl>\r\n<dt>What can you do?</dt>\r\n<dd>Have no fear, help is near!"
+                    . "There are many ways you can get back on track with Magento Store.</dd>\r\n<dd>\r\n"
+                    . "<ul class=\"disc\">\r\n<li><a href=\"#\" onclick=\"history.go(-1); return false;\">Go back</a> "
+                    . "to the previous page.</li>\r\n<li>Use the search bar at the top of the page to search for your"
+                    . "products.</li>\r\n<li>Follow these links to get you back on track!<br />"
+                    . "<a href=\"{{store url=\"\"}}\">Store Home</a> <span class=\"separator\">|</span> "
+                    . "<a href=\"{{store url=\"customer/account\"}}\">My Account</a></li></ul></dd></dl>\r\n",
                 'is_active' => 1,
                 'stores' => [0],
                 'sort_order' => 0
