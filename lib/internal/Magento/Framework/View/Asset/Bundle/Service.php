@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\View\Asset\Bundle;
 
-use Magento\Framework\App\State;
 use Magento\Framework\View\Asset;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Bundle;
@@ -74,22 +73,19 @@ class Service
      * @param ConfigInterface $config
      * @param ListInterface $themeList
      * @param Asset\ConfigInterface $bundleConfig
-     * @param State $appState
      */
     public function __construct(
         Filesystem $filesystem,
         BundleFactory $bundleFactory,
         ConfigInterface $config,
         ListInterface $themeList,
-        Asset\ConfigInterface $bundleConfig,
-        State $appState
+        Asset\ConfigInterface $bundleConfig
     ) {
         $this->filesystem = $filesystem;
         $this->bundleFactory = $bundleFactory;
         $this->viewConfig = $config;
         $this->themeList = $themeList;
         $this->bundleConfig = $bundleConfig;
-        $this->appState = $appState;
     }
 
     /**
@@ -182,8 +178,7 @@ class Service
     protected function isValidAsset()
     {
         if (
-            $this->isProductionMode()
-            && $this->bundleConfig->isMergeJsFiles()
+            $this->bundleConfig->isMergeJsFiles()
             && Bundle::isValid($this->getAsset())
             && !$this->isMinAssetExists()
             && !$this->isExcluded()
@@ -193,13 +188,6 @@ class Service
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    protected function isProductionMode()
-    {
-        return $this->appState->getMode() == State::MODE_PRODUCTION;
-    }
 
     /**
      * Return bundle

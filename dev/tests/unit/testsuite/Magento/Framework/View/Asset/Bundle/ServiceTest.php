@@ -29,9 +29,6 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|Asset\ConfigInterface */
     protected $bundleConf;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|App\State */
-    protected $appState;
-
     protected function setUp()
     {
         $this->conf = $this->getMockForAbstractClass(
@@ -60,11 +57,6 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('isMergeJsFiles')
             ->willReturn(true);
-        $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->appState
-            ->expects($this->once())
-            ->method('getMode')
-            ->willReturn('production');
     }
 
     protected function tearDown()
@@ -79,8 +71,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             $this->bundleFactory,
             $this->conf,
             $this->list,
-            $this->bundleConf,
-            $this->appState
+            $this->bundleConf
         );
     }
 
