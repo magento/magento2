@@ -461,7 +461,13 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
         if ($date === null) {
             return null;
         }
-        $dateUtc = new \DateTime($date);
+
+        if ($date instanceof \DateTimeInterface) {
+            $dateUtc = $date;
+        } else {
+            $dateUtc = new \DateTime($date);
+        }
+
         $dateUtc->setTimezone(new \DateTimeZone('UTC'));
         return $dateUtc->format('Y-m-d H:i:s');
     }

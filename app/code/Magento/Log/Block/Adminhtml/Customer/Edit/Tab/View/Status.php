@@ -5,11 +5,9 @@
  */
 namespace Magento\Log\Block\Adminhtml\Customer\Edit\Tab\View;
 
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-
 /**
  * Class Status
- * @package Magento\Log\Block\Adminhtml\Customer\Edit\Tab\View
+ * @SuppressWarning(PHPMD.CouplingBetweenObjects)
  */
 class Status extends \Magento\Backend\Block\Template
 {

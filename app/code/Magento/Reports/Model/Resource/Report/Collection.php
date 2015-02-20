@@ -196,7 +196,9 @@ class Collection extends \Magento\Framework\Data\Collection
 
         if ($dateStart->diff($dateEnd)->m == 0) {
             $interval['end'] = $dateStart->setDate(
-                $dateStart->format('Y'), $dateStart->format('m'), $dateEnd->format('d')
+                $dateStart->format('Y'),
+                $dateStart->format('m'),
+                $dateEnd->format('d')
             )->format(
                 'yyyy-MM-dd 23:59:59'
             );
@@ -235,7 +237,7 @@ class Collection extends \Magento\Framework\Data\Collection
             : $dateStart->format('yyyy-12-31 23:59:59');
         $dateStart->modify('+1 year');
 
-        if ($dateStart->diff($dateEnd)->y == 0 ) {
+        if ($dateStart->diff($dateEnd)->y == 0) {
             $dateStart->setDate($dateStart->format('Y'), 1, 1);
         }
 

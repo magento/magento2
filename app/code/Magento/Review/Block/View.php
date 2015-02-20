@@ -56,6 +56,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     ) {
         $this->_voteFactory = $voteFactory;
         $this->_reviewFactory = $reviewFactory;
+        $this->_ratingFactory = $ratingFactory;
 
         parent::__construct(
             $context,

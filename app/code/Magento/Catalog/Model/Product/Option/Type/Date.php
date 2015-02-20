@@ -230,10 +230,9 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Parse user input value and return cart prepared value
      *
      * @param string $optionValue
-     * @param array $productOptionValues Values for product option
      * @return string|null
      */
-    public function parseOptionValue($optionValue, $productOptionValues)
+    public function parseOptionValue($optionValue)
     {
         try {
             $date = new \DateTime($optionValue);
