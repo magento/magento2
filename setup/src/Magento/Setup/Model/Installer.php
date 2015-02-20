@@ -177,11 +177,6 @@ class Installer
     private $installInfo = [];
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @var \Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
