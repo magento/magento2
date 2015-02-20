@@ -227,16 +227,16 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         // at(4) - logMeta and so on...
         $this->logger->expects($this->at(5))->method('log')->with('Installing deployment configuration...');
         $this->logger->expects($this->at(7))->method('log')->with('Installing database schema:');
-        $this->logger->expects($this->at(9))->method('log')->with("Module 'Foo_One':");
-        $this->logger->expects($this->at(11))->method('log')->with("Module 'Bar_Two':");
+        $this->logger->expects($this->at(9))->method('log')->with("Module 'Foo_One'");
+        $this->logger->expects($this->at(11))->method('log')->with("Module 'Bar_Two'");
         $this->logger->expects($this->at(13))->method('log')->with('Schema post-updates:');
-        $this->logger->expects($this->at(14))->method('log')->with("Module 'Foo_One':");
-        $this->logger->expects($this->at(16))->method('log')->with("Module 'Bar_Two':");
+        $this->logger->expects($this->at(14))->method('log')->with("Module 'Foo_One'");
+        $this->logger->expects($this->at(16))->method('log')->with("Module 'Bar_Two'");
         $this->logger->expects($this->at(19))->method('log')->with('Installing user configuration...');
         $this->logger->expects($this->at(21))->method('log')->with('Installing data...');
         $this->logger->expects($this->at(22))->method('log')->with('Data install/update:');
-        $this->logger->expects($this->at(23))->method('log')->with("Module 'Foo_One':");
-        $this->logger->expects($this->at(25))->method('log')->with("Module 'Bar_Two':");
+        $this->logger->expects($this->at(23))->method('log')->with("Module 'Foo_One'");
+        $this->logger->expects($this->at(25))->method('log')->with("Module 'Bar_Two'");
         $this->logger->expects($this->at(28))->method('log')->with('Installing admin user...');
         $this->logger->expects($this->at(30))->method('log')->with('Enabling caches:');
         $this->logger->expects($this->at(31))->method('log')->with('Current status:');

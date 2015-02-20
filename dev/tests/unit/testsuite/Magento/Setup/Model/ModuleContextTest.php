@@ -13,14 +13,4 @@ class ModuleContextTest extends \PHPUnit_Framework_TestCase
         $object = new ModuleContext($version);
         $this->assertSame($version, $object->getVersion());
     }
-
-    public function testSetVersion()
-    {
-        $oldVersion = '1.0.1';
-        $object = new ModuleContext($oldVersion);
-        $this->assertSame($oldVersion, $object->getVersion());
-        $newVersion = '2.0.2';
-        $object->setVersion($newVersion);
-        $this->assertSame($newVersion, $object->getVersion());
-    }
 }
