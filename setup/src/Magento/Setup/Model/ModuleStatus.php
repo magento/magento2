@@ -48,7 +48,7 @@ class ModuleStatus
         ObjectManagerProvider $objectManagerProvider
     ) {
         $this->allModules = $moduleLoader->load();
-        foreach ($this->allModules as $module => $value) {
+        foreach (array_keys($this->allModules) as $module) {
             $this->allModules[$module]['selected'] = true;
             $this->allModules[$module]['disabled'] = true;
         }
@@ -71,14 +71,7 @@ class ModuleStatus
                     $this->allModules[$module]['selected'] = false;
                 }
             } else {
-                $existingModules = $this->deploymentConfig->getSegment(ModuleDeployment::CONFIG_KEY);
-                if (isset($existingModules)) {
-                    foreach ($existingModules as $module => $value) {
-                        if (!$value) {
-                            $this->allModules[$module]['selected'] = false;
-                        }
-                    }
-                }
+                $this->deselectDisabledModules();
             }
             $disableModules = $this->getListOfDisableModules();
             if (isset($disableModules)) {
@@ -143,5 +136,22 @@ class ModuleStatus
     public function setIsEnabled($status, $moduleName)
     {
         $this->allModules[$moduleName]['selected'] = $status;
+    }
+
+    /**
+     * Marks modules that are disabled in deploymentConfig as unselected.
+     *
+     * @return void
+     */
+    private function deselectDisabledModules()
+    {
+        $existingModules = $this->deploymentConfig->getSegment(ModuleDeployment::CONFIG_KEY);
+        if (isset($existingModules)) {
+            foreach ($existingModules as $module => $value) {
+                if (!$value) {
+                    $this->allModules[$module]['selected'] = false;
+                }
+            }
+        }
     }
 }

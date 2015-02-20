@@ -118,15 +118,13 @@ class Status
 
         foreach ($errorModulesDependency as $moduleName => $missingDependencies) {
             if (!empty($missingDependencies)) {
-                $errorMessages[] = $isEnabled ?
-                    ($prettyMessage ? "Cannot enable $moduleName" :
-                        "Cannot enable $moduleName, depending on disabled modules:") :
-                    ($prettyMessage ? "Cannot disable $moduleName" :
-                        "Cannot disable $moduleName, modules depending on it:");
-                foreach ($missingDependencies as $errorModule => $path) {
-                    if (!$prettyMessage) {
-                        $errorMessages [] = "$errorModule: " . implode('->', $path);
-                    }
+                if ($prettyMessage) {
+                    $errorMessages[] = $this->createShortErrorMessage($isEnabled, $moduleName);
+                } else {
+                    $errorMessages = array_merge(
+                        $errorMessages,
+                        $this->createVerboseErrorMessage($isEnabled, $moduleName, $missingDependencies)
+                    );
                 }
             }
         }
@@ -208,5 +206,42 @@ class Status
             throw new \LogicException("Unknown module(s): '" . implode("', '", $unknown) . "'");
         }
         return array_keys($all);
+    }
+
+    /**
+     * Creates a one-line error message that a module cannot be enabled/disabled.
+     *
+     * @param bool $isEnabled
+     * @param string $moduleName
+     * @return string
+     */
+    private function createShortErrorMessage($isEnabled, $moduleName) {
+        if ($isEnabled) {
+            return "Cannot enable $moduleName";
+        } else {
+            return "Cannot disable $moduleName";
+        }
+    }
+
+    /**
+     * Creates a verbose error message that a module cannot be enabled/disabled.
+     *
+     * Each line in the error message will be an array element.
+     *
+     * @param bool $isEnabled
+     * @param string $moduleName
+     * @param array $missingDependencies
+     * @return string[]
+     */
+    private function createVerboseErrorMessage($isEnabled, $moduleName, $missingDependencies) {
+        if ($isEnabled) {
+            $errorMessages[] = "Cannot enable $moduleName, depending on disabled modules:";
+        } else {
+            $errorMessages[] = "Cannot disable $moduleName, modules depending on it:";
+        }
+        foreach ($missingDependencies as $errorModule => $path) {
+                $errorMessages[] = "$errorModule: " . implode('->', $path);
+        }
+        return $errorMessages;
     }
 }

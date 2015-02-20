@@ -121,6 +121,7 @@ class Install extends AbstractActionController
      * Maps data from request to format of deployment config model
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function importDeploymentConfigForm()

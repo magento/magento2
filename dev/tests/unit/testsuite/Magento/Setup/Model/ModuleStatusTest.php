@@ -73,6 +73,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedAllModules
      * @param array $expectedConfig
      * @param array $expectedResult
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @dataProvider getAllModulesDataProvider
      */
@@ -98,7 +99,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedConfig
      * @param array $expectedResult
      *
-     *  @dataProvider getAllModulesDataProvider
+     * @dataProvider getAllModulesDataProvider
      */
     public function testSetIsEnabled($expectedAllModules, $expectedConfig, $expectedResult)
     {
