@@ -182,6 +182,10 @@ class Parser
      */
     public function errorHandler($errorNo, $errorStr, $errorFile, $errorLine)
     {
-        throw new \Magento\Framework\Exception($errorStr);
+        if ($errorNo == 0) {
+            return false;
+        }
+        $message = "{$errorStr} in {$errorFile} on line {$errorLine}";
+        throw new \Magento\Framework\Exception($message);
     }
 }

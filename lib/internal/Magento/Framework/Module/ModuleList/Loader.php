@@ -55,6 +55,7 @@ class Loader
     /**
      * Loads the full module list information
      *
+     * @throws \Magento\Framework\Exception
      * @return array
      */
     public function load()
