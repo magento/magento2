@@ -33,8 +33,10 @@
                     </container>
                 </container>
                 <container name="js" as="js" label="JavaScript"/>
-                <container name="page.footer.wrapper" as="page_footer_wrapper" after="page.content" htmlTag="footer" htmlClass="page-footer">
-                    <container name="footer" htmlTag="div" htmlClass="page-footer-content row" />
+                <container name="page.footer.wrapper" after="page.content" as="page_footer_wrapper" htmlTag="div" htmlClass="admin__scope">
+                    <container htmlTag="footer" htmlClass="page-footer">
+                        <container name="footer" htmlTag="div" htmlClass="page-footer-content row" />
+                    </container>
                 </container>
             </container>
             <container name="before.body.end" as="before_body_end" label="Before Body End" after="-"/>

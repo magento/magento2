@@ -27,7 +27,7 @@ body {
     line-height: @baseLineHeight;
     font-weight: @baseFontWeight;
     .font-size(@baseFontSize);
-    background: @primary7;
+    background: #f5f5f5;
     .vendor-prefix-display(flex);
     .vendor-prefix-flex-direction(column);
     & > * {
@@ -38,18 +38,19 @@ body {
 }
 
 .page-wrapper {
-    .vendor-prefix-display(flex);
-    .vendor-prefix-flex-direction(column);
-    min-height: 100%;
+//    .vendor-prefix-display(flex);
+//    .vendor-prefix-flex-direction(column);
+//    min-height: 100%;
     max-width: 100%;
     min-width: @layout__min-width + 2 * @layout-indent__width;
     margin-left: 8.8rem; // migration styles -> @menu__width
+    background-color: #F2EBDE;
     box-sizing: border-box;
-    & > * {
-        .vendor-prefix-flex-grow(0);
-        .vendor-prefix-flex-shrink(0);
-        .vendor-prefix-flex-basis(auto);
-    }
+//    & > * {
+//        .vendor-prefix-flex-grow(0);
+//        .vendor-prefix-flex-shrink(0);
+//        .vendor-prefix-flex-basis(auto);
+//    }
 }
 
 .page-header {
@@ -488,38 +489,6 @@ button {
     margin-bottom: 20px;
 }
 
-.page-footer {
-    background-color: @color-light;
-    margin-top: auto;
-    &-content {
-        padding: 15px 0;
-        &:extend(._layout-width all);
-        .clearer();
-    }
-}
-
-.footer-legal {
-    float: right;
-    width: 550px;
-    .link-report,
-    .magento-version,
-    .copyright {
-        font-size: 13px;
-    }
-    &:before {
-        content:"";
-        display: inline-block;
-        vertical-align: middle;
-        position: absolute;
-        z-index: 1;
-        margin-top: 2px;
-        margin-left: -35px;
-        width: 30px;
-        height: 35px;
-        background-size: 109px 70px;
-        background: url("@{baseDir}images/logo-admin.svg") no-repeat 0 -21px;
-    }
-}
 
 //
 // Icons

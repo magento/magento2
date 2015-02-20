@@ -7,7 +7,7 @@
 //  Page footer
 //  _____________________________________________
 
-@footer__background-color: @color-white-smoke;
+@footer__background-color: @body__background-color;
 @footer__border-color: @color-light-gray;
 @footer__border-width: .1rem;
 @footer__color: @color-very-dark-gray1;
@@ -21,51 +21,59 @@
 @footer-link__hover__text-decoration: underline;
 
 .page-footer {
-    background: @footer__background-color;
+    background-color: @footer__background-color;
     border-top: @footer__border-width solid @footer__border-color;
     color: @footer__color;
     margin-top: auto;
     padding: 2.6rem 2rem 6rem 3rem;
     a {
         .link(
-        @_link-color: @footer-link__color,
-        @_link-text-decoration: @footer-link__text-decoration,
-        @_link-color-visited: false,
-        @_link-text-decoration-visited: false,
-        @_link-color-hover: @footer-link__color,
-        @_link-text-decoration-hover: false,
-        @_link-color-active: false,
-        @_link-text-decoration-active: false
+            @_link-color: @footer-link__color,
+            @_link-text-decoration: @footer-link__text-decoration,
+            @_link-color-visited: false,
+            @_link-text-decoration-visited: false,
+            @_link-color-hover: @footer-link__color,
+            @_link-text-decoration-hover: false,
+            @_link-color-active: false,
+            @_link-text-decoration-active: false
         );
     }
 }
 
 .magento-version {
-    margin-top: 1rem;
-    b {
+    margin-bottom: .5rem;
+    strong {
         color: @footer-version__color;
     }
 }
 
 // Copyright
 .copyright {
-    margin: .6rem 0;
+    margin-bottom: 0;
     position: relative;
     .link-copyright {
-        background: url('@{baseDir}images/logo-admin.svg') no-repeat 0 0;
-        background-size: 88px 56px;
         display: inline-block;
-        height: 2.5rem;
-        margin-right: .2rem;
-        overflow: hidden;
+        margin-right: .5rem;
         text-decoration: none;
-        text-indent: 2.5rem;
-        vertical-align: middle;
-        width: 2.5rem;
+        vertical-align: top;
+        &:hover {
+            &:before {
+                color: lighten(@primary__color, 10%);
+            }
+        }
+        &:before {
+            &:extend(.abs-icon all);
+            color: @primary__color;
+            content: @icon-logo__content;
+            font-size: 2.5rem;
+            position: relative;
+            top: -.2rem;
+        }
     }
 }
 
 .footer-legal {
+    padding-top: 1rem;
     text-align: right;
 }
 

@@ -939,7 +939,7 @@ button.tertiary:active {
   border-bottom-left-radius: 0;
 }
 .actions-split .action-toggle {
-  padding: 4px 0.25rem;
+  padding: 4px 0.5rem;
   display: inline-block;
   text-decoration: none;
 }
@@ -1026,7 +1026,7 @@ button.tertiary:active {
 }
 .actions-split .dropdown-menu li {
   margin: 0;
-  padding: 3px 0.25rem;
+  padding: 3px 0.5rem;
 }
 .actions-split .dropdown-menu li:hover {
   background: #e8e8e8;
@@ -1337,11 +1337,20 @@ table tbody tr:last-child td {
 .col-xs-offset-0 {
   margin-left: 0%;
 }
+.row-gutter {
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+}
+.row-gutter .col-gutter {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
 .abs-icon,
 [class^='icon-']:before,
 [class*=' icon-']:before,
 .admin__menu .level-0 > a:before,
-.admin__menu .submenu-close:before {
+.admin__menu .submenu-close:before,
+.copyright .link-copyright:before {
   font-family: 'Icons';
   -webkit-font-smoothing: antialiased;
   font-style: normal;
@@ -1439,8 +1448,16 @@ table th.required:after {
   margin-top: -0.1rem;
   padding: 2rem;
 }
+body {
+  background-color: #f5f5f5;
+}
 .page-wrapper {
   padding-left: 8.8rem;
+  background-color: #ffffff;
+}
+.page-content {
+  padding-left: 3rem;
+  padding-right: 3rem;
 }
 /**
  * @category    design
@@ -1833,7 +1850,7 @@ table th.required:after {
   z-index: 500;
 }
 .page-footer {
-  background: #f5f5f5;
+  background-color: #f5f5f5;
   border-top: 0.1rem solid #dddddd;
   color: #777777;
   margin-top: auto;
@@ -1847,28 +1864,33 @@ table th.required:after {
   color: #ef672f;
 }
 .magento-version {
-  margin-top: 1rem;
+  margin-bottom: .5rem;
 }
-.magento-version b {
+.magento-version strong {
   color: #666666;
 }
 .copyright {
-  margin: .6rem 0;
+  margin-bottom: 0;
   position: relative;
 }
 .copyright .link-copyright {
-  background: url('../images/logo-admin.svg') no-repeat 0 0;
-  background-size: 88px 56px;
   display: inline-block;
-  height: 2.5rem;
-  margin-right: .2rem;
-  overflow: hidden;
+  margin-right: .5rem;
   text-decoration: none;
-  text-indent: 2.5rem;
-  vertical-align: middle;
-  width: 2.5rem;
+  vertical-align: top;
+}
+.copyright .link-copyright:hover:before {
+  color: #fd6e23;
+}
+.copyright .link-copyright:before {
+  color: #eb5202;
+  content: '\e606';
+  font-size: 2.5rem;
+  position: relative;
+  top: -0.2rem;
 }
 .footer-legal {
+  padding-top: 1rem;
   text-align: right;
 }
 .locale-switcher .label {

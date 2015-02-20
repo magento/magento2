@@ -8,10 +8,8 @@
 
 ?>
 <div class="locale-switcher col-m-5">
-    <label class="label" for="locale-switcher"><span><?php echo __('Interface Locale'); ?></span></label>
-    <div class="form-select-label">
-        <?php echo $block->getLocaleSelect(); ?>
-    </div>
+    <label class="label" for="footer_interface_locale"><span><?php echo __('Interface Locale'); ?></span></label>
+    <?php echo $block->getLocaleSelect(); ?>
     <script>
         (function () {
             'use strict';

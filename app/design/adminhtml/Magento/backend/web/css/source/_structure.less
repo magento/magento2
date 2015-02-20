@@ -7,9 +7,29 @@
 //  Structure
 //  _____________________________________________
 
+//
+//  Variables
+//  ---------------------------------------------
+
+@body__background-color: @color-white-smoke;
+
 @page-wrapper__indent-left: @menu__width;
+@page-wrapper__background-color: @color-white;
+
+@page-content__padding-horizontal: @content__indent;
+
+//
+
+body {
+    background-color: @body__background-color;
+}
 
 .page-wrapper {
     padding-left: @page-wrapper__indent-left;
+    background-color: @page-wrapper__background-color;
+}
 
+.page-content {
+    padding-left: @page-content__padding-horizontal;
+    padding-right: @page-content__padding-horizontal;
 }
