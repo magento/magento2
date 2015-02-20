@@ -1865,16 +1865,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.5",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "2d6851520bf0250f668307ab2fd28cbb0b35d2b9"
+                "reference": "3af00cf237289a406e7307e18e7ab0d92cf57038"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/2d6851520bf0250f668307ab2fd28cbb0b35d2b9",
-                "reference": "2d6851520bf0250f668307ab2fd28cbb0b35d2b9",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/3af00cf237289a406e7307e18e7ab0d92cf57038",
+                "reference": "3af00cf237289a406e7307e18e7ab0d92cf57038",
                 "shasum": ""
             },
             "require": {
@@ -1914,7 +1914,7 @@
                 }
             ],
             "description": "A script to automatically fix Symfony Coding Standard",
-            "time": "2015-02-18 19:35:59"
+            "time": "2015-02-03 21:20:51"
         },
         {
             "name": "league/climate",
@@ -3263,6 +3263,7 @@
         "phpmd/phpmd": 0
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": "~5.5.0|~5.6.0"
     },

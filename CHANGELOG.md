@@ -1,3 +1,38 @@
+0.42.0-beta9
+=============
+* Framework Improvements:
+  *  Layout Models are moved from Core module to appropriate modules
+  *  View components are moved from Core to Theme module
+  *  Rest of theme related configuration files are refactored
+  *  StoreManagerInterface is moved from Framework to App folder
+  *  ZF1 controller libraries are updated
+  *  Class definitions in multi-tenant mode are removed
+  *  DI configuration became more optimal: OM cached configuration uses the general pattern for all argument types in application
+  *  Varnish 4 configuration is updated
+  *  Layout Processing became more fast
+  *  HTML response minified
+  *  App Components and Specific Helper Components are moved from the Magento_Core Module
+* UI improvements:
+  *  Add to cart operation became asynchronous and doesn`t reload page (AJAX call)
+* Fixed Defects:
+  *  When Inline Translation is enabled, JQuery buttons for translate were broken
+  *  Base URL has invalid place inside Magento Admin Address on "Web Configuration" step of installation wizard
+  *  Inability of submit Product from keyboard while Product Creation
+  *  Sold products aren't displayed in Bestsellers
+  *  Compiled definitions can cause unexpected errors compared to runtime definitions
+* Accessibility improvements:
+  *  WAI-ARIA attributes are added to Frontend Layered Navigation and Customer Dropdown, Frontend Product Page Tabs, Frontend Cart Summary collapsible panels, Frontend forms and notifications, Frontend Checkout pages
+* Tests improvements:
+  *  Added mechanism of replacing 3-rd party credentials in functional tests
+  *  Update of end-to-end tests for create product, update product, promoted product, out of stock product, create product with new category, unassign products on category, create backend customer with injectable test
+* Various improvements:
+  *  JS template engine became unified on Backend and Frontend
+  *  Increased unit test coverage for Magento/Indexer module
+  *  Version number info became accessible at a public URL
+* GitHub requests:
+  *  [#1027](https://github.com/magento/magento2/issues/1027) -- Can't add new subctegory
+  *  [#921](https://github.com/magento/magento2/issues/921) -- Change resource ids from Magento_Adminhtml::* to Magento_Backend
+
 0.42.0-beta8
 =============
 * Various improvements:
