@@ -157,10 +157,10 @@
       <default_value xsi:type="string">This is short description for downloadable product</default_value>
     </field>
     <field name="downloadable" is_required="0" group="downloadable_information"/>
-    <field name="downloadable_items" is_required="0" group="downloadable_information" source="Magento\Downloadable\Test\Fixture\DownloadableProduct\Links">
+    <field name="downloadable_links" is_required="0" group="downloadable_information" source="Magento\Downloadable\Test\Fixture\DownloadableProduct\Links">
       <default_value xsi:type="array">
-                <item name="preset" xsi:type="string">default</item>
-            </default_value>
+          <item name="preset" xsi:type="string">default</item>
+      </default_value>
     </field>
     <field name="downloadable_sample" is_required="0" group="downloadable_information" source="Magento\Downloadable\Test\Fixture\DownloadableProduct\Samples">
       <default_value xsi:type="string">dafault</default_value>
