@@ -6,7 +6,7 @@
 
 namespace Magento\Downloadable\Test\Fixture\Cart;
 
-use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
+use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
@@ -26,7 +26,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
     {
         parent::__construct($product);
 
-        /** @var DownloadableProductInjectable $product */
+        /** @var DownloadableProduct $product */
         $checkoutDownloadableOptions = [];
         $checkoutData = $product->getCheckoutData();
         $downloadableOptions = $product->getDownloadableLinks();

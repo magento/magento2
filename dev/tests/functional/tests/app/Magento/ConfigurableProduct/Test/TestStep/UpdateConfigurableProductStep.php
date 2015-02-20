@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Test\TestStep;
 
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 
@@ -41,14 +41,14 @@ class UpdateConfigurableProductStep implements TestStepInterface
     /**
      * Old configurable product fixture.
      *
-     * @var ConfigurableProductInjectable
+     * @var ConfigurableProduct
      */
     protected $initialProduct;
 
     /**
      * New configurable product fixture.
      *
-     * @var ConfigurableProductInjectable
+     * @var ConfigurableProduct
      */
     protected $product;
 
@@ -63,15 +63,15 @@ class UpdateConfigurableProductStep implements TestStepInterface
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param CatalogProductEdit $catalogProductEdit
-     * @param ConfigurableProductInjectable $product
-     * @param ConfigurableProductInjectable $updatedProduct
+     * @param ConfigurableProduct $product
+     * @param ConfigurableProduct $updatedProduct
      * @param string $attributeTypeAction
      */
     public function __construct(
         FixtureFactory $fixtureFactory,
         CatalogProductEdit $catalogProductEdit,
-        ConfigurableProductInjectable $product,
-        ConfigurableProductInjectable $updatedProduct,
+        ConfigurableProduct $product,
+        ConfigurableProduct $updatedProduct,
         $attributeTypeAction
     ) {
         $this->fixtureFactory = $fixtureFactory;
@@ -97,14 +97,14 @@ class UpdateConfigurableProductStep implements TestStepInterface
     /**
      * Prepare new product for update.
      *
-     * @param ConfigurableProductInjectable $initialProduct
-     * @param ConfigurableProductInjectable $product
+     * @param ConfigurableProduct $initialProduct
+     * @param ConfigurableProduct $product
      * @param string $attributeTypeAction
-     * @return ConfigurableProductInjectable
+     * @return ConfigurableProduct
      */
     protected function prepareProduct(
-        ConfigurableProductInjectable $initialProduct,
-        ConfigurableProductInjectable $product,
+        ConfigurableProduct $initialProduct,
+        ConfigurableProduct $product,
         $attributeTypeAction
     ) {
         if ($attributeTypeAction == 'deleteAll') {
@@ -142,7 +142,7 @@ class UpdateConfigurableProductStep implements TestStepInterface
                 ->getCategories()[0];
         }
 
-        return $this->fixtureFactory->createByCode('configurableProductInjectable', ['data' => $dataProduct]);
+        return $this->fixtureFactory->createByCode('configurableProduct', ['data' => $dataProduct]);
     }
 
     /**
@@ -184,10 +184,10 @@ class UpdateConfigurableProductStep implements TestStepInterface
     /**
      * Update product.
      *
-     * @param ConfigurableProductInjectable $product
+     * @param ConfigurableProduct $product
      * @return void
      */
-    protected function updateProduct(ConfigurableProductInjectable $product)
+    protected function updateProduct(ConfigurableProduct $product)
     {
         $productForm = $this->catalogProductEdit->getProductForm();
         $productForm->openTab('variations');

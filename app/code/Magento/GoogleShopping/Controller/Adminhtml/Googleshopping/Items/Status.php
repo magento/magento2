@@ -11,7 +11,7 @@ class Status extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping
     /**
      * Retrieve background process status
      *
-     * @return \Zend_Controller_Response_Abstract
+     * @return \Magento\Framework\App\Response\Http
      */
     public function execute()
     {

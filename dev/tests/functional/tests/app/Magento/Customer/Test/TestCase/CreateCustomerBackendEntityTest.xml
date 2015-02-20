@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="CreateCustomerBackendEntityTest">
     <variation name="CreateCustomerBackendEntityTestVariation1" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">General customer without address</data>
+      <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
       <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
       <data name="customer/data/prefix" xsi:type="string">-</data>
@@ -32,6 +34,8 @@
       <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
     </variation>
     <variation name="CreateCustomerBackendEntityTestVariation2" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">Customer with prefix</data>
+      <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Admin</data>
       <data name="customer/data/group_id/dataSet" xsi:type="string">Wholesale</data>
       <data name="customer/data/prefix" xsi:type="string">M</data>
@@ -51,12 +55,13 @@
       <data name="address/data/region_id" xsi:type="string">-</data>
       <data name="address/data/postcode" xsi:type="string">-</data>
       <data name="address/data/telephone" xsi:type="string">-</data>
-      <data name="issue" xsi:type="string">Bug: MAGETWO-31689</data>
       <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerInGrid"/>
       <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessSaveMessage"/>
       <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
     </variation>
     <variation name="CreateCustomerBackendEntityTestVariation3" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">General customer from USA</data>
+      <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
       <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
       <data name="customer/data/prefix" xsi:type="string">-</data>
@@ -81,6 +86,8 @@
       <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
     </variation>
     <variation name="CreateCustomerBackendEntityTestVariation4" firstConstraint="assertCustomerInvalidEmail" method="test">
+      <data name="description" xsi:type="string">Retailer customer without address</data>
+      <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
       <data name="customer/data/group_id/dataSet" xsi:type="string">Retailer</data>
       <data name="customer/data/prefix" xsi:type="string">-</data>
@@ -103,6 +110,8 @@
       <constraint name="assertCustomerInvalidEmail"/>
     </variation>
     <variation name="CreateCustomerBackendEntityTestVariation5" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">General customer from Poland</data>
+      <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
       <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
       <data name="customer/data/prefix" xsi:type="string">-</data>
@@ -125,6 +134,32 @@
       <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerInGrid"/>
       <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessSaveMessage"/>
       <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
+    </variation>
+    <variation name="CreateCustomerBackendEntityTestVariation6" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12516: Create New Customer on Backend</data>
+      <data name="customerAction" xsi:type="string">saveAndContinue</data>
+      <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/prefix" xsi:type="string">-</data>
+      <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">-</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">-</data>
+      <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+      <data name="customer/data/dob" xsi:type="string">-</data>
+      <data name="customer/data/taxvat" xsi:type="string">-</data>
+      <data name="customer/data/gender" xsi:type="string">-</data>
+      <data name="address/data/firstname" xsi:type="string">-</data>
+      <data name="address/data/lastname" xsi:type="string">-</data>
+      <data name="address/data/street" xsi:type="string">-</data>
+      <data name="address/data/city" xsi:type="string">-</data>
+      <data name="address/data/country_id" xsi:type="string">-</data>
+      <data name="address/data/region_id" xsi:type="string">-</data>
+      <data name="address/data/postcode" xsi:type="string">-</data>
+      <data name="address/data/telephone" xsi:type="string">-</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerBackendFormTitle"/>
+      <constraint name="assertCustomerBackendFormTitle" prev="assertCustomerSuccessSaveMessage"/>
     </variation>
   </testCase>
 </config>

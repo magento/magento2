@@ -6,7 +6,7 @@
 
 namespace Magento\Reports\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Reports\Test\Page\Adminhtml\AbandonedCarts;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -28,10 +28,10 @@ class AssertAbandonedCartCustomerInfoResult extends AbstractConstraint
      *
      * @param AbandonedCarts $abandonedCarts
      * @param array $products
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return void
      */
-    public function processAssert(AbandonedCarts $abandonedCarts, $products, CustomerInjectable $customer)
+    public function processAssert(AbandonedCarts $abandonedCarts, $products, Customer $customer)
     {
         $abandonedCarts->open();
         $qty = 0;

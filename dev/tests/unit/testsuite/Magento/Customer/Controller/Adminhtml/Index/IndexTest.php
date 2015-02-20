@@ -63,7 +63,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
-            ->disableOriginalConstructor()
             ->setMethods(
                 [
                     'getQuery',
@@ -72,7 +71,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
                     'getActionName',
                     'setActionName',
                     'getParam',
-                    'getCookie'
+                    'getCookie',
+                    'isSecure',
                 ]
             )
             ->getMock();
