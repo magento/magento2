@@ -3,7 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Model\Cache;
+
+namespace Magento\Integration\Model\Cache;
 
 /**
  * System / Cache Management / Cache type "Integration Api Configuration"

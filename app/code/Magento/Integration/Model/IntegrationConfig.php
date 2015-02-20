@@ -3,9 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Integration\Model;
 
-use Magento\Webapi\Model\Cache\TypeIntegration;
+use Magento\Integration\Model\Cache\TypeIntegration;
+use Magento\Integration\Model\Config\Integration\Reader;
 
 /**
  * Integration Api Config Model.
@@ -34,10 +36,10 @@ class IntegrationConfig
     protected $_integrations;
 
     /**
-     * @param Cache\TypeIntegration $configCacheType
-     * @param Config\Integration\Reader $configReader
+     * @param TypeIntegration $configCacheType
+     * @param Reader $configReader
      */
-    public function __construct(Cache\TypeIntegration $configCacheType, Config\Integration\Reader $configReader)
+    public function __construct(TypeIntegration $configCacheType, Reader $configReader)
     {
         $this->_configCacheType = $configCacheType;
         $this->_configReader = $configReader;
