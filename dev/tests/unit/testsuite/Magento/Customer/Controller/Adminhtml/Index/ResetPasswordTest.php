@@ -341,7 +341,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         // Verify error message is set
         $this->messageManager->expects($this->once())
             ->method('addMessage')
-            ->with($this->equalTo($error));
+            ->with($error);
 
         $this->_testedObject->execute();
     }
@@ -353,8 +353,8 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
 
         $this->_request->expects($this->once())
             ->method('getParam')
-            ->with($this->equalTo('customer_id'), $this->equalTo(0))
-            ->will($this->returnValue($customerId));
+            ->with('customer_id', 0)
+            ->willReturn($customerId);
 
         // Setup a core exception to return
         $exception = new \Magento\Framework\Validator\ValidatorException($warningText);
@@ -365,13 +365,12 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         $this->_customerRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($customerId)
-            ->will($this->throwException($exception));
+            ->willThrowException($exception);
 
         // Verify Warning is converted to an Error and message text is set to exception text
         $this->messageManager->expects($this->once())
             ->method('addMessage')
-            ->with($this->equalTo(new \Magento\Framework\Message\Error($warningText))
-        );
+            ->with(new \Magento\Framework\Message\Error($warningText));
 
         $this->_testedObject->execute();
     }

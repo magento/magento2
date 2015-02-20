@@ -113,7 +113,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         $this->productRepository->expects($this->once())->method('getById')->will($this->returnValue($product));
         $this->itemFactory->expects($this->once())
             ->method('create')
-            ->will($this->throwException(new $exception('message')));
+            ->willThrowException(new $exception('message'));
         $this->massOperations->setFlag($this->flag);
         $this->massOperations->addProducts($products, 1);
     }
