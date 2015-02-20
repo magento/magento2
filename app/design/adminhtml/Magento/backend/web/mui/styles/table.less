@@ -226,6 +226,11 @@ table {
         margin: 0;
         padding: 0;
         width: 99%;
+        &:not([multiple]) {
+            .ie9 & {
+                padding-right: 0;
+            }
+        }
     }
 
     input.input-text {
