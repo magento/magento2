@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset;
 
 class SymlinkTest extends \PHPUnit_Framework_TestCase
@@ -61,7 +62,7 @@ class SymlinkTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['path/to/file', true],
-            [Asset\Source::TMP_MATERIALIZATION_DIR . '/path/to/file', false]
+            [DirectoryList::TMP_MATERIALIZATION_DIR . '/path/to/file', false]
         ];
     }
 }

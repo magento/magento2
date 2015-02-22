@@ -53,12 +53,14 @@ class Chain
      * @param \Magento\Framework\View\Asset\LocalInterface $asset
      * @param string $origContent
      * @param string $origContentType
+     * @param null $origAssetPath
+     * @param string $appMode
      */
     public function __construct(
         \Magento\Framework\View\Asset\LocalInterface $asset,
         $origContent,
         $origContentType,
-        $origPath,
+        $origAssetPath =  null,
         $appMode = \Magento\Framework\App\State::MODE_DEFAULT
     ) {
         $this->asset = $asset;
@@ -67,13 +69,12 @@ class Chain
         $this->origContentType = $origContentType;
         $this->contentType = $origContentType;
         $this->appMode = $appMode;
+        $this->targetContentType = $asset->getContentType();
+        $this->targetAssetPath = $asset->getPath();
 
         if ($appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
             $this->targetContentType = $this->origContentType;
-            $this->targetAssetPath = $origPath;
-        } else {
-            $this->targetContentType = $asset->getContentType();
-            $this->targetAssetPath = $asset->getPath();
+            $this->targetAssetPath = $origAssetPath;
         }
     }
 
