@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\View\Asset;
 
@@ -38,7 +39,7 @@ class Symlink implements StrategyInterface
     public function isSupported(Asset\LocalInterface $asset)
     {
         $sourceParts = explode('/', $asset->getSourceFile());
-        if (in_array(Asset\Source::TMP_MATERIALIZATION_DIR, $sourceParts)) {
+        if (in_array(DirectoryList::TMP_MATERIALIZATION_DIR, $sourceParts)) {
             return false;
         }
 
