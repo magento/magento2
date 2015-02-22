@@ -20,7 +20,7 @@
     <variation name="ViewedProductsReportEntityTestVariation2" firstConstraint="assertProductViewsReportTotalResult" method="test">
       <data name="description" xsi:type="string">view products on front and verify they all reflected in Month report</data>
       <data name="total" xsi:type="string">1, 1</data>
-      <data name="products" xsi:type="string">downloadableProductInjectable::default, bundleProduct::bundle_dynamic_product</data>
+      <data name="products" xsi:type="string">downloadableProduct::default, bundleProduct::bundle_dynamic_product</data>
       <data name="viewsReport/period_type" xsi:type="string">Month</data>
       <data name="viewsReport/from" xsi:type="string">m/d/Y</data>
       <data name="viewsReport/to" xsi:type="string">m/d/Y</data>
@@ -30,7 +30,7 @@
     <variation name="ViewedProductsReportEntityTestVariation3" firstConstraint="assertProductViewsReportTotalResult" method="test">
       <data name="description" xsi:type="string">view products on front and verify they all reflected in Day report</data>
       <data name="total" xsi:type="string">1, 1</data>
-      <data name="products" xsi:type="string">configurableProductInjectable::default, groupedProductInjectable::default</data>
+      <data name="products" xsi:type="string">configurableProduct::default, groupedProduct::default</data>
       <data name="viewsReport/period_type" xsi:type="string">Day</data>
       <data name="viewsReport/from" xsi:type="string">m/d/Y -1 day</data>
       <data name="viewsReport/to" xsi:type="string">m/d/Y +1 day</data>

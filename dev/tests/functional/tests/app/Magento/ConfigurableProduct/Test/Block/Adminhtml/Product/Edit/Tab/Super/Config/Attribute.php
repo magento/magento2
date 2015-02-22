@@ -159,7 +159,6 @@ class Attribute extends Form
     protected function createNewVariationSet(array $attribute)
     {
         $this->_rootElement->find($this->createNewVariationSet)->click();
-        $this->browser->switchToFrame(new Locator($this->newAttributeFrame));
 
         $newAttribute = $this->getEditAttributeForm();
         $newAttribute->getTabElement('properties')->fillFormTab($attribute);
@@ -268,12 +267,12 @@ class Attribute extends Form
     /**
      * Get attribute form block
      *
-     * @return \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\AttributeForm
+     * @return \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm
      */
     protected function getEditAttributeForm()
     {
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\AttributeForm',
+            'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm',
             ['element' => $this->browser->find($this->newAttribute)]
         );
     }

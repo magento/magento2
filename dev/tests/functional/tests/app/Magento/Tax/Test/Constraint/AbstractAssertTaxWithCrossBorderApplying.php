@@ -150,6 +150,7 @@ abstract class AbstractAssertTaxWithCrossBorderApplying extends AbstractConstrai
         $actualPrices['product_page_price'] =
             $this->catalogProductView->getViewBlock()->getPriceBlock()->getEffectivePrice();
         $this->catalogProductView->getViewBlock()->clickAddToCart();
+        $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
         return $actualPrices;
     }
 
@@ -162,6 +163,7 @@ abstract class AbstractAssertTaxWithCrossBorderApplying extends AbstractConstrai
      */
     protected function getCartPrice(CatalogProductSimple $product, $actualPrices)
     {
+        $this->checkoutCart->open();
         $actualPrices['cart_item_price_incl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getPriceInclTax();
         $actualPrices['cart_item_subtotal_incl_tax'] =

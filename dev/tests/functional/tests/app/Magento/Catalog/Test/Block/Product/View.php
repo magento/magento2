@@ -161,11 +161,8 @@ class View extends AbstractConfigureBlock
      */
     public function addToCart(FixtureInterface $product)
     {
-        $checkoutData = null;
-        if ($product instanceof InjectableFixture) {
-            /** @var CatalogProductSimple $product */
-            $checkoutData = $product->getCheckoutData();
-        }
+        /** @var CatalogProductSimple $product */
+        $checkoutData = $product->getCheckoutData();
 
         $this->fillOptions($product);
         if (isset($checkoutData['qty'])) {
@@ -351,7 +348,7 @@ class View extends AbstractConfigureBlock
      *
      * @return bool
      */
-    public function checkAddToCardButton()
+    public function isVisibleAddToCardButton()
     {
         return $this->_rootElement->find($this->addToCart, Locator::SELECTOR_CSS)->isVisible();
     }

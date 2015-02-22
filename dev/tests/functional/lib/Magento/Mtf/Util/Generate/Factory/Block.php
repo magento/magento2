@@ -44,7 +44,7 @@ class Block extends AbstractFactory
         $params = "\$element, \$driver = null, \$config = []";
 
         $this->factoryContent .= "\n    /**\n";
-        $this->factoryContent .= "     * @return \\{$item['class']}\n";
+        $this->factoryContent .= "     * @return {$item['class']}\n";
         $this->factoryContent .= "     */\n";
         $this->factoryContent .= "    public function get{$methodNameSuffix}({$params})\n";
         $this->factoryContent .= "    {";

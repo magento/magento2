@@ -44,7 +44,7 @@
       <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
     </variation>
     <variation name="AddProductsToShoppingCartEntityTestVariation5" firstConstraint="assertPriceInShoppingCart" method="test">
-      <data name="productsData" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="productsData" xsi:type="string">configurableProduct::default</data>
       <data name="cart/data/grand_total" xsi:type="string">516</data>
       <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
       <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
@@ -53,8 +53,9 @@
       <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
     </variation>
     <variation name="AddProductsToShoppingCartEntityTestVariation6" firstConstraint="assertPriceInShoppingCart" method="test">
-      <data name="productsData" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
+      <data name="productsData" xsi:type="string">downloadableProduct::with_two_separately_links</data>
       <data name="cart/data/grand_total" xsi:type="string">46</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-24195</data>
       <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
       <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
       <constraint name="assertSubtotalInShoppingCart" next="assertCartItemsOptions" prev="assertProductQtyInShoppingCart"/>
@@ -62,7 +63,7 @@
       <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
     </variation>
     <variation name="AddProductsToShoppingCartEntityTestVariation7" firstConstraint="assertPriceInShoppingCart" method="test">
-      <data name="productsData" xsi:type="string">groupedProductInjectable::three_simple_products</data>
+      <data name="productsData" xsi:type="string">groupedProduct::three_simple_products</data>
       <data name="cart/data/grand_total" xsi:type="string">1920</data>
       <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
       <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
@@ -71,8 +72,9 @@
       <constraint name="assertGrandTotalInShoppingCart" prev="assertCartItemsOptions"/>
     </variation>
     <variation name="AddProductsToShoppingCartEntityTestVariation8" firstConstraint="assertPriceInShoppingCart" method="test">
-      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
-      <data name="cart/data/grand_total" xsi:type="string">3272</data>
+      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProduct::with_two_separately_links, groupedProduct::three_simple_products, configurableProduct::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
+      <data name="cart/data/grand_total" xsi:type="string">3249</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-24195</data>
       <constraint name="assertPriceInShoppingCart" next="assertProductQtyInShoppingCart"/>
       <constraint name="assertProductQtyInShoppingCart" next="assertSubtotalInShoppingCart" prev="assertPriceInShoppingCart"/>
       <constraint name="assertSubtotalInShoppingCart" next="assertCartItemsOptions" prev="assertProductQtyInShoppingCart"/>
