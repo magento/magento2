@@ -62,6 +62,7 @@ class Source
      * @param PreProcessor\Pool $preProcessorPool
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
+     * @param string $appMode
      */
     public function __construct(
         PreProcessor\Cache $cache,
@@ -229,6 +230,11 @@ class Source
         return $dir->getAbsolutePath($asset->getPath());
     }
 
+    /**
+     * @param \Magento\Framework\View\Asset\LocalInterface $asset
+     *
+     * @return bool|string
+     */
     public function findRelativeSourceFilePath(LocalInterface $asset)
     {
         $sourceFile = $this->findSourceFile($asset);

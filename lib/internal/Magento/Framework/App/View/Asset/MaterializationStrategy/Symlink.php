@@ -17,8 +17,8 @@ class Symlink implements StrategyInterface
      *
      * @param WriteInterface $rootDir
      * @param WriteInterface $targetDir
-     * @param $sourcePath
-     * @param $destinationPath
+     * @param string $sourcePath
+     * @param string $destinationPath
      * @return bool
      */
     public function publishFile(

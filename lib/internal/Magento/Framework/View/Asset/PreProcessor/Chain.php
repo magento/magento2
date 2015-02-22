@@ -47,6 +47,9 @@ class Chain
      */
     private $appMode;
 
+    /**
+     * @var null|string
+     */
     private $targetAssetPath;
 
     /**
@@ -60,7 +63,7 @@ class Chain
         \Magento\Framework\View\Asset\LocalInterface $asset,
         $origContent,
         $origContentType,
-        $origAssetPath =  null,
+        $origAssetPath = null,
         $appMode = \Magento\Framework\App\State::MODE_DEFAULT
     ) {
         $this->asset = $asset;

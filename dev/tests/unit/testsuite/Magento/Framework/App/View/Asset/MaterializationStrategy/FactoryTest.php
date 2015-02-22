@@ -54,7 +54,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->with($asset)
             ->willReturn(false);
 
-        $supportedStrategy = $this->getMockBuilder('Magento\Framework\App\View\Asset\MaterializationStrategy\StrategyInterface')
+        $supportedStrategy = $this->getMockBuilder(
+            'Magento\Framework\App\View\Asset\MaterializationStrategy\StrategyInterface'
+        )
             ->setMethods([])
             ->getMock();
         $supportedStrategy->expects($this->once())

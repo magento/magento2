@@ -72,6 +72,8 @@ class Renderer
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param string $appMode
      */
     public function __construct(
         Config $pageConfig,
@@ -402,7 +404,7 @@ class Renderer
     /**
      * Injecting less.js compiler
      *
-     * @param $resultGroups
+     * @param array $resultGroups
      *
      * @return mixed
      */
