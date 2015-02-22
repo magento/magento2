@@ -17,7 +17,7 @@ class Renderer
     /**
      * @var array
      */
-    protected $assetTypeOrder = ['css', 'less', 'ico', 'js'];
+    protected $assetTypeOrder = ['css', 'ico', 'js'];
 
     /**
      * @var \Magento\Framework\View\Page\Config
