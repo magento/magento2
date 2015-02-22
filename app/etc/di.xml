@@ -181,9 +181,14 @@
             <argument name="mode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
         </arguments>
     </type>
-    <type name="\Magento\Framework\View\Asset\Source">
+    <type name="Magento\Framework\View\Asset\Source">
         <arguments>
-            <argument name="appmode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
+            <argument name="appMode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Page\Config\Renderer">
+        <arguments>
+            <argument name="appMode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Arguments\ValidationState">

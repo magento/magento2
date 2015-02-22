@@ -55,6 +55,16 @@ class Renderer
     protected $urlBuilder;
 
     /**
+     * @var string
+     */
+    private $appMode;
+
+    /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
+    private $assetRepo;
+
+    /**
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\View\Asset\MinifyService $assetMinifyService
      * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
@@ -70,7 +80,9 @@ class Renderer
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Stdlib\String $string,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        $appMode = \Magento\Framework\App\State::MODE_DEFAULT
     ) {
         $this->pageConfig = $pageConfig;
         $this->assetMinifyService = $assetMinifyService;
@@ -79,6 +91,8 @@ class Renderer
         $this->escaper = $escaper;
         $this->string = $string;
         $this->logger = $logger;
+        $this->assetRepo = $assetRepo;
+        $this->appMode = $appMode;
     }
 
     /**
@@ -219,12 +233,11 @@ class Renderer
     public function renderAssets()
     {
         $resultGroups = array_fill_keys($this->assetTypeOrder, '');
+        // less js have to be injected before any *.js in developer mode
+        $resultGroups = $this->renderLessJsScripts($resultGroups);
         /** @var $group \Magento\Framework\View\Asset\PropertyGroup */
         foreach ($this->pageConfig->getAssetCollection()->getGroups() as $group) {
             $type = $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE);
-            if ($type == 'js') {
-                $resultGroups[$type] .= $this->renderLessJsInclude();
-            }
             if (!isset($resultGroups[$type])) {
                 $resultGroups[$type] = '';
             }
@@ -365,18 +378,16 @@ class Renderer
     {
         $result = '';
         try {
-            /** @var $asset \Magento\Framework\View\Asset\File */
             foreach ($assets as $asset) {
-
-                if (true) {
+                /** @var $asset \Magento\Framework\View\Asset\File */
+                if ($this->appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
                     if ($asset->getSourceUrl() != $asset->getUrl()) {
                         $attributes = $this->addDefaultAttributes('less', []);
                         $groupTemplate = $this->getAssetTemplate('less', $attributes);
                         $result .= sprintf($groupTemplate, $asset->getSourceUrl());
                     } else {
-                        $result .= sprintf($template, $asset->getSourceUrl());
+                        $result .= sprintf($template, $asset->getUrl());
                     }
-
                 } else {
                     $result .= sprintf($template, $asset->getUrl());
                 }
@@ -388,17 +399,23 @@ class Renderer
         return $result;
     }
 
-    private function renderLessJsInclude()
+    /**
+     * Injecting less.js compiler
+     *
+     * @param $resultGroups
+     *
+     * @return mixed
+     */
+    private function renderLessJsScripts($resultGroups)
     {
-        $result = '';
-        $result .= '<script>
-      less = {
-        env: "production",
-        async: false,
-        fileAsync: false
-      };
-    </script>' ;
-        $result .= sprintf('<script src="%s"></script>' . "\n", '//cdnjs.cloudflare.com/ajax/libs/less.js/2.3.1/less.min.js') ;
-        return $result;
+        if (\Magento\Framework\App\State::MODE_DEVELOPER == $this->appMode) {
+            // less js have to be injected before any *.js in developer mode
+            $lessJsConfigAsset = $this->assetRepo->createAsset('less/config.less.js');
+            $resultGroups['js'] .= sprintf('<script src="%s"></script>' . "\n", $lessJsConfigAsset->getUrl()) ;
+            $lessJsAsset = $this->assetRepo->createAsset('less/less.min.js');
+            $resultGroups['js'] .= sprintf('<script src="%s"></script>' . "\n", $lessJsAsset->getUrl()) ;
+        }
+
+        return $resultGroups;
     }
 }

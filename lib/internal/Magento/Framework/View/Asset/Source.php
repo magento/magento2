@@ -94,10 +94,7 @@ class Source
             return false;
         }
         list($dirCode, $path) = $result;
-        return [
-            'abs' => $this->filesystem->getDirectoryRead($dirCode)->getAbsolutePath($path),
-            'relativePath' => $path
-        ];
+        return $this->filesystem->getDirectoryRead($dirCode)->getAbsolutePath($path);
     }
 
     /**
@@ -146,7 +143,7 @@ class Source
             $this->rootDir->readFile($path),
             $this->getContentType($path),
             $path,
-            'developer'
+            $this->appMode
         );
         $preProcessors = $this->preProcessorPool
             ->getPreProcessors($chain->getOrigContentType(), $chain->getTargetContentType());
@@ -232,7 +229,7 @@ class Source
         return $dir->getAbsolutePath($asset->getPath());
     }
 
-    public function findRelativeSourceFile(LocalInterface $asset)
+    public function findRelativeSourceFilePath(LocalInterface $asset)
     {
         $sourceFile = $this->findSourceFile($asset);
         if (!$sourceFile) {

@@ -101,7 +101,7 @@ class File implements MergeableInterface
     public function getRelativeSourceFilePath()
     {
         $path = $this->filePath;
-        if  (strpos($this->source->findRelativeSourceFile($this), 'less'))  {
+        if  (strpos($this->source->findRelativeSourceFilePath($this), 'less'))  {
             $path = str_replace('.css', '.less', $this->filePath);
         }
         $result = '';
@@ -130,9 +130,7 @@ class File implements MergeableInterface
     public function getSourceFile()
     {
         if (null === $this->resolvedFile) {
-            $result = $this->source->getFile($this);
-            $this->resolvedFile = $result['abs'];
-            $this->filePath = $result['relativePath'];
+            $this->resolvedFile = $this->source->getFile($this);
             if (false === $this->resolvedFile) {
                 throw new File\NotFoundException("Unable to resolve the source file for '{$this->getPath()}'");
             }
