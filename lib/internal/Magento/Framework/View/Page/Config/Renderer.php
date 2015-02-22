@@ -347,7 +347,6 @@ class Renderer
                 break;
 
             case 'css':
-            case 'less':
             default:
                 $groupTemplate = '<link ' . $attributes . ' href="%s" />' . "\n";
                 break;
@@ -386,7 +385,7 @@ class Renderer
                     if ($asset->getSourceUrl() != $asset->getUrl()) {
                         $attributes = $this->addDefaultAttributes('less', []);
                         $groupTemplate = $this->getAssetTemplate('less', $attributes);
-                        $result .= sprintf($groupTemplate, $asset->getSourceUrl());
+                        $result .= sprintf($groupTemplate, $asset->getUrl());
                     } else {
                         $result .= sprintf($template, $asset->getUrl());
                     }
