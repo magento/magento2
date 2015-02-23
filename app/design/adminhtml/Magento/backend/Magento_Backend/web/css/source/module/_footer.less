@@ -47,7 +47,7 @@
     }
 }
 
-// Copyright
+//  Copyright
 .copyright {
     margin-bottom: 0;
     position: relative;
@@ -77,10 +77,21 @@
     text-align: right;
 }
 
-// Locale switcher
+//  Locale switcher
 .locale-switcher {
     .label {
         display: block;
         margin-bottom: 1rem;
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .footer-legal {
+        padding-top: 3rem;
+        text-align: left;
     }
 }
