@@ -31,7 +31,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->_model->setEmail('co@co.co');
         $this->_model->setPostcode('12345');
         $this->_model->setLastname('LastName');
-        $this->_model->setStreet('Street');
+        $this->_model->setStreet(['Street']);
         $this->_model->setCity('City');
         $this->_model->setTelephone('123-45-67');
         $this->_model->setCountryId(1);

@@ -484,7 +484,8 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     public function getItemsCollection()
     {
         if (!$this->hasData(InvoiceInterface::ITEMS)) {
-            $this->setItems($this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId()));
+            $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
+            $this->setItems($collection->getItems());
 
             if ($this->getId()) {
                 foreach ($this->getItems() as $item) {
