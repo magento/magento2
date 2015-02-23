@@ -141,14 +141,17 @@
             font-size: @menu-item__font-size;
             letter-spacing: .025em;
             min-height: 6.2rem;
+            overflow: hidden;
             padding-left: .5rem;
             padding-right: .5rem;
             padding-top: 1.2rem;
             position: relative;
             text-align: center;
             text-decoration: none;
+            text-overflow: ellipsis;
             text-transform: uppercase;
             transition: background-color .1s linear;
+            white-space: nowrap;
             z-index: @menu__z-index;
             &:focus {
                 box-shadow: none;
