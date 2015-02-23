@@ -158,9 +158,9 @@ class Timezone implements TimezoneInterface
                 \IntlDateFormatter::SHORT,
                 $timezone
             );
-            $date = $formatter->parse($date);
+            $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         }
-        return new \DateTime('@' . $date);
+        return new \DateTime('@' . $date, new \DateTimeZone($timezone));
     }
 
     /**
