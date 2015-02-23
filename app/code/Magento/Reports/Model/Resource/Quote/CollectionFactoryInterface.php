@@ -13,5 +13,5 @@ interface CollectionFactoryInterface
      * @param array $data
      * @return \Magento\Reports\Model\Resource\Quote\Collection
      */
-    public function create(array $data = array());
+    public function create(array $data = []);
 }

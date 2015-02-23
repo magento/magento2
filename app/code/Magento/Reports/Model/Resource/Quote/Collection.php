@@ -335,7 +335,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         );
         $customersData = $select->getAdapter()->fetchAll($this->getCustomerNames($select));
 
-        foreach($this->getItems() as $id => $item) {
+        foreach($this->getItems() as $item) {
             $item->setData(array_merge($item->getData(), current($customersData)));
             next($customersData);
         }

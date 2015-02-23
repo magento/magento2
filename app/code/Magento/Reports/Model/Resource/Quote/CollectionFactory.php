@@ -41,7 +41,7 @@ class CollectionFactory implements \Magento\Reports\Model\Resource\Quote\Collect
     /**
      *{ @inheritdoc)
      */
-    public function create(array $data = array())
+    public function create(array $data = [])
     {
         return $this->_objectManager->create($this->_instanceName, $data);
     }
