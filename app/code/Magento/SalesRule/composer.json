@@ -7,7 +7,6 @@
         "magento/module-rule": "0.42.0-beta6",
         "magento/module-catalog": "0.42.0-beta6",
         "magento/module-sales": "0.42.0-beta6",
-        "magento/module-eav": "0.42.0-beta6",
         "magento/module-core": "0.42.0-beta6",
         "magento/module-backend": "0.42.0-beta6",
         "magento/module-customer": "0.42.0-beta6",

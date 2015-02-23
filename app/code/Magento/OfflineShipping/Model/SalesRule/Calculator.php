@@ -11,7 +11,10 @@
  */
 namespace Magento\OfflineShipping\Model\SalesRule;
 
-class Calculator extends \Magento\SalesRule\Model\Validator
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Validator;
+
+class Calculator extends Validator
 {
     /**
      * Quote item free shipping ability check
@@ -27,7 +30,7 @@ class Calculator extends \Magento\SalesRule\Model\Validator
         $item->setFreeShipping(false);
 
         foreach ($this->_getRules() as $rule) {
-            /* @var $rule \Magento\SalesRule\Model\Rule */
+            /* @var $rule Rule */
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;
             }
