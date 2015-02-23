@@ -86,12 +86,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new Factory($this->objectManager, []);
 
-        $this->setExpectedException('LogicException', __('No materialization strategy is supported'));
+        $this->setExpectedException('LogicException', 'No materialization strategy is supported');
         $factory->create($asset);
     }
 
     /**
-     * @return Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return Asset\LocalInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private function getAsset()
     {

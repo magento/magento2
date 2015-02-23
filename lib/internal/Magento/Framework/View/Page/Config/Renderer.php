@@ -11,6 +11,8 @@ use Magento\Framework\View\Page\Config;
 
 /**
  * Page config Renderer model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Renderer
 {

@@ -60,6 +60,6 @@ class Factory
             }
         }
 
-        throw new \LogicException(__('No materialization strategy is supported'));
+        throw new \LogicException('No materialization strategy is supported');
     }
 }
