@@ -21,8 +21,8 @@
 
 @menu-item__color: @color-gray65-lighten;
 @menu-item__font-size: 1rem;
-@menu-item__active__color: @color-ivory;
 @menu-item__active__background-color: @color-brownie-almost;
+@menu-item__active__color: @color-ivory;
 @menu-item-icon__height: 2.2rem;
 
 @menu-line-before__background-color: @color-brownie-vanilla;
@@ -83,8 +83,8 @@
         .logo-img {
             height: @menu-logo-img__height;
             transition: -webkit-filter .2s linear,
-            filter .2s linear,
-            transform .1s linear;
+                                filter .2s linear,
+                        transform .1s linear;
             width: @menu-logo-img__width;
         }
     }
@@ -106,6 +106,7 @@
                 //  Separator between logo and menu
                 &:after {
                     @_menu-separator__width: 68%;
+
                     background-color: @menu-line-before__background-color;
                     content: '';
                     display: block;
@@ -229,6 +230,7 @@
         .parent {
             margin-bottom: 4.5rem;
             //  Section title
+            //  ToDo UI: Should be not a link, strong instead and have a classname
             > a {
                 color: @submenu-section-label__color;
                 display: block;
@@ -287,6 +289,7 @@
         > a {
             &:before {
                 @_menu-item-dashboard__size: 1.8rem;
+
                 content: @icon-dashboard__content;
                 font-size: @_menu-item-dashboard__size;
                 padding-top: @menu-item-icon__height - @_menu-item-dashboard__size;
@@ -314,6 +317,7 @@
         > a {
             &:before {
                 @_menu-item-dashboard__size: 2.6rem;
+
                 content: @icon-customers__content;
                 font-size: @_menu-item-dashboard__size;
                 position: relative;
@@ -326,6 +330,7 @@
         > a {
             &:before {
                 @_menu-item-dashboard__size: 2rem;
+
                 content: @icon-promotions__content;
                 font-size: @_menu-item-dashboard__size;
                 padding-top: @menu-item-icon__height - @_menu-item-dashboard__size;
@@ -337,6 +342,7 @@
         > a {
             &:before {
                 @_menu-item-dashboard__size: 2.4rem;
+
                 content: @icon-cms__content;
                 font-size: @_menu-item-dashboard__size;
                 position: relative;
@@ -357,6 +363,7 @@
         > a {
             &:before {
                 @_menu-item-dashboard__size: 1.9rem;
+
                 content: @icon-stores__content;
                 font-size: @_menu-item-dashboard__size;
                 padding-top: @menu-item-icon__height - @_menu-item-dashboard__size;

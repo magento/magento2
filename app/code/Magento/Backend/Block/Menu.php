@@ -315,7 +315,7 @@ class Menu extends \Magento\Backend\Block\Template
      */
     public function renderMenu($menu, $level = 0)
     {
-        $output = '<ul ' . (0 == $level ? 'id="nav"' : '') . ' >';
+        $output = '<ul ' . (0 == $level ? 'id="nav" role="menubar"' : '') . ' >';
 
         /** @var $menuItem \Magento\Backend\Model\Menu\Item  */
         foreach ($this->_getMenuIterator($menu) as $menuItem) {
@@ -326,7 +326,7 @@ class Menu extends \Magento\Backend\Block\Template
                 $level
             ) . '"' . $this->getUiId(
                 $menuItem->getId()
-            ) . '>';
+            ) . 'role="menuitem">';
 
             $output .= $this->_renderAnchor($menuItem, $level);
 
@@ -409,11 +409,10 @@ class Menu extends \Magento\Backend\Block\Template
         $colStops = null;
         if ($level == 0 && $limit) {
             $colStops = $this->_columnBrake($menuItem->getChildren(), $limit);
-        }
-        if (!($level == 1 && $limit)) {
             $output .= '<strong class="submenu-title">' . $this->_getAnchorLabel($menuItem) . '</strong>';
             $output .= '<button class="submenu-close _close"></button>';
         }
+
         $output .= $this->renderNavigation($menuItem->getChildren(), $level + 1, $limit, $colStops);
         $output .= '</div>';
         return $output;
@@ -431,7 +430,7 @@ class Menu extends \Magento\Backend\Block\Template
     public function renderNavigation($menu, $level = 0, $limit = 0, $colBrakes = [])
     {
         $itemPosition = 1;
-        $outputStart = '<ul ' . (0 == $level ? 'id="nav"' : '') . ' >';
+        $outputStart = '<ul ' . (0 == $level ? 'id="nav" role="menubar"' : 'role="menu"') . ' >';
         $output = '';
 
         /** @var $menuItem \Magento\Backend\Model\Menu\Item  */
@@ -441,7 +440,7 @@ class Menu extends \Magento\Backend\Block\Template
             $itemClass = str_replace('_', '-', strtolower($itemName));
 
             if (count($colBrakes) && $colBrakes[$itemPosition]['colbrake']) {
-                $output .= '</ul></li><li class="column"><ul>';
+                $output .= '</ul></li><li class="column"><ul role="menu">';
             }
 
             $output .= '<li ' . $this->getUiId(
@@ -449,7 +448,7 @@ class Menu extends \Magento\Backend\Block\Template
             ) . ' class="item-' . $itemClass . ' ' . $this->_renderItemCssClass(
                 $menuItem,
                 $level
-            ) . '">' . $this->_renderAnchor(
+            ) . '" role="menu-item">' . $this->_renderAnchor(
                 $menuItem,
                 $level
             ) . $this->_addSubMenu(
@@ -461,7 +460,7 @@ class Menu extends \Magento\Backend\Block\Template
         }
 
         if (count($colBrakes) && $limit) {
-            $output = '<li class="column"><ul>' . $output . '</ul></li>';
+            $output = '<li class="column"><ul role="menu">' . $output . '</ul></li>';
         }
 
         return $outputStart . $output . '</ul>';
