@@ -70,10 +70,10 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                         ],
                     ],
                 ],
-                'qty' => 2,
+                'qty' => 1,
                 'cartItem' => [
                     'price' => 756,
-                    'qty' => 2,
+                    'qty' => 1,
                     'subtotal' => 756,
                 ],
             ],
@@ -300,6 +300,19 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             'value' => [
                                 'name' => 'product_100_dollar',
                             ]
+                        ],
+                    ],
+                ],
+            ],
+            'required_two_fixed_options' => [
+                'options' => [
+                    'bundle_options' => [
+                        [
+                            'title' => 'Drop-down Option',
+                            'type' => 'Drop-down',
+                            'value' => [
+                                'name' => 'Test simple product',
+                            ],
                         ],
                     ],
                 ],

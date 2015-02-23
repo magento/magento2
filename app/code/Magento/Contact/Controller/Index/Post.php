@@ -16,7 +16,7 @@ class Post extends \Magento\Contact\Controller\Index
      */
     public function execute()
     {
-        $post = $this->getRequest()->getPost();
+        $post = $this->getRequest()->getPostValue();
         if (!$post) {
             $this->_redirect('*/*/');
             return;

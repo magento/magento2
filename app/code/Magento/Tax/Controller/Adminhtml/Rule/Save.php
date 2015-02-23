@@ -14,7 +14,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rule
      */
     public function execute()
     {
-        $postData = $this->getRequest()->getPost();
+        $postData = $this->getRequest()->getPostValue();
         if ($postData) {
             $postData['calculate_subtotal'] = $this->getRequest()->getParam('calculate_subtotal', 0);
             $taxRule = $this->populateTaxRule($postData);

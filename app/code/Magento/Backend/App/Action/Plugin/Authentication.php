@@ -163,7 +163,7 @@ class Authentication
         $postLogin = $request->getPost('login');
         $username = isset($postLogin['username']) ? $postLogin['username'] : '';
         $password = isset($postLogin['password']) ? $postLogin['password'] : '';
-        $request->setPost('login', null);
+        $request->setPostValue('login', null);
 
         try {
             $this->_auth->login($username, $password);

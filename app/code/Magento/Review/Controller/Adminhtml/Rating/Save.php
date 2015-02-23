@@ -17,7 +17,7 @@ class Save extends \Magento\Review\Controller\Adminhtml\Rating
     {
         $this->_initEnityId();
 
-        if ($this->getRequest()->getPost()) {
+        if ($this->getRequest()->getPostValue()) {
             try {
                 $ratingModel = $this->_objectManager->create('Magento\Review\Model\Rating');
 
@@ -74,7 +74,7 @@ class Save extends \Magento\Review\Controller\Adminhtml\Rating
                 $this->_objectManager->get(
                     'Magento\Backend\Model\Session'
                 )->setRatingData(
-                    $this->getRequest()->getPost()
+                    $this->getRequest()->getPostValue()
                 );
                 $this->_redirect('review/rating/edit', ['id' => $this->getRequest()->getParam('id')]);
                 return;

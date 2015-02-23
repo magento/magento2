@@ -58,6 +58,10 @@ class SuggestElement extends SimpleElement
         $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
         $this->clear();
+
+        if ($value == '') {
+            return;
+        }
         foreach (str_split($value) as $symbol) {
             $input = $this->find($this->suggest);
             $input->click();

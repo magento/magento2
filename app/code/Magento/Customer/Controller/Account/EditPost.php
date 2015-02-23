@@ -122,7 +122,7 @@ class EditPost extends \Magento\Customer\Controller\Account
             }
 
             if ($this->messageManager->getMessages()->getCount() > 0) {
-                $this->_getSession()->setCustomerFormData($this->getRequest()->getPost());
+                $this->_getSession()->setCustomerFormData($this->getRequest()->getPostValue());
                 $resultRedirect->setPath('*/*/edit');
                 return $resultRedirect;
             }

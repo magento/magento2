@@ -15,7 +15,7 @@ class Post extends \Magento\Review\Controller\Adminhtml\Product
     {
         $productId = $this->getRequest()->getParam('product_id', false);
 
-        if ($data = $this->getRequest()->getPost()) {
+        if ($data = $this->getRequest()->getPostValue()) {
             /** @var \Magento\Store\Model\StoreManagerInterface $storeManagerInterface */
             $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
             if ($storeManager->hasSingleStore()) {

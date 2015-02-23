@@ -48,7 +48,7 @@ class AssertTaxCalculationAfterCheckoutExcludingIncludingTax extends
      */
     public function getOrderTotals($actualPrices)
     {
-        $viewBlock = $this->orderView->getOrderViewBlock();
+        $viewBlock = $this->salesOrderView->getSalesOrderViewBlock();
         $actualPrices['subtotal_excl_tax'] = $viewBlock->getSubtotalExclTax();
         $actualPrices['subtotal_incl_tax'] = $viewBlock->getSubtotalInclTax();
         $actualPrices['discount'] = $viewBlock->getDiscount();

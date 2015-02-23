@@ -53,7 +53,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                 }
             }
             /** @var array $data */
-            $data = $this->getRequest()->getPost();
+            $data = $this->getRequest()->getPostValue();
             if (!empty($data)) {
                 if (!isset($data['resource'])) {
                     $integrationData['resource'] = [];

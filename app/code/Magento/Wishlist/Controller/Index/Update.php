@@ -64,7 +64,7 @@ class Update extends Action\Action implements IndexInterface
             throw new NotFoundException();
         }
 
-        $post = $this->getRequest()->getPost();
+        $post = $this->getRequest()->getPostValue();
         if ($post && isset($post['description']) && is_array($post['description'])) {
             $updatedItems = 0;
 

@@ -157,7 +157,7 @@ class Product extends \Magento\Framework\App\Action\Action
                 $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
                 $this->_customerSession->setBeforeAuthUrl($this->_url->getUrl('*/*/*', ['_current' => true]));
                 $this->_reviewSession->setFormData(
-                    $request->getPost()
+                    $request->getPostValue()
                 )->setRedirectUrl(
                     $this->_redirect->getRefererUrl()
                 );
