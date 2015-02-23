@@ -21,45 +21,23 @@ class InterfaceGenerator extends \Magento\Framework\Code\Generator\ClassGenerato
                 return $output;
             }
         }
-
         $output = '';
         if (!$this->getName()) {
             return $output;
         }
 
-        if (null !== ($namespace = $this->getNamespaceName())) {
-            $output .= 'namespace ' . $namespace . ';' . self::LINE_FEED . self::LINE_FEED;
-        }
-
-        $uses = $this->getUses();
-        if (!empty($uses)) {
-            foreach ($uses as $use) {
-                $output .= 'use ' . $use . ';' . self::LINE_FEED;
-            }
-            $output .= self::LINE_FEED;
-        }
-
+        $output .= $this->generateDirectives();
         if (null !== ($docBlock = $this->getDocBlock())) {
             $docBlock->setIndentation('');
             $output .= $docBlock->generate();
         }
-
         $output .= 'interface ' . $this->getName();
-
         if (!empty($this->extendedClass)) {
             $output .= ' extends ' . $this->extendedClass;
         }
 
-        $output .= self::LINE_FEED . '{' . self::LINE_FEED . self::LINE_FEED;
-
-        $methods = $this->getMethods();
-        if (!empty($methods)) {
-            foreach ($methods as $method) {
-                $output .= $method->generate() . self::LINE_FEED;
-            }
-        }
-
-        $output .= self::LINE_FEED . '}' . self::LINE_FEED;
+        $output .= self::LINE_FEED . '{' . self::LINE_FEED . self::LINE_FEED
+            . $this->generateMethods() . self::LINE_FEED . '}' . self::LINE_FEED;
 
         return $output;
     }
@@ -72,5 +50,45 @@ class InterfaceGenerator extends \Magento\Framework\Code\Generator\ClassGenerato
     protected function createMethodGenerator()
     {
         return new \Magento\Framework\Code\Generator\InterfaceMethodGenerator();
+    }
+
+    /**
+     * Generate methods.
+     *
+     * @return string
+     */
+    protected function generateMethods()
+    {
+        $output = '';
+        $methods = $this->getMethods();
+        if (!empty($methods)) {
+            foreach ($methods as $method) {
+                $output .= $method->generate() . self::LINE_FEED;
+            }
+        }
+        return $output;
+    }
+
+    /**
+     * Generate directives.
+     *
+     * @return string
+     */
+    protected function generateDirectives()
+    {
+        $output = '';
+        $namespace = $this->getNamespaceName();
+        if (null !== $namespace) {
+            $output .= 'namespace ' . $namespace . ';' . self::LINE_FEED . self::LINE_FEED;
+        }
+
+        $uses = $this->getUses();
+        if (!empty($uses)) {
+            foreach ($uses as $use) {
+                $output .= 'use ' . $use . ';' . self::LINE_FEED;
+            }
+            $output .= self::LINE_FEED;
+        }
+        return $output;
     }
 }

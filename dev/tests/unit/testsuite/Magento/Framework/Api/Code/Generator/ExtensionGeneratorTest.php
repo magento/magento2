@@ -85,7 +85,7 @@ class ExtensionGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             in_array(
                 'Invalid extension name [\Magento\Catalog\Api\Data\ProductInterface].'
-                    . ' Use \Magento\Catalog\Api\Data\ProductExtension',
+                . ' Use \Magento\Catalog\Api\Data\ProductExtension',
                 $model->getErrors()
             ),
             'Expected validation error message is missing.'
@@ -96,6 +96,7 @@ class ExtensionGeneratorTest extends \PHPUnit_Framework_TestCase
      * Check if generated code matches provided expected result.
      *
      * @param string $expectedResult
+     * @return void
      */
     protected function validateGeneratedCode($expectedResult)
     {

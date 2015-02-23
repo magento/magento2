@@ -66,7 +66,7 @@ class ExtensionInterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             in_array(
                 'Invalid extension interface name [\Magento\Catalog\Api\Data\ProductInterface].'
-                    . ' Use \Magento\Catalog\Api\Data\ProductExtensionInterface',
+                . ' Use \Magento\Catalog\Api\Data\ProductExtensionInterface',
                 $model->getErrors()
             ),
             'Expected validation error message is missing.'

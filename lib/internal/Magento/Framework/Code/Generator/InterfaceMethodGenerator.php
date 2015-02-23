@@ -15,22 +15,7 @@ class InterfaceMethodGenerator extends \Zend\Code\Generator\MethodGenerator
      */
     public function generate()
     {
-        if ($this->getVisibility() != self::VISIBILITY_PUBLIC) {
-            throw new \LogicException(
-                "Interface method visibility can only be 'public'. Method name: '{$this->getName()}'"
-            );
-        }
-        if ($this->isFinal()) {
-            throw new \LogicException(
-                "Interface method cannot be marked as 'final'. Method name: '{$this->getName()}'"
-            );
-        }
-        if ($this->isAbstract()) {
-            throw new \LogicException(
-                "'abstract' modifier cannot be used for interface method. Method name: '{$this->getName()}'"
-            );
-        }
-
+        $this->validateMethodModifiers();
         $output = '';
         if (!$this->getName()) {
             return $output;
@@ -60,5 +45,30 @@ class InterfaceMethodGenerator extends \Zend\Code\Generator\MethodGenerator
         $output .= ');' . self::LINE_FEED;
 
         return $output;
+    }
+
+    /**
+     * Ensure that used method modifiers are allowed for interface methods.
+     *
+     * @throws \LogicException
+     * @return void
+     */
+    protected function validateMethodModifiers()
+    {
+        if ($this->getVisibility() != self::VISIBILITY_PUBLIC) {
+            throw new \LogicException(
+                "Interface method visibility can only be 'public'. Method name: '{$this->getName()}'"
+            );
+        }
+        if ($this->isFinal()) {
+            throw new \LogicException(
+                "Interface method cannot be marked as 'final'. Method name: '{$this->getName()}'"
+            );
+        }
+        if ($this->isAbstract()) {
+            throw new \LogicException(
+                "'abstract' modifier cannot be used for interface method. Method name: '{$this->getName()}'"
+            );
+        }
     }
 }
