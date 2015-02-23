@@ -11,7 +11,6 @@
  */
 namespace Magento\OfflineShipping\Model\SalesRule;
 
-use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\Validator;
 
 class Calculator extends Validator
@@ -30,7 +29,7 @@ class Calculator extends Validator
         $item->setFreeShipping(false);
 
         foreach ($this->_getRules() as $rule) {
-            /* @var $rule Rule */
+            /* @var $rule \Magento\SalesRule\Model\Rule */
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;
             }
@@ -40,11 +39,11 @@ class Calculator extends Validator
             }
 
             switch ($rule->getSimpleFreeShipping()) {
-                case \Magento\OfflineShipping\Model\SalesRule\Rule::FREE_SHIPPING_ITEM:
+                case Rule::FREE_SHIPPING_ITEM:
                     $item->setFreeShipping($rule->getDiscountQty() ? $rule->getDiscountQty() : true);
                     break;
 
-                case \Magento\OfflineShipping\Model\SalesRule\Rule::FREE_SHIPPING_ADDRESS:
+                case Rule::FREE_SHIPPING_ADDRESS:
                     $address->setFreeShipping(true);
                     break;
             }
