@@ -7,12 +7,11 @@
 namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\View\Asset;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
 
@@ -91,7 +90,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Asset\LocalInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Asset\LocalInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private function getAsset()
     {
