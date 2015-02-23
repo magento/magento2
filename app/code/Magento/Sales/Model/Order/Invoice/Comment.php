@@ -12,10 +12,6 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Invoice\Comment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Invoice\Comment getResource()
- * @method \Magento\Sales\Model\Order\Invoice\Comment setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Invoice\Comment setIsCustomerNotified(int $value)
- * @method \Magento\Sales\Model\Order\Invoice\Comment setIsVisibleOnFront(int $value)
- * @method \Magento\Sales\Model\Order\Invoice\Comment setComment(string $value)
  * @method \Magento\Sales\Model\Order\Invoice\Comment setCreatedAt(string $value)
  */
 class Comment extends AbstractModel implements InvoiceCommentInterface
@@ -165,4 +161,38 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
     {
         return $this->getData(InvoiceCommentInterface::PARENT_ID);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(InvoiceCommentInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsCustomerNotified($isCustomerNotified)
+    {
+        return $this->setData(InvoiceCommentInterface::IS_CUSTOMER_NOTIFIED, $isCustomerNotified);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront)
+    {
+        return $this->setData(InvoiceCommentInterface::IS_VISIBLE_ON_FRONT, $isVisibleOnFront);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setComment($comment)
+    {
+        return $this->setData(InvoiceCommentInterface::COMMENT, $comment);
+    }
+    //@codeCoverageIgnoreEnd
 }

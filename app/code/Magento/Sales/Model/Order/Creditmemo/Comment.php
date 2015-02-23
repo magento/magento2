@@ -12,10 +12,6 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Comment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Comment getResource()
- * @method \Magento\Sales\Model\Order\Creditmemo\Comment setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Creditmemo\Comment setIsCustomerNotified(int $value)
- * @method \Magento\Sales\Model\Order\Creditmemo\Comment setIsVisibleOnFront(int $value)
- * @method \Magento\Sales\Model\Order\Creditmemo\Comment setComment(string $value)
  * @method \Magento\Sales\Model\Order\Creditmemo\Comment setCreatedAt(string $value)
  */
 class Comment extends AbstractModel implements CreditmemoCommentInterface
@@ -165,4 +161,38 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
     {
         return $this->getData(CreditmemoCommentInterface::PARENT_ID);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(CreditmemoCommentInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsCustomerNotified($isCustomerNotified)
+    {
+        return $this->setData(CreditmemoCommentInterface::IS_CUSTOMER_NOTIFIED, $isCustomerNotified);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront)
+    {
+        return $this->setData(CreditmemoCommentInterface::IS_VISIBLE_ON_FRONT, $isVisibleOnFront);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setComment($comment)
+    {
+        return $this->setData(CreditmemoCommentInterface::COMMENT, $comment);
+    }
+    //@codeCoverageIgnoreEnd
 }

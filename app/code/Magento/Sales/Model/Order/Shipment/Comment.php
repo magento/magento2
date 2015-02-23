@@ -12,10 +12,6 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Comment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Comment getResource()
- * @method \Magento\Sales\Model\Order\Shipment\Comment setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Comment setIsCustomerNotified(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Comment setIsVisibleOnFront(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Comment setComment(string $value)
  * @method \Magento\Sales\Model\Order\Shipment\Comment setCreatedAt(string $value)
  */
 class Comment extends AbstractModel implements ShipmentCommentInterface
@@ -165,4 +161,38 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
     {
         return $this->getData(ShipmentCommentInterface::PARENT_ID);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(ShipmentCommentInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsCustomerNotified($isCustomerNotified)
+    {
+        return $this->setData(ShipmentCommentInterface::IS_CUSTOMER_NOTIFIED, $isCustomerNotified);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront)
+    {
+        return $this->setData(ShipmentCommentInterface::IS_VISIBLE_ON_FRONT, $isVisibleOnFront);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setComment($comment)
+    {
+        return $this->setData(ShipmentCommentInterface::COMMENT, $comment);
+    }
+    //@codeCoverageIgnoreEnd
 }
