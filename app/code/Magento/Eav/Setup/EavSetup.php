@@ -937,7 +937,7 @@ class EavSetup
      *
      * @param int|string $entityTypeId
      * @param int|string $id
-     * @param string $field
+     * @param string|array $field
      * @param mixed $value
      * @return $this
      */
@@ -974,21 +974,44 @@ class EavSetup
                 $value
             );
 
-            $setupCache = $this->setup->getSetupCache();
-            $mainTable = $this->setup->getTable('eav_attribute');
             $attribute = $this->getAttribute($entityTypeId, $id);
-            if (is_array($field)) {
-                $oldRow = $setupCache->has($mainTable, $attribute['entity_type_id'], $attribute['attribute_code']) ?
-                    $setupCache->get($mainTable, $attribute['entity_type_id'], $attribute['attribute_code']) :
-                    [];
-                $newRowData = array_merge($oldRow, $field);
-                $setupCache->setRow($mainTable, $attribute['entity_type_id'], $attribute['attribute_code'], $newRowData);
-            } else {
-                $setupCache->setField($mainTable, $attribute['entity_type_id'], $attribute['attribute_code'], $field, $value);
-            }
+            $this->updateCachedRow($field, $value, $attribute);
         }
 
         return $this;
+    }
+
+    /**
+     * Updates cache for the row
+     *
+     * @param string|array $field
+     * @param mixed $value
+     * @param array $attribute
+     */
+    private function updateCachedRow($field, $value, $attribute)
+    {
+        $setupCache = $this->setup->getSetupCache();
+        $mainTable = $this->setup->getTable('eav_attribute');
+        if (is_array($field)) {
+            $oldRow = $setupCache->has($mainTable, $attribute['entity_type_id'], $attribute['attribute_code']) ?
+                $setupCache->get($mainTable, $attribute['entity_type_id'], $attribute['attribute_code']) :
+                [];
+            $newRowData = array_merge($oldRow, $field);
+            $setupCache->setRow(
+                $mainTable,
+                $attribute['entity_type_id'],
+                $attribute['attribute_code'],
+                $newRowData
+            );
+        } else {
+            $setupCache->setField(
+                $mainTable,
+                $attribute['entity_type_id'],
+                $attribute['attribute_code'],
+                $field,
+                $value
+            );
+        }
     }
 
     /**
