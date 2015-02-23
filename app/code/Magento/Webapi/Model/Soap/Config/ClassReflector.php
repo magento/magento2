@@ -128,7 +128,7 @@ class ClassReflector
         );
 
         $docBlock = $methodReflection->getDocBlock();
-        if(!$docBlock) {
+        if (!$docBlock) {
             throw new \LogicException(
                 'The docBlock of the method '.
                 $method->getDeclaringClass()->getName() . '::' .  $method->getName() . ' is empty.'
