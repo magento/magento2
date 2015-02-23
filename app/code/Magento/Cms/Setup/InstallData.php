@@ -76,7 +76,7 @@ class InstallData implements InstallDataInterface
                 'identifier' => 'enable-cookies',
                 'content_heading' => 'What are Cookies?',
                 'content' => "<div class=\"enable-cookies cms-content\">\r\n<p>\"Cookies\" are little pieces of data"
-                    . "we send when you visit our store. Cookies help us get to know you better and personalize your"
+                    . " we send when you visit our store. Cookies help us get to know you better and personalize your"
                     . " experience. Plus they help protect you and other shoppers from fraud.</p>\r\n"
                     . "<p style=\"margin-bottom: 20px;\">Set your browser to accept cookies so you can buy items, "
                     . "save items, and receive customized recommendations. Here’s how:</p>\r\n<ul>\r\n<li>"
