@@ -482,13 +482,14 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
-     * Get invoice items collection
+     * Get invoice items collection.
+     * If needed, performs additional processing for these items.
      *
      * @return \Magento\Sales\Model\Resource\Order\Invoice\Item\Collection
      */
     public function getItemsCollection()
     {
-        $collection = $this->_getItemsCollection();
+        $collection = $this->_getItemsCollectionInstance();
         if (!$this->hasData(InvoiceInterface::ITEMS)) {
             $this->setItems($collection->getItems());
 
@@ -501,7 +502,12 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         return $collection;
     }
 
-    protected function _getItemsCollection()
+    /**
+     * Returns the invoice item collection
+     *
+     * @return $this|\Magento\Sales\Model\Resource\Order\Invoice\Item\Collection
+     */
+    protected function _getItemsCollectionInstance()
     {
         $collection = $this->_invoiceItemCollection;
         if (empty($collection)) {
@@ -820,7 +826,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     {
         $items = $this->getData(InvoiceInterface::ITEMS);
         if (($items === null || empty($items)) && $this->getId()) {
-            $collection = $this->_getItemsCollection();
+            $collection = $this->_getItemsCollectionInstance();
             foreach ($collection as $item) {
                 $item->setInvoice($this);
             }
