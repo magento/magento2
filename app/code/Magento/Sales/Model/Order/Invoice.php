@@ -105,6 +105,11 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     protected $_invoiceItemCollectionFactory;
 
     /**
+     * @var \Magento\Sales\Model\Resource\Order\Invoice\Item\Collection
+     */
+    protected $_invoiceItemCollection;
+
+    /**
      * @var \Magento\Sales\Model\Order\Invoice\CommentFactory
      */
     protected $_invoiceCommentFactory;
@@ -483,8 +488,8 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getItemsCollection()
     {
+        $collection = $this->_getItemsCollection();
         if (!$this->hasData(InvoiceInterface::ITEMS)) {
-            $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
             $this->setItems($collection->getItems());
 
             if ($this->getId()) {
@@ -493,7 +498,17 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
                 }
             }
         }
-        return $this->getItems();
+        return $collection;
+    }
+
+    protected function _getItemsCollection()
+    {
+        $collection = $this->_invoiceItemCollection;
+        if (empty($collection)) {
+            $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
+            $this->_invoiceItemCollection = $collection;
+        }
+        return $collection;
     }
 
     /**
@@ -534,6 +549,15 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 
         if (!$item->getId()) {
             $this->getItemsCollection()->addItem($item);
+
+            $item->setInvoice($this);
+
+            $items = $this->getData(InvoiceInterface::ITEMS);
+            if (empty($items)) {
+                $items = [];
+            }
+            $items[] = $item;
+            $this->setData(InvoiceInterface::ITEMS, $items);
         }
         return $this;
     }
@@ -794,8 +818,9 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getItems()
     {
-        if ($this->getData(InvoiceInterface::ITEMS) === null && $this->getId()) {
-            $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
+        $items = $this->getData(InvoiceInterface::ITEMS);
+        if (($items === null || empty($items)) && $this->getId()) {
+            $collection = $this->_getItemsCollection();
             foreach ($collection as $item) {
                 $item->setInvoice($this);
             }
