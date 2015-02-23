@@ -122,7 +122,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                 'to'
             ) . '/>' . '</div></div>';
         $html .= '<input type="hidden" name="' . $this->_getHtmlName() . '[locale]"' . ' value="'
-            . $this->_localeResolver->getLocaleCode() . '"/>';
+            . $this->localeResolver->getLocaleCode() . '"/>';
         $html .= '<script>
             require(["jquery", "mage/calendar"],function($){
                     $("#' . $htmlId . '_range").dateRange({

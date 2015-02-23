@@ -4,11 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
-
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Date grid column filter
@@ -23,7 +19,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
-    protected $_localeResolver;
+    protected $localeResolver;
 
     /**
      * @param \Magento\Backend\Block\Context $context
@@ -40,7 +36,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
         array $data = []
     ) {
         $this->mathRandom = $mathRandom;
-        $this->_localeResolver = $localeResolver;
+        $this->localeResolver = $localeResolver;
         parent::__construct($context, $resourceHelper, $data);
     }
 
@@ -89,7 +85,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             $this->_getHtmlName() .
             '[locale]"' .
             ' value="' .
-            $this->_localeResolver->getLocaleCode() .
+            $this->localeResolver->getLocaleCode() .
             '"/>';
         $html .= '<script>
             require(["jquery", "mage/calendar"], function($){
@@ -203,7 +199,13 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
                 \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         );
-        $simpleRes = new \DateTime($date, $adminTimeZone);
+        $formatter = new \IntlDateFormatter(
+            $this->localeResolver->getLocaleCode(),
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
+            $adminTimeZone
+        );
+        $simpleRes = new \DateTime('@' . $formatter->parse($date), $adminTimeZone);
         $simpleRes->setTime(0, 0, 0);
         $simpleRes->setTimezone(new \DateTimeZone('UTC'));
         return $simpleRes;
