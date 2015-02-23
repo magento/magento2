@@ -987,6 +987,8 @@ class EavSetup
      * @param string|array $field
      * @param mixed $value
      * @param array $attribute
+     *
+     * @return void
      */
     private function updateCachedRow($field, $value, $attribute)
     {
