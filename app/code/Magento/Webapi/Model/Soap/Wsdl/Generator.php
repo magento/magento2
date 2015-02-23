@@ -8,6 +8,7 @@ namespace Magento\Webapi\Model\Soap\Wsdl;
 
 use Magento\Webapi\Model\Soap\Fault;
 use Magento\Webapi\Model\Soap\Wsdl;
+use Magento\Webapi\Model\Soap\WsdlFactory;
 
 /**
  * WSDL generator.
@@ -19,12 +20,12 @@ class Generator
     /**
      * WSDL factory instance.
      *
-     * @var Factory
+     * @var WsdlFactory
      */
     protected $_wsdlFactory;
 
     /**
-     * @var \Magento\Webapi\Model\Cache\Type
+     * @var \Magento\Framework\App\Cache\Type\Webapi
      */
     protected $_cache;
 
@@ -52,15 +53,15 @@ class Generator
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Model\Soap\Config $apiConfig
-     * @param Factory $wsdlFactory
-     * @param \Magento\Webapi\Model\Cache\Type $cache
+     * @param WsdlFactory $wsdlFactory
+     * @param \Magento\Framework\App\Cache\Type\Webapi $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Webapi\Model\Soap\Config $apiConfig,
-        Factory $wsdlFactory,
-        \Magento\Webapi\Model\Cache\Type $cache,
+        WsdlFactory $wsdlFactory,
+        \Magento\Framework\App\Cache\Type\Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
@@ -95,7 +96,7 @@ class Generator
         }
 
         $wsdlContent = $this->_generate($services, $endPointUrl);
-        $this->_cache->save($wsdlContent, $cacheId, [\Magento\Webapi\Model\Cache\Type::CACHE_TAG]);
+        $this->_cache->save($wsdlContent, $cacheId, [\Magento\Framework\App\Cache\Type\Webapi::CACHE_TAG]);
 
         return $wsdlContent;
     }
@@ -106,7 +107,7 @@ class Generator
      * @param array $requestedServices
      * @param string $endPointUrl
      * @return string
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Webapi\Exception
      */
     protected function _generate($requestedServices, $endPointUrl)
     {

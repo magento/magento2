@@ -57,17 +57,6 @@ class TypeProcessor
     protected $_types = [];
 
     /**
-     * Types class map.
-     * <pre>array(
-     *     $complexTypeName => $interfaceName,
-     *     ...
-     * )</pre>
-     *
-     * @var array
-     */
-    protected $_typeToClassMap = [];
-
-    /**
      * Retrieve processed types data.
      *
      * @return array
@@ -128,9 +117,6 @@ class TypeProcessor
             $complexTypeName = $this->translateTypeName($type);
             if (!isset($this->_types[$complexTypeName])) {
                 $this->_processComplexType($type);
-                if (!$this->isArrayType($complexTypeName)) {
-                    $this->_typeToClassMap[$complexTypeName] = $type;
-                }
             }
             $typeName = $complexTypeName;
         }

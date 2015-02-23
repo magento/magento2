@@ -71,4 +71,12 @@ interface IntegrationInterface
      * @throws \Magento\Integration\Exception If the integration does not exist or cannot be deleted
      */
     public function delete($integrationId);
+
+    /**
+     * Return an array of selected resources  for an integration.
+     *
+     * @param int $integrationId
+     * @return array
+     */
+    public function getSelectedResources($integrationId);
 }

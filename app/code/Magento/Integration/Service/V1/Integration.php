@@ -6,7 +6,7 @@
 namespace Magento\Integration\Service\V1;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Integration\Model\Integration\Factory as IntegrationFactory;
+use Magento\Integration\Model\IntegrationFactory;
 use Magento\Integration\Service\V1\OauthInterface as IntegrationOauthService;
 
 /**
@@ -178,5 +178,20 @@ class Integration implements \Magento\Integration\Service\V1\IntegrationInterfac
                 $integration->setData('token_secret', $accessToken->getSecret());
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSelectedResources($integrationId)
+    {
+        $integration = $this->get($integrationId);
+        $data = $integration->getData();
+
+        $selectedResourceIds = [];
+        if ($data && isset($data['resource']) && is_array($data['resource'])) {
+            $selectedResourceIds = $data['resource'];
+        }
+        return $selectedResourceIds;
     }
 }

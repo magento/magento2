@@ -9,7 +9,7 @@
 namespace Magento\TestFramework\TestCase\Webapi\Adapter;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Webapi\Model\Rest\Config;
+use Magento\Framework\Webapi\Rest\Request;
 
 class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
 {
@@ -90,16 +90,16 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         }
         $authHeader = array_merge($authHeader, ['Accept: application/json', 'Content-Type: application/json']);
         switch ($httpMethod) {
-            case Config::HTTP_METHOD_GET:
+            case Request::HTTP_METHOD_GET:
                 $response = $this->curlClient->get($resourcePath, [], $authHeader);
                 break;
-            case Config::HTTP_METHOD_POST:
+            case Request::HTTP_METHOD_POST:
                 $response = $this->curlClient->post($resourcePath, $arguments, $authHeader);
                 break;
-            case Config::HTTP_METHOD_PUT:
+            case Request::HTTP_METHOD_PUT:
                 $response = $this->curlClient->put($resourcePath, $arguments, $authHeader);
                 break;
-            case Config::HTTP_METHOD_DELETE:
+            case Request::HTTP_METHOD_DELETE:
                 $response = $this->curlClient->delete($resourcePath, $authHeader);
                 break;
             default:
