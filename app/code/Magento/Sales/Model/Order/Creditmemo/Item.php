@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Item _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Item getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
 {

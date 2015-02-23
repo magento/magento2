@@ -637,5 +637,4 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @return $this
      */
     public function setWeeeTaxAppliedRowAmount($amount);
-
 }

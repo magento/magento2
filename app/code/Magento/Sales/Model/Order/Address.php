@@ -20,6 +20,7 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
  * @method \Magento\Customer\Api\Data\AddressInterface getCustomerAddressData()
  * @method Address setCustomerAddressData(\Magento\Customer\Api\Data\AddressInterface $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Address extends AbstractAddress implements OrderAddressInterface
 {

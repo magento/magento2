@@ -30,6 +30,7 @@ use Magento\Sales\Api\Data\InvoiceItemInterface;
  * @method \Magento\Sales\Model\Order\Invoice\Item setBaseWeeeTaxAppliedRowAmnt(float $value)
  * @method string getWeeeTaxApplied()
  * @method \Magento\Sales\Model\Order\Invoice\Item setWeeeTaxApplied(string $value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Item extends AbstractExtensibleModel implements InvoiceItemInterface
 {

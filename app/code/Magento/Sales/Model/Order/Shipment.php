@@ -17,6 +17,7 @@ use Magento\Sales\Model\EntityInterface;
  * @method \Magento\Sales\Model\Resource\Order\Shipment getResource()
  * @method \Magento\Sales\Model\Order\Shipment setCreatedAt(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Shipment extends AbstractModel implements EntityInterface, ShipmentInterface
 {
