@@ -3,8 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration;
+namespace Magento\Framework\Exception;
 
-class Exception extends \Magento\Framework\Exception\LocalizedException
+class IntegrationException extends LocalizedException
 {
 }

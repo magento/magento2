@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -12,6 +11,7 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Model\Integration as IntegrationModel;
+use Magento\Framework\Exception\IntegrationException;
 
 class SaveTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
 {
@@ -96,7 +96,7 @@ class SaveTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
             )->with(
                 self::INTEGRATION_ID
             )->will(
-                $this->throwException(new \Magento\Integration\Exception($exceptionMessage))
+                $this->throwException(new IntegrationException($exceptionMessage))
             );
         // Verify error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
@@ -170,7 +170,7 @@ class SaveTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
             )->with(
                 $this->anything()
             )->will(
-                $this->throwException(new \Magento\Integration\Exception($exceptionMessage))
+                $this->throwException(new IntegrationException($exceptionMessage))
             );
         $this->_integrationSvcMock->expects(
             $this->any()
