@@ -7,5 +7,11 @@ namespace Magento\Reports\Model\Resource\Quote;
 
 interface CollectionFactoryInterface
 {
+    /**
+     * Create class instance with specified parameters
+     *
+     * @param array $data
+     * @return \Magento\Reports\Model\Resource\Quote\Collection
+     */
     public function create(array $data = array());
 }

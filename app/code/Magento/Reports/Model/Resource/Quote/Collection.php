@@ -143,8 +143,8 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         )->joinInner(
             ['product_name' => $productAttrNameTable],
             'product_name.entity_id = e.entity_id'
-            . ' AND product_name.attribute_id = ' . $productAttrNameId
-            . ' AND product_name.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                . ' AND product_name.attribute_id = ' . $productAttrNameId
+                . ' AND product_name.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
             ['name' => 'product_name.value']
         )->joinInner(
             ['product_price' => $productAttrPriceTable],
@@ -171,6 +171,8 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
     }
 
     /**
+     * Orders quantity subselect
+     *
      * @return \Magento\Framework\DB\Select
      */
     protected function getOrdersSubSelect()

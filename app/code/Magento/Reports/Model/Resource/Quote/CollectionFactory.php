@@ -30,17 +30,16 @@ class CollectionFactory implements \Magento\Reports\Model\Resource\Quote\Collect
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = 'Magento\\Reports\\Model\\Resource\\Quote\\Collection')
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        $instanceName = 'Magento\\Reports\\Model\\Resource\\Quote\\Collection'
+    ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
     }
 
     /**
-     * Create class instance with specified parameters
-     *
-     * @param array $data
-     * @return \Magento\Reports\Model\Resource\Quote\Collection
+     *{ @inheritdoc)
      */
     public function create(array $data = array())
     {
