@@ -52,21 +52,20 @@
         </div>
     </div>
 </div>
-<script>
-    require([
-        "jquery",
-        "mage/mage"
-    ], function($){
-        $('.product-add-form').mage('slide', {
-            'slideSpeed': 1500,
-            'slideSelector': '#bundle-slide',
-            'slideBackSelector': '.action.customization.back',
-            'bundleProductSelector': '#bundleProduct',
-            'bundleOptionsContainer': '.product-add-form',
-            <?php if ($block->isStartCustomization()): ?>
-            'autostart': true
-            <?php endif;?>
-        });
-    });
+<script type="text/x-magento-init">
+    {
+        ".product-add-form": {
+            "slide": {
+                "slideSpeed": 1500,
+                "slideSelector": "#bundle-slide",
+                "slideBackSelector": ".action.customization.back",
+                "bundleProductSelector": "#bundleProduct",
+                "bundleOptionsContainer": ".product-add-form",
+                <?php if ($block->isStartCustomization()): ?>
+                "autostart": true
+                <?php endif;?>
+            }
+        }
+    }
 </script>
 <?php endif; ?>
