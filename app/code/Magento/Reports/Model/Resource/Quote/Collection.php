@@ -98,6 +98,9 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         )->addFieldToFilter(
             'main_table.is_active',
             '1'
+        )->addFieldToFilter(
+            'main_table.customer_id',
+            ['neq' => null]
         )->addSubtotal(
             $storeIds,
             $filter
@@ -220,8 +223,8 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         if (isset($filter['email'])) {
             $customersSelect->where('customer.email LIKE ?', '%' . $filter['email'] . '%');
         }
-        $filteredCustomers = $this->_customerResource->getReadConnection()->fetchAll($customersSelect);
-        $this->getSelect()->where('main_table.customer_id IN (?)', array_column($filteredCustomers, 'entity_id'));
+        $filteredCustomers = $this->_customerResource->getReadConnection()->fetchCol($customersSelect);
+        $this->getSelect()->where('main_table.customer_id IN (?)', $filteredCustomers);
         return $this;
     }
 
