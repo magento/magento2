@@ -7,11 +7,12 @@
 //  Variables
 //  _____________________________________________
 
-@select-check__background-color: @color-gray89;
 @select-check__arrow__color: @color-brownie;
+@select-check__background-color: @color-gray89;
 @select-check__height: 5px;
 @select-check__size: 2.36em;
 @select-check__width: 8px;
+@select-check__z-index: @z-index-1;
 
 //
 //  Customized select with label wrap
@@ -45,7 +46,7 @@
         right: 0;
         top: 0;
         width: @select-check__size;
-        z-index: @z-index-1;
+        z-index: @select-check__z-index;
         .ie9 & {
             display: none;
         }
@@ -62,7 +63,7 @@
         right: @select-check__size / 2;
         top: 50%;
         width: 0;
-        z-index: @z-index-2;
+        z-index: @select-check__z-index + 1;
         .ie9 & {
             display: none;
         }
@@ -77,7 +78,7 @@
         padding: @form-el__padding-top ~'calc(@{select-check__size} + 10%)' @form-el__padding-bottom @form-el__padding-side;
         position: relative;
         width: 110%;
-        z-index: @z-index-3;
+        z-index: @select-check__z-index + 2;
         .ie9 & {
             padding-right: @form-el__padding-side;
             width: 100%;
