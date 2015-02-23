@@ -17,9 +17,9 @@ define([
         qtyFieldSelector: 'input.qty',
         priceBoxSelector: '.price-box',
         optionHandlers: {},
-        optionTemplate: '<%= label %>' +
+        optionTemplate: '<%- label %>' +
         '<% if (finalPrice.value) { %>' +
-        ' +<%= finalPrice.formatted %>' +
+        ' +<%- finalPrice.formatted %>' +
         '<% } %>',
         controlContainer: 'dd', // should be eliminated
         priceFormat: {}
