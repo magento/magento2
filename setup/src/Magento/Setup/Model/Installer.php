@@ -653,13 +653,13 @@ class Installer
                         $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                     }
                     if ($type === 'schema') {
-                        $resource->setDbVersion($moduleName, $configVer, $type);
+                        $resource->setDbVersion($moduleName, $configVer);
                     } elseif ($type === 'data') {
-                        $resource->setDataVersion($moduleName, $configVer, $type);
+                        $resource->setDataVersion($moduleName, $configVer);
                     }
                 }
             } elseif ($configVer) {
-                $installer =  $this->getSchemaDataHandler($moduleName, $installType);
+                $installer = $this->getSchemaDataHandler($moduleName, $installType);
                 if ($installer) {
                     $this->log->logInline("Installing $type.. ");
                     $installer->install($setup, $moduleContextList[$moduleName]);
