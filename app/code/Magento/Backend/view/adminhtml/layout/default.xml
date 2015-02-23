@@ -11,7 +11,6 @@
         <link src="legacy-build.min.js"/>
         <link src="requirejs/require.js"/>
         <link src="jquery.js"/>
-        <css src="mage/calendar.css"/>
         <css src="extjs/resources/css/ext-all.css"/>
         <css src="extjs/resources/css/ytheme-magento.css"/>
     </head>

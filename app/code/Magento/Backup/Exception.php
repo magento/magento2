@@ -8,3 +8,4 @@ namespace Magento\Backup;
 class Exception extends \Zend_Exception
 {
 }
+
