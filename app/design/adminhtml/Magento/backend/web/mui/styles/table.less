@@ -432,6 +432,11 @@ table {
         &:not(.config-inherit) {
             position: static;
             opacity: 1;
+            + label {
+                &:before {
+                    display: none;
+                }
+            }
         }
     }
 }

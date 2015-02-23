@@ -113,14 +113,6 @@
     border: 0;
 }
 
-.popup-window .magento_message .fieldset select {
-    border-radius: 4px;
-}
-
-.popup-window .magento_message .fieldset select {
-    border-radius: 4px;
-}
-
 .popup-window .magento_message .fieldset .addon select {
     display: block;
 }
@@ -385,6 +377,14 @@
 
 .ui-dialog .ui-dialog-content label.mage-error {
     margin: 0;
+}
+
+.ui-dialog .product-composite-configure-inner .field > .label:after {
+    position: static;
+    vertical-align: middle;
+}
+.ui-dialog .product-composite-configure-inner .field > .control {
+    margin: 0 0 10px;
 }
 
 .ui-dialog .ui-dialog-content form {
