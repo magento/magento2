@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Io;
+namespace Magento\Framework\Filesystem\Io;
 
 /**
  * Sftp client interface
@@ -14,7 +14,7 @@ namespace Magento\Framework\Io;
  * @link        http://www.php.net/manual/en/function.ssh2-connect.php
  */
 require_once 'phpseclib/Net/SFTP.php';
-class Sftp extends AbstractIo implements IoInterface
+class Sftp extends AbstractIo
 {
     const REMOTE_TIMEOUT = 10;
 

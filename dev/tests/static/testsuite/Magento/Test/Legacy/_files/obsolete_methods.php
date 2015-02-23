@@ -305,7 +305,7 @@ return [
         'Magento\Core\Model\Design\PackageInterface',
         'Magento\Framework\View\Asset\MergeService'
     ],
-    ['cleanVarFolder', '', 'Magento\Framework\Io\File::rmdirRecursive()'],
+    ['cleanVarFolder', '', 'Magento\Framework\Filesystem\Io\File::rmdirRecursive()'],
     [
         'cleanVarSubFolders',
         '',
