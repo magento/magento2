@@ -15,6 +15,7 @@ class Builder implements BuilderInterface
      * Constant which defines if builder is created for building data objects or data models.
      */
     const TYPE_DATA_OBJECT = 'data_object';
+    const TYPE_EXTENSIBLE_DATA_OBJECT = 'extensible_data_object';
     const TYPE_DATA_MODEL = 'data_model';
     /**#@-*/
 
@@ -44,9 +45,9 @@ class Builder implements BuilderInterface
     protected $customAttributesCodes = null;
 
     /**
-     * @var \Magento\Framework\Api\AttributeDataBuilder
+     * @var \Magento\Framework\Api\AttributeValueFactory
      */
-    protected $attributeValueBuilder;
+    protected $attributeValueFactory;
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
@@ -76,7 +77,7 @@ class Builder implements BuilderInterface
     /**
      * @param ObjectFactory $objectFactory
      * @param MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $attributeValueBuilder
+     * @param AttributeValueFactory $attributeValueFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory
@@ -86,7 +87,7 @@ class Builder implements BuilderInterface
     public function __construct(
         ObjectFactory $objectFactory,
         MetadataServiceInterface $metadataService,
-        \Magento\Framework\Api\AttributeDataBuilder $attributeValueBuilder,
+        \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory,
@@ -97,10 +98,11 @@ class Builder implements BuilderInterface
         $this->metadataService = $metadataService;
         $this->modelClassInterface = $modelClassInterface;
         $this->objectProcessor = $objectProcessor;
-        $this->attributeValueBuilder = $attributeValueBuilder;
+        $this->attributeValueFactory = $attributeValueFactory;
         $this->typeProcessor = $typeProcessor;
         $this->dataBuilderFactory = $dataBuilderFactory;
         $this->objectManagerConfig = $objectManagerConfig;
+        $this->data = [];
     }
 
     /**
@@ -110,10 +112,9 @@ class Builder implements BuilderInterface
     {
         $customAttributesCodes = $this->getCustomAttributesCodes();
         if (in_array($attributeCode, $customAttributesCodes)) {
-            $attribute = $this->attributeValueBuilder
+            $attribute = $this->attributeValueFactory->create()
                 ->setAttributeCode($attributeCode)
-                ->setValue($attributeValue)
-                ->create();
+                ->setValue($attributeValue);
             //Stores as an associative array for easier lookup and processing
             $this->data[ExtensibleDataInterface::CUSTOM_ATTRIBUTES][$attributeCode] = $attribute;
         }
@@ -144,18 +145,25 @@ class Builder implements BuilderInterface
      */
     public function create()
     {
-        if ($this->getDataType() == self::TYPE_DATA_MODEL) {
+        $dataType = $this->getDataType();
+        if ($dataType == self::TYPE_DATA_MODEL) {
             /** @var \Magento\Framework\Model\AbstractExtensibleModel $dataObject */
             $dataObject = $this->objectFactory->create(
                 $this->_getDataObjectType(),
                 ['data' => $this->data]
             );
             $dataObject->setDataChanges(true);
+        } elseif ($dataType == self::TYPE_EXTENSIBLE_DATA_OBJECT) {
+            $dataObjectType = $this->_getDataObjectType();
+            $dataObject = $this->objectFactory->create(
+                $dataObjectType,
+                ['attributeValueFactory' => $this->attributeValueFactory, 'data' => $this->data]
+            );
         } else {
             $dataObjectType = $this->_getDataObjectType();
             $dataObject = $this->objectFactory->create(
                 $dataObjectType,
-                ['builder' => $this]
+                ['data' => $this->data]
             );
         }
         if ($dataObject instanceof \Magento\Framework\Object) {
@@ -250,7 +258,9 @@ class Builder implements BuilderInterface
     protected function getDataType()
     {
         $dataType = $this->_getDataObjectType();
-        if (is_subclass_of($dataType, '\Magento\Framework\Api\AbstractSimpleObject')) {
+        if (is_subclass_of($dataType, '\Magento\Framework\Api\AbstractExtensibleObject')) {
+            return self::TYPE_EXTENSIBLE_DATA_OBJECT;
+        } elseif (is_subclass_of($dataType, '\Magento\Framework\Api\AbstractSimpleObject')) {
             return self::TYPE_DATA_OBJECT;
         } elseif (is_subclass_of($dataType, '\Magento\Framework\Model\AbstractExtensibleModel')) {
             return self::TYPE_DATA_MODEL;
@@ -263,7 +273,9 @@ class Builder implements BuilderInterface
             );
         }
 
-        if (is_subclass_of($sourceClassPreference, '\Magento\Framework\Api\AbstractSimpleObject')) {
+        if (is_subclass_of($dataType, '\Magento\Framework\Api\AbstractExtensibleObject')) {
+            return self::TYPE_EXTENSIBLE_DATA_OBJECT;
+        } elseif (is_subclass_of($sourceClassPreference, '\Magento\Framework\Api\AbstractSimpleObject')) {
             return self::TYPE_DATA_OBJECT;
         } elseif (is_subclass_of($sourceClassPreference, '\Magento\Framework\Model\AbstractExtensibleModel')) {
             return self::TYPE_DATA_MODEL;

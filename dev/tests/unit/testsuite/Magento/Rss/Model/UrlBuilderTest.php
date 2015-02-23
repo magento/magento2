@@ -49,7 +49,7 @@ class UrlBuilderTest extends \PHPUnit_Framework_TestCase
     public function testGetUrlEmpty()
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')
-            ->with('rss/config/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            ->with('rss/config/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(false));
         $this->assertEquals('', $this->urlBuilder->getUrl());
     }
@@ -57,7 +57,7 @@ class UrlBuilderTest extends \PHPUnit_Framework_TestCase
     public function testGetUrl()
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')
-            ->with('rss/config/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            ->with('rss/config/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
         $this->urlInterface->expects($this->once())->method('getUrl')
             ->with('rss/feed/index', ['type' => 'rss_feed'])

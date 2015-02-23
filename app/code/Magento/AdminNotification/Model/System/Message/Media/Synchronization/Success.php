@@ -30,7 +30,7 @@ class Success extends \Magento\AdminNotification\Model\System\Message\Media\Abst
     /**
      * Retrieve message text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getText()
     {

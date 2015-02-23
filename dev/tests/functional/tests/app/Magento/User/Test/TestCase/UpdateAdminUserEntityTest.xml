@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="UpdateAdminUserEntityTest">
+    <variation name="UpdateAdminUserEntityTestVariation1" firstConstraint="assertUserSuccessSaveMessage" method="test">
+      <data name="initialUser/dataSet" xsi:type="string">custom_admin_with_default_role</data>
+      <data name="user/data/username" xsi:type="string">NewAdminUser%isolation%</data>
+      <data name="user/data/firstname" xsi:type="string">NewFirstName%isolation%</data>
+      <data name="user/data/lastname" xsi:type="string">NewLastName%isolation%</data>
+      <data name="user/data/email" xsi:type="string">NewEmail%isolation%@example.com</data>
+      <data name="user/data/password" xsi:type="string">123123qa</data>
+      <data name="user/data/password_confirmation" xsi:type="string">123123qa</data>
+      <data name="user/data/is_active" xsi:type="string">-</data>
+      <data name="user/data/role_id/dataSet" xsi:type="string">-</data>
+      <data name="user/data/current_password" xsi:type="string">123123q</data>
+      <constraint name="assertUserSuccessSaveMessage" next="assertUserInGrid"/>
+      <constraint name="assertUserInGrid" next="assertUserSuccessLogOut" prev="assertUserSuccessSaveMessage"/>
+      <constraint name="assertUserSuccessLogOut" next="assertUserSuccessLogin" prev="assertUserInGrid"/>
+      <constraint name="assertUserSuccessLogin" prev="assertUserSuccessLogOut"/>
+    </variation>
+    <variation name="UpdateAdminUserEntityTestVariation2" firstConstraint="assertUserSuccessSaveMessage" method="test">
+      <data name="initialUser/dataSet" xsi:type="string">custom_admin_with_default_role</data>
+      <data name="user/data/username" xsi:type="string">-</data>
+      <data name="user/data/firstname" xsi:type="string">-</data>
+      <data name="user/data/lastname" xsi:type="string">-</data>
+      <data name="user/data/email" xsi:type="string">-</data>
+      <data name="user/data/password" xsi:type="string">-</data>
+      <data name="user/data/password_confirmation" xsi:type="string">-</data>
+      <data name="user/data/is_active" xsi:type="string">-</data>
+      <data name="user/data/role_id/dataSet" xsi:type="string">role_sales</data>
+      <data name="user/data/current_password" xsi:type="string">123123q</data>
+      <constraint name="assertUserSuccessSaveMessage" next="assertUserInGrid"/>
+      <constraint name="assertUserInGrid" next="assertUserSuccessLogOut" prev="assertUserSuccessSaveMessage"/>
+      <constraint name="assertUserSuccessLogOut" next="assertUserSuccessLogin" prev="assertUserInGrid"/>
+      <constraint name="assertUserSuccessLogin" next="assertUserRoleSalesRestrictedAccess" prev="assertUserSuccessLogOut"/>
+      <constraint name="assertUserRoleSalesRestrictedAccess" prev="assertUserSuccessLogin"/>
+    </variation>
+    <variation name="UpdateAdminUserEntityTestVariation3" firstConstraint="assertUserSuccessSaveMessage" method="test">
+      <data name="initialUser/dataSet" xsi:type="string">custom_admin_with_default_role</data>
+      <data name="user/data/username" xsi:type="string">-</data>
+      <data name="user/data/firstname" xsi:type="string">-</data>
+      <data name="user/data/lastname" xsi:type="string">-</data>
+      <data name="user/data/email" xsi:type="string">-</data>
+      <data name="user/data/password" xsi:type="string">-</data>
+      <data name="user/data/password_confirmation" xsi:type="string">-</data>
+      <data name="user/data/is_active" xsi:type="string">Inactive</data>
+      <data name="user/data/role_id/dataSet" xsi:type="string">-</data>
+      <data name="loginAsDefaultAdmin" xsi:type="string">1</data>
+      <data name="user/data/current_password" xsi:type="string">123123q</data>
+      <constraint name="assertUserSuccessSaveMessage" next="assertUserInGrid"/>
+      <constraint name="assertUserInGrid" next="assertUserSuccessLogOut" prev="assertUserSuccessSaveMessage"/>
+      <constraint name="assertUserSuccessLogOut" next="assertUserWrongCredentialsMessage" prev="assertUserInGrid"/>
+      <constraint name="assertUserWrongCredentialsMessage" prev="assertUserSuccessLogOut"/>
+    </variation>
+  </testCase>
+</config>

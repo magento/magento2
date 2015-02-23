@@ -51,14 +51,13 @@ class GroupTest extends \Magento\Backend\Utility\Controller
 
     public function testNewActionWithCustomerGroupDataInSession()
     {
-        /** @var \Magento\Customer\Api\Data\GroupDataBuilder $customerGroupBuilder */
-        $customerGroupBuilder = $this->_objectManager
-            ->get('Magento\Customer\Api\Data\GroupDataBuilder');
+        /** @var \Magento\Customer\Api\Data\GroupInterfaceFactory $customerGroupFactory */
+        $customerGroupFactory = $this->_objectManager
+            ->get('Magento\Customer\Api\Data\GroupInterfaceFactory');
         /** @var \Magento\Customer\Api\Data\GroupInterface $customerGroup */
-        $customerGroup = $customerGroupBuilder
+        $customerGroup = $customerGroupFactory->create()
             ->setCode(self::CUSTOMER_GROUP_CODE)
-            ->setTaxClassId(self::TAX_CLASS_ID)
-            ->create();
+            ->setTaxClassId(self::TAX_CLASS_ID);
         /** @var \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor */
         $dataObjectProcessor = $this->_objectManager->get('Magento\Framework\Reflection\DataObjectProcessor');
         $customerGroupData = $dataObjectProcessor

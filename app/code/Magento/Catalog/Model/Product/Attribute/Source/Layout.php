@@ -13,14 +13,14 @@ namespace Magento\Catalog\Model\Product\Attribute\Source;
 class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
-     * @var \Magento\Core\Model\PageLayout\Config\Builder
+     * @var \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
      */
     protected $pageLayoutBuilder;
 
     /**
-     * @param \Magento\Core\Model\PageLayout\Config\Builder $pageLayoutBuilder
+     * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
      */
-    public function __construct(\Magento\Core\Model\PageLayout\Config\Builder $pageLayoutBuilder)
+    public function __construct(\Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder)
     {
         $this->pageLayoutBuilder = $pageLayoutBuilder;
     }

@@ -175,7 +175,7 @@ class Minsaleqty
     {
         $value = $this->scopeConfig->getValue(
             \Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_SALE_QTY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
         $value = $this->unserializeValue($value);

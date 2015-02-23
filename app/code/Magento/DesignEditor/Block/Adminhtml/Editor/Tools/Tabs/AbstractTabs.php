@@ -45,7 +45,7 @@ abstract class AbstractTabs extends \Magento\Framework\View\Element\Template
     /**
      * Get translated title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTitle()
     {

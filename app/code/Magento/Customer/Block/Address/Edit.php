@@ -30,9 +30,9 @@ class Edit extends \Magento\Directory\Block\Data
     protected $_addressRepository;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressDataBuilder
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
      */
-    protected $_addressBuilder;
+    protected $addressDataFactory;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
@@ -40,42 +40,50 @@ class Edit extends \Magento\Directory\Block\Data
     protected $currentCustomer;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
-     * @param \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder
+     * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder,
+        \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = []
     ) {
         $this->_customerSession = $customerSession;
         $this->_addressRepository = $addressRepository;
-        $this->_addressBuilder = $addressBuilder;
+        $this->addressDataFactory = $addressDataFactory;
         $this->currentCustomer = $currentCustomer;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct(
             $context,
-            $coreData,
+            $directoryHelper,
             $jsonEncoder,
             $configCacheType,
             $regionCollectionFactory,
@@ -104,7 +112,8 @@ class Edit extends \Magento\Directory\Block\Data
         }
 
         if (is_null($this->_address) || !$this->_address->getId()) {
-            $this->_address = $this->_addressBuilder->setPrefix(
+            $this->_address = $this->addressDataFactory->create();
+            $this->_address->setPrefix(
                 $this->getCustomer()->getPrefix()
             )->setFirstname(
                 $this->getCustomer()->getFirstname()
@@ -114,7 +123,7 @@ class Edit extends \Magento\Directory\Block\Data
                 $this->getCustomer()->getLastname()
             )->setSuffix(
                 $this->getCustomer()->getSuffix()
-            )->create();
+            );
         }
 
         $this->pageConfig->getTitle()->set($this->getTitle());
@@ -126,7 +135,7 @@ class Edit extends \Magento\Directory\Block\Data
                     'region' => $postedData['region'],
                 ];
             }
-            $this->_address = $this->_addressBuilder->mergeDataObjectWithArray($this->_address, $postedData)->create();
+            $this->dataObjectHelper->populateWithArray($this->_address, $postedData);
         }
 
         return $this;
@@ -340,6 +349,6 @@ class Edit extends \Magento\Directory\Block\Data
      */
     public function getConfig($path)
     {
-        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 }

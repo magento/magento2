@@ -1,3 +1,0 @@
-"category/dataSet";"constraint"
-"root_category";"assertCategorySuccessDeleteMessage, assertCategoryAbsenceOnBackend"
-"root_subcategory";"assertCategorySuccessDeleteMessage, assertUrlRewriteCategoryNotInGrid, assertCategoryAbsenceOnBackend, assertCategoryAbsenceOnFrontend"

@@ -19,7 +19,7 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
         $this->initMocks(true);
 
         $this->assertSame(
-            self::EXPECTED_VALUE,
+            $this->taxDetailsItem,
             $this->calculate($this->totalBaseCalculator)
         );
     }
@@ -32,7 +32,7 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
         $this->initMocks(false);
 
         $this->assertSame(
-            self::EXPECTED_VALUE,
+            $this->taxDetailsItem,
             $this->calculate($this->totalBaseCalculator)
         );
     }
@@ -45,9 +45,9 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
             ['deltaRound'],
             [
                 'taxClassService' => $taxClassService,
-                'taxDetailsItemBuilder' => $this->taxItemDetailsBuilder,
-                'appliedTaxBuilder' => $this->appliedTaxBuilder,
-                'appliedRateBuilder' => $this->appliedTaxRateBuilder,
+                'taxDetailsItemDataObjectFactory' => $this->taxItemDetailsDataObjectFactory,
+                'appliedTaxDataObjectFactory' => $this->appliedTaxDataObjectFactory,
+                'appliedTaxRateDataObjectFactory' => $this->appliedTaxRateDataObjectFactory,
                 'calculationTool' => $this->mockCalculationTool,
                 'config' => $this->mockConfig,
                 'storeId' => self::STORE_ID,

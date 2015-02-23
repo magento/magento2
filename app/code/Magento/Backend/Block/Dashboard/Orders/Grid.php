@@ -110,7 +110,6 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
             'items',
             [
                 'header' => __('Items'),
-                'align' => 'right',
                 'type' => 'number',
                 'sortable' => false,
                 'index' => 'items_count'
@@ -122,8 +121,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
         $this->addColumn(
             'total',
             [
-                'header' => __('Grand Total'),
-                'align' => 'right',
+                'header' => __('Total'),
                 'sortable' => false,
                 'type' => 'currency',
                 'currency_code' => $baseCurrencyCode,

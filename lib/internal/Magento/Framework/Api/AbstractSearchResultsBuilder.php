@@ -31,19 +31,19 @@ abstract class AbstractSearchResultsBuilder extends ExtensibleObjectBuilder
      * Constructor
      *
      * @param ObjectFactory $objectFactory
-     * @param AttributeDataBuilder $valueBuilder
+     * @param AttributeValueFactory $valueFactory
      * @param MetadataServiceInterface $metadataService
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param BuilderInterface $itemObjectBuilder
      */
     public function __construct(
         ObjectFactory $objectFactory,
-        AttributeDataBuilder $valueBuilder,
+        AttributeValueFactory $valueFactory,
         MetadataServiceInterface $metadataService,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         BuilderInterface $itemObjectBuilder
     ) {
-        parent::__construct($objectFactory, $valueBuilder, $metadataService);
+        parent::__construct($objectFactory, $valueFactory, $metadataService);
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->itemObjectBuilder = $itemObjectBuilder;
     }

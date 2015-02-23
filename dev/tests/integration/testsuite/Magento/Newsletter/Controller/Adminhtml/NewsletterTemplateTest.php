@@ -25,7 +25,7 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
             'sender_name' => 'Test Sender Name',
             'text' => 'Template Content',
         ];
-        $this->getRequest()->setPost($post);
+        $this->getRequest()->setPostValue($post);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Newsletter\Model\Template'
         );
@@ -99,7 +99,7 @@ class NewsletterTemplateTest extends \Magento\Backend\Utility\Controller
             'sender_name' => 'Test Sender Name',
             'text' => 'Template Content',
         ];
-        $this->getRequest()->setPost($post);
+        $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/newsletter/template/save');
 
         /**

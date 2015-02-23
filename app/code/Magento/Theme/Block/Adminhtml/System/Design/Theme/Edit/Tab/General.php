@@ -245,7 +245,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
     /**
      * Prepare label for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -300,7 +300,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
     /**
      * Get note string for theme's preview image
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getPreviewImageNote()
     {

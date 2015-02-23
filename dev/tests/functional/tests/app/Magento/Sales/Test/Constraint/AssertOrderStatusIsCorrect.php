@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\Constraint;
 
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -26,7 +26,7 @@ class AssertOrderStatusIsCorrect extends AbstractConstraint
      * @param string $status
      * @param string $orderId
      * @param OrderIndex $salesOrder
-     * @param OrderView $salesOrderView
+     * @param SalesOrderView $salesOrderView
      * @param string|null $statusToCheck
      * @return void
      */
@@ -34,7 +34,7 @@ class AssertOrderStatusIsCorrect extends AbstractConstraint
         $status,
         $orderId,
         OrderIndex $salesOrder,
-        OrderView $salesOrderView,
+        SalesOrderView $salesOrderView,
         $statusToCheck = null
     ) {
         $salesOrder->open();

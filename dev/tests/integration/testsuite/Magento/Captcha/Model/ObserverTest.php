@@ -30,9 +30,9 @@ class ObserverTest extends \Magento\TestFramework\TestCase\AbstractController
             ],
             'captcha' => ['backend_login' => 'some_unrealistic_captcha_value'],
         ];
-        $this->getRequest()->setPost($post);
+        $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/admin');
-        $this->assertContains(__('Incorrect CAPTCHA'), $this->getResponse()->getBody());
+        $this->assertContains((string)__('Incorrect CAPTCHA'), $this->getResponse()->getBody());
     }
 
     /**
@@ -46,7 +46,7 @@ class ObserverTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testCaptchaIsRequiredAfterFailedLoginAttempts()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->setCurrentStore(
             0
         );
@@ -77,7 +77,7 @@ class ObserverTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testCheckUserForgotPasswordBackendWhenCaptchaFailed()
     {
-        $this->getRequest()->setPost(
+        $this->getRequest()->setPostValue(
             ['email' => 'dummy@dummy.com', 'captcha' => ['backend_forgotpassword' => 'dummy']]
         );
         $this->dispatch('backend/admin/auth/forgotpassword');
@@ -96,7 +96,7 @@ class ObserverTest extends \Magento\TestFramework\TestCase\AbstractController
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Backend\Model\UrlInterface'
         )->turnOffSecretKey();
-        $this->getRequest()->setPost(['email' => 'dummy@dummy.com', 'captcha' => '1234']);
+        $this->getRequest()->setPostValue(['email' => 'dummy@dummy.com', 'captcha' => '1234']);
         $this->dispatch('backend/admin/auth/forgotpassword');
         $this->assertSessionMessages(
             $this->equalTo(['Incorrect CAPTCHA']),

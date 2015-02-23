@@ -103,7 +103,9 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             'preferences' =>
                 [
                     'Magento\Tools\Di\Compiler\Config\WriterInterface' =>
-                        'Magento\Tools\Di\Compiler\Config\Writer\Filesystem'
+                        'Magento\Tools\Di\Compiler\Config\Writer\Filesystem',
+                    'Magento\Tools\Di\Compiler\Log\Writer\WriterInterface' =>
+                        'Magento\Tools\Di\Compiler\Log\Writer\Console'
                 ]
         ];
     }

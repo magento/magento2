@@ -19,9 +19,9 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     private $areaListMock;
 
     /**
-     * @var ClassesScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $classesScannerMock;
+    private $areaInstancesNamesList;
 
     /**
      * @var Config\Reader | \PHPUnit_Framework_MockObject_MockObject
@@ -38,7 +38,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->areaListMock = $this->getMockBuilder('Magento\Framework\App\AreaList')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->classesScannerMock = $this->getMockBuilder('Magento\Tools\Di\Code\Reader\ClassesScanner')
+        $this->areaInstancesNamesList = $this->getMockBuilder('\Magento\Tools\Di\Code\Reader\InstancesNamesList\Area')
             ->disableOriginalConstructor()
             ->getMock();
         $this->configReaderMock = $this->getMockBuilder('Magento\Tools\Di\Compiler\Config\Reader')
@@ -53,7 +53,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     {
         $areaOperation = new Area(
             $this->areaListMock,
-            $this->classesScannerMock,
+            $this->areaInstancesNamesList,
             $this->configReaderMock,
             $this->configWriterMock
         );
@@ -74,7 +74,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $definitions->addDefinition('class', []);
         $areaOperation = new Area(
             $this->areaListMock,
-            $this->classesScannerMock,
+            $this->areaInstancesNamesList,
             $this->configReaderMock,
             $this->configWriterMock,
             [$path]
@@ -83,7 +83,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->areaListMock->expects($this->once())
             ->method('getCodes')
             ->willReturn([]);
-        $this->classesScannerMock->expects($this->once())
+        $this->areaInstancesNamesList->expects($this->once())
             ->method('getList')
             ->with($path)
             ->willReturn(['class' => []]);

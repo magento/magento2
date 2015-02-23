@@ -26,6 +26,17 @@ class SearchResults extends \Magento\Framework\Api\AbstractExtensibleObject
     }
 
     /**
+     * Set items
+     *
+     * @param \Magento\Framework\Api\AbstractExtensibleObject[] $items
+     * @return $this
+     */
+    public function setItems(array $items)
+    {
+        return $this->setData(self::KEY_ITEMS, $items);
+    }
+
+    /**
      * Get search criteria
      *
      * @return \Magento\Framework\Api\SearchCriteria
@@ -36,6 +47,17 @@ class SearchResults extends \Magento\Framework\Api\AbstractExtensibleObject
     }
 
     /**
+     * Set search criteria
+     *
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @return $this
+     */
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    {
+        return $this->setData(self::KEY_SEARCH_CRITERIA, $searchCriteria);
+    }
+
+    /**
      * Get total count
      *
      * @return int
@@ -43,5 +65,16 @@ class SearchResults extends \Magento\Framework\Api\AbstractExtensibleObject
     public function getTotalCount()
     {
         return $this->_get(self::KEY_TOTAL_COUNT);
+    }
+
+    /**
+     * Set total count
+     *
+     * @param int $count
+     * @return $this
+     */
+    public function setTotalCount($count)
+    {
+        return $this->setData(self::KEY_TOTAL_COUNT, $count);
     }
 }

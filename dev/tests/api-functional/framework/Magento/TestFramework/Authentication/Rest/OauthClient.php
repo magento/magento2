@@ -83,7 +83,7 @@ class OauthClient extends AbstractService
      */
     public function getTestApiEndpoint()
     {
-        $defaultStoreCode = Bootstrap::getObjectManager()->get('Magento\Framework\Store\StoreManagerInterface')
+        $defaultStoreCode = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
             ->getStore()->getCode();
         return new Uri(TESTS_BASE_URL . '/rest/' . $defaultStoreCode . '/V1/testmodule1');
     }

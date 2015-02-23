@@ -1,41 +1,17 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="checkout/onepage" module="Magento_Checkout">
-    <blocks>
-        <loginBlock>
-            <class>Magento\Checkout\Test\Block\Onepage\Login</class>
-            <locator>#checkout-step-login</locator>
-            <strategy>css selector</strategy>
-        </loginBlock>
-        <billingBlock>
-            <class>Magento\Checkout\Test\Block\Onepage\Billing</class>
-            <locator>#checkout-step-billing</locator>
-            <strategy>css selector</strategy>
-        </billingBlock>
-        <shippingBlock>
-            <class>Magento\Checkout\Test\Block\Onepage\Shipping</class>
-            <locator>#checkout-step-shipping</locator>
-            <strategy>css selector</strategy>
-        </shippingBlock>
-        <shippingMethodBlock>
-            <class>Magento\Checkout\Test\Block\Onepage\Shipping\Method</class>
-            <locator>#checkout-step-shipping_method</locator>
-            <strategy>css selector</strategy>
-        </shippingMethodBlock>
-        <paymentMethodsBlock>
-            <class>Magento\Checkout\Test\Block\Onepage\Payment\Methods</class>
-            <locator>#checkout-step-payment</locator>
-            <strategy>css selector</strategy>
-        </paymentMethodsBlock>
-        <reviewBlock>
-            <class>Magento\Checkout\Test\Block\Onepage\Review</class>
-            <locator>#checkout-step-review</locator>
-            <strategy>css selector</strategy>
-        </reviewBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CheckoutOnepage" mca="checkout/onepage" module="Magento_Checkout">
+    <block name="loginBlock" class="Magento\Checkout\Test\Block\Onepage\Login" locator="#checkout-step-login" strategy="css selector"/>
+    <block name="billingBlock" class="Magento\Checkout\Test\Block\Onepage\Billing" locator="#checkout-step-billing" strategy="css selector"/>
+    <block name="shippingBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping" locator="#checkout-step-shipping" strategy="css selector"/>
+    <block name="shippingMethodBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping\Method" locator="#checkout-step-shipping_method" strategy="css selector"/>
+    <block name="paymentMethodsBlock" class="Magento\Checkout\Test\Block\Onepage\Payment\Methods" locator="#checkout-step-payment" strategy="css selector"/>
+    <block name="reviewBlock" class="Magento\Checkout\Test\Block\Onepage\Review" locator="#checkout-step-review" strategy="css selector"/>
+  </page>
+</config>

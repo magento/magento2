@@ -37,17 +37,32 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $appliedTaxBuilderMock;
+    private $appliedTaxDataObjectFactoryMock;
 
     /**
      * @var  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $itemBuilderMock;
+    private $itemDataObjectFactoryMock;
+
+    /**
+     * @var \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface
+     */
+    protected $itemDataObject;
 
     /**
      * @var  \PHPUnit_Framework_MockObject_MockObject
      */
-    private $orderTaxDetailsBuilderMock;
+    private $orderTaxDetailsDataObjectFactoryMock;
+
+    /**
+     * @var \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface
+     */
+    protected $appliedTaxDataObject;
+
+    /**
+     * @var \Magento\Tax\Model\Sales\Order\Details
+     */
+    protected $orderTaxDetailsDataObject;
 
     public function setUp()
     {
@@ -68,25 +83,36 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $methods = ['setCode', 'setTitle', 'setPercent', 'setAmount', 'setBaseAmount', 'create'];
-        $this->appliedTaxBuilderMock
-            = $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxDataBuilder', $methods, [], '', false);
-        $builderMethods = ['setType', 'setItemId', 'setAssociatedItemId', 'setAppliedTaxes', 'create'];
-        $this->itemBuilderMock =
-            $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsItemDataBuilder', $builderMethods, [], '', false);
-        $detailMethods = ['setItems', 'setAppliedTaxes', 'create'];
-        $this->orderTaxDetailsBuilderMock =
-            $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsDataBuilder', $detailMethods, [], '', false);
-
         $objectManager = new ObjectManager($this);
+        $methods = ['create'];
+        $this->appliedTaxDataObject = $objectManager->getObject('Magento\Tax\Model\Sales\Order\Tax');
+        $this->appliedTaxDataObjectFactoryMock
+            = $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterfaceFactory', $methods, [], '', false);
+        $this->appliedTaxDataObjectFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->appliedTaxDataObject);
+
+        $this->itemDataObject = $objectManager->getObject('Magento\Tax\Model\Sales\Order\Tax\Item');
+        $this->itemDataObjectFactoryMock =
+            $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory', $methods, [], '', false);
+        $this->itemDataObjectFactoryMock->expects($this->atLeastOnce())
+            ->method('create')->willReturn($this->itemDataObject);
+
+        $this->orderTaxDetailsDataObject = $objectManager->getObject('Magento\Tax\Model\Sales\Order\Details');
+        $this->orderTaxDetailsDataObjectFactoryMock =
+            $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory', $methods, [], '', false);
+        $this->orderTaxDetailsDataObjectFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->orderTaxDetailsDataObject);
+
         $this->taxManagement = $objectManager->getObject(
             'Magento\Tax\Model\Sales\Order\TaxManagement',
             [
                 'orderFactory' => $this->orderFactoryMock,
                 'orderItemTaxFactory' => $this->taxItemFactoryMock,
-                'appliedTaxBuilder' => $this->appliedTaxBuilderMock,
-                'itemBuilder' => $this->itemBuilderMock,
-                'orderTaxDetailsBuilder' => $this->orderTaxDetailsBuilderMock
+                'appliedTaxDataObjectFactory' => $this->appliedTaxDataObjectFactoryMock,
+                'itemDataObjectFactory' => $this->itemDataObjectFactoryMock,
+                'orderTaxDetailsDataObjectFactory' => $this->orderTaxDetailsDataObjectFactoryMock
             ]
         );
     }
@@ -99,23 +125,7 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
     public function testGetOrderTaxDetails($orderItemAppliedTaxes)
     {
         $orderId = 1;
-        $appliedTaxDetailsMock = $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface');
         $data = $orderItemAppliedTaxes[0];
-        $this->appliedTaxBuilderMock
-            ->expects($this->at(0))->method('setCode')->with($data['code']);
-        $this->appliedTaxBuilderMock
-            ->expects($this->at(1))->method('setTitle')->with($data['title']);
-        $this->appliedTaxBuilderMock
-            ->expects($this->at(2))->method('setPercent')->with($data['tax_percent']);
-        $this->appliedTaxBuilderMock
-            ->expects($this->at(3))->method('setAmount')->with($data['real_amount']);
-        $this->appliedTaxBuilderMock
-            ->expects($this->at(4))->method('setBaseAmount')->with($data['real_base_amount']);
-        $this->appliedTaxBuilderMock
-            ->expects($this->atLeastOnce())->method('create')->willReturn($appliedTaxDetailsMock);
-        $itemMock = $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsItemInterface');
-        $this->itemBuilderMock->expects($this->atLeastOnce())->method('create')->willReturn($itemMock);
-        $itemMock->expects($this->atLeastOnce())->method('getAppliedTaxes')->willReturn([$appliedTaxDetailsMock]);
 
         $this->orderFactoryMock->expects($this->atLeastOnce())
             ->method('create')
@@ -129,9 +139,12 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getTaxItemsByOrderId')
             ->with($orderId)
             ->will($this->returnValue($orderItemAppliedTaxes));
-        $orderTaxDetailsMock = $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsInterface');
-        $this->orderTaxDetailsBuilderMock->expects($this->once())->method('create')->willReturn($orderTaxDetailsMock);
-        $this->assertEquals($orderTaxDetailsMock, $this->taxManagement->getOrderTaxDetails($orderId));
+        $this->assertEquals($this->orderTaxDetailsDataObject, $this->taxManagement->getOrderTaxDetails($orderId));
+        $this->assertEquals($data['code'], $this->appliedTaxDataObject->getCode());
+        $this->assertEquals($data['title'], $this->appliedTaxDataObject->getTitle());
+        $this->assertEquals($data['tax_percent'], $this->appliedTaxDataObject->getPercent());
+        $this->assertEquals($data['real_amount'], $this->appliedTaxDataObject->getAmount());
+        $this->assertEquals($data['real_base_amount'], $this->appliedTaxDataObject->getBaseAmount());
     }
 
     /**

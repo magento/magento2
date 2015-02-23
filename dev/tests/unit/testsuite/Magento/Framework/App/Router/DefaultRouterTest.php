@@ -27,7 +27,7 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
                 $this->getMockForAbstractClass('Magento\Framework\App\Action\AbstractAction', [], '', false)
             )
         );
-        $noRouteHandler = $this->getMock('Magento\Core\App\Router\NoRouteHandler', [], [], '', false);
+        $noRouteHandler = $this->getMock('Magento\Framework\App\Router\NoRouteHandler', [], [], '', false);
         $noRouteHandler->expects($this->any())->method('process')->will($this->returnValue(true));
         $noRouteHandlerList = $this->getMock('Magento\Framework\App\Router\NoRouteHandlerList', [], [], '', false);
         $noRouteHandlerList->expects($this->any())->method('getHandlers')->will($this->returnValue([$noRouteHandler]));

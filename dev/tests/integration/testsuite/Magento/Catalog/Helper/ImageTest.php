@@ -47,7 +47,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         // watermark fixture
         mkdir(
             $fixtureMediaDir . '/watermark/stores/' . $objectManager->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId(),
             0777,
             true
@@ -55,7 +55,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         copy(
             "{$fixtureDir}/watermark.jpg",
             $fixtureMediaDir . '/watermark/stores/' . $objectManager->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId() . '/watermark.jpg'
         );
 

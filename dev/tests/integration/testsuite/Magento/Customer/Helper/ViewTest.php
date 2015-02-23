@@ -70,11 +70,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function getCustomerNameDataProvider()
     {
-        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
-        $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerDataBuilder');
+        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        $customerFactory = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerInterfaceFactory');
         return [
             'With disabled prefix, middle name, suffix' => [
-                $customerBuilder->setPrefix(
+                $customerFactory->create()->setPrefix(
                     'prefix'
                 )->setFirstname(
                     'FirstName'
@@ -84,11 +84,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                     'LastName'
                 )->setSuffix(
                     'suffix'
-                )->create(),
+                ),
                 'FirstName LastName',
             ],
             'With prefix, middle name, suffix' => [
-                $customerBuilder->setPrefix(
+                $customerFactory->create()->setPrefix(
                     'prefix'
                 )->setFirstname(
                     'FirstName'
@@ -98,27 +98,27 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                     'LastName'
                 )->setSuffix(
                     'suffix'
-                )->create(),
+                ),
                 'prefix FirstName MiddleName LastName suffix',
                 true, // $isPrefixAllowed
                 true, // $isMiddleNameAllowed
                 true, //$isSuffixAllowed
             ],
             'Empty prefix, middle name, suffix' => [
-                $customerBuilder->setFirstname('FirstName')->setLastname('LastName')->create(),
+                $customerFactory->create()->setFirstname('FirstName')->setLastname('LastName'),
                 'FirstName LastName',
                 true, // $isPrefixAllowed
                 true, // $isMiddleNameAllowed
                 true, //$isSuffixAllowed
             ],
             'Empty prefix and suffix, not empty middle name' => [
-                $customerBuilder->setFirstname(
+                $customerFactory->create()->setFirstname(
                     'FirstName'
                 )->setMiddlename(
                     'MiddleName'
                 )->setLastname(
                     'LastName'
-                )->create(),
+                ),
                 'FirstName MiddleName LastName',
                 true, // $isPrefixAllowed
                 true, // $isMiddleNameAllowed

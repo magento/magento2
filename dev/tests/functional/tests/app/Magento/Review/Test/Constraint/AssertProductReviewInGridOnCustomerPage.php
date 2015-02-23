@@ -6,7 +6,7 @@
 
 namespace Magento\Review\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Review\Test\Block\Adminhtml\Product\Grid as ReviewsGrid;
@@ -26,7 +26,7 @@ class AssertProductReviewInGridOnCustomerPage extends AbstractConstraint
     /**
      * Asserts all Product Review variables in the reviews grid on customer page
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param Review $reviewInitial
      * @param Review $review
      * @param CustomerIndexEdit $customerIndexEdit
@@ -35,7 +35,7 @@ class AssertProductReviewInGridOnCustomerPage extends AbstractConstraint
      * @return void
      */
     public function processAssert(
-        CustomerInjectable $customer,
+        Customer $customer,
         Review $reviewInitial,
         Review $review,
         CustomerIndexEdit $customerIndexEdit,

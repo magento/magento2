@@ -32,4 +32,15 @@ class ObjectFactory
     {
         return $this->objectManager->create($className, $arguments);
     }
+
+    /**
+     * Get data object
+     *
+     * @param string $className
+     * @return object
+     */
+    public function get($className)
+    {
+        return $this->objectManager->get($className);
+    }
 }

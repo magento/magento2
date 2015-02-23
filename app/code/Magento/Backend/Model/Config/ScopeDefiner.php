@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Model\Config;
 
-use Magento\Framework\Store\ScopeInterface as StoreScopeInterface;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
  * System configuration scope

@@ -15,7 +15,7 @@
                 </block>
                 <block class="Magento\Customer\Block\Form\Login" name="customer.new" template="newcustomer.phtml" cacheable="false"/>
             </container>
-            <block class="Magento\Core\Block\RequireCookie" name="require-cookie" template="Magento_Core::require_cookie.phtml">
+            <block class="Magento\Cookie\Block\RequireCookie" name="require-cookie" template="Magento_Cookie::require_cookie.phtml">
                 <arguments>
                     <argument name="triggers" xsi:type="array">
                         <item name="loginButton" xsi:type="string">.action.login</item>

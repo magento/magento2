@@ -6,10 +6,12 @@
 
 namespace Magento\Framework\ObjectManager;
 
+use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
+
 class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystemDriverMock;
 
@@ -37,30 +39,8 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
             $this->filesystemDriverMock,
             'DefinitionDir',
             'GenerationDir',
-            'serialized'
+            Serialized::MODE_NAME
         );
-    }
-
-    public function testCreateDefinitionsReadsCompiledDefinitions()
-    {
-        $this->filesystemDriverMock->expects($this->once())->method('isReadable')->will($this->returnValue(false));
-        $this->assertInstanceOf(
-            '\Magento\Framework\ObjectManager\Definition\Runtime',
-            $this->model->createClassDefinition(null, true)
-        );
-        $autoloadFunctions = spl_autoload_functions();
-        spl_autoload_unregister(array_pop($autoloadFunctions));
-    }
-
-    public function testCreateDefinitionsDoesNotReadCompiledDefinitionsIfUseCompiledIsFalse()
-    {
-        $this->filesystemDriverMock->expects($this->never())->method('isReadable');
-        $this->assertInstanceOf(
-            '\Magento\Framework\ObjectManager\Definition\Runtime',
-            $this->model->createClassDefinition(null, false)
-        );
-        $autoloadFunctions = spl_autoload_functions();
-        spl_autoload_unregister(array_pop($autoloadFunctions));
     }
 
     public function testCreateClassDefinitionFromString()

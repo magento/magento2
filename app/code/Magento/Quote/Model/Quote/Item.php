@@ -8,7 +8,7 @@
 
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\MetadataServiceInterface;
 
 /**
@@ -181,7 +181,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Model\Status\ListFactory $statusListFactory
@@ -199,7 +199,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
@@ -220,7 +220,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $productRepository,
             $priceCurrency,
             $resource,

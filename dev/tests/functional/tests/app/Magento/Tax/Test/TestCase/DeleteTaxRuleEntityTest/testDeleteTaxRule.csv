@@ -1,2 +1,0 @@
-"taxRule/dataSet";"address/data/country_id";"address/data/region_id";"address/data/postcode";"shipping/carrier";"shipping/method";"shipping/price";"constraint"
-"tax_rule_with_custom_tax_classes";"United States";"California";90001;"Flat Rate";"Fixed";5;"assertTaxRuleSuccessDeleteMessage, assertTaxRuleNotInGrid, assertTaxRuleIsNotApplied"

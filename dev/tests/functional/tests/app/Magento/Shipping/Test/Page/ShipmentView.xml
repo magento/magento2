@@ -1,16 +1,12 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="sales/order/shipment" module="Magento_Shipping">
-    <blocks>
-        <shipmentBlock>
-            <class>Magento\Shipping\Test\Block\Order\Shipment</class>
-            <locator>.order-details-items</locator>
-            <strategy>css selector</strategy>
-        </shipmentBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="ShipmentView" mca="sales/order/shipment" module="Magento_Shipping">
+    <block name="shipmentBlock" class="Magento\Shipping\Test\Block\Order\Shipment" locator=".order-details-items" strategy="css selector"/>
+  </page>
+</config>

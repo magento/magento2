@@ -28,7 +28,7 @@ class Notices extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'web/browser_capabilities/javascript',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -41,7 +41,7 @@ class Notices extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'web/browser_capabilities/local_storage',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -54,17 +54,7 @@ class Notices extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'design/head/demonotice',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-    }
-
-    /**
-     * Get Link to cookie restriction privacy policy page
-     *
-     * @return string
-     */
-    public function getPrivacyPolicyLink()
-    {
-        return $this->_urlBuilder->getUrl('privacy-policy-cookie-restriction-mode');
     }
 }

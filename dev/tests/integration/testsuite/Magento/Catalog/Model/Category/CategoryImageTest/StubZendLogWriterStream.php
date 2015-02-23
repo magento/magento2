@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\Category\CategoryImageTest;
 )->setValue(
     'dev/log/active',
     1,
-    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
 );
 
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -18,7 +18,7 @@ namespace Magento\Catalog\Model\Category\CategoryImageTest;
 )->setValue(
     'dev/log/exception_file',
     'save_category_without_image.log',
-    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
 );
 class StubZendLogWriterStream extends \Zend_Log_Writer_Stream
 {

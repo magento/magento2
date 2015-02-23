@@ -15,12 +15,12 @@ $review->setEntityId(
     \Magento\Review\Model\Review::STATUS_PENDING
 )->setStoreId(
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Framework\Store\StoreManagerInterface'
+        'Magento\Store\Model\StoreManagerInterface'
     )->getStore()->getId()
 )->setStores(
     [
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore()->getId()
     ]
 )->setNickname(

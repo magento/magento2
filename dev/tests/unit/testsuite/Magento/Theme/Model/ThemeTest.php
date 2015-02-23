@@ -108,7 +108,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      * @dataProvider isPhysicalDataProvider
      * @param int $type
      * @param string $isPhysical
-     * @covers \Magento\Theme\Model\Theme::isPhysical
+     * @covers \Magento\Core\Model\Theme::isPhysical
      */
     public function testIsPhysical($type, $isPhysical)
     {

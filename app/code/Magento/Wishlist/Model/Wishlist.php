@@ -75,7 +75,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     protected $_catalogProduct;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -126,7 +126,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param ResourceWishlist $resource
      * @param Collection $resourceCollection
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param ItemFactory $wishlistItemFactory
      * @param CollectionFactory $wishlistCollectionFactory
@@ -145,7 +145,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         \Magento\Wishlist\Helper\Data $wishlistData,
         ResourceWishlist $resource,
         Collection $resourceCollection,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         ItemFactory $wishlistItemFactory,
         CollectionFactory $wishlistCollectionFactory,

@@ -86,7 +86,7 @@ class File
     /**
      * Return storage name
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getStorageName()
     {

@@ -97,7 +97,7 @@ class Template extends \Magento\Backend\Block\Template implements \Magento\Backe
     /**
      * Get transactional emails page header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

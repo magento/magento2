@@ -68,14 +68,14 @@ class Observer
 
         $pageId = $this->_scopeConfig->getValue(
             \Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $pageUrl = $this->_cmsPage->getPageUrl($pageId);
 
         if ($pageUrl) {
             $redirect->setRedirectUrl($pageUrl);
         } else {
-            $redirect->setRedirect(true)->setPath('cms/index/noCookies')->setArguments([]);
+            $redirect->setRedirect(true)->setPath('cookie/index/noCookies')->setArguments([]);
         }
         return $this;
     }

@@ -264,7 +264,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     {
         return $this->scopeConfig->getValue(
             \Magento\Framework\Session\Config::XML_PATH_COOKIE_LIFETIME,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) + 86400;
     }
 

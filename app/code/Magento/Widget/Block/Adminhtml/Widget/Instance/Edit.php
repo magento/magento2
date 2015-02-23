@@ -88,7 +88,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Return translated header text depending on creating/editing action
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

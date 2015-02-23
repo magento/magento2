@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Controller\Result;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\QueryFactory;
 
 class Index extends \Magento\Framework\App\Action\Action
@@ -41,7 +41,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @param Context $context
      * @param Session $catalogSession
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param QueryFactory $queryFactory
      * @param Resolver $layerResolver
      */

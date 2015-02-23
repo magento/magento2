@@ -1,26 +1,14 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="newsletter/template/index" module="Magento_Newsletter">
-    <blocks>
-        <messagesBlock>
-            <class>Magento\Core\Test\Block\Messages</class>
-            <locator>#messages .messages</locator>
-            <strategy>css selector</strategy>
-        </messagesBlock>
-        <gridPageActions>
-            <class>Magento\Newsletter\Test\Block\Adminhtml\Template\GridPageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </gridPageActions>
-        <newsletterTemplateGrid>
-            <class>Magento\Newsletter\Test\Block\Adminhtml\Template\Grid</class>
-            <locator>[id="page:main-container"]</locator>
-            <strategy>css selector</strategy>
-        </newsletterTemplateGrid>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="TemplateIndex" area="Adminhtml" mca="newsletter/template/index" module="Magento_Newsletter">
+    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
+    <block name="gridPageActions" class="Magento\Newsletter\Test\Block\Adminhtml\Template\GridPageActions" locator=".page-main-actions" strategy="css selector"/>
+    <block name="newsletterTemplateGrid" class="Magento\Newsletter\Test\Block\Adminhtml\Template\Grid" locator="[id='page:main-container']" strategy="css selector"/>
+  </page>
+</config>

@@ -13,8 +13,8 @@ class SwitchAction extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Store\StoreManagerInterface $storeManager */
-        $storeManager = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface');
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
         $currency = (string)$this->getRequest()->getParam('currency');
         if ($currency) {
             $storeManager->getStore()->setCurrentCurrencyCode($currency);

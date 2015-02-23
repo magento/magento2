@@ -188,7 +188,7 @@ class AttributeMetadataDataBuilder extends \Magento\Framework\Api\Builder implem
      *
      * @param \Magento\Framework\Api\ObjectFactory $objectFactory
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param \Magento\Framework\Api\AttributeDataBuilder $attributeValueBuilder
+     * @param \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory
@@ -199,7 +199,7 @@ class AttributeMetadataDataBuilder extends \Magento\Framework\Api\Builder implem
     public function __construct(
         \Magento\Framework\Api\ObjectFactory $objectFactory,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        \Magento\Framework\Api\AttributeDataBuilder $attributeValueBuilder,
+        \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory,
@@ -209,7 +209,7 @@ class AttributeMetadataDataBuilder extends \Magento\Framework\Api\Builder implem
         parent::__construct(
             $objectFactory,
             $metadataService,
-            $attributeValueBuilder,
+            $attributeValueFactory,
             $objectProcessor,
             $typeProcessor,
             $dataBuilderFactory,

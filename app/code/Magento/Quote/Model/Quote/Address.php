@@ -6,9 +6,9 @@
 namespace Magento\Quote\Model\Quote;
 
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AddressDataBuilder;
-use Magento\Customer\Api\Data\RegionDataBuilder;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Sales Quote address model
@@ -221,9 +221,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected $_addressTotalFactory;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressDataBuilder
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
      */
-    protected $addressBuilder;
+    protected $addressDataFactory;
 
     /**
      * @var Address\Validator
@@ -244,15 +244,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param AddressMetadataInterface $addressMetadataService
-     * @param AddressDataBuilder $addressBuilder
-     * @param RegionDataBuilder $regionBuilder
+     * @param AddressInterfaceFactory $addressDataFactory
+     * @param RegionInterfaceFactory $regionDataFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Address\ItemFactory $addressItemFactory
      * @param \Magento\Quote\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory
@@ -275,15 +276,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Address\Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
         AddressMetadataInterface $addressMetadataService,
-        AddressDataBuilder $addressBuilder,
-        RegionDataBuilder $regionBuilder,
+        AddressInterfaceFactory $addressDataFactory,
+        RegionInterfaceFactory $regionDataFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Address\ItemFactory $addressItemFactory,
         \Magento\Quote\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory,
@@ -312,22 +314,23 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $this->_addressTotalFactory = $addressTotalFactory;
         $this->_objectCopyService = $objectCopyService;
         $this->_carrierFactory = $carrierFactory;
-        $this->addressBuilder = $addressBuilder;
+        $this->addressDataFactory = $addressDataFactory;
         $this->validator = $validator;
         $this->addressMapper = $addressMapper;
         parent::__construct(
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $directoryData,
             $eavConfig,
             $addressConfig,
             $regionFactory,
             $countryFactory,
             $addressMetadataService,
-            $addressBuilder,
-            $regionBuilder,
+            $addressDataFactory,
+            $regionDataFactory,
+            $dataObjectHelper,
             $resource,
             $resourceCollection,
             $data
@@ -524,7 +527,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         }
         $customerAddressData = array_merge($customerAddressData, $customerAddressDataWithRegion);
 
-        return $this->addressBuilder->populateWithArray($customerAddressData)->create();
+        $addressDataObject = $this->addressDataFactory->create();
+        $this->dataObjectHelper->populateWithArray($addressDataObject, $customerAddressData);
+        return $addressDataObject;
     }
 
     /**
@@ -1134,7 +1139,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $storeId = $this->getQuote()->getStoreId();
         $validateEnabled = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/active',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if (!$validateEnabled) {
@@ -1147,12 +1152,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
         $amount = $this->_scopeConfig->getValue(
             'sales/minimum_order/amount',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $taxInclude = $this->_scopeConfig->getValue(
             'sales/minimum_order/tax_including',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;

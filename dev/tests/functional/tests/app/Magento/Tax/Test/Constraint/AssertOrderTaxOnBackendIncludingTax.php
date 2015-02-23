@@ -26,7 +26,7 @@ class AssertOrderTaxOnBackendIncludingTax extends AbstractAssertOrderTaxOnBacken
      */
     public function getOrderTotals($actualPrices)
     {
-        $viewBlock = $this->orderView->getOrderTotalsBlock();
+        $viewBlock = $this->salesOrderView->getOrderTotalsBlock();
         $actualPrices['subtotal_excl_tax'] = null;
         $actualPrices['subtotal_incl_tax'] = $viewBlock->getSubtotal();
 
