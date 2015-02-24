@@ -103,6 +103,7 @@ class Bundle
     /**
      * Prepare bundle for executing in js
      *
+     * @param LocalInterface[] $assets
      * @return array
      */
     protected function getPartContent($assets)
@@ -153,11 +154,12 @@ class Bundle
         foreach ($this->assets as $types) {
             $content = '';
             $bundlePath = '';
-            $partIndex = 0;
+            $partIndex = 1;
             $isSplit = null;
             foreach ($types as $parts) {
                 /** @var LocalInterface $firstAsset */
                 $firstAsset = reset(reset($parts)['assets']);
+                $amountParts = count($types[Manager::ASSET_TYPE_JS]) + count($types[Manager::ASSET_TYPE_HTML]);
                 if ($firstAsset) {
                     $bundlePath = $firstAsset->getContext()->getPath() . Manager::BUNDLE_PATH;
                     $isSplit = $this->bundleConfig->isSplit($firstAsset->getContext());
@@ -166,15 +168,14 @@ class Bundle
                             $content = '';
                         }
                         $content .= $this->getPartContent($part['assets']);
-                        if ($partIndex == 0) {
-                            $content = $this->getInitJs() . $content;
+                        if ($partIndex == $amountParts) {
+                            $content = $content . $this->getInitJs();
                         }
                         if ($isSplit) {
                             $dir->writeFile($bundlePath . "$partIndex.js", $content);
                         }
                         $partIndex++;
                     }
-
                 }
             }
             if ($bundlePath && !$isSplit) {
